@@ -1,7 +1,7 @@
 name: Build JetSetCraft
 on:
   push:
-    branches: [ main, jetsetcraft, jetsetcraft-alpha ]
+    branches: [ main, jetsetcraft, jetsetcraft-alpha, 'automation/**' ]
   pull_request:
   workflow_dispatch:
 jobs:
