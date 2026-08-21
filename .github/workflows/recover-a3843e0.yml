@@ -33,21 +33,72 @@ jobs:
         with:
           gradle-version: '8.8'
 
-      - name: Reconstruct exact remaining a3843e0 source delta
+      - name: Reconstruct preserved a3843e0 split source archive
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch origin jetsetcraft-alpha-current --depth=20
+          archive_b64="$RUNNER_TEMP/jetsetcraft-a3843e0.b64"
+          archive_tgz="$RUNNER_TEMP/jetsetcraft-a3843e0.tar.gz"
+          historical_root="$RUNNER_TEMP/jetsetcraft-a3843e0-src"
+          : > "$archive_b64"
+          for piece in \
+            .bootstrap/current/chunk-00 \
+            .bootstrap/current/chunk-01 \
+            .bootstrap/current/chunk-02 \
+            .bootstrap/current/chunk-03 \
+            .bootstrap/current/chunk-04 \
+            bootstrap/jetsetcraft-alpha-src.tar.gz.b64 \
+            .bootstrap/current/chunk-06 \
+            .bootstrap/current/chunk-07 \
+            .bootstrap/current/chunk-08; do
+            git show "origin/jetsetcraft-alpha-current:$piece" >> "$archive_b64"
+            printf '\n' >> "$archive_b64"
+          done
+          base64 --decode --ignore-garbage "$archive_b64" > "$archive_tgz"
+          tar -tzf "$archive_tgz" >/dev/null
+          mkdir -p "$historical_root"
+          tar -xzf "$archive_tgz" -C "$historical_root"
+          printf 'HISTORICAL_ROOT=%s\n' "$historical_root" >> "$GITHUB_ENV"
+          printf 'Recovered split source archive: %s bytes\n' "$(stat -c %s "$archive_tgz")"
+          find "$historical_root" -type f \( -name 'RideLoadout.java' -o -name 'C2SRideLoadoutPacket.java' -o -name 'ClientEvents.java' -o -name 'JetSetNetwork.java' \) -print
+
+      - name: Restore omitted checkpoint source and edge steering hunk
         id: patch
         shell: bash
         run: |
           set -euo pipefail
           test -f checkpoints/JetSetCraft-a3843e0.patch
-
-          # The interrupted recovery already committed four of the five product hunks to this branch.
-          # Reapplying the historical whole-tree patch is therefore intentionally invalid. Reconstruct the
-          # one surviving hunk against the current source by exact semantic anchors, then prove every durable
-          # a3843e0 marker is present before build/runtime verification.
           python - <<'PY'
+          import os
+          import shutil
           from pathlib import Path
 
-          movement_path = Path('src/main/java/com/herberto/jetsetcraft/movement/JetSetMovement.java')
+          root = Path('.')
+          historical_root = Path(os.environ['HISTORICAL_ROOT'])
+          changed = False
+
+          def historical(rel: str) -> Path:
+              matches = list(historical_root.rglob(rel))
+              if len(matches) != 1:
+                  raise SystemExit(f'Expected exactly one historical {rel}, found {len(matches)}: {matches}')
+              return matches[0]
+
+          # The interrupted source publication omitted entire new Java files from the checkpoint. Restore only
+          # files that are absent in the current recovered tree; never overwrite an existing newer source file.
+          for rel in [
+              'src/main/java/com/herberto/jetsetcraft/item/RideLoadout.java',
+              'src/main/java/com/herberto/jetsetcraft/network/C2SRideLoadoutPacket.java',
+          ]:
+              dst = root / rel
+              if not dst.exists():
+                  src = historical(rel)
+                  dst.parent.mkdir(parents=True, exist_ok=True)
+                  shutil.copy2(src, dst)
+                  print(f'restored missing source: {rel}')
+                  changed = True
+
+          movement_path = root / 'src/main/java/com/herberto/jetsetcraft/movement/JetSetMovement.java'
           movement = movement_path.read_text(encoding='utf-8')
           old = '''        if (data.grindKind().rail()) {
               Vec3 desired = desiredDirection(player, data);
@@ -69,27 +120,29 @@ jobs:
               }
           }
 '''
-          if "data.grindKind() == GrindKind.EDGE" not in movement:
+          if 'data.grindKind() == GrindKind.EDGE' not in movement:
               if old not in movement:
                   raise SystemExit('Current JetSetMovement steering anchor differs from both preserved old and recovered forms')
               movement_path.write_text(movement.replace(old, new, 1), encoding='utf-8')
               changed = True
-          else:
-              changed = False
 
           checks = {
-              Path('docs/VANILLA_WORLD_MECHANICS_SYNERGY.md'): ['## Exposed-world edge solver hardening'],
-              Path('src/main/java/com/herberto/jetsetcraft/command/JetSetCommands.java'): ['buildGeometryLane', 'Blocks.IRON_BARS', 'Blocks.OAK_LOG'],
-              Path('src/main/java/com/herberto/jetsetcraft/movement/EdgeFinder.java'): ['usableExposedEdge', 'sideProbeFree', 'noCollision(player, clearance)'],
+              root / 'docs/VANILLA_WORLD_MECHANICS_SYNERGY.md': ['## Exposed-world edge solver hardening'],
+              root / 'src/main/java/com/herberto/jetsetcraft/command/JetSetCommands.java': ['buildGeometryLane', 'Blocks.IRON_BARS', 'Blocks.OAK_LOG'],
+              root / 'src/main/java/com/herberto/jetsetcraft/movement/EdgeFinder.java': ['usableExposedEdge', 'sideProbeFree', 'noCollision(player, clearance)'],
               movement_path: ['data.grindKind() == GrindKind.EDGE', 'preferred.scale(0.58)'],
-              Path('tools/validate_gameplay_contract.py'): ['shape-driven exposed-edge validation', 'edge grinding lacks intentional 90-degree corner steering bias', 'Blocks.GLASS_PANE'],
+              root / 'tools/validate_gameplay_contract.py': ['shape-driven exposed-edge validation', 'edge grinding lacks intentional 90-degree corner steering bias', 'Blocks.GLASS_PANE'],
+              root / 'src/main/java/com/herberto/jetsetcraft/item/RideLoadout.java': ['equipFromHand', 'returnToPlayer', 'dropEquipped'],
+              root / 'src/main/java/com/herberto/jetsetcraft/network/C2SRideLoadoutPacket.java': ['C2SRideLoadoutPacket'],
           }
           for path, needles in checks.items():
+              if not path.exists():
+                  raise SystemExit(f'Missing recovered source file: {path}')
               text = path.read_text(encoding='utf-8')
               for needle in needles:
                   if needle not in text:
                       raise SystemExit(f'Missing recovered a3843e0 marker {needle!r} in {path}')
-          print('changed=' + ('true' if changed else 'false'))
+
           Path('.a3843e0_changed').write_text('true\n' if changed else 'false\n', encoding='utf-8')
           PY
           echo "applied=$(tr -d '\r\n' < .a3843e0_changed)" >> "$GITHUB_OUTPUT"
@@ -106,7 +159,7 @@ jobs:
           python tools/validate_assets.py
           python tools/validate_gameplay_contract.py
 
-      - name: Build exact patched Forge project
+      - name: Build exact recovered Forge project
         run: gradle --no-daemon build
 
       - name: Real Forge dedicated-server runtime smoke
@@ -143,20 +196,16 @@ jobs:
           git rev-parse HEAD > output/a3843e0/precommit-head.txt
           git diff --stat > output/a3843e0/recovery-diff-stat.txt
 
-      - name: Publish verified source patch to recovery branch
+      - name: Publish verified recovered source to recovery branch
         if: steps.patch.outputs.applied == 'true' && github.event_name == 'push'
         shell: bash
         run: |
           set -euo pipefail
           git config user.name 'JetSetCraft Recovery Bot'
           git config user.email 'actions@users.noreply.github.com'
-          git add docs/VANILLA_WORLD_MECHANICS_SYNERGY.md \
-                  src/main/java/com/herberto/jetsetcraft/command/JetSetCommands.java \
-                  src/main/java/com/herberto/jetsetcraft/movement/EdgeFinder.java \
-                  src/main/java/com/herberto/jetsetcraft/movement/JetSetMovement.java \
-                  tools/validate_gameplay_contract.py
+          git add -A src/main/java/com/herberto/jetsetcraft tools/validate_gameplay_contract.py docs/VANILLA_WORLD_MECHANICS_SYNERGY.md
           git diff --cached --check
-          git commit -m 'Recover verified a3843e0 exposed-edge grinding hardening'
+          git commit -m 'Recover verified a3843e0 source omissions'
           git push origin HEAD:automation/recover-a3843e0-edge-hardening
 
       - name: Upload exact recovery evidence
@@ -167,7 +216,7 @@ jobs:
           path: output/a3843e0
           if-no-files-found: warn
 
-      - name: Upload patched Forge build
+      - name: Upload recovered Forge build
         if: success()
         uses: actions/upload-artifact@v4
         with:
