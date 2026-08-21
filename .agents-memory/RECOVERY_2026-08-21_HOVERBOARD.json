@@ -1,0 +1,80 @@
+{
+  "schemaVersion": 1,
+  "project": "JetSetCraft",
+  "checkpointType": "recovery-closeout",
+  "checkedAt": "2026-08-21",
+  "sourceTask": "Interrupted JetSetCraft hoverboard requirement from the active mod-development conversation",
+  "canonical": {
+    "repository": "Herbertofury/JetSetCraft",
+    "branch": "main",
+    "mergedProduct": "b0631769441faea3931a11aa0b156b2ed7413d21",
+    "mergedTree": "4d4cdccedf81dfe2584bbcbdf0958ebdeb3fb1ca",
+    "pullRequest": 12,
+    "testedHead": "c96d023ad77287888048f0cece3057e03133792e",
+    "testedTree": "4d4cdccedf81dfe2584bbcbdf0958ebdeb3fb1ca",
+    "treeParity": true
+  },
+  "implementation": [
+    "backwards-compatible RideStyle.HOVER ID 5",
+    "dedicated hoverboard ride/loadout item and creative inventory entry",
+    "save/load and loadout persistence compatibility",
+    "client hover bob/tilt rendering and board-pose animation composition",
+    "localization and item model using existing street-board OBJ until dedicated hoverboard art is supplied",
+    "shared server-authoritative momentum/trick/grind/world-physics solver rather than a separate vehicle subsystem",
+    "safe S2C sync behavior for channel-less Forge fake/test players without weakening production networking"
+  ],
+  "realAcceptance": {
+    "workflowRun": 32464901677,
+    "job": 96719343690,
+    "conclusion": "success",
+    "assetGameplayContract": "success",
+    "forgeBuild": "success",
+    "forgeGameTest": {
+      "artifactId": 9440361350,
+      "zipBytes": 4220,
+      "zipSha256": "e7c23b604797d819f8a178d3b18aa445b0b283eff0f0111ada5fd01ca82ba79e",
+      "logBytes": 22000,
+      "logSha256": "f78335c39eba48852f05831f7a64e0588c90a3c7c5933a457d1a85da5a29aba4",
+      "observed": [
+        "Running test batch defaultBatch:1 (1 tests)",
+        "1 tests are now running",
+        "All 1 required tests passed"
+      ],
+      "coverage": [
+        "registered hoverboard identity",
+        "save/load and loadout persistence",
+        "production JetSetMovement solver on real Forge ServerLevel/ServerPlayer path"
+      ]
+    },
+    "dedicatedServer": {
+      "artifactId": 9440444545,
+      "zipBytes": 2240,
+      "zipSha256": "6e0492ae5007ab88879c9ec690bfe16313ef46c2375337c8ea510a8b0752a335",
+      "logBytes": 6789,
+      "logSha256": "284207ecac7b3c0529c5cdfd2cefcce3426b0a67ae179f452dd268ded4d73492",
+      "serverReadyLine": "Done (8.569s)! For help, type \"help\"",
+      "fatalGuard": "no ModLoadingException, failed lifecycle event, main-thread fatal, or JetSetCraft fatal matched"
+    },
+    "buildArtifact": {
+      "artifactId": 9440446053,
+      "zipBytes": 3172528,
+      "zipSha256": "8abb5b5068833c789d6ce10e488fdd9f568fe396b74695b0a6988a35a803fcd0",
+      "jar": "jetsetcraft-1.20.1-0.1.0-alpha.1.jar",
+      "jarBytes": 3308191,
+      "jarSha256": "3225980b1f1e4c7687474fcda1d34b057aecff4f5307dab3b229dbeb60c63a0e"
+    }
+  },
+  "durability": {
+    "github": "canonical source, merged product, STATUS and exact recovery checkpoint",
+    "driveCheckpointDocumentId": "1_9MOx4ijm-Cx7Dtx98nUY9BiM-yfrQ0Hyitpo_eYxRA",
+    "driveBuildFolderId": "1eo8__ZCC7PXIW14ogfsMn1Q0TCXKWv0I",
+    "driveBinaryEgress": "GitHub Actions artifact connector references remain blocked from Drive egress in this runtime; exact artifact IDs/sizes/SHA-256 identities are mirrored instead of falsely claiming binary upload"
+  },
+  "remainingAcceptance": [
+    "real client visual ride/trick/grind gameplay including hoverboard presentation",
+    "real Create 6.0.8 interoperability runtime",
+    "TACZ live integration",
+    "multiplayer movement/combat acceptance"
+  ],
+  "disposition": "HOVERBOARD_SERVER_AUTHORITATIVE_BEHAVIOR_VERIFIED_AND_MERGED_CLIENT_VISUAL_ACCEPTANCE_STILL_ADDITIVE"
+}
