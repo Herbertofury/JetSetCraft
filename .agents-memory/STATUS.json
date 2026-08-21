@@ -1,6 +1,6 @@
 {
   "version": "0.1.0-alpha.1",
-  "phase": "rail/combat foundation / verified Forge server bring-up",
+  "phase": "rail/combat foundation / exact-current-main Forge server and exposed-edge runtime verified",
   "implemented": [
     "four ride styles",
     "server-authoritative momentum",
@@ -26,27 +26,35 @@
     "grind stuck recovery and cross-dimension reattach grace"
   ],
   "verified": {
+    "canonical_main_commit": "32111151889acbd6fab610ac3ae55d07e245cdda",
+    "canonical_main_tree": "7c59cca15bff45edcd11f732c6db9ad775af9ed4",
     "forge_clean_build": true,
     "asset_and_gameplay_contract_validation": true,
     "dedicated_server_ready": true,
-    "runtime_verification_head": "e7e9f5bbca76045d0787a622cb4e2b6ea9695234",
-    "runtime_workflow_run": 32453299956,
-    "runtime_job": 96685661517,
-    "server_ready_line": "Done (29.165s)! For help, type \"help\"",
+    "real_exposed_edge_runtime": true,
+    "internal_full_block_seam_rejected": true,
+    "blocked_rider_clearance_rejected": true,
+    "verification_pr": 11,
+    "verification_head": "54953c68200adc5dd2e4f8b257b5ce1746ec0853",
+    "runtime_workflow_run": 32461794393,
+    "runtime_job": 96710026950,
+    "server_ready_line": "Done (29.046s)! For help, type \"help\"",
+    "edge_runtime_marker": "JETSETCRAFT_EDGE_RUNTIME_PASS internalSeamRejected=true exposedLedgeDetected=true clearanceRejected=true",
     "server_smoke_artifact": {
-      "id": 9436449450,
-      "zip_bytes": 3732,
-      "zip_sha256": "29a3630f9902eef2e2dce9c6db93a1c52bff749194eaff0ab5fb89d8f42d4b5e",
-      "log_bytes": 19297,
-      "log_sha256": "f06c0277e0dab56acebd70c75291edb469de1d7c3075f8d101ba515276e57513"
+      "id": 9439276030,
+      "zip_bytes": 3881,
+      "zip_sha256": "eaf481644c61243a786374a6968d8d861a369aeebcc350b995d485876c4b9d75",
+      "log_bytes": 19823,
+      "log_sha256": "04217b9535e7db00828369936b43b9bd0e95242537dc39fdfeba4a5bfeaf2844"
     },
-    "build_artifact": {
-      "id": 9436450207,
-      "zip_bytes": 3131261,
-      "zip_sha256": "a7b3c6e1328380bd38464d34163f9a812510799bc88e85371db0099aeead1aac",
+    "verification_build_artifact": {
+      "id": 9439276737,
+      "zip_bytes": 3171021,
+      "zip_sha256": "b2a4f6f525e023ca9d33e5b952fd991e74493be8d358b11f2fa2569bbd3d40eb",
       "jar": "jetsetcraft-1.20.1-0.1.0-alpha.1.jar",
-      "jar_bytes": 3263949,
-      "jar_sha256": "d59126b947296d63bc1e1e5aeba35f59942c6b499734b31ffa870b335786bb20"
+      "jar_bytes": 3306111,
+      "jar_sha256": "87a2396b08d7e28dec68e304c5bb680c4e2f30c4ce147a4177db8d3ba0b6b154",
+      "note": "Verification artifact includes CI-only edge probe instrumentation and is not represented as canonical release bytes."
     },
     "canonical_cover": {
       "drive_file_id": "1km1kaSF6vqR5wBrMQr8J1FHCAFy8vp4W",
