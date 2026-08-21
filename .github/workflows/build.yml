@@ -16,6 +16,14 @@ jobs:
       - uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '8.8'
+      - name: Package exact source snapshot
+        run: git archive --format=zip --output=jetsetcraft-source.zip HEAD
+      - name: Upload exact source snapshot
+        uses: actions/upload-artifact@v4
+        with:
+          name: jetsetcraft-source
+          path: jetsetcraft-source.zip
+          if-no-files-found: error
       - name: Generate and validate authored assets and gameplay contract
         run: |
           set -euo pipefail
