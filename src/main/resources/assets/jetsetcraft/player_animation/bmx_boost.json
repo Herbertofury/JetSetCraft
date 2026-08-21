@@ -1,0 +1,52 @@
+{
+  "version": 1,
+  "uuid": "6ea6c5cb-f1e9-42d5-9a71-77d617c6d251",
+  "name": "bmx_boost",
+  "emote": {
+    "beginTick": 0,
+    "endTick": 12,
+    "stopTick": 12,
+    "isLoop": true,
+    "returnTick": 0,
+    "nsfw": false,
+    "degrees": false,
+    "moves": [
+      {
+        "tick": 0,
+        "easing": "INOUTSINE",
+        "body": {
+          "pitch": 0.35
+        },
+        "leftLeg": {
+          "pitch": -0.9
+        },
+        "rightLeg": {
+          "pitch": 0.9
+        }
+      },
+      {
+        "tick": 6,
+        "easing": "INOUTSINE",
+        "leftLeg": {
+          "pitch": 0.9
+        },
+        "rightLeg": {
+          "pitch": -0.9
+        }
+      },
+      {
+        "tick": 12,
+        "easing": "INOUTSINE",
+        "body": {
+          "pitch": 0.35
+        },
+        "leftLeg": {
+          "pitch": -0.9
+        },
+        "rightLeg": {
+          "pitch": 0.9
+        }
+      }
+    ]
+  }
+}

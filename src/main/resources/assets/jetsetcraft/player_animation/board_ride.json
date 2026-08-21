@@ -1,0 +1,52 @@
+{
+  "version": 1,
+  "uuid": "30b7ec5f-6c27-4ffd-a0a2-9836857bd452",
+  "name": "board_ride",
+  "emote": {
+    "beginTick": 0,
+    "endTick": 20,
+    "stopTick": 20,
+    "isLoop": true,
+    "returnTick": 0,
+    "nsfw": false,
+    "degrees": false,
+    "moves": [
+      {
+        "tick": 0,
+        "easing": "INOUTSINE",
+        "body": {
+          "pitch": 0.12,
+          "roll": 0.08
+        },
+        "leftLeg": {
+          "pitch": 0.16,
+          "yaw": 0.34,
+          "roll": 0.12
+        },
+        "rightLeg": {
+          "pitch": -0.06,
+          "yaw": -0.3,
+          "roll": -0.1
+        }
+      },
+      {
+        "tick": 20,
+        "easing": "INOUTSINE",
+        "body": {
+          "pitch": 0.12,
+          "roll": -0.08
+        },
+        "leftLeg": {
+          "pitch": 0.16,
+          "yaw": 0.34,
+          "roll": 0.12
+        },
+        "rightLeg": {
+          "pitch": -0.06,
+          "yaw": -0.3,
+          "roll": -0.1
+        }
+      }
+    ]
+  }
+}

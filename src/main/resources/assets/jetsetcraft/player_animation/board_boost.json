@@ -1,0 +1,48 @@
+{
+  "version": 1,
+  "uuid": "8af2f899-5262-473b-8454-693f4886d7a7",
+  "name": "board_boost",
+  "emote": {
+    "beginTick": 0,
+    "endTick": 12,
+    "stopTick": 12,
+    "isLoop": true,
+    "returnTick": 0,
+    "nsfw": false,
+    "degrees": false,
+    "moves": [
+      {
+        "tick": 0,
+        "easing": "INOUTSINE",
+        "body": {
+          "pitch": 0.32,
+          "roll": 0.1
+        },
+        "leftLeg": {
+          "pitch": 0.26,
+          "yaw": 0.42
+        },
+        "rightLeg": {
+          "pitch": -0.18,
+          "yaw": -0.36
+        }
+      },
+      {
+        "tick": 12,
+        "easing": "INOUTSINE",
+        "body": {
+          "pitch": 0.32,
+          "roll": -0.1
+        },
+        "leftLeg": {
+          "pitch": 0.26,
+          "yaw": 0.42
+        },
+        "rightLeg": {
+          "pitch": -0.18,
+          "yaw": -0.36
+        }
+      }
+    ]
+  }
+}

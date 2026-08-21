@@ -1,0 +1,17 @@
+{
+  "itemGroup.jetsetcraft.main": "JetSetCraft",
+  "item.jetsetcraft.inline_skates": "Neo Inline Skates",
+  "item.jetsetcraft.street_board": "Street Deck",
+  "item.jetsetcraft.bmx": "Street BMX",
+  "item.jetsetcraft.spray_can": "Graffiti Spray Can",
+  "key.categories.jetsetcraft": "JetSetCraft",
+  "key.jetsetcraft.boost": "Boost",
+  "key.jetsetcraft.trick": "Trick",
+  "key.jetsetcraft.grind": "Grind / Wall Ride",
+  "key.jetsetcraft.manual": "Manual",
+  "key.jetsetcraft.brake": "Brake / Powerslide",
+  "message.jetsetcraft.ride_on": "Ride style: %s",
+  "message.jetsetcraft.ride_off": "Ride style off",
+  "message.jetsetcraft.graffiti_variant": "Graffiti tag %s",
+  "item.jetsetcraft.quad_skates": "Neon Quad Skates"
+}

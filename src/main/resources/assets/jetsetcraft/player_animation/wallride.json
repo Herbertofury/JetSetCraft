@@ -1,0 +1,48 @@
+{
+  "version": 1,
+  "uuid": "28a3c3cc-eb94-47de-8ea5-a1b70d62aea1",
+  "name": "wallride",
+  "emote": {
+    "beginTick": 0,
+    "endTick": 14,
+    "stopTick": 14,
+    "isLoop": true,
+    "returnTick": 0,
+    "nsfw": false,
+    "degrees": false,
+    "moves": [
+      {
+        "tick": 0,
+        "easing": "INOUTSINE",
+        "body": {
+          "pitch": 0.1,
+          "roll": 0.3
+        },
+        "leftLeg": {
+          "pitch": 0.28,
+          "roll": 0.2
+        },
+        "rightLeg": {
+          "pitch": -0.2,
+          "roll": 0.12
+        }
+      },
+      {
+        "tick": 14,
+        "easing": "INOUTSINE",
+        "body": {
+          "pitch": 0.1,
+          "roll": 0.22
+        },
+        "leftLeg": {
+          "pitch": 0.16,
+          "roll": 0.15
+        },
+        "rightLeg": {
+          "pitch": -0.1,
+          "roll": 0.08
+        }
+      }
+    ]
+  }
+}

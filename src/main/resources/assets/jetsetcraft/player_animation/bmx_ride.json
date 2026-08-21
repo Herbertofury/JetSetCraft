@@ -1,0 +1,52 @@
+{
+  "version": 1,
+  "uuid": "d7019e4d-40a7-4876-9930-d84d212c2d47",
+  "name": "bmx_ride",
+  "emote": {
+    "beginTick": 0,
+    "endTick": 20,
+    "stopTick": 20,
+    "isLoop": true,
+    "returnTick": 0,
+    "nsfw": false,
+    "degrees": false,
+    "moves": [
+      {
+        "tick": 0,
+        "easing": "INOUTSINE",
+        "body": {
+          "pitch": 0.16
+        },
+        "leftLeg": {
+          "pitch": -0.7
+        },
+        "rightLeg": {
+          "pitch": 0.7
+        }
+      },
+      {
+        "tick": 10,
+        "easing": "INOUTSINE",
+        "leftLeg": {
+          "pitch": 0.7
+        },
+        "rightLeg": {
+          "pitch": -0.7
+        }
+      },
+      {
+        "tick": 20,
+        "easing": "INOUTSINE",
+        "body": {
+          "pitch": 0.16
+        },
+        "leftLeg": {
+          "pitch": -0.7
+        },
+        "rightLeg": {
+          "pitch": 0.7
+        }
+      }
+    ]
+  }
+}

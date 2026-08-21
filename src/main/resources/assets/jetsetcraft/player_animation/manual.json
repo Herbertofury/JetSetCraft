@@ -1,0 +1,46 @@
+{
+  "version": 1,
+  "uuid": "43cae206-95d9-42b3-b50a-244ddfcdb006",
+  "name": "manual",
+  "emote": {
+    "beginTick": 0,
+    "endTick": 20,
+    "stopTick": 20,
+    "isLoop": true,
+    "returnTick": 0,
+    "nsfw": false,
+    "degrees": false,
+    "moves": [
+      {
+        "tick": 0,
+        "easing": "INOUTSINE",
+        "body": {
+          "pitch": -0.15
+        },
+        "leftLeg": {
+          "pitch": 0.32,
+          "yaw": 0.15
+        },
+        "rightLeg": {
+          "pitch": 0.18,
+          "yaw": -0.15
+        }
+      },
+      {
+        "tick": 20,
+        "easing": "INOUTSINE",
+        "body": {
+          "pitch": -0.1
+        },
+        "leftLeg": {
+          "pitch": 0.28,
+          "yaw": 0.15
+        },
+        "rightLeg": {
+          "pitch": 0.22,
+          "yaw": -0.15
+        }
+      }
+    ]
+  }
+}

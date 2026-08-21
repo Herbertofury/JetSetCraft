@@ -29,6 +29,11 @@ public final class JetSetConfig {
         public final ForgeConfigSpec.BooleanValue allowRailTricks;
         public final ForgeConfigSpec.BooleanValue allowWallRides;
         public final ForgeConfigSpec.BooleanValue allowCombatWhileRiding;
+        public final ForgeConfigSpec.BooleanValue enableVanillaWorldPhysics;
+        public final ForgeConfigSpec.DoubleValue blueIceSpeedMultiplier;
+        public final ForgeConfigSpec.DoubleValue slimeBounceMultiplier;
+        public final ForgeConfigSpec.DoubleValue poweredRailBoostPerTick;
+        public final ForgeConfigSpec.DoubleValue unpoweredRailRetention;
         public final ForgeConfigSpec.BooleanValue allowGraffiti;
 
         private Server(ForgeConfigSpec.Builder b) {
@@ -44,6 +49,18 @@ public final class JetSetConfig {
             allowRailTricks = b.comment("Allow trick inputs, hops and transfers while actively grinding a rail/track.")
                     .define("allowRailTricks", true);
             allowWallRides = b.define("allowWallRides", true);
+            b.pop();
+            b.push("vanillaWorldPhysics");
+            enableVanillaWorldPhysics = b.comment("Compose JetSetCraft momentum with Minecraft block materials, redstone, fluids, effects and enchantments.")
+                    .define("enableVanillaWorldPhysics", true);
+            blueIceSpeedMultiplier = b.comment("Extreme blue-ice top-speed multiplier. Intentionally evokes boats on blue ice instead of normal ground.")
+                    .defineInRange("blueIceSpeedMultiplier", 2.15, 1.0, 4.0);
+            slimeBounceMultiplier = b.comment("Multiplier applied to preserved vertical impact speed when a rider lands on slime.")
+                    .defineInRange("slimeBounceMultiplier", 0.92, 0.1, 2.0);
+            poweredRailBoostPerTick = b.comment("Momentum added per tick while grinding a powered powered-rail.")
+                    .defineInRange("poweredRailBoostPerTick", 0.030, 0.0, 0.20);
+            unpoweredRailRetention = b.comment("Momentum retained per tick while grinding an unpowered powered-rail.")
+                    .defineInRange("unpoweredRailRetention", 0.90, 0.20, 1.0);
             b.pop();
             b.push("compatibility");
             allowCombatWhileRiding = b.comment("Never suppress normal/third-party weapon input while a ride style is active.")

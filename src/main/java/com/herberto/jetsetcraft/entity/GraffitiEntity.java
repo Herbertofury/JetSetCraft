@@ -35,26 +35,62 @@ public final class GraffitiEntity extends Entity {
         setPos(x, y, z);
     }
 
-    public int getVariant() { return entityData.get(VARIANT); }
-    public void setVariant(int variant) { entityData.set(VARIANT, Math.floorMod(variant, GraffitiCatalog.size())); }
-    public Direction getFace() { return Direction.from3DDataValue(entityData.get(FACE)); }
-    public void setFace(Direction face) { entityData.set(FACE, (byte) face.get3DDataValue()); }
+    public int getVariant() {
+        return entityData.get(VARIANT);
+    }
 
-    @Override protected void defineSynchedData() {
+    public void setVariant(int variant) {
+        entityData.set(VARIANT, Math.floorMod(variant, GraffitiCatalog.size()));
+    }
+
+    public Direction getFace() {
+        return Direction.from3DDataValue(entityData.get(FACE));
+    }
+
+    public void setFace(Direction face) {
+        entityData.set(FACE, (byte) face.get3DDataValue());
+    }
+
+    @Override
+    protected void defineSynchedData() {
         entityData.define(VARIANT, 0);
         entityData.define(FACE, (byte) Direction.NORTH.get3DDataValue());
     }
-    @Override protected void readAdditionalSaveData(CompoundTag tag) {
-        setVariant(tag.getInt("Variant")); setFace(Direction.from3DDataValue(tag.getByte("Face")));
+
+    @Override
+    protected void readAdditionalSaveData(CompoundTag tag) {
+        setVariant(tag.getInt("Variant"));
+        setFace(Direction.from3DDataValue(tag.getByte("Face")));
     }
-    @Override protected void addAdditionalSaveData(CompoundTag tag) {
-        tag.putInt("Variant", getVariant()); tag.putByte("Face", (byte) getFace().get3DDataValue());
+
+    @Override
+    protected void addAdditionalSaveData(CompoundTag tag) {
+        tag.putInt("Variant", getVariant());
+        tag.putByte("Face", (byte) getFace().get3DDataValue());
     }
-    @Override public void tick() { setDeltaMovement(0, 0, 0); }
-    @Override public boolean hurt(DamageSource source, float amount) {
-        if (!level().isClientSide && source.getEntity() instanceof Player) { discard(); return true; }
+
+    @Override
+    public void tick() {
+        setDeltaMovement(0, 0, 0);
+    }
+
+
+    @Override
+    public boolean hurt(DamageSource source, float amount) {
+        if (!level().isClientSide && source.getEntity() instanceof Player) {
+            discard();
+            return true;
+        }
         return false;
     }
-    @Override public boolean isPickable() { return true; }
-    @Override public Packet<ClientGamePacketListener> getAddEntityPacket() { return NetworkHooks.getEntitySpawningPacket(this); }
+
+    @Override
+    public boolean isPickable() {
+        return true;
+    }
+
+    @Override
+    public Packet<ClientGamePacketListener> getAddEntityPacket() {
+        return NetworkHooks.getEntitySpawningPacket(this);
+    }
 }

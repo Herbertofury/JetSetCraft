@@ -37,6 +37,11 @@ public final class JetSetData {
     private int airTicks;
     private long lastSyncTick;
     private double momentum;
+    private double lastVerticalVelocity;
+    private long lastDetectorRailPos = Long.MIN_VALUE;
+    private long lastActivatorRailPos = Long.MIN_VALUE;
+    private long lastSideBouncePos = Long.MIN_VALUE;
+    private int surfaceInteractionCooldown;
 
     public RideStyle style() { return style; }
     public void setStyle(RideStyle v) { style = v == null ? RideStyle.NONE : v; }
@@ -100,6 +105,16 @@ public final class JetSetData {
     public void setLastSyncTick(long v) { lastSyncTick = v; }
     public double momentum() { return momentum; }
     public void setMomentum(double v) { momentum = Math.max(0.0, v); }
+    public double lastVerticalVelocity() { return lastVerticalVelocity; }
+    public void setLastVerticalVelocity(double v) { lastVerticalVelocity = v; }
+    public long lastDetectorRailPos() { return lastDetectorRailPos; }
+    public void setLastDetectorRailPos(long v) { lastDetectorRailPos = v; }
+    public long lastActivatorRailPos() { return lastActivatorRailPos; }
+    public void setLastActivatorRailPos(long v) { lastActivatorRailPos = v; }
+    public long lastSideBouncePos() { return lastSideBouncePos; }
+    public void setLastSideBouncePos(long v) { lastSideBouncePos = v; }
+    public int surfaceInteractionCooldown() { return surfaceInteractionCooldown; }
+    public void setSurfaceInteractionCooldown(int v) { surfaceInteractionCooldown = Math.max(0, v); }
     public boolean pressed(int flag) { return (inputMask & flag) != 0; }
     public boolean justPressed(int flag) { return (inputMask & flag) != 0 && (previousInputMask & flag) == 0; }
 
@@ -119,13 +134,17 @@ public final class JetSetData {
         grindStuckTicks = 0;
         grindCurveFactor = 1.0;
         wallRideTicks = 0;
+        lastDetectorRailPos = Long.MIN_VALUE;
+        lastActivatorRailPos = Long.MIN_VALUE;
+        lastSideBouncePos = Long.MIN_VALUE;
+        surfaceInteractionCooldown = 0;
     }
 
     public void copyFrom(JetSetData o) {
         style = o.style; active = o.active; boost = o.boost; comboScore = o.comboScore;
         comboMultiplier = o.comboMultiplier; comboGrace = o.comboGrace;
         resetTransientRideState(); inputMask = 0; previousInputMask = 0; inputForward = 0; inputStrafe = 0;
-        wasGrounded = true; airTicks = 0; momentum = 0;
+        wasGrounded = true; airTicks = 0; momentum = 0; lastVerticalVelocity = 0;
     }
 
     public CompoundTag save() {

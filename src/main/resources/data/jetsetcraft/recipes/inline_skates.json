@@ -1,0 +1,1 @@
+{"type":"minecraft:crafting_shaped","pattern":["L L","III","R R"],"key":{"L":{"item":"minecraft:leather"},"I":{"item":"minecraft:iron_ingot"},"R":{"item":"minecraft:redstone"}},"result":{"item":"jetsetcraft:inline_skates","count":1}}

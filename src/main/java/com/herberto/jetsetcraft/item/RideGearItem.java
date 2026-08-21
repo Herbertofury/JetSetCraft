@@ -15,17 +15,31 @@ import net.minecraft.world.level.Level;
 
 public final class RideGearItem extends Item {
     private final RideStyle style;
-    public RideGearItem(RideStyle style, Properties properties) { super(properties); this.style = style; }
-    public RideStyle style() { return style; }
-    @Override public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+
+    public RideGearItem(RideStyle style, Properties properties) {
+        super(properties);
+        this.style = style;
+    }
+
+    public RideStyle style() {
+        return style;
+    }
+
+    @Override
+    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
         if (!level.isClientSide && player instanceof ServerPlayer serverPlayer) {
             player.getCapability(JetSetDataProvider.CAPABILITY).ifPresent(data -> {
                 boolean sameAndActive = data.active() && data.style() == style;
-                data.setStyle(style); data.setActive(!sameAndActive); data.setGrinding(false); data.setGrindGrace(0);
-                player.displayClientMessage(sameAndActive
-                        ? Component.translatable("message.jetsetcraft.ride_off").withStyle(ChatFormatting.GRAY)
-                        : Component.translatable("message.jetsetcraft.ride_on", style.serializedName()).withStyle(ChatFormatting.AQUA), true);
+                data.setStyle(style);
+                data.setActive(!sameAndActive);
+                data.setGrinding(false);
+                data.setGrindGrace(0);
+                if (sameAndActive) {
+                    player.displayClientMessage(Component.translatable("message.jetsetcraft.ride_off").withStyle(ChatFormatting.GRAY), true);
+                } else {
+                    player.displayClientMessage(Component.translatable("message.jetsetcraft.ride_on", style.serializedName()).withStyle(ChatFormatting.AQUA), true);
+                }
                 JetSetNetwork.sync(serverPlayer, data);
             });
         }

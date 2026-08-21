@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:honey_block",
+    "minecraft:soul_sand",
+    "minecraft:soul_soil",
+    "minecraft:mud",
+    "minecraft:cobweb",
+    "minecraft:powder_snow"
+  ]
+}

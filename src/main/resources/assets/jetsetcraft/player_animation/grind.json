@@ -1,0 +1,52 @@
+{
+  "version": 1,
+  "uuid": "2b073cfb-e090-4a90-874a-dded134ac64c",
+  "name": "grind",
+  "emote": {
+    "beginTick": 0,
+    "endTick": 16,
+    "stopTick": 16,
+    "isLoop": true,
+    "returnTick": 0,
+    "nsfw": false,
+    "degrees": false,
+    "moves": [
+      {
+        "tick": 0,
+        "easing": "INOUTSINE",
+        "body": {
+          "pitch": 0.12,
+          "roll": -0.15
+        },
+        "leftLeg": {
+          "pitch": 0.42,
+          "yaw": 0.46,
+          "roll": 0.16
+        },
+        "rightLeg": {
+          "pitch": -0.24,
+          "yaw": -0.38,
+          "roll": -0.12
+        }
+      },
+      {
+        "tick": 16,
+        "easing": "INOUTSINE",
+        "body": {
+          "pitch": 0.12,
+          "roll": 0.15
+        },
+        "leftLeg": {
+          "pitch": 0.42,
+          "yaw": 0.46,
+          "roll": 0.16
+        },
+        "rightLeg": {
+          "pitch": -0.24,
+          "yaw": -0.38,
+          "roll": -0.12
+        }
+      }
+    ]
+  }
+}

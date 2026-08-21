@@ -1,0 +1,70 @@
+{
+  "version": 1,
+  "uuid": "14467541-8f11-4715-b678-8eb40437424f",
+  "name": "powerslide",
+  "emote": {
+    "beginTick": 0,
+    "endTick": 16,
+    "stopTick": 16,
+    "isLoop": true,
+    "returnTick": 0,
+    "nsfw": false,
+    "degrees": false,
+    "moves": [
+      {
+        "tick": 0,
+        "easing": "INOUTSINE",
+        "body": {
+          "pitch": 0.16,
+          "roll": -0.18
+        },
+        "leftLeg": {
+          "pitch": 0.28,
+          "yaw": 0.42,
+          "roll": 0.14
+        },
+        "rightLeg": {
+          "pitch": 0.1,
+          "yaw": -0.48,
+          "roll": -0.13
+        }
+      },
+      {
+        "tick": 8,
+        "easing": "INOUTSINE",
+        "body": {
+          "pitch": 0.18,
+          "roll": 0.18
+        },
+        "leftLeg": {
+          "pitch": 0.16,
+          "yaw": 0.48,
+          "roll": 0.16
+        },
+        "rightLeg": {
+          "pitch": 0.3,
+          "yaw": -0.42,
+          "roll": -0.15
+        }
+      },
+      {
+        "tick": 16,
+        "easing": "INOUTSINE",
+        "body": {
+          "pitch": 0.16,
+          "roll": -0.18
+        },
+        "leftLeg": {
+          "pitch": 0.28,
+          "yaw": 0.42,
+          "roll": 0.14
+        },
+        "rightLeg": {
+          "pitch": 0.1,
+          "yaw": -0.48,
+          "roll": -0.13
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,70 @@
+{
+  "version": 1,
+  "uuid": "dcfc585c-c13c-4b86-8598-079cf2c88838",
+  "name": "quad_ride",
+  "emote": {
+    "beginTick": 0,
+    "endTick": 20,
+    "stopTick": 20,
+    "isLoop": true,
+    "returnTick": 0,
+    "nsfw": false,
+    "degrees": false,
+    "moves": [
+      {
+        "tick": 0,
+        "easing": "INOUTSINE",
+        "body": {
+          "pitch": 0.1,
+          "roll": 0.02
+        },
+        "leftLeg": {
+          "pitch": -0.14,
+          "yaw": 0.13,
+          "roll": 0.07
+        },
+        "rightLeg": {
+          "pitch": 0.15,
+          "yaw": -0.13,
+          "roll": -0.07
+        }
+      },
+      {
+        "tick": 10,
+        "easing": "INOUTSINE",
+        "body": {
+          "pitch": 0.12,
+          "roll": -0.02
+        },
+        "leftLeg": {
+          "pitch": 0.2,
+          "yaw": 0.08,
+          "roll": 0.1
+        },
+        "rightLeg": {
+          "pitch": -0.22,
+          "yaw": -0.08,
+          "roll": -0.1
+        }
+      },
+      {
+        "tick": 20,
+        "easing": "INOUTSINE",
+        "body": {
+          "pitch": 0.1,
+          "roll": 0.02
+        },
+        "leftLeg": {
+          "pitch": -0.14,
+          "yaw": 0.13,
+          "roll": 0.07
+        },
+        "rightLeg": {
+          "pitch": 0.15,
+          "yaw": -0.13,
+          "roll": -0.07
+        }
+      }
+    ]
+  }
+}

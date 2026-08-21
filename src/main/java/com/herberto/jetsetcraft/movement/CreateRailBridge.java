@@ -4,16 +4,19 @@ import com.herberto.jetsetcraft.JetSetCraft;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.fml.ModList;
+
 import java.util.Optional;
 
 /** Loads the Create-specific provider only when Create is actually present, keeping Create optional at runtime. */
 final class CreateRailBridge {
     private static volatile GrindRailProvider provider;
     private static volatile boolean attempted;
+
     static Optional<GrindTarget> findBest(Player player, Vec3 preferredDirection, double radius, double verticalTolerance) {
         GrindRailProvider p = provider();
         return p == null ? Optional.empty() : p.findBest(player, preferredDirection, radius, verticalTolerance);
     }
+
     private static GrindRailProvider provider() {
         if (attempted) return provider;
         synchronized (CreateRailBridge.class) {
@@ -30,5 +33,6 @@ final class CreateRailBridge {
             return provider;
         }
     }
+
     private CreateRailBridge() {}
 }

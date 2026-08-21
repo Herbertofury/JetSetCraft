@@ -1,0 +1,56 @@
+{
+  "version": 1,
+  "uuid": "c187c7b2-0b20-48c3-9bd4-a62c38838ed1",
+  "name": "inline_boost",
+  "emote": {
+    "beginTick": 0,
+    "endTick": 14,
+    "stopTick": 14,
+    "isLoop": true,
+    "returnTick": 0,
+    "nsfw": false,
+    "degrees": false,
+    "moves": [
+      {
+        "tick": 0,
+        "easing": "INOUTSINE",
+        "body": {
+          "pitch": 0.3
+        },
+        "leftLeg": {
+          "pitch": -0.3,
+          "roll": 0.08
+        },
+        "rightLeg": {
+          "pitch": 0.38,
+          "roll": -0.08
+        }
+      },
+      {
+        "tick": 7,
+        "easing": "INOUTSINE",
+        "leftLeg": {
+          "pitch": 0.42
+        },
+        "rightLeg": {
+          "pitch": -0.44
+        }
+      },
+      {
+        "tick": 14,
+        "easing": "INOUTSINE",
+        "body": {
+          "pitch": 0.3
+        },
+        "leftLeg": {
+          "pitch": -0.3,
+          "roll": 0.08
+        },
+        "rightLeg": {
+          "pitch": 0.38,
+          "roll": -0.08
+        }
+      }
+    ]
+  }
+}
