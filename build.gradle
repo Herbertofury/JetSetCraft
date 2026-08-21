@@ -45,8 +45,12 @@ dependencies {
     // Compile against the current 1.20.1 TacZ API, but keep TacZ optional at runtime.
     compileOnly fg.deobf("curse.maven:timeless-and-classics-zero-1028108:8141310")
 
-    // Create 6.0.8 (current Forge 1.20.1 release) is optional at runtime; this compiles the native track geometry adapter.
+    // Create 6.0.8 (current Forge 1.20.1 release) is optional in JetSetCraft production.
     compileOnly fg.deobf("curse.maven:create-328085:7178761")
+
+    // Verification-only branch: load the exact production Create 6.0.8 jar in Forge GameTest/server runs so
+    // JetSetCraft's native ITrackBlock/Bezier adapter is proven against a real Create runtime, not API stubs.
+    runtimeOnly fg.deobf("curse.maven:create-328085:7178761")
 }
 
 sourceSets.main.resources { srcDir 'src/generated/resources' }
