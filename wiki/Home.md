@@ -24,6 +24,8 @@ The next major living-world pillar is defined in [[Gang Wars, Boombox & Mob Atla
 
 The core interoperability promise is strict: **Minecraft and other mods keep ownership of their entities; JetSetCraft adds an optional street-culture layer on top.** A normal mob becomes a gang rider only when actual JetSetCraft Street Gear is equipped. Ending an event does not revert it. It remains gangified across normal idle time, chunk reloads, and save/restart until that gear is genuinely removed, stolen, broken, or unequipped.
 
+Rare natural crews use the [[Gang Hangouts, Territory & Reputation|Hangouts-Territory-and-Reputation]] architecture: gangs adopt already-generated places as **soft territories** with tiny persistent site records, small resident crews, geometry-aware additive micro-furniture, no chunk tickets, and only low-frequency idle AI. Boombox/event crews are a separate ephemeral cast that skate away/despawn after the event, so repeatable challenges never steadily fill the save with permanent mobs. Canonical reputation remains per `gang_id`, while a specific hangout can remember only a small bounded amount of local chapter history.
+
 For the hard compatibility rules—including Fox/Allay/native pickup, dropped-gear walk-over, direct equip, dispenser/redstone equip, and anatomy-aware skating for quadrupeds, spiders, slimes, babies, and modded animals—read the [[Standalone Compatibility Covenant|Standalone-Compatibility-Covenant]]. That covenant supersedes any older temporary/event-only wording.
 
 ## Start here
@@ -34,7 +36,8 @@ For the hard compatibility rules—including Fox/Allay/native pickup, dropped-ge
 4. Build long lines with [[Tricks, Combos and Flow|Tricks-Combos-and-Flow]].
 5. Turn your world into a course with [[Grinding and Transfers|Grinding-and-Transfers]] and [[World Physics|World-Physics]].
 6. Explore the future rival-crew ecosystem in [[Gang Wars, Boombox & Mob Atlas|Gang-Wars-Boombox-and-Mob-Atlas]].
-7. Read the [[Standalone Compatibility Covenant|Standalone-Compatibility-Covenant]], then review [[Compatibility]] before assembling a large modpack.
+7. See how persistent crews live without performance bloat in [[Gang Hangouts, Territory & Reputation|Hangouts-Territory-and-Reputation]].
+8. Read the [[Standalone Compatibility Covenant|Standalone-Compatibility-Covenant]], then review [[Compatibility]] before assembling a large modpack.
 
 ## Core design promises
 
