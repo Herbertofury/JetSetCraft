@@ -40,7 +40,7 @@ public final class RideAnimationController {
             if (event.phase != TickEvent.Phase.END) return;
             Minecraft mc = Minecraft.getInstance();
             if (mc.level == null) { ACTIVE.clear(); return; }
-            for (var player : mc.level.players()) if (player instanceof AbstractClientPlayer clientPlayer) update(clientPlayer);
+            for (AbstractClientPlayer player : mc.level.players()) update(player);
         }
     }
 
