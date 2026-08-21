@@ -55,7 +55,12 @@ public final class JetSetCommands {
             return 0;
         }
 
-        player.getCapability(JetSetDataProvider.CAPABILITY).ifPresentOrElse(data -> {
+        JetSetData data = player.getCapability(JetSetDataProvider.CAPABILITY).resolve().orElse(null);
+        if (data == null) {
+            source.sendFailure(Component.literal("JetSetCraft capability is not attached to this player."));
+            return 0;
+        }
+
             VanillaWorldPhysics.Surface surface = VanillaWorldPhysics.ground(player);
             VanillaWorldPhysics.MotionProfile profile = VanillaWorldPhysics.profile(player, data, surface);
             String block = String.valueOf(BuiltInRegistries.BLOCK.getKey(surface.state().getBlock()));
@@ -95,7 +100,6 @@ public final class JetSetCommands {
                             material.capMultiplier(), material.retention(), target.curvature())), false);
                 });
             }
-        }, () -> source.sendFailure(Component.literal("JetSetCraft capability is not attached to this player.")));
         return 1;
     }
 
