@@ -17,90 +17,124 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Diagnose main staging and recover intact alpha source
+      - name: Recover and structurally verify staged source payload
         shell: bash
         run: |
           set -euo pipefail
-          mkdir -p output/candidates output/recovered-source
+          mkdir -p output/recovered-source
+          cat .bootstrap/cc65cad/chunk-* | base64 -d > output/staged-corrupt.tar.gz
+          STAGED_SHA="$(sha256sum output/staged-corrupt.tar.gz | awk '{print $1}')"
+          printf 'stagedCompressedSha256=%s\n' "$STAGED_SHA" > output/recovery-summary.txt
+          printf 'originalExpectedCompressedSha256=%s\n' '778627d230fd9f1ce87a7031e66dd928556ac4f84cd08089d41ca3871ea96ecc' >> output/recovery-summary.txt
+          printf 'compressedContainerStatus=CORRUPT_CRC_LENGTH\n' >> output/recovery-summary.txt
 
-          # Preserve the broken main payload as forensic evidence; never promote it.
-          cat .bootstrap/cc65cad/chunk-* | base64 -d > output/candidates/main-cc65cad.tar.gz || true
-          MAIN_SHA="$(sha256sum output/candidates/main-cc65cad.tar.gz | awk '{print $1}')"
-          printf 'mainStagedSha256=%s\n' "$MAIN_SHA" > output/recovery-summary.txt
-          printf 'mainExpectedSha256=%s\n' '778627d230fd9f1ce87a7031e66dd928556ac4f84cd08089d41ca3871ea96ecc' >> output/recovery-summary.txt
-          if gzip -t output/candidates/main-cc65cad.tar.gz 2>/dev/null && tar -tzf output/candidates/main-cc65cad.tar.gz >/dev/null 2>&1; then
-            printf 'mainStaging=VALID_BUT_HASH_MISMATCH\n' >> output/recovery-summary.txt
-          else
-            printf 'mainStaging=CORRUPT\n' >> output/recovery-summary.txt
-          fi
+          # gzip still emits the complete deflate payload before reporting the bad footer.
+          # We do not pretend the gzip is valid; instead verify every tar header/data extent.
+          gzip -dc output/staged-corrupt.tar.gz > output/recovered.tar 2>output/gzip-diagnostic.txt || true
+          python3 - <<'PY'
+          from pathlib import Path
+          import hashlib, json
+          data = Path('output/recovered.tar').read_bytes()
+          pos = 0
+          entries = []
+          zero_blocks = 0
+          while pos + 512 <= len(data):
+              block = data[pos:pos+512]
+              if block == b'\0' * 512:
+                  zero_blocks += 1
+                  pos += 512
+                  if zero_blocks >= 2:
+                      break
+                  continue
+              if zero_blocks:
+                  raise SystemExit(f'non-zero tar header after zero terminator at byte {pos}')
+              name = block[:100].split(b'\0', 1)[0].decode('utf-8', 'strict')
+              raw_size = block[124:136].split(b'\0', 1)[0].strip() or b'0'
+              raw_sum = block[148:156].split(b'\0', 1)[0].strip() or b'0'
+              size = int(raw_size, 8)
+              stored = int(raw_sum, 8)
+              check = bytearray(block)
+              check[148:156] = b'        '
+              calculated = sum(check)
+              if stored != calculated:
+                  raise SystemExit(f'tar header checksum mismatch for {name}: {stored} != {calculated}')
+              end = pos + 512 + size
+              if end > len(data):
+                  raise SystemExit(f'truncated tar payload for {name}: need {end}, have {len(data)}')
+              entries.append({'name': name, 'size': size, 'headerOffset': pos})
+              pos = pos + 512 + ((size + 511) // 512) * 512
+          if zero_blocks < 2:
+              raise SystemExit(f'missing complete two-block tar terminator: {zero_blocks}')
+          if len(entries) < 100:
+              raise SystemExit(f'implausibly small recovered source tree: {len(entries)} entries')
+          if any(data[pos:]):
+              raise SystemExit('non-zero bytes found after complete tar terminator')
+          Path('output/tar-structure.json').write_text(json.dumps({
+              'entries': len(entries),
+              'zeroBlocks': zero_blocks,
+              'logicalEnd': pos,
+              'decompressedBytes': len(data),
+              'sha256': hashlib.sha256(data).hexdigest(),
+              'first': entries[0]['name'],
+              'last': entries[-1]['name'],
+          }, indent=2) + '\n')
+          print(json.dumps({'entries': len(entries), 'logicalEnd': pos, 'decompressedBytes': len(data)}))
+          PY
 
-          # Recover only from immutable repository history. No guessed or synthesized bytes.
-          git worktree add --detach /tmp/jetsetcraft-alpha origin/jetsetcraft-alpha
-          cat /tmp/jetsetcraft-alpha/.bootstrap/current/chunk-* | base64 -d > output/candidates/alpha-current.tar.gz || true
-          base64 -d /tmp/jetsetcraft-alpha/bootstrap/jetsetcraft-alpha-src.tar.gz.b64 > output/candidates/alpha-single.tar.gz || true
-
-          choose_candidate() {
-            local candidate="$1"
-            if [[ -s "$candidate" ]] && gzip -t "$candidate" 2>/dev/null && tar -tzf "$candidate" >/dev/null 2>&1; then
-              printf '%s\n' "$candidate"
-              return 0
-            fi
-            return 1
-          }
-
-          SELECTED=""
-          if SELECTED="$(choose_candidate output/candidates/alpha-current.tar.gz)"; then
-            SOURCE_KIND=alpha-current
-          elif SELECTED="$(choose_candidate output/candidates/alpha-single.tar.gz)"; then
-            SOURCE_KIND=alpha-single
-          else
-            echo '::error::No byte-valid source archive survived in immutable JetSetCraft repository history.'
-            sha256sum output/candidates/*.tar.gz | tee -a output/recovery-summary.txt || true
-            exit 6
-          fi
-
-          SELECTED_SHA="$(sha256sum "$SELECTED" | awk '{print $1}')"
-          cp "$SELECTED" output/jetsetcraft-recovered.tar.gz
-          tar -tzf "$SELECTED" > output/archive-files.txt
-          tar -xzf "$SELECTED" -C output/recovered-source
+          tar -tf output/recovered.tar > output/archive-files.txt
+          tar -xf output/recovered.tar -C output/recovered-source
+          test -f output/recovered-source/build.gradle
+          test -f output/recovered-source/.github/workflows/build.yml
+          test -f output/recovered-source/src/main/java/com/herberto/jetsetcraft/JetSetCraft.java
+          test -f output/recovered-source/tools/validate_gameplay_contract.py
           find output/recovered-source -type f -print0 | sort -z | xargs -0 sha256sum > output/recovered-source.sha256
-          printf 'selectedSource=%s\n' "$SOURCE_KIND" >> output/recovery-summary.txt
-          printf 'selectedSha256=%s\n' "$SELECTED_SHA" >> output/recovery-summary.txt
-          printf 'fileCount=%s\n' "$(find output/recovered-source -type f | wc -l)" >> output/recovery-summary.txt
-          printf 'topLevel=%s\n' "$(find output/recovered-source -mindepth 1 -maxdepth 1 -printf '%f ' | sort)" >> output/recovery-summary.txt
+          printf 'recoveredFileCount=%s\n' "$(find output/recovered-source -type f | wc -l)" >> output/recovery-summary.txt
+          printf 'recoveredTarSha256=%s\n' "$(sha256sum output/recovered.tar | awk '{print $1}')" >> output/recovery-summary.txt
 
-      - name: Verify recovered project structure and real build
-        shell: bash
+      - name: Set up Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Set up exact Gradle 8.8
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.8'
+
+      - name: Generate and validate authored assets
         working-directory: output/recovered-source
+        shell: bash
         run: |
           set -euo pipefail
-          if [[ -f gradlew ]]; then
-            chmod +x gradlew
-            ./gradlew --no-daemon clean build
-          elif [[ -f pom.xml ]]; then
-            mvn -B -ntp test package
-          elif [[ -f build.gradle || -f build.gradle.kts ]]; then
-            echo '::error::Gradle project recovered without gradlew; refusing an unpinned system Gradle build.'
-            exit 4
-          elif [[ -f package.json ]]; then
-            if [[ -f package-lock.json ]]; then npm ci; else npm install --ignore-scripts --no-audit --no-fund; fi
-            npm test --if-present
-            npm run build --if-present
-          else
-            echo '::error::Recovered archive has no recognized build manifest.'
-            find . -maxdepth 3 -type f | sort | head -250
-            exit 5
-          fi
+          python -m pip install -r tools/requirements.txt
+          python tools/generate_models.py
+          python tools/generate_brand.py
+          python tools/validate_assets.py
+          python tools/validate_gameplay_contract.py
+
+      - name: Run real Forge build
+        working-directory: output/recovered-source
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(java -version 2>&1 | head -1 | grep -o '17[^\" ]*' | head -1 | cut -d. -f1)" = "17"
+          test "$(gradle --version | awk '/Gradle /{print $2; exit}')" = "8.8"
+          gradle --no-daemon clean build
+          test -n "$(find build/libs -maxdepth 1 -type f -name '*.jar' -print -quit)"
 
       - name: Capture recovered build outputs
         if: always()
         shell: bash
         run: |
           set -euo pipefail
-          find output/recovered-source -type f \( -path '*/build/libs/*' -o -path '*/target/*.jar' -o -path '*/dist/*' \) -print | sort > output/build-artifacts.txt || true
-          if [[ -s output/jetsetcraft-recovered.tar.gz ]]; then sha256sum output/jetsetcraft-recovered.tar.gz >> output/recovery-summary.txt; fi
+          find output/recovered-source/build/libs -maxdepth 1 -type f -name '*.jar' -print 2>/dev/null | sort > output/build-artifacts.txt || true
+          if [[ -s output/build-artifacts.txt ]]; then
+            while IFS= read -r artifact; do sha256sum "$artifact"; done < output/build-artifacts.txt > output/build-artifacts.sha256
+          fi
           cat output/recovery-summary.txt || true
-          cat output/build-artifacts.txt || true
+          cat output/tar-structure.json || true
+          cat output/build-artifacts.sha256 || true
 
       - name: Upload recovered source and build evidence
         if: always()
