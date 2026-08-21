@@ -4,8 +4,8 @@ import com.herberto.jetsetcraft.JetSetCraft;
 import com.herberto.jetsetcraft.data.JetSetData;
 import com.herberto.jetsetcraft.item.RideGearItem;
 import com.herberto.jetsetcraft.item.RideLoadout;
-import com.herberto.jetsetcraft.movement.JetSetMovement;
 import com.herberto.jetsetcraft.movement.RideStyle;
+import com.herberto.jetsetcraft.movement.VanillaWorldPhysics;
 import com.herberto.jetsetcraft.registry.ModItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.gametest.framework.GameTest;
@@ -19,6 +19,9 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.gametest.GameTestHolder;
 import net.minecraftforge.gametest.PrefixGameTestTemplate;
 import net.minecraftforge.registries.ForgeRegistries;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 /** Real Forge/Minecraft acceptance for the recovered hoverboard ride style. */
 @GameTestHolder(JetSetCraft.MOD_ID)
@@ -49,7 +52,9 @@ public final class HoverboardGameTests {
             throw new GameTestAssertException("Hoverboard did not survive real JetSetCraft persistence/loadout state");
         }
 
-        // Exercise the actual server-authoritative ride solver in a real ServerLevel rather than a math mock.
+        // Exercise JetSetCraft's actual production ground-motion solver against a real ServerLevel/ServerPlayer and
+        // real vanilla stone surface. Forge GameTest's mock player deliberately has no Netty channel, so invoking the
+        // outer tick orchestrator would mix an unrelated client-sync transport failure into this movement assertion.
         helper.setBlock(new BlockPos(1, 0, 1), Blocks.STONE);
         ServerPlayer player = helper.makeMockServerPlayerInLevel();
         BlockPos feet = helper.absolutePos(new BlockPos(1, 1, 1));
@@ -57,10 +62,9 @@ public final class HoverboardGameTests {
         player.setOnGround(true);
         player.setDeltaMovement(Vec3.ZERO);
         data.setInputForward(1.0F);
-        // Forge's GameTest mock player intentionally has no real Netty channel. Suppress only the unrelated
-        // periodic client-state packet while retaining the complete production movement solver invocation.
-        data.setLastSyncTick(Long.MAX_VALUE);
-        JetSetMovement.tickServer(player, data);
+        data.setMomentum(0.0);
+        VanillaWorldPhysics.Surface surface = VanillaWorldPhysics.ground(player);
+        invokeProductionGroundSolver(player, data, surface);
 
         double horizontalSpeed = player.getDeltaMovement().horizontalDistance();
         if (!(horizontalSpeed > 0.0) || !(data.momentum() > 0.0)) {
@@ -71,6 +75,22 @@ public final class HoverboardGameTests {
         }
 
         helper.succeed();
+    }
+
+    private static void invokeProductionGroundSolver(ServerPlayer player, JetSetData data,
+                                                     VanillaWorldPhysics.Surface surface) {
+        try {
+            Class<?> rideMotion = Class.forName("com.herberto.jetsetcraft.movement.RideMotion");
+            Method method = rideMotion.getDeclaredMethod("applyGroundMovement", ServerPlayer.class,
+                    JetSetData.class, VanillaWorldPhysics.Surface.class);
+            method.setAccessible(true);
+            method.invoke(null, player, data, surface);
+        } catch (InvocationTargetException error) {
+            Throwable cause = error.getCause() == null ? error : error.getCause();
+            throw new GameTestAssertException("Production RideMotion solver threw: " + cause);
+        } catch (ReflectiveOperationException error) {
+            throw new GameTestAssertException("Could not invoke production RideMotion solver: " + error);
+        }
     }
 
     private HoverboardGameTests() {}
