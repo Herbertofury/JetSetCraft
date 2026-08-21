@@ -118,8 +118,11 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          test "$(java -version 2>&1 | head -1 | grep -o '17[^\" ]*' | head -1 | cut -d. -f1)" = "17"
-          test "$(gradle --version | awk '/Gradle /{print $2; exit}')" = "8.8"
+          JAVA_VERSION="$(javac -version 2>&1)"
+          GRADLE_VERSION="$(gradle --version | sed -n 's/^Gradle //p' | sed -n '1p')"
+          printf 'Java compiler: %s\nGradle: %s\n' "$JAVA_VERSION" "$GRADLE_VERSION"
+          [[ "$JAVA_VERSION" == javac\ 17* ]]
+          [[ "$GRADLE_VERSION" == 8.8 ]]
           gradle --no-daemon clean build
           test -n "$(find build/libs -maxdepth 1 -type f -name '*.jar' -print -quit)"
 
