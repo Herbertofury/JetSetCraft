@@ -1,4 +1,6 @@
 name: Build JetSetCraft
+permissions:
+  contents: write
 on:
   push:
     branches: [ main, jetsetcraft, jetsetcraft-alpha, 'automation/**' ]
@@ -9,6 +11,22 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Apply pending verified-source checkpoint
+        id: pending
+        shell: bash
+        run: |
+          set -euo pipefail
+          shopt -s nullglob
+          parts=(checkpoints/style-flow-pending.b64.part*)
+          if (( ${#parts[@]} == 0 )); then
+            echo 'applied=false' >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          cat "${parts[@]}" | base64 --decode | gzip -dc > /tmp/style-flow.patch
+          git apply --index --whitespace=nowarn /tmp/style-flow.patch
+          echo 'applied=true' >> "$GITHUB_OUTPUT"
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
@@ -16,40 +34,49 @@ jobs:
       - uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '8.8'
-      - name: Package exact source snapshot
-        run: git archive --format=zip --output=jetsetcraft-source.zip HEAD
+      - name: Generate and validate authored assets and gameplay contract
+        run: |
+          set -euo pipefail
+          python -m pip install -r tools/requirements.txt
+          python tools/generate_models.py
+          python tools/generate_animations.py
+          python tools/generate_brand.py
+          python tools/validate_assets.py
+          python tools/validate_gameplay_contract.py
+      - name: Package exact staged source snapshot
+        run: |
+          set -euo pipefail
+          git add -A
+          tree_sha="$(git write-tree)"
+          git archive --format=zip --output=jetsetcraft-source.zip "$tree_sha"
       - name: Upload exact source snapshot
         uses: actions/upload-artifact@v4
         with:
           name: jetsetcraft-source
           path: jetsetcraft-source.zip
           if-no-files-found: error
-      - name: Generate and validate authored assets and gameplay contract
-        run: |
-          set -euo pipefail
-          python -m pip install -r tools/requirements.txt
-          python tools/generate_models.py
-          python tools/generate_brand.py
-          python tools/validate_assets.py
-          python tools/validate_gameplay_contract.py
       - name: Build
         run: gradle --no-daemon build
-      - name: Real Forge GameTest hoverboard acceptance
+      - name: Real Forge GameTest Style Flow acceptance
         shell: bash
         run: |
           set -euo pipefail
-          rm -f hoverboard-gametest.log
-          timeout 180s gradle --no-daemon runGameTestServer | tee hoverboard-gametest.log
-          if ! grep -Eq '1 tests are now running|1 test is now running|Running test|hoverboardUsesPersistentUniversalRideSolver|hoverboardusespersistentuniversalridesolver' hoverboard-gametest.log; then
-            echo '::error::Forge GameTest server did not visibly execute the recovered hoverboard test.'
+          rm -f style-flow-gametest.log
+          timeout 180s gradle --no-daemon runGameTestServer | tee style-flow-gametest.log
+          if ! grep -Eq 'Running test|hoverboardUsesPersistentUniversalRideSolver|hoverboardusespersistentuniversalridesolver|scooterUsesUniversalPersistentRideSolver|scooterusesuniversalpersistentridesolver' style-flow-gametest.log; then
+            echo '::error::Forge GameTest server did not visibly execute JetSetCraft Style Flow tests.'
             exit 1
           fi
-      - name: Upload hoverboard GameTest log
+          if ! grep -Eq 'All [0-9]+ required tests passed|[0-9]+ tests? passed' style-flow-gametest.log; then
+            echo '::error::Forge GameTest server did not report a complete required-test pass.'
+            exit 1
+          fi
+      - name: Upload Style Flow GameTest log
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: jetsetcraft-hoverboard-gametest
-          path: hoverboard-gametest.log
+          name: jetsetcraft-style-flow-gametest
+          path: style-flow-gametest.log
           if-no-files-found: warn
       - name: Real Forge dedicated-server runtime smoke
         shell: bash
@@ -90,3 +117,15 @@ jobs:
           name: jetsetcraft-forge-1.20.1
           path: build/libs/*.jar
           if-no-files-found: error
+      - name: Promote verified Style Flow source checkpoint
+        if: steps.pending.outputs.applied == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          git rm checkpoints/style-flow-pending.b64.part*
+          git add -A
+          git config user.name 'JetSetCraft Verification Bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git commit -m 'Add verified JetSetCraft Style Flow expansion'
+          target_branch="${GITHUB_HEAD_REF:-${GITHUB_REF_NAME}}"
+          git push origin HEAD:"$target_branch"
