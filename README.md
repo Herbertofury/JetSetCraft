@@ -3,3 +3,7 @@
 </p>
 
 # JetSetCraft
+
+## Design references
+
+- [Bedrock skating references + trick/grind surface catalog](docs/JETSETCRAFT_SKATING_REFERENCE_AND_TRICK_SURFACES.md) — skating/rollerblading/skateboarding inspiration, world grind/trick objects, purpose-built grind blocks, and the explicit hoverboard requirement.
