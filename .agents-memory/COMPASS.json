@@ -5,6 +5,7 @@
     "Preserve normal Minecraft and modded combat while skating, rollerblading, skateboarding or riding BMX.",
     "Ship high-fidelity equipment, animation and audiovisual presentation with no placeholder-quality core assets.",
     "Build a living street-culture ecosystem of gangs, music, graffiti, rivalry, reputation, minigames, and ultra-rare encounters without replacing vanilla or mod-owned mobs.",
+    "Let ultra-rare natural gangs adopt already-generated places as lightweight soft hangouts with small persistent resident crews, while repeatable Boombox/event casts remain ephemeral so the world feels inhabited without accumulating permanent AI load.",
     "Make gangification persistent and physical: actual JetSetCraft Street Gear on the original mob is what makes it a gang rider, and only actual gear removal/stolen gear/breakage/unequip restores its normal non-gang state.",
     "Make installed mods and dimensions feel naturally absorbed into JetSetCraft through data-driven optional compatibility and a runtime Mob Atlas.",
     "Perfect Forge 1.20.1 first, then carry the architecture forward to newer Minecraft versions."
@@ -26,6 +27,9 @@
     "persistent equipment-bound mob gangification using Street Gear rather than event-only conversion",
     "natural mob Street Gear acquisition through native pickup/steal, dropped-gear contact, direct interaction, and dispenser/redstone",
     "species-aware Ground Contact / Ride Rigs for bipeds, quadrupeds, multi-leg mobs, body-contact creatures, juveniles, and modded animals",
+    "ultra-rare soft Natural Hangouts with tiny persistent site records, small resident crews, adaptive non-destructive micro-furniture, and no chunk tickets",
+    "separate persistent natural residents from ephemeral Boombox/event casts that exit and despawn after repeatable challenges",
+    "global gang reputation keyed by gang_id plus only bounded lightweight local chapter memory keyed by site_id, never per-disposable-mob reputation",
     "gang reputation, rivalry, membership and renameable crew aliases",
     "competitive gang AI and street minigames",
     "adult, Junior/Baby and installed-mod Mob Atlases"
@@ -41,6 +45,9 @@
     "Never replace, registry-override, or unnecessarily subclass vanilla or mod-owned mobs for gang compatibility; attach JetSetCraft-owned state to the original entity.",
     "A challenge/event is never itself a mob-conversion trigger. Actual JetSetCraft Street Gear presence is the persistent Rider/Gang Form trigger.",
     "Ending an event tears down only transient challenge state; it must never remove persistent Street Gear or gang affiliation while the gear remains equipped.",
+    "Natural Hangouts must never force-load chunks, reserve terrain, rewrite biome/structure generation, replace source/player blocks for furniture, or fight later player/mod terrain changes.",
+    "Natural residents may remain persistent world actors without permanent strategic AI; event-only actors are an explicit ephemeral cast and must not steadily accumulate in the save.",
+    "Do not store full reputation per spawned gang mob. Canonical progression is gang_id-based; site_id memory stays tiny and bounded.",
     "Use source-owned mob pickup behavior when it exists and additive JetSetCraft item/dispenser behavior when it does not; never rewrite mob AI merely to equip gear.",
     "Never assume a two-legged humanoid rig for animals or modded mobs; map ride gear to actual ground/contact anatomy with safe generic fallbacks and curated adapters.",
     "Optional mods remain optional and must not be hard classloaded when absent.",
@@ -59,6 +66,10 @@
     "A vanilla or mod-owned mob can acquire Street Gear, remain persistently gangified across event end, chunk reload and save/restart, then return to its original behavior only when the gear is actually removed/stolen/broken/unequipped.",
     "Fox/Allay/native pickup, dropped-gear contact, direct player equip, and dispenser/redstone paths can equip compatible mobs without replacing their source AI.",
     "Biped, quadruped, multi-leg/body-contact, juvenile, and optional-mod animals use sensible species-aware ride contact rigs without forced humanoid assumptions or source renderer mutation.",
+    "An ultra-rare Natural Hangout can persist in an unloaded chunk without keeping that chunk loaded, altering source world generation, or ticking gang strategy offscreen.",
+    "Natural residents remain attached to their site after event end while event-only Boombox actors skate out/despawn cleanly and do not create permanent population bloat.",
+    "Hangout dressing adapts to existing geometry, never replaces solid source/player blocks, and safely degrades to fewer or no props when space is constrained.",
+    "One crew/event resolves balanced gang reputation as a shared transaction, while optional site chapter memory remains bounded and gang_id reputation remains canonical.",
     "The Boombox can start random and mob-targeted gang challenges with synchronized gang music metadata and cinematic entrances.",
     "Players can change reputation, join every gang over time, betray/reconcile with gangs, and rename a Friendly gang without breaking stable progression identity.",
     "The Gang Atlas covers vanilla adult crews, valid Junior/Baby variants, and safe detected mob types from installed optional mods."
