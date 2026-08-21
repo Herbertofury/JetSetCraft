@@ -1,38 +1,59 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "project": "JetSetCraft",
   "checkpointType": "recovery",
   "checkedAt": "2026-08-21",
   "canonical": {
     "repository": "Herbertofury/JetSetCraft",
     "branch": "main",
-    "statusCommit": "61fa24ed83286106ed1bd11ddc6ee7db54a97ea1"
+    "productCommit": "32111151889acbd6fab610ac3ae55d07e245cdda",
+    "productTree": "7c59cca15bff45edcd11f732c6db9ad775af9ed4",
+    "productNote": "Canonical main includes the final Forge LazyOptional diagnostics repair. Verification instrumentation was kept off main."
   },
-  "runtimeVerification": {
-    "verificationHead": "e7e9f5bbca76045d0787a622cb4e2b6ea9695234",
-    "workflowRun": 32453299956,
-    "job": 96685661517,
+  "exactCurrentMainVerification": {
+    "pullRequest": 11,
+    "verificationBranch": "automation/recovery-verify-main-321111",
+    "verificationHead": "54953c68200adc5dd2e4f8b257b5ce1746ec0853",
+    "pullRequestMergeRef": "cf20652ff60f3bffc9638e16967c4afd906d6b96",
+    "workflowRun": 32461794393,
+    "job": 96710026950,
     "conclusion": "success",
-    "serverReadyLine": "Done (29.165s)! For help, type \"help\"",
+    "baseProductCommit": "32111151889acbd6fab610ac3ae55d07e245cdda",
+    "serverReadyLine": "Done (29.046s)! For help, type \"help\"",
+    "edgeRuntimeMarker": "JETSETCRAFT_EDGE_RUNTIME_PASS internalSeamRejected=true exposedLedgeDetected=true clearanceRejected=true",
     "assetGameplayValidation": "success",
     "forgeBuild": "success",
-    "dedicatedServerRuntime": "success"
+    "dedicatedServerRuntime": "success",
+    "internalFullBlockSeamRejected": true,
+    "realExposedLedgeDetected": true,
+    "blockedRiderClearanceRejected": true,
+    "fatalGuard": "no ModLoadingException, failed lifecycle event, main-thread fatal, or JetSetCraft fatal matched",
+    "disposition": "verification-only PR closed without merge"
   },
-  "buildArtifact": {
-    "id": 9436450207,
-    "zipBytes": 3131261,
-    "zipSha256": "a7b3c6e1328380bd38464d34163f9a812510799bc88e85371db0099aeead1aac",
-    "jar": "jetsetcraft-1.20.1-0.1.0-alpha.1.jar",
-    "jarBytes": 3263949,
-    "jarSha256": "d59126b947296d63bc1e1e5aeba35f59942c6b499734b31ffa870b335786bb20"
+  "verificationArtifacts": {
+    "serverEvidence": {
+      "artifactId": 9439276030,
+      "zipBytes": 3881,
+      "zipSha256": "eaf481644c61243a786374a6968d8d861a369aeebcc350b995d485876c4b9d75",
+      "logBytes": 19823,
+      "logSha256": "04217b9535e7db00828369936b43b9bd0e95242537dc39fdfeba4a5bfeaf2844"
+    },
+    "forgeBuild": {
+      "artifactId": 9439276737,
+      "zipBytes": 3171021,
+      "zipSha256": "b2a4f6f525e023ca9d33e5b952fd991e74493be8d358b11f2fa2569bbd3d40eb",
+      "jar": "jetsetcraft-1.20.1-0.1.0-alpha.1.jar",
+      "jarBytes": 3306111,
+      "jarSha256": "87a2396b08d7e28dec68e304c5bb680c4e2f30c4ce147a4177db8d3ba0b6b154",
+      "note": "This artifact contains additive CI-only EdgeRuntimeVerifier instrumentation and is verification evidence, not a canonical release byte claim."
+    },
+    "legacyThumbnailArtifact": {
+      "artifactId": 9439276349,
+      "zipBytes": 14925,
+      "zipSha256": "bfb40a012e31ba4860170f48f838909828d2583144126b0c96c186a4edda3488"
+    }
   },
-  "serverEvidence": {
-    "artifactId": 9436449450,
-    "zipBytes": 3732,
-    "zipSha256": "29a3630f9902eef2e2dce9c6db93a1c52bff749194eaff0ab5fb89d8f42d4b5e",
-    "logBytes": 19297,
-    "logSha256": "f06c0277e0dab56acebd70c75291edb469de1d7c3075f8d101ba515276e57513"
-  },
+  "supersededRecoveryPrs": [6, 8, 10],
   "canonicalCover": {
     "driveFileId": "1km1kaSF6vqR5wBrMQr8J1FHCAFy8vp4W",
     "fileName": "JetSetCraft-cover-full-quality.png",
@@ -46,7 +67,7 @@
     "documentId": "1_9MOx4ijm-Cx7Dtx98nUY9BiM-yfrQ0Hyitpo_eYxRA",
     "folderId": "1tLhuo8QeAMtFvnwrbnqGtKKrBi3NuvZl",
     "coverAssetFolderId": "1eq5LuybeL4nyf_WPOAEmDom1CQD3OuWM",
-    "binaryEgressNote": "Direct GitHub-Actions-artifact to Drive raw binary egress was blocked by connector policy; exact build/server bytes remain retained in GitHub Actions and are indexed in the Drive checkpoint."
+    "binaryEgressNote": "Exact GitHub Actions binary artifacts remain retained in GitHub; the Drive checkpoint stores verified IDs, sizes and SHA-256 identities."
   },
   "stillUnverified": [
     "real client ride/trick/grind gameplay acceptance",
@@ -55,5 +76,5 @@
     "multiplayer movement/combat acceptance world",
     "hoverboard ride style implementation and runtime acceptance"
   ],
-  "disposition": "RECOVERED_ALPHA_FOUNDATION_NOT_FEATURE_COMPLETE"
+  "disposition": "EXACT_CURRENT_MAIN_SERVER_AND_EDGE_RUNTIME_VERIFIED_ALPHA_NOT_FEATURE_COMPLETE"
 }
