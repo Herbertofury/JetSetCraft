@@ -1,0 +1,62 @@
+name: Restore exact JetSetCraft recovered tools
+
+on:
+  push:
+    branches: [ main ]
+    paths: [ '.github/workflows/restore-recovered-tools.yml' ]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  restore:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Check out exact current main
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Refuse stale main
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch origin main
+          test "$(git rev-parse HEAD)" = "$(git rev-parse origin/main)"
+
+      - name: Download exact successful recovery artifact
+        uses: actions/download-artifact@v5
+        with:
+          name: jetsetcraft-source-recovery
+          path: recovered
+          run-id: 32450625206
+          github-token: ${{ github.token }}
+
+      - name: Restore and verify exact build tools
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -d recovered/recovered-source/tools
+          rm -rf tools
+          cp -a recovered/recovered-source/tools tools
+          rm -rf tools/__pycache__
+          echo '4f09b84a00a0bf37599f67c165d769544c87f243065e174d5f6ebeab3ae841e7  tools/generate_models.py' | sha256sum -c -
+          echo '718b2f747538a42220c843904316bcda85b8b968e7f403bf4145af2500ce1a61  tools/generate_brand.py' | sha256sum -c -
+          echo 'a6aa4945334d7e5c05151676e8dfca726780a9e4d154310a34df06f4137f1c92  tools/requirements.txt' | sha256sum -c -
+          echo 'bb859f5bfaddff297f4909a005ccbd6667d6d63e6d10eea29050bbc463e8156b  tools/validate_assets.py' | sha256sum -c -
+          echo 'd837947b167532dd9e3b5d82b465b8a4804d82ca4f5eb955e7af5ece60ac5d89  tools/validate_gameplay_contract.py' | sha256sum -c -
+          python3 -m py_compile tools/*.py
+
+      - name: Commit exact tools and remove temporary restorer
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm .github/workflows/restore-recovered-tools.yml
+          git config user.name 'JetSetCraft Recovery Bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add -A tools .github/workflows/restore-recovered-tools.yml
+          git diff --cached --check
+          git commit -m 'Restore exact JetSetCraft recovered build tools'
+          git push origin HEAD:main
