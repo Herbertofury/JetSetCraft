@@ -1,9 +1,9 @@
 {
   "schema": 1,
-  "source_commit": "824cb73912ba1546513b4a3553d82d32c0e8b353",
-  "wiki_commit": "55a55dae2e5b712b6019a3cc96e9444542a30064",
+  "source_commit": "56c98448c5ea7c01e2e918ec46938d0bb9e24fee",
+  "wiki_commit": "65246f886c553fef716bb4ab6147a2290d3fcf17",
   "wiki_branch": "master",
-  "page_count": 23,
+  "page_count": 24,
   "pages": [
     "Breakdance-and-Cyphers.md",
     "Compatibility.md",
@@ -16,6 +16,7 @@
     "Getting-Started.md",
     "Graffiti.md",
     "Grinding-and-Transfers.md",
+    "Hangouts-Territory-and-Reputation.md",
     "Home.md",
     "Modpack-Maker-Guide.md",
     "Multiplayer-and-Servers.md",
@@ -30,6 +31,6 @@
     "_Sidebar.md"
   ],
   "validated": true,
-  "published_at_utc": "2026-08-21T23:42:51.367142+00:00",
+  "published_at_utc": "2026-08-21T23:51:54.493912+00:00",
   "url": "https://github.com/Herbertofury/JetSetCraft/wiki"
 }
