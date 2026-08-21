@@ -57,8 +57,9 @@ public final class HoverboardGameTests {
         player.setOnGround(true);
         player.setDeltaMovement(Vec3.ZERO);
         data.setInputForward(1.0F);
-        // Avoid an unrelated network synchronization packet during the single-tick solver assertion.
-        data.setLastSyncTick(player.level().getGameTime());
+        // Forge's GameTest mock player intentionally has no real Netty channel. Suppress only the unrelated
+        // periodic client-state packet while retaining the complete production movement solver invocation.
+        data.setLastSyncTick(Long.MAX_VALUE);
         JetSetMovement.tickServer(player, data);
 
         double horizontalSpeed = player.getDeltaMovement().horizontalDistance();
