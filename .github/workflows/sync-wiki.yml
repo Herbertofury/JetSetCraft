@@ -21,25 +21,65 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - name: Validate complete wiki
         run: python tools/validate_wiki.py
-      - name: Publish exact wiki tree
+      - name: Publish exact wiki tree and record receipt
         env:
           GITHUB_TOKEN: ${{ github.token }}
         shell: bash
         run: |
           set -euo pipefail
           remote="https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.wiki.git"
-          git clone "$remote" wiki-repository
-          rsync -a --delete --exclude '.git' wiki/ wiki-repository/
-          cd wiki-repository
+          rm -rf /tmp/jetsetcraft-wiki
+          git clone "$remote" /tmp/jetsetcraft-wiki
+          rsync -a --delete --exclude '.git' wiki/ /tmp/jetsetcraft-wiki/
+          cd /tmp/jetsetcraft-wiki
           git config user.name 'JetSetCraft Wiki Bot'
           git config user.email 'actions@users.noreply.github.com'
           git add -A
           if git diff --cached --quiet; then
             echo 'Wiki already matches the validated repository source.'
+          else
+            git commit -m "Publish JetSetCraft wiki for ${GITHUB_SHA::12}"
+            branch="$(git branch --show-current)"
+            git push origin "HEAD:${branch:-master}"
+          fi
+          wiki_commit="$(git rev-parse HEAD)"
+          wiki_branch="$(git branch --show-current)"
+
+          cd "$GITHUB_WORKSPACE"
+          python - "$wiki_commit" "$wiki_branch" <<'PY'
+          import datetime
+          import json
+          import pathlib
+          import sys
+
+          wiki_commit, wiki_branch = sys.argv[1:]
+          pages = sorted(path.name for path in pathlib.Path('wiki').glob('*.md'))
+          receipt = {
+              'schema': 1,
+              'source_commit': '${{ github.sha }}',
+              'wiki_commit': wiki_commit,
+              'wiki_branch': wiki_branch or 'master',
+              'page_count': len(pages),
+              'pages': pages,
+              'validated': True,
+              'published_at_utc': datetime.datetime.now(datetime.timezone.utc).isoformat(),
+              'url': 'https://github.com/${{ github.repository }}/wiki',
+          }
+          target = pathlib.Path('.agents-memory/WIKI_PUBLICATION.json')
+          target.parent.mkdir(parents=True, exist_ok=True)
+          target.write_text(json.dumps(receipt, indent=2) + '\n', encoding='utf-8')
+          PY
+
+          git config user.name 'JetSetCraft Wiki Bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add .agents-memory/WIKI_PUBLICATION.json
+          if git diff --cached --quiet; then
+            echo 'Wiki publication receipt is already current.'
             exit 0
           fi
-          git commit -m "Publish JetSetCraft wiki for ${GITHUB_SHA::12}"
-          branch="$(git branch --show-current)"
-          git push origin "HEAD:${branch:-master}"
+          git commit -m "Record published JetSetCraft wiki ${wiki_commit:0:12}"
+          git push origin HEAD:main

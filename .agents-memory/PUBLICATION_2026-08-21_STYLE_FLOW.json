@@ -1,0 +1,54 @@
+{
+  "schema": 1,
+  "project": "JetSetCraft",
+  "version": "0.2.0-alpha.1",
+  "recorded_at_utc": "2026-08-21T22:20:07Z",
+  "canonical_repository": "Herbertofury/JetSetCraft",
+  "release_pull_request": 19,
+  "release_main_commit": "022a99efa0edb478c556f96cd90d77f129f1a44d",
+  "release_main_tree": "47ababd7a5812fb4793bebb14055b2e0fb316120",
+  "tested_release_commit": "e6441a73ca94cf9603e8993c55b05e2ea1607b4e",
+  "tested_release_tree": "47ababd7a5812fb4793bebb14055b2e0fb316120",
+  "tested_tree_matches_merged_main": true,
+  "github_actions": {
+    "sealed_artifact_run": 32528717032,
+    "clean_promoted_source_run": 32531359670,
+    "forge_gametests": {
+      "required": 5,
+      "passed": 5,
+      "log_sha256": "893c9b6ba4a743f990b00390b62736ae2d1444f598b034cf15b768ea76c09cfc",
+      "observed": "All 5 required tests passed :)"
+    },
+    "dedicated_server": {
+      "ready": true,
+      "log_sha256": "9373a64f71d523c32f238ce16b0589a2f7fa314e0ca674457f8f91fbb51e4e87",
+      "observed": "Done (5.584s)! For help, type \"help\""
+    },
+    "jar": {
+      "file": "jetsetcraft-1.20.1-0.2.0-alpha.1.jar",
+      "bytes": 3573244,
+      "sha256": "cf988bd0efac1494237e34232932b6ab032d57d3340de5b62dd94303766ac140"
+    }
+  },
+  "google_drive": {
+    "parent_folder_id": "1npHf1VwOj-tybm791XShz2IvY8LmjjUU",
+    "publication_receipt_id": "1YyJfrTSp9A9rQrYud8035JPl7xmjsRHf",
+    "full_remote_readback_verified": true,
+    "files": [
+      {"name": "JetSetCraft-0.2.0-alpha.1-Release.zip", "id": "1Wh1exGU9RPqtSFZeeCZF1DBVL5mdDpFn", "bytes": 3626737, "sha256": "cb1dad1d11a8b9a3894cf310f06d3c27efa21d53c42b707a4056ebdf7a5fb56a"},
+      {"name": "jetsetcraft-1.20.1-0.2.0-alpha.1.jar", "id": "1DpB8YAPISL1PNshcxJs6qcS2M5wXjlBD", "bytes": 3573244, "sha256": "cf988bd0efac1494237e34232932b6ab032d57d3340de5b62dd94303766ac140"},
+      {"name": "JetSetCraft-0.2.0-alpha.1-Verified-Source.zip", "id": "1EPaE70jF2R5Gl1CTHSJdnNP5OJPQs-q6", "bytes": 230152, "sha256": "d0a7900982e4136ef12ff5b94d0ab2213d903179146e8890ff9b5aaf5bf6ce0e"},
+      {"name": "JetSetCraft-0.2.0-alpha.1-Verification.zip", "id": "1-fJINZ0PjDjKvXfz2HwJNtwQYj-hhCUT", "bytes": 1074, "sha256": "cdaca71bb2a49be7df87fb58f05fd5dd3747c7f641648ebd845912ee299737c0"},
+      {"name": "JetSetCraft-0.2.0-alpha.1-GameTests.zip", "id": "1G8M6ehmsD152mZ11cnbpGeZMHu3YmvuL", "bytes": 4312, "sha256": "3a3a500f06dd0e005287939a830f401df509c813901ee8d3046d0c889d0abef9"},
+      {"name": "JetSetCraft-0.2.0-alpha.1-Server-Smoke.zip", "id": "1Huf-gMk_np3H5D5g-iFfMH0Ah5soy-Ez", "bytes": 2240, "sha256": "402078d8c5631618bac82c48d02c9c8d2a4910a3ce6810d68b52ba0bbd040104"},
+      {"name": "JetSetCraft-0.2.0-alpha.1-Release.zip.sha256", "id": "1r7GD2e1_b-Y2kGipiGjcFpr5lf_aCVJk", "bytes": 104, "sha256": "26b2dbb30d312cca200cd643bb920fa3faa2d7a3d3606a58947ac5a1941d7a6d"}
+    ]
+  },
+  "remaining_real_client_acceptance": [
+    "visual ride, trick, dance, HUD, VFX, and reduced-motion QA in a real Minecraft client",
+    "Create 6.0.8 live straight, slope, junction, and Bezier interoperability",
+    "TACZ live aim, fire, and reload composition",
+    "Aether and Twilight Forest exact-release route smoke tests",
+    "multiplayer movement, cypher, combat, dimension-transfer, and persistence soak"
+  ]
+}
