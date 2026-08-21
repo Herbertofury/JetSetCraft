@@ -1,9 +1,9 @@
 {
   "schema": 1,
-  "source_commit": "8f8337e23301945afce0658059ba5e50458adb0c",
-  "wiki_commit": "5467a207ae999319dbe4ba22bddb8190d5ce9b89",
+  "source_commit": "ced1294980389623038d92797992a48b9d025dac",
+  "wiki_commit": "6d2bd7b303334c70f2e42ee0b0091faa4e5d86b4",
   "wiki_branch": "master",
-  "page_count": 22,
+  "page_count": 23,
   "pages": [
     "Breakdance-and-Cyphers.md",
     "Compatibility.md",
@@ -21,6 +21,7 @@
     "Multiplayer-and-Servers.md",
     "Ride-Styles.md",
     "Roadmap.md",
+    "Standalone-Compatibility-Covenant.md",
     "Testing-and-Verification.md",
     "Tricks-Combos-and-Flow.md",
     "Troubleshooting.md",
@@ -29,6 +30,6 @@
     "_Sidebar.md"
   ],
   "validated": true,
-  "published_at_utc": "2026-08-21T23:18:00.603812+00:00",
+  "published_at_utc": "2026-08-21T23:33:06.199953+00:00",
   "url": "https://github.com/Herbertofury/JetSetCraft/wiki"
 }
