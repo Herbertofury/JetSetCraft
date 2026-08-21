@@ -1,6 +1,8 @@
 name: Recover staged JetSetCraft source
 
 on:
+  push:
+    branches: [ automation/recover-cc65cad-source ]
   pull_request:
     branches: [ main ]
   workflow_dispatch:
@@ -86,10 +88,9 @@ jobs:
           test -f output/recovered-source/src/main/java/com/herberto/jetsetcraft/JetSetCraft.java
           test -f output/recovered-source/tools/validate_gameplay_contract.py
 
-          # IMPORTANT: do not use `git apply` from inside output/recovered-source.
-          # That directory is still beneath the outer JetSetCraft Git worktree, so
-          # Git resolves paths against the outer repository root. `patch -d` applies
-          # the repair to the recovered source tree that Gradle actually compiles.
+          # `git apply` from inside output/recovered-source still resolves paths
+          # against the outer JetSetCraft worktree. Apply directly to the tree that
+          # Gradle will compile and assert that the old source cannot survive.
           patch --batch --forward -p1 -d output/recovered-source < recovery/cc65cad-forge-compile.patch
           sha256sum recovery/cc65cad-forge-compile.patch > output/compile-repair.sha256
 
