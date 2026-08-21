@@ -26,8 +26,10 @@ jobs:
           python tools/validate_gameplay_contract.py
       - name: Build
         run: gradle --no-daemon build
-      - name: Real Forge dedicated-server runtime smoke
+      - name: Real Forge dedicated-server runtime smoke and exposed-edge proof
         shell: bash
+        env:
+          JAVA_TOOL_OPTIONS: -Djetsetcraft.ci.edgeRuntime=true
         run: |
           set -euo pipefail
           mkdir -p run
@@ -42,11 +44,15 @@ jobs:
             echo '::error::Forge dedicated server never reached the ready state.'
             exit "${exit_code:-1}"
           fi
+          if ! grep -Fq 'JETSETCRAFT_EDGE_RUNTIME_PASS internalSeamRejected=true exposedLedgeDetected=true clearanceRejected=true' server-smoke.log; then
+            echo '::error::Real Forge exposed-edge runtime acceptance marker was not observed.'
+            exit 1
+          fi
           if grep -Eiq 'ModLoadingException|Failed to complete lifecycle event|Exception in thread "main"|FATAL.*jetsetcraft' server-smoke.log; then
             echo '::error::JetSetCraft produced a fatal/mod-loading error before or during server startup.'
             exit 1
           fi
-          echo 'JetSetCraft reached the real Forge dedicated-server ready state.'
+          echo 'JetSetCraft reached the real Forge dedicated-server ready state with exposed-edge runtime proof.'
       - name: Upload runtime smoke log
         if: always()
         uses: actions/upload-artifact@v4
