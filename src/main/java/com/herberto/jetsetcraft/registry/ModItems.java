@@ -18,6 +18,8 @@ public final class ModItems {
             () -> new RideGearItem(RideStyle.QUAD, new Item.Properties().stacksTo(1)));
     public static final RegistryObject<Item> STREET_BOARD = ITEMS.register("street_board",
             () -> new RideGearItem(RideStyle.BOARD, new Item.Properties().stacksTo(1)));
+    public static final RegistryObject<Item> HOVERBOARD = ITEMS.register("hoverboard",
+            () -> new RideGearItem(RideStyle.HOVER, new Item.Properties().stacksTo(1)));
     public static final RegistryObject<Item> BMX = ITEMS.register("bmx",
             () -> new RideGearItem(RideStyle.BMX, new Item.Properties().stacksTo(1)));
     public static final RegistryObject<Item> SPRAY_CAN = ITEMS.register("spray_can",

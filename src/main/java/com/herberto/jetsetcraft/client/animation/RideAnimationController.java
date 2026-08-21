@@ -2,8 +2,6 @@ package com.herberto.jetsetcraft.client.animation;
 
 import com.herberto.jetsetcraft.JetSetCraft;
 import com.herberto.jetsetcraft.client.state.ClientRideState;
-import com.herberto.jetsetcraft.compat.CompatManager;
-import com.herberto.jetsetcraft.movement.RideStyle;
 import dev.kosmx.playerAnim.api.layered.IAnimation;
 import dev.kosmx.playerAnim.api.layered.KeyframeAnimationPlayer;
 import dev.kosmx.playerAnim.api.layered.ModifierLayer;
@@ -18,6 +16,7 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -76,10 +75,13 @@ public final class RideAnimationController {
         if (s.wallRiding()) return id("wallride");
         if (s.powersliding()) return id("powerslide");
         if (s.manual()) return id("manual");
-        if (s.style() == RideStyle.BMX) return id(s.boosting() ? "bmx_boost" : "bmx_ride");
-        if (s.style() == RideStyle.BOARD) return id(s.boosting() ? "board_boost" : "board_ride");
-        if (s.style() == RideStyle.INLINE) return id(s.boosting() ? "inline_boost" : "inline_ride");
-        if (s.style() == RideStyle.QUAD) return id(s.boosting() ? "quad_boost" : "quad_ride");
+        if (s.style() == com.herberto.jetsetcraft.movement.RideStyle.BMX) return id(s.boosting() ? "bmx_boost" : "bmx_ride");
+        // Hoverboard intentionally reuses the board lower-body pose family. This preserves the authored animation layer
+        // contract while its distinct board model/bobbing and movement tuning provide the hover identity.
+        if (s.style() == com.herberto.jetsetcraft.movement.RideStyle.HOVER) return id(s.boosting() ? "board_boost" : "board_ride");
+        if (s.style() == com.herberto.jetsetcraft.movement.RideStyle.BOARD) return id(s.boosting() ? "board_boost" : "board_ride");
+        if (s.style() == com.herberto.jetsetcraft.movement.RideStyle.INLINE) return id(s.boosting() ? "inline_boost" : "inline_ride");
+        if (s.style() == com.herberto.jetsetcraft.movement.RideStyle.QUAD) return id(s.boosting() ? "quad_boost" : "quad_ride");
         return null;
     }
 

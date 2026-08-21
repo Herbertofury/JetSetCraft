@@ -19,6 +19,12 @@ client = (ROOT / 'src/main/java/com/herberto/jetsetcraft/client/ClientEvents.jav
 ride_item = (ROOT / 'src/main/java/com/herberto/jetsetcraft/item/RideGearItem.java').read_text(encoding='utf-8')
 commands = (ROOT / 'src/main/java/com/herberto/jetsetcraft/command/JetSetCommands.java').read_text(encoding='utf-8')
 common_events = (ROOT / 'src/main/java/com/herberto/jetsetcraft/event/CommonEvents.java').read_text(encoding='utf-8')
+ride_style = (ROOT / 'src/main/java/com/herberto/jetsetcraft/movement/RideStyle.java').read_text(encoding='utf-8')
+mod_items = (ROOT / 'src/main/java/com/herberto/jetsetcraft/registry/ModItems.java').read_text(encoding='utf-8')
+creative_tab = (ROOT / 'src/main/java/com/herberto/jetsetcraft/registry/ModCreativeTabs.java').read_text(encoding='utf-8')
+ride_layer = (ROOT / 'src/main/java/com/herberto/jetsetcraft/client/render/RideGearLayer.java').read_text(encoding='utf-8')
+ride_animation = (ROOT / 'src/main/java/com/herberto/jetsetcraft/client/animation/RideAnimationController.java').read_text(encoding='utf-8')
+lang = json.loads((ROOT / 'src/main/resources/assets/jetsetcraft/lang/en_us.json').read_text(encoding='utf-8'))
 
 # Core doctrine: riding must not be hard-disabled simply because the player is swimming,
 # and external speed above normal caps must have explicit preservation paths.
@@ -120,6 +126,26 @@ for needle, label, source in [
     if needle not in source:
         errors.append(f'missing Red Skate-derived production contract: {label}')
 
+# Hoverboards are a first-class ride style inside the same persistent, server-authoritative system.
+# They must never regress into an isolated pseudo-vehicle that bypasses vanilla-world/grind/trick logic.
+for needle, label, source in [
+    ('HOVER(5, "hover"', 'stable hoverboard RideStyle ID', ride_style),
+    ('ITEMS.register("hoverboard"', 'hoverboard item registration', mod_items),
+    ('new RideGearItem(RideStyle.HOVER', 'hoverboard loadout style binding', mod_items),
+    ('ModItems.HOVERBOARD.get()', 'hoverboard creative inventory exposure', creative_tab),
+    ('case HOVER -> renderBoard', 'hoverboard third-person render path', ride_layer),
+    ('RideStyle.HOVER', 'hoverboard lower-body animation composition', ride_animation),
+]:
+    if needle not in source:
+        errors.append(f'missing hoverboard production contract: {label}')
+if not lang.get('item.jetsetcraft.hoverboard'):
+    errors.append('missing hoverboard localization')
+if not (ROOT / 'src/main/resources/assets/jetsetcraft/models/item/hoverboard.json').exists():
+    errors.append('missing hoverboard item model')
+if not (ROOT / 'src/main/java/com/herberto/jetsetcraft/gametest/HoverboardGameTests.java').exists():
+    errors.append('missing real Forge hoverboard GameTest')
+if not (ROOT / 'src/main/resources/data/jetsetcraft/structures/hoverboard_empty.nbt').exists():
+    errors.append('missing hoverboard GameTest structure')
 
 # Dedicated skate footwear must still participate in Minecraft's movement enchantment language.
 for needle, label, source in [
@@ -135,7 +161,6 @@ for needle, label, source in [
     if needle not in source:
         errors.append(f'missing vanilla enchantment/loadout contract: {label}')
 
-
 for needle, label in [
     ('GrindMaterialProfile', 'material-specific grind profile'),
     ('SoundType.METAL', 'metal grind language'),
@@ -150,7 +175,6 @@ for needle, label in [
         errors.append(f'missing material grind contract: {label}')
 if 'grindMaterial(player, hit)' not in movement or 'emitGrindFeedback(player, hit, material)' not in movement:
     errors.append('grind solver is not consuming the material/feedback profile')
-
 
 # Runtime acceptance tooling must stay available so the doctrine can be verified in a real Minecraft world.
 for needle, label in [
