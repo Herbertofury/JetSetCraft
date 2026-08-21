@@ -39,15 +39,26 @@ jobs:
         run: |
           set -euo pipefail
           patch_file=checkpoints/JetSetCraft-a3843e0.patch
+          normalized_patch="$RUNNER_TEMP/JetSetCraft-a3843e0.normalized.patch"
           test -f "$patch_file"
-          if git apply --check "$patch_file"; then
-            git apply "$patch_file"
+
+          # The durable checkpoint was written without a terminal LF during the interrupted chat.
+          # Git reports that byte-level transport defect as a corrupt patch even though the hunks themselves
+          # are intact. Normalize only the patch container for application; the canonical checkpoint file and
+          # its recorded hash remain untouched as historical evidence.
+          cat "$patch_file" > "$normalized_patch"
+          if [[ -s "$normalized_patch" ]] && [[ "$(tail -c 1 "$normalized_patch" | wc -l)" -eq 0 ]]; then
+            printf '\n' >> "$normalized_patch"
+          fi
+
+          if git apply --recount --check "$normalized_patch"; then
+            git apply --recount "$normalized_patch"
             echo 'applied=true' >> "$GITHUB_OUTPUT"
-          elif git apply --reverse --check "$patch_file"; then
+          elif git apply --recount --reverse --check "$normalized_patch"; then
             echo 'Patch is already present in the exact branch tree.'
             echo 'applied=false' >> "$GITHUB_OUTPUT"
           else
-            echo '::error::Preserved a3843e0 patch neither applies cleanly nor matches the current tree.'
+            echo '::error::Preserved a3843e0 patch neither applies cleanly nor matches the current tree after transport normalization.'
             exit 2
           fi
           git diff --check
