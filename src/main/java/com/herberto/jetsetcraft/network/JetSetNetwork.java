@@ -28,7 +28,20 @@ public final class JetSetNetwork {
     }
     public static void sendInput(int mask, float forward, float strafe) { CHANNEL.sendToServer(new C2SInputPacket(mask, forward, strafe)); }
     public static void sendRideLoadoutAction(boolean unequip) { CHANNEL.sendToServer(new C2SRideLoadoutPacket(unequip)); }
+
+    /**
+     * Fake/test players and a few server-side automation players can legitimately exist without a Netty channel.
+     * They still participate in JetSetCraft's server-authoritative movement/capability logic, but there is no client
+     * endpoint to receive S2C state. Treat that as "nothing to sync" instead of crashing Forge's login/tick path.
+     */
+    public static boolean canSync(ServerPlayer player) {
+        return player.connection != null
+                && player.connection.connection != null
+                && player.connection.connection.channel() != null;
+    }
+
     public static void sync(ServerPlayer player, JetSetData data) {
+        if (!canSync(player)) return;
         S2CStatePacket p = new S2CStatePacket(player.getId(), data);
         CHANNEL.send(PacketDistributor.PLAYER.with(() -> player), p);
         CHANNEL.send(PacketDistributor.TRACKING_ENTITY.with(() -> player), p);
