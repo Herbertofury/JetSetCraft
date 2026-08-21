@@ -5,18 +5,20 @@ import com.herberto.jetsetcraft.compat.create.CreateRailProvider;
 import com.herberto.jetsetcraft.movement.GrindFinder;
 import com.herberto.jetsetcraft.movement.GrindKind;
 import com.herberto.jetsetcraft.movement.GrindTarget;
-import com.simibubi.create.AllBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestAssertException;
 import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.util.FakePlayerFactory;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.gametest.GameTestHolder;
 import net.minecraftforge.gametest.PrefixGameTestTemplate;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.Optional;
 
@@ -34,9 +36,16 @@ public final class CreateRailCompatGameTests {
             throw new GameTestAssertException("Create 6.0.8 is not loaded in the compatibility runtime");
         }
 
+        // Resolve the real production block through Forge's runtime registry instead of exposing Create's
+        // internal Registrate BlockEntry wrapper to this compatibility test's compile classpath.
+        Block createTrack = ForgeRegistries.BLOCKS.getValue(new ResourceLocation("create", "track"));
+        if (createTrack == null || createTrack == Blocks.AIR) {
+            throw new GameTestAssertException("Create is loaded but create:track is absent from the Forge block registry");
+        }
+
         BlockPos trackRelative = new BlockPos(1, 1, 1);
         helper.setBlock(trackRelative.below(), Blocks.STONE);
-        helper.setBlock(trackRelative, AllBlocks.TRACK.getDefaultState());
+        helper.setBlock(trackRelative, createTrack.defaultBlockState());
 
         BlockPos track = helper.absolutePos(trackRelative);
         ServerPlayer player = FakePlayerFactory.getMinecraft(helper.getLevel());
