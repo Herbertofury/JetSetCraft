@@ -4,6 +4,30 @@
     "minecraft:ice",
     "minecraft:packed_ice",
     "minecraft:blue_ice",
-    "minecraft:frosted_ice"
+    "minecraft:frosted_ice",
+    {
+      "id": "aether:quicksoil",
+      "required": false
+    },
+    {
+      "id": "aether:quicksoil_glass",
+      "required": false
+    },
+    {
+      "id": "aether:quicksoil_glass_pane",
+      "required": false
+    },
+    {
+      "id": "twilightforest:aurora_block",
+      "required": false
+    },
+    {
+      "id": "twilightforest:aurora_pillar",
+      "required": false
+    },
+    {
+      "id": "twilightforest:aurora_slab",
+      "required": false
+    }
   ]
 }

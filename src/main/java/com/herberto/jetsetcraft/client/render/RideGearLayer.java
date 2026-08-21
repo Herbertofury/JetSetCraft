@@ -1,6 +1,7 @@
 package com.herberto.jetsetcraft.client.render;
 
 import com.herberto.jetsetcraft.client.state.ClientRideState;
+import com.herberto.jetsetcraft.config.JetSetConfig;
 import com.herberto.jetsetcraft.registry.ModItems;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
@@ -24,7 +25,9 @@ public final class RideGearLayer extends RenderLayer<AbstractClientPlayer, Playe
                        float limbSwing, float limbSwingAmount, float partialTick, float ageInTicks,
                        float netHeadYaw, float headPitch) {
         ClientRideState.Snapshot state = ClientRideState.get(player.getId());
-        if (!state.active()) return;
+        // Dancing and breakdance power moves deliberately return the rider to their feet. Equipment remains safely
+        // stored in the dedicated loadout and reappears as soon as the action ends.
+        if (!state.active() || state.dancing() || state.groundStunt()) return;
         switch (state.style()) {
             case INLINE -> renderSkates(poseStack, buffer, packedLight, player, ModItems.INLINE_SKATES.get().getDefaultInstance());
             case QUAD -> renderSkates(poseStack, buffer, packedLight, player, ModItems.QUAD_SKATES.get().getDefaultInstance());
@@ -33,6 +36,7 @@ public final class RideGearLayer extends RenderLayer<AbstractClientPlayer, Playe
             case HOVER -> renderBoard(poseStack, buffer, packedLight, player, state, partialTick,
                     ModItems.HOVERBOARD.get().getDefaultInstance(), true);
             case BMX -> renderBmx(poseStack, buffer, packedLight, player, state, partialTick);
+            case SCOOTER -> renderScooter(poseStack, buffer, packedLight, player, state, partialTick);
             default -> { }
         }
     }
@@ -59,16 +63,18 @@ public final class RideGearLayer extends RenderLayer<AbstractClientPlayer, Playe
                              AbstractClientPlayer player, ClientRideState.Snapshot state, float partialTick,
                              ItemStack stack, boolean hover) {
         poseStack.pushPose();
-        double bob = hover ? Math.sin((player.tickCount + partialTick) * 0.24) * 0.012 : 0.0;
+        boolean reduced = JetSetConfig.CLIENT.reducedMotion.get();
+        double bob = hover && !reduced ? Math.sin((player.tickCount + partialTick) * 0.24) * 0.012 : 0.0;
         poseStack.translate(0.0, (hover ? -0.085 : -0.035) + bob, 0.0);
-        if (state.trickTicks() > 0) {
-            float progress = (16.0f - state.trickTicks() + partialTick) / 16.0f;
+        if (state.trickTicks() > 0 && !reduced) {
+            float progress = (22.0f - state.trickTicks() + partialTick) / 22.0f;
             poseStack.mulPose(Axis.YP.rotationDegrees(progress * 360.0f));
             poseStack.mulPose(Axis.ZP.rotationDegrees((float) Math.sin(progress * Math.PI) * (hover ? 62.0f : 80.0f)));
-        } else if (hover) {
+        } else if (hover && !reduced) {
             poseStack.mulPose(Axis.ZP.rotationDegrees((float) Math.sin((player.tickCount + partialTick) * 0.12) * 2.0f));
         }
-        poseStack.scale(hover ? 0.88f : 0.82f, hover ? 0.88f : 0.82f, hover ? 0.88f : 0.82f);
+        float scale = hover ? 0.88f : 0.82f;
+        poseStack.scale(scale, scale, scale);
         renderItem(stack, poseStack, buffer, light, player);
         poseStack.popPose();
     }
@@ -77,12 +83,26 @@ public final class RideGearLayer extends RenderLayer<AbstractClientPlayer, Playe
                            AbstractClientPlayer player, ClientRideState.Snapshot state, float partialTick) {
         poseStack.pushPose();
         poseStack.translate(0.0, -0.02, 0.12);
-        if (state.trickTicks() > 0) {
-            float progress = (16.0f - state.trickTicks() + partialTick) / 16.0f;
+        if (state.trickTicks() > 0 && !JetSetConfig.CLIENT.reducedMotion.get()) {
+            float progress = (22.0f - state.trickTicks() + partialTick) / 22.0f;
             poseStack.mulPose(Axis.ZP.rotationDegrees((float) Math.sin(progress * Math.PI) * 28.0f));
         }
         poseStack.scale(0.88f, 0.88f, 0.88f);
         renderItem(ModItems.BMX.get().getDefaultInstance(), poseStack, buffer, light, player);
+        poseStack.popPose();
+    }
+
+    private void renderScooter(PoseStack poseStack, MultiBufferSource buffer, int light,
+                               AbstractClientPlayer player, ClientRideState.Snapshot state, float partialTick) {
+        poseStack.pushPose();
+        poseStack.translate(0.0, -0.01, 0.12);
+        if (state.trickTicks() > 0 && !JetSetConfig.CLIENT.reducedMotion.get()) {
+            float progress = (22.0f - state.trickTicks() + partialTick) / 22.0f;
+            poseStack.mulPose(Axis.YP.rotationDegrees(progress * 360.0f));
+            poseStack.mulPose(Axis.ZP.rotationDegrees((float) Math.sin(progress * Math.PI) * 24.0f));
+        }
+        poseStack.scale(0.86f, 0.86f, 0.86f);
+        renderItem(ModItems.SCOOTER.get().getDefaultInstance(), poseStack, buffer, light, player);
         poseStack.popPose();
     }
 

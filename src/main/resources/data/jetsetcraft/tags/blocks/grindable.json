@@ -4,6 +4,22 @@
     "minecraft:iron_bars",
     "#minecraft:fences",
     "#minecraft:walls",
-    "#minecraft:rails"
+    "#minecraft:rails",
+    {
+      "id": "aether:quicksoil_glass_pane",
+      "required": false
+    },
+    {
+      "id": "twilightforest:aurora_pillar",
+      "required": false
+    },
+    {
+      "id": "twilightforest:aurora_slab",
+      "required": false
+    },
+    {
+      "id": "twilightforest:auroralized_glass",
+      "required": false
+    }
   ]
 }

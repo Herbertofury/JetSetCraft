@@ -11,12 +11,47 @@ import net.minecraft.world.phys.Vec3;
 public final class JetSetMovement {
 
     public static void tickServer(ServerPlayer player, JetSetData data) {
+        if (DanceSystem.tick(player, data)) {
+            data.setLastVerticalVelocity(player.getDeltaMovement().y);
+            data.setLastSolverVelocity(player.getDeltaMovement());
+            data.setPreviousInputMask(data.inputMask());
+            periodicSync(player, data, 2);
+            return;
+        }
         if (!data.active() || data.style() == RideStyle.NONE || player.isPassenger() || player.isFallFlying()) {
             data.resetTransientRideState();
+            data.setGroundStunt(false);
+            data.setBoostTrick(false);
+            data.setTrickTicks(0);
             data.setMomentum(0.0);
             data.setPreviousInputMask(data.inputMask());
             periodicSync(player, data, 8);
             return;
+        }
+        data.setDancing(false);
+
+        if (data.groundStunt() && data.trickTicks() > 0) {
+            boolean cancel = !player.onGround() || player.isUsingItem() || player.swinging
+                    || data.pressed(InputFlags.JUMP) || data.pressed(InputFlags.GRIND);
+            if (cancel) {
+                data.setGroundStunt(false);
+                data.setBoostTrick(false);
+                data.setTrickTicks(0);
+            } else {
+                Vec3 velocity = player.getDeltaMovement();
+                player.setDeltaMovement(velocity.x * 0.68, velocity.y, velocity.z * 0.68);
+                player.hurtMarked = true;
+                data.setMomentum(data.momentum() * 0.68);
+                data.setBoosting(false);
+                data.setManual(false);
+                data.setPowersliding(false);
+                TrickCombo.handleTricksAndCombo(player, data, true);
+                data.setLastVerticalVelocity(player.getDeltaMovement().y);
+                data.setLastSolverVelocity(player.getDeltaMovement());
+                data.setPreviousInputMask(data.inputMask());
+                periodicSync(player, data, 2);
+                return;
+            }
         }
 
         if (data.grindReattachCooldown() > 0) data.setGrindReattachCooldown(data.grindReattachCooldown() - 1);

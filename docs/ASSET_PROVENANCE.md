@@ -36,5 +36,15 @@ Potential CC0/original-source candidates have been researched for future visual 
 - SHA-256: `8541009fcfb3ec77f22e7aeafb2bcfceebd64decddf168171df24182438c70d9`.
 - Contents: 135 PNG graffiti designs.
 - Canonical preserved source archive: exact owner-supplied `JSRGraffiti.zip`, SHA-256 `8541009fcfb3ec77f22e7aeafb2bcfceebd64decddf168171df24182438c70d9`, mirrored to Google Drive Assets.
-- Clean Git checkouts fetch the public byte-identical mirror at `https://storage.googleapis.com/greg-kennedy.com/jsr/JSRGraffiti.zip` and abort unless the SHA-256 matches the owner-supplied master.
-- Runtime processing: dimensions and aspect ratio are preserved; PNG decoder mode is normalized to RGBA only. No redraw, resize, denoise, AI regeneration, or style transfer is performed.
+- Clean Git checkouts may fetch the public byte-identical mirror at `https://storage.googleapis.com/greg-kennedy.com/jsr/JSRGraffiti.zip`; downloaded bytes are accepted only when the SHA-256 matches the owner-supplied master. Offline or unavailable builds delete partial downloads and generate original JetSetCraft fallback tags instead of failing or shipping corrupt data.
+- Runtime processing of the authorized archive preserves dimensions and aspect ratio; PNG decoder mode is normalized to RGBA only. No redraw, resize, denoise, AI regeneration, or style transfer is performed.
+
+
+## Style Flow generated equipment and animation assets
+
+- `tools/generate_models.py` is the authored source for inline skates, quad skates, skateboard, BMX, hoverboard, scooter, spray can, and supporting item textures.
+- The hoverboard is a dedicated wheel-free mesh with energy rings, stabilizers, and generator details; it no longer points at the skateboard OBJ.
+- The scooter is an original generated mesh with deck, wheels, stem, handlebar, grips, and grind rails.
+- `tools/generate_animations.py` deterministically generates hoverboard and scooter ride/boost clips, eight aerial-trick clips, eight grind-trick clips, twenty-eight dance clips, and eight ground-stunt clips. UUIDs are derived deterministically from the JetSetCraft namespace and clip name.
+- These generators use project-authored geometry/keyframes and do not download character models, motion-capture files, copyrighted game animations, or AI-generated substitutes.
+- `tools/validate_assets.py` enforces model-quality floors, valid OBJ face indices, complete item-model coverage, deterministic clip presence, no held-item bones, and lower-body-only ownership for ride/combat-compatible clips.

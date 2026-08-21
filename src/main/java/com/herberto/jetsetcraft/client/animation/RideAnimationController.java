@@ -2,6 +2,10 @@ package com.herberto.jetsetcraft.client.animation;
 
 import com.herberto.jetsetcraft.JetSetCraft;
 import com.herberto.jetsetcraft.client.state.ClientRideState;
+import com.herberto.jetsetcraft.compat.CompatManager;
+import com.herberto.jetsetcraft.movement.DanceCatalog;
+import com.herberto.jetsetcraft.movement.RideStyle;
+import com.herberto.jetsetcraft.movement.TrickCatalog;
 import dev.kosmx.playerAnim.api.layered.IAnimation;
 import dev.kosmx.playerAnim.api.layered.KeyframeAnimationPlayer;
 import dev.kosmx.playerAnim.api.layered.ModifierLayer;
@@ -19,16 +23,20 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public final class RideAnimationController {
-    private static final ResourceLocation LAYER = new ResourceLocation(JetSetCraft.MOD_ID, "ride_lower_body");
-    private static final Map<Integer, ResourceLocation> ACTIVE = new HashMap<>();
+    private static final ResourceLocation RIDE_LAYER = new ResourceLocation(JetSetCraft.MOD_ID, "ride_lower_body");
+    private static final ResourceLocation ACTION_LAYER = new ResourceLocation(JetSetCraft.MOD_ID, "style_full_body");
+    private static final Map<Integer, ResourceLocation> ACTIVE_RIDE = new HashMap<>();
+    private static final Map<Integer, ResourceLocation> ACTIVE_ACTION = new HashMap<>();
 
     @Mod.EventBusSubscriber(modid = JetSetCraft.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
     public static final class ModBus {
         @SubscribeEvent
         public static void setup(FMLClientSetupEvent event) {
-            PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(LAYER, 24, player -> new ModifierLayer<>());
+            PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(RIDE_LAYER, 24, player -> new ModifierLayer<>());
+            PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(ACTION_LAYER, 32, player -> new ModifierLayer<>());
         }
     }
 
@@ -38,50 +46,73 @@ public final class RideAnimationController {
         public static void tick(TickEvent.ClientTickEvent event) {
             if (event.phase != TickEvent.Phase.END) return;
             Minecraft mc = Minecraft.getInstance();
-            if (mc.level == null) { ACTIVE.clear(); return; }
+            if (mc.level == null) {
+                ACTIVE_RIDE.clear();
+                ACTIVE_ACTION.clear();
+                return;
+            }
             for (AbstractClientPlayer player : mc.level.players()) update(player);
         }
     }
 
-    @SuppressWarnings("unchecked")
     private static void update(AbstractClientPlayer player) {
         ClientRideState.Snapshot state = ClientRideState.get(player.getId());
-        ResourceLocation next = choose(state);
-        ResourceLocation previous = ACTIVE.get(player.getId());
-        if (java.util.Objects.equals(previous, next)) return;
+        boolean weaponOverlay = CompatManager.hasWeaponOverlay(player);
+        apply(player, RIDE_LAYER, ACTIVE_RIDE, chooseRide(state));
+        apply(player, ACTION_LAYER, ACTIVE_ACTION, chooseAction(state, weaponOverlay));
+    }
 
-        Object raw = PlayerAnimationAccess.getPlayerAssociatedData(player).get(LAYER);
+    @SuppressWarnings("unchecked")
+    private static void apply(AbstractClientPlayer player, ResourceLocation layerId,
+                              Map<Integer, ResourceLocation> active, ResourceLocation next) {
+        ResourceLocation previous = active.get(player.getId());
+        if (Objects.equals(previous, next)) return;
+        Object raw = PlayerAnimationAccess.getPlayerAssociatedData(player).get(layerId);
         if (!(raw instanceof ModifierLayer<?> layerRaw)) return;
         ModifierLayer<IAnimation> layer = (ModifierLayer<IAnimation>) layerRaw;
         if (next == null) {
             layer.setAnimation(null);
-            ACTIVE.remove(player.getId());
+            active.remove(player.getId());
             return;
         }
-        var anim = PlayerAnimationRegistry.getAnimation(next);
-        if (anim != null) {
-            layer.setAnimation(new KeyframeAnimationPlayer(anim));
-            ACTIVE.put(player.getId(), next);
+        var animation = PlayerAnimationRegistry.getAnimation(next);
+        if (animation == null) {
+            layer.setAnimation(null);
+            active.remove(player.getId());
+            return;
         }
+        layer.setAnimation(new KeyframeAnimationPlayer(animation));
+        active.put(player.getId(), next);
     }
 
-    private static ResourceLocation choose(ClientRideState.Snapshot s) {
-        if (!s.active()) return null;
-        // Upper-body weapon animation is intentionally not selected here. Our authored clips only animate body/legs,
-        // leaving TacZ/Epic Fight/Better Combat/vanilla hand and arm layers free to compose above this layer.
-        if (s.grinding() && s.trickTicks() > 0) return id("grind_trick_" + Math.floorMod(s.trickIndex(), 4));
-        if (s.trickTicks() > 0) return id("trick_" + Math.floorMod(s.trickIndex(), 4));
-        if (s.grinding()) return id("grind");
-        if (s.wallRiding()) return id("wallride");
-        if (s.powersliding()) return id("powerslide");
-        if (s.manual()) return id("manual");
-        if (s.style() == com.herberto.jetsetcraft.movement.RideStyle.BMX) return id(s.boosting() ? "bmx_boost" : "bmx_ride");
-        // Hoverboard intentionally reuses the board lower-body pose family. This preserves the authored animation layer
-        // contract while its distinct board model/bobbing and movement tuning provide the hover identity.
-        if (s.style() == com.herberto.jetsetcraft.movement.RideStyle.HOVER) return id(s.boosting() ? "board_boost" : "board_ride");
-        if (s.style() == com.herberto.jetsetcraft.movement.RideStyle.BOARD) return id(s.boosting() ? "board_boost" : "board_ride");
-        if (s.style() == com.herberto.jetsetcraft.movement.RideStyle.INLINE) return id(s.boosting() ? "inline_boost" : "inline_ride");
-        if (s.style() == com.herberto.jetsetcraft.movement.RideStyle.QUAD) return id(s.boosting() ? "quad_boost" : "quad_ride");
+    private static ResourceLocation chooseRide(ClientRideState.Snapshot state) {
+        if (!state.active() || state.dancing() || state.groundStunt()) return null;
+        int trickAnimation = TrickCatalog.byId(state.trickIndex()).animationIndex();
+        if (state.grinding() && state.trickTicks() > 0) return id("grind_trick_" + trickAnimation);
+        if (state.trickTicks() > 0) return id("trick_" + trickAnimation);
+        if (state.grinding()) return id("grind");
+        if (state.wallRiding()) return id("wallride");
+        if (state.powersliding()) return id("powerslide");
+        if (state.manual()) return id("manual");
+        if (state.style() == RideStyle.BMX) return id(state.boosting() ? "bmx_boost" : "bmx_ride");
+        if (state.style() == RideStyle.HOVER) return id(state.boosting() ? "hover_boost" : "hover_ride");
+        if (state.style() == RideStyle.SCOOTER) return id(state.boosting() ? "scooter_boost" : "scooter_ride");
+        if (state.style() == RideStyle.BOARD) return id(state.boosting() ? "board_boost" : "board_ride");
+        if (state.style() == RideStyle.INLINE) return id(state.boosting() ? "inline_boost" : "inline_ride");
+        if (state.style() == RideStyle.QUAD) return id(state.boosting() ? "quad_boost" : "quad_ride");
+        return null;
+    }
+
+    private static ResourceLocation chooseAction(ClientRideState.Snapshot state, boolean weaponOverlay) {
+        if (weaponOverlay) return null;
+        if (state.dancing()) {
+            int animation = DanceCatalog.byId(state.danceMoveId()).animationIndex();
+            return id("dance_" + animation);
+        }
+        if (state.groundStunt() && state.trickTicks() > 0) {
+            int animation = TrickCatalog.byId(state.trickIndex()).animationIndex();
+            return id("stunt_" + animation);
+        }
         return null;
     }
 

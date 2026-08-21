@@ -1,4 +1,25 @@
 {
   "replace": false,
-  "values": []
+  "values": [
+    {
+      "id": "aether:aerogel",
+      "required": false
+    },
+    {
+      "id": "aether:holystone_bricks",
+      "required": false
+    },
+    {
+      "id": "twilightforest:aurora_block",
+      "required": false
+    },
+    {
+      "id": "twilightforest:aurora_pillar",
+      "required": false
+    },
+    {
+      "id": "twilightforest:auroralized_glass",
+      "required": false
+    }
+  ]
 }

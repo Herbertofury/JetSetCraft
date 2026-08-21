@@ -1,0 +1,45 @@
+name: Publish JetSetCraft Wiki
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'wiki/**'
+      - 'tools/validate_wiki.py'
+      - '.github/workflows/sync-wiki.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: jetsetcraft-wiki
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate complete wiki
+        run: python tools/validate_wiki.py
+      - name: Publish exact wiki tree
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          remote="https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.wiki.git"
+          git clone "$remote" wiki-repository
+          rsync -a --delete --exclude '.git' wiki/ wiki-repository/
+          cd wiki-repository
+          git config user.name 'JetSetCraft Wiki Bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add -A
+          if git diff --cached --quiet; then
+            echo 'Wiki already matches the validated repository source.'
+            exit 0
+          fi
+          git commit -m "Publish JetSetCraft wiki for ${GITHUB_SHA::12}"
+          branch="$(git branch --show-current)"
+          git push origin "HEAD:${branch:-master}"

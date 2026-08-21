@@ -1,4 +1,17 @@
 {
   "replace": false,
-  "values": []
+  "values": [
+    {
+      "id": "aether:quicksoil",
+      "required": false
+    },
+    {
+      "id": "aether:quicksoil_glass",
+      "required": false
+    },
+    {
+      "id": "aether:quicksoil_glass_pane",
+      "required": false
+    }
+  ]
 }

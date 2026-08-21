@@ -4,32 +4,66 @@ import com.herberto.jetsetcraft.client.state.ClientRideState;
 import com.herberto.jetsetcraft.data.JetSetData;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
+
 import java.util.function.Supplier;
 
 public record S2CStatePacket(int entityId, int styleId, boolean active, float boost, int comboScore,
                              float comboMultiplier, boolean grinding, int grindKindId, boolean wallRiding, boolean manual,
-                             boolean boosting, boolean powersliding, float wallSide,
-                             int trickIndex, int trickTicks, float momentum) {
-    public S2CStatePacket(int id, JetSetData d) {
-        this(id, d.style().id(), d.active(), d.boost(), d.comboScore(), d.comboMultiplier(), d.grinding(),
-                d.grindKind().id(), d.wallRiding(), d.manual(), d.boosting(), d.powersliding(), d.wallSide(),
-                d.trickIndex(), d.trickTicks(), (float)d.momentum());
+                             boolean boosting, boolean powersliding, float wallSide, int trickIndex, int trickTicks,
+                             boolean boostTrick, float momentum, float flow, boolean groundStunt,
+                             int landingGrade, int landingTicks, boolean dancing, int danceStyle, int danceMoveId,
+                             int danceTicks, int danceChain, int cypherSize) {
+    public S2CStatePacket(int id, JetSetData data) {
+        this(id, data.style().id(), data.active(), data.boost(), data.comboScore(), data.comboMultiplier(),
+                data.grinding(), data.grindKind().id(), data.wallRiding(), data.manual(), data.boosting(),
+                data.powersliding(), data.wallSide(), data.trickIndex(), data.trickTicks(), data.boostTrick(),
+                (float)data.momentum(), data.flow(), data.groundStunt(), data.landingGrade(), data.landingTicks(),
+                data.dancing(), data.danceStyleId(), data.danceMoveId(), data.danceTicks(), data.danceChain(),
+                data.cypherSize());
     }
-    public static void encode(S2CStatePacket p, FriendlyByteBuf b) {
-        b.writeVarInt(p.entityId); b.writeVarInt(p.styleId); b.writeBoolean(p.active); b.writeFloat(p.boost);
-        b.writeVarInt(p.comboScore); b.writeFloat(p.comboMultiplier); b.writeBoolean(p.grinding); b.writeVarInt(p.grindKindId);
-        b.writeBoolean(p.wallRiding); b.writeBoolean(p.manual); b.writeBoolean(p.boosting);
-        b.writeBoolean(p.powersliding); b.writeFloat(p.wallSide);
-        b.writeVarInt(p.trickIndex); b.writeVarInt(p.trickTicks); b.writeFloat(p.momentum);
+
+    public static void encode(S2CStatePacket packet, FriendlyByteBuf buffer) {
+        buffer.writeVarInt(packet.entityId);
+        buffer.writeVarInt(packet.styleId);
+        buffer.writeBoolean(packet.active);
+        buffer.writeFloat(packet.boost);
+        buffer.writeVarInt(packet.comboScore);
+        buffer.writeFloat(packet.comboMultiplier);
+        buffer.writeBoolean(packet.grinding);
+        buffer.writeVarInt(packet.grindKindId);
+        buffer.writeBoolean(packet.wallRiding);
+        buffer.writeBoolean(packet.manual);
+        buffer.writeBoolean(packet.boosting);
+        buffer.writeBoolean(packet.powersliding);
+        buffer.writeFloat(packet.wallSide);
+        buffer.writeVarInt(packet.trickIndex);
+        buffer.writeVarInt(packet.trickTicks);
+        buffer.writeBoolean(packet.boostTrick);
+        buffer.writeFloat(packet.momentum);
+        buffer.writeFloat(packet.flow);
+        buffer.writeBoolean(packet.groundStunt);
+        buffer.writeVarInt(packet.landingGrade);
+        buffer.writeVarInt(packet.landingTicks);
+        buffer.writeBoolean(packet.dancing);
+        buffer.writeVarInt(packet.danceStyle);
+        buffer.writeVarInt(packet.danceMoveId);
+        buffer.writeVarInt(packet.danceTicks);
+        buffer.writeVarInt(packet.danceChain);
+        buffer.writeVarInt(packet.cypherSize);
     }
-    public static S2CStatePacket decode(FriendlyByteBuf b) {
-        return new S2CStatePacket(b.readVarInt(), b.readVarInt(), b.readBoolean(), b.readFloat(), b.readVarInt(),
-                b.readFloat(), b.readBoolean(), b.readVarInt(), b.readBoolean(), b.readBoolean(), b.readBoolean(),
-                b.readBoolean(), b.readFloat(), b.readVarInt(), b.readVarInt(), b.readFloat());
+
+    public static S2CStatePacket decode(FriendlyByteBuf buffer) {
+        return new S2CStatePacket(buffer.readVarInt(), buffer.readVarInt(), buffer.readBoolean(), buffer.readFloat(),
+                buffer.readVarInt(), buffer.readFloat(), buffer.readBoolean(), buffer.readVarInt(), buffer.readBoolean(),
+                buffer.readBoolean(), buffer.readBoolean(), buffer.readBoolean(), buffer.readFloat(), buffer.readVarInt(),
+                buffer.readVarInt(), buffer.readBoolean(), buffer.readFloat(), buffer.readFloat(), buffer.readBoolean(),
+                buffer.readVarInt(), buffer.readVarInt(), buffer.readBoolean(), buffer.readVarInt(), buffer.readVarInt(),
+                buffer.readVarInt(), buffer.readVarInt(), buffer.readVarInt());
     }
-    public static void handle(S2CStatePacket p, Supplier<NetworkEvent.Context> supplier) {
-        NetworkEvent.Context ctx = supplier.get();
-        ctx.enqueueWork(() -> ClientRideState.accept(p));
-        ctx.setPacketHandled(true);
+
+    public static void handle(S2CStatePacket packet, Supplier<NetworkEvent.Context> supplier) {
+        NetworkEvent.Context context = supplier.get();
+        context.enqueueWork(() -> ClientRideState.accept(packet));
+        context.setPacketHandled(true);
     }
 }

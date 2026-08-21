@@ -1,0 +1,73 @@
+{
+  "version": 1,
+  "uuid": "c79ce738-6340-5bde-8637-3e230f40e8b0",
+  "name": "grind_trick_7",
+  "emote": {
+    "beginTick": 0,
+    "endTick": 18,
+    "stopTick": 18,
+    "isLoop": false,
+    "returnTick": 0,
+    "nsfw": false,
+    "degrees": false,
+    "moves": [
+      {
+        "tick": 0,
+        "easing": "INOUTSINE",
+        "body": {
+          "pitch": 0.08,
+          "yaw": 0.0,
+          "roll": 0.0
+        },
+        "leftLeg": {
+          "pitch": 0.18,
+          "yaw": 0.0,
+          "roll": 0.0
+        },
+        "rightLeg": {
+          "pitch": -0.16,
+          "yaw": 0.0,
+          "roll": 0.0
+        }
+      },
+      {
+        "tick": 9,
+        "easing": "OUTQUAD",
+        "body": {
+          "pitch": 0.34,
+          "yaw": -1.22,
+          "roll": -0.36
+        },
+        "leftLeg": {
+          "pitch": 0.58,
+          "yaw": -0.18,
+          "roll": 0.32
+        },
+        "rightLeg": {
+          "pitch": -0.52,
+          "yaw": 0.18,
+          "roll": -0.32
+        }
+      },
+      {
+        "tick": 18,
+        "easing": "INOUTSINE",
+        "body": {
+          "pitch": 0.08,
+          "yaw": 0.0,
+          "roll": 0.0
+        },
+        "leftLeg": {
+          "pitch": 0.18,
+          "yaw": 0.0,
+          "roll": 0.0
+        },
+        "rightLeg": {
+          "pitch": -0.16,
+          "yaw": 0.0,
+          "roll": 0.0
+        }
+      }
+    ]
+  }
+}

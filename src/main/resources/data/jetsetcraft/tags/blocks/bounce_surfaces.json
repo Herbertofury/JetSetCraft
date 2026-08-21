@@ -1,4 +1,10 @@
 {
   "replace": false,
-  "values": ["minecraft:slime_block"]
+  "values": [
+    "minecraft:slime_block",
+    {
+      "id": "aether:blue_aercloud",
+      "required": false
+    }
+  ]
 }

@@ -1,0 +1,73 @@
+{
+  "version": 1,
+  "uuid": "28107788-865a-59de-b1ca-3d87bcc8ec52",
+  "name": "scooter_boost",
+  "emote": {
+    "beginTick": 0,
+    "endTick": 24,
+    "stopTick": 24,
+    "isLoop": true,
+    "returnTick": 0,
+    "nsfw": false,
+    "degrees": false,
+    "moves": [
+      {
+        "tick": 0,
+        "easing": "INOUTSINE",
+        "body": {
+          "pitch": 0.22,
+          "yaw": 0.0,
+          "roll": 0.0
+        },
+        "leftLeg": {
+          "pitch": 0.46,
+          "yaw": 0.0,
+          "roll": 0.08
+        },
+        "rightLeg": {
+          "pitch": -0.46,
+          "yaw": 0.0,
+          "roll": -0.08
+        }
+      },
+      {
+        "tick": 12,
+        "easing": "INOUTSINE",
+        "body": {
+          "pitch": 0.26,
+          "yaw": 0.0,
+          "roll": 0.05
+        },
+        "leftLeg": {
+          "pitch": 0.32,
+          "yaw": 0.0,
+          "roll": 0.13
+        },
+        "rightLeg": {
+          "pitch": -0.34,
+          "yaw": 0.0,
+          "roll": -0.13
+        }
+      },
+      {
+        "tick": 24,
+        "easing": "INOUTSINE",
+        "body": {
+          "pitch": 0.22,
+          "yaw": 0.0,
+          "roll": 0.0
+        },
+        "leftLeg": {
+          "pitch": 0.46,
+          "yaw": 0.0,
+          "roll": 0.08
+        },
+        "rightLeg": {
+          "pitch": -0.46,
+          "yaw": 0.0,
+          "roll": -0.08
+        }
+      }
+    ]
+  }
+}

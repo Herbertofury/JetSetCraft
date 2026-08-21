@@ -12,7 +12,6 @@ public final class JetSetConfig {
         ForgeConfigSpec.Builder serverBuilder = new ForgeConfigSpec.Builder();
         SERVER = new Server(serverBuilder);
         SERVER_SPEC = serverBuilder.build();
-
         ForgeConfigSpec.Builder clientBuilder = new ForgeConfigSpec.Builder();
         CLIENT = new Client(clientBuilder);
         CLIENT_SPEC = clientBuilder.build();
@@ -28,6 +27,12 @@ public final class JetSetConfig {
         public final ForgeConfigSpec.BooleanValue allowRailGrinding;
         public final ForgeConfigSpec.BooleanValue allowRailTricks;
         public final ForgeConfigSpec.BooleanValue allowWallRides;
+        public final ForgeConfigSpec.BooleanValue allowGroundStunts;
+        public final ForgeConfigSpec.BooleanValue allowBoostTricks;
+        public final ForgeConfigSpec.BooleanValue allowDancing;
+        public final ForgeConfigSpec.BooleanValue enableCyphers;
+        public final ForgeConfigSpec.DoubleValue cypherRadius;
+        public final ForgeConfigSpec.DoubleValue styleBoostScale;
         public final ForgeConfigSpec.BooleanValue allowCombatWhileRiding;
         public final ForgeConfigSpec.BooleanValue enableVanillaWorldPhysics;
         public final ForgeConfigSpec.DoubleValue blueIceSpeedMultiplier;
@@ -46,30 +51,47 @@ public final class JetSetConfig {
             grindSnapRadius = b.defineInRange("grindSnapRadius", 0.62, 0.20, 1.40);
             grindVerticalTolerance = b.defineInRange("grindVerticalTolerance", 0.76, 0.20, 1.60);
             allowEdgeGrinding = b.define("allowEdgeGrinding", true);
-            allowRailGrinding = b.comment("Prefer real rail/track paths (vanilla/modded rails and supported track APIs) over generic block edges.")
+            allowRailGrinding = b.comment("Prefer real rail/track paths over incidental block edges.")
                     .define("allowRailGrinding", true);
-            allowRailTricks = b.comment("Allow trick inputs, hops and transfers while actively grinding a rail/track.")
+            allowRailTricks = b.comment("Allow tricks, hops and transfers while actively grinding.")
                     .define("allowRailTricks", true);
             allowWallRides = b.define("allowWallRides", true);
             b.pop();
+
+            b.push("styleFlow");
+            allowGroundStunts = b.comment("Allow contextual breakdance power moves and freezes on the ground.")
+                    .define("allowGroundStunts", true);
+            allowBoostTricks = b.comment("Allow holding Boost while pressing Trick for higher-risk, higher-value boost tricks.")
+                    .define("allowBoostTricks", true);
+            allowDancing = b.comment("Allow the six selectable street-dance styles even without ride gear equipped.")
+                    .define("allowDancing", true);
+            enableCyphers = b.comment("Nearby dancing players form cyphers that improve style and boost rewards.")
+                    .define("enableCyphers", true);
+            cypherRadius = b.comment("Maximum block radius used to detect other dancers in a cypher.")
+                    .defineInRange("cypherRadius", 8.0, 2.0, 24.0);
+            styleBoostScale = b.comment("Multiplier for boost earned from tricks, clean landings and cyphers.")
+                    .defineInRange("styleBoostScale", 1.0, 0.0, 4.0);
+            b.pop();
+
             b.push("vanillaWorldPhysics");
-            enableVanillaWorldPhysics = b.comment("Compose JetSetCraft momentum with Minecraft block materials, redstone, fluids, effects and enchantments.")
+            enableVanillaWorldPhysics = b.comment("Compose momentum with Minecraft materials, redstone, fluids, effects and enchantments.")
                     .define("enableVanillaWorldPhysics", true);
-            blueIceSpeedMultiplier = b.comment("Extreme blue-ice top-speed multiplier. Intentionally evokes boats on blue ice instead of normal ground.")
+            blueIceSpeedMultiplier = b.comment("Extreme blue-ice top-speed multiplier, intentionally evoking boats on blue ice.")
                     .defineInRange("blueIceSpeedMultiplier", 2.15, 1.0, 4.0);
-            slimeBounceMultiplier = b.comment("Multiplier applied to preserved vertical impact speed when a rider lands on slime.")
+            slimeBounceMultiplier = b.comment("Preserved vertical impact multiplier when landing on slime.")
                     .defineInRange("slimeBounceMultiplier", 0.92, 0.1, 2.0);
-            poweredRailBoostPerTick = b.comment("Momentum added per tick while grinding a powered powered-rail.")
+            poweredRailBoostPerTick = b.comment("Momentum added each tick on a powered powered-rail.")
                     .defineInRange("poweredRailBoostPerTick", 0.030, 0.0, 0.20);
-            unpoweredRailRetention = b.comment("Momentum retained per tick while grinding an unpowered powered-rail.")
+            unpoweredRailRetention = b.comment("Momentum retained on an unpowered powered-rail.")
                     .defineInRange("unpoweredRailRetention", 0.90, 0.20, 1.0);
-            enableMicroTerrainAssist = b.comment("Safely continue ride momentum across collision-verified slabs, stair steps, snow layers and similar <=5/8-block rises.")
+            enableMicroTerrainAssist = b.comment("Continue across collision-verified slabs, stairs and other small rises.")
                     .define("enableMicroTerrainAssist", true);
-            microTerrainMaxStep = b.comment("Maximum vertical rise eligible for JetSetCraft micro-terrain continuation. Full blocks remain solid obstacles.")
+            microTerrainMaxStep = b.comment("Maximum rise eligible for micro-terrain continuation.")
                     .defineInRange("microTerrainMaxStep", 0.625, 0.25, 0.75);
             b.pop();
+
             b.push("compatibility");
-            allowCombatWhileRiding = b.comment("Never suppress normal/third-party weapon input while a ride style is active.")
+            allowCombatWhileRiding = b.comment("Never suppress normal or third-party weapon input while riding.")
                     .define("allowCombatWhileRiding", true);
             b.pop();
             b.push("graffiti");
@@ -84,16 +106,27 @@ public final class JetSetConfig {
         public final ForgeConfigSpec.DoubleValue cameraRollScale;
         public final ForgeConfigSpec.DoubleValue maxExtraFov;
         public final ForgeConfigSpec.DoubleValue boostExtraFov;
+        public final ForgeConfigSpec.BooleanValue showStyleHud;
+        public final ForgeConfigSpec.BooleanValue showTrickNames;
+        public final ForgeConfigSpec.BooleanValue reducedMotion;
 
         private Client(ForgeConfigSpec.Builder b) {
             b.push("camera");
             dynamicCamera = b.comment("Lean the camera while grinding, powersliding and wall riding.")
                     .define("dynamicCamera", true);
-            dynamicFov = b.comment("Add speed-sensitive field of view without overriding the player's configured FOV.")
+            dynamicFov = b.comment("Add speed-sensitive field of view without overriding configured FOV.")
                     .define("dynamicFov", true);
             cameraRollScale = b.defineInRange("cameraRollScale", 1.0, 0.0, 2.0);
             maxExtraFov = b.defineInRange("maxExtraFov", 7.0, 0.0, 24.0);
             boostExtraFov = b.defineInRange("boostExtraFov", 4.0, 0.0, 18.0);
+            reducedMotion = b.comment("Disable camera roll/FOV pulses and reduce rapid ride-gear stunt rotations.")
+                    .define("reducedMotion", false);
+            b.pop();
+            b.push("hud");
+            showStyleHud = b.comment("Show the JetSetCraft boost, flow, combo, trick and cypher HUD.")
+                    .define("showStyleHud", true);
+            showTrickNames = b.comment("Show contextual named tricks and landing grades.")
+                    .define("showTrickNames", true);
             b.pop();
         }
     }

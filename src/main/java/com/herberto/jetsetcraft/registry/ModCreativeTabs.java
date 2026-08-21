@@ -19,6 +19,7 @@ public final class ModCreativeTabs {
                 output.accept(ModItems.STREET_BOARD.get());
                 output.accept(ModItems.HOVERBOARD.get());
                 output.accept(ModItems.BMX.get());
+                output.accept(ModItems.SCOOTER.get());
                 output.accept(ModItems.SPRAY_CAN.get());
             }).build());
 

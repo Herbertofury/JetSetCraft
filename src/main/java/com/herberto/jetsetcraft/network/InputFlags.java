@@ -7,5 +7,7 @@ public final class InputFlags {
     public static final int MANUAL = 1 << 3;
     public static final int BRAKE = 1 << 4;
     public static final int JUMP = 1 << 5;
+    public static final int DANCE = 1 << 6;
+    public static final int SNEAK = 1 << 7;
     private InputFlags() {}
 }
