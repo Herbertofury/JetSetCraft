@@ -1,7 +1,6 @@
 package com.herberto.jetsetcraft.client.render;
 
 import com.herberto.jetsetcraft.client.state.ClientRideState;
-import com.herberto.jetsetcraft.movement.RideStyle;
 import com.herberto.jetsetcraft.registry.ModItems;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
@@ -27,16 +26,19 @@ public final class RideGearLayer extends RenderLayer<AbstractClientPlayer, Playe
         ClientRideState.Snapshot state = ClientRideState.get(player.getId());
         if (!state.active()) return;
         switch (state.style()) {
-            case INLINE -> renderSkates(poseStack, buffer, packedLight, player, state, partialTick, ModItems.INLINE_SKATES.get().getDefaultInstance());
-            case QUAD -> renderSkates(poseStack, buffer, packedLight, player, state, partialTick, ModItems.QUAD_SKATES.get().getDefaultInstance());
-            case BOARD -> renderBoard(poseStack, buffer, packedLight, player, state, partialTick);
+            case INLINE -> renderSkates(poseStack, buffer, packedLight, player, ModItems.INLINE_SKATES.get().getDefaultInstance());
+            case QUAD -> renderSkates(poseStack, buffer, packedLight, player, ModItems.QUAD_SKATES.get().getDefaultInstance());
+            case BOARD -> renderBoard(poseStack, buffer, packedLight, player, state, partialTick,
+                    ModItems.STREET_BOARD.get().getDefaultInstance(), false);
+            case HOVER -> renderBoard(poseStack, buffer, packedLight, player, state, partialTick,
+                    ModItems.HOVERBOARD.get().getDefaultInstance(), true);
             case BMX -> renderBmx(poseStack, buffer, packedLight, player, state, partialTick);
             default -> { }
         }
     }
 
     private void renderSkates(PoseStack poseStack, MultiBufferSource buffer, int light,
-                              AbstractClientPlayer player, ClientRideState.Snapshot state, float partialTick, ItemStack stack) {
+                              AbstractClientPlayer player, ItemStack stack) {
         poseStack.pushPose();
         getParentModel().leftLeg.translateAndRotate(poseStack);
         poseStack.translate(0.0, 0.72, -0.04);
@@ -54,16 +56,20 @@ public final class RideGearLayer extends RenderLayer<AbstractClientPlayer, Playe
     }
 
     private void renderBoard(PoseStack poseStack, MultiBufferSource buffer, int light,
-                             AbstractClientPlayer player, ClientRideState.Snapshot state, float partialTick) {
+                             AbstractClientPlayer player, ClientRideState.Snapshot state, float partialTick,
+                             ItemStack stack, boolean hover) {
         poseStack.pushPose();
-        poseStack.translate(0.0, -0.035, 0.0);
+        double bob = hover ? Math.sin((player.tickCount + partialTick) * 0.24) * 0.012 : 0.0;
+        poseStack.translate(0.0, (hover ? -0.085 : -0.035) + bob, 0.0);
         if (state.trickTicks() > 0) {
             float progress = (16.0f - state.trickTicks() + partialTick) / 16.0f;
             poseStack.mulPose(Axis.YP.rotationDegrees(progress * 360.0f));
-            poseStack.mulPose(Axis.ZP.rotationDegrees((float) Math.sin(progress * Math.PI) * 80.0f));
+            poseStack.mulPose(Axis.ZP.rotationDegrees((float) Math.sin(progress * Math.PI) * (hover ? 62.0f : 80.0f)));
+        } else if (hover) {
+            poseStack.mulPose(Axis.ZP.rotationDegrees((float) Math.sin((player.tickCount + partialTick) * 0.12) * 2.0f));
         }
-        poseStack.scale(0.82f, 0.82f, 0.82f);
-        renderItem(ModItems.STREET_BOARD.get().getDefaultInstance(), poseStack, buffer, light, player);
+        poseStack.scale(hover ? 0.88f : 0.82f, hover ? 0.88f : 0.82f, hover ? 0.88f : 0.82f);
+        renderItem(stack, poseStack, buffer, light, player);
         poseStack.popPose();
     }
 
