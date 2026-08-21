@@ -1,0 +1,73 @@
+name: Restore exact JetSetCraft recovered source tree
+
+on:
+  push:
+    branches: [ main ]
+    paths: [ '.github/workflows/restore-recovered-source-tree.yml' ]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  restore:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Check out exact current main
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Refuse stale main
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch origin main
+          test "$(git rev-parse HEAD)" = "$(git rev-parse origin/main)"
+
+      - name: Download exact successful recovery artifact
+        uses: actions/download-artifact@v5
+        with:
+          name: jetsetcraft-source-recovery
+          path: recovered
+          run-id: 32450625206
+          github-token: ${{ github.token }}
+
+      - name: Restore exact Java and runtime-resource trees
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -d recovered/recovered-source/src/main/java
+          test -d recovered/recovered-source/src/main/resources
+          rm -rf src/main/java src/main/resources
+          mkdir -p src/main
+          cp -a recovered/recovered-source/src/main/java src/main/java
+          cp -a recovered/recovered-source/src/main/resources src/main/resources
+          find src/main -type f -name '*.orig' -delete
+
+          test -f src/main/java/com/herberto/jetsetcraft/registry/ModItems.java
+          test -f src/main/java/com/herberto/jetsetcraft/registry/ModEntities.java
+          test -f src/main/java/com/herberto/jetsetcraft/movement/JetSetMovement.java
+          test -f src/main/resources/META-INF/mods.toml
+          test -f src/main/resources/assets/jetsetcraft/graffiti/catalog.json
+          test -f src/main/resources/assets/jetsetcraft/player_animation/grind.json
+          grep -Fq 'renderer instanceof PlayerRenderer playerRenderer' src/main/java/com/herberto/jetsetcraft/client/ClientEvents.java
+          grep -Fq 'for (AbstractClientPlayer player : mc.level.players()) update(player);' src/main/java/com/herberto/jetsetcraft/client/animation/RideAnimationController.java
+          ! find src/main -type f -name '*.orig' -print -quit | grep -q .
+
+          find recovered/recovered-source/src/main/java recovered/recovered-source/src/main/resources -type f ! -name '*.orig' -printf '%P\n' | sort > /tmp/recovered-paths.txt
+          find src/main/java src/main/resources -type f -printf '%P\n' | sort > /tmp/restored-paths.txt
+          diff -u /tmp/recovered-paths.txt /tmp/restored-paths.txt
+
+      - name: Commit exact recovered source and remove temporary restorer
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm .github/workflows/restore-recovered-source-tree.yml
+          git config user.name 'JetSetCraft Recovery Bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add -A src/main .github/workflows/restore-recovered-source-tree.yml
+          git diff --cached --check
+          git commit -m 'Restore exact JetSetCraft recovered Forge source tree'
+          git push origin HEAD:main
