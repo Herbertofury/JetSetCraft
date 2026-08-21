@@ -1,0 +1,21 @@
+{
+  "schema": 1,
+  "project": "JetSetCraft",
+  "checkpoint": "standalone_compatibility_covenant",
+  "date": "2026-08-21",
+  "master_spec": "docs/JetSetCraft_Gang_Wars_Boombox_Mob_Atlas_Master_Spec.md",
+  "master_sha256": "268dfe0647830b05bdf50baa6a13cf04704a49371a3c0636dcfae785ba07d71a",
+  "master_size": 69594,
+  "requirements_locked": [
+    "Standalone additive architecture; do not replace or patch vanilla/third-party mob code for gang support.",
+    "No broad spawn-table takeover; natural gang encounters are ultra-rare and independently scheduled.",
+    "Craftable vanilla-ingredient Boombox is the reliable event entry point.",
+    "Street Gear activation covers skates, skateboards, BMX, scooters, hoverboards and future trick gear on the same original entity.",
+    "Removing Street Gear restores source-owned behavior/state.",
+    "Optional-mod adapters fail closed and never become hard dependencies.",
+    "Zero known JetSetCraft-caused compatibility regressions is a release gate; unknown unsupported cases degrade gracefully.",
+    "Dormant worlds/mobs incur negligible JetSetCraft overhead."
+  ],
+  "wiki_page": "Standalone-Compatibility-Covenant.md",
+  "docs_page": "docs/STANDALONE_COMPATIBILITY_COVENANT.md"
+}
