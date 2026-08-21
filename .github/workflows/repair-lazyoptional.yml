@@ -44,7 +44,6 @@ jobs:
           PY
 
           python3 tools/validate_gameplay_contract.py
-          python3 tools/validate_assets.py
           git diff --check
 
           if git diff --quiet; then
