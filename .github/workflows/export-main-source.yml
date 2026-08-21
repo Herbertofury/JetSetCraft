@@ -1,0 +1,31 @@
+name: Export JetSetCraft Main Source
+
+on:
+  push:
+    branches: [ feature/ultimate-street-movement ]
+    paths: [ '.github/workflows/export-main-source.yml' ]
+  workflow_dispatch:
+
+jobs:
+  export-main:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+      - name: Archive exact main tree
+        shell: bash
+        run: |
+          set -euo pipefail
+          git rev-parse HEAD | tee JetSetCraft-main-source.commit
+          git archive --format=zip --output=JetSetCraft-main-source.zip HEAD
+          sha256sum JetSetCraft-main-source.zip > JetSetCraft-main-source.zip.sha256
+      - uses: actions/upload-artifact@v4
+        with:
+          name: jetsetcraft-exact-main-source
+          path: |
+            JetSetCraft-main-source.zip
+            JetSetCraft-main-source.zip.sha256
+            JetSetCraft-main-source.commit
+          if-no-files-found: error
