@@ -12,6 +12,8 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import java.util.Optional;
 
 public final class EdgeFinder {
+    private static final double[] EXPOSURE_SAMPLES = {0.20, 0.50, 0.80};
+
     public record Edge(Vec3 point, Vec3 tangent, double distanceSq) {}
 
     public static Optional<Edge> findBest(Player player, Vec3 preferredDirection) {
@@ -51,13 +53,13 @@ public final class EdgeFinder {
                         double x1 = x + box.maxX;
                         double z0 = z + box.minZ;
                         double z1 = z + box.maxZ;
-                        best = choose(feet, preferred, new Vec3(x0, topY, z0), new Vec3(x1, topY, z0), radius, best, bestScore);
+                        best = choose(player, feet, preferred, new Vec3(x0, topY, z0), new Vec3(x1, topY, z0), radius, best, bestScore);
                         if (best != null) bestScore = score(best, preferred);
-                        best = choose(feet, preferred, new Vec3(x0, topY, z1), new Vec3(x1, topY, z1), radius, best, bestScore);
+                        best = choose(player, feet, preferred, new Vec3(x0, topY, z1), new Vec3(x1, topY, z1), radius, best, bestScore);
                         if (best != null) bestScore = score(best, preferred);
-                        best = choose(feet, preferred, new Vec3(x0, topY, z0), new Vec3(x0, topY, z1), radius, best, bestScore);
+                        best = choose(player, feet, preferred, new Vec3(x0, topY, z0), new Vec3(x0, topY, z1), radius, best, bestScore);
                         if (best != null) bestScore = score(best, preferred);
-                        best = choose(feet, preferred, new Vec3(x1, topY, z0), new Vec3(x1, topY, z1), radius, best, bestScore);
+                        best = choose(player, feet, preferred, new Vec3(x1, topY, z0), new Vec3(x1, topY, z1), radius, best, bestScore);
                         if (best != null) bestScore = score(best, preferred);
                     }
                 }
@@ -66,22 +68,67 @@ public final class EdgeFinder {
         return Optional.ofNullable(best);
     }
 
-    private static Edge choose(Vec3 feet, Vec3 preferred, Vec3 a, Vec3 b, double radius, Edge current, double currentScore) {
+    private static Edge choose(Player player, Vec3 feet, Vec3 preferred, Vec3 a, Vec3 b, double radius, Edge current, double currentScore) {
         Vec3 ab = b.subtract(a);
         double lenSq = ab.lengthSqr();
         if (lenSq < 0.04) return current;
         Vec3 tangent = ab.normalize();
         double alignment = Math.abs(tangent.dot(preferred));
         if (alignment < 0.42) return current;
-        if (tangent.dot(preferred) < 0) tangent = tangent.scale(-1);
         double t = feet.subtract(a).dot(ab) / lenSq;
         t = Math.max(0.0, Math.min(1.0, t));
         Vec3 point = a.add(ab.scale(t));
         double distanceSq = point.distanceToSqr(feet);
         if (distanceSq > radius * radius) return current;
+        // Collision exposure probes are the expensive part, so only run them for edges inside snap range.
+        if (!usableExposedEdge(player, a, b)) return current;
+        if (tangent.dot(preferred) < 0) tangent = tangent.scale(-1);
         Edge candidate = new Edge(point, tangent, distanceSq);
         double score = score(candidate, preferred);
         return score < currentScore ? candidate : current;
+    }
+
+    /**
+     * Reject fake top seams while retaining real ledges and narrow world geometry. A collision-box top edge
+     * is grindable only when one horizontal side is genuinely open and there is rider clearance above it.
+     * This makes adjacent full-block floor seams disappear while iron bars, fences, walls, panes, roof edges
+     * and the exposed sides of complex voxel shapes remain discoverable without a giant block whitelist.
+     */
+    private static boolean usableExposedEdge(Player player, Vec3 a, Vec3 b) {
+        Vec3 tangent = horizontal(b.subtract(a));
+        if (tangent.lengthSqr() < 1.0e-6) return false;
+        tangent = tangent.normalize();
+        Vec3 side = new Vec3(-tangent.z, 0.0, tangent.x);
+
+        // Sample more than the midpoint so a candidate that merely crosses an internal shape seam does not
+        // masquerade as a continuous ledge. At each sample, at least one side just below the top must be air.
+        for (double t : EXPOSURE_SAMPLES) {
+            Vec3 p = a.add(b.subtract(a).scale(t));
+            boolean sideAFree = sideProbeFree(player, p.add(side.scale(0.045)), tangent);
+            boolean sideBFree = sideProbeFree(player, p.add(side.scale(-0.045)), tangent);
+            if (!sideAFree && !sideBFree) return false;
+        }
+
+        Vec3 mid = a.add(b.subtract(a).scale(0.50));
+        double halfAlong = Math.min(0.16, Math.max(0.08, horizontal(b.subtract(a)).length() * 0.20));
+        double halfSide = 0.12;
+        AABB clearance = orientedAabb(mid.add(0.0, 0.04, 0.0), tangent, side, halfAlong, halfSide, 1.62);
+        return player.level().noCollision(player, clearance);
+    }
+
+    private static boolean sideProbeFree(Player player, Vec3 center, Vec3 tangent) {
+        Vec3 side = new Vec3(-tangent.z, 0.0, tangent.x);
+        AABB probe = orientedAabb(center.add(0.0, -0.035, 0.0), tangent, side, 0.045, 0.018, 0.040);
+        return player.level().noCollision(player, probe);
+    }
+
+    /** Build a conservative world-axis AABB around a tiny oriented rectangle. */
+    private static AABB orientedAabb(Vec3 center, Vec3 tangent, Vec3 side, double halfAlong, double halfSide, double height) {
+        double hx = Math.abs(tangent.x) * halfAlong + Math.abs(side.x) * halfSide;
+        double hz = Math.abs(tangent.z) * halfAlong + Math.abs(side.z) * halfSide;
+        double minY = height >= 0.10 ? center.y : center.y - height;
+        double maxY = height >= 0.10 ? center.y + height : center.y;
+        return new AABB(center.x - hx, minY, center.z - hz, center.x + hx, maxY, center.z + hz);
     }
 
     private static double score(Edge edge, Vec3 preferred) {
