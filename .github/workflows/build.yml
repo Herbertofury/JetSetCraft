@@ -26,6 +26,23 @@ jobs:
           python tools/validate_gameplay_contract.py
       - name: Build
         run: gradle --no-daemon build
+      - name: Real Forge GameTest hoverboard acceptance
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -f hoverboard-gametest.log
+          timeout 180s gradle --no-daemon runGameTestServer | tee hoverboard-gametest.log
+          if ! grep -Eq '1 tests are now running|1 test is now running|Running test|hoverboardUsesPersistentUniversalRideSolver|hoverboardusespersistentuniversalridesolver' hoverboard-gametest.log; then
+            echo '::error::Forge GameTest server did not visibly execute the recovered hoverboard test.'
+            exit 1
+          fi
+      - name: Upload hoverboard GameTest log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: jetsetcraft-hoverboard-gametest
+          path: hoverboard-gametest.log
+          if-no-files-found: warn
       - name: Real Forge dedicated-server runtime smoke
         shell: bash
         run: |
