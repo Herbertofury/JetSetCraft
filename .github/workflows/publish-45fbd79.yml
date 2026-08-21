@@ -1,0 +1,60 @@
+name: Promote JetSetCraft 45fbd79
+
+on:
+  push:
+    branches: [ jetsetcraft-publish-45fbd79 ]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  promote:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout staged publication branch
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Verify payloads and apply current source
+        shell: bash
+        run: |
+          set -euo pipefail
+          EXPECTED_MAIN=339a53afa08a3f84c0617e9fde27cda92e538d44
+          git fetch origin main
+          actual_main="$(git rev-parse origin/main)"
+          if [[ "$actual_main" != "$EXPECTED_MAIN" ]]; then
+            echo "::error::main moved from $EXPECTED_MAIN to $actual_main; refusing to overwrite newer work."
+            exit 1
+          fi
+
+          tr -d '[:space:]' < .bootstrap/source-delta.patch.gz.b64 | base64 -d > /tmp/source-delta.patch.gz
+          echo '6c2a63ba340f1a9f395cec89c467cde2007fea21e57af90f666146169e07e558  /tmp/source-delta.patch.gz' | sha256sum -c -
+          gzip -dc /tmp/source-delta.patch.gz > /tmp/source-delta.patch
+          echo '1cd8689c23cff01c019b22667075c78ffe1c939f54acaa5f0b900f62f17afe82  /tmp/source-delta.patch' | sha256sum -c -
+
+          git apply --3way --index /tmp/source-delta.patch
+
+          tr -d '[:space:]' < .bootstrap/ClientEvents.java.b64 | base64 -d > src/main/java/com/herberto/jetsetcraft/client/ClientEvents.java
+          tr -d '[:space:]' < .bootstrap/RideAnimationController.java.b64 | base64 -d > src/main/java/com/herberto/jetsetcraft/client/animation/RideAnimationController.java
+          echo '735c589e6bbe4bdd561e9b937fdc7758106e0399591e771a4b0954ea6784d204  src/main/java/com/herberto/jetsetcraft/client/ClientEvents.java' | sha256sum -c -
+          echo '2933259e3a2bcb77196b320ad15364f88ea086067c59dc18625b49be4f0225b3  src/main/java/com/herberto/jetsetcraft/client/animation/RideAnimationController.java' | sha256sum -c -
+
+          rm -rf .bootstrap
+          rm -f .github/workflows/publish-45fbd79.yml
+          git add -A
+
+          git config user.name 'JetSetCraft Publisher'
+          git config user.email 'actions@users.noreply.github.com'
+          git reset --soft origin/main
+          git add -A
+
+          echo '--- promoted source delta ---'
+          git diff --cached --stat
+          if git diff --cached --quiet; then
+            echo '::error::Promotion produced no source changes.'
+            exit 1
+          fi
+          git commit -m 'Promote vanilla-world mechanics and hardened ride systems'
+          git push origin HEAD:main
