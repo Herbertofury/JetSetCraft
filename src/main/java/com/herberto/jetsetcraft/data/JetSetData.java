@@ -3,6 +3,7 @@ package com.herberto.jetsetcraft.data;
 import com.herberto.jetsetcraft.movement.GrindKind;
 import com.herberto.jetsetcraft.movement.RideStyle;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 
 public final class JetSetData {
@@ -42,6 +43,20 @@ public final class JetSetData {
     private long lastActivatorRailPos = Long.MIN_VALUE;
     private long lastSideBouncePos = Long.MIN_VALUE;
     private int surfaceInteractionCooldown;
+    // Velocity written by JetSetCraft at the end of the previous server tick. Comparing Minecraft's
+    // next-tick velocity against this lets us detect real external impulses (explosions, pistons,
+    // knockback, moving contraptions) without blindly treating ordinary ride acceleration as tech.
+    private Vec3 lastSolverVelocity = Vec3.ZERO;
+    private Vec3 externalImpulse = Vec3.ZERO;
+    private int externalImpulseTicks;
+    private int terrainAssistCooldown;
+    /**
+     * Dedicated ride-equipment slot inspired by Red Skate Rebellion's player gear inventory.
+     * Keeping the actual stack here means JetSetCraft never needs to occupy either hand or the
+     * vanilla boot slot just to remain equipped. NBT is preserved for future board/skate paint,
+     * upgrades and other per-item customization.
+     */
+    private ItemStack rideGear = ItemStack.EMPTY;
 
     public RideStyle style() { return style; }
     public void setStyle(RideStyle v) { style = v == null ? RideStyle.NONE : v; }
@@ -115,6 +130,21 @@ public final class JetSetData {
     public void setLastSideBouncePos(long v) { lastSideBouncePos = v; }
     public int surfaceInteractionCooldown() { return surfaceInteractionCooldown; }
     public void setSurfaceInteractionCooldown(int v) { surfaceInteractionCooldown = Math.max(0, v); }
+    public Vec3 lastSolverVelocity() { return lastSolverVelocity; }
+    public void setLastSolverVelocity(Vec3 v) { lastSolverVelocity = v == null ? Vec3.ZERO : v; }
+    public Vec3 externalImpulse() { return externalImpulse; }
+    public void setExternalImpulse(Vec3 v) { externalImpulse = v == null ? Vec3.ZERO : v; }
+    public int externalImpulseTicks() { return externalImpulseTicks; }
+    public void setExternalImpulseTicks(int v) { externalImpulseTicks = Math.max(0, v); }
+    public int terrainAssistCooldown() { return terrainAssistCooldown; }
+    public void setTerrainAssistCooldown(int v) { terrainAssistCooldown = Math.max(0, v); }
+    public ItemStack rideGear() { return rideGear; }
+    public void setRideGear(ItemStack stack) { rideGear = stack == null ? ItemStack.EMPTY : stack; }
+    public ItemStack takeRideGear() {
+        ItemStack stack = rideGear;
+        rideGear = ItemStack.EMPTY;
+        return stack;
+    }
     public boolean pressed(int flag) { return (inputMask & flag) != 0; }
     public boolean justPressed(int flag) { return (inputMask & flag) != 0 && (previousInputMask & flag) == 0; }
 
@@ -138,11 +168,16 @@ public final class JetSetData {
         lastActivatorRailPos = Long.MIN_VALUE;
         lastSideBouncePos = Long.MIN_VALUE;
         surfaceInteractionCooldown = 0;
+        lastSolverVelocity = Vec3.ZERO;
+        externalImpulse = Vec3.ZERO;
+        externalImpulseTicks = 0;
+        terrainAssistCooldown = 0;
     }
 
     public void copyFrom(JetSetData o) {
         style = o.style; active = o.active; boost = o.boost; comboScore = o.comboScore;
         comboMultiplier = o.comboMultiplier; comboGrace = o.comboGrace;
+        rideGear = o.rideGear.copy();
         resetTransientRideState(); inputMask = 0; previousInputMask = 0; inputForward = 0; inputStrafe = 0;
         wasGrounded = true; airTicks = 0; momentum = 0; lastVerticalVelocity = 0;
     }
@@ -151,6 +186,7 @@ public final class JetSetData {
         CompoundTag t = new CompoundTag();
         t.putInt("Style", style.id()); t.putBoolean("Active", active); t.putFloat("Boost", boost);
         t.putInt("ComboScore", comboScore); t.putFloat("ComboMultiplier", comboMultiplier);
+        if (!rideGear.isEmpty()) t.put("RideGear", rideGear.save(new CompoundTag()));
         return t;
     }
 
@@ -158,5 +194,7 @@ public final class JetSetData {
         style = RideStyle.byId(t.getInt("Style")); active = t.getBoolean("Active") && style != RideStyle.NONE;
         boost = t.contains("Boost") ? t.getFloat("Boost") : 100f;
         comboScore = t.getInt("ComboScore"); comboMultiplier = t.contains("ComboMultiplier") ? t.getFloat("ComboMultiplier") : 1f;
+        rideGear = t.contains("RideGear", 10) ? ItemStack.of(t.getCompound("RideGear")) : ItemStack.EMPTY;
+        if (rideGear.isEmpty()) active = false;
     }
 }

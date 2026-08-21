@@ -31,6 +31,7 @@ public final class ClientEvents {
     public static final KeyMapping GRIND = new KeyMapping("key.jetsetcraft.grind", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_G, CATEGORY);
     public static final KeyMapping MANUAL = new KeyMapping("key.jetsetcraft.manual", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_C, CATEGORY);
     public static final KeyMapping BRAKE = new KeyMapping("key.jetsetcraft.brake", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_V, CATEGORY);
+    public static final KeyMapping RIDE_TOGGLE = new KeyMapping("key.jetsetcraft.ride_toggle", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_K, CATEGORY);
     private static int lastMask = -1;
     private static int heartbeat;
 
@@ -43,6 +44,7 @@ public final class ClientEvents {
             event.register(GRIND);
             event.register(MANUAL);
             event.register(BRAKE);
+            event.register(RIDE_TOGGLE);
         }
 
         @SubscribeEvent
@@ -72,6 +74,9 @@ public final class ClientEvents {
                 heartbeat = 0;
                 ClientRideState.reset();
                 return;
+            }
+            while (RIDE_TOGGLE.consumeClick()) {
+                JetSetNetwork.sendRideLoadoutAction(mc.options.keyShift.isDown());
             }
             int mask = 0;
             if (BOOST.isDown()) mask |= InputFlags.BOOST;
