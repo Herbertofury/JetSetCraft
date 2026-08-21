@@ -134,3 +134,30 @@ These remain product requirements, not discarded ideas:
 ## Acceptance line
 
 A representative test route must be able to chain ordinary ground -> Iron Bars/fence/ledge -> vanilla rail -> powered rail -> detector-triggered redstone obstacle -> Ice -> Packed Ice -> Blue Ice -> slime/piston launch -> slime landing -> honey braking -> Soul Sand/Soul Soil with/without Soul Speed -> flowing water/bubble column -> hazards -> explosion launch -> clean trick landing, and reproduce server/client state without rubber-banding.
+
+## Implemented acceptance tooling and enchantment completion
+
+The runtime implementation now includes `/jetsetcraft status`, `/jetsetcraft set_momentum <speed>`, and `/jetsetcraft build_vanilla_lab` so the surface, rail/redstone, fluid, slime/honey and hazard contracts can be tested through the real server-authoritative movement path. See `docs/VANILLA_ACCEPTANCE_LAB.md`.
+
+Dedicated inline/quad skate footwear now completes the four vanilla enchantment interactions promised by the loadout architecture: Frost Walker, Soul Speed, Depth Strider, and Feather Falling. Feather Falling is integrated with vanilla EPF math using the stronger of the vanilla footwear and JetSetCraft ride levels rather than summing both enchantment levels.
+
+
+## External impulse + micro-terrain hardening
+
+JetSetCraft now tracks the velocity written by its own previous server solve and compares it with Minecraft's next-tick velocity. Meaningful speed injection or a hard direction shock opens a short `externalImpulseTicks` window. During that window ground steering, air control, fluid control and boost steering deliberately yield more authority to the incoming Minecraft/modded impulse. Explosions, pistons, entity knockback and moving-world mechanics can therefore launch or redirect a rider without the skate solver immediately snapping the vector back to WASD.
+
+Small terrain discontinuities also have a collision-verified continuation assist. It only activates after a real horizontal collision, probes the collision shape at the rider's actual forward point, accepts at most a 5/8-block rise, and requires Minecraft `noCollision` on the destination box before moving. Slabs, stair steps, snow layers and similar modded micro-geometry can flow at speed; full blocks, fences, walls and other real obstacles remain solid. The runtime acceptance lab now contains slab/stair/snow continuity segments and `/jetsetcraft status` exposes impulse/terrain-assist state.
+
+## Exposed-world edge solver hardening
+
+JetSetCraft's generic edge grind detection now treats Minecraft collision geometry as the source of truth while rejecting geometry that only *looks* like a line numerically:
+
+- candidate edges are derived from real `VoxelShape` collision boxes, not a block-ID whitelist;
+- a top edge must have real open space on at least one horizontal side at several points along the segment;
+- shared top seams between adjacent full blocks therefore do not become invisible grind rails;
+- internal seams between multiple AABBs in stairs, walls, fences and other compound collision shapes are rejected the same way;
+- a rider-height clearance probe above the edge prevents covered/stacked geometry from creating grind paths through blocks;
+- collision exposure probes run only after distance/alignment filtering so this safety does not turn edge detection into a per-tick world-scan performance regression;
+- while already on an EDGE grind, deliberate steering input gets enough junction authority to take a real 90-degree fence/wall/ledge corner; without steering input the current line remains preferred.
+
+The runtime vanilla lab now has a fifth world-geometry lane containing connected Iron Bars, oak fences, cobblestone walls, glass panes, a multi-block rooftop, a natural log line and a stacked-log clearance regression. The intended result is that ordinary architecture becomes a readable trick playground while flat floor seams remain ordinary floors.
