@@ -1,0 +1,73 @@
+{
+  "version": 1,
+  "uuid": "09976908-dbfc-5bf6-a9c9-951fc6969b02",
+  "name": "scooter_ride",
+  "emote": {
+    "beginTick": 0,
+    "endTick": 24,
+    "stopTick": 24,
+    "isLoop": true,
+    "returnTick": 0,
+    "nsfw": false,
+    "degrees": false,
+    "moves": [
+      {
+        "tick": 0,
+        "easing": "INOUTSINE",
+        "body": {
+          "pitch": 0.1,
+          "yaw": 0.0,
+          "roll": 0.0
+        },
+        "leftLeg": {
+          "pitch": 0.46,
+          "yaw": 0.0,
+          "roll": 0.08
+        },
+        "rightLeg": {
+          "pitch": -0.46,
+          "yaw": 0.0,
+          "roll": -0.08
+        }
+      },
+      {
+        "tick": 12,
+        "easing": "INOUTSINE",
+        "body": {
+          "pitch": 0.14,
+          "yaw": 0.0,
+          "roll": 0.05
+        },
+        "leftLeg": {
+          "pitch": 0.32,
+          "yaw": 0.0,
+          "roll": 0.13
+        },
+        "rightLeg": {
+          "pitch": -0.34,
+          "yaw": 0.0,
+          "roll": -0.13
+        }
+      },
+      {
+        "tick": 24,
+        "easing": "INOUTSINE",
+        "body": {
+          "pitch": 0.1,
+          "yaw": 0.0,
+          "roll": 0.0
+        },
+        "leftLeg": {
+          "pitch": 0.46,
+          "yaw": 0.0,
+          "roll": 0.08
+        },
+        "rightLeg": {
+          "pitch": -0.46,
+          "yaw": 0.0,
+          "roll": -0.08
+        }
+      }
+    ]
+  }
+}

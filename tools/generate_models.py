@@ -225,6 +225,54 @@ def make_board():
     m.write({'deck':'deck','metal':'metal','wheel':'wheel','accent':'accent'})
 
 
+
+def make_hoverboard():
+    m=Mesh('hoverboard')
+    # A purpose-built wheel-free silhouette: broad levitation deck, luminous edge rails, twin field
+    # generators and directional fins. This is intentionally not a recolored skateboard.
+    m.deck(length=1.22,width=.39,thickness=.055,mat='shell',segments=56)
+    for x in (-.18,.18):
+        m.torus((x,.025,-.31),.12,.026,'energy',major_seg=40,minor_seg=10,plane='xz')
+        m.torus((x,.025,.31),.12,.026,'energy',major_seg=40,minor_seg=10,plane='xz')
+        m.cylinder((x,.015,-.31),.075,.12,'y','metal',segments=36)
+        m.cylinder((x,.015,.31),.075,.12,'y','metal',segments=36)
+    m.box((0,.022,0),(.30,.045,.72),'metal')
+    m.box((-.188,.12,0),(.026,.045,.92),'energy')
+    m.box(( .188,.12,0),(.026,.045,.92),'energy')
+    for z in (-.48,.48):
+        m.box((0,.055,z),(.22,.08,.11),'accent')
+        m.tube_between((-.12,.03,z),(.12,.03,z),.022,'energy',segments=18)
+    # Stabilizer fins create a readable futuristic profile from third person.
+    for x in (-.17,.17):
+        m.quad((x,.08,-.45),(x,.08,-.60),(x,.20,-.48),(x,.19,-.34),'accent')
+        m.quad((x,.08,.45),(x,.08,.60),(x,.20,.48),(x,.19,.34),'accent')
+    m.write({'shell':'hover_deck','metal':'metal','energy':'energy','accent':'accent'})
+
+
+def make_scooter():
+    m=Mesh('scooter')
+    # Compact reinforced deck with two high-detail wheels and a real stem/handlebar silhouette.
+    m.deck(length=.92,width=.27,thickness=.055,mat='deck',segments=48)
+    rear=(0,.10,-.42); front=(0,.10,.46)
+    for center in (rear,front):
+        m.torus(center,.135,.035,'rubber',major_seg=44,minor_seg=10,plane='yz')
+        m.torus(center,.095,.012,'energy',major_seg=40,minor_seg=7,plane='yz')
+        m.cylinder(center,.034,.24,'x','metal',segments=24)
+    # Fork, headset and tall bar.
+    m.tube_between((-.05,.10,.46),(-.05,.80,.37),.026,'frame',segments=18)
+    m.tube_between(( .05,.10,.46),( .05,.80,.37),.026,'frame',segments=18)
+    m.tube_between((0,.78,.37),(0,1.18,.33),.035,'frame',segments=22)
+    m.tube_between((-.30,1.18,.33),(.30,1.18,.33),.028,'metal',segments=22)
+    m.cylinder((-.31,1.18,.33),.040,.12,'x','rubber',segments=24)
+    m.cylinder(( .31,1.18,.33),.040,.12,'x','rubber',segments=24)
+    # Clamp, brake and deck rails.
+    m.cylinder((0,.76,.37),.055,.13,'y','metal',segments=30)
+    m.box((0,.16,-.35),(.18,.08,.16),'accent')
+    m.box((-.125,.09,0),(.022,.035,.72),'energy')
+    m.box(( .125,.09,0),(.022,.035,.72),'energy')
+    m.write({'deck':'deck','frame':'bike_frame','metal':'metal','rubber':'rubber','energy':'energy','accent':'accent'})
+
+
 def make_bmx():
     m=Mesh('bmx')
     rear=(0,.34,-.52); front=(0,.34,.56); crank=(0,.36,-.03); seat=(0,.76,-.18); head=(0,.70,.35)
@@ -297,6 +345,8 @@ def make_textures():
     texture_gradient(TEX_DIR/'rubber.png',(128,128),[(10,10,14),(38,40,46),(13,13,17)],1)
     texture_gradient(TEX_DIR/'wheel.png',(128,128),[(22,18,34),(78,34,110),(20,210,220)],1)
     texture_gradient(TEX_DIR/'accent.png',(128,128),[(255,60,180),(255,190,35),(20,220,220)],0)
+    texture_gradient(TEX_DIR/'hover_deck.png',(512,512),[(16,12,35),(34,30,82),(18,190,205),(245,51,169)],1)
+    texture_gradient(TEX_DIR/'energy.png',(128,128),[(12,40,80),(30,235,245),(255,75,196),(255,224,70)],0)
 
     # deck: original, busy cel-graffiti pattern with grip/noise details
     im=Image.new('RGB',(512,512),(17,18,24)); d=ImageDraw.Draw(im)
@@ -398,11 +448,19 @@ def make_graffiti():
         cache.parent.mkdir(parents=True, exist_ok=True)
         if not cache.exists():
             print('downloading pinned JSR graffiti asset pack')
-            urllib.request.urlretrieve(JSR_GRAFFITI_URL, cache)
-        digest = hashlib.sha256(cache.read_bytes()).hexdigest()
-        if digest != JSR_GRAFFITI_SHA256:
-            raise RuntimeError(f'JSRGraffiti.zip SHA-256 mismatch: {digest}')
-        jsr_archive = cache
+            try:
+                urllib.request.urlretrieve(JSR_GRAFFITI_URL, cache)
+            except Exception as exc:
+                # Clean/offline builds remain complete using the four original JetSetCraft fallbacks.
+                # A partial download is never trusted or retained; the full pack is included only after
+                # exact SHA-256 verification against the owner-approved archive.
+                cache.unlink(missing_ok=True)
+                print(f'pinned JSR graffiti pack unavailable; using offline originals: {exc}')
+        if cache.exists():
+            digest = hashlib.sha256(cache.read_bytes()).hexdigest()
+            if digest != JSR_GRAFFITI_SHA256:
+                raise RuntimeError(f'JSRGraffiti.zip SHA-256 mismatch: {digest}')
+            jsr_archive = cache
     jsr_runtime = GRAFF_DIR/'jsr'
     if jsr_archive.exists():
         import io, zipfile
@@ -426,7 +484,7 @@ def make_graffiti():
     print('graffiti catalog entries', len(catalog))
 
 if __name__=='__main__':
-    make_textures(); make_graffiti(); make_skate(); make_quad_skate(); make_board(); make_bmx(); make_spray_can()
-    for name in ('inline_skates','quad_skates','street_board','bmx','spray_can'):
+    make_textures(); make_graffiti(); make_skate(); make_quad_skate(); make_board(); make_hoverboard(); make_bmx(); make_scooter(); make_spray_can()
+    for name in ('inline_skates','quad_skates','street_board','hoverboard','bmx','scooter','spray_can'):
         p=OBJ_DIR/f'{name}.obj'
         print(name, 'vertices', sum(1 for line in p.open() if line.startswith('v ')), 'faces', sum(1 for line in p.open() if line.startswith('f ')), 'bytes', p.stat().st_size)

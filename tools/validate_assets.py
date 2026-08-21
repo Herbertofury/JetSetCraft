@@ -12,13 +12,23 @@ for p in sorted((ROOT/'src/main/resources').rglob('*.json')):
     try: json.loads(p.read_text(encoding='utf-8'))
     except Exception as e: errors.append(f'{p.relative_to(ROOT)}: invalid JSON: {e}')
 
-# Ride animation layer is lower-body only by contract so TACZ/Epic Fight/Better Combat can own arms/hands.
+# Locomotion remains lower-body only so combat mods retain arms/hands. Explicit dances and ground stunts
+# are full-body performance clips, and the client suppresses them whenever a weapon overlay is active.
 for p in sorted((ASSETS/'player_animation').glob('*.json')):
     data=json.loads(p.read_text(encoding='utf-8'))
     text=json.dumps(data)
-    for forbidden in ('leftArm','rightArm','head','leftItem','rightItem'):
-        if forbidden in text:
-            errors.append(f'{p.relative_to(ROOT)}: forbidden upper-body key {forbidden}')
+    full_body = p.stem.startswith('dance_') or p.stem.startswith('stunt_')
+    if full_body:
+        for required in ('body','leftArm','rightArm','leftLeg','rightLeg'):
+            if required not in text:
+                errors.append(f'{p.relative_to(ROOT)}: full-body performance clip missing {required}')
+        for forbidden in ('leftItem','rightItem'):
+            if forbidden in text:
+                errors.append(f'{p.relative_to(ROOT)}: performance clip must not animate held-item bones {forbidden}')
+    else:
+        for forbidden in ('leftArm','rightArm','head','leftItem','rightItem'):
+            if forbidden in text:
+                errors.append(f'{p.relative_to(ROOT)}: forbidden upper-body key {forbidden}')
 
 # Every registered ride item has an item model and every OBJ face index is in bounds.
 items_java=(ROOT/'src/main/java/com/herberto/jetsetcraft/registry/ModItems.java').read_text()
@@ -41,7 +51,7 @@ for obj in sorted((ASSETS/'models/obj').glob('*.obj')):
                     continue
                 if idx == 0 or abs(idx)>vertices:
                     errors.append(f'{obj.relative_to(ROOT)}:{line_no}: face index {idx} out of current range 1..{vertices}')
-    if vertices < 1000 and obj.stem in {'bmx','inline_skates','quad_skates','street_board','spray_can'}:
+    if vertices < 1000 and obj.stem in {'bmx','inline_skates','quad_skates','street_board','hoverboard','scooter','spray_can'}:
         errors.append(f'{obj.relative_to(ROOT)}: core model only has {vertices} vertices; quality floor is 1000')
     if not faces: errors.append(f'{obj.relative_to(ROOT)}: no faces')
 
@@ -51,7 +61,15 @@ for p in list((ROOT/'src/main/java/com/herberto/jetsetcraft').rglob('*.java')) +
     if 'streetrush' in text.lower() or 'StreetRush' in text:
         errors.append(f'{p.relative_to(ROOT)}: stale StreetRush identifier')
 
-required_clips={'inline_ride','inline_boost','quad_ride','quad_boost','board_ride','board_boost','bmx_ride','bmx_boost','grind','wallride','manual','powerslide','trick_0','trick_1','trick_2','trick_3','grind_trick_0','grind_trick_1','grind_trick_2','grind_trick_3'}
+required_clips={
+    'inline_ride','inline_boost','quad_ride','quad_boost','board_ride','board_boost',
+    'bmx_ride','bmx_boost','hover_ride','hover_boost','scooter_ride','scooter_boost',
+    'grind','wallride','manual','powerslide',
+    *{f'trick_{i}' for i in range(8)},
+    *{f'grind_trick_{i}' for i in range(8)},
+    *{f'dance_{i}' for i in range(28)},
+    *{f'stunt_{i}' for i in range(8)},
+}
 actual={p.stem for p in (ASSETS/'player_animation').glob('*.json')}
 for missing in sorted(required_clips-actual): errors.append(f'missing player animation clip {missing}')
 

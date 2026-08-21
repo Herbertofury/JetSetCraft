@@ -98,6 +98,10 @@ public final class RideLoadout {
         data.setWallRiding(false);
         data.setManual(false);
         data.setPowersliding(false);
+        data.setDancing(false);
+        data.setGroundStunt(false);
+        data.setBoostTrick(false);
+        data.setTrickTicks(0);
     }
 
     private RideLoadout() {}

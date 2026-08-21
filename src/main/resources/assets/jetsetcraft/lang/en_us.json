@@ -18,5 +18,8 @@
   "key.jetsetcraft.ride_toggle": "Toggle / Unequip Ride Gear",
   "message.jetsetcraft.ride_equipped": "Equipped %s. Press K to ride; Shift+K to unequip.",
   "message.jetsetcraft.no_ride_equipped": "No JetSetCraft ride gear equipped.",
-  "message.jetsetcraft.ride_unequipped": "Ride gear returned to your inventory."
+  "message.jetsetcraft.ride_unequipped": "Ride gear returned to your inventory.",
+  "item.jetsetcraft.scooter": "Neon Street Scooter",
+  "key.jetsetcraft.dance": "Dance / Cycle Style",
+  "message.jetsetcraft.dance_hint": "Press B to dance; move or press an action key to stop."
 }

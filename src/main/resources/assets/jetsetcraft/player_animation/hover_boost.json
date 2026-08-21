@@ -1,0 +1,73 @@
+{
+  "version": 1,
+  "uuid": "57e79564-27b3-5da2-bca5-bf508f756d64",
+  "name": "hover_boost",
+  "emote": {
+    "beginTick": 0,
+    "endTick": 24,
+    "stopTick": 24,
+    "isLoop": true,
+    "returnTick": 0,
+    "nsfw": false,
+    "degrees": false,
+    "moves": [
+      {
+        "tick": 0,
+        "easing": "INOUTSINE",
+        "body": {
+          "pitch": 0.22,
+          "yaw": 0.0,
+          "roll": 0.0
+        },
+        "leftLeg": {
+          "pitch": 0.28,
+          "yaw": 0.0,
+          "roll": 0.08
+        },
+        "rightLeg": {
+          "pitch": -0.28,
+          "yaw": 0.0,
+          "roll": -0.08
+        }
+      },
+      {
+        "tick": 12,
+        "easing": "INOUTSINE",
+        "body": {
+          "pitch": 0.26,
+          "yaw": 0.0,
+          "roll": 0.05
+        },
+        "leftLeg": {
+          "pitch": 0.14,
+          "yaw": 0.0,
+          "roll": 0.13
+        },
+        "rightLeg": {
+          "pitch": -0.16,
+          "yaw": 0.0,
+          "roll": -0.13
+        }
+      },
+      {
+        "tick": 24,
+        "easing": "INOUTSINE",
+        "body": {
+          "pitch": 0.22,
+          "yaw": 0.0,
+          "roll": 0.0
+        },
+        "leftLeg": {
+          "pitch": 0.28,
+          "yaw": 0.0,
+          "roll": 0.08
+        },
+        "rightLeg": {
+          "pitch": -0.28,
+          "yaw": 0.0,
+          "roll": -0.08
+        }
+      }
+    ]
+  }
+}

@@ -1,7 +1,9 @@
 # JetSetCraft Handoff
 
-Canonical repo: `Herbertofury/JetSetCraft`; target Forge 1.20.1 / Java 17 / mod version `0.1.0-alpha.1`.
+Canonical repo: `Herbertofury/JetSetCraft`; target Forge 1.20.1 / Java 17 / mod version `0.2.0-alpha.1`.
 
-Current source has inline, quad, board and BMX ride states; momentum/boost/manual/tricks/combo; arbitrary block-edge grinding; first-class vanilla/Forge/custom rail grinding; native optional Create 6.0.8 track geometry including long Bezier curves; rail junction steering, rail-hop transfers and rail tricks; wall rides; powerslide; graffiti; PlayerAnimator lower-body clips; TACZ `IGun` detection; configurable camera effects; procedural dense OBJ models.
+The verified Style Flow checkpoint now has six ride styles (inline, quad, skateboard, BMX, hoverboard, scooter), twenty-four named contextual tricks, twenty-eight named dance moves across six families, no-gear dancing, automatic dance phrases, multiplayer cyphers, repeat penalties, graded landings, Flow ranks, dedicated hoverboard/scooter meshes, accessibility controls, optional Aether/Twilight data hooks, the existing Create/native rail stack, combat-safe animation composition, graffiti, and a complete twenty-one-page wiki source.
 
-Immediate next gate: publish the coherent `jetsetcraft-alpha` repo checkpoint, run GitHub Actions clean build, fix every compile/runtime issue, download the produced JAR, and mirror verified checkpoint/artifact to Google Drive. The exact owner-supplied JetSetCraft icon/cover PNG is now preserved as `source_assets/brand/jetsetcraft_official_art.png` and drives deterministic icon/banner generation. The owner-supplied `createrailgrinding-1.2.2.jar` and 135-file `JSRGraffiti.zip` were inspected and integrated. See `docs/RAIL_REFERENCE_AUDIT.md` and `docs/ASSET_PROVENANCE.md`.
+Real Forge proof for this checkpoint: five required GameTests passed; the dedicated server reached its ready state; runtime JAR `jetsetcraft-1.20.1-0.2.0-alpha.1.jar` is 3573244 bytes with SHA-256 `cf988bd0efac1494237e34232932b6ab032d57d3340de5b62dd94303766ac140`. Workflow run `32528717032` on branch `style-flow-release` produced the evidence.
+
+Remaining acceptance is deliberately real-client/modpack validation rather than missing implementation: visual ride/dance/trick QA, Create 6.0.8 live tracks, TACZ live weapon composition, optional Aether/Twilight routes, and multiplayer soak. See `docs/STYLE_FLOW.md`, `wiki/Testing-and-Verification.md`, and `.agents-memory/RECOVERY_2026-08-21_STYLE_FLOW.json`.

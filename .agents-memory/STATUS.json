@@ -1,32 +1,25 @@
 {
-  "version": "0.1.0-alpha.1",
-  "phase": "hoverboard + rail/combat foundation / real Forge GameTest and dedicated-server verified",
+  "version": "0.2.0-alpha.1",
+  "phase": "Style Flow expansion / local contracts complete / real Forge GameTests and dedicated-server verified",
   "implemented": [
-    "five ride styles including first-class hoverboard",
-    "server-authoritative momentum",
-    "boost",
-    "manuals",
-    "tricks/combo",
-    "block-edge grinding",
-    "vanilla/Forge/custom rail grinding",
-    "Create 6.0.8 native track and Bezier grinding",
-    "rail-hop transfers",
-    "rail tricks",
-    "wall rides",
-    "powerslide",
-    "hoverboard loadout item and creative-tab entry",
-    "hoverboard persistence compatibility",
-    "hoverboard client render bob/tilt and board-pose animation composition",
-    "graffiti entities",
-    "TACZ API detection",
-    "lower-body PlayerAnimator composition",
-    "dynamic ride camera",
-    "dense equipment meshes",
-    "deterministic official-brand derivative pipeline",
-    "139-entry aspect-preserving graffiti catalog",
-    "Create track-type-aware rail-bar placement",
-    "curve-speed shaping with momentum preservation",
-    "grind stuck recovery and cross-dimension reattach grace"
+    "six server-authoritative ride styles: inline, quad, skateboard, BMX, hoverboard, scooter",
+    "persistent hands-free ride loadout with scooter and dedicated hoverboard geometry",
+    "continuous momentum, boost, manuals, powerslides, wall rides, rail transfers, and block-edge grinding",
+    "vanilla, Forge, Create 6.0.8 track, and data-driven optional mod surface compatibility",
+    "twenty-four named contextual ride, grind, boost, and ground tricks",
+    "repeat penalties, trick variety tracking, graded landings, combo ranks, and Flow meter",
+    "twenty-eight named breakdance and street-dance moves across six families",
+    "no-gear server-authoritative dancing, automatic phrase chaining, and multiplayer cypher bonuses",
+    "immediate combat and item-use sovereignty over full-body style animation",
+    "lower-body PlayerAnimator locomotion composition that preserves weapon arms",
+    "sixty-eight validated deterministic animation resources",
+    "material-aware grind feedback, trick/dance particles, sounds, and accessible reduced-motion presentation",
+    "configurable Style HUD, trick labels, camera roll/FOV, dance/cypher rules, and Flow tuning",
+    "dense procedural inline, quad, skateboard, hoverboard, BMX, scooter, and spray-can meshes",
+    "offline-safe deterministic asset generation and complete graffiti fallback catalog",
+    "optional Aether Quicksoil/Blue Aercloud/Aerogel and Twilight Forest Aurora route hooks without dependencies",
+    "complete validated twenty-one-page GitHub wiki source and automatic wiki publication workflow",
+    "five isolated real Forge GameTests with unique fake-player identities"
   ],
   "verified": {
     "canonical_main_commit": "b0631769441faea3931a11aa0b156b2ed7413d21",
@@ -82,18 +75,46 @@
       "height": 1254,
       "sha256": "6e60bcc90fd6b85209598b088b9d2b87fb6c3a36d9d68c6eb4e478f538a5894f",
       "legacy_repo_thumbnail": "assets/jetsetcraft-cover.webp"
-    }
+    },
+    "style_flow_workflow_run": 32528717032,
+    "style_flow_workflow_run_number": 97,
+    "workflow_input_commit": "3806bade7e59b16826e7a0c92128117fd1fd5c35",
+    "workflow_branch": "style-flow-release",
+    "asset_gameplay_and_wiki_validation": true,
+    "real_forge_style_flow_gametests": {
+      "required": 5,
+      "passed": 5,
+      "observed": "[21:31:18] [Server thread/INFO] [minecraft/GameTestServer]: All 5 required tests passed :)",
+      "file": "style-flow-gametest.log",
+      "bytes": 21971,
+      "sha256": "893c9b6ba4a743f990b00390b62736ae2d1444f598b034cf15b768ea76c09cfc"
+    },
+    "dedicated_server_smoke": {
+      "observed": "[21:32:12] [Server thread/INFO] [minecraft/DedicatedServer]: Done (5.584s)! For help, type \"help\"",
+      "file": "server-smoke.log",
+      "bytes": 6593,
+      "sha256": "9373a64f71d523c32f238ce16b0589a2f7fa314e0ca674457f8f91fbb51e4e87"
+    },
+    "style_flow_build": {
+      "file": "jetsetcraft-1.20.1-0.2.0-alpha.1.jar",
+      "bytes": 3573244,
+      "sha256": "cf988bd0efac1494237e34232932b6ab032d57d3340de5b62dd94303766ac140"
+    },
+    "ride_style_count": 6,
+    "dance_move_count": 28,
+    "trick_count": 24,
+    "animation_resource_count": 68,
+    "wiki_page_count": 21
   },
   "pending_validation": [
-    "real client visual ride/trick/grind gameplay smoke test including hoverboard presentation",
-    "real Create 6.0.8 interoperability runtime smoke test",
-    "TACZ live integration smoke test",
-    "multiplayer movement/combat acceptance world"
+    "real client visual smoke test across all ride styles, dance families, named tricks, HUD, VFX, and reduced-motion mode",
+    "real Create 6.0.8 straight, sloped, junction, and Bezier interoperability runtime smoke test",
+    "TACZ live aim/fire/reload composition smoke test while riding and immediately after dancing",
+    "Aether and Twilight Forest optional route smoke tests with their exact Forge 1.20.1 releases",
+    "multiplayer movement, cypher, combat, dimension-transfer, and persistence acceptance world"
   ],
   "pending_features": [],
-  "pending_assets": [
-    "dedicated hoverboard art can replace the current street-board OBJ reuse without changing ride semantics"
-  ],
+  "pending_assets": [],
   "source_inputs": {
     "official_brand_sha256": "6e60bcc90fd6b85209598b088b9d2b87fb6c3a36d9d68c6eb4e478f538a5894f",
     "graffiti_zip_sha256": "8541009fcfb3ec77f22e7aeafb2bcfceebd64decddf168171df24182438c70d9",

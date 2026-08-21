@@ -134,3 +134,25 @@ These remain product requirements, not discarded ideas:
 ## Acceptance line
 
 A representative test route must be able to chain ordinary ground -> Iron Bars/fence/ledge -> vanilla rail -> powered rail -> detector-triggered redstone obstacle -> Ice -> Packed Ice -> Blue Ice -> slime/piston launch -> slime landing -> honey braking -> Soul Sand/Soul Soil with/without Soul Speed -> flowing water/bubble column -> hazards -> explosion launch -> clean trick landing, and reproduce server/client state without rubber-banding.
+
+## Style Flow optional dimension routes
+
+`0.2.0-alpha.1` extends the same data-driven interaction language into optional dimensions without requiring either mod:
+
+- The Aether Quicksoil, Quicksoil Glass, and Quicksoil Glass Pane are optional speed-route entries.
+- Blue Aercloud is an optional bounce-route entry; JetSetCraft composes with the block rather than replacing its native vertical launch behavior.
+- Aerogel and Holystone Bricks are optional wall-route entries; Quicksoil Glass Pane is also an optional grind line.
+- Twilight Forest Aurora Block, Aurora Pillar, Aurora Slab, and Auroralized Glass are optional low-friction, wall, and grind route entries.
+
+Every external registry entry is encoded as `{ "id": "namespace:block", "required": false }`. A world or server without those mods loads the same JetSetCraft build without a hard dependency.
+
+## Style Flow completed requirements
+
+The earlier hoverboard and material-feedback requirements are now implemented at the alpha level:
+
+- hoverboard is a first-class ride style with persistence, tuning, dedicated mesh, animations, GameTest, and universal trick/grind/world-physics behavior;
+- scooter is a first-class sixth ride style using the same server-authoritative system;
+- grind feedback selects material profiles and emits Minecraft-native sound/particle language;
+- the acceptance lab, runtime diagnostics, and Forge GameTests cover the core movement doctrine.
+
+Remaining gates are real-client visual acceptance, high-speed chunk-boundary stress, optional-mod runtime smoke, and multiplayer soak. Those tests must harden the capable behavior rather than nerfing Blue Ice, removing supported geometry, or weakening momentum continuity.

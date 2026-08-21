@@ -3,8 +3,10 @@ package com.herberto.jetsetcraft.command;
 import com.herberto.jetsetcraft.data.JetSetData;
 import com.herberto.jetsetcraft.data.JetSetDataProvider;
 import com.herberto.jetsetcraft.item.RideLoadout;
+import com.herberto.jetsetcraft.movement.DanceCatalog;
 import com.herberto.jetsetcraft.movement.GrindFinder;
 import com.herberto.jetsetcraft.movement.JetSetMovement;
+import com.herberto.jetsetcraft.movement.TrickCatalog;
 import com.herberto.jetsetcraft.movement.VanillaWorldPhysics;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.DoubleArgumentType;
@@ -68,9 +70,10 @@ public final class JetSetCommands {
 
             source.sendSuccess(() -> Component.literal("JetSetCraft server diagnostics").withStyle(ChatFormatting.AQUA), false);
             source.sendSuccess(() -> Component.literal(String.format(Locale.ROOT,
-                    "ride=%s equipped=%s active=%s momentum=%.3f velocity=%.3f boost=%.1f combo=%d x%.2f",
+                    "ride=%s equipped=%s active=%s momentum=%.3f velocity=%.3f boost=%.1f flow=%.1f combo=%d x%.2f rank=%s",
                     data.style().serializedName(), RideLoadout.equippedStyle(data).serializedName(), data.active(),
-                    data.momentum(), horizontal.length(), data.boost(), data.comboScore(), data.comboMultiplier())), false);
+                    data.momentum(), horizontal.length(), data.boost(), data.flow(), data.comboScore(),
+                    data.comboMultiplier(), TrickCatalog.rankName(data.comboScore(), data.comboMultiplier(), data.flow()))), false);
             source.sendSuccess(() -> Component.literal(String.format(Locale.ROOT,
                     "surface=%s block=%s friction=%.3f cap=%.2fx boostCap=%.2fx retention=%.5f steering=%.2fx",
                     surface.kind().name().toLowerCase(Locale.ROOT), block, surface.vanillaFriction(),
@@ -88,6 +91,11 @@ public final class JetSetCommands {
                     data.grinding(), data.grindKind().serializedName(), data.wallRiding(), data.manual(),
                     data.powersliding(), data.boosting(), data.grindCurveFactor(), data.externalImpulseTicks(),
                     data.externalImpulse().length(), data.terrainAssistCooldown())), false);
+            source.sendSuccess(() -> Component.literal(String.format(Locale.ROOT,
+                    "style trick=%s boostTrick=%s landing=%s dance=%s/%s chain=%d cypher=%d",
+                    TrickCatalog.debugName(data.trickIndex(), data.style()), data.boostTrick(),
+                    TrickCatalog.landingName(data.landingGrade()), data.danceStyle().serializedName(),
+                    DanceCatalog.name(data.danceMoveId()), data.danceChain(), data.cypherSize())), false);
 
             if (data.grinding()) {
                 Vec3 preferred = data.grindDirection().lengthSqr() > 1.0e-6

@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -24,6 +25,18 @@ mod_items = (ROOT / 'src/main/java/com/herberto/jetsetcraft/registry/ModItems.ja
 creative_tab = (ROOT / 'src/main/java/com/herberto/jetsetcraft/registry/ModCreativeTabs.java').read_text(encoding='utf-8')
 ride_layer = (ROOT / 'src/main/java/com/herberto/jetsetcraft/client/render/RideGearLayer.java').read_text(encoding='utf-8')
 ride_animation = (ROOT / 'src/main/java/com/herberto/jetsetcraft/client/animation/RideAnimationController.java').read_text(encoding='utf-8')
+dance_system = (ROOT / 'src/main/java/com/herberto/jetsetcraft/movement/DanceSystem.java').read_text(encoding='utf-8')
+trick_combo = (ROOT / 'src/main/java/com/herberto/jetsetcraft/movement/TrickCombo.java').read_text(encoding='utf-8')
+trick_catalog = (ROOT / 'src/main/java/com/herberto/jetsetcraft/movement/TrickCatalog.java').read_text(encoding='utf-8')
+dance_catalog = (ROOT / 'src/main/java/com/herberto/jetsetcraft/movement/DanceCatalog.java').read_text(encoding='utf-8')
+style_feedback = (ROOT / 'src/main/java/com/herberto/jetsetcraft/movement/StyleFeedback.java').read_text(encoding='utf-8')
+input_flags = (ROOT / 'src/main/java/com/herberto/jetsetcraft/network/InputFlags.java').read_text(encoding='utf-8')
+state_packet = (ROOT / 'src/main/java/com/herberto/jetsetcraft/network/S2CStatePacket.java').read_text(encoding='utf-8')
+client_state = (ROOT / 'src/main/java/com/herberto/jetsetcraft/client/state/ClientRideState.java').read_text(encoding='utf-8')
+build_workflow = (ROOT / '.github/workflows/build.yml').read_text(encoding='utf-8')
+style_flow_tests = (ROOT / 'src/main/java/com/herberto/jetsetcraft/gametest/StyleFlowGameTests.java').read_text(encoding='utf-8')
+hoverboard_tests = (ROOT / 'src/main/java/com/herberto/jetsetcraft/gametest/HoverboardGameTests.java').read_text(encoding='utf-8')
+model_generator = (ROOT / 'tools/generate_models.py').read_text(encoding='utf-8')
 lang = json.loads((ROOT / 'src/main/resources/assets/jetsetcraft/lang/en_us.json').read_text(encoding='utf-8'))
 
 # Core doctrine: riding must not be hard-disabled simply because the player is swimming,
@@ -93,7 +106,7 @@ for filename, expected in required_tags.items():
     except Exception as exc:
         errors.append(f'{filename}: invalid JSON: {exc}')
         continue
-    values = set(data.get('values', []))
+    values = {entry if isinstance(entry, str) else entry.get('id') for entry in data.get('values', [])}
     missing = expected - values
     if missing:
         errors.append(f'{filename}: missing defaults {sorted(missing)}')
@@ -116,7 +129,7 @@ if 'data.grindKind() == GrindKind.EDGE' not in movement or 'preferred.scale(0.58
 # equipment lives in a persistent player loadout so weapons/items remain free in both hands.
 for needle, label, source in [
     ('private ItemStack rideGear = ItemStack.EMPTY', 'persistent dedicated ride gear slot', data_java),
-    ('t.put("RideGear"', 'ride gear NBT persistence', data_java),
+    ('put("RideGear"', 'ride gear NBT persistence', data_java),
     ('equipFromHand', 'server-authoritative loadout equip', loadout),
     ('returnToPlayer', 'safe ride gear retrieval/swap', loadout),
     ('dropEquipped', 'normal death-drop semantics for ride gear', loadout),
@@ -175,6 +188,127 @@ for needle, label in [
         errors.append(f'missing material grind contract: {label}')
 if 'grindMaterial(player, hit)' not in movement or 'emitGrindFeedback(player, hit, material)' not in movement:
     errors.append('grind solver is not consuming the material/feedback profile')
+
+# Style Flow is one server-authoritative system, not disconnected cosmetic emotes.
+for needle, label, source in [
+    ('SCOOTER(6, "scooter"', 'stable scooter RideStyle ID', ride_style),
+    ('ITEMS.register("scooter"', 'scooter item registration', mod_items),
+    ('new RideGearItem(RideStyle.SCOOTER', 'scooter loadout binding', mod_items),
+    ('case SCOOTER -> renderScooter', 'scooter third-person render path', ride_layer),
+    ('RideStyle.SCOOTER', 'scooter lower-body animation composition', ride_animation),
+    ('DANCE = 1 << 6', 'dedicated dance input', input_flags),
+    ('getEntitiesOfClass(ServerPlayer.class', 'nearby-player cypher detection', dance_system),
+    ('enableCyphers', 'server-configurable cypher support', config),
+    ('allowGroundStunts', 'server-configurable ground stunts', config),
+    ('styleBoostScale', 'style-derived boost control', config),
+    ('allowBoostTricks', 'server-configurable boost tricks', config),
+    ('cypherRadius', 'server-configurable cypher radius', config),
+    ('reducedMotion', 'client reduced-motion mode', config),
+    ('repetitionScale', 'repetition-aware scoring', trick_combo),
+    ('uniqueTrickMask', 'trick-variety tracking', data_java),
+    ('uniqueDanceMask', 'dance-variety tracking', data_java),
+    ('scoreLanding', 'landing grade scoring', trick_combo),
+    ('boostTrick', 'boost-trick state', data_java),
+    ('rankName', 'style rank vocabulary', trick_catalog),
+    ('MOVE_COUNT = 28', 'twenty-eight named dance moves', dance_catalog),
+    ('DanceCatalog.byId(state.danceMoveId()).animationIndex()', 'dynamic dance animation selection', ride_animation),
+    ('weaponOverlay', 'weapon-safe full-body dance suppression', ride_animation),
+    ('ParticleTypes.ELECTRIC_SPARK', 'style action particle feedback', style_feedback),
+    ('player.isUsingItem() || player.swinging', 'immediate combat/input sovereignty while dancing', dance_system),
+]:
+    if needle not in source:
+        errors.append(f'missing Style Flow contract: {label}')
+for path in (
+    ROOT / 'src/main/resources/assets/jetsetcraft/models/item/scooter.json',
+    ROOT / 'src/main/resources/assets/jetsetcraft/models/item/hoverboard.json',
+    ROOT / 'src/main/resources/data/jetsetcraft/recipes/scooter.json',
+    ROOT / 'src/main/resources/data/jetsetcraft/recipes/hoverboard.json',
+):
+    if not path.exists(): errors.append(f'missing Style Flow resource: {path.relative_to(ROOT)}')
+if not (ROOT / 'src/main/java/com/herberto/jetsetcraft/gametest/StyleFlowGameTests.java').exists():
+    errors.append('missing real Forge Style Flow GameTests')
+if not (ROOT / 'tools/generate_animations.py').exists():
+    errors.append('missing deterministic animation generator')
+if 'pinned JSR graffiti pack unavailable; using offline originals' not in model_generator:
+    errors.append('asset generation does not preserve an offline-original graffiti fallback')
+
+for generated_function in ('make_hoverboard', 'make_scooter'):
+    if model_generator.count(f'def {generated_function}(') != 1:
+        errors.append(f'asset generator must define {generated_function} exactly once')
+if "'shell':'hover_deck'" not in model_generator:
+    errors.append('hoverboard generator is not bound to its dedicated deck texture')
+
+# Optional dimension-mod integrations must never make those mods required.
+for tag_name, optional_ids in {
+    'boost_surfaces.json': {'aether:quicksoil', 'aether:quicksoil_glass'},
+    'low_friction_surfaces.json': {'aether:quicksoil', 'twilightforest:aurora_block'},
+    'bounce_surfaces.json': {'aether:blue_aercloud'},
+}.items():
+    path = tag_dir / tag_name
+    if not path.exists():
+        errors.append(f'missing optional compatibility tag {tag_name}')
+        continue
+    entries = json.loads(path.read_text(encoding='utf-8')).get('values', [])
+    optional = {entry.get('id') for entry in entries if isinstance(entry, dict) and entry.get('required') is False}
+    missing = optional_ids - optional
+    if missing:
+        errors.append(f'{tag_name}: missing non-required compatibility entries {sorted(missing)}')
+
+# Network and CI state must evolve atomically. A packet-order mismatch here would silently corrupt every HUD and
+# animation decision even though both sides still compile, so validate the wire contract from source order.
+record_match = re.search(r'public record S2CStatePacket\((.*?)\) \{', state_packet, re.S)
+if not record_match:
+    errors.append('could not parse S2CStatePacket record components')
+else:
+    record_fields = re.findall(r'\b(?:int|boolean|float)\s+(\w+)', record_match.group(1))
+    encode_match = re.search(r'public static void encode\(.*?\) \{(.*?)\n    \}', state_packet, re.S)
+    decode_match = re.search(r'public static S2CStatePacket decode\(.*?\) \{(.*?)\n    \}', state_packet, re.S)
+    if not encode_match or not decode_match:
+        errors.append('could not parse S2CStatePacket encode/decode methods')
+    else:
+        encoded = re.findall(r'buffer\.write(?:VarInt|Boolean|Float)\(packet\.(\w+)\)', encode_match.group(1))
+        decoded = re.findall(r'buffer\.(readVarInt|readBoolean|readFloat)\(\)', decode_match.group(1))
+        writes = re.findall(r'buffer\.(writeVarInt|writeBoolean|writeFloat)\(packet\.(\w+)\)', encode_match.group(1))
+        expected_reads = {
+            'writeVarInt': 'readVarInt',
+            'writeBoolean': 'readBoolean',
+            'writeFloat': 'readFloat',
+        }
+        if encoded != record_fields:
+            errors.append(f'S2C encode order differs from record order: {encoded} != {record_fields}')
+        if len(decoded) != len(record_fields):
+            errors.append(f'S2C decode field count differs from record: {len(decoded)} != {len(record_fields)}')
+        elif [expected_reads[write] for write, _ in writes] != decoded:
+            errors.append('S2C decode primitive order differs from encode primitive order')
+        for field in record_fields:
+            if field != 'entityId' and f'packet.{field}()' not in client_state:
+                errors.append(f'client snapshot does not consume S2C field {field}')
+if 'private static final String PROTOCOL = "6"' not in network:
+    errors.append('network protocol was not bumped for the expanded Style Flow packet')
+
+required_gametest_markers = {
+    'JETSETCRAFT_GAMETEST_PASS hoverboard': hoverboard_tests,
+    'JETSETCRAFT_GAMETEST_PASS scooter': style_flow_tests,
+    'JETSETCRAFT_GAMETEST_PASS dance_flow': style_flow_tests,
+    'JETSETCRAFT_GAMETEST_PASS combat_sovereignty': style_flow_tests,
+    'JETSETCRAFT_GAMETEST_PASS catalogs': style_flow_tests,
+}
+for pass_marker, source in required_gametest_markers.items():
+    if pass_marker not in source:
+        errors.append(f'missing explicit real-Forge acceptance marker: {pass_marker}')
+    if pass_marker not in build_workflow:
+        errors.append(f'CI does not require real-Forge acceptance marker: {pass_marker}')
+for workflow_token, label in [
+    ('build/verification/style-flow-gametest.log', 'ignored GameTest evidence path'),
+    ('build/verification/server-smoke.log', 'ignored server-smoke evidence path'),
+    ('tools/finalize_ci_checkpoint.py', 'verified project-memory finalizer'),
+    ('git write-tree', 'exact staged source tree packaging'),
+    ('style-flow-pending.ready.json', 'complete-payload ready gate'),
+]:
+    if workflow_token not in build_workflow:
+        errors.append(f'missing CI durability contract: {label}')
+if not (ROOT / 'tools/finalize_ci_checkpoint.py').exists():
+    errors.append('missing Style Flow CI finalizer')
 
 # Runtime acceptance tooling must stay available so the doctrine can be verified in a real Minecraft world.
 for needle, label in [

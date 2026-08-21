@@ -2,30 +2,75 @@
 
 ## Non-negotiable gameplay contracts
 
-1. **Momentum is continuous.** Boosting, landing, grinding, wall riding and tricks may add/redirect/bleed momentum, but ordinary transitions must not flat-reset speed.
-2. **Combat is composable.** A weapon action is not an implicit ride-state exit. Movement owns translation/lower-body presentation; weapon systems retain item input and upper-body animation authority.
-3. **Server owns movement truth.** Inputs are sent to the server; authoritative ride state is synchronized to the local and tracking clients.
-4. **World geometry is the playground.** Grinding understands both arbitrary collision-shape edges and authored rail networks. Vanilla/Forge rails use their real `RailShape`; Create tracks use Create's native track axes/normals and Bezier graph. Wall riding still uses real wall collision.
-5. **Animation backend is replaceable.** Gameplay state does not depend on PlayerAnimator, GeckoLib, Epic Fight, TACZ, or YSM internals. Adapters consume state rather than owning it.
+1. **Momentum is continuous.** Boosting, landing, grinding, wall riding, tricks, block materials, slopes, fluids, redstone, and external impulses may add, redirect, or bleed momentum. Ordinary state transitions must not flat-reset legitimate speed.
+2. **Combat is composable.** A weapon or item action is not an implicit ride-state exit. Movement owns translation and lower-body ride presentation; weapon systems retain item input and upper-body animation authority.
+3. **The server owns truth.** Inputs are sent to the server. Movement, scoring, Flow, dancing, cyphers, landings, loadout state, and combo state are authoritative and synchronized to local and tracking clients.
+4. **World geometry is the playground.** Grinding understands arbitrary exposed collision-shape edges and authored rail networks. Vanilla/Forge rails use their real `RailShape`; Create uses native track axes, normals, graph junctions, and Bezier geometry.
+5. **Optional integrations remain optional.** Missing mods cannot cause classloading or datapack errors. APIs are isolated behind adapters and optional block entries use `required: false`.
+6. **Animation is presentation, not gameplay authority.** Gameplay state never depends on PlayerAnimator, GeckoLib, Epic Fight, TACZ, Better Combat, or YSM internals.
+7. **Accessibility preserves control.** Reduced-motion settings remove presentation effects, never mechanics, responsiveness, score, or authoritative movement.
 
 ## State flow
 
-`ClientEvents` -> `C2SInputPacket` -> `JetSetData` -> `JetSetMovement` -> player velocity/state -> `S2CStatePacket` -> `ClientRideState` -> camera/HUD/render/animation adapters.
+`ClientEvents` -> `C2SInputPacket` -> `JetSetData` -> `DanceSystem` / `JetSetMovement` -> movement and Style Flow state -> `S2CStatePacket` -> `ClientRideState` -> HUD, camera, gear renderer, and animation adapters.
 
-## Combat layering
+`JetSetData` is the single persistent player source of truth for:
 
-The authored `assets/jetsetcraft/player_animation/*.json` ride clips are validated to exclude `leftArm`, `rightArm`, `head`, `leftItem`, and `rightItem`. This preserves upper-body ownership for TACZ/Epic Fight/Better Combat/vanilla item animation. `tools/validate_assets.py` fails the checkpoint if a ride clip violates this contract.
+- ride gear, active ride style, boost, momentum, and movement flags;
+- grind kind/direction, wall state, manual, powerslide, and external impulses;
+- combo score/multiplier/grace, Flow, trick history, repeat count, variety masks, boost tricks, and landing grade;
+- dance family, named move, phrase time, chain length, cypher size, and dance variety mask.
+
+## Style Flow modules
+
+- `TrickCatalog`: stable 24-slot vocabulary for aerial, grind, and ground actions; style-specific display names; animation mapping; rank and landing labels.
+- `TrickCombo`: contextual trick selection, repeat penalties, variety rewards, boost tricks, ground stunts, landing grading, combo bridge, and Flow decay.
+- `DanceCatalog`: stable 28-move vocabulary across six dance families, deterministic animation mapping, phrase timing, points, multiplier gain, and boost recovery.
+- `DanceSystem`: no-gear/full-loadout dancing, immediate cancellation, automatic phrase chaining, nearby-player cypher discovery, scoring, Flow, and feedback.
+- `StyleFeedback`: server-triggered Minecraft-native particles and sounds for tricks, dances, and landings.
+- `S2CStatePacket`: compact synchronized snapshot used by every presentation adapter.
 
 ## Movement modules
 
-- `EdgeFinder`: searches nearby voxel collision boxes and scores top edges against velocity/distance.
-- `VanillaRailFinder`: follows `BaseRailBlock#getRailDirection` so vanilla and Forge-compatible mod rails preserve straight, curved, and ascending geometry; datapack tags extend/blacklist unusual rails.
-- `CreateRailProvider`: optional Create 6.0.8 adapter using `ITrackBlock` for local track axes and `TrackGraphBounds`/`BezierConnection` for exact long-curve sampling.
-- `GrindFinder`: arbitrates rails/tracks versus incidental block edges and preserves the active rail kind through transfers/junction steering.
-- `WallRideFinder`: detects adjacent wall surfaces and returns wall normal/tangent.
-- `JetSetMovement`: acceleration, steering, air control, boost, grind continuation, rail junction steering, rail-hop transfers, rail tricks, wall rides, powerslides, tricks, manuals, combo state.
-- `RideStyle`: data for inline, quad, board and BMX handling differences.
+- `EdgeFinder`: searches current voxel collision boxes and scores exposed top edges while rejecting internal seams, hazards, blocked clearance, and `no_grind` entries.
+- `VanillaRailFinder`: follows `BaseRailBlock#getRailDirection`, preserving straight, curved, and ascending geometry for vanilla and Forge-compatible rails.
+- `CreateRailProvider`: optional Create 6.0.8 adapter using `ITrackBlock`, `TrackGraphBounds`, and `BezierConnection` instead of block-name guessing.
+- `GrindFinder`: arbitrates native rails/tracks versus arbitrary block edges and preserves active rail kind through transfers.
+- `GrindTraversal`: continuation, curve shaping, junction steering, rail hops, stuck recovery, and dimension-transition grace.
+- `WallRideFinder` / `WallTraversal`: real collision-based wall detection and continuation.
+- `VanillaWorldPhysics`: surfaces, redstone rails, enchantments, fluids, block materials, external impulses, bounce/sticky contact, and micro-terrain continuity.
+- `RideMotion`: ground acceleration, steering, air control, fluids, and boost while preserving above-cap external momentum.
+- `RideStyle`: handling data for inline, quad, board, BMX, hoverboard, and scooter.
 
-## Next rig stage
+## Animation and combat layering
 
-The high-detail static OBJ meshes are the current alpha visual baseline. The next renderer milestone is an articulated ride rig with named wheel/steering/deck bones so wheel spin, steering, suspension/compression, grinds, manuals and tricks can be animated independently while retaining the existing high-detail silhouette.
+JetSetCraft registers two PlayerAnimator layers:
+
+- `ride_lower_body` at lower priority for ride, boost, grind, manual, powerslide, wallride, and ordinary trick clips. These clips are validated to exclude arms, hands, held-item bones, and head.
+- `style_full_body` at higher priority for dances and low-speed ground stunts. This layer is presentation-only and is suppressed when a weapon overlay or active item action needs upper-body ownership.
+
+`tools/validate_assets.py` enforces the separation. A clip cannot silently seize weapon bones merely because it looks correct in isolation.
+
+## Rendering and accessibility
+
+`RideGearLayer` renders synchronized equipment without creating vehicle entities. Dedicated models exist for hoverboard and scooter. While dancing or performing a full-body ground stunt, ride equipment is hidden to avoid clipping. `reducedMotion` disables camera roll, speed FOV pulses, hover bobbing, and rapid equipment stunt rotations while retaining the complete gameplay state.
+
+## Optional ecosystem integration
+
+- Create code is compile-only and guarded behind the compatibility adapter.
+- TACZ uses its public `IGun` API when present.
+- Aether and Twilight Forest surface/grind/wall behavior is expressed through non-required datapack entries.
+- Unknown Forge rails follow `BaseRailBlock` behavior; unusual blocks can opt in through JetSetCraft tags.
+
+## Verification architecture
+
+The repository verifies implementation in layers:
+
+1. deterministic model, animation, and brand generation;
+2. JSON, model, animation, gameplay-contract, and wiki validators;
+3. ForgeGradle production build;
+4. five real Forge GameTests for hoverboard and scooter persistence/movement, no-gear dance scoring, immediate combat sovereignty, and stable complete trick/dance catalogs;
+5. real dedicated-server startup smoke;
+6. exact tested-source and binary artifact publication.
+
+The next visual milestone is an articulated equipment rig with named wheels, steering, deck, compression, and grind-contact bones. It must preserve the current gameplay state machine, combat composition, accessibility settings, and dense silhouettes rather than replacing working mechanics with a renderer rewrite.

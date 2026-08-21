@@ -1,0 +1,73 @@
+{
+  "version": 1,
+  "uuid": "ca687ebb-333b-5e4e-8cc6-1ed52be5813b",
+  "name": "trick_5",
+  "emote": {
+    "beginTick": 0,
+    "endTick": 22,
+    "stopTick": 22,
+    "isLoop": false,
+    "returnTick": 0,
+    "nsfw": false,
+    "degrees": false,
+    "moves": [
+      {
+        "tick": 0,
+        "easing": "INOUTSINE",
+        "body": {
+          "pitch": 0.08,
+          "yaw": 0.0,
+          "roll": 0.0
+        },
+        "leftLeg": {
+          "pitch": 0.18,
+          "yaw": 0.0,
+          "roll": 0.0
+        },
+        "rightLeg": {
+          "pitch": -0.16,
+          "yaw": 0.0,
+          "roll": 0.0
+        }
+      },
+      {
+        "tick": 11,
+        "easing": "OUTQUAD",
+        "body": {
+          "pitch": 0.5,
+          "yaw": -1.0,
+          "roll": -0.36
+        },
+        "leftLeg": {
+          "pitch": 0.58,
+          "yaw": -0.18,
+          "roll": 0.32
+        },
+        "rightLeg": {
+          "pitch": -0.52,
+          "yaw": 0.18,
+          "roll": -0.32
+        }
+      },
+      {
+        "tick": 22,
+        "easing": "INOUTSINE",
+        "body": {
+          "pitch": 0.08,
+          "yaw": 0.0,
+          "roll": 0.0
+        },
+        "leftLeg": {
+          "pitch": 0.18,
+          "yaw": 0.0,
+          "roll": 0.0
+        },
+        "rightLeg": {
+          "pitch": -0.16,
+          "yaw": 0.0,
+          "roll": 0.0
+        }
+      }
+    ]
+  }
+}

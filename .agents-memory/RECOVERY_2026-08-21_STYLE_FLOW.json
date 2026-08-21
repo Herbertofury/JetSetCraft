@@ -1,0 +1,52 @@
+{
+  "schema": 1,
+  "project": "JetSetCraft",
+  "version": "0.2.0-alpha.1",
+  "verified_at": "2026-08-21T21:34:52.188240+00:00",
+  "workflow": {
+    "run_id": 32528717032,
+    "run_number": 97,
+    "input_commit": "3806bade7e59b16826e7a0c92128117fd1fd5c35",
+    "branch": "style-flow-release"
+  },
+  "contracts": {
+    "ride_styles": 6,
+    "named_tricks": 24,
+    "dance_moves": 28,
+    "dance_families": 6,
+    "animation_resources": 68,
+    "wiki_pages": 21,
+    "real_forge_gametests_required": 5,
+    "real_forge_gametests_passed": 5,
+    "dedicated_server_ready": true
+  },
+  "observed": {
+    "gametest": "[21:31:18] [Server thread/INFO] [minecraft/GameTestServer]: All 5 required tests passed :)",
+    "server": "[21:32:12] [Server thread/INFO] [minecraft/DedicatedServer]: Done (5.584s)! For help, type \"help\""
+  },
+  "artifacts": {
+    "jar": {
+      "file": "jetsetcraft-1.20.1-0.2.0-alpha.1.jar",
+      "bytes": 3573244,
+      "sha256": "cf988bd0efac1494237e34232932b6ab032d57d3340de5b62dd94303766ac140"
+    },
+    "gametest_log": {
+      "file": "style-flow-gametest.log",
+      "bytes": 21971,
+      "sha256": "893c9b6ba4a743f990b00390b62736ae2d1444f598b034cf15b768ea76c09cfc"
+    },
+    "server_log": {
+      "file": "server-smoke.log",
+      "bytes": 6593,
+      "sha256": "9373a64f71d523c32f238ce16b0589a2f7fa314e0ca674457f8f91fbb51e4e87"
+    }
+  },
+  "remaining_acceptance": [
+    "real client visual smoke test across all ride styles, dance families, named tricks, HUD, VFX, and reduced-motion mode",
+    "real Create 6.0.8 straight, sloped, junction, and Bezier interoperability runtime smoke test",
+    "TACZ live aim/fire/reload composition smoke test while riding and immediately after dancing",
+    "Aether and Twilight Forest optional route smoke tests with their exact Forge 1.20.1 releases",
+    "multiplayer movement, cypher, combat, dimension-transfer, and persistence acceptance world"
+  ],
+  "supersedes": ".agents-memory/RECOVERY_2026-08-21_HOVERBOARD.json"
+}

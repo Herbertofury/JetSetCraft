@@ -22,6 +22,8 @@ public final class ModItems {
             () -> new RideGearItem(RideStyle.HOVER, new Item.Properties().stacksTo(1)));
     public static final RegistryObject<Item> BMX = ITEMS.register("bmx",
             () -> new RideGearItem(RideStyle.BMX, new Item.Properties().stacksTo(1)));
+    public static final RegistryObject<Item> SCOOTER = ITEMS.register("scooter",
+            () -> new RideGearItem(RideStyle.SCOOTER, new Item.Properties().stacksTo(1)));
     public static final RegistryObject<Item> SPRAY_CAN = ITEMS.register("spray_can",
             () -> new SprayCanItem(new Item.Properties().stacksTo(1).durability(256)));
 

@@ -7,6 +7,7 @@ import com.herberto.jetsetcraft.item.RideLoadout;
 import com.herberto.jetsetcraft.movement.RideStyle;
 import com.herberto.jetsetcraft.movement.VanillaWorldPhysics;
 import com.herberto.jetsetcraft.registry.ModItems;
+import com.mojang.authlib.GameProfile;
 import net.minecraft.core.BlockPos;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestAssertException;
@@ -23,6 +24,8 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.nio.charset.StandardCharsets;
+import java.util.UUID;
 
 /** Real Forge/Minecraft acceptance for the recovered hoverboard ride style. */
 @GameTestHolder(JetSetCraft.MOD_ID)
@@ -58,7 +61,9 @@ public final class HoverboardGameTests {
         // require a synthetic Netty channel, so this remains a real Minecraft/Forge movement test without mixing in
         // an unrelated client transport failure.
         helper.setBlock(new BlockPos(1, 0, 1), Blocks.STONE);
-        ServerPlayer player = FakePlayerFactory.getMinecraft(helper.getLevel());
+        UUID uuid = UUID.nameUUIDFromBytes((JetSetCraft.MOD_ID + ":gametest:hoverboard")
+                .getBytes(StandardCharsets.UTF_8));
+        ServerPlayer player = FakePlayerFactory.get(helper.getLevel(), new GameProfile(uuid, "JSC_hoverboard"));
         BlockPos feet = helper.absolutePos(new BlockPos(1, 1, 1));
         player.moveTo(feet.getX() + 0.5, feet.getY(), feet.getZ() + 0.5, 0.0F, 0.0F);
         player.setOnGround(true);
@@ -76,6 +81,7 @@ public final class HoverboardGameTests {
             throw new GameTestAssertException("Hoverboard tuning no longer preserves its grind/air-control identity");
         }
 
+        System.out.println("JETSETCRAFT_GAMETEST_PASS hoverboard");
         helper.succeed();
     }
 
