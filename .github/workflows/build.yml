@@ -24,6 +24,7 @@ jobs:
           python tools/generate_brand.py
           python tools/validate_assets.py
           python tools/validate_gameplay_contract.py
+          python tools/validate_animation_ownership.py
       - name: Build
         run: gradle --no-daemon build
       - name: Real Forge GameTest hoverboard acceptance
