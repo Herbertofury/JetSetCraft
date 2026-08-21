@@ -1,9 +1,9 @@
 {
   "schema": 1,
-  "source_commit": "529258a45393268bb558baa718f611f90dfbe64f",
-  "wiki_commit": "3b200929501cde74d31316329d56ae81ef5e7748",
+  "source_commit": "8f8337e23301945afce0658059ba5e50458adb0c",
+  "wiki_commit": "5467a207ae999319dbe4ba22bddb8190d5ce9b89",
   "wiki_branch": "master",
-  "page_count": 21,
+  "page_count": 22,
   "pages": [
     "Breakdance-and-Cyphers.md",
     "Compatibility.md",
@@ -12,6 +12,7 @@
     "Crafting-and-Survival.md",
     "Developer-Architecture.md",
     "FAQ.md",
+    "Gang-Wars-Boombox-and-Mob-Atlas.md",
     "Getting-Started.md",
     "Graffiti.md",
     "Grinding-and-Transfers.md",
@@ -28,6 +29,6 @@
     "_Sidebar.md"
   ],
   "validated": true,
-  "published_at_utc": "2026-08-21T22:24:05.051270+00:00",
+  "published_at_utc": "2026-08-21T23:18:00.603812+00:00",
   "url": "https://github.com/Herbertofury/JetSetCraft/wiki"
 }
