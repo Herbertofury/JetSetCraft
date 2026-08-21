@@ -1,0 +1,24 @@
+{
+  "schema": 2,
+  "project": "JetSetCraft",
+  "checkpoint": "style-flow-0.2.0-alpha.1-repair-1",
+  "base_commit": "d8ad1254c69dc30ae6b90956f9ed5ba713b46dda",
+  "primary": {
+    "patch_bytes": 235134,
+    "patch_sha256": "5a14ed1dd98a2059bee147952a3d8091722850d22c7f757a0387e20167b33a90",
+    "xz_bytes": 52864,
+    "xz_sha256": "a2b088ae089f5fda36cc8b1b0f6e457b8b49237146416524dab12f6a20837d2a",
+    "base64_bytes": 70488,
+    "base64_sha256": "b7d0c4f5c953f131ac04efdacb63e4475623c3d7e5f47d86b20c81a5d137d7a0",
+    "part_count": 8
+  },
+  "repair": {
+    "patch_bytes": 31340,
+    "patch_sha256": "366212f9cab1a047cabb285a5ccd1a9750cd618e58999bfa889acaf6d6e1cdba",
+    "xz_bytes": 8836,
+    "xz_sha256": "2130c83424f5de4befbf3f08b759b49c0e049081f937b2fb376da834c681d676",
+    "base64_bytes": 11784,
+    "base64_sha256": "26bd6b9190ce3835ba5352798e4c24394f95a201eb8e14336174dd41871960e9",
+    "part_count": 3
+  }
+}

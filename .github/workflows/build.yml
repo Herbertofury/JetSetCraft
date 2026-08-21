@@ -14,22 +14,49 @@ jobs:
         with:
           fetch-depth: 0
           ref: ${{ github.head_ref || github.ref_name }}
-      - name: Apply pending verified-source checkpoint
+
+      - name: Apply pending Style Flow source checkpoint
         id: pending
         shell: bash
         run: |
           set -euo pipefail
           shopt -s nullglob
+          ready='checkpoints/style-flow-pending.ready.json'
           parts=(checkpoints/style-flow-pending.b64.part*)
-          if (( ${#parts[@]} == 0 )); then
+          repair_parts=(checkpoints/style-flow-repair.b64.part*)
+          if [[ ! -f "$ready" ]]; then
             echo 'applied=false' >> "$GITHUB_OUTPUT"
             exit 0
           fi
-          cat "${parts[@]}" | base64 --decode | xz -dc > /tmp/style-flow.patch
-          git apply --index --whitespace=nowarn /tmp/style-flow.patch
-          rm -f checkpoints/style-flow-pending.b64.part*
+          if (( ${#parts[@]} == 0 )) || (( ${#repair_parts[@]} == 0 )); then
+            echo '::error::Style Flow ready marker exists but a payload component is missing.'
+            exit 1
+          fi
+
+          cat "${parts[@]}" | base64 --decode > /tmp/style-flow-primary.patch.xz
+          expected_primary_xz="$(python -c 'import json; print(json.load(open("checkpoints/style-flow-pending.ready.json"))["primary"]["xz_sha256"])')"
+          actual_primary_xz="$(sha256sum /tmp/style-flow-primary.patch.xz | cut -d' ' -f1)"
+          [[ "$actual_primary_xz" == "$expected_primary_xz" ]] || { echo '::error::Primary Style Flow compressed payload SHA-256 mismatch.'; exit 1; }
+          xz -dc /tmp/style-flow-primary.patch.xz > /tmp/style-flow-primary.patch
+          expected_primary_patch="$(python -c 'import json; print(json.load(open("checkpoints/style-flow-pending.ready.json"))["primary"]["patch_sha256"])')"
+          actual_primary_patch="$(sha256sum /tmp/style-flow-primary.patch | cut -d' ' -f1)"
+          [[ "$actual_primary_patch" == "$expected_primary_patch" ]] || { echo '::error::Primary Style Flow patch SHA-256 mismatch.'; exit 1; }
+          git apply --index --binary --whitespace=nowarn /tmp/style-flow-primary.patch
+
+          cat "${repair_parts[@]}" | base64 --decode > /tmp/style-flow-repair.patch.xz
+          expected_repair_xz="$(python -c 'import json; print(json.load(open("checkpoints/style-flow-pending.ready.json"))["repair"]["xz_sha256"])')"
+          actual_repair_xz="$(sha256sum /tmp/style-flow-repair.patch.xz | cut -d' ' -f1)"
+          [[ "$actual_repair_xz" == "$expected_repair_xz" ]] || { echo '::error::Style Flow repair compressed payload SHA-256 mismatch.'; exit 1; }
+          xz -dc /tmp/style-flow-repair.patch.xz > /tmp/style-flow-repair.patch
+          expected_repair_patch="$(python -c 'import json; print(json.load(open("checkpoints/style-flow-pending.ready.json"))["repair"]["patch_sha256"])')"
+          actual_repair_patch="$(sha256sum /tmp/style-flow-repair.patch | cut -d' ' -f1)"
+          [[ "$actual_repair_patch" == "$expected_repair_patch" ]] || { echo '::error::Style Flow repair patch SHA-256 mismatch.'; exit 1; }
+          git apply --index --binary --whitespace=nowarn /tmp/style-flow-repair.patch
+
+          rm -f checkpoints/style-flow-pending.b64.part* checkpoints/style-flow-repair.b64.part* "$ready"
           git add -A
           echo 'applied=true' >> "$GITHUB_OUTPUT"
+
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
@@ -37,7 +64,8 @@ jobs:
       - uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '8.8'
-      - name: Generate and validate authored assets and gameplay contract
+
+      - name: Generate and validate authored assets, gameplay, and wiki
         run: |
           set -euo pipefail
           python -m pip install -r tools/requirements.txt
@@ -47,85 +75,132 @@ jobs:
           python tools/validate_assets.py
           python tools/validate_gameplay_contract.py
           python tools/validate_wiki.py
-      - name: Package exact staged source snapshot
-        run: |
-          set -euo pipefail
-          git add -A
-          tree_sha="$(git write-tree)"
-          git archive --format=zip --output=jetsetcraft-source.zip "$tree_sha"
-      - name: Upload exact source snapshot
-        uses: actions/upload-artifact@v4
-        with:
-          name: jetsetcraft-source
-          path: jetsetcraft-source.zip
-          if-no-files-found: error
-      - name: Build
+          python -m compileall -q tools
+          git diff --check
+
+      - name: Build Forge 1.20.1 mod
         run: gradle --no-daemon build
+
       - name: Real Forge GameTest Style Flow acceptance
         shell: bash
         run: |
           set -euo pipefail
-          rm -f style-flow-gametest.log
-          timeout 180s gradle --no-daemon runGameTestServer | tee style-flow-gametest.log
+          mkdir -p build/verification
+          log='build/verification/style-flow-gametest.log'
+          rm -f "$log"
+          timeout 180s gradle --no-daemon runGameTestServer | tee "$log"
           for required in \
-            hoverboardusespersistentuniversalridesolver \
-            scooterusesuniversalpersistentridesolver \
-            breakdancestartswithoutridegearandbuildsstyle; do
-            if ! tr '[:upper:]' '[:lower:]' < style-flow-gametest.log | grep -q "$required"; then
-              echo "::error::Forge GameTest did not visibly execute $required."
-              exit 1
-            fi
+            'JETSETCRAFT_GAMETEST_PASS hoverboard' \
+            'JETSETCRAFT_GAMETEST_PASS scooter' \
+            'JETSETCRAFT_GAMETEST_PASS dance_flow' \
+            'JETSETCRAFT_GAMETEST_PASS combat_sovereignty' \
+            'JETSETCRAFT_GAMETEST_PASS catalogs'; do
+            grep -Fq "$required" "$log" || { echo "::error::Forge GameTest did not emit $required."; exit 1; }
           done
-          if ! grep -Eq 'All 3 required tests passed|3 tests? passed' style-flow-gametest.log; then
-            echo '::error::Forge GameTest server did not report all three required Style Flow tests passing.'
+          grep -Eq 'All 5 required tests passed|5 tests? passed' "$log" || {
+            echo '::error::Forge GameTest server did not report all five required Style Flow tests passing.'
             exit 1
-          fi
+          }
+
       - name: Upload Style Flow GameTest log
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: jetsetcraft-style-flow-gametest
-          path: style-flow-gametest.log
+          path: build/verification/style-flow-gametest.log
           if-no-files-found: warn
+
       - name: Real Forge dedicated-server runtime smoke
         shell: bash
         run: |
           set -euo pipefail
-          mkdir -p run
+          mkdir -p run build/verification
           printf 'eula=true\n' > run/eula.txt
-          rm -f server-smoke.log
+          log='build/verification/server-smoke.log'
+          rm -f "$log"
           set +e
-          timeout 180s gradle --no-daemon runServer > server-smoke.log 2>&1
+          timeout 180s gradle --no-daemon runServer > "$log" 2>&1
           exit_code=$?
           set -e
-          cat server-smoke.log
-          if ! grep -Eq 'Done \([0-9.]+s\)!|Done \([0-9.]+s\)! For help' server-smoke.log; then
+          cat "$log"
+          if ! grep -Eq 'Done \([0-9.]+s\)!|Done \([0-9.]+s\)! For help' "$log"; then
             echo '::error::Forge dedicated server never reached the ready state.'
             exit "${exit_code:-1}"
           fi
-          if grep -Eiq 'ModLoadingException|Failed to complete lifecycle event|Exception in thread "main"|FATAL.*jetsetcraft' server-smoke.log; then
+          if grep -Eiq 'ModLoadingException|Failed to complete lifecycle event|Exception in thread "main"|FATAL.*jetsetcraft' "$log"; then
             echo '::error::JetSetCraft produced a fatal/mod-loading error before or during server startup.'
             exit 1
           fi
           echo 'JetSetCraft reached the real Forge dedicated-server ready state.'
+
       - name: Upload runtime smoke log
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: jetsetcraft-forge-server-smoke
-          path: server-smoke.log
+          path: build/verification/server-smoke.log
           if-no-files-found: warn
-      - name: Upload approved full-quality cover
+
+      - name: Seal verified Style Flow project memory
+        if: steps.pending.outputs.applied == 'true'
+        run: python tools/finalize_ci_checkpoint.py
+
+      - name: Package exact verified source snapshot
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p build/verification
+          git add -A
+          tree_sha="$(git write-tree)"
+          git archive --format=zip --output=build/jetsetcraft-source.zip "$tree_sha"
+          if [[ -f build/verification/style-flow-verification.json ]]; then
+            python tools/finalize_ci_checkpoint.py --seal-tree "$tree_sha"
+          fi
+          printf '%s\n' "$tree_sha" > build/verification/source-tree.txt
+
+      - name: Upload exact source snapshot
+        uses: actions/upload-artifact@v4
+        with:
+          name: jetsetcraft-source
+          path: build/jetsetcraft-source.zip
+          if-no-files-found: error
+
+      - name: Upload Style Flow verification receipt
+        if: steps.pending.outputs.applied == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: jetsetcraft-style-flow-verification
+          path: |
+            build/verification/style-flow-verification.json
+            build/verification/source-tree.txt
+          if-no-files-found: error
+
+      - name: Upload approved project cover
         uses: actions/upload-artifact@v4
         with:
           name: jetsetcraft-approved-cover
           path: assets/jetsetcraft-cover.webp
           if-no-files-found: error
-      - uses: actions/upload-artifact@v4
+
+      - name: Upload Forge 1.20.1 JAR
+        uses: actions/upload-artifact@v4
         with:
           name: jetsetcraft-forge-1.20.1
           path: build/libs/*.jar
           if-no-files-found: error
+
+      - name: Promote verified Style Flow source checkpoint
+        if: steps.pending.outputs.applied == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          git add -A
+          git config user.name 'JetSetCraft Verification Bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git commit -m 'Add verified JetSetCraft Style Flow expansion'
+          target_branch="${GITHUB_HEAD_REF:-${GITHUB_REF_NAME}}"
+          git push origin HEAD:"$target_branch"
+
       - name: Publish verified JetSetCraft wiki
         if: steps.pending.outputs.applied == 'true'
         env:
@@ -147,14 +222,3 @@ jobs:
             branch="$(git branch --show-current)"
             git push origin "HEAD:${branch:-master}"
           fi
-      - name: Promote verified Style Flow source checkpoint
-        if: steps.pending.outputs.applied == 'true'
-        shell: bash
-        run: |
-          set -euo pipefail
-          git add -A
-          git config user.name 'JetSetCraft Verification Bot'
-          git config user.email 'actions@users.noreply.github.com'
-          git commit -m 'Add verified JetSetCraft Style Flow expansion'
-          target_branch="${GITHUB_HEAD_REF:-${GITHUB_REF_NAME}}"
-          git push origin HEAD:"$target_branch"
