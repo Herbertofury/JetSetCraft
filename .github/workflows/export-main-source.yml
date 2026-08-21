@@ -4,6 +4,7 @@ on:
   push:
     branches: [ feature/ultimate-street-movement ]
     paths: [ '.github/workflows/export-main-source.yml' ]
+  pull_request:
   workflow_dispatch:
 
 jobs:
