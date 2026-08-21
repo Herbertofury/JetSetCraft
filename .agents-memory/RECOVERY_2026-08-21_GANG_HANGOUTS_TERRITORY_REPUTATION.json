@@ -1,0 +1,38 @@
+{
+  "schema": 1,
+  "project": "JetSetCraft",
+  "date": "2026-08-21",
+  "decision": "Natural gangs use persistent soft Hangouts/Turf records with small resident crews; Boombox/scripted event actors are ephemeral competition casts.",
+  "architecture": {
+    "natural_hangout": "tiny site_id record, no chunk ticket, no generation ownership, small persistent original-type geared residents, low-frequency shared Hangout Brain",
+    "event_actor": "explicit ephemeral cast, exits/despawns after event once safely out of view, does not create permanent population/site",
+    "furniture": "post-generation additive micro-dressing in safe empty/replaceable space only; no terrain carving/replacement; non-ticking by default; removable by JetSetCraft placement manifest",
+    "reputation": "gang_id is canonical durable progression; site_id stores only bounded local chapter affinity/flags; no full per-mob reputation; one balanced transaction per crew/event",
+    "performance": "no force-loaded gang chunks, no global per-tick site scans, bounded active sites/residents, strategic AI only during challenges"
+  },
+  "canonical_master": {
+    "local_path": "/mnt/data/JetSetCraft_Gang_Wars_Boombox_Mob_Atlas_Master_Spec.md",
+    "drive_file_id": "1OoOVTWhhTAoVoc4TljPZM9mkS9fWvCol",
+    "size_bytes": 94454,
+    "sha256": "0daebc3d682b3ce7289b86670dbe3fa849f1fe262a34a4cb243dec841647f285",
+    "drive_roundtrip_byte_match": true
+  },
+  "github": {
+    "wiki_page_source_commit": "56c98448c5ea7c01e2e918ec46938d0bb9e24fee",
+    "docs_page_commit": "1b59f29b1ea5f9d4e2ca101dbfee3483856bf5af",
+    "sidebar_commit": "657280e4d00f291039d18093a9bde6421b3695e3",
+    "home_commit": "ef6feadcf54d14e303ef008f4207fd0d22eeb459",
+    "compass_commit": "769d0d0fd0ed3b7ef85a8943559bdad0efa3138a",
+    "published_wiki_commit": "0efb8b856bf2c3264f49874acd9ab3d20a51ae20",
+    "wiki_page_count": 24,
+    "wiki_validated": true
+  },
+  "next_implementation_focus": [
+    "HangoutRecord SavedData schema and spatial index",
+    "Natural resident soft-home lifecycle and no-chunk-ticket tests",
+    "adaptive prop placement solver with strict non-replacement rules",
+    "shared low-frequency Hangout Brain",
+    "event_actor exit/despawn lifecycle",
+    "gang_id reputation transaction plus bounded site_id chapter memory"
+  ]
+}
