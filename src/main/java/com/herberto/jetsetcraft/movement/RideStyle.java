@@ -5,7 +5,13 @@ public enum RideStyle {
     INLINE(1, "inline", 0.027, 0.59, 0.92, 0.024, 1.05, 0.20),
     BOARD(2, "board", 0.024, 0.56, 0.90, 0.020, 1.12, 0.17),
     BMX(3, "bmx", 0.030, 0.65, 0.98, 0.026, 0.90, 0.23),
-    QUAD(4, "quad", 0.025, 0.55, 0.88, 0.022, 1.08, 0.25);
+    QUAD(4, "quad", 0.025, 0.55, 0.88, 0.022, 1.08, 0.25),
+    /**
+     * Hoverboard keeps JetSetCraft's universal trick/grind/world-physics contract instead of becoming
+     * a separate vehicle subsystem. Its tuning favors smooth coasting, air correction and rail flow
+     * while remaining below BMX's raw boost ceiling so vanilla-world impulses still matter.
+     */
+    HOVER(5, "hover", 0.028, 0.62, 0.96, 0.031, 1.16, 0.24);
 
     private final int id;
     private final String serializedName;
