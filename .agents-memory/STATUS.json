@@ -1,8 +1,8 @@
 {
   "version": "0.1.0-alpha.1",
-  "phase": "rail/combat foundation / exact-current-main Forge server and exposed-edge runtime verified",
+  "phase": "hoverboard + rail/combat foundation / real Forge GameTest and dedicated-server verified",
   "implemented": [
-    "four ride styles",
+    "five ride styles including first-class hoverboard",
     "server-authoritative momentum",
     "boost",
     "manuals",
@@ -14,6 +14,9 @@
     "rail tricks",
     "wall rides",
     "powerslide",
+    "hoverboard loadout item and creative-tab entry",
+    "hoverboard persistence compatibility",
+    "hoverboard client render bob/tilt and board-pose animation composition",
     "graffiti entities",
     "TACZ API detection",
     "lower-body PlayerAnimator composition",
@@ -26,35 +29,50 @@
     "grind stuck recovery and cross-dimension reattach grace"
   ],
   "verified": {
-    "canonical_main_commit": "32111151889acbd6fab610ac3ae55d07e245cdda",
-    "canonical_main_tree": "7c59cca15bff45edcd11f732c6db9ad775af9ed4",
+    "canonical_main_commit": "b0631769441faea3931a11aa0b156b2ed7413d21",
+    "canonical_main_tree": "4d4cdccedf81dfe2584bbcbdf0958ebdeb3fb1ca",
+    "tested_hoverboard_pr": 12,
+    "tested_hoverboard_head": "c96d023ad77287888048f0cece3057e03133792e",
+    "tested_hoverboard_tree": "4d4cdccedf81dfe2584bbcbdf0958ebdeb3fb1ca",
+    "tested_tree_matches_merged_product": true,
     "forge_clean_build": true,
     "asset_and_gameplay_contract_validation": true,
+    "hoverboard_real_forge_gametest": true,
+    "hoverboard_registry_identity_verified": true,
+    "hoverboard_save_load_and_loadout_persistence_verified": true,
+    "hoverboard_production_movement_solver_verified": true,
     "dedicated_server_ready": true,
-    "real_exposed_edge_runtime": true,
-    "internal_full_block_seam_rejected": true,
-    "blocked_rider_clearance_rejected": true,
-    "verification_pr": 11,
-    "verification_head": "54953c68200adc5dd2e4f8b257b5ce1746ec0853",
-    "runtime_workflow_run": 32461794393,
-    "runtime_job": 96710026950,
-    "server_ready_line": "Done (29.046s)! For help, type \"help\"",
-    "edge_runtime_marker": "JETSETCRAFT_EDGE_RUNTIME_PASS internalSeamRejected=true exposedLedgeDetected=true clearanceRejected=true",
-    "server_smoke_artifact": {
-      "id": 9439276030,
-      "zip_bytes": 3881,
-      "zip_sha256": "eaf481644c61243a786374a6968d8d861a369aeebcc350b995d485876c4b9d75",
-      "log_bytes": 19823,
-      "log_sha256": "04217b9535e7db00828369936b43b9bd0e95242537dc39fdfeba4a5bfeaf2844"
+    "hoverboard_workflow_run": 32464901677,
+    "hoverboard_job": 96719343690,
+    "hoverboard_gametest_artifact": {
+      "id": 9440361350,
+      "zip_bytes": 4220,
+      "zip_sha256": "e7c23b604797d819f8a178d3b18aa445b0b283eff0f0111ada5fd01ca82ba79e",
+      "log_bytes": 22000,
+      "log_sha256": "f78335c39eba48852f05831f7a64e0588c90a3c7c5933a457d1a85da5a29aba4",
+      "observed": "Running test batch defaultBatch:1; 1 test running; All 1 required tests passed"
     },
-    "verification_build_artifact": {
-      "id": 9439276737,
-      "zip_bytes": 3171021,
-      "zip_sha256": "b2a4f6f525e023ca9d33e5b952fd991e74493be8d358b11f2fa2569bbd3d40eb",
+    "hoverboard_server_smoke_artifact": {
+      "id": 9440444545,
+      "zip_bytes": 2240,
+      "zip_sha256": "6e0492ae5007ab88879c9ec690bfe16313ef46c2375337c8ea510a8b0752a335",
+      "log_bytes": 6789,
+      "log_sha256": "284207ecac7b3c0529c5cdfd2cefcce3426b0a67ae179f452dd268ded4d73492",
+      "server_ready_line": "Done (8.569s)! For help, type \"help\""
+    },
+    "hoverboard_build_artifact": {
+      "id": 9440446053,
+      "zip_bytes": 3172528,
+      "zip_sha256": "8abb5b5068833c789d6ce10e488fdd9f568fe396b74695b0a6988a35a803fcd0",
       "jar": "jetsetcraft-1.20.1-0.1.0-alpha.1.jar",
-      "jar_bytes": 3306111,
-      "jar_sha256": "87a2396b08d7e28dec68e304c5bb680c4e2f30c4ce147a4177db8d3ba0b6b154",
-      "note": "Verification artifact includes CI-only edge probe instrumentation and is not represented as canonical release bytes."
+      "jar_bytes": 3308191,
+      "jar_sha256": "3225980b1f1e4c7687474fcda1d34b057aecff4f5307dab3b229dbeb60c63a0e"
+    },
+    "prior_exact_main_exposed_edge_runtime": {
+      "verification_pr": 11,
+      "workflow_run": 32461794393,
+      "server_ready_line": "Done (29.046s)! For help, type \"help\"",
+      "edge_runtime_marker": "JETSETCRAFT_EDGE_RUNTIME_PASS internalSeamRejected=true exposedLedgeDetected=true clearanceRejected=true"
     },
     "canonical_cover": {
       "drive_file_id": "1km1kaSF6vqR5wBrMQr8J1FHCAFy8vp4W",
@@ -67,15 +85,15 @@
     }
   },
   "pending_validation": [
-    "real client ride/trick/grind gameplay smoke test",
+    "real client visual ride/trick/grind gameplay smoke test including hoverboard presentation",
     "real Create 6.0.8 interoperability runtime smoke test",
     "TACZ live integration smoke test",
     "multiplayer movement/combat acceptance world"
   ],
-  "pending_features": [
-    "hoverboard ride style requested in project continuity"
+  "pending_features": [],
+  "pending_assets": [
+    "dedicated hoverboard art can replace the current street-board OBJ reuse without changing ride semantics"
   ],
-  "pending_assets": [],
   "source_inputs": {
     "official_brand_sha256": "6e60bcc90fd6b85209598b088b9d2b87fb6c3a36d9d68c6eb4e478f538a5894f",
     "graffiti_zip_sha256": "8541009fcfb3ec77f22e7aeafb2bcfceebd64decddf168171df24182438c70d9",
