@@ -1,0 +1,59 @@
+{
+  "schemaVersion": 1,
+  "project": "JetSetCraft",
+  "checkpointType": "recovery",
+  "checkedAt": "2026-08-21",
+  "canonical": {
+    "repository": "Herbertofury/JetSetCraft",
+    "branch": "main",
+    "statusCommit": "61fa24ed83286106ed1bd11ddc6ee7db54a97ea1"
+  },
+  "runtimeVerification": {
+    "verificationHead": "e7e9f5bbca76045d0787a622cb4e2b6ea9695234",
+    "workflowRun": 32453299956,
+    "job": 96685661517,
+    "conclusion": "success",
+    "serverReadyLine": "Done (29.165s)! For help, type \"help\"",
+    "assetGameplayValidation": "success",
+    "forgeBuild": "success",
+    "dedicatedServerRuntime": "success"
+  },
+  "buildArtifact": {
+    "id": 9436450207,
+    "zipBytes": 3131261,
+    "zipSha256": "a7b3c6e1328380bd38464d34163f9a812510799bc88e85371db0099aeead1aac",
+    "jar": "jetsetcraft-1.20.1-0.1.0-alpha.1.jar",
+    "jarBytes": 3263949,
+    "jarSha256": "d59126b947296d63bc1e1e5aeba35f59942c6b499734b31ffa870b335786bb20"
+  },
+  "serverEvidence": {
+    "artifactId": 9436449450,
+    "zipBytes": 3732,
+    "zipSha256": "29a3630f9902eef2e2dce9c6db93a1c52bff749194eaff0ab5fb89d8f42d4b5e",
+    "logBytes": 19297,
+    "logSha256": "f06c0277e0dab56acebd70c75291edb469de1d7c3075f8d101ba515276e57513"
+  },
+  "canonicalCover": {
+    "driveFileId": "1km1kaSF6vqR5wBrMQr8J1FHCAFy8vp4W",
+    "fileName": "JetSetCraft-cover-full-quality.png",
+    "bytes": 1702879,
+    "dimensions": [1254, 1254],
+    "sha256": "6e60bcc90fd6b85209598b088b9d2b87fb6c3a36d9d68c6eb4e478f538a5894f",
+    "repositoryLegacyThumbnail": "assets/jetsetcraft-cover.webp",
+    "legacyThumbnailDimensions": [160, 160]
+  },
+  "driveCheckpoint": {
+    "documentId": "1_9MOx4ijm-Cx7Dtx98nUY9BiM-yfrQ0Hyitpo_eYxRA",
+    "folderId": "1tLhuo8QeAMtFvnwrbnqGtKKrBi3NuvZl",
+    "coverAssetFolderId": "1eq5LuybeL4nyf_WPOAEmDom1CQD3OuWM",
+    "binaryEgressNote": "Direct GitHub-Actions-artifact to Drive raw binary egress was blocked by connector policy; exact build/server bytes remain retained in GitHub Actions and are indexed in the Drive checkpoint."
+  },
+  "stillUnverified": [
+    "real client ride/trick/grind gameplay acceptance",
+    "real Create 6.0.8 interoperability runtime acceptance",
+    "TACZ live integration acceptance",
+    "multiplayer movement/combat acceptance world",
+    "hoverboard ride style implementation and runtime acceptance"
+  ],
+  "disposition": "RECOVERED_ALPHA_FOUNDATION_NOT_FEATURE_COMPLETE"
+}
