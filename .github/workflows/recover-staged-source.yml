@@ -17,22 +17,59 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Reconstruct exact cc65cad source archive
+      - name: Diagnose main staging and recover intact alpha source
         shell: bash
         run: |
           set -euo pipefail
-          mkdir -p output/recovered-source
-          cat .bootstrap/cc65cad/chunk-* | base64 -d > output/jetsetcraft-cc65cad.tar.gz
-          echo "778627d230fd9f1ce87a7031e66dd928556ac4f84cd08089d41ca3871ea96ecc  output/jetsetcraft-cc65cad.tar.gz" | sha256sum -c -
-          tar -tzf output/jetsetcraft-cc65cad.tar.gz > output/archive-files.txt
-          tar -xzf output/jetsetcraft-cc65cad.tar.gz -C output/recovered-source
-          test -s output/archive-files.txt
+          mkdir -p output/candidates output/recovered-source
+
+          # Preserve the broken main payload as forensic evidence; never promote it.
+          cat .bootstrap/cc65cad/chunk-* | base64 -d > output/candidates/main-cc65cad.tar.gz || true
+          MAIN_SHA="$(sha256sum output/candidates/main-cc65cad.tar.gz | awk '{print $1}')"
+          printf 'mainStagedSha256=%s\n' "$MAIN_SHA" > output/recovery-summary.txt
+          printf 'mainExpectedSha256=%s\n' '778627d230fd9f1ce87a7031e66dd928556ac4f84cd08089d41ca3871ea96ecc' >> output/recovery-summary.txt
+          if gzip -t output/candidates/main-cc65cad.tar.gz 2>/dev/null && tar -tzf output/candidates/main-cc65cad.tar.gz >/dev/null 2>&1; then
+            printf 'mainStaging=VALID_BUT_HASH_MISMATCH\n' >> output/recovery-summary.txt
+          else
+            printf 'mainStaging=CORRUPT\n' >> output/recovery-summary.txt
+          fi
+
+          # Recover only from immutable repository history. No guessed or synthesized bytes.
+          git worktree add --detach /tmp/jetsetcraft-alpha origin/jetsetcraft-alpha
+          cat /tmp/jetsetcraft-alpha/.bootstrap/current/chunk-* | base64 -d > output/candidates/alpha-current.tar.gz || true
+          base64 -d /tmp/jetsetcraft-alpha/bootstrap/jetsetcraft-alpha-src.tar.gz.b64 > output/candidates/alpha-single.tar.gz || true
+
+          choose_candidate() {
+            local candidate="$1"
+            if [[ -s "$candidate" ]] && gzip -t "$candidate" 2>/dev/null && tar -tzf "$candidate" >/dev/null 2>&1; then
+              printf '%s\n' "$candidate"
+              return 0
+            fi
+            return 1
+          }
+
+          SELECTED=""
+          if SELECTED="$(choose_candidate output/candidates/alpha-current.tar.gz)"; then
+            SOURCE_KIND=alpha-current
+          elif SELECTED="$(choose_candidate output/candidates/alpha-single.tar.gz)"; then
+            SOURCE_KIND=alpha-single
+          else
+            echo '::error::No byte-valid source archive survived in immutable JetSetCraft repository history.'
+            sha256sum output/candidates/*.tar.gz | tee -a output/recovery-summary.txt || true
+            exit 6
+          fi
+
+          SELECTED_SHA="$(sha256sum "$SELECTED" | awk '{print $1}')"
+          cp "$SELECTED" output/jetsetcraft-recovered.tar.gz
+          tar -tzf "$SELECTED" > output/archive-files.txt
+          tar -xzf "$SELECTED" -C output/recovered-source
           find output/recovered-source -type f -print0 | sort -z | xargs -0 sha256sum > output/recovered-source.sha256
-          printf 'archiveSha256=778627d230fd9f1ce87a7031e66dd928556ac4f84cd08089d41ca3871ea96ecc\n' > output/recovery-summary.txt
+          printf 'selectedSource=%s\n' "$SOURCE_KIND" >> output/recovery-summary.txt
+          printf 'selectedSha256=%s\n' "$SELECTED_SHA" >> output/recovery-summary.txt
           printf 'fileCount=%s\n' "$(find output/recovered-source -type f | wc -l)" >> output/recovery-summary.txt
           printf 'topLevel=%s\n' "$(find output/recovered-source -mindepth 1 -maxdepth 1 -printf '%f ' | sort)" >> output/recovery-summary.txt
 
-      - name: Verify recovered project structure and build
+      - name: Verify recovered project structure and real build
         shell: bash
         working-directory: output/recovered-source
         run: |
@@ -51,7 +88,7 @@ jobs:
             npm run build --if-present
           else
             echo '::error::Recovered archive has no recognized build manifest.'
-            find . -maxdepth 2 -type f | sort | head -200
+            find . -maxdepth 3 -type f | sort | head -250
             exit 5
           fi
 
@@ -61,14 +98,14 @@ jobs:
         run: |
           set -euo pipefail
           find output/recovered-source -type f \( -path '*/build/libs/*' -o -path '*/target/*.jar' -o -path '*/dist/*' \) -print | sort > output/build-artifacts.txt || true
-          sha256sum output/jetsetcraft-cc65cad.tar.gz >> output/recovery-summary.txt
-          cat output/recovery-summary.txt
+          if [[ -s output/jetsetcraft-recovered.tar.gz ]]; then sha256sum output/jetsetcraft-recovered.tar.gz >> output/recovery-summary.txt; fi
+          cat output/recovery-summary.txt || true
           cat output/build-artifacts.txt || true
 
       - name: Upload recovered source and build evidence
         if: always()
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         with:
-          name: jetsetcraft-cc65cad-recovery
+          name: jetsetcraft-source-recovery
           path: output
           if-no-files-found: error
