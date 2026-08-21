@@ -1,0 +1,74 @@
+name: Recover staged JetSetCraft source
+
+on:
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  recover-and-verify:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Check out recovery branch
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+
+      - name: Reconstruct exact cc65cad source archive
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p output/recovered-source
+          cat .bootstrap/cc65cad/chunk-* | base64 -d > output/jetsetcraft-cc65cad.tar.gz
+          echo "778627d230fd9f1ce87a7031e66dd928556ac4f84cd08089d41ca3871ea96ecc  output/jetsetcraft-cc65cad.tar.gz" | sha256sum -c -
+          tar -tzf output/jetsetcraft-cc65cad.tar.gz > output/archive-files.txt
+          tar -xzf output/jetsetcraft-cc65cad.tar.gz -C output/recovered-source
+          test -s output/archive-files.txt
+          find output/recovered-source -type f -print0 | sort -z | xargs -0 sha256sum > output/recovered-source.sha256
+          printf 'archiveSha256=778627d230fd9f1ce87a7031e66dd928556ac4f84cd08089d41ca3871ea96ecc\n' > output/recovery-summary.txt
+          printf 'fileCount=%s\n' "$(find output/recovered-source -type f | wc -l)" >> output/recovery-summary.txt
+          printf 'topLevel=%s\n' "$(find output/recovered-source -mindepth 1 -maxdepth 1 -printf '%f ' | sort)" >> output/recovery-summary.txt
+
+      - name: Verify recovered project structure and build
+        shell: bash
+        working-directory: output/recovered-source
+        run: |
+          set -euo pipefail
+          if [[ -f gradlew ]]; then
+            chmod +x gradlew
+            ./gradlew --no-daemon clean build
+          elif [[ -f pom.xml ]]; then
+            mvn -B -ntp test package
+          elif [[ -f build.gradle || -f build.gradle.kts ]]; then
+            echo '::error::Gradle project recovered without gradlew; refusing an unpinned system Gradle build.'
+            exit 4
+          elif [[ -f package.json ]]; then
+            if [[ -f package-lock.json ]]; then npm ci; else npm install --ignore-scripts --no-audit --no-fund; fi
+            npm test --if-present
+            npm run build --if-present
+          else
+            echo '::error::Recovered archive has no recognized build manifest.'
+            find . -maxdepth 2 -type f | sort | head -200
+            exit 5
+          fi
+
+      - name: Capture recovered build outputs
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          find output/recovered-source -type f \( -path '*/build/libs/*' -o -path '*/target/*.jar' -o -path '*/dist/*' \) -print | sort > output/build-artifacts.txt || true
+          sha256sum output/jetsetcraft-cc65cad.tar.gz >> output/recovery-summary.txt
+          cat output/recovery-summary.txt
+          cat output/build-artifacts.txt || true
+
+      - name: Upload recovered source and build evidence
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: jetsetcraft-cc65cad-recovery
+          path: output
+          if-no-files-found: error
