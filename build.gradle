@@ -9,6 +9,12 @@ group = mod_group_id
 base { archivesName = "${mod_id}-${minecraft_version}" }
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
+configurations {
+    // Raw production jars used only by the Create interoperability acceptance server. Keeping this isolated from
+    // runtimeClasspath prevents production Create mixins from being injected into ForgeGradle's mapped userdev JVM.
+    createAcceptanceRuntime
+}
+
 minecraft {
     mappings channel: 'official', version: minecraft_version
     copyIdeResources = true
@@ -48,9 +54,15 @@ dependencies {
     // Create 6.0.8 (current Forge 1.20.1 release) is optional in JetSetCraft production.
     compileOnly fg.deobf("curse.maven:create-328085:7178761")
 
-    // Verification-only branch: load the exact production Create 6.0.8 jar in Forge GameTest/server runs so
-    // JetSetCraft's native ITrackBlock/Bezier adapter is proven against a real Create runtime, not API stubs.
-    runtimeOnly fg.deobf("curse.maven:create-328085:7178761")
+    // Verification-only raw production mods. Create 6.0.8 embeds its own runtime libraries; GeckoLib remains a
+    // mandatory JetSetCraft server dependency, so both are copied into a real production Forge installation.
+    createAcceptanceRuntime "curse.maven:create-328085:7178761"
+    createAcceptanceRuntime "curse.maven:geckolib-388172:8285794"
+}
+
+tasks.register('copyCreateAcceptanceMods', Copy) {
+    from configurations.createAcceptanceRuntime
+    into layout.buildDirectory.dir('create-acceptance/mods')
 }
 
 sourceSets.main.resources { srcDir 'src/generated/resources' }
