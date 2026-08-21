@@ -55,47 +55,51 @@ public final class JetSetCommands {
             return 0;
         }
 
-        player.getCapability(JetSetDataProvider.CAPABILITY).ifPresentOrElse(data -> {
-            VanillaWorldPhysics.Surface surface = VanillaWorldPhysics.ground(player);
-            VanillaWorldPhysics.MotionProfile profile = VanillaWorldPhysics.profile(player, data, surface);
-            String block = String.valueOf(BuiltInRegistries.BLOCK.getKey(surface.state().getBlock()));
-            Vec3 horizontal = new Vec3(player.getDeltaMovement().x, 0.0, player.getDeltaMovement().z);
+        JetSetData data = player.getCapability(JetSetDataProvider.CAPABILITY).resolve().orElse(null);
+        if (data == null) {
+            source.sendFailure(Component.literal("JetSetCraft capability is not attached to this player."));
+            return 0;
+        }
 
-            source.sendSuccess(() -> Component.literal("JetSetCraft server diagnostics").withStyle(ChatFormatting.AQUA), false);
-            source.sendSuccess(() -> Component.literal(String.format(Locale.ROOT,
-                    "ride=%s equipped=%s active=%s momentum=%.3f velocity=%.3f boost=%.1f combo=%d x%.2f",
-                    data.style().serializedName(), RideLoadout.equippedStyle(data).serializedName(), data.active(),
-                    data.momentum(), horizontal.length(), data.boost(), data.comboScore(), data.comboMultiplier())), false);
-            source.sendSuccess(() -> Component.literal(String.format(Locale.ROOT,
-                    "surface=%s block=%s friction=%.3f cap=%.2fx boostCap=%.2fx retention=%.5f steering=%.2fx",
-                    surface.kind().name().toLowerCase(Locale.ROOT), block, surface.vanillaFriction(),
-                    profile.cruiseCapMultiplier(), profile.boostCapMultiplier(), profile.coastingRetention(),
-                    profile.steeringMultiplier())), false);
-            source.sendSuccess(() -> Component.literal(String.format(Locale.ROOT,
-                    "enchants frost=%d soul=%d depth=%d feather=%d water=%s underwater=%s",
-                    VanillaWorldPhysics.effectiveEnchantmentLevel(player, data, Enchantments.FROST_WALKER),
-                    VanillaWorldPhysics.effectiveEnchantmentLevel(player, data, Enchantments.SOUL_SPEED),
-                    VanillaWorldPhysics.effectiveEnchantmentLevel(player, data, Enchantments.DEPTH_STRIDER),
-                    VanillaWorldPhysics.effectiveEnchantmentLevel(player, data, Enchantments.FALL_PROTECTION),
-                    player.isInWater(), player.isUnderWater())), false);
-            source.sendSuccess(() -> Component.literal(String.format(Locale.ROOT,
-                    "state grind=%s/%s wall=%s manual=%s powerslide=%s boost=%s curve=%.3f impulseTicks=%d impulse=%.3f terrainAssist=%d",
-                    data.grinding(), data.grindKind().serializedName(), data.wallRiding(), data.manual(),
-                    data.powersliding(), data.boosting(), data.grindCurveFactor(), data.externalImpulseTicks(),
-                    data.externalImpulse().length(), data.terrainAssistCooldown())), false);
+        VanillaWorldPhysics.Surface surface = VanillaWorldPhysics.ground(player);
+        VanillaWorldPhysics.MotionProfile profile = VanillaWorldPhysics.profile(player, data, surface);
+        String block = String.valueOf(BuiltInRegistries.BLOCK.getKey(surface.state().getBlock()));
+        Vec3 horizontal = new Vec3(player.getDeltaMovement().x, 0.0, player.getDeltaMovement().z);
 
-            if (data.grinding()) {
-                Vec3 preferred = data.grindDirection().lengthSqr() > 1.0e-6
-                        ? data.grindDirection() : JetSetMovement.horizontalLook(player);
-                GrindFinder.findBest(player, preferred, data.grindKind()).ifPresent(target -> {
-                    VanillaWorldPhysics.GrindMaterialProfile material = VanillaWorldPhysics.grindMaterial(player, target);
-                    source.sendSuccess(() -> Component.literal(String.format(Locale.ROOT,
-                            "grindTarget=%s material=%s cap=%.3fx retention=%.5f curvature=%.4f",
-                            target.kind().serializedName(), material.kind().name().toLowerCase(Locale.ROOT),
-                            material.capMultiplier(), material.retention(), target.curvature())), false);
-                });
-            }
-        }, () -> source.sendFailure(Component.literal("JetSetCraft capability is not attached to this player.")));
+        source.sendSuccess(() -> Component.literal("JetSetCraft server diagnostics").withStyle(ChatFormatting.AQUA), false);
+        source.sendSuccess(() -> Component.literal(String.format(Locale.ROOT,
+                "ride=%s equipped=%s active=%s momentum=%.3f velocity=%.3f boost=%.1f combo=%d x%.2f",
+                data.style().serializedName(), RideLoadout.equippedStyle(data).serializedName(), data.active(),
+                data.momentum(), horizontal.length(), data.boost(), data.comboScore(), data.comboMultiplier())), false);
+        source.sendSuccess(() -> Component.literal(String.format(Locale.ROOT,
+                "surface=%s block=%s friction=%.3f cap=%.2fx boostCap=%.2fx retention=%.5f steering=%.2fx",
+                surface.kind().name().toLowerCase(Locale.ROOT), block, surface.vanillaFriction(),
+                profile.cruiseCapMultiplier(), profile.boostCapMultiplier(), profile.coastingRetention(),
+                profile.steeringMultiplier())), false);
+        source.sendSuccess(() -> Component.literal(String.format(Locale.ROOT,
+                "enchants frost=%d soul=%d depth=%d feather=%d water=%s underwater=%s",
+                VanillaWorldPhysics.effectiveEnchantmentLevel(player, data, Enchantments.FROST_WALKER),
+                VanillaWorldPhysics.effectiveEnchantmentLevel(player, data, Enchantments.SOUL_SPEED),
+                VanillaWorldPhysics.effectiveEnchantmentLevel(player, data, Enchantments.DEPTH_STRIDER),
+                VanillaWorldPhysics.effectiveEnchantmentLevel(player, data, Enchantments.FALL_PROTECTION),
+                player.isInWater(), player.isUnderWater())), false);
+        source.sendSuccess(() -> Component.literal(String.format(Locale.ROOT,
+                "state grind=%s/%s wall=%s manual=%s powerslide=%s boost=%s curve=%.3f impulseTicks=%d impulse=%.3f terrainAssist=%d",
+                data.grinding(), data.grindKind().serializedName(), data.wallRiding(), data.manual(),
+                data.powersliding(), data.boosting(), data.grindCurveFactor(), data.externalImpulseTicks(),
+                data.externalImpulse().length(), data.terrainAssistCooldown())), false);
+
+        if (data.grinding()) {
+            Vec3 preferred = data.grindDirection().lengthSqr() > 1.0e-6
+                    ? data.grindDirection() : JetSetMovement.horizontalLook(player);
+            GrindFinder.findBest(player, preferred, data.grindKind()).ifPresent(target -> {
+                VanillaWorldPhysics.GrindMaterialProfile material = VanillaWorldPhysics.grindMaterial(player, target);
+                source.sendSuccess(() -> Component.literal(String.format(Locale.ROOT,
+                        "grindTarget=%s material=%s cap=%.3fx retention=%.5f curvature=%.4f",
+                        target.kind().serializedName(), material.kind().name().toLowerCase(Locale.ROOT),
+                        material.capMultiplier(), material.retention(), target.curvature())), false);
+            });
+        }
         return 1;
     }
 
@@ -171,7 +175,6 @@ public final class JetSetCommands {
         fill(level, origin, 0, 48, 50, Blocks.SLIME_BLOCK);
         set(level, origin.offset(0, 1, 51), Blocks.COBWEB);
         fill(level, origin, 0, 52, 54, Blocks.POWDER_SNOW);
-        // Micro-height continuity: half-height slab down/up, then real stair collision and thin snow.
         set(level, origin.offset(0, 0, 56), Blocks.STONE_SLAB);
         set(level, origin.offset(0, 0, 57), Blocks.SMOOTH_STONE);
         set(level, origin.offset(0, 0, 58), Blocks.STONE_SLAB);
@@ -194,13 +197,11 @@ public final class JetSetCommands {
                     : z == 16 ? Blocks.DETECTOR_RAIL : Blocks.ACTIVATOR_RAIL;
             set(level, origin.offset(0, 1, z), rail);
         }
-        // Detector feedback: ordinary redstone components should react to a JetSetCraft rider.
         set(level, origin.offset(1, 0, 16), Blocks.SMOOTH_STONE);
         set(level, origin.offset(1, 1, 16), Blocks.REDSTONE_LAMP);
         set(level, origin.offset(2, 0, 16), Blocks.SMOOTH_STONE);
         set(level, origin.offset(2, 1, 16), Blocks.NOTE_BLOCK);
 
-        // A small rising rail proves slopes are part of the same continuous rail path.
         for (int z = 28; z <= 31; z++) set(level, origin.offset(0, 0, z), Blocks.SMOOTH_STONE);
         set(level, origin.offset(0, 1, 28), Blocks.RAIL);
         set(level, origin.offset(0, 1, 29), Blocks.SMOOTH_STONE);
@@ -212,7 +213,6 @@ public final class JetSetCommands {
     }
 
     private static void buildFluidLane(ServerLevel level, BlockPos origin) {
-        // Contained one-block-deep channel: source water must not flood the rest of the acceptance lab.
         for (int z = -1; z <= 12; z++) {
             set(level, origin.offset(-1, 0, z), Blocks.SMOOTH_STONE);
             set(level, origin.offset(0, 0, z), Blocks.SMOOTH_STONE);
@@ -224,7 +224,6 @@ public final class JetSetCommands {
         set(level, origin.offset(0, 1, 12), Blocks.GLASS);
         for (int z = 0; z <= 11; z++) set(level, origin.offset(0, 1, z), Blocks.WATER);
 
-        // Vanilla Soul Sand/Magma + source-water columns are intentionally used rather than a custom launcher block.
         for (int z : new int[]{14, 18}) {
             set(level, origin.offset(0, 0, z), z == 14 ? Blocks.SOUL_SAND : Blocks.MAGMA_BLOCK);
             for (int y = 1; y <= 4; y++) {
@@ -245,14 +244,9 @@ public final class JetSetCommands {
         set(level, origin.offset(0, 0, 18), Blocks.SOUL_CAMPFIRE);
         set(level, origin.offset(0, 0, 20), Blocks.CACTUS);
         set(level, origin.offset(0, -1, 20), Blocks.SAND);
-        // This lane deliberately leaves vanilla hazards dangerous. The purpose is to verify that
-        // tricks and momentum do not silently grant immunity.
     }
 
     private static void buildGeometryLane(ServerLevel level, BlockPos origin) {
-        // This lane proves that the generic edge solver follows Minecraft collision geometry rather than a
-        // tiny whitelist. Connected narrow blocks get real corner lines; broad roofs expose only their outer
-        // ledges, not the invisible seams between adjacent full blocks.
         for (int x = -1; x <= 5; x++) {
             for (int z = 0; z <= 66; z++) set(level, origin.offset(x, 0, z), Blocks.SMOOTH_STONE);
         }
@@ -269,13 +263,10 @@ public final class JetSetCommands {
         for (int z = 32; z <= 38; z++) set(level, origin.offset(0, 1, z), Blocks.GLASS_PANE);
         for (int x = 1; x <= 4; x++) set(level, origin.offset(x, 1, 38), Blocks.GLASS_PANE);
 
-        // Three-wide rooftop: perimeter edges are valid, block-to-block top seams are intentionally invalid.
         for (int x = 0; x <= 2; x++) {
             for (int z = 43; z <= 50; z++) set(level, origin.offset(x, 1, z), Blocks.SMOOTH_STONE);
         }
 
-        // Natural full-block geometry still participates. The vertical stack specifically regression-tests
-        // clearance: lower block tops must not become hidden grind paths through the log above them.
         for (int z = 54; z <= 61; z++) set(level, origin.offset(0, 1, z), Blocks.OAK_LOG);
         set(level, origin.offset(4, 1, 56), Blocks.OAK_LOG);
         set(level, origin.offset(4, 2, 56), Blocks.OAK_LOG);
