@@ -1,0 +1,43 @@
+{
+  "project": "JetSetCraft",
+  "northpoints": [
+    "Make Minecraft movement feel like a complete high-skill urban street-sports game rather than a vehicle gimmick.",
+    "Preserve normal Minecraft and modded combat while skating, rollerblading, skateboarding or riding BMX.",
+    "Ship high-fidelity equipment, animation and audiovisual presentation with no placeholder-quality core assets.",
+    "Perfect Forge 1.20.1 first, then carry the architecture forward to newer Minecraft versions."
+  ],
+  "feature_pillars": [
+    "momentum and boost",
+    "inline and quad skating",
+    "skateboard",
+    "BMX",
+    "tricks and combos",
+    "arbitrary block-edge grinding",
+    "rail tricks and junction routing",
+    "first-class vanilla/Forge/Create rail grinding and transfers",
+    "wall rides",
+    "graffiti",
+    "combat composition",
+    "advanced animation rigs"
+  ],
+  "guardrails": [
+    "Weapon use never implicitly clears locomotion state.",
+    "Ride clips do not own weapon arms by default.",
+    "Movement state is server-authoritative.",
+    "Do not downgrade core models to low-detail cuboids or token placeholders.",
+    "Preserve asset provenance and source derivatives separately.",
+    "Use the project-owner-supplied JetSetCraft artwork as the exact canonical mod icon/cover source, with deterministic resize/crop derivatives only.",
+    "Support custom-player-renderer ecosystems such as YSM without making ride gear or movement animations disappear."
+  ],
+  "acceptance_signals": [
+    "A player can maintain momentum through ground, air, grind and wall-ride transitions.",
+    "A player can aim/fire/reload TACZ while a JetSetCraft ride state remains active.",
+    "Inline, quad, board and BMX are mechanically and visually distinct.",
+    "Graffiti persists in-world and can be repainted/removed.",
+    "A rider can grind vanilla/Forge rails and Create straight, diagonal, sloped, junction, and Bezier tracks without flattening the path to X/Z.",
+    "A rider can perform rail tricks and hop/transfer off a grind while preserving momentum and combo state.",
+    "CI produces a Forge 1.20.1 jar from a clean checkout.",
+    "A clean build can derive Forge/distribution branding from the exact owner-supplied artwork without AI regeneration or stylistic reinterpretation.",
+    "Ride state, combat pose composition, and visible ride gear remain functional when supported custom player renderers are active."
+  ]
+}

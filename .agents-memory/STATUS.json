@@ -1,0 +1,40 @@
+{
+  "version": "0.1.0-alpha.1",
+  "phase": "rail/combat foundation / CI bring-up",
+  "implemented": [
+    "four ride styles",
+    "server-authoritative momentum",
+    "boost",
+    "manuals",
+    "tricks/combo",
+    "block-edge grinding",
+    "vanilla/Forge/custom rail grinding",
+    "Create 6.0.8 native track and Bezier grinding",
+    "rail-hop transfers",
+    "rail tricks",
+    "wall rides",
+    "powerslide",
+    "graffiti entities",
+    "TACZ API detection",
+    "lower-body PlayerAnimator composition",
+    "dynamic ride camera",
+    "dense equipment meshes",
+    "deterministic official-brand derivative pipeline",
+    "139-entry aspect-preserving graffiti catalog",
+    "Create track-type-aware rail-bar placement",
+    "curve-speed shaping with momentum preservation",
+    "grind stuck recovery and cross-dimension reattach grace"
+  ],
+  "pending_validation": [
+    "clean Forge compilation",
+    "Create 6.0.8 compile/runtime smoke test",
+    "runtime movement smoke test",
+    "TACZ live integration smoke test"
+  ],
+  "pending_assets": [],
+  "source_inputs": {
+    "official_brand_sha256": "6e60bcc90fd6b85209598b088b9d2b87fb6c3a36d9d68c6eb4e478f538a5894f",
+    "graffiti_zip_sha256": "8541009fcfb3ec77f22e7aeafb2bcfceebd64decddf168171df24182438c70d9",
+    "rail_reference_sha256": "9c27bba88d89e1ec081f6263e47f7b56226817394caaf1c2148e11c31e037c69"
+  }
+}

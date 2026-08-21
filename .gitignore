@@ -1,0 +1,29 @@
+.gradle/
+build/
+out/
+run/
+.idea/
+*.iml
+*.ipr
+*.iws
+.classpath
+.project
+.settings/
+
+# Generated JetSetCraft production assets; rebuilt by tools/generate_models.py in CI.
+src/main/resources/assets/jetsetcraft/models/obj/*.obj
+src/main/resources/assets/jetsetcraft/models/obj/*.mtl
+src/main/resources/assets/jetsetcraft/textures/item/*.png
+src/main/resources/assets/jetsetcraft/textures/graffiti/tag_*.png
+
+__pycache__/
+*.pyc
+
+# Owner-supplied brand source stays in durable project storage; generated derivatives are reproducible.
+art/generated/
+src/main/resources/jetsetcraft.png
+src/main/resources/assets/jetsetcraft/textures/graffiti/jsr/*.png
+src/main/resources/assets/jetsetcraft/graffiti/catalog.json
+# Full-resolution masters are stored and verified in JetSetCraft/Assets on Google Drive.
+source_assets/brand/jetsetcraft_official_art.png
+source_assets/authorized/jsrf/graffiti/poison_jam_sheet.png

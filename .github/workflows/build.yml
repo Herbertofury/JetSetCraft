@@ -1,0 +1,31 @@
+name: Build JetSetCraft
+on:
+  push:
+    branches: [ main, jetsetcraft, jetsetcraft-alpha ]
+  pull_request:
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.8'
+      - name: Generate and validate authored assets
+        run: |
+          python -m pip install -r tools/requirements.txt
+          python tools/generate_models.py
+          python tools/generate_brand.py
+          python tools/validate_assets.py
+      - name: Build
+        run: gradle --no-daemon build
+      - uses: actions/upload-artifact@v4
+        with:
+          name: jetsetcraft-forge-1.20.1
+          path: build/libs/*.jar
+          if-no-files-found: error
