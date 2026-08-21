@@ -54,6 +54,12 @@ jobs:
           name: jetsetcraft-forge-server-smoke
           path: server-smoke.log
           if-no-files-found: warn
+      - name: Upload approved full-quality cover
+        uses: actions/upload-artifact@v4
+        with:
+          name: jetsetcraft-approved-cover
+          path: assets/jetsetcraft-cover.webp
+          if-no-files-found: error
       - uses: actions/upload-artifact@v4
         with:
           name: jetsetcraft-forge-1.20.1

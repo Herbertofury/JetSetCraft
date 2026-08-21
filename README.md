@@ -1,8 +1,10 @@
 # JetSetCraft
 
-> **Official visual identity:** the project-owner-supplied JetSetCraft artwork is the canonical icon/cover source. The build pipeline only resamples/crops that exact source; it does not regenerate or reinterpret it.
+> **Official visual identity:** the project-owner-supplied JetSetCraft artwork is the canonical icon/cover source. The full-quality cover below is preserved byte-for-byte from the approved project asset; the smaller `src/main/resources/jetsetcraft.png` remains the runtime mod icon.
 
-![JetSetCraft official artwork](src/main/resources/jetsetcraft.png)
+<p align="center">
+  <img src="assets/jetsetcraft-cover.webp" alt="JetSetCraft official cover art" width="960">
+</p>
 
 **JetSetCraft** is a Forge 1.20.1 urban movement/combat mod built around momentum instead of scripted vehicle mode. The goal is to make Minecraft movement feel like a full street-sports game while remaining composable with normal Minecraft combat and third-party weapons.
 
