@@ -20,9 +20,11 @@ The `0.2.0-alpha.1` Style Flow release adds:
 
 ## Gang Wars, Boombox & Mob Atlas expansion
 
-The next major living-world pillar is defined in [[Gang Wars, Boombox & Mob Atlas|Gang-Wars-Boombox-and-Mob-Atlas]]. It establishes the Boombox as the universal street-jam initializer, reversible Gang Skates that augment rather than replace vanilla/modded mobs, dynamic reputation and membership with every gang, renameable crew aliases backed by stable IDs, rare cinematic encounters, competitive gang AI, Turf Wars, graffiti contests, trick battles, Tag, races, dance battles, spray combat, themed rewards, a complete vanilla Gang Atlas, a Junior/Baby Gang Atlas, and a runtime Atlas for mobs from installed mods.
+The next major living-world pillar is defined in [[Gang Wars, Boombox & Mob Atlas|Gang-Wars-Boombox-and-Mob-Atlas]]. It establishes the Boombox as the universal street-jam initializer, **persistent equipment-bound gangification** that augments rather than replaces vanilla/modded mobs, dynamic reputation and membership with every gang, renameable crew aliases backed by stable IDs, rare cinematic encounters, competitive gang AI, Turf Wars, graffiti contests, trick battles, Tag, races, dance battles, spray combat, themed rewards, a complete vanilla Gang Atlas, a Junior/Baby Gang Atlas, and a runtime Atlas for mobs from installed mods.
 
-The core interoperability promise is strict: **Minecraft and other mods keep ownership of their entities; JetSetCraft adds an optional street-culture layer on top.**
+The core interoperability promise is strict: **Minecraft and other mods keep ownership of their entities; JetSetCraft adds an optional street-culture layer on top.** A normal mob becomes a gang rider only when actual JetSetCraft Street Gear is equipped. Ending an event does not revert it. It remains gangified across normal idle time, chunk reloads, and save/restart until that gear is genuinely removed, stolen, broken, or unequipped.
+
+For the hard compatibility rules—including Fox/Allay/native pickup, dropped-gear walk-over, direct equip, dispenser/redstone equip, and anatomy-aware skating for quadrupeds, spiders, slimes, babies, and modded animals—read the [[Standalone Compatibility Covenant|Standalone-Compatibility-Covenant]]. That covenant supersedes any older temporary/event-only wording.
 
 ## Start here
 
@@ -32,7 +34,7 @@ The core interoperability promise is strict: **Minecraft and other mods keep own
 4. Build long lines with [[Tricks, Combos and Flow|Tricks-Combos-and-Flow]].
 5. Turn your world into a course with [[Grinding and Transfers|Grinding-and-Transfers]] and [[World Physics|World-Physics]].
 6. Explore the future rival-crew ecosystem in [[Gang Wars, Boombox & Mob Atlas|Gang-Wars-Boombox-and-Mob-Atlas]].
-7. Review [[Compatibility]] before assembling a large modpack.
+7. Read the [[Standalone Compatibility Covenant|Standalone-Compatibility-Covenant]], then review [[Compatibility]] before assembling a large modpack.
 
 ## Core design promises
 
@@ -44,4 +46,4 @@ The core interoperability promise is strict: **Minecraft and other mods keep own
 
 **Optional mods stay optional.** Compatibility entries use APIs, Forge behavior, registry lookups, or non-required datapack tags. The Aether, Twilight Forest, Create, TACZ, and other supported mods are never hard dependencies.
 
-**Mobs keep their owners.** JetSetCraft never needs to replace vanilla or modded entity types to make them gang members. Gang state is reversible augmentation attached to the original creature.
+**Mobs keep their owners.** JetSetCraft never needs to replace vanilla or modded entity types to make them gang members. JetSetCraft owns only its persistent Street Gear/gang layer. The actual source mob remains the original entity, and gear removal cleanly restores source-owned non-gang behavior.
