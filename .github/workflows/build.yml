@@ -26,6 +26,34 @@ jobs:
           python tools/validate_gameplay_contract.py
       - name: Build
         run: gradle --no-daemon build
+      - name: Real Forge dedicated-server runtime smoke
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p run
+          printf 'eula=true\n' > run/eula.txt
+          rm -f server-smoke.log
+          set +e
+          timeout 180s gradle --no-daemon runServer > server-smoke.log 2>&1
+          exit_code=$?
+          set -e
+          cat server-smoke.log
+          if ! grep -Eq 'Done \([0-9.]+s\)!|Done \([0-9.]+s\)! For help' server-smoke.log; then
+            echo '::error::Forge dedicated server never reached the ready state.'
+            exit "${exit_code:-1}"
+          fi
+          if grep -Eiq 'ModLoadingException|Failed to complete lifecycle event|Exception in thread "main"|FATAL.*jetsetcraft' server-smoke.log; then
+            echo '::error::JetSetCraft produced a fatal/mod-loading error before or during server startup.'
+            exit 1
+          fi
+          echo 'JetSetCraft reached the real Forge dedicated-server ready state.'
+      - name: Upload runtime smoke log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: jetsetcraft-forge-server-smoke
+          path: server-smoke.log
+          if-no-files-found: warn
       - uses: actions/upload-artifact@v4
         with:
           name: jetsetcraft-forge-1.20.1
