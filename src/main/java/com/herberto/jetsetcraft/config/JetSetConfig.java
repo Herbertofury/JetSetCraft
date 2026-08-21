@@ -34,6 +34,8 @@ public final class JetSetConfig {
         public final ForgeConfigSpec.DoubleValue slimeBounceMultiplier;
         public final ForgeConfigSpec.DoubleValue poweredRailBoostPerTick;
         public final ForgeConfigSpec.DoubleValue unpoweredRailRetention;
+        public final ForgeConfigSpec.BooleanValue enableMicroTerrainAssist;
+        public final ForgeConfigSpec.DoubleValue microTerrainMaxStep;
         public final ForgeConfigSpec.BooleanValue allowGraffiti;
 
         private Server(ForgeConfigSpec.Builder b) {
@@ -61,6 +63,10 @@ public final class JetSetConfig {
                     .defineInRange("poweredRailBoostPerTick", 0.030, 0.0, 0.20);
             unpoweredRailRetention = b.comment("Momentum retained per tick while grinding an unpowered powered-rail.")
                     .defineInRange("unpoweredRailRetention", 0.90, 0.20, 1.0);
+            enableMicroTerrainAssist = b.comment("Safely continue ride momentum across collision-verified slabs, stair steps, snow layers and similar <=5/8-block rises.")
+                    .define("enableMicroTerrainAssist", true);
+            microTerrainMaxStep = b.comment("Maximum vertical rise eligible for JetSetCraft micro-terrain continuation. Full blocks remain solid obstacles.")
+                    .defineInRange("microTerrainMaxStep", 0.625, 0.25, 0.75);
             b.pop();
             b.push("compatibility");
             allowCombatWhileRiding = b.comment("Never suppress normal/third-party weapon input while a ride style is active.")
