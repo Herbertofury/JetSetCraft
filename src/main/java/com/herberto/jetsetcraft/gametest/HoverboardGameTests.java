@@ -16,6 +16,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.common.util.FakePlayerFactory;
 import net.minecraftforge.gametest.GameTestHolder;
 import net.minecraftforge.gametest.PrefixGameTestTemplate;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -52,11 +53,12 @@ public final class HoverboardGameTests {
             throw new GameTestAssertException("Hoverboard did not survive real JetSetCraft persistence/loadout state");
         }
 
-        // Exercise JetSetCraft's actual production ground-motion solver against a real ServerLevel/ServerPlayer and
-        // real vanilla stone surface. Forge GameTest's mock player deliberately has no Netty channel, so invoking the
-        // outer tick orchestrator would mix an unrelated client-sync transport failure into this movement assertion.
+        // Exercise JetSetCraft's actual production ground-motion solver against the real GameTest ServerLevel and
+        // Forge's purpose-built server FakePlayer. Unlike GameTest's login-oriented mock player, FakePlayer does not
+        // require a synthetic Netty channel, so this remains a real Minecraft/Forge movement test without mixing in
+        // an unrelated client transport failure.
         helper.setBlock(new BlockPos(1, 0, 1), Blocks.STONE);
-        ServerPlayer player = helper.makeMockServerPlayerInLevel();
+        ServerPlayer player = FakePlayerFactory.getMinecraft(helper.getLevel());
         BlockPos feet = helper.absolutePos(new BlockPos(1, 1, 1));
         player.moveTo(feet.getX() + 0.5, feet.getY(), feet.getZ() + 0.5, 0.0F, 0.0F);
         player.setOnGround(true);
