@@ -33,34 +33,67 @@ jobs:
         with:
           gradle-version: '8.8'
 
-      - name: Apply exact preserved a3843e0 patch if needed
+      - name: Reconstruct exact remaining a3843e0 source delta
         id: patch
         shell: bash
         run: |
           set -euo pipefail
-          patch_file=checkpoints/JetSetCraft-a3843e0.patch
-          normalized_patch="$RUNNER_TEMP/JetSetCraft-a3843e0.normalized.patch"
-          test -f "$patch_file"
+          test -f checkpoints/JetSetCraft-a3843e0.patch
 
-          # The durable checkpoint was written without a terminal LF during the interrupted chat.
-          # Git reports that byte-level transport defect as a corrupt patch even though the hunks themselves
-          # are intact. Normalize only the patch container for application; the canonical checkpoint file and
-          # its recorded hash remain untouched as historical evidence.
-          cat "$patch_file" > "$normalized_patch"
-          if [[ -s "$normalized_patch" ]] && [[ "$(tail -c 1 "$normalized_patch" | wc -l)" -eq 0 ]]; then
-            printf '\n' >> "$normalized_patch"
-          fi
+          # The interrupted recovery already committed four of the five product hunks to this branch.
+          # Reapplying the historical whole-tree patch is therefore intentionally invalid. Reconstruct the
+          # one surviving hunk against the current source by exact semantic anchors, then prove every durable
+          # a3843e0 marker is present before build/runtime verification.
+          python - <<'PY'
+          from pathlib import Path
 
-          if git apply --recount --check "$normalized_patch"; then
-            git apply --recount "$normalized_patch"
-            echo 'applied=true' >> "$GITHUB_OUTPUT"
-          elif git apply --recount --reverse --check "$normalized_patch"; then
-            echo 'Patch is already present in the exact branch tree.'
-            echo 'applied=false' >> "$GITHUB_OUTPUT"
-          else
-            echo '::error::Preserved a3843e0 patch neither applies cleanly nor matches the current tree after transport normalization.'
-            exit 2
-          fi
+          movement_path = Path('src/main/java/com/herberto/jetsetcraft/movement/JetSetMovement.java')
+          movement = movement_path.read_text(encoding='utf-8')
+          old = '''        if (data.grindKind().rail()) {
+              Vec3 desired = desiredDirection(player, data);
+              if (desired.lengthSqr() > 0.05) {
+                  // Steering input biases junction selection without instantly rotating away from the current rail.
+                  preferred = safeNormalize(preferred.scale(0.82).add(desired.normalize().scale(0.44)), preferred);
+              }
+          }
+'''
+          new = '''        Vec3 desired = desiredDirection(player, data);
+          if (desired.lengthSqr() > 0.05) {
+              if (data.grindKind().rail()) {
+                  // Rail input biases switches/junctions without snapping the rider away from the current track.
+                  preferred = safeNormalize(preferred.scale(0.82).add(desired.normalize().scale(0.44)), preferred);
+              } else if (data.grindKind() == GrindKind.EDGE) {
+                  // Exposed world edges need stronger intentional steering so a fence/wall/ledge can take a
+                  // real 90-degree corner. With no input the current tangent still wins, so corners remain skillful.
+                  preferred = safeNormalize(preferred.scale(0.58).add(desired.normalize().scale(0.82)), preferred);
+              }
+          }
+'''
+          if "data.grindKind() == GrindKind.EDGE" not in movement:
+              if old not in movement:
+                  raise SystemExit('Current JetSetMovement steering anchor differs from both preserved old and recovered forms')
+              movement_path.write_text(movement.replace(old, new, 1), encoding='utf-8')
+              changed = True
+          else:
+              changed = False
+
+          checks = {
+              Path('docs/VANILLA_WORLD_MECHANICS_SYNERGY.md'): ['## Exposed-world edge solver hardening'],
+              Path('src/main/java/com/herberto/jetsetcraft/command/JetSetCommands.java'): ['buildGeometryLane', 'Blocks.IRON_BARS', 'Blocks.OAK_LOG'],
+              Path('src/main/java/com/herberto/jetsetcraft/movement/EdgeFinder.java'): ['usableExposedEdge', 'sideProbeFree', 'noCollision(player, clearance)'],
+              movement_path: ['data.grindKind() == GrindKind.EDGE', 'preferred.scale(0.58)'],
+              Path('tools/validate_gameplay_contract.py'): ['shape-driven exposed-edge validation', 'edge grinding lacks intentional 90-degree corner steering bias', 'Blocks.GLASS_PANE'],
+          }
+          for path, needles in checks.items():
+              text = path.read_text(encoding='utf-8')
+              for needle in needles:
+                  if needle not in text:
+                      raise SystemExit(f'Missing recovered a3843e0 marker {needle!r} in {path}')
+          print('changed=' + ('true' if changed else 'false'))
+          Path('.a3843e0_changed').write_text('true\n' if changed else 'false\n', encoding='utf-8')
+          PY
+          echo "applied=$(tr -d '\r\n' < .a3843e0_changed)" >> "$GITHUB_OUTPUT"
+          rm .a3843e0_changed
           git diff --check
 
       - name: Generate and validate authored assets and gameplay contracts
@@ -89,7 +122,7 @@ jobs:
           set -e
           cat a3843e0-server-smoke.log
           if ! grep -Eq 'Done \([0-9.]+s\)!|Done \([0-9.]+s\)! For help' a3843e0-server-smoke.log; then
-            echo '::error::Forge dedicated server never reached ready state on the patched source.'
+            echo '::error::Forge dedicated server never reached ready state on the recovered source.'
             exit "${exit_code:-1}"
           fi
           if grep -Eiq 'ModLoadingException|Failed to complete lifecycle event|Exception in thread "main"|FATAL.*jetsetcraft' a3843e0-server-smoke.log; then
