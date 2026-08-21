@@ -12,6 +12,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
@@ -53,7 +54,9 @@ public final class ClientEvents {
         public static void addPlayerLayers(EntityRenderersEvent.AddLayers event) {
             for (String skin : event.getSkins()) {
                 var renderer = event.getSkin(skin);
-                if (renderer != null) renderer.addLayer(new RideGearLayer(renderer));
+                if (renderer instanceof PlayerRenderer playerRenderer) {
+                    playerRenderer.addLayer(new RideGearLayer(playerRenderer));
+                }
             }
         }
     }
