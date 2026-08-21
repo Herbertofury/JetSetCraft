@@ -11,6 +11,13 @@ movement = (ROOT / 'src/main/java/com/herberto/jetsetcraft/movement/JetSetMoveme
 world = (ROOT / 'src/main/java/com/herberto/jetsetcraft/movement/VanillaWorldPhysics.java').read_text(encoding='utf-8')
 config = (ROOT / 'src/main/java/com/herberto/jetsetcraft/config/JetSetConfig.java').read_text(encoding='utf-8')
 edge = (ROOT / 'src/main/java/com/herberto/jetsetcraft/movement/EdgeFinder.java').read_text(encoding='utf-8')
+data_java = (ROOT / 'src/main/java/com/herberto/jetsetcraft/data/JetSetData.java').read_text(encoding='utf-8')
+loadout = (ROOT / 'src/main/java/com/herberto/jetsetcraft/item/RideLoadout.java').read_text(encoding='utf-8')
+network = (ROOT / 'src/main/java/com/herberto/jetsetcraft/network/JetSetNetwork.java').read_text(encoding='utf-8')
+client = (ROOT / 'src/main/java/com/herberto/jetsetcraft/client/ClientEvents.java').read_text(encoding='utf-8')
+ride_item = (ROOT / 'src/main/java/com/herberto/jetsetcraft/item/RideGearItem.java').read_text(encoding='utf-8')
+commands = (ROOT / 'src/main/java/com/herberto/jetsetcraft/command/JetSetCommands.java').read_text(encoding='utf-8')
+common_events = (ROOT / 'src/main/java/com/herberto/jetsetcraft/event/CommonEvents.java').read_text(encoding='utf-8')
 
 # Core doctrine: riding must not be hard-disabled simply because the player is swimming,
 # and external speed above normal caps must have explicit preservation paths.
@@ -18,6 +25,8 @@ if 'player.isSwimming()' in movement.split('if (!data.active()', 1)[1].split('{'
     errors.append('movement hard-reset still disables JetSetCraft while swimming')
 for needle, label in [
     ('explosions, pistons, knockback, currents', 'external impulse preservation'),
+    ('captureExternalImpulse', 'external impulse bridge'),
+    ('applyMicroTerrainContinuity', 'micro-height terrain continuity'),
     ('baseSpeed < cap', 'above-cap momentum preservation'),
     ('applyFluidMovement', 'fluid composition'),
     ('applyAirborneSurfaceInteractions', 'honey/slime side-contact composition'),
@@ -86,6 +95,98 @@ if 'JetSetTags.NO_GRIND' not in edge:
     errors.append('generic edge solver does not respect no_grind tag')
 if 'JetSetTags.HAZARD_SURFACES' not in edge:
     errors.append('generic edge solver does not guard hazard surfaces')
+for needle, label in [
+    ('usableExposedEdge', 'shape-driven exposed-edge validation'),
+    ('sideProbeFree', 'shared/internal seam rejection'),
+    ('noCollision(player, clearance)', 'rider clearance above grind edges'),
+]:
+    if needle not in edge:
+        errors.append(f'missing world-geometry grind contract: {label}')
+if 'data.grindKind() == GrindKind.EDGE' not in movement or 'preferred.scale(0.58)' not in movement:
+    errors.append('edge grinding lacks intentional 90-degree corner steering bias')
+
+# Red Skate's useful dedicated-gear concept is now a permanent compatibility contract: actual ride
+# equipment lives in a persistent player loadout so weapons/items remain free in both hands.
+for needle, label, source in [
+    ('private ItemStack rideGear = ItemStack.EMPTY', 'persistent dedicated ride gear slot', data_java),
+    ('t.put("RideGear"', 'ride gear NBT persistence', data_java),
+    ('equipFromHand', 'server-authoritative loadout equip', loadout),
+    ('returnToPlayer', 'safe ride gear retrieval/swap', loadout),
+    ('dropEquipped', 'normal death-drop semantics for ride gear', loadout),
+    ('C2SRideLoadoutPacket', 'ride loadout network action', network),
+    ('RIDE_TOGGLE', 'ride loadout key binding', client),
+]:
+    if needle not in source:
+        errors.append(f'missing Red Skate-derived production contract: {label}')
+
+
+# Dedicated skate footwear must still participate in Minecraft's movement enchantment language.
+for needle, label, source in [
+    ('Enchantments.FROST_WALKER', 'Frost Walker allowed on skate footwear', ride_item),
+    ('Enchantments.SOUL_SPEED', 'Soul Speed allowed on skate footwear', ride_item),
+    ('Enchantments.DEPTH_STRIDER', 'Depth Strider allowed on skate footwear', ride_item),
+    ('FrostWalkerEnchantment.onEntityMoved', 'vanilla Frost Walker implementation reused', world),
+    ('Math.max(vanilla, jetSet)', 'loadout enchantments use max-not-sum composition', world),
+    ('applyRideEnchantments(player, data)', 'ride enchantments tick before surface sampling', movement),
+    ('augmentFallDamageProtection', 'dedicated-slot Feather Falling composition', world),
+    ('getDamageProtection(player.getArmorSlots()', 'vanilla EPF used to avoid Feather Falling double-stack', world),
+]:
+    if needle not in source:
+        errors.append(f'missing vanilla enchantment/loadout contract: {label}')
+
+
+for needle, label in [
+    ('GrindMaterialProfile', 'material-specific grind profile'),
+    ('SoundType.METAL', 'metal grind language'),
+    ('SoundType.COPPER', 'copper grind language'),
+    ('SoundType.GLASS', 'glass grind language'),
+    ('SoundType.WOOD', 'wood grind language'),
+    ('SoundType.STONE', 'stone grind language'),
+    ('ParticleTypes.ELECTRIC_SPARK', 'metal/copper grind sparks'),
+    ('getStepSound()', 'Minecraft-native material grind audio'),
+]:
+    if needle not in world:
+        errors.append(f'missing material grind contract: {label}')
+if 'grindMaterial(player, hit)' not in movement or 'emitGrindFeedback(player, hit, material)' not in movement:
+    errors.append('grind solver is not consuming the material/feedback profile')
+
+
+# Runtime acceptance tooling must stay available so the doctrine can be verified in a real Minecraft world.
+for needle, label in [
+    ('literal("status")', 'authoritative runtime diagnostics'),
+    ('literal("build_vanilla_lab")', 'vanilla acceptance lab builder'),
+    ('Blocks.BLUE_ICE', 'Blue Ice test segment'),
+    ('Blocks.POWERED_RAIL', 'powered/unpowered rail test segment'),
+    ('Blocks.DETECTOR_RAIL', 'detector rail redstone test'),
+    ('Blocks.ACTIVATOR_RAIL', 'activator rail action test'),
+    ('Blocks.SLIME_BLOCK', 'slime test segment'),
+    ('Blocks.HONEY_BLOCK', 'honey test segment'),
+    ('Blocks.SOUL_SAND', 'Soul Speed/bubble test segment'),
+    ('Blocks.MAGMA_BLOCK', 'magma/bubble hazard test segment'),
+    ('Blocks.COBWEB', 'cobweb trap test'),
+    ('Blocks.POWDER_SNOW', 'powder-snow trap test'),
+    ('Blocks.STONE_SLAB', 'slab continuity test'),
+    ('Blocks.STONE_STAIRS', 'stair continuity test'),
+    ('Blocks.IRON_BARS', 'iron-bar geometry grind test'),
+    ('Blocks.OAK_FENCE', 'fence geometry grind test'),
+    ('Blocks.COBBLESTONE_WALL', 'wall geometry grind test'),
+    ('Blocks.GLASS_PANE', 'glass-pane geometry grind test'),
+    ('Blocks.OAK_LOG', 'natural log/clearance geometry test'),
+]:
+    if needle not in commands:
+        errors.append(f'missing runtime vanilla acceptance tool: {label}')
+if 'JetSetCommands.register(event.getDispatcher())' not in common_events:
+    errors.append('JetSetCraft runtime commands are not registered on the Forge command event')
+for needle, label in [
+    ('lastSolverVelocity', 'previous solver velocity tracking'),
+    ('externalImpulseTicks', 'external impulse preservation window'),
+    ('terrainAssistCooldown', 'safe terrain assist cooldown'),
+]:
+    if needle not in data_java:
+        errors.append(f'missing movement-composition state: {label}')
+
+if 'augmentFallDamageProtection' not in common_events:
+    errors.append('custom-slot Feather Falling is not wired into Forge damage handling')
 
 for doc in ('docs/VANILLA_WORLD_MECHANICS_SYNERGY.md', 'docs/RED_SKATE_REBELLION_AUDIT.md'):
     if not (ROOT / doc).exists():
