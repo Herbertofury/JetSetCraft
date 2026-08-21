@@ -71,6 +71,75 @@ jobs:
           name: jetsetcraft-forge-server-smoke
           path: server-smoke.log
           if-no-files-found: warn
+      - name: Stage raw Create 6.0.8 production mods
+        run: gradle --no-daemon copyCreateAcceptanceMods
+      - name: Real production Forge + Create 6.0.8 rail acceptance
+        shell: bash
+        run: |
+          set -euo pipefail
+          SERVER="$GITHUB_WORKSPACE/build/create-production-server"
+          LOG="$GITHUB_WORKSPACE/create-runtime.log"
+          INPUT="$GITHUB_WORKSPACE/build/create-production.stdin"
+          INSTALLER="$GITHUB_WORKSPACE/build/forge-1.20.1-47.4.23-installer.jar"
+          rm -rf "$SERVER" "$LOG" "$INPUT"
+          mkdir -p "$SERVER"
+          curl --fail --location --retry 3 \
+            'https://maven.minecraftforge.net/net/minecraftforge/forge/1.20.1-47.4.23/forge-1.20.1-47.4.23-installer.jar' \
+            --output "$INSTALLER"
+          (cd "$SERVER" && java -jar "$INSTALLER" --installServer)
+          mkdir -p "$SERVER/mods"
+          cp "$GITHUB_WORKSPACE"/build/libs/*.jar "$SERVER/mods/"
+          cp "$GITHUB_WORKSPACE"/build/create-acceptance/mods/*.jar "$SERVER/mods/"
+          printf '%s\n' '-Xms512M' '-Xmx2G' '-Djetsetcraft.createAcceptance=true' > "$SERVER/user_jvm_args.txt"
+          printf 'eula=true\n' > "$SERVER/eula.txt"
+          chmod +x "$SERVER/run.sh"
+
+          mkfifo "$INPUT"
+          (cd "$SERVER" && ./run.sh nogui < "$INPUT" > "$LOG" 2>&1) &
+          server_pid=$!
+          exec 3>"$INPUT"
+          accepted=0
+          for _ in $(seq 1 150); do
+            if grep -q 'JETSETCRAFT_CREATE_RUNTIME_PASS' "$LOG" 2>/dev/null \
+              && grep -Eq 'Done \([0-9.]+s\)!|Done \([0-9.]+s\)! For help' "$LOG" 2>/dev/null; then
+              accepted=1
+              break
+            fi
+            if ! kill -0 "$server_pid" 2>/dev/null; then
+              break
+            fi
+            sleep 1
+          done
+          if kill -0 "$server_pid" 2>/dev/null; then
+            printf 'stop\n' >&3 || true
+          fi
+          exec 3>&-
+          for _ in $(seq 1 20); do
+            kill -0 "$server_pid" 2>/dev/null || break
+            sleep 1
+          done
+          if kill -0 "$server_pid" 2>/dev/null; then
+            kill "$server_pid" || true
+          fi
+          wait "$server_pid" || true
+          cat "$LOG"
+
+          if [ "$accepted" -ne 1 ]; then
+            echo '::error::Real production Forge/Create server did not prove JetSetCraft Create rail geometry.'
+            exit 1
+          fi
+          if grep -Eq 'JETSETCRAFT_CREATE_RUNTIME_FAIL|Mixin apply failed|ModLoadingException|Failed to complete lifecycle event' "$LOG"; then
+            echo '::error::Production Forge/Create runtime contained a fatal compatibility failure.'
+            exit 1
+          fi
+          echo 'JetSetCraft passed real production Forge 47.4.23 + Create 6.0.8 rail-bar geometry acceptance.'
+      - name: Upload Create 6.0.8 production acceptance log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: jetsetcraft-create-6.0.8-production-acceptance
+          path: create-runtime.log
+          if-no-files-found: warn
       - name: Upload approved full-quality cover
         uses: actions/upload-artifact@v4
         with:
