@@ -18,6 +18,12 @@ The `0.2.0-alpha.1` Style Flow release adds:
 - A polished HUD for boost, Flow, rank, combo, trick names, landing grades, dance moves, and cypher size.
 - A reduced-motion option that disables camera roll/FOV pulses and rapid equipment stunt rotations.
 
+## Gang Wars, Boombox & Mob Atlas expansion
+
+The next major living-world pillar is defined in [[Gang Wars, Boombox & Mob Atlas|Gang-Wars-Boombox-and-Mob-Atlas]]. It establishes the Boombox as the universal street-jam initializer, reversible Gang Skates that augment rather than replace vanilla/modded mobs, dynamic reputation and membership with every gang, renameable crew aliases backed by stable IDs, rare cinematic encounters, competitive gang AI, Turf Wars, graffiti contests, trick battles, Tag, races, dance battles, spray combat, themed rewards, a complete vanilla Gang Atlas, a Junior/Baby Gang Atlas, and a runtime Atlas for mobs from installed mods.
+
+The core interoperability promise is strict: **Minecraft and other mods keep ownership of their entities; JetSetCraft adds an optional street-culture layer on top.**
+
 ## Start here
 
 1. Read [[Getting Started|Getting-Started]] for installation and first ride.
@@ -25,7 +31,8 @@ The `0.2.0-alpha.1` Style Flow release adds:
 3. Choose equipment on [[Ride Styles|Ride-Styles]].
 4. Build long lines with [[Tricks, Combos and Flow|Tricks-Combos-and-Flow]].
 5. Turn your world into a course with [[Grinding and Transfers|Grinding-and-Transfers]] and [[World Physics|World-Physics]].
-6. Review [[Compatibility]] before assembling a large modpack.
+6. Explore the future rival-crew ecosystem in [[Gang Wars, Boombox & Mob Atlas|Gang-Wars-Boombox-and-Mob-Atlas]].
+7. Review [[Compatibility]] before assembling a large modpack.
 
 ## Core design promises
 
@@ -36,3 +43,5 @@ The `0.2.0-alpha.1` Style Flow release adds:
 **Combat remains composable.** Normal item use and third-party combat systems keep their input and upper-body animation authority while JetSetCraft owns movement and lower-body ride presentation. Full-body dance/stunt clips are suppressed when a weapon overlay is active.
 
 **Optional mods stay optional.** Compatibility entries use APIs, Forge behavior, registry lookups, or non-required datapack tags. The Aether, Twilight Forest, Create, TACZ, and other supported mods are never hard dependencies.
+
+**Mobs keep their owners.** JetSetCraft never needs to replace vanilla or modded entity types to make them gang members. Gang state is reversible augmentation attached to the original creature.

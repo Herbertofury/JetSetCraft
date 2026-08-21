@@ -11,6 +11,7 @@ EXPECTED = {
     'Home.md', 'Getting-Started.md', 'Controls.md', 'Ride-Styles.md',
     'Tricks-Combos-and-Flow.md', 'Breakdance-and-Cyphers.md',
     'Grinding-and-Transfers.md', 'World-Physics.md', 'Graffiti.md',
+    'Gang-Wars-Boombox-and-Mob-Atlas.md',
     'Crafting-and-Survival.md', 'Compatibility.md', 'Modpack-Maker-Guide.md',
     'Configuration.md', 'Multiplayer-and-Servers.md', 'Testing-and-Verification.md',
     'Developer-Architecture.md', 'Troubleshooting.md', 'FAQ.md', 'Roadmap.md',
@@ -46,7 +47,8 @@ for page in EXPECTED - {'_Sidebar.md', '_Footer.md'}:
 
 joined = '\n'.join(p.read_text(encoding='utf-8') for p in WIKI.glob('*.md'))
 for token in ('0.2.0-alpha.1', '28 named', 'cypher', 'scooter', 'hoverboard',
-              'Aether', 'Twilight Forest', 'reducedMotion', 'GameTest'):
+              'Aether', 'Twilight Forest', 'reducedMotion', 'GameTest',
+              'Boombox', 'gang_id', 'Junior', 'Mob Atlas'):
     if token.lower() not in joined.lower():
         errors.append(f'wiki coverage missing required token: {token}')
 

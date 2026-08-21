@@ -1,0 +1,29 @@
+{
+  "schema": 1,
+  "project_id": "jetsetcraft",
+  "checkpoint": "gang-wars-boombox-mob-atlas-master-spec",
+  "date": "2026-08-21",
+  "repository": "Herbertofury/JetSetCraft",
+  "branch": "main",
+  "base_commit": "f76f808ba9cc09d26fccf57dfb15c1f5d5538c00",
+  "master_spec_path": "docs/GANG_WARS_BOOMBOX_MOB_ATLAS_MASTER_SPEC.md",
+  "wiki_page_path": "wiki/Gang-Wars-Boombox-and-Mob-Atlas.md",
+  "master_spec_sha256": "3c26afb343bf7186304ee20f68cebd6cc138ed295817a8709474c8f79d06ab45",
+  "master_spec_size": 59749,
+  "requirements": [
+    "Boombox is the universal challenge initializer and mob-head/emblem gang selector.",
+    "Gang music uses replaceable valid silent placeholders until owner-authored tracks are supplied.",
+    "Vanilla and modded mobs are never replaced; Gang Skates attach reversible JetSetCraft state to original entities.",
+    "Approved gang names are canonical defaults stored as data and remain easy to change.",
+    "Friendly reputation unlocks safe in-game gang renaming while stable gang IDs preserve progression.",
+    "Players may eventually join and max reputation with all gangs while betrayal and reconciliation remain possible.",
+    "The Atlas covers all vanilla mobs, valid baby/junior mobs with cute pun subcrew names and music profiles, and mobs detected from installed mods.",
+    "Gang minigames include Turf War, graffiti, trick battles, racing, Tag, dance battles, and spray-paint combat with high-quality AI.",
+    "Natural gang encounters remain ultra rare while the Boombox provides deliberate replayable challenges."
+  ],
+  "publication_targets": [
+    "GitHub repository canonical docs",
+    "GitHub Wiki through the validated wiki sync workflow",
+    "Google Drive JetSetCraft project folder"
+  ]
+}

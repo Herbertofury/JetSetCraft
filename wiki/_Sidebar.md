@@ -9,6 +9,7 @@
 - [[Grinding and Transfers|Grinding-and-Transfers]]
 - [[World Physics|World-Physics]]
 - [[Graffiti]]
+- [[Gang Wars, Boombox & Mob Atlas|Gang-Wars-Boombox-and-Mob-Atlas]]
 - [[Crafting and Survival|Crafting-and-Survival]]
 - [[Compatibility]]
 - [[Modpack Maker Guide|Modpack-Maker-Guide]]

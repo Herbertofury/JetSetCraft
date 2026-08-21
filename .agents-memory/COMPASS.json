@@ -4,6 +4,8 @@
     "Make Minecraft movement feel like a complete high-skill urban street-sports game rather than a vehicle gimmick.",
     "Preserve normal Minecraft and modded combat while skating, rollerblading, skateboarding or riding BMX.",
     "Ship high-fidelity equipment, animation and audiovisual presentation with no placeholder-quality core assets.",
+    "Build a living street-culture ecosystem of gangs, music, graffiti, rivalry, reputation, minigames, and rare encounters without replacing vanilla or mod-owned mobs.",
+    "Make installed mods and dimensions feel naturally absorbed into JetSetCraft through data-driven optional compatibility and a runtime Mob Atlas.",
     "Perfect Forge 1.20.1 first, then carry the architecture forward to newer Minecraft versions."
   ],
   "feature_pillars": [
@@ -18,7 +20,12 @@
     "wall rides",
     "graffiti",
     "combat composition",
-    "advanced animation rigs"
+    "advanced animation rigs",
+    "Boombox street-jam challenges and gang music",
+    "reversible mob gangification with Gang Skates",
+    "gang reputation, rivalry, membership and renameable crew aliases",
+    "competitive gang AI and street minigames",
+    "adult, Junior/Baby and installed-mod Mob Atlases"
   ],
   "guardrails": [
     "Weapon use never implicitly clears locomotion state.",
@@ -27,7 +34,10 @@
     "Do not downgrade core models to low-detail cuboids or token placeholders.",
     "Preserve asset provenance and source derivatives separately.",
     "Use the project-owner-supplied JetSetCraft artwork as the exact canonical mod icon/cover source, with deterministic resize/crop derivatives only.",
-    "Support custom-player-renderer ecosystems such as YSM without making ride gear or movement animations disappear."
+    "Support custom-player-renderer ecosystems such as YSM without making ride gear or movement animations disappear.",
+    "Never replace, registry-override, or unnecessarily subclass vanilla or mod-owned mobs for gang compatibility; attach reversible JetSetCraft state to the original entity.",
+    "Optional mods remain optional and must not be hard classloaded when absent.",
+    "Durable gang progression keys from stable namespaced gang IDs; display names remain data-driven and safely renameable."
   ],
   "acceptance_signals": [
     "A player can maintain momentum through ground, air, grind and wall-ride transitions.",
@@ -38,6 +48,10 @@
     "A rider can perform rail tricks and hop/transfer off a grind while preserving momentum and combo state.",
     "CI produces a Forge 1.20.1 jar from a clean checkout.",
     "A clean build can derive Forge/distribution branding from the exact owner-supplied artwork without AI regeneration or stylistic reinterpretation.",
-    "Ride state, combat pose composition, and visible ride gear remain functional when supported custom player renderers are active."
+    "Ride state, combat pose composition, and visible ride gear remain functional when supported custom player renderers are active.",
+    "A vanilla or mod-owned mob can enter Gang Form through JetSetCraft equipment/state and return to its original behavior on removal without entity replacement.",
+    "The Boombox can start random and mob-targeted gang challenges with synchronized gang music metadata and cinematic entrances.",
+    "Players can change reputation, join every gang over time, betray/reconcile with gangs, and rename a Friendly gang without breaking stable progression identity.",
+    "The Gang Atlas covers vanilla adult crews, valid Junior/Baby variants, and safe detected mob types from installed optional mods."
   ]
 }
