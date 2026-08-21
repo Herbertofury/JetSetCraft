@@ -87,9 +87,15 @@ jobs:
           test -f output/recovered-source/.github/workflows/build.yml
           test -f output/recovered-source/src/main/java/com/herberto/jetsetcraft/JetSetCraft.java
           test -f output/recovered-source/tools/validate_gameplay_contract.py
+
+          # Apply only the two source-level compile repairs proven by the first real Forge build.
+          (cd output/recovered-source && git apply ../../recovery/cc65cad-forge-compile.patch)
+          sha256sum recovery/cc65cad-forge-compile.patch > output/compile-repair.sha256
+
           find output/recovered-source -type f -print0 | sort -z | xargs -0 sha256sum > output/recovered-source.sha256
           printf 'recoveredFileCount=%s\n' "$(find output/recovered-source -type f | wc -l)" >> output/recovery-summary.txt
           printf 'recoveredTarSha256=%s\n' "$(sha256sum output/recovered.tar | awk '{print $1}')" >> output/recovery-summary.txt
+          printf 'compileRepairSha256=%s\n' "$(cut -d' ' -f1 output/compile-repair.sha256)" >> output/recovery-summary.txt
 
       - name: Set up Java 17
         uses: actions/setup-java@v4
