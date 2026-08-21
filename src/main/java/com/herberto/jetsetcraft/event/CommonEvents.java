@@ -1,14 +1,20 @@
 package com.herberto.jetsetcraft.event;
 
 import com.herberto.jetsetcraft.JetSetCraft;
+import com.herberto.jetsetcraft.command.JetSetCommands;
 import com.herberto.jetsetcraft.data.JetSetDataProvider;
 import com.herberto.jetsetcraft.movement.JetSetMovement;
+import com.herberto.jetsetcraft.item.RideLoadout;
 import com.herberto.jetsetcraft.network.JetSetNetwork;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.GameRules;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
+import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -30,6 +36,27 @@ public final class CommonEvents {
         event.getOriginal().getCapability(JetSetDataProvider.CAPABILITY).ifPresent(oldData ->
                 event.getEntity().getCapability(JetSetDataProvider.CAPABILITY).ifPresent(newData -> newData.copyFrom(oldData)));
         event.getOriginal().invalidateCaps();
+    }
+
+    @SubscribeEvent
+    public static void playerDeath(LivingDeathEvent event) {
+        if (!(event.getEntity() instanceof ServerPlayer player)) return;
+        if (player.level().getGameRules().getBoolean(GameRules.RULE_KEEPINVENTORY)) return;
+        player.getCapability(JetSetDataProvider.CAPABILITY).ifPresent(data -> RideLoadout.dropEquipped(player, data));
+    }
+
+
+    @SubscribeEvent
+    public static void registerCommands(RegisterCommandsEvent event) {
+        JetSetCommands.register(event.getDispatcher());
+    }
+
+    @SubscribeEvent
+    public static void livingHurt(LivingHurtEvent event) {
+        if (!(event.getEntity() instanceof ServerPlayer player)) return;
+        player.getCapability(JetSetDataProvider.CAPABILITY).ifPresent(data ->
+                event.setAmount(com.herberto.jetsetcraft.movement.VanillaWorldPhysics
+                        .augmentFallDamageProtection(player, data, event.getSource(), event.getAmount())));
     }
 
     @SubscribeEvent
