@@ -17,10 +17,11 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Recover and structurally verify staged source payload
+      - name: Recover, structurally verify, and patch staged source payload
         shell: bash
         run: |
           set -euo pipefail
+          rm -rf output
           mkdir -p output/recovered-source
           cat .bootstrap/cc65cad/chunk-* | base64 -d > output/staged-corrupt.tar.gz
           STAGED_SHA="$(sha256sum output/staged-corrupt.tar.gz | awk '{print $1}')"
@@ -28,8 +29,6 @@ jobs:
           printf 'originalExpectedCompressedSha256=%s\n' '778627d230fd9f1ce87a7031e66dd928556ac4f84cd08089d41ca3871ea96ecc' >> output/recovery-summary.txt
           printf 'compressedContainerStatus=CORRUPT_CRC_LENGTH\n' >> output/recovery-summary.txt
 
-          # gzip still emits the complete deflate payload before reporting the bad footer.
-          # We do not pretend the gzip is valid; instead verify every tar header/data extent.
           gzip -dc output/staged-corrupt.tar.gz > output/recovered.tar 2>output/gzip-diagnostic.txt || true
           python3 - <<'PY'
           from pathlib import Path
@@ -78,7 +77,6 @@ jobs:
               'first': entries[0]['name'],
               'last': entries[-1]['name'],
           }, indent=2) + '\n')
-          print(json.dumps({'entries': len(entries), 'logicalEnd': pos, 'decompressedBytes': len(data)}))
           PY
 
           tar -tf output/recovered.tar > output/archive-files.txt
@@ -88,14 +86,23 @@ jobs:
           test -f output/recovered-source/src/main/java/com/herberto/jetsetcraft/JetSetCraft.java
           test -f output/recovered-source/tools/validate_gameplay_contract.py
 
-          # Apply only the two source-level compile repairs proven by the first real Forge build.
-          (cd output/recovered-source && git apply ../../recovery/cc65cad-forge-compile.patch)
+          # IMPORTANT: do not use `git apply` from inside output/recovered-source.
+          # That directory is still beneath the outer JetSetCraft Git worktree, so
+          # Git resolves paths against the outer repository root. `patch -d` applies
+          # the repair to the recovered source tree that Gradle actually compiles.
+          patch --batch --forward -p1 -d output/recovered-source < recovery/cc65cad-forge-compile.patch
           sha256sum recovery/cc65cad-forge-compile.patch > output/compile-repair.sha256
+
+          grep -Fq 'renderer instanceof PlayerRenderer playerRenderer' output/recovered-source/src/main/java/com/herberto/jetsetcraft/client/ClientEvents.java
+          grep -Fq 'for (AbstractClientPlayer player : mc.level.players()) update(player);' output/recovered-source/src/main/java/com/herberto/jetsetcraft/client/animation/RideAnimationController.java
+          ! grep -Fq 'if (renderer != null) renderer.addLayer(new RideGearLayer(renderer));' output/recovered-source/src/main/java/com/herberto/jetsetcraft/client/ClientEvents.java
+          ! grep -Fq 'player instanceof AbstractClientPlayer clientPlayer' output/recovered-source/src/main/java/com/herberto/jetsetcraft/client/animation/RideAnimationController.java
 
           find output/recovered-source -type f -print0 | sort -z | xargs -0 sha256sum > output/recovered-source.sha256
           printf 'recoveredFileCount=%s\n' "$(find output/recovered-source -type f | wc -l)" >> output/recovery-summary.txt
           printf 'recoveredTarSha256=%s\n' "$(sha256sum output/recovered.tar | awk '{print $1}')" >> output/recovery-summary.txt
           printf 'compileRepairSha256=%s\n' "$(cut -d' ' -f1 output/compile-repair.sha256)" >> output/recovery-summary.txt
+          printf 'patchAppliedToCompiledTree=true\n' >> output/recovery-summary.txt
 
       - name: Set up Java 17
         uses: actions/setup-java@v4
