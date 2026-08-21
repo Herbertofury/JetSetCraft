@@ -21,6 +21,7 @@ jobs:
           set -euo pipefail
           python -m pip install -r tools/requirements.txt
           python tools/generate_models.py
+          python tools/generate_hoverboard.py
           python tools/generate_brand.py
           python tools/validate_assets.py
           python tools/validate_gameplay_contract.py
