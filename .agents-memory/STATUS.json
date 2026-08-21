@@ -1,6 +1,6 @@
 {
   "version": "0.1.0-alpha.1",
-  "phase": "rail/combat foundation / CI bring-up",
+  "phase": "rail/combat foundation / verified Forge server bring-up",
   "implemented": [
     "four ride styles",
     "server-authoritative momentum",
@@ -25,11 +25,47 @@
     "curve-speed shaping with momentum preservation",
     "grind stuck recovery and cross-dimension reattach grace"
   ],
+  "verified": {
+    "forge_clean_build": true,
+    "asset_and_gameplay_contract_validation": true,
+    "dedicated_server_ready": true,
+    "runtime_verification_head": "e7e9f5bbca76045d0787a622cb4e2b6ea9695234",
+    "runtime_workflow_run": 32453299956,
+    "runtime_job": 96685661517,
+    "server_ready_line": "Done (29.165s)! For help, type \"help\"",
+    "server_smoke_artifact": {
+      "id": 9436449450,
+      "zip_bytes": 3732,
+      "zip_sha256": "29a3630f9902eef2e2dce9c6db93a1c52bff749194eaff0ab5fb89d8f42d4b5e",
+      "log_bytes": 19297,
+      "log_sha256": "f06c0277e0dab56acebd70c75291edb469de1d7c3075f8d101ba515276e57513"
+    },
+    "build_artifact": {
+      "id": 9436450207,
+      "zip_bytes": 3131261,
+      "zip_sha256": "a7b3c6e1328380bd38464d34163f9a812510799bc88e85371db0099aeead1aac",
+      "jar": "jetsetcraft-1.20.1-0.1.0-alpha.1.jar",
+      "jar_bytes": 3263949,
+      "jar_sha256": "d59126b947296d63bc1e1e5aeba35f59942c6b499734b31ffa870b335786bb20"
+    },
+    "canonical_cover": {
+      "drive_file_id": "1km1kaSF6vqR5wBrMQr8J1FHCAFy8vp4W",
+      "file_name": "JetSetCraft-cover-full-quality.png",
+      "bytes": 1702879,
+      "width": 1254,
+      "height": 1254,
+      "sha256": "6e60bcc90fd6b85209598b088b9d2b87fb6c3a36d9d68c6eb4e478f538a5894f",
+      "legacy_repo_thumbnail": "assets/jetsetcraft-cover.webp"
+    }
+  },
   "pending_validation": [
-    "clean Forge compilation",
-    "Create 6.0.8 compile/runtime smoke test",
-    "runtime movement smoke test",
-    "TACZ live integration smoke test"
+    "real client ride/trick/grind gameplay smoke test",
+    "real Create 6.0.8 interoperability runtime smoke test",
+    "TACZ live integration smoke test",
+    "multiplayer movement/combat acceptance world"
+  ],
+  "pending_features": [
+    "hoverboard ride style requested in project continuity"
   ],
   "pending_assets": [],
   "source_inputs": {
