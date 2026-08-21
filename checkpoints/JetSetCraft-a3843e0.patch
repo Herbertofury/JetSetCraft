@@ -1,0 +1,249 @@
+diff --git a/docs/VANILLA_WORLD_MECHANICS_SYNERGY.md b/docs/VANILLA_WORLD_MECHANICS_SYNERGY.md
+index aa4b543..63ad6d7 100644
+--- a/docs/VANILLA_WORLD_MECHANICS_SYNERGY.md
++++ b/docs/VANILLA_WORLD_MECHANICS_SYNERGY.md
+@@ -147,3 +147,17 @@ Dedicated inline/quad skate footwear now completes the four vanilla enchantment
+ JetSetCraft now tracks the velocity written by its own previous server solve and compares it with Minecraft's next-tick velocity. Meaningful speed injection or a hard direction shock opens a short `externalImpulseTicks` window. During that window ground steering, air control, fluid control and boost steering deliberately yield more authority to the incoming Minecraft/modded impulse. Explosions, pistons, entity knockback and moving-world mechanics can therefore launch or redirect a rider without the skate solver immediately snapping the vector back to WASD.
+ 
+ Small terrain discontinuities also have a collision-verified continuation assist. It only activates after a real horizontal collision, probes the collision shape at the rider's actual forward point, accepts at most a 5/8-block rise, and requires Minecraft `noCollision` on the destination box before moving. Slabs, stair steps, snow layers and similar modded micro-geometry can flow at speed; full blocks, fences, walls and other real obstacles remain solid. The runtime acceptance lab now contains slab/stair/snow continuity segments and `/jetsetcraft status` exposes impulse/terrain-assist state.
++
++## Exposed-world edge solver hardening
++
++JetSetCraft's generic edge grind detection now treats Minecraft collision geometry as the source of truth while rejecting geometry that only *looks* like a line numerically:
++
++- candidate edges are derived from real `VoxelShape` collision boxes, not a block-ID whitelist;
++- a top edge must have real open space on at least one horizontal side at several points along the segment;
++- shared top seams between adjacent full blocks therefore do not become invisible grind rails;
++- internal seams between multiple AABBs in stairs, walls, fences and other compound collision shapes are rejected the same way;
++- a rider-height clearance probe above the edge prevents covered/stacked geometry from creating grind paths through blocks;
++- collision exposure probes run only after distance/alignment filtering so this safety does not turn edge detection into a per-tick world-scan performance regression;
++- while already on an EDGE grind, deliberate steering input gets enough junction authority to take a real 90-degree fence/wall/ledge corner; without steering input the current line remains preferred.
++
++The runtime vanilla lab now has a fifth world-geometry lane containing connected Iron Bars, oak fences, cobblestone walls, glass panes, a multi-block rooftop, a natural log line and a stacked-log clearance regression. The intended result is that ordinary architecture becomes a readable trick playground while flat floor seams remain ordinary floors.
+diff --git a/src/main/java/com/herberto/jetsetcraft/command/JetSetCommands.java b/src/main/java/com/herberto/jetsetcraft/command/JetSetCommands.java
+index c5160dc..bd837d3 100644
+--- a/src/main/java/com/herberto/jetsetcraft/command/JetSetCommands.java
++++ b/src/main/java/com/herberto/jetsetcraft/command/JetSetCommands.java
+@@ -137,19 +137,20 @@ public final class JetSetCommands {
+         buildRailLane(level, origin.offset(3, 0, 0));
+         buildFluidLane(level, origin.offset(6, 0, 0));
+         buildImpulseLane(level, origin.offset(9, 0, 0));
++        buildGeometryLane(level, origin.offset(12, 0, 0));
+ 
+         source.sendSuccess(() -> Component.literal("Built JetSetCraft vanilla-physics acceptance lab at "
+                 + origin.toShortString() + " (lanes run south/+Z).").withStyle(ChatFormatting.GREEN), false);
+         source.sendSuccess(() -> Component.literal(
+-                "Lanes: X+0 surfaces | X+3 rails/redstone | X+6 water/bubbles | X+9 slime/honey/impulse hazards."), false);
++                "Lanes: X+0 surfaces | X+3 rails/redstone | X+6 water/bubbles | X+9 slime/honey/impulse hazards | X+12 world geometry."), false);
+         source.sendSuccess(() -> Component.literal(
+                 "Use /jetsetcraft status while riding each section; /jetsetcraft set_momentum <speed> is an operator-only test aid."), false);
+         return 1;
+     }
+ 
+     private static void clearLabVolume(ServerLevel level, BlockPos origin) {
+-        for (int x = -1; x <= 11; x++) {
+-            for (int z = -1; z <= 56; z++) {
++        for (int x = -1; x <= 17; x++) {
++            for (int z = -1; z <= 70; z++) {
+                 for (int y = 1; y <= 4; y++) {
+                     level.setBlockAndUpdate(origin.offset(x, y, z), Blocks.AIR.defaultBlockState());
+                 }
+@@ -248,6 +249,39 @@ public final class JetSetCommands {
+         // tricks and momentum do not silently grant immunity.
+     }
+ 
++    private static void buildGeometryLane(ServerLevel level, BlockPos origin) {
++        // This lane proves that the generic edge solver follows Minecraft collision geometry rather than a
++        // tiny whitelist. Connected narrow blocks get real corner lines; broad roofs expose only their outer
++        // ledges, not the invisible seams between adjacent full blocks.
++        for (int x = -1; x <= 5; x++) {
++            for (int z = 0; z <= 66; z++) set(level, origin.offset(x, 0, z), Blocks.SMOOTH_STONE);
++        }
++
++        for (int z = 2; z <= 8; z++) set(level, origin.offset(0, 1, z), Blocks.IRON_BARS);
++        for (int x = 1; x <= 5; x++) set(level, origin.offset(x, 1, 8), Blocks.IRON_BARS);
++
++        for (int z = 12; z <= 18; z++) set(level, origin.offset(0, 1, z), Blocks.OAK_FENCE);
++        for (int x = 1; x <= 4; x++) set(level, origin.offset(x, 1, 18), Blocks.OAK_FENCE);
++
++        for (int z = 22; z <= 28; z++) set(level, origin.offset(0, 1, z), Blocks.COBBLESTONE_WALL);
++        for (int x = 1; x <= 4; x++) set(level, origin.offset(x, 1, 28), Blocks.COBBLESTONE_WALL);
++
++        for (int z = 32; z <= 38; z++) set(level, origin.offset(0, 1, z), Blocks.GLASS_PANE);
++        for (int x = 1; x <= 4; x++) set(level, origin.offset(x, 1, 38), Blocks.GLASS_PANE);
++
++        // Three-wide rooftop: perimeter edges are valid, block-to-block top seams are intentionally invalid.
++        for (int x = 0; x <= 2; x++) {
++            for (int z = 43; z <= 50; z++) set(level, origin.offset(x, 1, z), Blocks.SMOOTH_STONE);
++        }
++
++        // Natural full-block geometry still participates. The vertical stack specifically regression-tests
++        // clearance: lower block tops must not become hidden grind paths through the log above them.
++        for (int z = 54; z <= 61; z++) set(level, origin.offset(0, 1, z), Blocks.OAK_LOG);
++        set(level, origin.offset(4, 1, 56), Blocks.OAK_LOG);
++        set(level, origin.offset(4, 2, 56), Blocks.OAK_LOG);
++        set(level, origin.offset(4, 3, 56), Blocks.OAK_LOG);
++    }
++
+     private static void fill(ServerLevel level, BlockPos origin, int x, int z0, int z1, Block block) {
+         for (int z = z0; z <= z1; z++) set(level, origin.offset(x, 0, z), block);
+     }
+diff --git a/src/main/java/com/herberto/jetsetcraft/movement/EdgeFinder.java b/src/main/java/com/herberto/jetsetcraft/movement/EdgeFinder.java
+index 6f0596d..921e8e1 100644
+--- a/src/main/java/com/herberto/jetsetcraft/movement/EdgeFinder.java
++++ b/src/main/java/com/herberto/jetsetcraft/movement/EdgeFinder.java
+@@ -12,6 +12,8 @@ import net.minecraft.world.phys.shapes.VoxelShape;
+ import java.util.Optional;
+ 
+ public final class EdgeFinder {
++    private static final double[] EXPOSURE_SAMPLES = {0.20, 0.50, 0.80};
++
+     public record Edge(Vec3 point, Vec3 tangent, double distanceSq) {}
+ 
+     public static Optional<Edge> findBest(Player player, Vec3 preferredDirection) {
+@@ -51,13 +53,13 @@ public final class EdgeFinder {
+                         double x1 = x + box.maxX;
+                         double z0 = z + box.minZ;
+                         double z1 = z + box.maxZ;
+-                        best = choose(feet, preferred, new Vec3(x0, topY, z0), new Vec3(x1, topY, z0), radius, best, bestScore);
++                        best = choose(player, feet, preferred, new Vec3(x0, topY, z0), new Vec3(x1, topY, z0), radius, best, bestScore);
+                         if (best != null) bestScore = score(best, preferred);
+-                        best = choose(feet, preferred, new Vec3(x0, topY, z1), new Vec3(x1, topY, z1), radius, best, bestScore);
++                        best = choose(player, feet, preferred, new Vec3(x0, topY, z1), new Vec3(x1, topY, z1), radius, best, bestScore);
+                         if (best != null) bestScore = score(best, preferred);
+-                        best = choose(feet, preferred, new Vec3(x0, topY, z0), new Vec3(x0, topY, z1), radius, best, bestScore);
++                        best = choose(player, feet, preferred, new Vec3(x0, topY, z0), new Vec3(x0, topY, z1), radius, best, bestScore);
+                         if (best != null) bestScore = score(best, preferred);
+-                        best = choose(feet, preferred, new Vec3(x1, topY, z0), new Vec3(x1, topY, z1), radius, best, bestScore);
++                        best = choose(player, feet, preferred, new Vec3(x1, topY, z0), new Vec3(x1, topY, z1), radius, best, bestScore);
+                         if (best != null) bestScore = score(best, preferred);
+                     }
+                 }
+@@ -66,24 +68,69 @@ public final class EdgeFinder {
+         return Optional.ofNullable(best);
+     }
+ 
+-    private static Edge choose(Vec3 feet, Vec3 preferred, Vec3 a, Vec3 b, double radius, Edge current, double currentScore) {
++    private static Edge choose(Player player, Vec3 feet, Vec3 preferred, Vec3 a, Vec3 b, double radius, Edge current, double currentScore) {
+         Vec3 ab = b.subtract(a);
+         double lenSq = ab.lengthSqr();
+         if (lenSq < 0.04) return current;
+         Vec3 tangent = ab.normalize();
+         double alignment = Math.abs(tangent.dot(preferred));
+         if (alignment < 0.42) return current;
+-        if (tangent.dot(preferred) < 0) tangent = tangent.scale(-1);
+         double t = feet.subtract(a).dot(ab) / lenSq;
+         t = Math.max(0.0, Math.min(1.0, t));
+         Vec3 point = a.add(ab.scale(t));
+         double distanceSq = point.distanceToSqr(feet);
+         if (distanceSq > radius * radius) return current;
++        // Collision exposure probes are the expensive part, so only run them for edges inside snap range.
++        if (!usableExposedEdge(player, a, b)) return current;
++        if (tangent.dot(preferred) < 0) tangent = tangent.scale(-1);
+         Edge candidate = new Edge(point, tangent, distanceSq);
+         double score = score(candidate, preferred);
+         return score < currentScore ? candidate : current;
+     }
+ 
++    /**
++     * Reject fake top seams while retaining real ledges and narrow world geometry. A collision-box top edge
++     * is grindable only when one horizontal side is genuinely open and there is rider clearance above it.
++     * This makes adjacent full-block floor seams disappear while iron bars, fences, walls, panes, roof edges
++     * and the exposed sides of complex voxel shapes remain discoverable without a giant block whitelist.
++     */
++    private static boolean usableExposedEdge(Player player, Vec3 a, Vec3 b) {
++        Vec3 tangent = horizontal(b.subtract(a));
++        if (tangent.lengthSqr() < 1.0e-6) return false;
++        tangent = tangent.normalize();
++        Vec3 side = new Vec3(-tangent.z, 0.0, tangent.x);
++
++        // Sample more than the midpoint so a candidate that merely crosses an internal shape seam does not
++        // masquerade as a continuous ledge. At each sample, at least one side just below the top must be air.
++        for (double t : EXPOSURE_SAMPLES) {
++            Vec3 p = a.add(b.subtract(a).scale(t));
++            boolean sideAFree = sideProbeFree(player, p.add(side.scale(0.045)), tangent);
++            boolean sideBFree = sideProbeFree(player, p.add(side.scale(-0.045)), tangent);
++            if (!sideAFree && !sideBFree) return false;
++        }
++
++        Vec3 mid = a.add(b.subtract(a).scale(0.50));
++        double halfAlong = Math.min(0.16, Math.max(0.08, horizontal(b.subtract(a)).length() * 0.20));
++        double halfSide = 0.12;
++        AABB clearance = orientedAabb(mid.add(0.0, 0.04, 0.0), tangent, side, halfAlong, halfSide, 1.62);
++        return player.level().noCollision(player, clearance);
++    }
++
++    private static boolean sideProbeFree(Player player, Vec3 center, Vec3 tangent) {
++        Vec3 side = new Vec3(-tangent.z, 0.0, tangent.x);
++        AABB probe = orientedAabb(center.add(0.0, -0.035, 0.0), tangent, side, 0.045, 0.018, 0.040);
++        return player.level().noCollision(player, probe);
++    }
++
++    /** Build a conservative world-axis AABB around a tiny oriented rectangle. */
++    private static AABB orientedAabb(Vec3 center, Vec3 tangent, Vec3 side, double halfAlong, double halfSide, double height) {
++        double hx = Math.abs(tangent.x) * halfAlong + Math.abs(side.x) * halfSide;
++        double hz = Math.abs(tangent.z) * halfAlong + Math.abs(side.z) * halfSide;
++        double minY = height >= 0.10 ? center.y : center.y - height;
++        double maxY = height >= 0.10 ? center.y + height : center.y;
++        return new AABB(center.x - hx, minY, center.z - hz, center.x + hx, maxY, center.z + hz);
++    }
++
+     private static double score(Edge edge, Vec3 preferred) {
+         double alignment = Math.abs(edge.tangent.dot(preferred));
+         return edge.distanceSq + (1.0 - alignment) * 0.35;
+diff --git a/src/main/java/com/herberto/jetsetcraft/movement/JetSetMovement.java b/src/main/java/com/herberto/jetsetcraft/movement/JetSetMovement.java
+index 8f6fc32..78de7d8 100644
+--- a/src/main/java/com/herberto/jetsetcraft/movement/JetSetMovement.java
++++ b/src/main/java/com/herberto/jetsetcraft/movement/JetSetMovement.java
+@@ -235,11 +235,15 @@ public final class JetSetMovement {
+ 
+         Vec3 preferred = data.grindDirection().lengthSqr() > 1.0e-5
+                 ? data.grindDirection() : EdgeFinder.horizontal(player.getDeltaMovement());
+-        if (data.grindKind().rail()) {
+-            Vec3 desired = desiredDirection(player, data);
+-            if (desired.lengthSqr() > 0.05) {
+-                // Steering input biases junction selection without instantly rotating away from the current rail.
++        Vec3 desired = desiredDirection(player, data);
++        if (desired.lengthSqr() > 0.05) {
++            if (data.grindKind().rail()) {
++                // Rail input biases switches/junctions without snapping the rider away from the current track.
+                 preferred = safeNormalize(preferred.scale(0.82).add(desired.normalize().scale(0.44)), preferred);
++            } else if (data.grindKind() == GrindKind.EDGE) {
++                // Exposed world edges need stronger intentional steering so a fence/wall/ledge can take a
++                // real 90-degree corner. With no input the current tangent still wins, so corners remain skillful.
++                preferred = safeNormalize(preferred.scale(0.58).add(desired.normalize().scale(0.82)), preferred);
+             }
+         }
+ 
+diff --git a/tools/validate_gameplay_contract.py b/tools/validate_gameplay_contract.py
+index f2dadae..1456cab 100755
+--- a/tools/validate_gameplay_contract.py
++++ b/tools/validate_gameplay_contract.py
+@@ -95,6 +95,15 @@ if 'JetSetTags.NO_GRIND' not in edge:
+     errors.append('generic edge solver does not respect no_grind tag')
+ if 'JetSetTags.HAZARD_SURFACES' not in edge:
+     errors.append('generic edge solver does not guard hazard surfaces')
++for needle, label in [
++    ('usableExposedEdge', 'shape-driven exposed-edge validation'),
++    ('sideProbeFree', 'shared/internal seam rejection'),
++    ('noCollision(player, clearance)', 'rider clearance above grind edges'),
++]:
++    if needle not in edge:
++        errors.append(f'missing world-geometry grind contract: {label}')
++if 'data.grindKind() == GrindKind.EDGE' not in movement or 'preferred.scale(0.58)' not in movement:
++    errors.append('edge grinding lacks intentional 90-degree corner steering bias')
+ 
+ # Red Skate's useful dedicated-gear concept is now a permanent compatibility contract: actual ride
+ # equipment lives in a persistent player loadout so weapons/items remain free in both hands.
+@@ -158,6 +167,11 @@ for needle, label in [
+     ('Blocks.POWDER_SNOW', 'powder-snow trap test'),
+     ('Blocks.STONE_SLAB', 'slab continuity test'),
+     ('Blocks.STONE_STAIRS', 'stair continuity test'),
++    ('Blocks.IRON_BARS', 'iron-bar geometry grind test'),
++    ('Blocks.OAK_FENCE', 'fence geometry grind test'),
++    ('Blocks.COBBLESTONE_WALL', 'wall geometry grind test'),
++    ('Blocks.GLASS_PANE', 'glass-pane geometry grind test'),
++    ('Blocks.OAK_LOG', 'natural log/clearance geometry test'),
+ ]:
+     if needle not in commands:
+         errors.append(f'missing runtime vanilla acceptance tool: {label}')

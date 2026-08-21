@@ -1,0 +1,26 @@
+JetSetCraft checkpoint a3843e0
+Local commit: a3843e073f99c984e3d24f9261bf1268083b360d
+Base checkpoint: 4bb74b5
+Purpose: Harden exposed world-edge grinding
+
+Includes:
+- VoxelShape-derived exposed-edge validation
+- rejection of shared full-block floor seams and internal compound-shape seams
+- rider-height clearance checks above grind edges
+- intentional 90-degree EDGE corner steering
+- runtime geometry acceptance lane with iron bars, fences, walls, glass panes, rooftop ledges and logs
+- gameplay contract regression coverage
+
+Static verification:
+- tools/validate_gameplay_contract.py: PASS
+- tools/validate_assets.py: PASS
+- git diff --check: PASS
+- Java brace scan: PASS
+
+Patch SHA-256: 91e29f3cc2a84298e06ceaf54b85dd9068ac0fe7421b1c77524471421793d6db
+Patch size: 17096 bytes
+Source ZIP SHA-256: 2a8107b6381045970d491632bd341798daf6a43cc4da55bb4fd3aba4943a0429
+Source ZIP size: 135527 bytes
+
+Durable source ZIP and patch are mirrored in Google Drive / JetSetCraft / Checkpoints.
+This checkpoint is source/static verified only. It is NOT a claim that Forge compilation has passed yet.
