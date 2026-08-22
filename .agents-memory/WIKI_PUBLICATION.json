@@ -1,9 +1,9 @@
 {
   "schema": 1,
-  "source_commit": "ef6feadcf54d14e303ef008f4207fd0d22eeb459",
-  "wiki_commit": "0efb8b856bf2c3264f49874acd9ab3d20a51ae20",
+  "source_commit": "6aea1654f5cec63ee832e049e7590c335278cb9c",
+  "wiki_commit": "541d929a6cd6c77d0dd42030a179eea38a5fc1e6",
   "wiki_branch": "master",
-  "page_count": 24,
+  "page_count": 25,
   "pages": [
     "Breakdance-and-Cyphers.md",
     "Compatibility.md",
@@ -20,6 +20,7 @@
     "Home.md",
     "Modpack-Maker-Guide.md",
     "Multiplayer-and-Servers.md",
+    "Player-Chapters-Posse-and-Mob-Archetypes.md",
     "Ride-Styles.md",
     "Roadmap.md",
     "Standalone-Compatibility-Covenant.md",
@@ -31,6 +32,6 @@
     "_Sidebar.md"
   ],
   "validated": true,
-  "published_at_utc": "2026-08-21T23:52:24.287190+00:00",
+  "published_at_utc": "2026-08-22T00:04:22.960796+00:00",
   "url": "https://github.com/Herbertofury/JetSetCraft/wiki"
 }
