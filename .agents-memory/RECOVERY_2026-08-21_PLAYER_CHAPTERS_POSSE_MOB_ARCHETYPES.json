@@ -1,0 +1,35 @@
+{
+  "project": "JetSetCraft",
+  "date_local": "2026-08-21",
+  "topic": "High-reputation player-founded gang chapters, permanent posse roster, Chapter Boombox home recovery, and provider-agnostic mob archetypes",
+  "canonical_master": {
+    "drive_file_id": "1OoOVTWhhTAoVoc4TljPZM9mkS9fWvCol",
+    "drive_path": "/Google Drive/JetSetCraft/JetSetCraft_Gang_Wars_Boombox_Mob_Atlas_Master_Spec.md",
+    "size_bytes": 106700,
+    "sha256": "841eaf1d9f20d1a02f268449545f3b4bee6be1d62f282342f854dc2f1e6b774a",
+    "drive_roundtrip_byte_match": true
+  },
+  "github": {
+    "repository": "Herbertofury/JetSetCraft",
+    "main_commit_after_compass": "34208efd5ed345964d1e6c28b9db41109d0d39eb",
+    "wiki_source_commit": "6aea1654f5cec63ee832e049e7590c335278cb9c",
+    "wiki_commit": "541d929a6cd6c77d0dd42030a179eea38a5fc1e6",
+    "wiki_page": "Player-Chapters-Posse-and-Mob-Archetypes.md",
+    "wiki_validated": true,
+    "wiki_page_count": 25
+  },
+  "requirements_locked": [
+    "At high configurable gang reputation, award a gang-specific Chapter Boombox tied to stable gang_id.",
+    "Each gang may have a custom Chapter Boombox model/name/skin, e.g. a Mooshroom Shroom Box, implemented as data-driven presentation over one safe base contract.",
+    "Placing the earned Chapter Boombox at a player-selected base creates a bounded player-founded chapter with roughly five permanent named/interactable roster members by default.",
+    "Permanent residents use stable crew_member_id roster identity separate from runtime entity UUID/body identity.",
+    "Residents can be named and recruited/dismissed as followers in the player's posse while non-followers stay on the low-frequency Hangout Brain.",
+    "The Chapter Boombox is the crew home/spawn anchor. Killed/defeated permanent members enter recovery and return there after a delay only when the home chunk is naturally loaded; no force-loading.",
+    "Recovery preserves JetSetCraft-owned name, role, gang, gear/cosmetics, posse assignment, and memories while preventing equipment/inventory duplication and infinite source-mob loot farming.",
+    "Semantic mob_archetype_id is separate from concrete provider entity_type_id so concepts such as Mooblooms can survive backport/provider changes.",
+    "Mob archetype resolution uses explicit tags/server overrides, curated aliases, normalized registry/name synonyms, safe trait evidence, and modpack aliases; uncertain matches remain dormant instead of being guessed.",
+    "Multiple providers resolve deterministically and never randomly change an already-living member's provider.",
+    "If a provider disappears, roster identity remains; a later safe spawn/recovery may bind another provider for the same archetype without fabricating absent provider-specific NBT.",
+    "All of the above retains the standalone compatibility covenant: no vanilla/mod class replacement, no worldgen takeover, no forced chunk tickets."
+  ]
+}
