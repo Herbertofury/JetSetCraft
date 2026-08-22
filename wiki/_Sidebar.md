@@ -11,6 +11,7 @@
 - [[Graffiti]]
 - [[Gang Wars, Boombox & Mob Atlas|Gang-Wars-Boombox-and-Mob-Atlas]]
 - [[Gang Hangouts, Territory & Reputation|Hangouts-Territory-and-Reputation]]
+- [[Player Chapters, Posse & Mob Archetypes|Player-Chapters-Posse-and-Mob-Archetypes]]
 - [[Crafting and Survival|Crafting-and-Survival]]
 - [[Compatibility]]
 - [[Modpack Maker Guide|Modpack-Maker-Guide]]
