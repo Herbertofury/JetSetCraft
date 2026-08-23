@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "uuid": "d1e84e97-4de3-403d-9107-1bc13676e7b2",
+  "uuid": "834d7959-5d75-59d8-b630-01fca181bd3e",
   "name": "quad_boost",
   "emote": {
     "beginTick": 0,
@@ -15,7 +15,9 @@
         "tick": 0,
         "easing": "INOUTSINE",
         "body": {
-          "pitch": 0.27
+          "pitch": 0.27,
+          "yaw": 0.0,
+          "roll": 0.02
         },
         "leftLeg": {
           "pitch": -0.28,
@@ -29,25 +31,69 @@
         }
       },
       {
+        "tick": 3,
+        "easing": "OUTQUAD",
+        "body": {
+          "pitch": 0.2932,
+          "yaw": 0.0,
+          "roll": -0.0061
+        },
+        "leftLeg": {
+          "pitch": 0.1028,
+          "yaw": 0.0878,
+          "roll": 0.1016
+        },
+        "rightLeg": {
+          "pitch": -0.0892,
+          "yaw": -0.0878,
+          "roll": -0.1016
+        }
+      },
+      {
         "tick": 7,
         "easing": "INOUTSINE",
         "body": {
-          "pitch": 0.31
+          "pitch": 0.31,
+          "yaw": 0.0,
+          "roll": -0.025
         },
         "leftLeg": {
           "pitch": 0.38,
+          "yaw": 0.05,
           "roll": 0.11
         },
         "rightLeg": {
           "pitch": -0.4,
+          "yaw": -0.05,
           "roll": -0.11
+        }
+      },
+      {
+        "tick": 10,
+        "easing": "OUTQUAD",
+        "body": {
+          "pitch": 0.2868,
+          "yaw": 0.0,
+          "roll": 0.0011
+        },
+        "leftLeg": {
+          "pitch": -0.0028,
+          "yaw": 0.1022,
+          "roll": 0.0984
+        },
+        "rightLeg": {
+          "pitch": 0.0292,
+          "yaw": -0.1022,
+          "roll": -0.0984
         }
       },
       {
         "tick": 14,
         "easing": "INOUTSINE",
         "body": {
-          "pitch": 0.27
+          "pitch": 0.27,
+          "yaw": 0.0,
+          "roll": 0.02
         },
         "leftLeg": {
           "pitch": -0.28,

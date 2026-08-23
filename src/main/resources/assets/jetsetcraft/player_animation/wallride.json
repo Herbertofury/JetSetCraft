@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "uuid": "28a3c3cc-eb94-47de-8ea5-a1b70d62aea1",
+  "uuid": "35fe8e11-74ce-5dd2-95e7-b99fc3bed626",
   "name": "wallride",
   "emote": {
     "beginTick": 0,
@@ -16,15 +16,75 @@
         "easing": "INOUTSINE",
         "body": {
           "pitch": 0.1,
+          "yaw": 0.0,
           "roll": 0.3
         },
         "leftLeg": {
           "pitch": 0.28,
+          "yaw": 0.0,
           "roll": 0.2
         },
         "rightLeg": {
           "pitch": -0.2,
+          "yaw": 0.0,
           "roll": 0.12
+        }
+      },
+      {
+        "tick": 3,
+        "easing": "OUTQUAD",
+        "body": {
+          "pitch": 0.1348,
+          "yaw": 0.0348,
+          "roll": 0.2536
+        },
+        "leftLeg": {
+          "pitch": 0.2104,
+          "yaw": 0.029,
+          "roll": 0.171
+        },
+        "rightLeg": {
+          "pitch": -0.142,
+          "yaw": -0.029,
+          "roll": 0.0968
+        }
+      },
+      {
+        "tick": 7,
+        "easing": "INOUTSINE",
+        "body": {
+          "pitch": 0.16,
+          "yaw": 0.06,
+          "roll": 0.22
+        },
+        "leftLeg": {
+          "pitch": 0.16,
+          "yaw": 0.05,
+          "roll": 0.15
+        },
+        "rightLeg": {
+          "pitch": -0.1,
+          "yaw": -0.05,
+          "roll": 0.08
+        }
+      },
+      {
+        "tick": 10,
+        "easing": "OUTQUAD",
+        "body": {
+          "pitch": 0.1252,
+          "yaw": 0.0252,
+          "roll": 0.2664
+        },
+        "leftLeg": {
+          "pitch": 0.2296,
+          "yaw": 0.021,
+          "roll": 0.179
+        },
+        "rightLeg": {
+          "pitch": -0.158,
+          "yaw": -0.021,
+          "roll": 0.1032
         }
       },
       {
@@ -32,15 +92,18 @@
         "easing": "INOUTSINE",
         "body": {
           "pitch": 0.1,
-          "roll": 0.22
+          "yaw": 0.0,
+          "roll": 0.3
         },
         "leftLeg": {
-          "pitch": 0.16,
-          "roll": 0.15
+          "pitch": 0.28,
+          "yaw": 0.0,
+          "roll": 0.2
         },
         "rightLeg": {
-          "pitch": -0.1,
-          "roll": 0.08
+          "pitch": -0.2,
+          "yaw": 0.0,
+          "roll": 0.12
         }
       }
     ]

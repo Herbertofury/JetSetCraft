@@ -1,9 +1,12 @@
 package com.herberto.jetsetcraft.client;
 
 import com.herberto.jetsetcraft.JetSetCraft;
+import com.herberto.jetsetcraft.client.animation.RideAnimationController;
 import com.herberto.jetsetcraft.client.render.GraffitiRenderer;
 import com.herberto.jetsetcraft.client.render.RideGearLayer;
+import com.herberto.jetsetcraft.client.render.MobRideGearLayer;
 import com.herberto.jetsetcraft.client.state.ClientRideState;
+import com.herberto.jetsetcraft.client.state.ClientMobGearState;
 import com.herberto.jetsetcraft.config.JetSetConfig;
 import com.herberto.jetsetcraft.movement.DanceCatalog;
 import com.herberto.jetsetcraft.movement.TrickCatalog;
@@ -16,12 +19,17 @@ import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
+import net.minecraft.client.renderer.entity.LivingEntityRenderer;
+import net.minecraft.world.entity.EntityType;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.event.entity.EntityLeaveLevelEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.client.event.RenderGuiOverlayEvent;
 import net.minecraftforge.client.event.ViewportEvent;
+import net.minecraftforge.client.settings.KeyConflictContext;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -31,14 +39,16 @@ import java.util.Locale;
 
 public final class ClientEvents {
     private static final String CATEGORY = "key.categories.jetsetcraft";
-    public static final KeyMapping BOOST = new KeyMapping("key.jetsetcraft.boost", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_LEFT_ALT, CATEGORY);
-    public static final KeyMapping TRICK = new KeyMapping("key.jetsetcraft.trick", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_R, CATEGORY);
-    public static final KeyMapping GRIND = new KeyMapping("key.jetsetcraft.grind", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_G, CATEGORY);
-    public static final KeyMapping MANUAL = new KeyMapping("key.jetsetcraft.manual", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_C, CATEGORY);
-    public static final KeyMapping BRAKE = new KeyMapping("key.jetsetcraft.brake", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_V, CATEGORY);
-    public static final KeyMapping DANCE = new KeyMapping("key.jetsetcraft.dance", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_B, CATEGORY);
-    public static final KeyMapping RIDE_TOGGLE = new KeyMapping("key.jetsetcraft.ride_toggle", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_K, CATEGORY);
+    public static final KeyMapping BOOST = new KeyMapping("key.jetsetcraft.boost", KeyConflictContext.IN_GAME, InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_LEFT_ALT, CATEGORY);
+    public static final KeyMapping TRICK = new KeyMapping("key.jetsetcraft.trick", KeyConflictContext.IN_GAME, InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_R, CATEGORY);
+    public static final KeyMapping GRIND = new KeyMapping("key.jetsetcraft.grind", KeyConflictContext.IN_GAME, InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_G, CATEGORY);
+    public static final KeyMapping MANUAL = new KeyMapping("key.jetsetcraft.manual", KeyConflictContext.IN_GAME, InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_C, CATEGORY);
+    public static final KeyMapping BRAKE = new KeyMapping("key.jetsetcraft.brake", KeyConflictContext.IN_GAME, InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_V, CATEGORY);
+    public static final KeyMapping DANCE = new KeyMapping("key.jetsetcraft.dance", KeyConflictContext.IN_GAME, InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_B, CATEGORY);
+    public static final KeyMapping RIDE_TOGGLE = new KeyMapping("key.jetsetcraft.ride_toggle", KeyConflictContext.IN_GAME, InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_K, CATEGORY);
     private static int lastMask = -1;
+    private static float lastForward = Float.NaN;
+    private static float lastStrafe = Float.NaN;
     private static int heartbeat;
 
     @Mod.EventBusSubscriber(modid = JetSetCraft.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
@@ -67,6 +77,16 @@ public final class ClientEvents {
                     playerRenderer.addLayer(new RideGearLayer(playerRenderer));
                 }
             }
+            for (EntityType<?> type : ForgeRegistries.ENTITY_TYPES.getValues()) {
+                if (type == EntityType.PLAYER) continue;
+                addMobLayer(event, type);
+            }
+        }
+
+        @SuppressWarnings({"rawtypes", "unchecked"})
+        private static void addMobLayer(EntityRenderersEvent.AddLayers event, EntityType<?> type) {
+            LivingEntityRenderer renderer = event.getRenderer((EntityType) type);
+            if (renderer != null) renderer.addLayer(new MobRideGearLayer(renderer));
         }
     }
 
@@ -78,32 +98,61 @@ public final class ClientEvents {
             Minecraft mc = Minecraft.getInstance();
             if (mc.player == null || mc.level == null) {
                 lastMask = -1;
+                lastForward = Float.NaN;
+                lastStrafe = Float.NaN;
                 heartbeat = 0;
                 ClientRideState.reset();
+                ClientMobGearState.reset();
+                RideAnimationController.reset();
                 return;
             }
+            boolean gameplayInput = mc.screen == null;
             while (RIDE_TOGGLE.consumeClick()) {
-                JetSetNetwork.sendRideLoadoutAction(mc.options.keyShift.isDown());
+                // Always drain queued clicks so a key pressed in chat/inventory cannot fire after the screen closes.
+                if (gameplayInput) JetSetNetwork.sendRideLoadoutAction(mc.options.keyShift.isDown());
             }
-            int mask = 0;
-            if (BOOST.isDown()) mask |= InputFlags.BOOST;
-            if (TRICK.isDown()) mask |= InputFlags.TRICK;
-            if (GRIND.isDown()) mask |= InputFlags.GRIND;
-            if (MANUAL.isDown()) mask |= InputFlags.MANUAL;
-            if (BRAKE.isDown()) mask |= InputFlags.BRAKE;
-            if (DANCE.isDown()) mask |= InputFlags.DANCE;
-            if (mc.options.keyJump.isDown()) mask |= InputFlags.JUMP;
-            if (mc.options.keyShift.isDown()) mask |= InputFlags.SNEAK;
 
-            float forward = mc.player.input.forwardImpulse;
-            float strafe = mc.player.input.leftImpulse;
+            int mask = 0;
+            float forward = 0.0F;
+            float strafe = 0.0F;
+            if (gameplayInput) {
+                if (BOOST.isDown()) mask |= InputFlags.BOOST;
+                if (TRICK.isDown()) mask |= InputFlags.TRICK;
+                if (GRIND.isDown()) mask |= InputFlags.GRIND;
+                if (MANUAL.isDown()) mask |= InputFlags.MANUAL;
+                if (BRAKE.isDown()) mask |= InputFlags.BRAKE;
+                if (DANCE.isDown()) mask |= InputFlags.DANCE;
+                if (mc.options.keyJump.isDown()) mask |= InputFlags.JUMP;
+                if (mc.options.keyShift.isDown()) mask |= InputFlags.SNEAK;
+                forward = finiteUnit(mc.player.input.forwardImpulse);
+                strafe = finiteUnit(mc.player.input.leftImpulse);
+            }
+
             ClientRideState.Snapshot snapshot = ClientRideState.get(mc.player.getId());
+            boolean analogChanged = Float.floatToIntBits(forward) != Float.floatToIntBits(lastForward)
+                    || Float.floatToIntBits(strafe) != Float.floatToIntBits(lastStrafe);
             heartbeat++;
-            if (mask != lastMask || snapshot.active() || snapshot.dancing() || heartbeat >= 5) {
+            if (mask != lastMask || analogChanged || snapshot.active() || snapshot.dancing() || heartbeat >= 5) {
                 JetSetNetwork.sendInput(mask, forward, strafe);
                 lastMask = mask;
+                lastForward = forward;
+                lastStrafe = strafe;
                 heartbeat = 0;
             }
+        }
+
+        private static float finiteUnit(float value) {
+            if (!Float.isFinite(value)) return 0.0F;
+            return Math.max(-1.0F, Math.min(1.0F, value));
+        }
+
+        @SubscribeEvent
+        public static void entityLeave(EntityLeaveLevelEvent event) {
+            if (!event.getLevel().isClientSide) return;
+            int entityId = event.getEntity().getId();
+            ClientRideState.remove(entityId);
+            ClientMobGearState.remove(entityId);
+            RideAnimationController.remove(entityId);
         }
 
         @SubscribeEvent
@@ -114,9 +163,10 @@ public final class ClientEvents {
             if (!state.active() || state.dancing() || JetSetConfig.CLIENT.reducedMotion.get()
                     || !JetSetConfig.CLIENT.dynamicCamera.get()) return;
             float roll = 0.0f;
+            float strafe = finiteUnit(mc.player.input.leftImpulse);
             if (state.wallRiding()) roll = state.wallSide() * 8.0f;
-            else if (state.powersliding()) roll = -mc.player.input.leftImpulse * 5.0f;
-            else if (state.grinding()) roll = -mc.player.input.leftImpulse * 2.5f;
+            else if (state.powersliding()) roll = -strafe * 5.0f;
+            else if (state.grinding()) roll = -strafe * 2.5f;
             if (com.herberto.jetsetcraft.compat.CompatManager.hasWeaponOverlay(mc.player)) roll *= 0.35f;
             roll *= JetSetConfig.CLIENT.cameraRollScale.get().floatValue();
             event.setRoll(event.getRoll() + roll);

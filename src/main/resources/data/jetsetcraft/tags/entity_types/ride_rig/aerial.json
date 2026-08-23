@@ -1,0 +1,7 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:allay", "minecraft:bat", "minecraft:bee", "minecraft:parrot", "minecraft:phantom",
+    "minecraft:vex", "minecraft:blaze", "minecraft:ghast"
+  ]
+}

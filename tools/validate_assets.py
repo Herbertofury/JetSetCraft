@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
-import json, re, sys
+import json, math, re, sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -17,7 +17,25 @@ for p in sorted((ROOT/'src/main/resources').rglob('*.json')):
 for p in sorted((ASSETS/'player_animation').glob('*.json')):
     data=json.loads(p.read_text(encoding='utf-8'))
     text=json.dumps(data)
+    emote=data.get('emote', {})
+    moves=emote.get('moves', [])
+    ticks=[move.get('tick') for move in moves]
+    if len(moves) < 2 or any(not isinstance(tick, int) for tick in ticks):
+        errors.append(f'{p.relative_to(ROOT)}: animation needs at least two integer-timed keyframes')
+    elif ticks != sorted(set(ticks)):
+        errors.append(f'{p.relative_to(ROOT)}: animation keyframe ticks must be unique and increasing')
+    elif ticks[0] != emote.get('beginTick') or ticks[-1] != emote.get('endTick'):
+        errors.append(f'{p.relative_to(ROOT)}: keyframes do not align with begin/end ticks')
+    for move in moves:
+        for bone, angles in move.items():
+            if bone in {'tick', 'easing'} or not isinstance(angles, dict):
+                continue
+            for axis, value in angles.items():
+                if not isinstance(value, (int, float)) or not math.isfinite(value):
+                    errors.append(f'{p.relative_to(ROOT)}: non-finite {bone}.{axis} value')
     full_body = p.stem.startswith('dance_') or p.stem.startswith('stunt_')
+    if not full_body and len(moves) < 5:
+        errors.append(f'{p.relative_to(ROOT)}: gameplay motion clip has only {len(moves)} keyframes; premium floor is 5')
     if full_body:
         for required in ('body','leftArm','rightArm','leftLeg','rightLeg'):
             if required not in text:

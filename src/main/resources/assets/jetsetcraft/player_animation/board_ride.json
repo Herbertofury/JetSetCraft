@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "uuid": "30b7ec5f-6c27-4ffd-a0a2-9836857bd452",
+  "uuid": "0284dc79-fc89-5962-a90e-d53a957b8fc6",
   "name": "board_ride",
   "emote": {
     "beginTick": 0,
@@ -16,6 +16,7 @@
         "easing": "INOUTSINE",
         "body": {
           "pitch": 0.12,
+          "yaw": 0.0,
           "roll": 0.08
         },
         "leftLeg": {
@@ -30,11 +31,69 @@
         }
       },
       {
+        "tick": 5,
+        "easing": "OUTQUAD",
+        "body": {
+          "pitch": 0.1316,
+          "yaw": 0.0261,
+          "roll": -0.0128
+        },
+        "leftLeg": {
+          "pitch": 0.1832,
+          "yaw": 0.3632,
+          "roll": 0.1374
+        },
+        "rightLeg": {
+          "pitch": -0.0832,
+          "yaw": -0.3232,
+          "roll": -0.1174
+        }
+      },
+      {
+        "tick": 10,
+        "easing": "INOUTSINE",
+        "body": {
+          "pitch": 0.14,
+          "yaw": 0.045,
+          "roll": -0.08
+        },
+        "leftLeg": {
+          "pitch": 0.2,
+          "yaw": 0.38,
+          "roll": 0.15
+        },
+        "rightLeg": {
+          "pitch": -0.1,
+          "yaw": -0.34,
+          "roll": -0.13
+        }
+      },
+      {
+        "tick": 15,
+        "easing": "OUTQUAD",
+        "body": {
+          "pitch": 0.1284,
+          "yaw": 0.0189,
+          "roll": 0.0128
+        },
+        "leftLeg": {
+          "pitch": 0.1768,
+          "yaw": 0.3568,
+          "roll": 0.1326
+        },
+        "rightLeg": {
+          "pitch": -0.0768,
+          "yaw": -0.3168,
+          "roll": -0.1126
+        }
+      },
+      {
         "tick": 20,
         "easing": "INOUTSINE",
         "body": {
           "pitch": 0.12,
-          "roll": -0.08
+          "yaw": 0.0,
+          "roll": 0.08
         },
         "leftLeg": {
           "pitch": 0.16,

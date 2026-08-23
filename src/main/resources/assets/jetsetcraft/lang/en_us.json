@@ -21,5 +21,10 @@
   "message.jetsetcraft.ride_unequipped": "Ride gear returned to your inventory.",
   "item.jetsetcraft.scooter": "Neon Street Scooter",
   "key.jetsetcraft.dance": "Dance / Cycle Style",
-  "message.jetsetcraft.dance_hint": "Press B to dance; move or press an action key to stop."
+  "message.jetsetcraft.dance_hint": "Press B to dance; move or press an action key to stop.",
+  "message.jetsetcraft.mob_gear_already_equipped": "That rider already has Street Gear. Sneak-use another gear item to swap it.",
+  "message.jetsetcraft.mob_gear_equipped": "%s joined the street on %s gear.",
+  "tooltip.jetsetcraft.ride_gear_player": "Use in the air to equip your hands-free ride loadout.",
+  "tooltip.jetsetcraft.ride_gear_mob": "Use on a mob to equip the original mob with persistent Street Gear.",
+  "tooltip.jetsetcraft.ride_gear_remove": "Sneak + empty-hand use removes mob gear; sneak-use gear swaps it."
 }

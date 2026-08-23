@@ -1,1 +1,10 @@
-{"loader":"forge:obj","model":"jetsetcraft:models/obj/bmx.obj","flip_v":true}
+{
+  "parent": "forge:item/default",
+  "loader": "forge:obj",
+  "model": "jetsetcraft:models/obj/bmx.obj",
+  "flip_v": true,
+  "gui_light": "front",
+  "textures": {
+    "particle": "jetsetcraft:item/bike_frame"
+  }
+}

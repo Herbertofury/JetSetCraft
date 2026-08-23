@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "uuid": "14467541-8f11-4715-b678-8eb40437424f",
+  "uuid": "9a1f9b54-7e60-5117-9e03-d7d813f3cf86",
   "name": "powerslide",
   "emote": {
     "beginTick": 0,
@@ -16,6 +16,7 @@
         "easing": "INOUTSINE",
         "body": {
           "pitch": 0.16,
+          "yaw": 0.0,
           "roll": -0.18
         },
         "leftLeg": {
@@ -30,10 +31,30 @@
         }
       },
       {
+        "tick": 4,
+        "easing": "OUTQUAD",
+        "body": {
+          "pitch": 0.1716,
+          "yaw": 0.058,
+          "roll": 0.0288
+        },
+        "leftLeg": {
+          "pitch": 0.2104,
+          "yaw": 0.4548,
+          "roll": 0.1516
+        },
+        "rightLeg": {
+          "pitch": 0.216,
+          "yaw": -0.4452,
+          "roll": -0.1416
+        }
+      },
+      {
         "tick": 8,
         "easing": "INOUTSINE",
         "body": {
           "pitch": 0.18,
+          "yaw": 0.1,
           "roll": 0.18
         },
         "leftLeg": {
@@ -48,10 +69,30 @@
         }
       },
       {
+        "tick": 12,
+        "easing": "OUTQUAD",
+        "body": {
+          "pitch": 0.1684,
+          "yaw": 0.042,
+          "roll": -0.0288
+        },
+        "leftLeg": {
+          "pitch": 0.2296,
+          "yaw": 0.4452,
+          "roll": 0.1484
+        },
+        "rightLeg": {
+          "pitch": 0.184,
+          "yaw": -0.4548,
+          "roll": -0.1384
+        }
+      },
+      {
         "tick": 16,
         "easing": "INOUTSINE",
         "body": {
           "pitch": 0.16,
+          "yaw": 0.0,
           "roll": -0.18
         },
         "leftLeg": {

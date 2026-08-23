@@ -47,8 +47,7 @@ public final class RideAnimationController {
             if (event.phase != TickEvent.Phase.END) return;
             Minecraft mc = Minecraft.getInstance();
             if (mc.level == null) {
-                ACTIVE_RIDE.clear();
-                ACTIVE_ACTION.clear();
+                reset();
                 return;
             }
             for (AbstractClientPlayer player : mc.level.players()) update(player);
@@ -66,10 +65,13 @@ public final class RideAnimationController {
     private static void apply(AbstractClientPlayer player, ResourceLocation layerId,
                               Map<Integer, ResourceLocation> active, ResourceLocation next) {
         ResourceLocation previous = active.get(player.getId());
-        if (Objects.equals(previous, next)) return;
         Object raw = PlayerAnimationAccess.getPlayerAssociatedData(player).get(layerId);
-        if (!(raw instanceof ModifierLayer<?> layerRaw)) return;
+        if (!(raw instanceof ModifierLayer<?> layerRaw)) {
+            active.remove(player.getId());
+            return;
+        }
         ModifierLayer<IAnimation> layer = (ModifierLayer<IAnimation>) layerRaw;
+        if (Objects.equals(previous, next)) return;
         if (next == null) {
             layer.setAnimation(null);
             active.remove(player.getId());
@@ -83,6 +85,17 @@ public final class RideAnimationController {
         }
         layer.setAnimation(new KeyframeAnimationPlayer(animation));
         active.put(player.getId(), next);
+    }
+
+
+    public static void remove(int entityId) {
+        ACTIVE_RIDE.remove(entityId);
+        ACTIVE_ACTION.remove(entityId);
+    }
+
+    public static void reset() {
+        ACTIVE_RIDE.clear();
+        ACTIVE_ACTION.clear();
     }
 
     private static ResourceLocation chooseRide(ClientRideState.Snapshot state) {

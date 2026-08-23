@@ -63,6 +63,7 @@ final class TrickCombo {
     }
 
     private static void perform(ServerPlayer player, JetSetData data, int context, int duration) {
+        data.consumeTrickBuffer();
         int seed = data.comboScore() / 180 + Math.max(0, data.lastTrickId()) + player.tickCount / 7;
         TrickCatalog.Trick trick = TrickCatalog.select(context, data.style(), data.inputForward(), data.inputStrafe(), seed);
         boolean boostTrick = JetSetConfig.SERVER.allowBoostTricks.get() && data.pressed(InputFlags.BOOST)
@@ -116,7 +117,9 @@ final class TrickCombo {
     }
 
     static void addStyle(JetSetData data, int base, float multiplierGain) {
-        data.setComboScore(data.comboScore() + Math.max(1, Math.round(base * data.comboMultiplier())));
+        int award = Math.max(1, Math.round(base * data.comboMultiplier()));
+        long total = (long) data.comboScore() + award;
+        data.setComboScore(total >= Integer.MAX_VALUE ? Integer.MAX_VALUE : (int) total);
         data.setComboMultiplier(data.comboMultiplier() + multiplierGain);
         data.setComboGrace(MovementTuning.COMBO_GRACE_TICKS);
         data.setFlow(data.flow() + Math.min(1.25f, Math.max(0.08f, base / 260.0f)));

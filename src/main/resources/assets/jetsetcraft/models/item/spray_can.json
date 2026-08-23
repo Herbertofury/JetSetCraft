@@ -1,1 +1,10 @@
-{"loader":"forge:obj","model":"jetsetcraft:models/obj/spray_can.obj","flip_v":true}
+{
+  "parent": "forge:item/default",
+  "loader": "forge:obj",
+  "model": "jetsetcraft:models/obj/spray_can.obj",
+  "flip_v": true,
+  "gui_light": "front",
+  "textures": {
+    "particle": "jetsetcraft:item/accent"
+  }
+}

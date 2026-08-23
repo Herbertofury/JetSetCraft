@@ -1,1 +1,10 @@
-{"loader":"forge:obj","model":"jetsetcraft:models/obj/hoverboard.obj","flip_v":true}
+{
+  "parent": "forge:item/default",
+  "loader": "forge:obj",
+  "model": "jetsetcraft:models/obj/hoverboard.obj",
+  "flip_v": true,
+  "gui_light": "front",
+  "textures": {
+    "particle": "jetsetcraft:item/hover_deck"
+  }
+}

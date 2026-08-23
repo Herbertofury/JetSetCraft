@@ -1,0 +1,27 @@
+{
+  "project": "JetSetCraft",
+  "date_local": "2026-08-22",
+  "topic": "Persistent same-entity Street Gear foundation and species-aware contact rigs",
+  "version": "0.3.0-alpha.1",
+  "local_checkpoint_commit": "347b1d3795ebc31ece2ea9dd7533ec412149face",
+  "drive_checkpoint": {
+    "file_id": "1JoYt37eCKhpMI7e1-ECa86MK7XjiZUrG",
+    "size_bytes": 277176,
+    "sha256": "926ffc2220b6dcb78869146798dd43de5ce96257b63a97cea3d033417e490834",
+    "roundtrip_byte_match": true
+  },
+  "implemented": [
+    "Persistent physical ItemStack Street Gear stored on the original mob entity",
+    "Player equip, sneak-swap, empty-hand removal, native pickup, dropped-item contact and dispenser acquisition paths",
+    "Death-drop and living-conversion preservation without replacing source mob classes or AI",
+    "Data-driven biped, quadruped, multi-leg, body-contact, aerial and aquatic contact rigs with conservative modded-mob fallback",
+    "Server-authoritative late-tracking packet synchronization and generic client render layer",
+    "Input finite-number sanitation, stuck-input watchdog and short trick input buffer"
+  ],
+  "verification": {
+    "asset_validator": "pass",
+    "gameplay_contract_validator": "pass",
+    "wiki_validator": "pass",
+    "forge_ci": "first compiler pass found and fixed BlockSource mapping plus comparator typing; clean rerun requested"
+  }
+}
