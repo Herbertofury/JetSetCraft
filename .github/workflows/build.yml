@@ -33,6 +33,11 @@ jobs:
             exit 1
           fi
 
+          verification_workflow='/tmp/jetsetcraft-build-workflow.yml'
+          cp .github/workflows/build.yml "$verification_workflow"
+          git show origin/main:.github/workflows/build.yml > .github/workflows/build.yml
+          git add .github/workflows/build.yml
+
           cat "${parts[@]}" | base64 --decode > /tmp/style-flow-primary.patch.xz
           expected_primary_xz="$(python -c 'import json; print(json.load(open("checkpoints/style-flow-pending.ready.json"))["primary"]["xz_sha256"])')"
           actual_primary_xz="$(sha256sum /tmp/style-flow-primary.patch.xz | cut -d' ' -f1)"
@@ -53,6 +58,7 @@ jobs:
           [[ "$actual_repair_patch" == "$expected_repair_patch" ]] || { echo '::error::Style Flow repair patch SHA-256 mismatch.'; exit 1; }
           git apply --index --binary --whitespace=nowarn /tmp/style-flow-repair.patch
 
+          cp "$verification_workflow" .github/workflows/build.yml
           rm -f checkpoints/style-flow-pending.b64.part* checkpoints/style-flow-repair.b64.part* "$ready"
           git add -A
           echo 'applied=true' >> "$GITHUB_OUTPUT"
