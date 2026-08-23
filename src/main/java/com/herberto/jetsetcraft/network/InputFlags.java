@@ -9,5 +9,7 @@ public final class InputFlags {
     public static final int JUMP = 1 << 5;
     public static final int DANCE = 1 << 6;
     public static final int SNEAK = 1 << 7;
+    public static final int ALL = BOOST | TRICK | GRIND | MANUAL | BRAKE | JUMP | DANCE | SNEAK;
+
     private InputFlags() {}
 }
