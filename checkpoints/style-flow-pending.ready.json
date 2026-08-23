@@ -1,18 +1,18 @@
 {
   "schema": 1,
-  "description": "JetSetCraft 0.3 Street Gear remote Forge verification (inspectable PR run)",
+  "description": "JetSetCraft 0.3 Street Gear Forge compile repair verification",
   "primary": {
-    "patch_sha256": "5577d8394325d671c8a82a146aa12f4ac524fbe7146bd37fe63130641286228f",
-    "xz_sha256": "944589a15c88031820123e0b0709a4fdd037f19a3cbf5d7a71692f53956dec0f",
-    "patch_size_bytes": 65209,
-    "xz_size_bytes": 13148,
-    "parts": 1
+    "patch_sha256": "10c42ff3da3307b1bbee67111bfe1d162e089ca95a7299ecc1c8037ff43fdcd4",
+    "xz_sha256": "5029df420c6b652f4911486f0d8e03b4a4a162e8ee547a7f20a2a9230c43d93c",
+    "patch_size_bytes": 239150,
+    "xz_size_bytes": 38604,
+    "parts": 9
   },
   "repair": {
-    "patch_sha256": "9379ba0ce6e219fb96ee3dc0704c06f74eea49887d35c1539da6b486f2d59345",
-    "xz_sha256": "7ddac799060409e7b9f3fc34d210efb8260e0f94db0a6812c52acd2745685832",
-    "patch_size_bytes": 1587,
-    "xz_size_bytes": 976,
+    "patch_sha256": "1867846e8e4d629bed14a91758bddbeb305868e4431622091e039b4708a1c909",
+    "xz_sha256": "e3ad06e207186e835c8c6bf0ad22edbc40df4bc4d19f5a36a505cebd56c4f0c2",
+    "patch_size_bytes": 1015,
+    "xz_size_bytes": 616,
     "parts": 1
   }
 }
