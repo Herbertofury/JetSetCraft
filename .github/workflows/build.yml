@@ -94,11 +94,12 @@ jobs:
             'JETSETCRAFT_GAMETEST_PASS scooter' \
             'JETSETCRAFT_GAMETEST_PASS dance_flow' \
             'JETSETCRAFT_GAMETEST_PASS combat_sovereignty' \
-            'JETSETCRAFT_GAMETEST_PASS catalogs'; do
+            'JETSETCRAFT_GAMETEST_PASS catalogs' \
+            'JETSETCRAFT_GAMETEST_PASS street_gear'; do
             grep -Fq "$required" "$log" || { echo "::error::Forge GameTest did not emit $required."; exit 1; }
           done
-          grep -Eq 'All 5 required tests passed|5 tests? passed' "$log" || {
-            echo '::error::Forge GameTest server did not report all five required Style Flow tests passing.'
+          grep -Eq 'All 6 required tests passed|6 tests? passed' "$log" || {
+            echo '::error::Forge GameTest server did not report all six required JetSetCraft tests passing.'
             exit 1
           }
 
