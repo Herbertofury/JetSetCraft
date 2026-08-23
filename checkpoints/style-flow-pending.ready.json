@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "description": "JetSetCraft 0.3 Street Gear Forge compile repair verification",
+  "description": "JetSetCraft 0.3 Street Gear Forge compile and verification repair",
   "primary": {
     "patch_sha256": "10c42ff3da3307b1bbee67111bfe1d162e089ca95a7299ecc1c8037ff43fdcd4",
     "xz_sha256": "5029df420c6b652f4911486f0d8e03b4a4a162e8ee547a7f20a2a9230c43d93c",
@@ -9,10 +9,10 @@
     "parts": 12
   },
   "repair": {
-    "patch_sha256": "9bac0c086fb7a9cdf5f7954b2ed91bf25df4da18e4a3c0a625617b60fba80fb7",
-    "xz_sha256": "6320e9edf3dd9290dec4a22e61d8b1f8d93268fc07ea77c570f068d26b6b0eca",
-    "patch_size_bytes": 1909,
-    "xz_size_bytes": 920,
+    "patch_sha256": "8eb3a55b446d6891ac4862ea471da7ccb09dcf999d77b4ef0694052902c7e488",
+    "xz_sha256": "661bc89bbbd674f1986205051f4aec3c642dce44efb0f82ba823d83338b52023",
+    "patch_size_bytes": 5699,
+    "xz_size_bytes": 2024,
     "parts": 1
   }
 }
