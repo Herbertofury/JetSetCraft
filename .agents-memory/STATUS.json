@@ -1,5 +1,5 @@
 {
-  "version": "0.2.0-alpha.1",
+  "version": "0.3.0-alpha.1",
   "phase": "Style Flow expansion / local contracts complete / real Forge GameTests and dedicated-server verified",
   "implemented": [
     "six server-authoritative ride styles: inline, quad, skateboard, BMX, hoverboard, scooter",
@@ -18,8 +18,8 @@
     "dense procedural inline, quad, skateboard, hoverboard, BMX, scooter, and spray-can meshes",
     "offline-safe deterministic asset generation and complete graffiti fallback catalog",
     "optional Aether Quicksoil/Blue Aercloud/Aerogel and Twilight Forest Aurora route hooks without dependencies",
-    "complete validated twenty-one-page GitHub wiki source and automatic wiki publication workflow",
-    "five isolated real Forge GameTests with unique fake-player identities"
+    "complete validated twenty-five-page GitHub wiki source and automatic wiki publication workflow",
+    "six isolated real Forge GameTests with unique fake-player identities, including Street Gear"
   ],
   "verified": {
     "canonical_main_commit": "b0631769441faea3931a11aa0b156b2ed7413d21",
@@ -76,35 +76,53 @@
       "sha256": "6e60bcc90fd6b85209598b088b9d2b87fb6c3a36d9d68c6eb4e478f538a5894f",
       "legacy_repo_thumbnail": "assets/jetsetcraft-cover.webp"
     },
-    "style_flow_workflow_run": 32528717032,
-    "style_flow_workflow_run_number": 97,
-    "workflow_input_commit": "3806bade7e59b16826e7a0c92128117fd1fd5c35",
-    "workflow_branch": "style-flow-release",
+    "style_flow_workflow_run": 32652330325,
+    "style_flow_workflow_run_number": 141,
+    "workflow_input_commit": "a24cd3d87e222ad12381d1e67684c73f68a4ac2a",
+    "workflow_branch": "automation/street-gear-0.3-verify",
     "asset_gameplay_and_wiki_validation": true,
     "real_forge_style_flow_gametests": {
-      "required": 5,
-      "passed": 5,
-      "observed": "[21:31:18] [Server thread/INFO] [minecraft/GameTestServer]: All 5 required tests passed :)",
+      "required": 6,
+      "passed": 6,
+      "observed": "[16:41:00] [Server thread/INFO] [minecraft/GameTestServer]: All 6 required tests passed :)",
       "file": "style-flow-gametest.log",
-      "bytes": 21971,
-      "sha256": "893c9b6ba4a743f990b00390b62736ae2d1444f598b034cf15b768ea76c09cfc"
+      "bytes": 22106,
+      "sha256": "37d8e675eba6775b604e65f6dad22b4391a15b242f2b72205e363cd5d4ebdfd9"
     },
     "dedicated_server_smoke": {
-      "observed": "[21:32:12] [Server thread/INFO] [minecraft/DedicatedServer]: Done (5.584s)! For help, type \"help\"",
+      "observed": "[16:41:33] [Server thread/INFO] [minecraft/DedicatedServer]: Done (6.779s)! For help, type \"help\"",
       "file": "server-smoke.log",
       "bytes": 6593,
-      "sha256": "9373a64f71d523c32f238ce16b0589a2f7fa314e0ca674457f8f91fbb51e4e87"
+      "sha256": "3574acd334d913d6249fa8ffad71b9651ecbf95d1463c5efc7b69eba88d06358"
     },
     "style_flow_build": {
-      "file": "jetsetcraft-1.20.1-0.2.0-alpha.1.jar",
-      "bytes": 3573244,
-      "sha256": "cf988bd0efac1494237e34232932b6ab032d57d3340de5b62dd94303766ac140"
+      "file": "jetsetcraft-1.20.1-0.3.0-alpha.1.jar",
+      "bytes": 3612216,
+      "sha256": "979ba60d68767c51df16fdcd41c7e73ac59323f118498fa01b927f7b2a8c679e"
     },
     "ride_style_count": 6,
     "dance_move_count": 28,
     "trick_count": 24,
     "animation_resource_count": 68,
-    "wiki_page_count": 21
+    "wiki_page_count": 25,
+    "premium_polish_source_commit": "035f2b99d589c47d11af00a8138140e0d5dd4b4b",
+    "premium_polish_offline_gates": {
+      "assets": "pass: 7 items / 68 clips",
+      "geometry_and_animation": "pass: 7 meshes / 68 seam-checked clips",
+      "gameplay_contract": true,
+      "compatibility_boundary": true,
+      "java_syntax_sources": 69,
+      "wiki_pages": 21,
+      "python_compileall": true,
+      "git_diff_check": true
+    },
+    "premium_preview": {
+      "file": "jetsetcraft-1.20.1-0.2.1-alpha.1-premium-preview.jar",
+      "base_verified_jar_sha256": "cf988bd0efac1494237e34232932b6ab032d57d3340de5b62dd94303766ac140",
+      "bytes": 3605594,
+      "sha256": "c3dc6de19b34e06273eec3e9630e57b4c93700b086dc184d47e9f2c75531c347",
+      "runtime_scope": "presentation resources plus narrow 0.2 JetSetData hardening; not the uncompiled 0.3 feature set"
+    }
   },
   "pending_validation": [
     "real client visual smoke test across all ride styles, dance families, named tricks, HUD, VFX, and reduced-motion mode",

@@ -13,9 +13,8 @@ public record C2SInputPacket(int mask, float forward, float strafe) {
         NetworkEvent.Context ctx = supplier.get();
         ctx.enqueueWork(() -> {
             ServerPlayer player = ctx.getSender();
-            if (player != null) player.getCapability(JetSetDataProvider.CAPABILITY).ifPresent(data -> {
-                data.setInputMask(p.mask); data.setInputForward(p.forward); data.setInputStrafe(p.strafe);
-            });
+            if (player != null) player.getCapability(JetSetDataProvider.CAPABILITY)
+                    .ifPresent(data -> data.acceptInput(p.mask, p.forward, p.strafe));
         });
         ctx.setPacketHandled(true);
     }

@@ -1,10 +1,13 @@
 package com.herberto.jetsetcraft.data;
 
+import com.herberto.jetsetcraft.item.RideGearItem;
 import com.herberto.jetsetcraft.movement.DanceCatalog;
 import com.herberto.jetsetcraft.movement.DanceStyle;
 import com.herberto.jetsetcraft.movement.GrindKind;
 import com.herberto.jetsetcraft.movement.RideStyle;
+import com.herberto.jetsetcraft.network.InputFlags;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 
@@ -51,6 +54,9 @@ public final class JetSetData {
     private int previousInputMask;
     private float inputForward;
     private float inputStrafe;
+    private int inputAgeTicks;
+    private boolean inputWatchdogArmed;
+    private int trickBufferTicks;
     private boolean wasGrounded = true;
     private int airTicks;
     private long lastSyncTick;
@@ -139,25 +145,67 @@ public final class JetSetData {
     public float wallSide() { return wallSide; }
     public void setWallSide(float value) { wallSide = clamp(value, -1f, 1f); }
     public Vec3 grindDirection() { return grindDirection; }
-    public void setGrindDirection(Vec3 value) { grindDirection = value == null ? Vec3.ZERO : value; }
+    public void setGrindDirection(Vec3 value) { grindDirection = finiteVector(value); }
     public Vec3 wallNormal() { return wallNormal; }
-    public void setWallNormal(Vec3 value) { wallNormal = value == null ? Vec3.ZERO : value; }
+    public void setWallNormal(Vec3 value) { wallNormal = finiteVector(value); }
     public int grindGrace() { return grindGrace; }
     public void setGrindGrace(int value) { grindGrace = Math.max(0, value); }
     public int grindStuckTicks() { return grindStuckTicks; }
     public void setGrindStuckTicks(int value) { grindStuckTicks = Math.max(0, value); }
     public double grindCurveFactor() { return grindCurveFactor; }
-    public void setGrindCurveFactor(double value) { grindCurveFactor = Math.max(0.65, Math.min(1.0, value)); }
+    public void setGrindCurveFactor(double value) {
+        grindCurveFactor = Double.isFinite(value) ? Math.max(0.65, Math.min(1.0, value)) : 1.0;
+    }
     public int wallRideTicks() { return wallRideTicks; }
     public void setWallRideTicks(int value) { wallRideTicks = Math.max(0, value); }
     public int inputMask() { return inputMask; }
-    public void setInputMask(int value) { inputMask = value; }
+    public void setInputMask(int value) {
+        int sanitized = value & InputFlags.ALL;
+        if ((sanitized & InputFlags.TRICK) != 0 && (inputMask & InputFlags.TRICK) == 0) {
+            trickBufferTicks = 6;
+        }
+        inputMask = sanitized;
+    }
     public int previousInputMask() { return previousInputMask; }
-    public void setPreviousInputMask(int value) { previousInputMask = value; }
+    public void setPreviousInputMask(int value) { previousInputMask = value & InputFlags.ALL; }
     public float inputForward() { return inputForward; }
-    public void setInputForward(float value) { inputForward = clamp(value, -1f, 1f); }
+    public void setInputForward(float value) { inputForward = sanitizeUnit(value); }
     public float inputStrafe() { return inputStrafe; }
-    public void setInputStrafe(float value) { inputStrafe = clamp(value, -1f, 1f); }
+    public void setInputStrafe(float value) { inputStrafe = sanitizeUnit(value); }
+    public int inputAgeTicks() { return inputAgeTicks; }
+    public int trickBufferTicks() { return trickBufferTicks; }
+
+    /** Accept one complete client input sample at the server-authoritative boundary. */
+    public void acceptInput(int mask, float forward, float strafe) {
+        setInputMask(mask);
+        setInputForward(forward);
+        setInputStrafe(strafe);
+        inputAgeTicks = 0;
+        inputWatchdogArmed = true;
+    }
+
+    /**
+     * Prevent a lost release packet or disconnected client from leaving boost/grind/manual/dance latched forever.
+     * Direct server-side tests and automation remain unaffected until a real network sample arms the watchdog.
+     */
+    public void tickInputWatchdog() {
+        if (trickBufferTicks > 0) trickBufferTicks--;
+        if (!inputWatchdogArmed) return;
+        inputAgeTicks++;
+        if (inputAgeTicks > 20) clearInputState();
+    }
+
+    public void clearInputState() {
+        inputMask = 0;
+        previousInputMask = 0;
+        inputForward = 0.0f;
+        inputStrafe = 0.0f;
+        inputAgeTicks = 0;
+        inputWatchdogArmed = false;
+        trickBufferTicks = 0;
+    }
+
+    public void consumeTrickBuffer() { trickBufferTicks = 0; }
     public boolean wasGrounded() { return wasGrounded; }
     public void setWasGrounded(boolean value) { wasGrounded = value; }
     public int airTicks() { return airTicks; }
@@ -165,9 +213,9 @@ public final class JetSetData {
     public long lastSyncTick() { return lastSyncTick; }
     public void setLastSyncTick(long value) { lastSyncTick = value; }
     public double momentum() { return momentum; }
-    public void setMomentum(double value) { momentum = Math.max(0.0, value); }
+    public void setMomentum(double value) { momentum = Double.isFinite(value) ? Math.max(0.0, value) : 0.0; }
     public double lastVerticalVelocity() { return lastVerticalVelocity; }
-    public void setLastVerticalVelocity(double value) { lastVerticalVelocity = value; }
+    public void setLastVerticalVelocity(double value) { lastVerticalVelocity = Double.isFinite(value) ? value : 0.0; }
     public long lastDetectorRailPos() { return lastDetectorRailPos; }
     public void setLastDetectorRailPos(long value) { lastDetectorRailPos = value; }
     public long lastActivatorRailPos() { return lastActivatorRailPos; }
@@ -177,18 +225,28 @@ public final class JetSetData {
     public int surfaceInteractionCooldown() { return surfaceInteractionCooldown; }
     public void setSurfaceInteractionCooldown(int value) { surfaceInteractionCooldown = Math.max(0, value); }
     public Vec3 lastSolverVelocity() { return lastSolverVelocity; }
-    public void setLastSolverVelocity(Vec3 value) { lastSolverVelocity = value == null ? Vec3.ZERO : value; }
+    public void setLastSolverVelocity(Vec3 value) { lastSolverVelocity = finiteVector(value); }
     public Vec3 externalImpulse() { return externalImpulse; }
-    public void setExternalImpulse(Vec3 value) { externalImpulse = value == null ? Vec3.ZERO : value; }
+    public void setExternalImpulse(Vec3 value) { externalImpulse = finiteVector(value); }
     public int externalImpulseTicks() { return externalImpulseTicks; }
     public void setExternalImpulseTicks(int value) { externalImpulseTicks = Math.max(0, value); }
     public int terrainAssistCooldown() { return terrainAssistCooldown; }
     public void setTerrainAssistCooldown(int value) { terrainAssistCooldown = Math.max(0, value); }
     public ItemStack rideGear() { return rideGear; }
-    public void setRideGear(ItemStack stack) { rideGear = stack == null ? ItemStack.EMPTY : stack; }
+    public void setRideGear(ItemStack stack) {
+        if (stack == null || stack.isEmpty() || !(stack.getItem() instanceof RideGearItem)) {
+            rideGear = ItemStack.EMPTY;
+            return;
+        }
+        rideGear = stack.copy();
+        rideGear.setCount(1);
+    }
     public ItemStack takeRideGear() { ItemStack stack = rideGear; rideGear = ItemStack.EMPTY; return stack; }
     public boolean pressed(int flag) { return (inputMask & flag) != 0; }
-    public boolean justPressed(int flag) { return (inputMask & flag) != 0 && (previousInputMask & flag) == 0; }
+    public boolean justPressed(int flag) {
+        if (flag == InputFlags.TRICK && trickBufferTicks > 0) return true;
+        return (inputMask & flag) != 0 && (previousInputMask & flag) == 0;
+    }
 
     public void resetTransientRideState() {
         grinding = false;
@@ -229,30 +287,32 @@ public final class JetSetData {
     }
 
     public void copyFrom(JetSetData other) {
-        style = other.style;
-        active = other.active;
-        boost = other.boost;
-        comboScore = other.comboScore;
-        comboMultiplier = other.comboMultiplier;
-        comboGrace = other.comboGrace;
-        flow = other.flow;
-        uniqueTrickMask = other.uniqueTrickMask;
-        uniqueDanceMask = other.uniqueDanceMask;
-        danceStyle = other.danceStyle;
-        danceMoveId = other.danceMoveId;
-        rideGear = other.rideGear.copy();
+        if (other == null) {
+            load(new CompoundTag());
+            return;
+        }
+        setRideGear(other.rideGear);
+        RideStyle physicalStyle = rideGear.getItem() instanceof RideGearItem gear ? gear.style() : RideStyle.NONE;
+        setStyle(physicalStyle);
+        setActive(other.active && physicalStyle != RideStyle.NONE && other.style == physicalStyle);
+        setBoost(other.boost);
+        setComboScore(other.comboScore);
+        setComboMultiplier(other.comboMultiplier);
+        setComboGrace(other.comboGrace);
+        setFlow(other.flow);
+        setUniqueTrickMask(other.uniqueTrickMask);
+        setUniqueDanceMask(other.uniqueDanceMask);
+        setDanceStyle(other.danceStyle);
+        setDanceMoveId(other.danceMoveId);
         resetTransientRideState();
         dancing = false;
         groundStunt = false;
         boostTrick = false;
-        inputMask = 0;
-        previousInputMask = 0;
-        inputForward = 0;
-        inputStrafe = 0;
+        clearInputState();
         wasGrounded = true;
         airTicks = 0;
-        momentum = 0;
-        lastVerticalVelocity = 0;
+        momentum = 0.0;
+        lastVerticalVelocity = 0.0;
     }
 
     public CompoundTag save() {
@@ -272,21 +332,51 @@ public final class JetSetData {
     }
 
     public void load(CompoundTag tag) {
-        style = RideStyle.byId(tag.getInt("Style"));
-        active = tag.getBoolean("Active") && style != RideStyle.NONE;
-        boost = tag.contains("Boost") ? tag.getFloat("Boost") : 100f;
-        comboScore = tag.getInt("ComboScore");
-        comboMultiplier = tag.contains("ComboMultiplier") ? tag.getFloat("ComboMultiplier") : 1f;
-        flow = tag.contains("Flow") ? tag.getFloat("Flow") : 0f;
-        uniqueTrickMask = tag.contains("UniqueTricks") ? tag.getLong("UniqueTricks") : 0L;
-        uniqueDanceMask = tag.contains("UniqueDances") ? tag.getLong("UniqueDances") : 0L;
-        danceStyle = tag.contains("DanceStyle") ? DanceStyle.byId(tag.getInt("DanceStyle")).id() : DanceStyle.BREAKING.id();
-        danceMoveId = tag.contains("DanceMove") ? Math.floorMod(tag.getInt("DanceMove"), DanceCatalog.MOVE_COUNT) : 0;
-        rideGear = tag.contains("RideGear", 10) ? ItemStack.of(tag.getCompound("RideGear")) : ItemStack.EMPTY;
-        if (rideGear.isEmpty()) active = false;
+        CompoundTag safe = tag == null ? new CompoundTag() : tag;
+        setBoost(safe.contains("Boost") ? safe.getFloat("Boost") : 100.0F);
+        setComboScore(safe.getInt("ComboScore"));
+        setComboMultiplier(safe.contains("ComboMultiplier") ? safe.getFloat("ComboMultiplier") : 1.0F);
+        setFlow(safe.contains("Flow") ? safe.getFloat("Flow") : 0.0F);
+        setUniqueTrickMask(safe.contains("UniqueTricks") ? safe.getLong("UniqueTricks") : 0L);
+        setUniqueDanceMask(safe.contains("UniqueDances") ? safe.getLong("UniqueDances") : 0L);
+        setDanceStyle(safe.contains("DanceStyle") ? safe.getInt("DanceStyle") : DanceStyle.BREAKING.id());
+        setDanceMoveId(safe.contains("DanceMove") ? safe.getInt("DanceMove") : 0);
+        setRideGear(safe.contains("RideGear", Tag.TAG_COMPOUND)
+                ? ItemStack.of(safe.getCompound("RideGear")) : ItemStack.EMPTY);
+
+        // The physical item is the source of truth. A stale/corrupt style integer can never activate a different ride.
+        RideStyle storedStyle = RideStyle.byId(safe.getInt("Style"));
+        RideStyle physicalStyle = rideGear.getItem() instanceof RideGearItem gear ? gear.style() : RideStyle.NONE;
+        setStyle(physicalStyle == RideStyle.NONE ? RideStyle.NONE : physicalStyle);
+        setActive(safe.getBoolean("Active") && physicalStyle != RideStyle.NONE
+                && (storedStyle == RideStyle.NONE || storedStyle == physicalStyle));
+
+        resetTransientRideState();
+        clearInputState();
+        dancing = false;
+        groundStunt = false;
+        boostTrick = false;
+        trickTicks = 0;
+        landingTicks = 0;
+        wasGrounded = true;
+        airTicks = 0;
+        momentum = 0.0;
+        lastVerticalVelocity = 0.0;
+    }
+
+    private static Vec3 finiteVector(Vec3 value) {
+        if (value == null || !Double.isFinite(value.x) || !Double.isFinite(value.y) || !Double.isFinite(value.z)) {
+            return Vec3.ZERO;
+        }
+        return value;
+    }
+
+    private static float sanitizeUnit(float value) {
+        return Float.isFinite(value) ? Math.max(-1.0f, Math.min(1.0f, value)) : 0.0f;
     }
 
     private static float clamp(float value, float min, float max) {
+        if (!Float.isFinite(value)) return min <= 0.0f && max >= 0.0f ? 0.0f : min;
         return Math.max(min, Math.min(max, value));
     }
 }

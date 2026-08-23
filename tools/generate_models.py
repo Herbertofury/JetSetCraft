@@ -108,22 +108,37 @@ class Mesh:
 
     def ellipsoid(self, center, radii, mat, lon=28, lat=14, y_min=-1.0, y_max=1.0):
         cx,cy,cz=center; rx,ry,rz=radii
-        rings=[]
+        # Poles are single vertices, not a full ring of coincident vertices. The old form produced dozens of
+        # zero-area cap faces on every skate boot, which could shimmer or disappear under back-face culling.
+        levels=[]
         for j in range(lat+1):
             phi=-math.pi/2 + math.pi*j/lat
             yn=math.sin(phi)
-            if yn<y_min or yn>y_max: continue
+            if yn<y_min-1.0e-9 or yn>y_max+1.0e-9: continue
+            radial=math.cos(phi)
+            if abs(radial)<1.0e-8:
+                levels.append((j,[(cx,cy+ry*yn,cz)]))
+                continue
             ring=[]
             for i in range(lon):
                 th=2*math.pi*i/lon
-                x=cx+rx*math.cos(phi)*math.cos(th); y=cy+ry*yn; z=cz+rz*math.cos(phi)*math.sin(th)
+                x=cx+rx*radial*math.cos(th); y=cy+ry*yn; z=cz+rz*radial*math.sin(th)
                 ring.append((x,y,z))
-            rings.append((j,ring))
-        for r in range(len(rings)-1):
-            j,a=rings[r]; _,b=rings[r+1]
-            for i in range(lon):
-                ni=(i+1)%lon
-                self.quad(a[i],a[ni],b[ni],b[i],mat,((i/lon,j/lat),(ni/lon,j/lat),(ni/lon,(j+1)/lat),(i/lon,(j+1)/lat)))
+            levels.append((j,ring))
+        for r in range(len(levels)-1):
+            j,a=levels[r]; next_j,b=levels[r+1]
+            if len(a)==1 and len(b)>1:
+                for i in range(lon):
+                    ni=(i+1)%lon
+                    self.tri(a[0],b[ni],b[i],mat,(0.5,0.0),(ni/lon,next_j/lat),(i/lon,next_j/lat))
+            elif len(b)==1 and len(a)>1:
+                for i in range(lon):
+                    ni=(i+1)%lon
+                    self.tri(a[i],a[ni],b[0],mat,(i/lon,j/lat),(ni/lon,j/lat),(0.5,1.0))
+            elif len(a)>1 and len(b)>1:
+                for i in range(lon):
+                    ni=(i+1)%lon
+                    self.quad(a[i],a[ni],b[ni],b[i],mat,((i/lon,j/lat),(ni/lon,j/lat),(ni/lon,next_j/lat),(i/lon,next_j/lat)))
 
     def deck(self, length=1.15,width=.34,thickness=.065, mat='deck', segments=40):
         top=[]; bottom=[]

@@ -4,7 +4,9 @@ import com.herberto.jetsetcraft.JetSetCraft;
 import com.herberto.jetsetcraft.item.RideGearItem;
 import com.herberto.jetsetcraft.item.SprayCanItem;
 import com.herberto.jetsetcraft.movement.RideStyle;
+import com.herberto.jetsetcraft.mob.StreetGearDispenserBehavior;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.DispenserBlock;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
@@ -26,6 +28,17 @@ public final class ModItems {
             () -> new RideGearItem(RideStyle.SCOOTER, new Item.Properties().stacksTo(1)));
     public static final RegistryObject<Item> SPRAY_CAN = ITEMS.register("spray_can",
             () -> new SprayCanItem(new Item.Properties().stacksTo(1).durability(256)));
+
+
+    public static void registerDispenserBehaviors() {
+        StreetGearDispenserBehavior behavior = new StreetGearDispenserBehavior();
+        DispenserBlock.registerBehavior(INLINE_SKATES.get(), behavior);
+        DispenserBlock.registerBehavior(QUAD_SKATES.get(), behavior);
+        DispenserBlock.registerBehavior(STREET_BOARD.get(), behavior);
+        DispenserBlock.registerBehavior(HOVERBOARD.get(), behavior);
+        DispenserBlock.registerBehavior(BMX.get(), behavior);
+        DispenserBlock.registerBehavior(SCOOTER.get(), behavior);
+    }
 
     private ModItems() {}
 }

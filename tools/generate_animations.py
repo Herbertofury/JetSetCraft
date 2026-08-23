@@ -44,15 +44,89 @@ def write_clip(name: str, end_tick: int, moves: list[dict], loop: bool = False):
     (OUT / f'{name}.json').write_text(json.dumps(payload, indent=2) + '\n', encoding='utf-8')
 
 
-def lower_body_pose(name: str, boost: bool, scooter: bool):
-    end = 24
-    lean = 0.22 if boost else 0.10
-    stance = 0.46 if scooter else 0.28
+def lower_body_loop(name: str, end: int, base, apex):
+    """Create a seamless five-key lower-body loop from two authored signature poses."""
+    def mix_tuple(a, b, amount):
+        return tuple(a[i] + (b[i] - a[i]) * amount for i in range(3))
+
+    def mix_pose(a, b, amount):
+        return tuple(mix_tuple(a[i], b[i], amount) for i in range(3))
+
+    def pose_frame(tick, pose, easing='INOUTSINE'):
+        body, left_leg, right_leg = pose
+        return frame(tick, easing, body=part(*body), leftLeg=part(*left_leg), rightLeg=part(*right_leg))
+
     moves = [
-        frame(0, body=part(lean), leftLeg=part(stance, 0.0, 0.08), rightLeg=part(-stance, 0.0, -0.08)),
-        frame(12, body=part(lean + 0.04, 0.0, 0.05),
-              leftLeg=part(stance - 0.14, 0.0, 0.13), rightLeg=part(-stance + 0.12, 0.0, -0.13)),
-        frame(end, body=part(lean), leftLeg=part(stance, 0.0, 0.08), rightLeg=part(-stance, 0.0, -0.08)),
+        pose_frame(0, base),
+        pose_frame(end // 4, mix_pose(base, apex, 0.58), 'OUTQUAD'),
+        pose_frame(end // 2, apex),
+        pose_frame(end * 3 // 4, mix_pose(apex, base, 0.58), 'OUTQUAD'),
+        pose_frame(end, base),
+    ]
+    write_clip(name, end, moves, loop=True)
+
+
+def core_motion_clips():
+    # Original silhouettes retained, now with anticipation and recovery keys rather than two/three-key interpolation.
+    lower_body_loop('inline_ride', 20,
+                    ((0.12, 0.00, 0.00), (-0.18, 0.08, 0.00), (0.18, -0.08, 0.00)),
+                    ((0.14, 0.00, -0.025), (0.24, 0.00, 0.05), (-0.28, 0.00, -0.05)))
+    lower_body_loop('inline_boost', 14,
+                    ((0.30, 0.00, 0.00), (-0.30, 0.00, 0.08), (0.38, 0.00, -0.08)),
+                    ((0.34, 0.00, -0.035), (0.42, 0.00, 0.10), (-0.44, 0.00, -0.10)))
+    lower_body_loop('quad_ride', 20,
+                    ((0.10, 0.00, 0.02), (-0.14, 0.13, 0.07), (0.15, -0.13, -0.07)),
+                    ((0.12, 0.00, -0.02), (0.20, 0.08, 0.10), (-0.22, -0.08, -0.10)))
+    lower_body_loop('quad_boost', 14,
+                    ((0.27, 0.00, 0.02), (-0.28, 0.14, 0.09), (0.34, -0.14, -0.09)),
+                    ((0.31, 0.00, -0.025), (0.38, 0.05, 0.11), (-0.40, -0.05, -0.11)))
+    lower_body_loop('board_ride', 20,
+                    ((0.12, 0.00, 0.08), (0.16, 0.34, 0.12), (-0.06, -0.30, -0.10)),
+                    ((0.14, 0.045, -0.08), (0.20, 0.38, 0.15), (-0.10, -0.34, -0.13)))
+    lower_body_loop('board_boost', 12,
+                    ((0.32, 0.00, 0.10), (0.26, 0.42, 0.10), (-0.18, -0.36, -0.09)),
+                    ((0.37, 0.075, -0.10), (0.34, 0.46, 0.14), (-0.26, -0.40, -0.13)))
+    lower_body_loop('bmx_ride', 20,
+                    ((0.16, 0.00, 0.00), (-0.70, 0.00, 0.02), (0.70, 0.00, -0.02)),
+                    ((0.19, 0.00, -0.025), (0.70, 0.00, 0.04), (-0.70, 0.00, -0.04)))
+    lower_body_loop('bmx_boost', 12,
+                    ((0.35, 0.00, 0.00), (-0.90, 0.00, 0.03), (0.90, 0.00, -0.03)),
+                    ((0.40, 0.00, -0.035), (0.90, 0.00, 0.05), (-0.90, 0.00, -0.05)))
+    lower_body_loop('grind', 16,
+                    ((0.12, 0.00, -0.15), (0.42, 0.46, 0.16), (-0.24, -0.38, -0.12)),
+                    ((0.16, 0.08, 0.15), (0.50, 0.50, 0.22), (-0.30, -0.42, -0.18)))
+    lower_body_loop('wallride', 14,
+                    ((0.10, 0.00, 0.30), (0.28, 0.00, 0.20), (-0.20, 0.00, 0.12)),
+                    ((0.16, 0.06, 0.22), (0.16, 0.05, 0.15), (-0.10, -0.05, 0.08)))
+    lower_body_loop('manual', 20,
+                    ((-0.15, 0.00, -0.03), (0.32, 0.15, 0.06), (0.18, -0.15, -0.06)),
+                    ((-0.10, 0.05, 0.04), (0.28, 0.18, 0.10), (0.22, -0.18, -0.10)))
+    lower_body_loop('powerslide', 16,
+                    ((0.16, 0.00, -0.18), (0.28, 0.42, 0.14), (0.10, -0.48, -0.13)),
+                    ((0.18, 0.10, 0.18), (0.16, 0.48, 0.16), (0.30, -0.42, -0.15)))
+
+
+def lower_body_pose(name: str, boost: bool, scooter: bool):
+    # Five-key breathing/weight-transfer loop. It deliberately owns only body and legs so weapon mods keep
+    # complete arm/head authority while the rider still looks alive instead of frozen on the equipment.
+    end = 24
+    lean = 0.24 if boost else 0.11
+    stance = 0.48 if scooter else 0.29
+    pump = 0.10 if boost else 0.055
+    steer = 0.035 if scooter else 0.055
+    moves = [
+        frame(0, body=part(lean, 0.0, 0.0),
+              leftLeg=part(stance, 0.0, 0.08), rightLeg=part(-stance, 0.0, -0.08)),
+        frame(6, 'OUTQUAD', body=part(lean + pump, steer, 0.045),
+              leftLeg=part(stance - 0.19, 0.035, 0.15),
+              rightLeg=part(-stance + 0.10, -0.025, -0.12)),
+        frame(12, body=part(lean + pump * 0.40, 0.0, 0.0),
+              leftLeg=part(stance - 0.07, 0.0, 0.10), rightLeg=part(-stance + 0.06, 0.0, -0.10)),
+        frame(18, 'OUTQUAD', body=part(lean + pump, -steer, -0.045),
+              leftLeg=part(stance - 0.10, -0.025, 0.12),
+              rightLeg=part(-stance + 0.19, 0.035, -0.15)),
+        frame(end, body=part(lean, 0.0, 0.0),
+              leftLeg=part(stance, 0.0, 0.08), rightLeg=part(-stance, 0.0, -0.08)),
     ]
     write_clip(name, end, moves, loop=True)
 
@@ -61,17 +135,50 @@ def trick_clip(index: int, grind: bool):
     name = f'grind_trick_{index}' if grind else f'trick_{index}'
     end = 18 if grind else 22
     direction = -1.0 if index % 2 else 1.0
-    spin = (0.45 + index * 0.11) * direction
-    pitch = 0.18 + (index % 3) * 0.16
+
+    # Preserve the four original signature silhouettes, then extend the remaining set through the same staged
+    # anticipation/apex/recovery grammar. Every clip stays body/legs-only for firearm and combat-mod composition.
+    trick_apex = (
+        ((0.25, 0.00, 0.75), (0.65, 0.00, 0.25), (-0.55, 0.00, -0.25)),
+        ((0.25, 0.00, -0.75), (0.65, 0.00, 0.25), (-0.55, 0.00, -0.25)),
+        ((0.45, 1.00, 0.30), (0.65, 0.00, 0.25), (-0.55, 0.00, -0.25)),
+        ((0.45, -1.00, -0.30), (0.65, 0.00, 0.25), (-0.55, 0.00, -0.25)),
+    )
+    grind_apex = (
+        ((0.22, 0.32, 0.42), (0.72, 0.65, 0.38), (-0.48, -0.62, -0.28)),
+        ((0.52, -0.35, -0.18), (1.05, -0.15, 0.55), (0.38, 0.55, -0.42)),
+        ((0.08, 0.62, 0.05), (0.15, -0.75, -0.28), (0.66, 0.82, 0.36)),
+        ((0.30, -0.20, -0.62), (0.96, 0.70, 0.72), (-0.68, -0.28, -0.52)),
+    )
+    if index < 4:
+        body_apex, left_apex, right_apex = (grind_apex if grind else trick_apex)[index]
+    else:
+        spin = (0.45 + index * 0.11) * direction
+        pitch = 0.18 + (index % 3) * 0.16
+        body_apex = (pitch, spin, 0.36 * direction)
+        left_apex = (0.62, 0.20 * direction, 0.34)
+        right_apex = (-0.58, -0.20 * direction, -0.34)
+
+    base_body = (0.13, 0.0, 0.10 * direction) if grind else (0.08, 0.0, 0.0)
+    base_left = (0.42, 0.38, 0.14) if grind else (0.18, 0.0, 0.0)
+    base_right = (-0.23, -0.34, -0.11) if grind else (-0.16, 0.0, 0.0)
+
+    def mix(a: tuple[float, float, float], b: tuple[float, float, float], amount: float):
+        return tuple(a[i] + (b[i] - a[i]) * amount for i in range(3))
+
     moves = [
-        frame(0, body=part(0.08), leftLeg=part(0.18), rightLeg=part(-0.16)),
-        frame(end // 2, 'OUTQUAD', body=part(pitch, spin, 0.36 * direction),
-              leftLeg=part(0.58, 0.18 * direction, 0.32),
-              rightLeg=part(-0.52, -0.18 * direction, -0.32)),
-        frame(end, body=part(0.08), leftLeg=part(0.18), rightLeg=part(-0.16)),
+        frame(0, body=part(*base_body), leftLeg=part(*base_left), rightLeg=part(*base_right)),
+        frame(end // 4, 'OUTQUAD', body=part(*mix(base_body, body_apex, 0.42)),
+              leftLeg=part(*mix(base_left, left_apex, 0.50)),
+              rightLeg=part(*mix(base_right, right_apex, 0.50))),
+        frame(end // 2, 'OUTQUAD', body=part(*body_apex),
+              leftLeg=part(*left_apex), rightLeg=part(*right_apex)),
+        frame(end * 3 // 4, 'INOUTSINE', body=part(*mix(base_body, body_apex, 0.30)),
+              leftLeg=part(*mix(base_left, left_apex, 0.34)),
+              rightLeg=part(*mix(base_right, right_apex, 0.34))),
+        frame(end, body=part(*base_body), leftLeg=part(*base_left), rightLeg=part(*base_right)),
     ]
     write_clip(name, end, moves)
-
 
 def full_pose(body=(0.0, 0.0, 0.0), head=(0.0, 0.0, 0.0),
               left_arm=(0.0, 0.0, 0.0), right_arm=(0.0, 0.0, 0.0),
@@ -313,18 +420,19 @@ def stunt_clip(index: int):
 
 
 def main():
+    core_motion_clips()
     lower_body_pose('hover_ride', False, False)
     lower_body_pose('hover_boost', True, False)
     lower_body_pose('scooter_ride', False, True)
     lower_body_pose('scooter_boost', True, True)
-    for index in range(4, 8):
+    for index in range(8):
         trick_clip(index, False)
         trick_clip(index, True)
     for index in range(DANCE_COUNT):
         dance_clip(index)
     for index in range(8):
         stunt_clip(index)
-    print('generated JetSetCraft animation clips:', 4 + 8 + DANCE_COUNT + 8)
+    print('generated JetSetCraft animation clips:', 12 + 4 + 16 + DANCE_COUNT + 8)
 
 
 if __name__ == '__main__':

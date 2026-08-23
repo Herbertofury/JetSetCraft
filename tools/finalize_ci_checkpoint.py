@@ -23,7 +23,7 @@ MEMORY = ROOT / ".agents-memory"
 DEFAULT_RECEIPT = ROOT / "build/verification/style-flow-verification.json"
 DEFAULT_GAMETEST_LOG = ROOT / "build/verification/style-flow-gametest.log"
 DEFAULT_SERVER_LOG = ROOT / "build/verification/server-smoke.log"
-VERSION = "0.2.0-alpha.1"
+VERSION = "0.3.0-alpha.1"
 
 
 def sha256(path: Path) -> str:
@@ -97,6 +97,7 @@ def verify_logs(gametest_log: Path, server_log: Path) -> tuple[str, str]:
         "JETSETCRAFT_GAMETEST_PASS dance_flow",
         "JETSETCRAFT_GAMETEST_PASS combat_sovereignty",
         "JETSETCRAFT_GAMETEST_PASS catalogs",
+        "JETSETCRAFT_GAMETEST_PASS street_gear",
     )
     missing = [marker for marker in required_markers if marker not in gametest_text]
     if missing:
@@ -104,10 +105,10 @@ def verify_logs(gametest_log: Path, server_log: Path) -> tuple[str, str]:
 
     pass_line = first_matching_line(
         gametest_text,
-        (r"All\s+5\s+required\s+tests\s+passed", r"5\s+tests?\s+passed"),
+        (r"All\s+6\s+required\s+tests\s+passed", r"6\s+tests?\s+passed"),
     )
     if not pass_line:
-        raise SystemExit("GameTest log does not report all five required tests passing")
+        raise SystemExit("GameTest log does not report all six required tests passing")
 
     ready_line = first_matching_line(
         server_text,
@@ -136,8 +137,8 @@ def build_status(
             "forge_clean_build": True,
             "asset_gameplay_and_wiki_validation": True,
             "real_forge_style_flow_gametests": {
-                "required": 5,
-                "passed": 5,
+                "required": 6,
+                "passed": 6,
                 "observed": pass_line,
                 **file_evidence(gametest_log),
             },
@@ -151,7 +152,7 @@ def build_status(
             "dance_move_count": 28,
             "trick_count": 24,
             "animation_resource_count": 68,
-            "wiki_page_count": 21,
+            "wiki_page_count": 25,
         }
     )
 
@@ -175,8 +176,8 @@ def build_status(
             "dense procedural inline, quad, skateboard, hoverboard, BMX, scooter, and spray-can meshes",
             "offline-safe deterministic asset generation and complete graffiti fallback catalog",
             "optional Aether Quicksoil/Blue Aercloud/Aerogel and Twilight Forest Aurora route hooks without dependencies",
-            "complete validated twenty-one-page GitHub wiki source and automatic wiki publication workflow",
-            "five isolated real Forge GameTests with unique fake-player identities",
+            "complete validated twenty-five-page GitHub wiki source and automatic wiki publication workflow",
+            "six isolated real Forge GameTests with unique fake-player identities, including Street Gear",
         ],
         "verified": verified,
         "pending_validation": [
@@ -198,9 +199,9 @@ def write_handoff(receipt: dict[str, Any]) -> None:
 
 Canonical repo: `Herbertofury/JetSetCraft`; target Forge 1.20.1 / Java 17 / mod version `{VERSION}`.
 
-The verified Style Flow checkpoint now has six ride styles (inline, quad, skateboard, BMX, hoverboard, scooter), twenty-four named contextual tricks, twenty-eight named dance moves across six families, no-gear dancing, automatic dance phrases, multiplayer cyphers, repeat penalties, graded landings, Flow ranks, dedicated hoverboard/scooter meshes, accessibility controls, optional Aether/Twilight data hooks, the existing Create/native rail stack, combat-safe animation composition, graffiti, and a complete twenty-one-page wiki source.
+The verified Style Flow checkpoint now has six ride styles (inline, quad, skateboard, BMX, hoverboard, scooter), twenty-four named contextual tricks, twenty-eight named dance moves across six families, no-gear dancing, automatic dance phrases, multiplayer cyphers, repeat penalties, graded landings, Flow ranks, dedicated hoverboard/scooter meshes, accessibility controls, optional Aether/Twilight data hooks, the existing Create/native rail stack, combat-safe animation composition, graffiti, and a complete twenty-five-page wiki source.
 
-Real Forge proof for this checkpoint: five required GameTests passed; the dedicated server reached its ready state; runtime JAR `{jar['file']}` is {jar['bytes']} bytes with SHA-256 `{jar['sha256']}`. Workflow run `{receipt['workflow']['run_id']}` on branch `{receipt['workflow']['branch']}` produced the evidence.
+Real Forge proof for this checkpoint: six required GameTests passed; the dedicated server reached its ready state; runtime JAR `{jar['file']}` is {jar['bytes']} bytes with SHA-256 `{jar['sha256']}`. Workflow run `{receipt['workflow']['run_id']}` on branch `{receipt['workflow']['branch']}` produced the evidence.
 
 Remaining acceptance is deliberately real-client/modpack validation rather than missing implementation: visual ride/dance/trick QA, Create 6.0.8 live tracks, TACZ live weapon composition, optional Aether/Twilight routes, and multiplayer soak. See `docs/STYLE_FLOW.md`, `wiki/Testing-and-Verification.md`, and `.agents-memory/RECOVERY_2026-08-21_STYLE_FLOW.json`.
 """
@@ -256,9 +257,9 @@ def main() -> None:
             "dance_moves": 28,
             "dance_families": 6,
             "animation_resources": 68,
-            "wiki_pages": 21,
-            "real_forge_gametests_required": 5,
-            "real_forge_gametests_passed": 5,
+            "wiki_pages": 25,
+            "real_forge_gametests_required": 6,
+            "real_forge_gametests_passed": 6,
             "dedicated_server_ready": True,
         },
         "observed": {

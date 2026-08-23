@@ -1,0 +1,40 @@
+{
+  "project": "JetSetCraft",
+  "date_local": "2026-08-22",
+  "topic": "Premium animation, model, Street Gear and reliability hardening",
+  "target_version": "0.3.0-alpha.1",
+  "implementation_commit": "035f2b99d589c47d11af00a8138140e0d5dd4b4b",
+  "implemented": [
+    "Five-key seam-safe lower-body ride loops and staged anticipation/apex/recovery for all ride and grind trick clips",
+    "Zero-area ellipsoid pole-face elimination in deterministic OBJ generation",
+    "Forge OBJ parent and particle metadata for all seven modeled items",
+    "Finite and range-safe server input, capability load/copy, client state, camera and vector handling",
+    "Same-entity Street Gear physical-item normalization, corrupt-state repair and conversion fallback",
+    "Species-aware mob contact rendering with corrected skate orientation and under-body carriage rigs",
+    "Sixth Forge GameTest covering Street Gear identity, persistence, removal and vanilla anatomy routing",
+    "Premium OBJ, animation, compatibility and Java syntax validators wired into CI"
+  ],
+  "offline_verification": {
+    "asset_validator": "pass: 7 registered items, 68 animation clips",
+    "gameplay_contract_validator": "pass",
+    "premium_polish_validator": "pass: 7 authored meshes, 68 seam-checked animations",
+    "java_syntax_parser": "pass: 69 source files",
+    "wiki_validator": "pass: 21 pages",
+    "python_compileall": "pass",
+    "git_diff_check": "pass"
+  },
+  "installable_preview": {
+    "file": "jetsetcraft-1.20.1-0.2.1-alpha.1-premium-preview.jar",
+    "base_verified_jar": "jetsetcraft-1.20.1-0.2.0-alpha.1.jar",
+    "bytes": 3605594,
+    "sha256": "c3dc6de19b34e06273eec3e9630e57b4c93700b086dc184d47e9f2c75531c347",
+    "scope": "0.2 compatible premium models/animations plus narrow JetSetData finite/mask hardening; excludes uncompiled 0.3 Street Gear classes"
+  },
+  "runtime_verification_pending": [
+    "ForgeGradle 0.3 compile and reobfuscation",
+    "all six required Forge GameTests",
+    "dedicated-server smoke",
+    "real-client visual/model/animation acceptance",
+    "Create, TACZ, Aether, Twilight Forest and multiplayer modpack acceptance"
+  ]
+}

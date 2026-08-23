@@ -12,6 +12,7 @@ import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import org.slf4j.Logger;
 
 @Mod(JetSetCraft.MOD_ID)
@@ -25,9 +26,14 @@ public final class JetSetCraft {
         ModEntities.ENTITIES.register(modBus);
         ModCreativeTabs.TABS.register(modBus);
         modBus.addListener(CapabilityEvents::register);
+        modBus.addListener(this::commonSetup);
         JetSetNetwork.init();
         ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, JetSetConfig.SERVER_SPEC);
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, JetSetConfig.CLIENT_SPEC);
         MinecraftForge.EVENT_BUS.register(this);
+    }
+
+    private void commonSetup(FMLCommonSetupEvent event) {
+        event.enqueueWork(ModItems::registerDispenserBehaviors);
     }
 }

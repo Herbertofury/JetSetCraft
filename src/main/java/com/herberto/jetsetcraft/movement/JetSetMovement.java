@@ -11,6 +11,7 @@ import net.minecraft.world.phys.Vec3;
 public final class JetSetMovement {
 
     public static void tickServer(ServerPlayer player, JetSetData data) {
+        data.tickInputWatchdog();
         if (DanceSystem.tick(player, data)) {
             data.setLastVerticalVelocity(player.getDeltaMovement().y);
             data.setLastSolverVelocity(player.getDeltaMovement());

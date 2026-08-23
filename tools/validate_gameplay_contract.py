@@ -33,9 +33,15 @@ style_feedback = (ROOT / 'src/main/java/com/herberto/jetsetcraft/movement/StyleF
 input_flags = (ROOT / 'src/main/java/com/herberto/jetsetcraft/network/InputFlags.java').read_text(encoding='utf-8')
 state_packet = (ROOT / 'src/main/java/com/herberto/jetsetcraft/network/S2CStatePacket.java').read_text(encoding='utf-8')
 client_state = (ROOT / 'src/main/java/com/herberto/jetsetcraft/client/state/ClientRideState.java').read_text(encoding='utf-8')
+mob_gear = (ROOT / 'src/main/java/com/herberto/jetsetcraft/mob/MobStreetGear.java').read_text(encoding='utf-8')
+mob_rig = (ROOT / 'src/main/java/com/herberto/jetsetcraft/mob/MobRideRigResolver.java').read_text(encoding='utf-8')
+mob_events = (ROOT / 'src/main/java/com/herberto/jetsetcraft/event/MobStreetGearEvents.java').read_text(encoding='utf-8')
+mob_layer = (ROOT / 'src/main/java/com/herberto/jetsetcraft/client/render/MobRideGearLayer.java').read_text(encoding='utf-8')
+mob_packet = (ROOT / 'src/main/java/com/herberto/jetsetcraft/network/S2CMobGearPacket.java').read_text(encoding='utf-8')
 build_workflow = (ROOT / '.github/workflows/build.yml').read_text(encoding='utf-8')
 style_flow_tests = (ROOT / 'src/main/java/com/herberto/jetsetcraft/gametest/StyleFlowGameTests.java').read_text(encoding='utf-8')
 hoverboard_tests = (ROOT / 'src/main/java/com/herberto/jetsetcraft/gametest/HoverboardGameTests.java').read_text(encoding='utf-8')
+street_gear_tests = (ROOT / 'src/main/java/com/herberto/jetsetcraft/gametest/StreetGearGameTests.java').read_text(encoding='utf-8')
 model_generator = (ROOT / 'tools/generate_models.py').read_text(encoding='utf-8')
 lang = json.loads((ROOT / 'src/main/resources/assets/jetsetcraft/lang/en_us.json').read_text(encoding='utf-8'))
 
@@ -138,6 +144,53 @@ for needle, label, source in [
 ]:
     if needle not in source:
         errors.append(f'missing Red Skate-derived production contract: {label}')
+
+# Persistent same-entity Street Gear is a compatibility covenant, not an event-only cosmetic.
+for needle, label, source in [
+    ('getPersistentData()', 'same-entity persistent storage', mob_gear),
+    ('Stack', 'physical ItemStack persistence', mob_gear),
+    ('StreetGearAcquisition', 'auditable acquisition source', mob_gear),
+    ('LivingEquipmentChangeEvent', 'native pickup observer', mob_events),
+    ('LivingConversionEvent.Post', 'conversion persistence bridge', mob_events),
+    ('LivingDropsEvent', 'physical death-drop semantics', mob_events),
+    ('PlayerEvent.StartTracking', 'late-join tracking synchronization', mob_events),
+    ('ride_rig/biped', 'data-driven biped rig tag', mob_rig),
+    ('ride_rig/quadruped', 'data-driven quadruped rig tag', mob_rig),
+    ('MobRideGearLayer', 'renderer-agnostic mob gear visuals', client),
+    ('S2CMobGearPacket', 'server-authoritative mob gear sync', network),
+    ('writeItem', 'full physical gear stack network payload', mob_packet),
+]:
+    if needle not in source:
+        errors.append(f'missing persistent Street Gear contract: {label}')
+for needle, label, source in [
+    ('entity instanceof Mob', 'real-mob-only eligibility boundary', mob_gear),
+    ('hasStoredState', 'corrupt-state repair entry point', mob_gear),
+    ('entity.spawnAtLocation(stack.copy())', 'physical fallback when a datapack later rejects a rig', mob_gear),
+    ('remainder.shrink(1)', 'exactly-one native equipment consumption', mob_events),
+    ('Never mutate the mob\'s persistent drop-chance rules', 'third-party drop-rule sovereignty', mob_events),
+    ('JETSETCRAFT_GAMETEST_PASS street_gear', 'real Forge same-entity Street Gear acceptance', street_gear_tests),
+]:
+    if needle not in source:
+        errors.append(f'missing compatibility-safe Street Gear contract: {label}')
+
+for path in (
+    ROOT / 'src/main/resources/data/jetsetcraft/tags/entity_types/ride_rig/biped.json',
+    ROOT / 'src/main/resources/data/jetsetcraft/tags/entity_types/ride_rig/quadruped.json',
+    ROOT / 'src/main/resources/data/jetsetcraft/tags/entity_types/street_gear_incompatible.json',
+):
+    if not path.exists(): errors.append(f'missing Street Gear resource: {path.relative_to(ROOT)}')
+
+for needle, label, source in [
+    ('mc.screen == null', 'menu-safe client input gate', client),
+    ('Float.floatToIntBits(forward)', 'immediate analog-change transmission', client),
+    ('acceptInput(~0, Float.NaN, Float.POSITIVE_INFINITY)', 'non-finite/unknown-bit GameTest', style_flow_tests),
+    ('tickInputWatchdog()', 'lost-input watchdog wiring', movement),
+    ('outcome.level().addFreshEntity(new ItemEntity', 'conversion-safe physical gear fallback', mob_events),
+    ('copied.copyFrom(sanitizedSave)', 'capability clone hostile-data acceptance', style_flow_tests),
+    ('finiteUnit(mc.player.input.leftImpulse)', 'non-finite-safe camera input', client),
+]:
+    if needle not in source:
+        errors.append(f'missing premium reliability contract: {label}')
 
 # Hoverboards are a first-class ride style inside the same persistent, server-authoritative system.
 # They must never regress into an isolated pseudo-vehicle that bypasses vanilla-world/grind/trick logic.
@@ -283,7 +336,7 @@ else:
         for field in record_fields:
             if field != 'entityId' and f'packet.{field}()' not in client_state:
                 errors.append(f'client snapshot does not consume S2C field {field}')
-if 'private static final String PROTOCOL = "6"' not in network:
+if 'private static final String PROTOCOL = "7"' not in network:
     errors.append('network protocol was not bumped for the expanded Style Flow packet')
 
 required_gametest_markers = {
@@ -292,6 +345,7 @@ required_gametest_markers = {
     'JETSETCRAFT_GAMETEST_PASS dance_flow': style_flow_tests,
     'JETSETCRAFT_GAMETEST_PASS combat_sovereignty': style_flow_tests,
     'JETSETCRAFT_GAMETEST_PASS catalogs': style_flow_tests,
+    'JETSETCRAFT_GAMETEST_PASS street_gear': street_gear_tests,
 }
 for pass_marker, source in required_gametest_markers.items():
     if pass_marker not in source:

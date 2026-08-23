@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "uuid": "87284cc5-229a-413a-b6b8-b0d2845e0f5a",
+  "uuid": "b4d99c6b-805d-5bfc-ae57-29ca9fdc4b7d",
   "name": "grind_trick_1",
   "emote": {
     "beginTick": 0,
-    "endTick": 14,
-    "stopTick": 14,
+    "endTick": 18,
+    "stopTick": 18,
     "isLoop": false,
     "returnTick": 0,
     "nsfw": false,
@@ -15,27 +15,47 @@
         "tick": 0,
         "easing": "INOUTSINE",
         "body": {
-          "pitch": 0.12,
-          "roll": 0.1
+          "pitch": 0.13,
+          "yaw": 0.0,
+          "roll": -0.1
         },
         "leftLeg": {
-          "pitch": 0.38,
+          "pitch": 0.42,
           "yaw": 0.38,
-          "roll": 0.12
+          "roll": 0.14
         },
         "rightLeg": {
-          "pitch": -0.2,
+          "pitch": -0.23,
           "yaw": -0.34,
-          "roll": -0.1
+          "roll": -0.11
         }
       },
       {
-        "tick": 6,
+        "tick": 4,
+        "easing": "OUTQUAD",
+        "body": {
+          "pitch": 0.2938,
+          "yaw": -0.147,
+          "roll": -0.1336
+        },
+        "leftLeg": {
+          "pitch": 0.735,
+          "yaw": 0.115,
+          "roll": 0.345
+        },
+        "rightLeg": {
+          "pitch": 0.075,
+          "yaw": 0.105,
+          "roll": -0.265
+        }
+      },
+      {
+        "tick": 9,
         "easing": "OUTQUAD",
         "body": {
           "pitch": 0.52,
-          "roll": -0.18,
-          "yaw": -0.35
+          "yaw": -0.35,
+          "roll": -0.18
         },
         "leftLeg": {
           "pitch": 1.05,
@@ -49,21 +69,41 @@
         }
       },
       {
-        "tick": 14,
+        "tick": 13,
         "easing": "INOUTSINE",
         "body": {
-          "pitch": 0.12,
+          "pitch": 0.247,
+          "yaw": -0.105,
+          "roll": -0.124
+        },
+        "leftLeg": {
+          "pitch": 0.6342,
+          "yaw": 0.1998,
+          "roll": 0.2794
+        },
+        "rightLeg": {
+          "pitch": -0.0226,
+          "yaw": -0.0374,
+          "roll": -0.2154
+        }
+      },
+      {
+        "tick": 18,
+        "easing": "INOUTSINE",
+        "body": {
+          "pitch": 0.13,
+          "yaw": 0.0,
           "roll": -0.1
         },
         "leftLeg": {
-          "pitch": 0.38,
+          "pitch": 0.42,
           "yaw": 0.38,
-          "roll": 0.12
+          "roll": 0.14
         },
         "rightLeg": {
-          "pitch": -0.2,
+          "pitch": -0.23,
           "yaw": -0.34,
-          "roll": -0.1
+          "roll": -0.11
         }
       }
     ]

@@ -15,6 +15,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestAssertException;
 import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
@@ -142,6 +143,44 @@ public final class StyleFlowGameTests {
                     || !trickNames.add(key)) {
                 throw new GameTestAssertException("Trick catalog identity is invalid at " + id + " (" + key + ")");
             }
+        }
+
+        JetSetData networkBoundary = new JetSetData();
+        networkBoundary.acceptInput(~0, Float.NaN, Float.POSITIVE_INFINITY);
+        if (networkBoundary.inputMask() != InputFlags.ALL || networkBoundary.inputForward() != 0.0F
+                || networkBoundary.inputStrafe() != 0.0F || !networkBoundary.justPressed(InputFlags.TRICK)) {
+            throw new GameTestAssertException("Client input boundary did not sanitize mask/analog values or buffer trick");
+        }
+        for (int tick = 0; tick < 21; tick++) networkBoundary.tickInputWatchdog();
+        if (networkBoundary.inputMask() != 0 || networkBoundary.inputForward() != 0.0F
+                || networkBoundary.inputStrafe() != 0.0F || networkBoundary.inputAgeTicks() != 0
+                || networkBoundary.trickBufferTicks() != 0) {
+            throw new GameTestAssertException("Lost-input watchdog did not neutralize stale client state");
+        }
+
+        JetSetData validSave = new JetSetData();
+        validSave.setRideGear(new ItemStack(ModItems.SCOOTER.get()));
+        validSave.setStyle(RideStyle.SCOOTER);
+        validSave.setActive(true);
+        CompoundTag hostileSave = validSave.save();
+        hostileSave.putFloat("Boost", Float.NaN);
+        hostileSave.putFloat("ComboMultiplier", Float.POSITIVE_INFINITY);
+        hostileSave.putFloat("Flow", Float.NEGATIVE_INFINITY);
+        hostileSave.putInt("ComboScore", -42);
+        hostileSave.putInt("Style", RideStyle.HOVER.id());
+        JetSetData sanitizedSave = new JetSetData();
+        sanitizedSave.load(hostileSave);
+        sanitizedSave.setGrindDirection(new Vec3(Double.NaN, 1.0D, 0.0D));
+        sanitizedSave.setLastVerticalVelocity(Double.POSITIVE_INFINITY);
+        JetSetData copied = new JetSetData();
+        copied.copyFrom(sanitizedSave);
+        if (!Float.isFinite(sanitizedSave.boost()) || sanitizedSave.boost() != 0.0F
+                || sanitizedSave.comboMultiplier() != 1.0F || sanitizedSave.flow() != 0.0F
+                || sanitizedSave.comboScore() != 0 || sanitizedSave.style() != RideStyle.SCOOTER
+                || sanitizedSave.active() || !sanitizedSave.grindDirection().equals(Vec3.ZERO)
+                || sanitizedSave.lastVerticalVelocity() != 0.0D || copied.style() != RideStyle.SCOOTER
+                || copied.active() || copied.rideGear().getCount() != 1) {
+            throw new GameTestAssertException("Persistent/copy movement state did not fail closed on hostile data");
         }
         System.out.println("JETSETCRAFT_GAMETEST_PASS catalogs");
         helper.succeed();
