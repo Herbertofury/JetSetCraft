@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "description": "JetSetCraft 0.3 Street Gear remote Forge verification",
+  "description": "JetSetCraft 0.3 Street Gear remote Forge verification (inspectable PR run)",
   "primary": {
     "patch_sha256": "5577d8394325d671c8a82a146aa12f4ac524fbe7146bd37fe63130641286228f",
     "xz_sha256": "944589a15c88031820123e0b0709a4fdd037f19a3cbf5d7a71692f53956dec0f",
