@@ -6,7 +6,7 @@
     "xz_sha256": "5029df420c6b652f4911486f0d8e03b4a4a162e8ee547a7f20a2a9230c43d93c",
     "patch_size_bytes": 239150,
     "xz_size_bytes": 38604,
-    "parts": 9
+    "parts": 12
   },
   "repair": {
     "patch_sha256": "1867846e8e4d629bed14a91758bddbeb305868e4431622091e039b4708a1c909",
