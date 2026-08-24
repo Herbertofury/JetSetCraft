@@ -1,6 +1,6 @@
 {
   "version": "0.3.0-alpha.1",
-  "phase": "Style Flow expansion / local contracts complete / real Forge GameTests and dedicated-server verified",
+  "phase": "Street + Gang Runtime / physical Boombox, persistent gangification, real Forge GameTests and dedicated-server verified",
   "implemented": [
     "six server-authoritative ride styles: inline, quad, skateboard, BMX, hoverboard, scooter",
     "persistent hands-free ride loadout with scooter and dedicated hoverboard geometry",
@@ -19,7 +19,15 @@
     "offline-safe deterministic asset generation and complete graffiti fallback catalog",
     "optional Aether Quicksoil/Blue Aercloud/Aerogel and Twilight Forest Aurora route hooks without dependencies",
     "complete validated twenty-five-page GitHub wiki source and automatic wiki publication workflow",
-    "six isolated real Forge GameTests with unique fake-player identities, including Street Gear"
+    "six isolated real Forge GameTests with unique fake-player identities, including Street Gear",
+    "craftable/placeable Boombox with a physical visible one-item mob-head gang target slot",
+    "stable curated vanilla Gang Registry plus deterministic safe IDs for optional-mod entities",
+    "original-source EntityType gang actor factory with species-aware Street Gear instead of entity replacement",
+    "persistent reversible gangification bound to actual Street Gear equipment",
+    "server-authoritative Boombox sessions with staggered entrances, actor caps, loaded-terrain safety, UUID tracking, and hard expiry",
+    "ephemeral Boombox event cast with no normal loot/XP farming and clean cancellation cleanup",
+    "per-gang registered music slots with valid Vorbis placeholder audio ready for owner-authored tracks",
+    "provider-agnostic mob-head targeting wired end-to-end into the physical Boombox"
   ],
   "verified": {
     "canonical_main_commit": "b0631769441faea3931a11aa0b156b2ed7413d21",
@@ -78,8 +86,8 @@
     },
     "style_flow_workflow_run": 32652330325,
     "style_flow_workflow_run_number": 141,
-    "workflow_input_commit": "a24cd3d87e222ad12381d1e67684c73f68a4ac2a",
-    "workflow_branch": "automation/street-gear-0.3-verify",
+    "workflow_input_commit": "a01a3ade445fdd27b8a1f245016a99ca0e75d6c2",
+    "workflow_branch": "automation/head-gang-compat-0.3",
     "asset_gameplay_and_wiki_validation": true,
     "real_forge_style_flow_gametests": {
       "required": 6,
@@ -90,10 +98,10 @@
       "sha256": "37d8e675eba6775b604e65f6dad22b4391a15b242f2b72205e363cd5d4ebdfd9"
     },
     "dedicated_server_smoke": {
-      "observed": "[16:41:33] [Server thread/INFO] [minecraft/DedicatedServer]: Done (6.779s)! For help, type \"help\"",
+      "observed": "[02:49:44] [Server thread/INFO] [minecraft/DedicatedServer]: Done (7.451s)! For help, type \"help\"",
       "file": "server-smoke.log",
-      "bytes": 6593,
-      "sha256": "3574acd334d913d6249fa8ffad71b9651ecbf95d1463c5efc7b69eba88d06358"
+      "bytes": 6790,
+      "sha256": "9257d34517a37771df7c8a6c353ddcfc5567ddfa53e129f27d5b49ff4c7c349d"
     },
     "style_flow_build": {
       "file": "jetsetcraft-1.20.1-0.3.0-alpha.1.jar",
@@ -122,6 +130,21 @@
       "bytes": 3605594,
       "sha256": "c3dc6de19b34e06273eec3e9630e57b4c93700b086dc184d47e9f2c75531c347",
       "runtime_scope": "presentation resources plus narrow 0.2 JetSetData hardening; not the uncompiled 0.3 feature set"
+    },
+    "street_gang_workflow_run": 32684207348,
+    "street_gang_workflow_run_number": 159,
+    "real_forge_street_gang_gametests": {
+      "required": 6,
+      "passed": 6,
+      "observed": "[02:49:08] [Server thread/INFO] [minecraft/GameTestServer]: All 6 required tests passed :)",
+      "file": "style-flow-gametest.log",
+      "bytes": 23804,
+      "sha256": "d63a7a73cd07d8c775a6dce554699a432c4dd7a8e01ade255b1791c2c9c931a7"
+    },
+    "street_gang_build": {
+      "file": "jetsetcraft-1.20.1-0.3.0-alpha.1.jar",
+      "bytes": 3933492,
+      "sha256": "32dd39c640fe9f813a15fc0fb945d91f4fa14f8a84789e057b28df883a13a8fe"
     }
   },
   "pending_validation": [

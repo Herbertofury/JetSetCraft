@@ -9,6 +9,7 @@ public enum StreetGearAcquisition {
     DROPPED_CONTACT("dropped_contact"),
     DISPENSER("dispenser"),
     COMMAND("command"),
+    GANG_EVENT("gang_event"),
     RESTORED("restored");
 
     private final String id;

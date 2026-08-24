@@ -28,7 +28,7 @@ The GameTest server verifies:
 3. Breakdance starting with no ride gear, server-owned move selection, completed-phrase scoring, and Flow.
 4. Immediate dance cancellation when a combat swing takes presentation/input authority.
 5. Stable one-to-one identity for all 28 dance moves, complete 24-trick catalog coverage, and hostile input/NBT sanitization.
-6. Same-entity Street Gear identity, one physical item, real entity NBT save/load, clean removal, and spider/slime anatomy routing.
+6. Same-entity Street Gear identity, physical-item persistence, real entity NBT save/load, clean removal, spider/slime anatomy routing, persistent gangification/de-gangification, and a real placed Boombox proving Zombie Head → Dead Beat tuning plus start/cancel/immediate-restart/target-return behavior.
 
 The player tests use uniquely identified Forge fake players and a real `ServerLevel` rather than mocked movement classes. Unique profiles prevent parallel GameTests from moving or mutating the same automation player.
 

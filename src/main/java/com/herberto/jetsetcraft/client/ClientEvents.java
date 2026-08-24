@@ -2,6 +2,7 @@ package com.herberto.jetsetcraft.client;
 
 import com.herberto.jetsetcraft.JetSetCraft;
 import com.herberto.jetsetcraft.client.animation.RideAnimationController;
+import com.herberto.jetsetcraft.client.render.BoomboxRenderer;
 import com.herberto.jetsetcraft.client.render.GraffitiRenderer;
 import com.herberto.jetsetcraft.client.render.RideGearLayer;
 import com.herberto.jetsetcraft.client.render.MobRideGearLayer;
@@ -12,6 +13,7 @@ import com.herberto.jetsetcraft.movement.DanceCatalog;
 import com.herberto.jetsetcraft.movement.TrickCatalog;
 import com.herberto.jetsetcraft.network.InputFlags;
 import com.herberto.jetsetcraft.network.JetSetNetwork;
+import com.herberto.jetsetcraft.registry.ModBlockEntities;
 import com.herberto.jetsetcraft.registry.ModEntities;
 import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.ChatFormatting;
@@ -67,6 +69,7 @@ public final class ClientEvents {
         @SubscribeEvent
         public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
             event.registerEntityRenderer(ModEntities.GRAFFITI.get(), GraffitiRenderer::new);
+            event.registerBlockEntityRenderer(ModBlockEntities.BOOMBOX.get(), BoomboxRenderer::new);
         }
 
         @SubscribeEvent

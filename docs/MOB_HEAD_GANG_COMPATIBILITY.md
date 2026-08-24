@@ -1,6 +1,6 @@
 # JetSetCraft Mob Head → Gang Compatibility
 
-Status: active compatibility foundation on `automation/head-gang-compat-0.3`.
+Status: active compatibility runtime on `automation/head-gang-compat-0.3`; the resolver is now wired into the physical Boombox and gang-session controller.
 
 ## Goal
 
@@ -14,15 +14,23 @@ Any trustworthy mob head, skull, emblem, or compatible head-equivalent should be
 
 The implementation lives in `HeadGangTargetResolver`.
 
-## Current canonical mappings
+## Current canonical mapping model
+
+`GangRegistry` is now the single stable mapping source rather than a small special-case table. The approved vanilla Mob Atlas is curated across passive, neutral, hostile, legendary, and technical actors. Important examples include:
 
 - `minecraft:zombie` → `jetsetcraft:dead_beat`
-- `minecraft:skeleton` / `minecraft:wither_skeleton` → `jetsetcraft:bone_drones`
+- `minecraft:skeleton` → `jetsetcraft:bone_drones`
+- `minecraft:wither_skeleton` → `jetsetcraft:blackout_bones`
 - `minecraft:creeper` → `jetsetcraft:creepaku_gouji`
-- `minecraft:spider` / `minecraft:cave_spider` → `jetsetcraft:arachnaphobia`
+- `minecraft:spider` → `jetsetcraft:arachnaphobia`
+- `minecraft:cave_spider` → `jetsetcraft:underweb`
 - `minecraft:witch` → `jetsetcraft:hex_appeal`
-- `minecraft:piglin`, `minecraft:piglin_brute`, `minecraft:zombified_piglin` → `jetsetcraft:gold_rush`
-- every other safely-resolved entity gets a stable generated gang identity under `jetsetcraft:mob/<namespace>/<entity>` until a curated gang overrides it.
+- `minecraft:piglin` → `jetsetcraft:gold_rush`
+- `minecraft:piglin_brute` → `jetsetcraft:gold_standard`
+- `minecraft:zombified_piglin` → `jetsetcraft:dead_mint`
+- every other safely-resolved entity gets a deterministic `jetsetcraft:mob/<namespace>/<entity>` identity until a curated gang overrides it.
+
+The exact source mob registry remains untouched.
 
 ## Compatibility targets researched 2026-08-23
 
@@ -75,7 +83,7 @@ JetSetCraft should preserve the exact variant token for Atlas/discovery/cosmetic
 
 ## Premium Boombox behavior contract
 
-When the physical Boombox target slot is implemented/connected to this resolver:
+The physical Boombox target slot is implemented and connected to this resolver. Its runtime contract is:
 
 1. Insert head.
 2. Resolver produces source entity + stable gang ID.
@@ -100,3 +108,8 @@ When the physical Boombox target slot is implemented/connected to this resolver:
 ## Compatibility principle
 
 A head provider supplies identity; JetSetCraft supplies gang gameplay. JetSetCraft must never copy or replace the provider's entity classes, rewrite its loot tables, or require it as a dependency merely to support the Boombox.
+
+
+## Runtime checkpoint
+
+See `BOOMBOX_GANG_RUNTIME.md` for the implemented placeable block, physical target slot, gang session lifecycle, source-entity actor factory, anti-farm event cast, persistent Street Gear gangification, and verification contract.

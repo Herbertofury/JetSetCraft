@@ -1,28 +1,35 @@
 package com.herberto.jetsetcraft.gametest;
 
 import com.herberto.jetsetcraft.JetSetCraft;
+import com.herberto.jetsetcraft.blockentity.BoomboxBlockEntity;
+import com.herberto.jetsetcraft.gang.GangMemberState;
 import com.herberto.jetsetcraft.gang.HeadGangTargetResolver;
 import com.herberto.jetsetcraft.mob.MobRideRig;
 import com.herberto.jetsetcraft.mob.MobRideRigResolver;
 import com.herberto.jetsetcraft.mob.MobStreetGear;
 import com.herberto.jetsetcraft.mob.StreetGearAcquisition;
 import com.herberto.jetsetcraft.movement.RideStyle;
+import com.herberto.jetsetcraft.registry.ModBlocks;
 import com.herberto.jetsetcraft.registry.ModItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestAssertException;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.nbt.CompoundTag;
+import com.mojang.authlib.GameProfile;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.monster.Slime;
 import net.minecraft.world.entity.monster.Spider;
 import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraftforge.common.util.FakePlayerFactory;
 import net.minecraftforge.gametest.GameTestHolder;
 import net.minecraftforge.gametest.PrefixGameTestTemplate;
 
+import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 
 /** Real Forge acceptance for additive, same-entity, equipment-bound mob Street Gear. */
@@ -50,6 +57,12 @@ public final class StreetGearGameTests {
         if (zombie.getType() != originalType || !zombie.getUUID().equals(originalUuid)) {
             throw new GameTestAssertException("Street Gear replaced or re-identified the source-owned mob");
         }
+        GangMemberState.Snapshot gangSnapshot = GangMemberState.snapshot(zombie);
+        if (!gangSnapshot.present()
+                || !gangSnapshot.gangId().equals(new ResourceLocation("jetsetcraft", "dead_beat"))
+                || gangSnapshot.ephemeral() || gangSnapshot.inChallenge()) {
+            throw new GameTestAssertException("Street Gear did not persist the canonical Dead Beat gang identity");
+        }
         if (snapshot.stack().getCount() != 1 || offered.getCount() != 1) {
             throw new GameTestAssertException("Street Gear persistence did not normalize/copy exactly one physical item");
         }
@@ -70,6 +83,9 @@ public final class StreetGearGameTests {
                 || MobStreetGear.hasStoredState(zombie) || zombie.getType() != originalType
                 || !zombie.getUUID().equals(originalUuid)) {
             throw new GameTestAssertException("Unequipping did not return the physical item and original mob unchanged");
+        }
+        if (GangMemberState.snapshot(zombie).present()) {
+            throw new GameTestAssertException("Removing Street Gear did not de-gangify the original source mob");
         }
 
         Spider spider = EntityType.SPIDER.create(helper.getLevel());
@@ -97,6 +113,49 @@ public final class StreetGearGameTests {
 
         if (HeadGangTargetResolver.resolve(new ItemStack(Items.DIAMOND)).isPresent()) {
             throw new GameTestAssertException("Non-head item was incorrectly accepted as a gang target");
+        }
+
+        // Exercise the real physical Boombox block entity and its no-cooldown gang-session state machine.
+        BlockPos boomboxRelative = new BlockPos(3, 1, 3);
+        helper.setBlock(boomboxRelative, ModBlocks.BOOMBOX.get());
+        BlockPos boomboxWorld = helper.absolutePos(boomboxRelative);
+        if (!(helper.getLevel().getBlockEntity(boomboxWorld) instanceof BoomboxBlockEntity boombox)) {
+            throw new GameTestAssertException("Placed Boombox did not create its authoritative block entity");
+        }
+        if (!boombox.setTarget(new ItemStack(Items.ZOMBIE_HEAD))) {
+            throw new GameTestAssertException("Boombox refused a vanilla Zombie Head target");
+        }
+        HeadGangTargetResolver.Target tuned = boombox.resolvedTarget()
+                .orElseThrow(() -> new GameTestAssertException("Boombox lost its tuned Zombie target"));
+        if (!tuned.entityId().equals(new ResourceLocation("minecraft", "zombie"))
+                || !tuned.gangId().equals(new ResourceLocation("jetsetcraft", "dead_beat"))) {
+            throw new GameTestAssertException("Boombox tuned to the wrong source entity/gang");
+        }
+
+        UUID playerUuid = UUID.nameUUIDFromBytes((JetSetCraft.MOD_ID + ":gametest:boombox")
+                .getBytes(StandardCharsets.UTF_8));
+        ServerPlayer player = FakePlayerFactory.get(helper.getLevel(), new GameProfile(playerUuid, "JSC_boombox"));
+        boombox.toggleChallenge(player);
+        UUID firstChallenge = boombox.challengeId();
+        if (!boombox.isChallengeActive() || firstChallenge == null || boombox.plannedActors() < 1
+                || !new ResourceLocation("minecraft", "zombie").equals(boombox.challengeEntityId())
+                || !new ResourceLocation("jetsetcraft", "dead_beat").equals(boombox.challengeGangId())) {
+            throw new GameTestAssertException("Zombie Head did not start a real Dead Beat Boombox session");
+        }
+        boombox.cancelChallenge(true);
+        if (boombox.isChallengeActive()) {
+            throw new GameTestAssertException("Cancelling a Boombox session did not clear authoritative state");
+        }
+        boombox.toggleChallenge(player);
+        if (!boombox.isChallengeActive() || boombox.challengeId() == null
+                || firstChallenge.equals(boombox.challengeId())) {
+            throw new GameTestAssertException("Boombox could not start a fresh session immediately after cancel");
+        }
+        boombox.cancelChallenge(true);
+
+        ItemStack recoveredHead = boombox.removeTarget();
+        if (recoveredHead.getItem() != Items.ZOMBIE_HEAD || !boombox.targetStack().isEmpty()) {
+            throw new GameTestAssertException("Boombox target slot did not return its physical mob head intact");
         }
 
         System.out.println("JETSETCRAFT_GAMETEST_PASS street_gear");

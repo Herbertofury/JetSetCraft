@@ -21,6 +21,7 @@ public final class ModCreativeTabs {
                 output.accept(ModItems.BMX.get());
                 output.accept(ModItems.SCOOTER.get());
                 output.accept(ModItems.SPRAY_CAN.get());
+                output.accept(ModItems.BOOMBOX.get());
             }).build());
 
     private ModCreativeTabs() {}

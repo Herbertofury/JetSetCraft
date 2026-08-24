@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Seal verified Style Flow build evidence into JetSetCraft project memory.
+"""Seal verified Street + Gang Runtime build evidence into JetSetCraft project memory.
 
 This script is intentionally standard-library-only so GitHub Actions can run it after the
 real Forge GameTests and dedicated-server smoke test without adding another dependency.
@@ -130,13 +130,13 @@ def build_status(
     verified = dict(prior.get("verified", {}))
     verified.update(
         {
-            "style_flow_workflow_run": int(os.getenv("GITHUB_RUN_ID", "0") or 0),
-            "style_flow_workflow_run_number": int(os.getenv("GITHUB_RUN_NUMBER", "0") or 0),
+            "street_gang_workflow_run": int(os.getenv("GITHUB_RUN_ID", "0") or 0),
+            "street_gang_workflow_run_number": int(os.getenv("GITHUB_RUN_NUMBER", "0") or 0),
             "workflow_input_commit": os.getenv("GITHUB_SHA", "") or git_output("rev-parse", "HEAD"),
             "workflow_branch": os.getenv("GITHUB_HEAD_REF") or os.getenv("GITHUB_REF_NAME", ""),
             "forge_clean_build": True,
             "asset_gameplay_and_wiki_validation": True,
-            "real_forge_style_flow_gametests": {
+            "real_forge_street_gang_gametests": {
                 "required": 6,
                 "passed": 6,
                 "observed": pass_line,
@@ -147,7 +147,7 @@ def build_status(
                 "observed": ready_line,
                 **file_evidence(server_log),
             },
-            "style_flow_build": file_evidence(jar),
+            "street_gang_build": file_evidence(jar),
             "ride_style_count": 6,
             "dance_move_count": 28,
             "trick_count": 24,
@@ -158,7 +158,7 @@ def build_status(
 
     return {
         "version": VERSION,
-        "phase": "Style Flow expansion / local contracts complete / real Forge GameTests and dedicated-server verified",
+        "phase": "Street + Gang Runtime / physical Boombox, persistent gangification, real Forge GameTests and dedicated-server verified",
         "implemented": [
             "six server-authoritative ride styles: inline, quad, skateboard, BMX, hoverboard, scooter",
             "persistent hands-free ride loadout with scooter and dedicated hoverboard geometry",
@@ -178,6 +178,14 @@ def build_status(
             "optional Aether Quicksoil/Blue Aercloud/Aerogel and Twilight Forest Aurora route hooks without dependencies",
             "complete validated twenty-five-page GitHub wiki source and automatic wiki publication workflow",
             "six isolated real Forge GameTests with unique fake-player identities, including Street Gear",
+            "craftable/placeable Boombox with a physical visible one-item mob-head gang target slot",
+            "stable curated vanilla Gang Registry plus deterministic safe IDs for optional-mod entities",
+            "original-source EntityType gang actor factory with species-aware Street Gear instead of entity replacement",
+            "persistent reversible gangification bound to actual Street Gear equipment",
+            "server-authoritative Boombox sessions with staggered entrances, actor caps, loaded-terrain safety, UUID tracking, and hard expiry",
+            "ephemeral Boombox event cast with no normal loot/XP farming and clean cancellation cleanup",
+            "per-gang registered music slots with valid Vorbis placeholder audio ready for owner-authored tracks",
+            "provider-agnostic mob-head targeting wired end-to-end into the physical Boombox",
         ],
         "verified": verified,
         "pending_validation": [
@@ -199,11 +207,11 @@ def write_handoff(receipt: dict[str, Any]) -> None:
 
 Canonical repo: `Herbertofury/JetSetCraft`; target Forge 1.20.1 / Java 17 / mod version `{VERSION}`.
 
-The verified Style Flow checkpoint now has six ride styles (inline, quad, skateboard, BMX, hoverboard, scooter), twenty-four named contextual tricks, twenty-eight named dance moves across six families, no-gear dancing, automatic dance phrases, multiplayer cyphers, repeat penalties, graded landings, Flow ranks, dedicated hoverboard/scooter meshes, accessibility controls, optional Aether/Twilight data hooks, the existing Create/native rail stack, combat-safe animation composition, graffiti, and a complete twenty-five-page wiki source.
+The verified runtime keeps the complete Style Flow foundation (six ride styles, 24 contextual tricks, 28 dance moves, hoverboard/scooter meshes, Create/native rail hooks, combat-safe animation composition, graffiti and the 25-page wiki) and adds the first production Gang Wars layer: a physical craftable Boombox, visible mob-head target slot, the approved stable vanilla gang atlas, reversible Street-Gear gangification, original-source EntityType event actors, species-aware gang gear, safe staggered Boombox sessions, no-cooldown restart, anti-farm ephemeral cast cleanup, and stable per-gang music slots.
 
-Real Forge proof for this checkpoint: six required GameTests passed; the dedicated server reached its ready state; runtime JAR `{jar['file']}` is {jar['bytes']} bytes with SHA-256 `{jar['sha256']}`. Workflow run `{receipt['workflow']['run_id']}` on branch `{receipt['workflow']['branch']}` produced the evidence.
+Real Forge proof for this checkpoint: six required GameTests passed (with `street_gear` now covering physical Boombox Zombie Head → Dead Beat tuning and start/cancel/restart), the dedicated server reached its ready state, and runtime JAR `{jar['file']}` is {jar['bytes']} bytes with SHA-256 `{jar['sha256']}`. Workflow run `{receipt['workflow']['run_id']}` on branch `{receipt['workflow']['branch']}` produced the evidence.
 
-Remaining acceptance is deliberately real-client/modpack validation rather than missing implementation: visual ride/dance/trick QA, Create 6.0.8 live tracks, TACZ live weapon composition, optional Aether/Twilight routes, and multiplayer soak. See `docs/STYLE_FLOW.md`, `wiki/Testing-and-Verification.md`, and `.agents-memory/RECOVERY_2026-08-21_STYLE_FLOW.json`.
+Remaining acceptance is real-client/modpack validation and the broader design roadmap rather than this runtime being untested source: visual Boombox/head rendering and audio smoke, live optional head-mod packs, Create/TACZ/Aether/Twilight integration, multiplayer soak, and later Atlas/reputation/territory/chapter/minigame layers. See `docs/BOOMBOX_GANG_RUNTIME.md`, `docs/GANG_WARS_BOOMBOX_MOB_ATLAS_MASTER_SPEC.md`, and `wiki/Testing-and-Verification.md`.
 """
     (MEMORY / "HANDOFF.md").write_text(text, encoding="utf-8")
 
@@ -228,7 +236,7 @@ def main() -> None:
     receipt_path = args.receipt if args.receipt.is_absolute() else ROOT / args.receipt
     if args.seal_tree:
         seal_tree(receipt_path, args.seal_tree)
-        print(f"Sealed Style Flow receipt with source tree {args.seal_tree}")
+        print(f"Sealed Street + Gang Runtime receipt with source tree {args.seal_tree}")
         return
 
     gametest_log = args.gametest_log if args.gametest_log.is_absolute() else ROOT / args.gametest_log
@@ -276,10 +284,10 @@ def main() -> None:
 
     recovery = dict(receipt)
     recovery["remaining_acceptance"] = status["pending_validation"]
-    recovery["supersedes"] = ".agents-memory/RECOVERY_2026-08-21_HOVERBOARD.json"
-    write_json(MEMORY / "RECOVERY_2026-08-21_STYLE_FLOW.json", recovery)
+    recovery["supersedes"] = ".agents-memory/RECOVERY_2026-08-21_STYLE_FLOW.json"
+    write_json(MEMORY / "RECOVERY_2026-08-23_BOOMBOX_GANG_RUNTIME.json", recovery)
     write_handoff(receipt)
-    print(f"JetSetCraft Style Flow verification sealed: {jar.name} {receipt['artifacts']['jar']['sha256']}")
+    print(f"JetSetCraft Street + Gang Runtime verification sealed: {jar.name} {receipt['artifacts']['jar']['sha256']}")
 
 
 if __name__ == "__main__":

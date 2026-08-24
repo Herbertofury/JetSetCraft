@@ -1,0 +1,4 @@
+{
+  "parent": "jetsetcraft:block/boombox",
+  "textures": {"body": "jetsetcraft:block/boombox_active", "particle": "jetsetcraft:block/boombox_active"}
+}

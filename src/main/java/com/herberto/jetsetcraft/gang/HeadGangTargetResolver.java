@@ -134,21 +134,8 @@ public final class HeadGangTargetResolver {
         return List.copyOf(candidates);
     }
 
-    private static ResourceLocation defaultGangId(ResourceLocation entityId) {
-        if (entityId.equals(id("minecraft:creeper"))) return id("jetsetcraft:creepaku_gouji");
-        if (entityId.equals(id("minecraft:skeleton")) || entityId.equals(id("minecraft:wither_skeleton"))) {
-            return id("jetsetcraft:bone_drones");
-        }
-        if (entityId.equals(id("minecraft:zombie"))) return id("jetsetcraft:dead_beat");
-        if (entityId.equals(id("minecraft:spider")) || entityId.equals(id("minecraft:cave_spider"))) {
-            return id("jetsetcraft:arachnaphobia");
-        }
-        if (entityId.equals(id("minecraft:witch"))) return id("jetsetcraft:hex_appeal");
-        if (entityId.equals(id("minecraft:piglin")) || entityId.equals(id("minecraft:piglin_brute"))
-                || entityId.equals(id("minecraft:zombified_piglin"))) {
-            return id("jetsetcraft:gold_rush");
-        }
-        return id("jetsetcraft:mob/" + entityId.getNamespace() + "/" + entityId.getPath());
+    public static ResourceLocation defaultGangId(ResourceLocation entityId) {
+        return GangRegistry.gangIdForEntity(entityId);
     }
 
     private static ResourceLocation firstValidEntityId(String... values) {

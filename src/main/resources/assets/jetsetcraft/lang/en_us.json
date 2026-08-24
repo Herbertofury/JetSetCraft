@@ -26,5 +26,18 @@
   "message.jetsetcraft.mob_gear_equipped": "%s joined the street on %s gear.",
   "tooltip.jetsetcraft.ride_gear_player": "Use in the air to equip your hands-free ride loadout.",
   "tooltip.jetsetcraft.ride_gear_mob": "Use on a mob to equip the original mob with persistent Street Gear.",
-  "tooltip.jetsetcraft.ride_gear_remove": "Sneak + empty-hand use removes mob gear; sneak-use gear swaps it."
+  "tooltip.jetsetcraft.ride_gear_remove": "Sneak + empty-hand use removes mob gear; sneak-use gear swaps it.",
+  "block.jetsetcraft.boombox": "JetSetCraft Boombox",
+  "item.jetsetcraft.boombox": "JetSetCraft Boombox",
+  "message.jetsetcraft.boombox_cancelled": "Gang session cancelled. The street is clear.",
+  "message.jetsetcraft.boombox_target_removed": "Boombox target removed.",
+  "message.jetsetcraft.boombox_target_occupied": "This Boombox is already tuned. Sneak + empty hand to remove its target.",
+  "message.jetsetcraft.boombox_tuned": "Boombox tuned to %s.",
+  "message.jetsetcraft.boombox_no_gang": "No safe gang signal found here. Insert a mob head to tune it directly.",
+  "message.jetsetcraft.boombox_legendary_locked": "%s is a legendary encounter and cannot be summoned by a normal Boombox session.",
+  "message.jetsetcraft.boombox_challenge_started": "%s is rolling in: %s riders incoming.",
+  "message.jetsetcraft.boombox_challenge_expired": "Gang session expired; event riders were safely recalled.",
+  "message.jetsetcraft.boombox_challenge_complete": "%s session complete. The block is yours again.",
+  "tooltip.jetsetcraft.boombox_target": "Use a mob head to tune this Boombox to that mob gang.",
+  "tooltip.jetsetcraft.boombox_start": "Empty-hand use starts or stops the tuned gang session."
 }

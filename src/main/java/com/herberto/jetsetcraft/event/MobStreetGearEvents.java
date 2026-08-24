@@ -1,6 +1,7 @@
 package com.herberto.jetsetcraft.event;
 
 import com.herberto.jetsetcraft.JetSetCraft;
+import com.herberto.jetsetcraft.gang.GangMemberState;
 import com.herberto.jetsetcraft.item.RideGearItem;
 import com.herberto.jetsetcraft.mob.MobStreetGear;
 import com.herberto.jetsetcraft.mob.StreetGearAcquisition;
@@ -82,12 +83,15 @@ public final class MobStreetGearEvents {
         if (original.level().isClientSide || !MobStreetGear.hasGear(original)) return;
 
         ItemStack gear = MobStreetGear.snapshot(original).stack().copy();
+        GangMemberState.Snapshot gangState = GangMemberState.snapshot(original);
         MobStreetGear.EquipResult transfer = MobStreetGear.hasGear(outcome)
                 ? MobStreetGear.EquipResult.rejected()
                 : MobStreetGear.equip(outcome, gear, StreetGearAcquisition.RESTORED, false);
+        if (transfer.equipped() && gangState.present()) GangMemberState.restore(outcome, gangState);
         // The old body is removed immediately after Forge's Post event. Clear its copy in every path, then
         // materialize the item if the destination is incompatible/already equipped so conversion never deletes gear.
         original.getPersistentData().remove(MobStreetGear.ROOT_KEY);
+        GangMemberState.clear(original);
         if (!transfer.equipped() && !gear.isEmpty()) {
             outcome.level().addFreshEntity(new ItemEntity(outcome.level(), outcome.getX(), outcome.getY() + 0.25D,
                     outcome.getZ(), gear));

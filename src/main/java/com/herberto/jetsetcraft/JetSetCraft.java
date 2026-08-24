@@ -4,9 +4,12 @@ import com.mojang.logging.LogUtils;
 import com.herberto.jetsetcraft.config.JetSetConfig;
 import com.herberto.jetsetcraft.network.JetSetNetwork;
 import com.herberto.jetsetcraft.event.CapabilityEvents;
+import com.herberto.jetsetcraft.registry.ModBlockEntities;
+import com.herberto.jetsetcraft.registry.ModBlocks;
 import com.herberto.jetsetcraft.registry.ModCreativeTabs;
 import com.herberto.jetsetcraft.registry.ModEntities;
 import com.herberto.jetsetcraft.registry.ModItems;
+import com.herberto.jetsetcraft.registry.ModSounds;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
@@ -22,8 +25,11 @@ public final class JetSetCraft {
 
     public JetSetCraft() {
         var modBus = FMLJavaModLoadingContext.get().getModEventBus();
+        ModBlocks.BLOCKS.register(modBus);
         ModItems.ITEMS.register(modBus);
         ModEntities.ENTITIES.register(modBus);
+        ModBlockEntities.BLOCK_ENTITIES.register(modBus);
+        ModSounds.SOUNDS.register(modBus);
         ModCreativeTabs.TABS.register(modBus);
         modBus.addListener(CapabilityEvents::register);
         modBus.addListener(this::commonSetup);

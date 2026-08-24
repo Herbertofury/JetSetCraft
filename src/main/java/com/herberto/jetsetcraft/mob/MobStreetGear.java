@@ -1,6 +1,7 @@
 package com.herberto.jetsetcraft.mob;
 
 import com.herberto.jetsetcraft.JetSetCraft;
+import com.herberto.jetsetcraft.gang.GangMemberState;
 import com.herberto.jetsetcraft.item.RideGearItem;
 import com.herberto.jetsetcraft.movement.RideStyle;
 import com.herberto.jetsetcraft.network.JetSetNetwork;
@@ -75,6 +76,7 @@ public final class MobStreetGear {
         CompoundTag tag = createTag(physical, MobRideRigResolver.resolve(entity), source,
                 entity.level().getGameTime());
         entity.getPersistentData().put(ROOT_KEY, tag);
+        GangMemberState.ensureForGear(entity);
         JetSetNetwork.syncMobGear(entity);
         return new EquipResult(true, current.stack().copy());
     }
@@ -83,6 +85,7 @@ public final class MobStreetGear {
         if (entity == null || entity.level().isClientSide) return ItemStack.EMPTY;
         ItemStack stack = snapshot(entity).stack().copy();
         entity.getPersistentData().remove(ROOT_KEY);
+        GangMemberState.clear(entity);
         JetSetNetwork.syncMobGear(entity);
         return stack;
     }
@@ -97,11 +100,13 @@ public final class MobStreetGear {
         ItemStack stack = readPhysicalStack(current);
         if (stack.isEmpty()) {
             entity.getPersistentData().remove(ROOT_KEY);
+            GangMemberState.clear(entity);
             JetSetNetwork.syncMobGear(entity);
             return;
         }
         if (!eligible(entity)) {
             entity.getPersistentData().remove(ROOT_KEY);
+            GangMemberState.clear(entity);
             entity.spawnAtLocation(stack.copy());
             JetSetNetwork.syncMobGear(entity);
             return;
@@ -115,6 +120,7 @@ public final class MobStreetGear {
             entity.getPersistentData().put(ROOT_KEY, normalized);
             JetSetNetwork.syncMobGear(entity);
         }
+        GangMemberState.ensureForGear(entity);
     }
 
     public static Snapshot emptySnapshot() {

@@ -42,6 +42,9 @@ public final class JetSetConfig {
         public final ForgeConfigSpec.BooleanValue enableMicroTerrainAssist;
         public final ForgeConfigSpec.DoubleValue microTerrainMaxStep;
         public final ForgeConfigSpec.BooleanValue allowGraffiti;
+        public final ForgeConfigSpec.IntValue boomboxMaxActors;
+        public final ForgeConfigSpec.IntValue boomboxChallengeLifetimeTicks;
+        public final ForgeConfigSpec.DoubleValue boomboxSpawnRadius;
 
         private Server(ForgeConfigSpec.Builder b) {
             b.push("movement");
@@ -96,6 +99,15 @@ public final class JetSetConfig {
             b.pop();
             b.push("graffiti");
             allowGraffiti = b.define("allowGraffiti", true);
+            b.pop();
+
+            b.push("gangs");
+            boomboxMaxActors = b.comment("Maximum event-only gang actors one Boombox challenge may create. No chunk loading is forced.")
+                    .defineInRange("boomboxMaxActors", 7, 1, 24);
+            boomboxChallengeLifetimeTicks = b.comment("Hard cleanup lifetime for Boombox event casts in ticks. This is not a player cooldown.")
+                    .defineInRange("boomboxChallengeLifetimeTicks", 20 * 180, 20 * 30, 20 * 900);
+            boomboxSpawnRadius = b.comment("Maximum radius used to search loaded terrain for safe cinematic entrance points.")
+                    .defineInRange("boomboxSpawnRadius", 12.0, 4.0, 24.0);
             b.pop();
         }
     }

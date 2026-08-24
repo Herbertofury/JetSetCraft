@@ -1,0 +1,52 @@
+{
+  "schema": 1,
+  "project": "JetSetCraft",
+  "version": "0.3.0-alpha.1",
+  "verified_at": "2026-08-24T02:52:16.426727+00:00",
+  "workflow": {
+    "run_id": 32684207348,
+    "run_number": 159,
+    "input_commit": "a01a3ade445fdd27b8a1f245016a99ca0e75d6c2",
+    "branch": "automation/head-gang-compat-0.3"
+  },
+  "contracts": {
+    "ride_styles": 6,
+    "named_tricks": 24,
+    "dance_moves": 28,
+    "dance_families": 6,
+    "animation_resources": 68,
+    "wiki_pages": 25,
+    "real_forge_gametests_required": 6,
+    "real_forge_gametests_passed": 6,
+    "dedicated_server_ready": true
+  },
+  "observed": {
+    "gametest": "[02:49:08] [Server thread/INFO] [minecraft/GameTestServer]: All 6 required tests passed :)",
+    "server": "[02:49:44] [Server thread/INFO] [minecraft/DedicatedServer]: Done (7.451s)! For help, type \"help\""
+  },
+  "artifacts": {
+    "jar": {
+      "file": "jetsetcraft-1.20.1-0.3.0-alpha.1.jar",
+      "bytes": 3933492,
+      "sha256": "32dd39c640fe9f813a15fc0fb945d91f4fa14f8a84789e057b28df883a13a8fe"
+    },
+    "gametest_log": {
+      "file": "style-flow-gametest.log",
+      "bytes": 23804,
+      "sha256": "d63a7a73cd07d8c775a6dce554699a432c4dd7a8e01ade255b1791c2c9c931a7"
+    },
+    "server_log": {
+      "file": "server-smoke.log",
+      "bytes": 6790,
+      "sha256": "9257d34517a37771df7c8a6c353ddcfc5567ddfa53e129f27d5b49ff4c7c349d"
+    }
+  },
+  "remaining_acceptance": [
+    "real client visual smoke test across all ride styles, dance families, named tricks, HUD, VFX, and reduced-motion mode",
+    "real Create 6.0.8 straight, sloped, junction, and Bezier interoperability runtime smoke test",
+    "TACZ live aim/fire/reload composition smoke test while riding and immediately after dancing",
+    "Aether and Twilight Forest optional route smoke tests with their exact Forge 1.20.1 releases",
+    "multiplayer movement, cypher, combat, dimension-transfer, and persistence acceptance world"
+  ],
+  "supersedes": ".agents-memory/RECOVERY_2026-08-21_STYLE_FLOW.json"
+}

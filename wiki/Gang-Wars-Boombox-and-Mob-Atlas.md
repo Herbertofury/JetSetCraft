@@ -7,6 +7,31 @@
 
 ---
 
+## Implemented runtime checkpoint — August 23, 2026
+
+The first production Gang Wars runtime is now implemented on the Forge 1.20.1 line instead of remaining specification-only:
+
+- a craftable/placeable physical **JetSetCraft Boombox**;
+- a visible one-item **Gang Target** slot that accepts safe mob-head mappings;
+- provider-agnostic target resolution through `HeadGangTargetResolver`;
+- a central stable `GangRegistry` containing the approved vanilla adult gang atlas;
+- original-source `EntityType` gang actors equipped through the existing persistent Street Gear system;
+- reversible natural gangification: equip Street Gear → persistent gang state, remove Street Gear → original mob with JetSetCraft gang state removed;
+- cinematic staggered event arrivals with species-aware ride rigs;
+- session actor caps, loaded-terrain spawn safety, hard expiry, no forced chunks, and UUID tracking rather than global entity scans;
+- event-cast anti-farm rules: ephemeral summoned actors provide no normal loot or experience and are removed when the event is cancelled/expires;
+- no arbitrary real-world/player cooldown — a cancelled/completed Boombox can be used again immediately;
+- per-gang registered music paths with valid Vorbis placeholders ready for owner-authored tracks;
+- comparator states for automation: `0` idle, `7` tuned, `15` active.
+
+The physical Boombox renders its inserted target above the unit. Empty-hand use starts/stops the tuned session; sneak + empty-hand removes the target. Breaking the block returns the physical target.
+
+The current Forge GameTest suite keeps its six-test acceptance contract while extending the Street Gear test to prove the real placed Boombox, Zombie Head → Dead Beat targeting, session start/cancel/restart, physical target recovery, and persistent gangification/de-gangification. See [Testing and Verification](Testing-and-Verification) and `docs/BOOMBOX_GANG_RUNTIME.md`.
+
+The remaining sections are the broader approved design and expansion contract. Features described below that are not in the implemented-runtime list remain design targets rather than silently being represented as finished.
+
+---
+
 ## 0. Mission
 
 Continue development of **JetSetCraft** from the current project state. Do not restart the mod, replace working subsystems, regress existing movement, or reduce compatibility to make this expansion easier.

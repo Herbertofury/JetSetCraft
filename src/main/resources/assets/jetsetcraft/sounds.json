@@ -1,0 +1,642 @@
+{
+  "music/gangs/blue_notes": {
+    "sounds": [
+      {
+        "name": "jetsetcraft:music/gangs/blue_notes",
+        "stream": true
+      }
+    ]
+  },
+  "music/gangs/gillty_pleasure": {
+    "sounds": [
+      {
+        "name": "jetsetcraft:music/gangs/gillty_pleasure",
+        "stream": true
+      }
+    ]
+  },
+  "music/gangs/echo_chamber": {
+    "sounds": [
+      {
+        "name": "jetsetcraft:music/gangs/echo_chamber",
+        "stream": true
+      }
+    ]
+  },
+  "music/gangs/dune_cruisers": {
+    "sounds": [
+      {
+        "name": "jetsetcraft:music/gangs/dune_cruisers",
+        "stream": true
+      }
+    ]
+  },
+  "music/gangs/nine_lives": {
+    "sounds": [
+      {
+        "name": "jetsetcraft:music/gangs/nine_lives",
+        "stream": true
+      }
+    ]
+  },
+  "music/gangs/pecking_order": {
+    "sounds": [
+      {
+        "name": "jetsetcraft:music/gangs/pecking_order",
+        "stream": true
+      }
+    ]
+  },
+  "music/gangs/cod_frequency": {
+    "sounds": [
+      {
+        "name": "jetsetcraft:music/gangs/cod_frequency",
+        "stream": true
+      }
+    ]
+  },
+  "music/gangs/milk_run": {
+    "sounds": [
+      {
+        "name": "jetsetcraft:music/gangs/milk_run",
+        "stream": true
+      }
+    ]
+  },
+  "music/gangs/kickback": {
+    "sounds": [
+      {
+        "name": "jetsetcraft:music/gangs/kickback",
+        "stream": true
+      }
+    ]
+  },
+  "music/gangs/fox_trot": {
+    "sounds": [
+      {
+        "name": "jetsetcraft:music/gangs/fox_trot",
+        "stream": true
+      }
+    ]
+  },
+  "music/gangs/ribbit_riot": {
+    "sounds": [
+      {
+        "name": "jetsetcraft:music/gangs/ribbit_riot",
+        "stream": true
+      }
+    ]
+  },
+  "music/gangs/neon_ink": {
+    "sounds": [
+      {
+        "name": "jetsetcraft:music/gangs/neon_ink",
+        "stream": true
+      }
+    ]
+  },
+  "music/gangs/bridle_breakers": {
+    "sounds": [
+      {
+        "name": "jetsetcraft:music/gangs/bridle_breakers",
+        "stream": true
+      }
+    ]
+  },
+  "music/gangs/spore_score": {
+    "sounds": [
+      {
+        "name": "jetsetcraft:music/gangs/spore_score",
+        "stream": true
+      }
+    ]
+  },
+  "music/gangs/pack_attack": {
+    "sounds": [
+      {
+        "name": "jetsetcraft:music/gangs/pack_attack",
+        "stream": true
+      }
+    ]
+  },
+  "music/gangs/spot_check": {
+    "sounds": [
+      {
+        "name": "jetsetcraft:music/gangs/spot_check",
+        "stream": true
+      }
+    ]
+  },
+  "music/gangs/repeat_offenders": {
+    "sounds": [
+      {
+        "name": "jetsetcraft:music/gangs/repeat_offenders",
+        "stream": true
+      }
+    ]
+  },
+  "music/gangs/hog_wild": {
+    "sounds": [
+      {
+        "name": "jetsetcraft:music/gangs/hog_wild",
+        "stream": true
+      }
+    ]
+  },
+  "music/gangs/hare_trigger": {
+    "sounds": [
+      {
+        "name": "jetsetcraft:music/gangs/hare_trigger",
+        "stream": true
+      }
+    ]
+  },
+  "music/gangs/upstream": {
+    "sounds": [
+      {
+        "name": "jetsetcraft:music/gangs/upstream",
+        "stream": true
+      }
+    ]
+  },
+  "music/gangs/fleece_fleet": {
+    "sounds": [
+      {
+        "name": "jetsetcraft:music/gangs/fleece_fleet",
+        "stream": true
+      }
+    ]
+  },
+  "music/gangs/pale_riders": {
+    "sounds": [
+      {
+        "name": "jetsetcraft:music/gangs/pale_riders",
+        "stream": true
+      }
+    ]
+  },
+  "music/gangs/throwbacks": {
+    "sounds": [
+      {
+        "name": "jetsetcraft:music/gangs/throwbacks",
+        "stream": true
+      }
+    ]
+  },
+  "music/gangs/inkognito": {
+    "sounds": [
+      {
+        "name": "jetsetcraft:music/gangs/inkognito",
+        "stream": true
+      }
+    ]
+  },
+  "music/gangs/lava_lanes": {
+    "sounds": [
+      {
+        "name": "jetsetcraft:music/gangs/lava_lanes",
+        "stream": true
+      }
+    ]
+  },
+  "music/gangs/small_fry": {
+    "sounds": [
+      {
+        "name": "jetsetcraft:music/gangs/small_fry",
+        "stream": true
+      }
+    ]
+  },
+  "music/gangs/reef_riders": {
+    "sounds": [
+      {
+        "name": "jetsetcraft:music/gangs/reef_riders",
+        "stream": true
+      }
+    ]
+  },
+  "music/gangs/shell_rollers": {
+    "sounds": [
+      {
+        "name": "jetsetcraft:music/gangs/shell_rollers",
+        "stream": true
+      }
+    ]
+  },
+  "music/gangs/block_party": {
+    "sounds": [
+      {
+        "name": "jetsetcraft:music/gangs/block_party",
+        "stream": true
+      }
+    ]
+  },
+  "music/gangs/roadshow": {
+    "sounds": [
+      {
+        "name": "jetsetcraft:music/gangs/roadshow",
+        "stream": true
+      }
+    ]
+  },
+  "music/gangs/hive_five": {
+    "sounds": [
+      {
+        "name": "jetsetcraft:music/gangs/hive_five",
+        "stream": true
+      }
+    ]
+  },
+  "music/gangs/wave_riders": {
+    "sounds": [
+      {
+        "name": "jetsetcraft:music/gangs/wave_riders",
+        "stream": true
+      }
+    ]
+  },
+  "music/gangs/ender_the_influence": {
+    "sounds": [
+      {
+        "name": "jetsetcraft:music/gangs/ender_the_influence",
+        "stream": true
+      }
+    ]
+  },
+  "music/gangs/high_ground": {
+    "sounds": [
+      {
+        "name": "jetsetcraft:music/gangs/high_ground",
+        "stream": true
+      }
+    ]
+  },
+  "music/gangs/ironclad": {
+    "sounds": [
+      {
+        "name": "jetsetcraft:music/gangs/ironclad",
+        "stream": true
+      }
+    ]
+  },
+  "music/gangs/spit_take": {
+    "sounds": [
+      {
+        "name": "jetsetcraft:music/gangs/spit_take",
+        "stream": true
+      }
+    ]
+  },
+  "music/gangs/bamboo_b_sides": {
+    "sounds": [
+      {
+        "name": "jetsetcraft:music/gangs/bamboo_b_sides",
+        "stream": true
+      }
+    ]
+  },
+  "music/gangs/gold_rush": {
+    "sounds": [
+      {
+        "name": "jetsetcraft:music/gangs/gold_rush",
+        "stream": true
+      }
+    ]
+  },
+  "music/gangs/ice_breakers": {
+    "sounds": [
+      {
+        "name": "jetsetcraft:music/gangs/ice_breakers",
+        "stream": true
+      }
+    ]
+  },
+  "music/gangs/cold_front": {
+    "sounds": [
+      {
+        "name": "jetsetcraft:music/gangs/cold_front",
+        "stream": true
+      }
+    ]
+  },
+  "music/gangs/arachnaphobia": {
+    "sounds": [
+      {
+        "name": "jetsetcraft:music/gangs/arachnaphobia",
+        "stream": true
+      }
+    ]
+  },
+  "music/gangs/caravan_crew": {
+    "sounds": [
+      {
+        "name": "jetsetcraft:music/gangs/caravan_crew",
+        "stream": true
+      }
+    ]
+  },
+  "music/gangs/pack_mentality": {
+    "sounds": [
+      {
+        "name": "jetsetcraft:music/gangs/pack_mentality",
+        "stream": true
+      }
+    ]
+  },
+  "music/gangs/dead_mint": {
+    "sounds": [
+      {
+        "name": "jetsetcraft:music/gangs/dead_mint",
+        "stream": true
+      }
+    ]
+  },
+  "music/gangs/burnout_brigade": {
+    "sounds": [
+      {
+        "name": "jetsetcraft:music/gangs/burnout_brigade",
+        "stream": true
+      }
+    ]
+  },
+  "music/gangs/underweb": {
+    "sounds": [
+      {
+        "name": "jetsetcraft:music/gangs/underweb",
+        "stream": true
+      }
+    ]
+  },
+  "music/gangs/creepaku_gouji": {
+    "sounds": [
+      {
+        "name": "jetsetcraft:music/gangs/creepaku_gouji",
+        "stream": true
+      }
+    ]
+  },
+  "music/gangs/dead_water": {
+    "sounds": [
+      {
+        "name": "jetsetcraft:music/gangs/dead_water",
+        "stream": true
+      }
+    ]
+  },
+  "music/gangs/ancient_current": {
+    "sounds": [
+      {
+        "name": "jetsetcraft:music/gangs/ancient_current",
+        "stream": true
+      }
+    ]
+  },
+  "music/gangs/static_noise": {
+    "sounds": [
+      {
+        "name": "jetsetcraft:music/gangs/static_noise",
+        "stream": true
+      }
+    ]
+  },
+  "music/gangs/conjure_club": {
+    "sounds": [
+      {
+        "name": "jetsetcraft:music/gangs/conjure_club",
+        "stream": true
+      }
+    ]
+  },
+  "music/gangs/wail_riders": {
+    "sounds": [
+      {
+        "name": "jetsetcraft:music/gangs/wail_riders",
+        "stream": true
+      }
+    ]
+  },
+  "music/gangs/current_affairs": {
+    "sounds": [
+      {
+        "name": "jetsetcraft:music/gangs/current_affairs",
+        "stream": true
+      }
+    ]
+  },
+  "music/gangs/razorbacks": {
+    "sounds": [
+      {
+        "name": "jetsetcraft:music/gangs/razorbacks",
+        "stream": true
+      }
+    ]
+  },
+  "music/gangs/dry_spell": {
+    "sounds": [
+      {
+        "name": "jetsetcraft:music/gangs/dry_spell",
+        "stream": true
+      }
+    ]
+  },
+  "music/gangs/hot_bounce": {
+    "sounds": [
+      {
+        "name": "jetsetcraft:music/gangs/hot_bounce",
+        "stream": true
+      }
+    ]
+  },
+  "music/gangs/night_shift": {
+    "sounds": [
+      {
+        "name": "jetsetcraft:music/gangs/night_shift",
+        "stream": true
+      }
+    ]
+  },
+  "music/gangs/gold_standard": {
+    "sounds": [
+      {
+        "name": "jetsetcraft:music/gangs/gold_standard",
+        "stream": true
+      }
+    ]
+  },
+  "music/gangs/raid_parade": {
+    "sounds": [
+      {
+        "name": "jetsetcraft:music/gangs/raid_parade",
+        "stream": true
+      }
+    ]
+  },
+  "music/gangs/puff_piece": {
+    "sounds": [
+      {
+        "name": "jetsetcraft:music/gangs/puff_piece",
+        "stream": true
+      }
+    ]
+  },
+  "music/gangs/wrecking_crew": {
+    "sounds": [
+      {
+        "name": "jetsetcraft:music/gangs/wrecking_crew",
+        "stream": true
+      }
+    ]
+  },
+  "music/gangs/boxed_in": {
+    "sounds": [
+      {
+        "name": "jetsetcraft:music/gangs/boxed_in",
+        "stream": true
+      }
+    ]
+  },
+  "music/gangs/silver_static": {
+    "sounds": [
+      {
+        "name": "jetsetcraft:music/gangs/silver_static",
+        "stream": true
+      }
+    ]
+  },
+  "music/gangs/bone_drones": {
+    "sounds": [
+      {
+        "name": "jetsetcraft:music/gangs/bone_drones",
+        "stream": true
+      }
+    ]
+  },
+  "music/gangs/goo_groove": {
+    "sounds": [
+      {
+        "name": "jetsetcraft:music/gangs/goo_groove",
+        "stream": true
+      }
+    ]
+  },
+  "music/gangs/cold_shots": {
+    "sounds": [
+      {
+        "name": "jetsetcraft:music/gangs/cold_shots",
+        "stream": true
+      }
+    ]
+  },
+  "music/gangs/bad_spirits": {
+    "sounds": [
+      {
+        "name": "jetsetcraft:music/gangs/bad_spirits",
+        "stream": true
+      }
+    ]
+  },
+  "music/gangs/axe_to_grind": {
+    "sounds": [
+      {
+        "name": "jetsetcraft:music/gangs/axe_to_grind",
+        "stream": true
+      }
+    ]
+  },
+  "music/gangs/deep_cuts": {
+    "sounds": [
+      {
+        "name": "jetsetcraft:music/gangs/deep_cuts",
+        "stream": true
+      }
+    ]
+  },
+  "music/gangs/hex_appeal": {
+    "sounds": [
+      {
+        "name": "jetsetcraft:music/gangs/hex_appeal",
+        "stream": true
+      }
+    ]
+  },
+  "music/gangs/blackout_bones": {
+    "sounds": [
+      {
+        "name": "jetsetcraft:music/gangs/blackout_bones",
+        "stream": true
+      }
+    ]
+  },
+  "music/gangs/rotten_rush": {
+    "sounds": [
+      {
+        "name": "jetsetcraft:music/gangs/rotten_rush",
+        "stream": true
+      }
+    ]
+  },
+  "music/gangs/dead_beat": {
+    "sounds": [
+      {
+        "name": "jetsetcraft:music/gangs/dead_beat",
+        "stream": true
+      }
+    ]
+  },
+  "music/gangs/dead_locals": {
+    "sounds": [
+      {
+        "name": "jetsetcraft:music/gangs/dead_locals",
+        "stream": true
+      }
+    ]
+  },
+  "music/gangs/final_flight": {
+    "sounds": [
+      {
+        "name": "jetsetcraft:music/gangs/final_flight",
+        "stream": true
+      }
+    ]
+  },
+  "music/gangs/triple_threat": {
+    "sounds": [
+      {
+        "name": "jetsetcraft:music/gangs/triple_threat",
+        "stream": true
+      }
+    ]
+  },
+  "music/gangs/night_mares": {
+    "sounds": [
+      {
+        "name": "jetsetcraft:music/gangs/night_mares",
+        "stream": true
+      }
+    ]
+  },
+  "music/gangs/smoke_and_mirrors": {
+    "sounds": [
+      {
+        "name": "jetsetcraft:music/gangs/smoke_and_mirrors",
+        "stream": true
+      }
+    ]
+  },
+  "music/gangs/dead_beat_titan": {
+    "sounds": [
+      {
+        "name": "jetsetcraft:music/gangs/dead_beat_titan",
+        "stream": true
+      }
+    ]
+  },
+  "music/gangs/generic": {
+    "sounds": [
+      {
+        "name": "jetsetcraft:music/gangs/generic",
+        "stream": true
+      }
+    ]
+  }
+}
