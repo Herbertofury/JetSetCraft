@@ -53,7 +53,20 @@ jobs:
           git diff --exit-code
 
       - name: Clean Forge build
-        run: ./gradlew clean build --no-daemon
+        shell: bash
+        run: |
+          set -euo pipefail
+          for attempt in 1 2 3; do
+            if ./gradlew clean build --no-daemon; then
+              exit 0
+            fi
+            if [[ "$attempt" -eq 3 ]]; then
+              echo '::error::Forge build failed after three attempts.'
+              exit 1
+            fi
+            echo "::warning::Forge dependency service/build attempt $attempt failed; retrying in 20 seconds."
+            sleep 20
+          done
 
       - name: Run eight real Forge GameTests
         shell: bash
