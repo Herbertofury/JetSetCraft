@@ -175,7 +175,7 @@ public final class BoomboxBlockEntity extends BlockEntity {
     }
 
     public void completeChallenge() {
-        clearChallengeState(false);
+        clearChallengeState(true);
     }
 
     public void cancelChallenge(boolean removeActors) {
@@ -185,7 +185,19 @@ public final class BoomboxBlockEntity extends BlockEntity {
         clearChallengeState(true);
     }
 
-    private void clearChallengeState(boolean cancelled) {
+    /**
+     * Tear down an active session while the block itself is being removed. This deliberately avoids
+     * mutating the block state or broadcasting a block-entity update: doing either from Block#onRemove
+     * can race the replacement state and make an active Boombox appear to survive its own break.
+     */
+    public void cancelChallengeForRemoval() {
+        if (level instanceof ServerLevel server) {
+            GangChallengeController.removeActors(server, actorIds, challengeId);
+        }
+        clearChallengeState(false);
+    }
+
+    private void clearChallengeState(boolean updateWorldState) {
         challengeId = null;
         ownerId = null;
         challengeEntityId = null;
@@ -197,8 +209,12 @@ public final class BoomboxBlockEntity extends BlockEntity {
         plannedActors = 0;
         spawnAttempts = 0;
         actorIds.clear();
-        setBlockActive(false);
-        sync();
+        if (updateWorldState) {
+            setBlockActive(false);
+            sync();
+        } else {
+            setChanged();
+        }
     }
 
     private void setBlockActive(boolean active) {
