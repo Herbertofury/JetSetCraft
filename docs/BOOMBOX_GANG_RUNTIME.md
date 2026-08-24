@@ -41,9 +41,17 @@ Natural/source mobs are not converted into ephemeral event actors and are not gl
 
 Unknown modded entities use deterministic `jetsetcraft:mob/<namespace>/<entity>` IDs and safe generated crew names until a curated datapack/adapter overrides them; JetSetCraft does not invent a destructive entity replacement.
 
+### Datapack/server gang overrides
+
+Gang identity is now reloadable server data rather than a hardcoded-only catalog. Files under `data/<namespace>/jetsetcraft_gangs/*.json` overlay the stable built-in atlas atomically. A definition may override `display_name`, `disposition`, `music`, `primary_color`, `secondary_color`, actor bounds, Boombox eligibility, legendary status, and one or more source `entity`/`entities` mappings. Missing fields inherit the built-in definition when the `gang_id` matches a stock gang, so a server can rename or recolor Dead Beat without copying every field. Optional-mod entity mappings are ignored cleanly when their entity is not installed.
+
+The bundled `dead_beat.json` is an acceptance fixture as well as an example. The Forge GameTest requires at least one gang override to have been loaded, so a broken reload-listener registration fails CI instead of silently falling back forever.
+
 ## Mob-head compatibility
 
-The Boombox consumes `HeadGangTargetResolver`, so the same provider-agnostic compatibility rules apply to vanilla and optional head ecosystems. Exact known runtime targets and the All The Heads future-version identity contract are documented in `MOB_HEAD_GANG_COMPATIBILITY.md`.
+The Boombox consumes `HeadGangTargetResolver`, so the same provider-agnostic compatibility rules apply to vanilla and optional head ecosystems. Exact item mappings can now be supplied by `data/<namespace>/jetsetcraft_head_targets/*.json` with `item`, `entity`, and optional `gang` fields. The resolver priority is explicit per-stack JetSetCraft metadata → exact server/datapack mapping → vanilla identity → conservative registry-name convention. That lets a pack support unusual player-head/emblem items without texture guessing or source-mod Java linkage.
+
+Exact known runtime targets and the All The Heads future-version identity contract are documented in `MOB_HEAD_GANG_COMPATIBILITY.md`.
 
 ## Music slots
 
