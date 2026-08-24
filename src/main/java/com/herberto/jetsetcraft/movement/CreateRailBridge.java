@@ -27,7 +27,7 @@ final class CreateRailBridge {
                 Class<?> clazz = Class.forName("com.herberto.jetsetcraft.compat.create.CreateRailProvider");
                 provider = (GrindRailProvider) clazz.getDeclaredConstructor().newInstance();
                 JetSetCraft.LOGGER.info("Create track grinding enabled via native ITrackBlock/Bezier track geometry");
-            } catch (Throwable t) {
+            } catch (ReflectiveOperationException | RuntimeException | LinkageError t) {
                 JetSetCraft.LOGGER.error("Create is loaded, but JetSetCraft could not initialize Create track grinding", t);
             }
             return provider;

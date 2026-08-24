@@ -19,7 +19,7 @@ final class VanillaEnchantments {
         ItemStack ride = data.rideGear();
         int jetSet = 0;
         if (!ride.isEmpty() && ride.getItem() instanceof com.herberto.jetsetcraft.item.RideGearItem gear && gear.isFootwearStyle()) {
-            jetSet = EnchantmentHelper.getItemEnchantmentLevel(enchantment, ride);
+            jetSet = EnchantmentHelper.getTagEnchantmentLevel(enchantment, ride);
         }
         return Math.max(vanilla, jetSet);
     }
@@ -34,7 +34,7 @@ final class VanillaEnchantments {
         ItemStack ride = data.rideGear();
         if (ride.isEmpty() || !(ride.getItem() instanceof com.herberto.jetsetcraft.item.RideGearItem gear) || !gear.isFootwearStyle()) return;
 
-        int rideFrost = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.FROST_WALKER, ride);
+        int rideFrost = EnchantmentHelper.getTagEnchantmentLevel(Enchantments.FROST_WALKER, ride);
         int vanillaFrost = EnchantmentHelper.getEnchantmentLevel(Enchantments.FROST_WALKER, player);
         if (rideFrost > vanillaFrost) {
             FrostWalkerEnchantment.onEntityMoved(player, player.level(), player.blockPosition(), rideFrost);
@@ -54,7 +54,7 @@ final class VanillaEnchantments {
             return amount;
         }
 
-        int rideLevel = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.FALL_PROTECTION, ride);
+        int rideLevel = EnchantmentHelper.getTagEnchantmentLevel(Enchantments.FALL_PROTECTION, ride);
         int vanillaLevel = EnchantmentHelper.getEnchantmentLevel(Enchantments.FALL_PROTECTION, player);
         if (rideLevel <= vanillaLevel) return amount;
 

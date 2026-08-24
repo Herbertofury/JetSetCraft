@@ -1,9 +1,10 @@
 package com.herberto.jetsetcraft.network;
 
-import com.herberto.jetsetcraft.client.state.ClientMobGearState;
 import com.herberto.jetsetcraft.mob.MobRideRig;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
@@ -23,7 +24,8 @@ public record S2CMobGearPacket(int entityId, ItemStack stack, MobRideRig rig) {
 
     public static void handle(S2CMobGearPacket packet, Supplier<NetworkEvent.Context> supplier) {
         NetworkEvent.Context context = supplier.get();
-        context.enqueueWork(() -> ClientMobGearState.accept(packet));
+        context.enqueueWork(() -> DistExecutor.unsafeRunWhenOn(Dist.CLIENT,
+                () -> () -> com.herberto.jetsetcraft.client.ClientPacketHandlers.accept(packet)));
         context.setPacketHandled(true);
     }
 }

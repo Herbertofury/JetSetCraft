@@ -58,7 +58,7 @@ public final class MobRideRigResolver {
     }
 
     private static TagKey<EntityType<?>> tag(String path) {
-        return TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(JetSetCraft.MOD_ID, path));
+        return TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(JetSetCraft.MOD_ID, path));
     }
 
     private MobRideRigResolver() {}

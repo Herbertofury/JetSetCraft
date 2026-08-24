@@ -3,6 +3,7 @@ package com.herberto.jetsetcraft.entity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
@@ -19,6 +20,7 @@ import com.herberto.jetsetcraft.graffiti.GraffitiCatalog;
 public final class GraffitiEntity extends Entity {
     private static final EntityDataAccessor<Integer> VARIANT = SynchedEntityData.defineId(GraffitiEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Byte> FACE = SynchedEntityData.defineId(GraffitiEntity.class, EntityDataSerializers.BYTE);
+    private BlockPos supportPos;
 
     public GraffitiEntity(EntityType<? extends GraffitiEntity> type, Level level) {
         super(type, level);
@@ -27,6 +29,7 @@ public final class GraffitiEntity extends Entity {
     }
 
     public void configure(BlockPos blockPos, Direction face, int variant) {
+        supportPos = blockPos.immutable();
         setVariant(variant);
         setFace(face);
         double x = blockPos.getX() + 0.5 + face.getStepX() * 0.505;
@@ -61,17 +64,24 @@ public final class GraffitiEntity extends Entity {
     protected void readAdditionalSaveData(CompoundTag tag) {
         setVariant(tag.getInt("Variant"));
         setFace(Direction.from3DDataValue(tag.getByte("Face")));
+        supportPos = tag.contains("SupportPos", Tag.TAG_LONG) ? BlockPos.of(tag.getLong("SupportPos")) : null;
     }
 
     @Override
     protected void addAdditionalSaveData(CompoundTag tag) {
         tag.putInt("Variant", getVariant());
         tag.putByte("Face", (byte) getFace().get3DDataValue());
+        if (supportPos != null) tag.putLong("SupportPos", supportPos.asLong());
     }
 
     @Override
     public void tick() {
+        super.tick();
         setDeltaMovement(0, 0, 0);
+        if (!level().isClientSide && tickCount % 40 == 0 && supportPos != null
+                && !level().getBlockState(supportPos).isFaceSturdy(level(), supportPos, getFace())) {
+            discard();
+        }
     }
 
 

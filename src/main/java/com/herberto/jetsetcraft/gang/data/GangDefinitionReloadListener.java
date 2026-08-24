@@ -43,7 +43,7 @@ public final class GangDefinitionReloadListener extends SimpleJsonResourceReload
                 GangDefinition.Disposition disposition = parseDisposition(GsonHelper.getAsString(json, "disposition",
                         base == null ? "neutral" : base.disposition().name()));
                 ResourceLocation music = json.has("music") ? requiredId(json, "music")
-                        : base == null ? new ResourceLocation(JetSetCraft.MOD_ID, "music/gangs/generic") : base.musicId();
+                        : base == null ? ResourceLocation.fromNamespaceAndPath(JetSetCraft.MOD_ID, "music/gangs/generic") : base.musicId();
                 int primary = parseColor(json.get("primary_color"), base == null ? 0x5EE8E8 : base.primaryColor());
                 int secondary = parseColor(json.get("secondary_color"), base == null ? 0xE938A8 : base.secondaryColor());
                 int minActors = GsonHelper.getAsInt(json, "min_actors", base == null ? 2 : base.minActors());

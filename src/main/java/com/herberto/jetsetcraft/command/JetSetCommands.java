@@ -10,11 +10,11 @@ import com.herberto.jetsetcraft.movement.TrickCatalog;
 import com.herberto.jetsetcraft.movement.VanillaWorldPhysics;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.DoubleArgumentType;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -22,6 +22,7 @@ import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.Locale;
 
@@ -52,7 +53,7 @@ public final class JetSetCommands {
         ServerPlayer player;
         try {
             player = source.getPlayerOrException();
-        } catch (Exception exception) {
+        } catch (CommandSyntaxException exception) {
             source.sendFailure(Component.literal("JetSetCraft status requires a player."));
             return 0;
         }
@@ -65,7 +66,7 @@ public final class JetSetCommands {
 
             VanillaWorldPhysics.Surface surface = VanillaWorldPhysics.ground(player);
             VanillaWorldPhysics.MotionProfile profile = VanillaWorldPhysics.profile(player, data, surface);
-            String block = String.valueOf(BuiltInRegistries.BLOCK.getKey(surface.state().getBlock()));
+            String block = String.valueOf(ForgeRegistries.BLOCKS.getKey(surface.state().getBlock()));
             Vec3 horizontal = new Vec3(player.getDeltaMovement().x, 0.0, player.getDeltaMovement().z);
 
             source.sendSuccess(() -> Component.literal("JetSetCraft server diagnostics").withStyle(ChatFormatting.AQUA), false);
@@ -115,19 +116,22 @@ public final class JetSetCommands {
         ServerPlayer player;
         try {
             player = source.getPlayerOrException();
-        } catch (Exception exception) {
+        } catch (CommandSyntaxException exception) {
             source.sendFailure(Component.literal("JetSetCraft set_momentum requires a player."));
             return 0;
         }
-        player.getCapability(JetSetDataProvider.CAPABILITY).ifPresent(data -> {
-            Vec3 direction = JetSetMovement.desiredDirection(player, data);
-            if (direction.lengthSqr() < 1.0e-6) direction = JetSetMovement.horizontalLook(player);
-            direction = direction.normalize();
-            Vec3 current = player.getDeltaMovement();
-            data.setMomentum(speed);
-            player.setDeltaMovement(direction.x * speed, current.y, direction.z * speed);
-            player.hurtMarked = true;
-        });
+        JetSetData data = player.getCapability(JetSetDataProvider.CAPABILITY).resolve().orElse(null);
+        if (data == null) {
+            source.sendFailure(Component.literal("JetSetCraft capability is not attached to this player."));
+            return 0;
+        }
+        Vec3 direction = JetSetMovement.desiredDirection(player, data);
+        if (direction.lengthSqr() < 1.0e-6) direction = JetSetMovement.horizontalLook(player);
+        direction = direction.normalize();
+        Vec3 current = player.getDeltaMovement();
+        data.setMomentum(speed);
+        player.setDeltaMovement(direction.x * speed, current.y, direction.z * speed);
+        player.hurtMarked = true;
         source.sendSuccess(() -> Component.literal(String.format(Locale.ROOT,
                 "JetSetCraft momentum set to %.3f for runtime testing.", speed)).withStyle(ChatFormatting.YELLOW), false);
         return 1;
@@ -137,7 +141,7 @@ public final class JetSetCommands {
         ServerPlayer player;
         try {
             player = source.getPlayerOrException();
-        } catch (Exception exception) {
+        } catch (CommandSyntaxException exception) {
             source.sendFailure(Component.literal("JetSetCraft build_vanilla_lab requires a player."));
             return 0;
         }

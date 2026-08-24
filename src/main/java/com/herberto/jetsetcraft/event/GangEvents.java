@@ -2,6 +2,7 @@ package com.herberto.jetsetcraft.event;
 
 import com.herberto.jetsetcraft.JetSetCraft;
 import com.herberto.jetsetcraft.gang.GangMemberState;
+import net.minecraft.nbt.Tag;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
@@ -28,6 +29,8 @@ public final class GangEvents {
     public static void expireEventCast(LivingEvent.LivingTickEvent event) {
         LivingEntity living = event.getEntity();
         if (living.level().isClientSide || !(living instanceof Mob mob)) return;
+        if (mob.tickCount % 20 != 0
+                || !mob.getPersistentData().contains(GangMemberState.ROOT_KEY, Tag.TAG_COMPOUND)) return;
         if (GangMemberState.expired(mob, mob.level().getGameTime())) mob.discard();
     }
 

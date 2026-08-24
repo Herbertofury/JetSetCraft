@@ -76,7 +76,7 @@ public final class ClientEvents {
         @SubscribeEvent
         public static void addPlayerLayers(EntityRenderersEvent.AddLayers event) {
             for (String skin : event.getSkins()) {
-                var renderer = event.getSkin(skin);
+                var renderer = event.getPlayerSkin(skin);
                 if (renderer instanceof PlayerRenderer playerRenderer) {
                     playerRenderer.addLayer(new RideGearLayer(playerRenderer));
                 }
@@ -89,8 +89,10 @@ public final class ClientEvents {
 
         @SuppressWarnings({"rawtypes", "unchecked"})
         private static void addMobLayer(EntityRenderersEvent.AddLayers event, EntityType<?> type) {
-            LivingEntityRenderer renderer = event.getRenderer((EntityType) type);
-            if (renderer != null) renderer.addLayer(new MobRideGearLayer(renderer));
+            var renderer = event.getEntityRenderer((EntityType) type);
+            if (renderer instanceof LivingEntityRenderer livingRenderer) {
+                livingRenderer.addLayer(new MobRideGearLayer(livingRenderer));
+            }
         }
     }
 

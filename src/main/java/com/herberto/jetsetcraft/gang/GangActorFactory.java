@@ -1,5 +1,6 @@
 package com.herberto.jetsetcraft.gang;
 
+import com.herberto.jetsetcraft.JetSetCraft;
 import com.herberto.jetsetcraft.mob.MobStreetGear;
 import com.herberto.jetsetcraft.mob.StreetGearAcquisition;
 import net.minecraft.core.BlockPos;
@@ -11,6 +12,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.Optional;
@@ -35,12 +37,19 @@ public final class GangActorFactory {
         mob.moveTo(spawn.getX() + 0.5D, spawn.getY(), spawn.getZ() + 0.5D,
                 Mth.wrapDegrees(memberIndex * 57.0F), 0.0F);
         try {
-            mob.finalizeSpawn(level, level.getCurrentDifficultyAt(spawn), MobSpawnType.EVENT, null, null);
-        } catch (RuntimeException ignored) {
-            // Some optional mobs perform specialized spawn setup. Their ordinary source type is still valid without it.
+            ForgeEventFactory.onFinalizeSpawn(mob, level, level.getCurrentDifficultyAt(spawn),
+                    MobSpawnType.EVENT, null, null);
+        } catch (RuntimeException error) {
+            JetSetCraft.LOGGER.warn("Skipping Boombox actor {} because its spawn finalization failed",
+                    target.entityId(), error);
+            mob.discard();
+            return Optional.empty();
         }
         mob.setPersistenceRequired();
-        if (!level.addFreshEntity(mob)) return Optional.empty();
+        if (!level.addFreshEntity(mob)) {
+            mob.discard();
+            return Optional.empty();
+        }
 
         MobStreetGear.EquipResult gear = MobStreetGear.equip(mob, GangGearSelector.forActor(mob, memberIndex),
                 StreetGearAcquisition.GANG_EVENT, false);
@@ -61,7 +70,7 @@ public final class GangActorFactory {
             double distance = 4.5D + ((i + memberIndex) % 5) * Math.max(0.75D, (maxRadius - 4.5D) / 5.0D);
             int x = anchor.getX() + Mth.floor(Math.cos(angle) * distance);
             int z = anchor.getZ() + Mth.floor(Math.sin(angle) * distance);
-            if (!level.hasChunkAt(new BlockPos(x, anchor.getY(), z))) continue;
+            if (!level.getChunkSource().hasChunk(x >> 4, z >> 4)) continue;
             int y = level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, x, z);
             BlockPos feet = new BlockPos(x, y, z);
             if (Math.abs(y - anchor.getY()) > 10) continue;

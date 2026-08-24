@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public final class JetSetDataProvider implements ICapabilitySerializable<CompoundTag> {
-    public static final ResourceLocation ID = new ResourceLocation(JetSetCraft.MOD_ID, "ride_data");
+    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(JetSetCraft.MOD_ID, "ride_data");
     public static final Capability<JetSetData> CAPABILITY = CapabilityManager.get(new CapabilityToken<>() {});
     private final JetSetData data = new JetSetData();
     private final LazyOptional<JetSetData> optional = LazyOptional.of(() -> data);

@@ -2,6 +2,7 @@ package com.herberto.jetsetcraft.gametest;
 
 import com.herberto.jetsetcraft.JetSetCraft;
 import com.herberto.jetsetcraft.blockentity.BoomboxBlockEntity;
+import com.herberto.jetsetcraft.entity.GraffitiEntity;
 import com.herberto.jetsetcraft.gang.GangMemberState;
 import com.herberto.jetsetcraft.gang.GangRegistry;
 import com.herberto.jetsetcraft.gang.HeadTargetMappingRegistry;
@@ -12,8 +13,10 @@ import com.herberto.jetsetcraft.mob.MobStreetGear;
 import com.herberto.jetsetcraft.mob.StreetGearAcquisition;
 import com.herberto.jetsetcraft.movement.RideStyle;
 import com.herberto.jetsetcraft.registry.ModBlocks;
+import com.herberto.jetsetcraft.registry.ModEntities;
 import com.herberto.jetsetcraft.registry.ModItems;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestAssertException;
 import net.minecraft.gametest.framework.GameTestHelper;
@@ -41,6 +44,41 @@ import java.util.UUID;
 @GameTestHolder(JetSetCraft.MOD_ID)
 @PrefixGameTestTemplate(false)
 public final class StreetGearGameTests {
+    @GameTest(template = "hoverboard_empty", timeoutTicks = 100)
+    public static void graffitiPersistsAndLeavesWithItsWall(GameTestHelper helper) {
+        BlockPos wallRelative = new BlockPos(2, 1, 2);
+        BlockPos wallWorld = helper.absolutePos(wallRelative);
+        helper.setBlock(wallRelative, Blocks.STONE);
+
+        GraffitiEntity graffiti = new GraffitiEntity(ModEntities.GRAFFITI.get(), helper.getLevel());
+        graffiti.configure(wallWorld, Direction.NORTH, 2);
+        if (!helper.getLevel().addFreshEntity(graffiti)) {
+            throw new GameTestAssertException("Could not add a real graffiti entity to the GameTest level");
+        }
+
+        CompoundTag saved = new CompoundTag();
+        graffiti.saveWithoutId(saved);
+        GraffitiEntity restored = new GraffitiEntity(ModEntities.GRAFFITI.get(), helper.getLevel());
+        restored.load(saved);
+        if (restored.getVariant() != 2 || restored.getFace() != Direction.NORTH) {
+            throw new GameTestAssertException("Graffiti did not preserve its variant/facing NBT");
+        }
+
+        helper.runAfterDelay(5, () -> {
+            if (!graffiti.isAlive()) {
+                throw new GameTestAssertException("Supported graffiti removed itself prematurely");
+            }
+            helper.setBlock(wallRelative, Blocks.AIR);
+        });
+        helper.runAfterDelay(50, () -> {
+            if (!graffiti.isRemoved()) {
+                throw new GameTestAssertException("Graffiti survived after its supporting wall was removed");
+            }
+            System.out.println("JETSETCRAFT_GAMETEST_PASS graffiti_lifecycle");
+            helper.succeed();
+        });
+    }
+
     @GameTest(template = "hoverboard_empty", timeoutTicks = 80)
     public static void streetGearPreservesSourceMobAndPhysicalItem(GameTestHelper helper) {
         Zombie zombie = EntityType.ZOMBIE.create(helper.getLevel());
@@ -64,7 +102,7 @@ public final class StreetGearGameTests {
         }
         GangMemberState.Snapshot gangSnapshot = GangMemberState.snapshot(zombie);
         if (!gangSnapshot.present()
-                || !gangSnapshot.gangId().equals(new ResourceLocation("jetsetcraft", "dead_beat"))
+                || !gangSnapshot.gangId().equals(ResourceLocation.fromNamespaceAndPath("jetsetcraft", "dead_beat"))
                 || gangSnapshot.ephemeral() || gangSnapshot.inChallenge()) {
             throw new GameTestAssertException("Street Gear did not persist the canonical Dead Beat gang identity");
         }
@@ -105,8 +143,8 @@ public final class StreetGearGameTests {
         }
         HeadGangTargetResolver.Target zombieHead = HeadGangTargetResolver.resolve(new ItemStack(Items.ZOMBIE_HEAD))
                 .orElseThrow(() -> new GameTestAssertException("Vanilla zombie head did not resolve a gang target"));
-        if (!zombieHead.entityId().equals(new ResourceLocation("minecraft", "zombie"))
-                || !zombieHead.gangId().equals(new ResourceLocation("jetsetcraft", "dead_beat"))
+        if (!zombieHead.entityId().equals(ResourceLocation.fromNamespaceAndPath("minecraft", "zombie"))
+                || !zombieHead.gangId().equals(ResourceLocation.fromNamespaceAndPath("jetsetcraft", "dead_beat"))
                 || zombieHead.source() != HeadGangTargetResolver.ResolutionSource.DATA_PACK_MAPPING) {
             throw new GameTestAssertException("Datapack Zombie Head mapping resolved the wrong entity/gang/source identity");
         }
@@ -115,7 +153,7 @@ public final class StreetGearGameTests {
         adapterHead.getOrCreateTag().putString(HeadGangTargetResolver.TARGET_ENTITY_KEY, "minecraft:bee");
         HeadGangTargetResolver.Target beeHead = HeadGangTargetResolver.resolve(adapterHead)
                 .orElseThrow(() -> new GameTestAssertException("Explicit head compatibility metadata did not resolve"));
-        if (!beeHead.entityId().equals(new ResourceLocation("minecraft", "bee"))
+        if (!beeHead.entityId().equals(ResourceLocation.fromNamespaceAndPath("minecraft", "bee"))
                 || beeHead.source() != HeadGangTargetResolver.ResolutionSource.EXPLICIT_METADATA) {
             throw new GameTestAssertException("Explicit head compatibility metadata resolved incorrectly");
         }
@@ -136,8 +174,8 @@ public final class StreetGearGameTests {
         }
         HeadGangTargetResolver.Target tuned = boombox.resolvedTarget()
                 .orElseThrow(() -> new GameTestAssertException("Boombox lost its tuned Zombie target"));
-        if (!tuned.entityId().equals(new ResourceLocation("minecraft", "zombie"))
-                || !tuned.gangId().equals(new ResourceLocation("jetsetcraft", "dead_beat"))) {
+        if (!tuned.entityId().equals(ResourceLocation.fromNamespaceAndPath("minecraft", "zombie"))
+                || !tuned.gangId().equals(ResourceLocation.fromNamespaceAndPath("jetsetcraft", "dead_beat"))) {
             throw new GameTestAssertException("Boombox tuned to the wrong source entity/gang");
         }
 
@@ -147,8 +185,8 @@ public final class StreetGearGameTests {
         boombox.toggleChallenge(player);
         UUID firstChallenge = boombox.challengeId();
         if (!boombox.isChallengeActive() || firstChallenge == null || boombox.plannedActors() < 1
-                || !new ResourceLocation("minecraft", "zombie").equals(boombox.challengeEntityId())
-                || !new ResourceLocation("jetsetcraft", "dead_beat").equals(boombox.challengeGangId())) {
+                || !ResourceLocation.fromNamespaceAndPath("minecraft", "zombie").equals(boombox.challengeEntityId())
+                || !ResourceLocation.fromNamespaceAndPath("jetsetcraft", "dead_beat").equals(boombox.challengeGangId())) {
             throw new GameTestAssertException("Zombie Head did not start a real Dead Beat Boombox session");
         }
         boombox.cancelChallenge(true);

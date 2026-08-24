@@ -23,7 +23,7 @@ public final class RideLoadout {
 
         ItemStack equipped = held.copy();
         equipped.setCount(1);
-        held.shrink(1);
+        if (!player.getAbilities().instabuild) held.shrink(1);
 
         returnToPlayer(player, data.takeRideGear());
         data.setRideGear(equipped);

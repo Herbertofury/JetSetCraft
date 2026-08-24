@@ -18,6 +18,7 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import org.slf4j.Logger;
 
+@SuppressWarnings({"deprecation", "removal"}) // Forge 1.20.1 exposes loading contexts only through these legacy accessors.
 @Mod(JetSetCraft.MOD_ID)
 public final class JetSetCraft {
     public static final String MOD_ID = "jetsetcraft";

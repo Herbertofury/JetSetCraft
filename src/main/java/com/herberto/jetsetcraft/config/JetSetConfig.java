@@ -42,6 +42,7 @@ public final class JetSetConfig {
         public final ForgeConfigSpec.BooleanValue enableMicroTerrainAssist;
         public final ForgeConfigSpec.DoubleValue microTerrainMaxStep;
         public final ForgeConfigSpec.BooleanValue allowGraffiti;
+        public final ForgeConfigSpec.IntValue maxGraffitiPerChunk;
         public final ForgeConfigSpec.IntValue boomboxMaxActors;
         public final ForgeConfigSpec.IntValue boomboxChallengeLifetimeTicks;
         public final ForgeConfigSpec.DoubleValue boomboxSpawnRadius;
@@ -99,6 +100,8 @@ public final class JetSetConfig {
             b.pop();
             b.push("graffiti");
             allowGraffiti = b.define("allowGraffiti", true);
+            maxGraffitiPerChunk = b.comment("Maximum persistent JetSetCraft decals in one chunk. Repainting an existing patch does not consume another slot.")
+                    .defineInRange("maxGraffitiPerChunk", 128, 1, 1024);
             b.pop();
 
             b.push("gangs");

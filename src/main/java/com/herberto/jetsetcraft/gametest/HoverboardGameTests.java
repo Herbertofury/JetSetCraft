@@ -37,7 +37,7 @@ public final class HoverboardGameTests {
             throw new GameTestAssertException("Hoverboard registry entry is not RideGearItem");
         }
         ResourceLocation registryName = ForgeRegistries.ITEMS.getKey(gear);
-        ResourceLocation expected = new ResourceLocation(JetSetCraft.MOD_ID, "hoverboard");
+        ResourceLocation expected = ResourceLocation.fromNamespaceAndPath(JetSetCraft.MOD_ID, "hoverboard");
         if (!expected.equals(registryName)) {
             throw new GameTestAssertException("Unexpected hoverboard registry key: " + registryName);
         }

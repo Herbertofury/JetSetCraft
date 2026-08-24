@@ -14,7 +14,7 @@ public final class ModEntities {
     public static final RegistryObject<EntityType<GraffitiEntity>> GRAFFITI = ENTITIES.register("graffiti",
             () -> EntityType.Builder.<GraffitiEntity>of(GraffitiEntity::new, MobCategory.MISC)
                     .sized(2.6f, 1.3f)
-                    .clientTrackingRange(64)
+                    .clientTrackingRange(8)
                     .updateInterval(20)
                     .build("jetsetcraft:graffiti"));
 

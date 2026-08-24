@@ -26,8 +26,8 @@ import java.util.Map;
 import java.util.Objects;
 
 public final class RideAnimationController {
-    private static final ResourceLocation RIDE_LAYER = new ResourceLocation(JetSetCraft.MOD_ID, "ride_lower_body");
-    private static final ResourceLocation ACTION_LAYER = new ResourceLocation(JetSetCraft.MOD_ID, "style_full_body");
+    private static final ResourceLocation RIDE_LAYER = ResourceLocation.fromNamespaceAndPath(JetSetCraft.MOD_ID, "ride_lower_body");
+    private static final ResourceLocation ACTION_LAYER = ResourceLocation.fromNamespaceAndPath(JetSetCraft.MOD_ID, "style_full_body");
     private static final Map<Integer, ResourceLocation> ACTIVE_RIDE = new HashMap<>();
     private static final Map<Integer, ResourceLocation> ACTIVE_ACTION = new HashMap<>();
 
@@ -129,6 +129,6 @@ public final class RideAnimationController {
         return null;
     }
 
-    private static ResourceLocation id(String name) { return new ResourceLocation(JetSetCraft.MOD_ID, name); }
+    private static ResourceLocation id(String name) { return ResourceLocation.fromNamespaceAndPath(JetSetCraft.MOD_ID, name); }
     private RideAnimationController() {}
 }

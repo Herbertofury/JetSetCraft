@@ -68,10 +68,20 @@ public final class BoomboxBlockEntity extends BlockEntity {
     }
 
     public ItemStack removeTarget() {
+        return drainTarget(true);
+    }
+
+    /** Drain the physical target during Block#onRemove without reviving the outgoing block state. */
+    public ItemStack removeTargetForRemoval() {
+        return drainTarget(false);
+    }
+
+    private ItemStack drainTarget(boolean updateWorldState) {
         if (level == null || level.isClientSide || targetStack.isEmpty()) return ItemStack.EMPTY;
         ItemStack removed = targetStack.copy();
         targetStack = ItemStack.EMPTY;
-        sync();
+        if (updateWorldState) sync();
+        else setChanged();
         return removed;
     }
 

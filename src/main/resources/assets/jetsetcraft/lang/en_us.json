@@ -14,6 +14,7 @@
   "message.jetsetcraft.ride_on": "Ride style: %s",
   "message.jetsetcraft.ride_off": "Ride style off",
   "message.jetsetcraft.graffiti_variant": "Graffiti tag %s",
+  "message.jetsetcraft.graffiti_chunk_full": "This chunk has reached its graffiti limit.",
   "item.jetsetcraft.quad_skates": "Neon Quad Skates",
   "key.jetsetcraft.ride_toggle": "Toggle / Unequip Ride Gear",
   "message.jetsetcraft.ride_equipped": "Equipped %s. Press K to ride; Shift+K to unequip.",

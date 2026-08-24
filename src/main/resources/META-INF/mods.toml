@@ -37,13 +37,6 @@ ordering="AFTER"
 side="CLIENT"
 
 [[dependencies.${mod_id}]]
-modId="geckolib"
-mandatory=true
-versionRange="[4.8.4,)"
-ordering="AFTER"
-side="BOTH"
-
-[[dependencies.${mod_id}]]
 modId="tacz"
 mandatory=false
 versionRange="[1.1.8,)"

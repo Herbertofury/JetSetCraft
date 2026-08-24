@@ -41,7 +41,7 @@ public final class StyleFlowGameTests {
             throw new GameTestAssertException("Scooter registry entry is not RideGearItem");
         }
         ResourceLocation actual = ForgeRegistries.ITEMS.getKey(gear);
-        ResourceLocation expected = new ResourceLocation(JetSetCraft.MOD_ID, "scooter");
+        ResourceLocation expected = ResourceLocation.fromNamespaceAndPath(JetSetCraft.MOD_ID, "scooter");
         if (!expected.equals(actual) || gear.style() != RideStyle.SCOOTER || RideStyle.byId(6) != RideStyle.SCOOTER) {
             throw new GameTestAssertException("Scooter registry/style identity is unstable: " + actual);
         }

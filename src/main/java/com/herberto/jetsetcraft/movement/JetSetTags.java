@@ -23,7 +23,7 @@ public final class JetSetTags {
     public static final TagKey<Block> NO_GRIND = block("no_grind");
 
     private static TagKey<Block> block(String path) {
-        return TagKey.create(Registries.BLOCK, new ResourceLocation(JetSetCraft.MOD_ID, path));
+        return TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(JetSetCraft.MOD_ID, path));
     }
 
     private JetSetTags() {}

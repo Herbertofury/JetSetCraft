@@ -25,7 +25,7 @@ public record GangDefinition(
         if (id == null) throw new IllegalArgumentException("Gang id is required");
         canonicalName = canonicalName == null || canonicalName.isBlank() ? humanize(id.getPath()) : canonicalName;
         disposition = disposition == null ? Disposition.NEUTRAL : disposition;
-        musicId = musicId == null ? new ResourceLocation(id.getNamespace(), "music/gangs/" + id.getPath()) : musicId;
+        musicId = musicId == null ? ResourceLocation.fromNamespaceAndPath(id.getNamespace(), "music/gangs/" + id.getPath()) : musicId;
         minActors = Math.max(1, minActors);
         maxActors = Math.max(minActors, maxActors);
     }

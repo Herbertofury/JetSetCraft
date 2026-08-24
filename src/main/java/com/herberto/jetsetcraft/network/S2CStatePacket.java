@@ -1,8 +1,9 @@
 package com.herberto.jetsetcraft.network;
 
-import com.herberto.jetsetcraft.client.state.ClientRideState;
 import com.herberto.jetsetcraft.data.JetSetData;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
@@ -63,7 +64,8 @@ public record S2CStatePacket(int entityId, int styleId, boolean active, float bo
 
     public static void handle(S2CStatePacket packet, Supplier<NetworkEvent.Context> supplier) {
         NetworkEvent.Context context = supplier.get();
-        context.enqueueWork(() -> ClientRideState.accept(packet));
+        context.enqueueWork(() -> DistExecutor.unsafeRunWhenOn(Dist.CLIENT,
+                () -> () -> com.herberto.jetsetcraft.client.ClientPacketHandlers.accept(packet)));
         context.setPacketHandled(true);
     }
 }

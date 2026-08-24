@@ -19,11 +19,11 @@ import java.util.Optional;
 /** Handles every Forge rail that follows BaseRailBlock plus datapack-opted rail-like blocks. */
 public final class VanillaRailFinder implements GrindRailProvider {
     public static final TagKey<Block> GRIND_RAILS = TagKey.create(Registries.BLOCK,
-            new ResourceLocation(JetSetCraft.MOD_ID, "grind_rails"));
+            ResourceLocation.fromNamespaceAndPath(JetSetCraft.MOD_ID, "grind_rails"));
     public static final TagKey<Block> GRIND_RAIL_BLACKLIST = TagKey.create(Registries.BLOCK,
-            new ResourceLocation(JetSetCraft.MOD_ID, "grind_rail_blacklist"));
+            ResourceLocation.fromNamespaceAndPath(JetSetCraft.MOD_ID, "grind_rail_blacklist"));
     private static final TagKey<Block> VANILLA_RAILS = TagKey.create(Registries.BLOCK,
-            new ResourceLocation("minecraft", "rails"));
+            ResourceLocation.fromNamespaceAndPath("minecraft", "rails"));
     private static final Vec3 UP = new Vec3(0, 1, 0);
 
     @Override

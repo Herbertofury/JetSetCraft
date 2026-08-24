@@ -11,6 +11,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.phys.AABB;
 
 public final class SprayCanItem extends Item {
@@ -49,10 +50,23 @@ public final class SprayCanItem extends Item {
             AABB patch = new AABB(graffiti.position(), graffiti.position())
                     .inflate(Math.max(0.14, entry.renderWidth() * 0.48), Math.max(0.55, entry.renderHeight() * 0.48),
                             Math.max(0.14, entry.renderWidth() * 0.48));
-            serverLevel.getEntitiesOfClass(GraffitiEntity.class, patch, e -> e.getFace() == face)
-                    .forEach(GraffitiEntity::discard);
+            var replaced = serverLevel.getEntitiesOfClass(GraffitiEntity.class, patch, e -> e.getFace() == face);
 
-            serverLevel.addFreshEntity(graffiti);
+            ChunkPos chunk = new ChunkPos(graffiti.blockPosition());
+            AABB chunkBounds = new AABB(chunk.getMinBlockX(), serverLevel.getMinBuildHeight(), chunk.getMinBlockZ(),
+                    chunk.getMaxBlockX() + 1, serverLevel.getMaxBuildHeight(), chunk.getMaxBlockZ() + 1);
+            int existingOutsidePatch = serverLevel.getEntitiesOfClass(GraffitiEntity.class, chunkBounds).size()
+                    - replaced.size();
+            if (existingOutsidePatch >= JetSetConfig.SERVER.maxGraffitiPerChunk.get()) {
+                if (player != null) {
+                    player.displayClientMessage(Component.translatable("message.jetsetcraft.graffiti_chunk_full")
+                            .withStyle(ChatFormatting.RED), true);
+                }
+                return InteractionResult.CONSUME;
+            }
+
+            if (!serverLevel.addFreshEntity(graffiti)) return InteractionResult.FAIL;
+            replaced.forEach(GraffitiEntity::discard);
             if (player != null && !player.getAbilities().instabuild) {
                 stack.hurtAndBreak(1, player, p -> p.broadcastBreakEvent(context.getHand()));
             }

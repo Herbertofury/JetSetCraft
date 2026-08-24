@@ -6,6 +6,7 @@ import com.google.gson.JsonParser;
 import com.herberto.jetsetcraft.JetSetCraft;
 import net.minecraft.resources.ResourceLocation;
 
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -40,14 +41,14 @@ public final class GraffitiCatalog {
             for (var element : entries) {
                 JsonObject e = element.getAsJsonObject();
                 out.add(new Entry(e.get("id").getAsString(),
-                        new ResourceLocation(e.get("texture").getAsString()),
+                        ResourceLocation.parse(e.get("texture").getAsString()),
                         e.get("width").getAsInt(), e.get("height").getAsInt()));
             }
             if (out.isEmpty()) throw new IllegalStateException("Graffiti catalog is empty");
             return List.copyOf(out);
-        } catch (Exception ex) {
+        } catch (IOException | RuntimeException ex) {
             JetSetCraft.LOGGER.error("Failed to load generated graffiti catalog; using emergency JetSetCraft fallback", ex);
-            return List.of(new Entry("jetsetcraft", new ResourceLocation(JetSetCraft.MOD_ID,
+            return List.of(new Entry("jetsetcraft", ResourceLocation.fromNamespaceAndPath(JetSetCraft.MOD_ID,
                     "textures/graffiti/tag_3.png"), 512, 320));
         }
     }

@@ -13,7 +13,7 @@ import net.minecraftforge.network.simple.SimpleChannel;
 public final class JetSetNetwork {
     private static final String PROTOCOL = "7";
     private static final SimpleChannel CHANNEL = NetworkRegistry.ChannelBuilder
-            .named(new ResourceLocation(JetSetCraft.MOD_ID, "main"))
+            .named(ResourceLocation.fromNamespaceAndPath(JetSetCraft.MOD_ID, "main"))
             .networkProtocolVersion(() -> PROTOCOL).clientAcceptedVersions(PROTOCOL::equals).serverAcceptedVersions(PROTOCOL::equals)
             .simpleChannel();
 

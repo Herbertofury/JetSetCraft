@@ -1,5 +1,6 @@
 package com.herberto.jetsetcraft.movement;
 
+import com.herberto.jetsetcraft.JetSetCraft;
 import com.herberto.jetsetcraft.config.JetSetConfig;
 import com.herberto.jetsetcraft.data.JetSetData;
 import net.minecraft.core.BlockPos;
@@ -18,7 +19,11 @@ import net.minecraft.world.phys.Vec3;
 
 import com.herberto.jetsetcraft.movement.VanillaWorldPhysics.*;
 
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+
 final class VanillaSurfacePhysics {
+    private static final Set<Block> REPORTED_FRICTION_FAILURES = ConcurrentHashMap.newKeySet();
     static Surface ground(ServerPlayer player) {
         // Body-contact traps must win over the floor under them. Cobweb and powder snow commonly have
         // nonstandard collision, so sampling only the block under the feet would let JetSet momentum
@@ -82,7 +87,11 @@ final class VanillaSurfacePhysics {
     static float safeFriction(ServerPlayer player, BlockPos pos, BlockState state) {
         try {
             return state.getFriction(player.level(), pos, player);
-        } catch (Throwable ignored) {
+        } catch (RuntimeException error) {
+            if (REPORTED_FRICTION_FAILURES.add(state.getBlock())) {
+                JetSetCraft.LOGGER.warn("Block {} rejected its contextual friction query; using base friction",
+                        state.getBlock(), error);
+            }
             return state.getBlock().getFriction();
         }
     }

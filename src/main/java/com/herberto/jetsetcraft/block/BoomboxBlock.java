@@ -32,6 +32,7 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 
+@SuppressWarnings("deprecation") // Minecraft 1.20.1 requires these deprecated BlockBehaviour override hooks.
 public final class BoomboxBlock extends BaseEntityBlock {
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final BooleanProperty ACTIVE = BlockStateProperties.POWERED;
@@ -120,7 +121,7 @@ public final class BoomboxBlock extends BaseEntityBlock {
             BlockEntity raw = level.getBlockEntity(pos);
             if (raw instanceof BoomboxBlockEntity boombox && !level.isClientSide) {
                 boombox.cancelChallengeForRemoval();
-                ItemStack target = boombox.removeTarget();
+                ItemStack target = boombox.removeTargetForRemoval();
                 if (!target.isEmpty()) net.minecraft.world.Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), target);
             }
         }
