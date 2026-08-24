@@ -1,0 +1,13 @@
+{
+  "gang_id": "jetsetcraft:dead_beat",
+  "display_name": "Dead Beat",
+  "entities": ["minecraft:zombie"],
+  "disposition": "hostile",
+  "music": "jetsetcraft:music/gangs/dead_beat",
+  "primary_color": "#4F8A53",
+  "secondary_color": "#5C68B1",
+  "min_actors": 3,
+  "max_actors": 6,
+  "boombox_eligible": true,
+  "legendary": false
+}
