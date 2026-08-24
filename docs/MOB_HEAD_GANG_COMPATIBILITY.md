@@ -6,13 +6,29 @@ Status: active compatibility runtime on `automation/head-gang-compat-0.3`; the r
 
 Any trustworthy mob head, skull, emblem, or compatible head-equivalent should be usable as the Boombox Gang Target without JetSetCraft taking ownership of the source mod. The compatibility contract is provider-agnostic and fail-closed:
 
-1. Vanilla skull/head identity wins when present.
-2. Explicit JetSetCraft adapter metadata can map any head item to a concrete `entity_type` and optional `gang_id`.
-3. Common `*_head`, `*_skull`, `head_*`, and `skull_*` registry conventions are resolved conservatively against the live entity registry.
-4. Ambiguous player-head texture payloads are never guessed from skin pixels or display names. They require an explicit compatibility mapping.
-5. Missing optional mods never create classloading failures.
+1. Explicit per-stack JetSetCraft metadata can map a token/head to a concrete source entity and optional `gang_id`.
+2. Exact server/datapack mappings under `jetsetcraft_head_targets` can map any installed item ID to an installed source entity and gang without Java dependencies.
+3. Vanilla skull/head identity remains a safe built-in fallback.
+4. Common `*_head`, `*_skull`, `head_*`, and `skull_*` registry conventions are resolved conservatively against the live entity registry.
+5. Ambiguous player-head texture payloads are never guessed from skin pixels or display names. They require explicit metadata/mapping.
+6. Missing optional mods never create classloading failures; mappings for absent items/entities are skipped during reload.
 
 The implementation lives in `HeadGangTargetResolver`.
+
+
+## Server/modpack mapping format
+
+Place JSON files in `data/<namespace>/jetsetcraft_head_targets/`. The filename is only a resource identity; the target is explicit:
+
+```json
+{
+  "item": "examplemod:bee_head",
+  "entity": "minecraft:bee",
+  "gang": "jetsetcraft:hive_five"
+}
+```
+
+`gang` is optional; when omitted JetSetCraft resolves the current gang for `entity`, including server gang overrides. Exact mappings are loaded only when both the item and entity registry IDs exist, so compatibility packs are safe to leave installed across different mod lists.
 
 ## Current canonical mapping model
 
