@@ -35,19 +35,23 @@ public final class HeadGangTargetResolver {
     public record Target(ResourceLocation entityId, ResourceLocation gangId, ResolutionSource source) {}
 
     public enum ResolutionSource {
-        VANILLA,
         EXPLICIT_METADATA,
+        DATA_PACK_MAPPING,
+        VANILLA,
         REGISTRY_CONVENTION
     }
 
     public static Optional<Target> resolve(ItemStack stack) {
         if (stack == null || stack.isEmpty()) return Optional.empty();
 
-        Optional<Target> vanilla = resolveVanilla(stack.getItem());
-        if (vanilla.isPresent()) return vanilla;
-
         Optional<Target> explicit = resolveExplicitMetadata(stack);
         if (explicit.isPresent()) return explicit;
+
+        Optional<Target> mapped = resolveDataPackMapping(stack.getItem());
+        if (mapped.isPresent()) return mapped;
+
+        Optional<Target> vanilla = resolveVanilla(stack.getItem());
+        if (vanilla.isPresent()) return vanilla;
 
         return resolveRegistryConvention(stack.getItem());
     }
@@ -55,6 +59,13 @@ public final class HeadGangTargetResolver {
     public static Optional<EntityType<?>> resolveEntityType(ItemStack stack) {
         return resolve(stack).map(Target::entityId).map(ForgeRegistries.ENTITY_TYPES::getValue)
                 .filter(type -> type != null);
+    }
+
+    private static Optional<Target> resolveDataPackMapping(Item item) {
+        ResourceLocation itemId = ForgeRegistries.ITEMS.getKey(item);
+        return HeadTargetMappingRegistry.find(itemId).map(mapping -> new Target(mapping.entityId(),
+                mapping.gangId() == null ? defaultGangId(mapping.entityId()) : mapping.gangId(),
+                ResolutionSource.DATA_PACK_MAPPING));
     }
 
     private static Optional<Target> resolveVanilla(Item item) {
