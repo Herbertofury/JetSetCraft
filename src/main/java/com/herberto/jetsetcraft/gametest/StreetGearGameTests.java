@@ -3,6 +3,8 @@ package com.herberto.jetsetcraft.gametest;
 import com.herberto.jetsetcraft.JetSetCraft;
 import com.herberto.jetsetcraft.blockentity.BoomboxBlockEntity;
 import com.herberto.jetsetcraft.gang.GangMemberState;
+import com.herberto.jetsetcraft.gang.GangRegistry;
+import com.herberto.jetsetcraft.gang.HeadTargetMappingRegistry;
 import com.herberto.jetsetcraft.gang.HeadGangTargetResolver;
 import com.herberto.jetsetcraft.mob.MobRideRig;
 import com.herberto.jetsetcraft.mob.MobRideRigResolver;
@@ -98,11 +100,15 @@ public final class StreetGearGameTests {
             throw new GameTestAssertException("Species-aware rig resolver regressed for vanilla stress-test anatomies");
         }
 
+        if (GangRegistry.dataOverrideCount() < 1 || HeadTargetMappingRegistry.dataMappingCount() < 1) {
+            throw new GameTestAssertException("Server datapack gang/head mapping listeners did not load bundled acceptance data");
+        }
         HeadGangTargetResolver.Target zombieHead = HeadGangTargetResolver.resolve(new ItemStack(Items.ZOMBIE_HEAD))
                 .orElseThrow(() -> new GameTestAssertException("Vanilla zombie head did not resolve a gang target"));
         if (!zombieHead.entityId().equals(new ResourceLocation("minecraft", "zombie"))
-                || !zombieHead.gangId().equals(new ResourceLocation("jetsetcraft", "dead_beat"))) {
-            throw new GameTestAssertException("Vanilla zombie head resolved the wrong entity/gang identity");
+                || !zombieHead.gangId().equals(new ResourceLocation("jetsetcraft", "dead_beat"))
+                || zombieHead.source() != HeadGangTargetResolver.ResolutionSource.DATA_PACK_MAPPING) {
+            throw new GameTestAssertException("Datapack Zombie Head mapping resolved the wrong entity/gang/source identity");
         }
 
         ItemStack adapterHead = new ItemStack(Items.PLAYER_HEAD);
