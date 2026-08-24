@@ -1,6 +1,7 @@
 package com.herberto.jetsetcraft.gametest;
 
 import com.herberto.jetsetcraft.JetSetCraft;
+import com.herberto.jetsetcraft.gang.HeadGangTargetResolver;
 import com.herberto.jetsetcraft.mob.MobRideRig;
 import com.herberto.jetsetcraft.mob.MobRideRigResolver;
 import com.herberto.jetsetcraft.mob.MobStreetGear;
@@ -12,11 +13,13 @@ import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestAssertException;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.monster.Slime;
 import net.minecraft.world.entity.monster.Spider;
 import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraftforge.gametest.GameTestHolder;
 import net.minecraftforge.gametest.PrefixGameTestTemplate;
 
@@ -74,6 +77,26 @@ public final class StreetGearGameTests {
         if (spider == null || slime == null || MobRideRigResolver.resolve(spider) != MobRideRig.MULTI_LEG
                 || MobRideRigResolver.resolve(slime) != MobRideRig.BODY_CONTACT) {
             throw new GameTestAssertException("Species-aware rig resolver regressed for vanilla stress-test anatomies");
+        }
+
+        HeadGangTargetResolver.Target zombieHead = HeadGangTargetResolver.resolve(new ItemStack(Items.ZOMBIE_HEAD))
+                .orElseThrow(() -> new GameTestAssertException("Vanilla zombie head did not resolve a gang target"));
+        if (!zombieHead.entityId().equals(new ResourceLocation("minecraft", "zombie"))
+                || !zombieHead.gangId().equals(new ResourceLocation("jetsetcraft", "dead_beat"))) {
+            throw new GameTestAssertException("Vanilla zombie head resolved the wrong entity/gang identity");
+        }
+
+        ItemStack adapterHead = new ItemStack(Items.PLAYER_HEAD);
+        adapterHead.getOrCreateTag().putString(HeadGangTargetResolver.TARGET_ENTITY_KEY, "minecraft:bee");
+        HeadGangTargetResolver.Target beeHead = HeadGangTargetResolver.resolve(adapterHead)
+                .orElseThrow(() -> new GameTestAssertException("Explicit head compatibility metadata did not resolve"));
+        if (!beeHead.entityId().equals(new ResourceLocation("minecraft", "bee"))
+                || beeHead.source() != HeadGangTargetResolver.ResolutionSource.EXPLICIT_METADATA) {
+            throw new GameTestAssertException("Explicit head compatibility metadata resolved incorrectly");
+        }
+
+        if (HeadGangTargetResolver.resolve(new ItemStack(Items.DIAMOND)).isPresent()) {
+            throw new GameTestAssertException("Non-head item was incorrectly accepted as a gang target");
         }
 
         System.out.println("JETSETCRAFT_GAMETEST_PASS street_gear");
