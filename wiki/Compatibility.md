@@ -53,4 +53,4 @@ For creatures, namespaced registry IDs and optional adapters are preferred over 
 
 ## Visual model mods
 
-The lower-body animation contract improves composition with player-model and action systems, but extreme skeleton replacements may still need a dedicated adapter. JetSetCraft keeps gameplay state independent from PlayerAnimator, GeckoLib, Epic Fight, TACZ, or YSM internals so adapters can be added without replacing movement.
+The lower-body animation contract improves composition with player-model and action systems, but extreme skeleton replacements may still need a dedicated adapter. JetSetCraft keeps gameplay state independent from PlayerAnimator, Epic Fight, TACZ, or YSM internals so adapters can be added without replacing movement.

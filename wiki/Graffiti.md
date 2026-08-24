@@ -10,13 +10,13 @@ The Graffiti Spray Can places persistent wall-mounted graffiti entities with sel
 
 ## Catalog and provenance
 
-The runtime catalog is generated from preserved source art. Every entry records a stable ID, resource texture, width, height, and source name when applicable. Aspect ratio is retained rather than forcing all art into the same square.
+The v0.3.0 runtime catalog contains 139 entries generated from preserved source art. Every entry records a stable ID, resource texture, width, height, and source name when applicable. Aspect ratio is retained rather than forcing all art into the same square.
 
 A clean offline source build always contains four original JetSetCraft fallback tags. When the owner-approved JSR archive is available, the generator accepts it only after exact SHA-256 verification, then normalizes PNG decoding without resizing the original pixels. A failed or partial download is removed and never trusted.
 
 ## Server control
 
-Servers can disable graffiti independently with the common/server configuration. Existing entities remain ordinary saved entities; the setting controls new use rather than silently deleting player art.
+Servers can disable new graffiti independently and set `maxGraffitiPerChunk` (default 128). Repainting an occupied patch does not consume another slot. Decals persist through saves, can be removed by attacking them, and automatically clean themselves up when their supporting wall disappears.
 
 ## Adding original art
 

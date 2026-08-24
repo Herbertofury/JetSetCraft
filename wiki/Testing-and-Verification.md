@@ -14,7 +14,8 @@ python tools/validate_gameplay_contract.py
 python tools/validate_premium_polish.py
 python tools/validate_java_syntax.py
 python tools/validate_wiki.py
-gradle --no-daemon build
+./gradlew clean build --no-daemon
+./gradlew runGameTestServer --no-daemon
 ```
 
 The model generator is offline-safe: when the pinned optional graffiti archive cannot be fetched, it removes any partial download and produces the original JetSetCraft fallback catalog.
@@ -29,6 +30,7 @@ The GameTest server verifies:
 4. Immediate dance cancellation when a combat swing takes presentation/input authority.
 5. Stable one-to-one identity for all 28 dance moves, complete 24-trick catalog coverage, and hostile input/NBT sanitization.
 6. Same-entity Street Gear identity, physical-item persistence, real entity NBT save/load, clean removal, spider/slime anatomy routing, persistent gangification/de-gangification, and a real placed Boombox proving Zombie Head → Dead Beat tuning plus start/cancel/immediate-restart/target-return behavior.
+7. Graffiti entity NBT persistence plus automatic removal after its supporting wall is broken.
 
 The player tests use uniquely identified Forge fake players and a real `ServerLevel` rather than mocked movement classes. Unique profiles prevent parallel GameTests from moving or mutating the same automation player.
 
@@ -52,7 +54,7 @@ Then exercise every ride style, dance family, surface lane, rail type, wall, haz
 
 ## Wiki verification
 
-`tools/validate_wiki.py` ensures the complete page set exists, sidebar destinations resolve, internal wiki links are valid, required technical terms are present, and no unfinished-marker language ships. A separate workflow synchronizes the validated `wiki/` directory to the GitHub wiki after main-branch updates.
+`tools/validate_wiki.py` ensures the complete page set exists, sidebar destinations resolve, internal wiki links are valid, required technical terms are present, and no unfinished-marker language ships. The validated `wiki/` directory is the canonical source published to the GitHub wiki.
 
 ## Premium offline gates
 

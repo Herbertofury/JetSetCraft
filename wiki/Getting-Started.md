@@ -2,7 +2,7 @@
 
 ## Requirements
 
-JetSetCraft `0.2.0-alpha.1` targets:
+JetSetCraft `0.3.0` targets:
 
 | Component | Required or tested target |
 | --- | --- |
@@ -10,7 +10,6 @@ JetSetCraft `0.2.0-alpha.1` targets:
 | Forge | 47.4.23 |
 | Java | 17 |
 | PlayerAnimator | 1.0.2-rc1+1.20 |
-| GeckoLib | 4.8.4 |
 
 Create and TACZ are optional. The Aether, Twilight Forest, Epic Fight, Better Combat, and other dimension/combat mods are also optional.
 
@@ -18,9 +17,9 @@ Create and TACZ are optional. The Aether, Twilight Forest, Epic Fight, Better Co
 
 1. Install Forge 47.4.23 for Minecraft 1.20.1.
 2. Place the verified JetSetCraft JAR in the instance `mods` folder.
-3. Install the required PlayerAnimator and GeckoLib dependencies.
+3. Install PlayerAnimator on clients. A dedicated server does not need PlayerAnimator.
 4. Launch once so Forge creates the common/server and client configuration files.
-5. In multiplayer, install the same JetSetCraft build and required dependencies on both client and server.
+5. In multiplayer, install the same JetSetCraft build on the server and every client.
 
 ## Your first ride
 

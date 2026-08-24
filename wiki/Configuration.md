@@ -41,7 +41,16 @@ JetSetCraft uses separate Forge server/common and client specifications. Exact f
 | `enableMicroTerrainAssist` | true | Safe slab/stair/snow continuity |
 | `microTerrainMaxStep` | 0.625 | Maximum collision-verified rise |
 
-Other server toggles include `allowCombatWhileRiding` and `allowGraffiti`.
+### Graffiti and gangs
+
+| Key | Default | Purpose |
+| --- | ---: | --- |
+| `allowCombatWhileRiding` | true | Preserve ordinary/third-party combat input while riding |
+| `allowGraffiti` | true | Permit new graffiti placement |
+| `maxGraffitiPerChunk` | 128 | Persistent decal limit per chunk; repainting does not consume another slot |
+| `boomboxMaxActors` | 7 | Maximum event-only actors from one Boombox |
+| `boomboxChallengeLifetimeTicks` | 3600 | Hard event-cast cleanup lifetime (three minutes) |
+| `boomboxSpawnRadius` | 12.0 | Loaded-terrain search radius for safe entrances |
 
 ## Client options
 

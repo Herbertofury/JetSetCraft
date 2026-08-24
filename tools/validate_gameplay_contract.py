@@ -379,6 +379,7 @@ required_gametest_markers = {
     'JETSETCRAFT_GAMETEST_PASS combat_sovereignty': style_flow_tests,
     'JETSETCRAFT_GAMETEST_PASS catalogs': style_flow_tests,
     'JETSETCRAFT_GAMETEST_PASS street_gear': street_gear_tests,
+    'JETSETCRAFT_GAMETEST_PASS graffiti_lifecycle': street_gear_tests,
 }
 for pass_marker, source in required_gametest_markers.items():
     if pass_marker not in source:
@@ -386,16 +387,17 @@ for pass_marker, source in required_gametest_markers.items():
     if pass_marker not in build_workflow:
         errors.append(f'CI does not require real-Forge acceptance marker: {pass_marker}')
 for workflow_token, label in [
-    ('build/verification/style-flow-gametest.log', 'ignored GameTest evidence path'),
-    ('build/verification/server-smoke.log', 'ignored server-smoke evidence path'),
-    ('tools/finalize_ci_checkpoint.py', 'verified project-memory finalizer'),
-    ('git write-tree', 'exact staged source tree packaging'),
-    ('style-flow-pending.ready.json', 'complete-payload ready gate'),
+    ('permissions:\n  contents: read', 'read-only workflow permissions'),
+    ('./gradlew clean build --no-daemon', 'wrapper-driven clean production build'),
+    ('build/verification/gametest.log', 'GameTest evidence path'),
+    ('build/verification/server-smoke.log', 'server-smoke evidence path'),
+    ('build/libs/SHA256SUMS', 'artifact checksum publication'),
+    ('git diff --exit-code', 'deterministic generator cleanliness gate'),
 ]:
     if workflow_token not in build_workflow:
         errors.append(f'missing CI durability contract: {label}')
-if not (ROOT / 'tools/finalize_ci_checkpoint.py').exists():
-    errors.append('missing Style Flow CI finalizer')
+if 'contents: write' in build_workflow or 'git push' in build_workflow:
+    errors.append('verification CI must not mutate repository or wiki state')
 
 # Runtime acceptance tooling must stay available so the doctrine can be verified in a real Minecraft world.
 for needle, label in [

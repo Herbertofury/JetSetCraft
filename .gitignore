@@ -26,4 +26,10 @@ src/main/resources/assets/jetsetcraft/textures/graffiti/jsr/*.png
 src/main/resources/assets/jetsetcraft/graffiti/catalog.json
 # Full-resolution masters are stored and verified in JetSetCraft/Assets on Google Drive.
 source_assets/brand/jetsetcraft_official_art.png
-source_assets/authorized/jsrf/graffiti/poison_jam_sheet.png
+
+# Owner-supplied and research-only binary inputs are part of the canonical Desktop/Drive project,
+# but are intentionally excluded from the public Git repository and release JAR.
+source_assets/authorized/jsr/JSRGraffiti.zip
+source_assets/authorized/red-skate/*.jar
+source_assets/references/bedrock/*.zip
+source_assets/references/jsr-models/*.zip

@@ -46,7 +46,7 @@ for page in EXPECTED - {'_Sidebar.md', '_Footer.md'}:
         errors.append(f'_Sidebar.md: missing navigation entry for {page}')
 
 joined = '\n'.join(p.read_text(encoding='utf-8') for p in WIKI.glob('*.md'))
-for token in ('0.2.0-alpha.1', '28 named', 'cypher', 'scooter', 'hoverboard',
+for token in ('0.3.0', '28 named', '139', 'cypher', 'scooter', 'hoverboard',
               'Aether', 'Twilight Forest', 'reducedMotion', 'GameTest',
               'Boombox', 'gang_id', 'Junior', 'Mob Atlas'):
     if token.lower() not in joined.lower():

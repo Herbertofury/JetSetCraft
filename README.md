@@ -1,93 +1,66 @@
+![JetSetCraft](art/generated/jetsetcraft-banner-1200x630.png)
+
 # JetSetCraft
 
-> **Official visual identity:** the project-owner-supplied JetSetCraft artwork is the canonical icon and cover source. The verified full-quality PNG is preserved in the JetSetCraft Drive Assets folder at **1,254 × 1,254**, **1,702,879 bytes**, SHA-256 `6e60bcc90fd6b85209598b088b9d2b87fb6c3a36d9d68c6eb4e478f538a5894f`. [Open the canonical cover](https://drive.google.com/file/d/1km1kaSF6vqR5wBrMQr8J1FHCAFy8vp4W/view). `src/main/resources/jetsetcraft.png` is the deterministic runtime icon; `assets/jetsetcraft-cover.webp` remains a legacy repository thumbnail.
+[![Verify JetSetCraft](https://github.com/Herbertofury/JetSetCraft/actions/workflows/build.yml/badge.svg)](https://github.com/Herbertofury/JetSetCraft/actions/workflows/build.yml)
+[![Minecraft 1.20.1](https://img.shields.io/badge/Minecraft-1.20.1-62B47A)](https://files.minecraftforge.net/net/minecraftforge/forge/index_1.20.1.html)
+[![Forge 47.4.23](https://img.shields.io/badge/Forge-47.4.23-E04E39)](https://files.minecraftforge.net/net/minecraftforge/forge/index_1.20.1.html)
+[![Release v0.3.0](https://img.shields.io/badge/release-v0.3.0-35D4D8)](https://github.com/Herbertofury/JetSetCraft/releases/tag/v0.3.0)
 
-**JetSetCraft** is a Forge 1.20.1 street-movement, trick, dance, graffiti, and combat-composition mod. It makes ordinary Minecraft terrain feel like a full momentum sports game without putting the player inside a disconnected vehicle subsystem. Villages, rooftops, fences, walls, rails, Create tracks, ice highways, redstone builds, modded dimensions, pistons, slime launchers, fluids, mobs, and weapons all remain part of the same play space.
+JetSetCraft turns ordinary Minecraft terrain into a momentum-first street sports game. Ride, boost, trick, grind, wall-ride, dance, tag walls, equip mobs with Street Gear, and start data-driven gang sessions—without replacing Minecraft’s world, combat, mobs, rails, or movement ecosystems.
 
-## Style Flow 0.2.0-alpha.1
+## What ships in v0.3.0
 
-The Style Flow release expands the verified hoverboard foundation into a complete playable style system:
+- Six persistent ride styles: inline skates, quad skates, street board, BMX, hoverboard, and scooter.
+- Twenty-four named tricks and twenty-eight dance moves with combo variety, Flow, boost rewards, landing grades, and multiplayer cyphers.
+- Exposed block-edge, fence, wall, pane, vanilla/Forge rail, and optional Create 6.0.8 track grinding.
+- Minecraft-native momentum tech across ice, slime, honey, Soul Speed, fluids, redstone rails, pistons, explosions, knockback, and small terrain transitions.
+- A hands-free, server-authoritative ride slot that leaves both hands and the vanilla boots slot available.
+- Combat-safe presentation: ride locomotion owns the lower body while item and weapon systems retain arms, hands, held items, and head.
+- 139 aspect-aware graffiti decals with repaint-in-place behavior, support cleanup, durability, and a configurable per-chunk safety limit.
+- Persistent Street Gear for compatible vanilla and modded mobs, using conservative anatomy rigs without replacing the original entity, AI, ownership, UUID, or registry type.
+- A physical Boombox and mob-head gang tuner with data-pack mappings, safe event-only actors, cleanup/anti-farm rules, and eighty original gang entrance stingers.
+- Reduced-motion, camera, FOV, HUD, and trick-name controls.
 
-- **Six ride styles:** inline skates, quad skates, skateboard, BMX, hoverboard, and street scooter. Each has distinct acceleration, steering, air control, grind multiplier, cruise cap, and boost cap.
-- **Twenty-four named tricks:** eight aerial, eight grind, and eight ground-stunt slots with ride-specific names and presentation.
-- **Twenty-eight named dance moves:** Toprock, Popping, House, Breaking, Hip-Hop, and Locking families, including Six-Step, Windmill, Flare, Swipe, Halo, Headspin, Airflare, Running Man, Tutting, and more.
-- **Style Flow scoring:** combo multiplier, Flow meter, rank ladder, repeat penalties, variety rewards, boost tricks, graded landings, manuals, powerslides, and automatic dance chains.
-- **Multiplayer cyphers:** nearby dancers contribute crew size, score, Flow, boost recovery, and synchronized street-session energy.
-- **World-native grinding:** arbitrary exposed block edges, fences, walls, panes, vanilla and Forge rails, and optional Create 6.0.8 tracks including junctions, slopes, diagonals, and long Bezier curves.
-- **Vanilla physics as movement tech:** powered rails boost, unpowered powered rails brake, detector rails pulse redstone, activator rails pop, ice accelerates, slime bounces, honey drags, Soul Speed creates specialist routes, and external impulses become legitimate momentum.
-- **Hands-free ride loadout:** ride equipment persists in its own server-authoritative player slot so both hands and the vanilla boot slot remain available.
-- **Combat composition:** riding never silently disables normal item use or third-party weapon input. Lower-body ride clips leave arms, hands, held items, and head free for TACZ, Epic Fight, Better Combat, spellbooks, bows, and vanilla actions.
-- **High-detail generated equipment:** dedicated hoverboard and scooter geometry, rather than a hoverboard reusing the skateboard model.
-- **Sixty-eight validated animation clips:** 28 individually addressable dance phrases, eight full-body ground stunts, 16 trick/grind variants, six ride/boost families, and core movement states.
-- **Accessibility controls:** optional Style HUD, trick names, dynamic camera, speed FOV, and a reduced-motion mode that removes camera pulses and rapid equipment rotations.
+The [wiki](https://github.com/Herbertofury/JetSetCraft/wiki) covers mechanics, configuration, compatibility, modpack tags, and verification in depth.
+
+## Install
+
+JetSetCraft targets Minecraft 1.20.1 and Java 17.
+
+1. Install Forge 47.4.10 or newer for Minecraft 1.20.1; the release is built and verified with Forge 47.4.23.
+2. Put the JetSetCraft JAR in the instance’s `mods` folder.
+3. Install PlayerAnimator `1.0.2-rc1+1.20` on every client. It is not required on a dedicated server.
+4. Launch with Java 17. Multiplayer servers and clients must use the same JetSetCraft version.
+
+Create 6.0.8, TACZ 1.1.8-hotfix, Epic Fight, Better Combat, The Aether, Twilight Forest, and other Forge rail/block ecosystems are optional. Missing optional mods do not create registry or data-pack failures.
+
+Official dependencies and compatibility targets: [Forge](https://files.minecraftforge.net/net/minecraftforge/forge/index_1.20.1.html), [PlayerAnimator](https://www.curseforge.com/minecraft/mc-mods/playeranimator/files/4587214), [TACZ](https://www.curseforge.com/minecraft/mc-mods/timeless-and-classics-zero/files/8141310), and [Create](https://www.curseforge.com/minecraft/mc-mods/create/files/7178761).
 
 ## Controls
 
-All inputs are normal Forge key mappings and can be rebound in Minecraft Controls.
+All keys are ordinary Forge mappings and can be rebound.
 
 | Input | Action |
 | --- | --- |
-| Right-click ride gear | Equip or activate that ride style |
-| `K` | Toggle equipped ride gear |
-| `Shift + K` | Return equipped ride gear to inventory |
-| `Left Alt` | Boost; combine with `R` for a boost trick |
-| `R` | Contextual air, grind, or low-speed ground trick |
-| `G` | Grind or wall ride |
-| `C` | Manual; also selects Hip-Hop while starting a dance |
-| `V` | Brake or powerslide; also selects Breaking while starting a dance |
-| `Space` while grinding | Rail hop or transfer while preserving momentum |
-| `B` | Start or change dance family/move |
-| `Shift + B` | Stop dancing |
+| Use ride gear | Equip it to the hands-free ride slot |
+| `K` / `Shift + K` | Toggle ride / return equipped gear |
+| `Left Alt` | Boost |
+| `R` | Contextual air, grind, or ground trick |
+| `G` | Grind or wall-ride |
+| `C` | Manual; Hip-Hop dance selector |
+| `V` | Brake/powerslide; Breaking dance selector |
+| `Space` while grinding | Hop or transfer |
+| `B` / `Shift + B` | Dance or change move / stop dancing |
 | `W/S/A/D + B` | Select Toprock, House, Locking, or Popping |
 | Shift + use spray can | Cycle graffiti |
-| Use spray can on a wall | Spray the selected tag |
+| Use spray can on a wall | Paint the selected decal |
+| Use ride gear on a mob | Equip persistent Street Gear |
+| Sneak + empty-hand use on geared mob | Recover its gear |
 
-Dancing does not require ride equipment. While dancing, ride gear is visually hidden, momentum is safely settled, and movement or action inputs immediately return control to the player.
+## Build and verify
 
-## Flow and combos
-
-JetSetCraft rewards lines that stay varied rather than repeating one high-value action:
-
-- New tricks and dance moves receive freshness bonuses.
-- Immediate repeats receive diminishing score.
-- Manuals, grinds, wall rides, powerslides, and successful landings hold the combo bridge.
-- Boost tricks spend additional boost for higher score and Flow.
-- Perfect, clean, and sketchy landings provide distinct feedback and recovery.
-- Flow ranks progress from **WARM UP** to **ALL CITY**.
-
-See the [complete wiki](https://github.com/Herbertofury/JetSetCraft/wiki) for move names, scoring behavior, controls, compatibility, server configuration, and testing commands.
-
-## Optional compatibility
-
-JetSetCraft has no hard dependency on these integrations:
-
-- **Create 6.0.8:** native track axes, normals, graph junctions, and Bezier geometry.
-- **The Aether:** Quicksoil speed routes, Blue Aercloud bounce routes, Aerogel/Holystone wall routes, and Quicksoil Glass grind lines through non-required datapack entries.
-- **Twilight Forest:** Aurora block, pillar, slab, and glass routes through non-required datapack entries.
-- **TACZ:** public `IGun` detection and reduced camera effects while using a weapon.
-- **Epic Fight / Better Combat / vanilla combat:** preserved upper-body animation and input ownership.
-- **Forge rail/block ecosystems:** native `BaseRailBlock` support plus datapack tags for unusual surfaces and geometry.
-
-Missing optional mods do not create registry errors because optional datapack entries use `required: false`.
-
-## Target stack
-
-| Component | 1.20.1 target |
-| --- | --- |
-| Minecraft | 1.20.1 |
-| Forge | 47.4.23 |
-| Java | 17 |
-| GeckoLib | 4.8.4 |
-| PlayerAnimator | 1.0.2-rc1+1.20 |
-| TACZ compatibility target | 1.1.8-hotfix |
-| Epic Fight compatibility target | 20.14.17 |
-| Create compatibility target | 6.0.8 |
-
-Official project locations: [Forge 1.20.1](https://files.minecraftforge.net/net/minecraftforge/forge/index_1.20.1.html), [GeckoLib](https://www.curseforge.com/minecraft/mc-mods/geckolib/files/8285794), [PlayerAnimator](https://www.curseforge.com/minecraft/mc-mods/playeranimator/files/4587214), [TACZ](https://www.curseforge.com/minecraft/mc-mods/timeless-and-classics-zero/files/8141310), and [Create](https://www.curseforge.com/minecraft/mc-mods/create/files/7178761).
-
-## Build and verification
-
-JetSetCraft uses Java 17, ForgeGradle 6, deterministic generated assets, contract validators, real Forge GameTests, and a dedicated-server startup smoke test.
+The repository includes the Gradle 8.8 wrapper. Use Java 17:
 
 ```text
 python -m pip install -r tools/requirements.txt
@@ -96,21 +69,23 @@ python tools/generate_animations.py
 python tools/generate_brand.py
 python tools/validate_assets.py
 python tools/validate_gameplay_contract.py
+python tools/validate_java_syntax.py
+python tools/validate_premium_polish.py
 python tools/validate_wiki.py
-gradle --no-daemon build
-gradle --no-daemon runGameTestServer
+./gradlew clean build
+./gradlew runGameTestServer
 ```
 
-The distributable JAR is written to `build/libs/`. CI also publishes the exact tested source tree, GameTest log, server-smoke log, and built JAR as GitHub Actions artifacts.
+On Windows, use `gradlew.bat`. The JAR is written to `build/libs/`. CI regenerates deterministic assets, rejects dirty generator output, performs a clean build, requires all seven Forge GameTests, starts a real dedicated server, and publishes the JAR, checksums, and logs as one workflow artifact.
 
-In a development world, `/jetsetcraft status` prints the authoritative ride, surface, Flow, trick, dance, landing, enchantment, and compatibility state. `/jetsetcraft build_vanilla_lab` creates a compact acceptance course for rails, redstone, ice, slime, honey, fluids, hazards, and grind geometry.
+In a development world, `/jetsetcraft status` reports authoritative movement and style state. Operators can use `/jetsetcraft build_vanilla_lab` to create a compact acceptance course and `/jetsetcraft set_momentum <speed>` as a controlled test aid.
 
-## Architecture and asset policy
+## Architecture and compatibility
 
-The server owns movement and style truth. Clients send inputs and render synchronized snapshots. Ride locomotion uses a lower-body PlayerAnimator layer; full-body dances and ground stunts use a separate higher-priority layer and yield when a weapon overlay is active. Gameplay state does not depend on an animation backend, so render adapters can evolve without replacing the movement state machine.
+Clients send bounded input samples; the server owns movement, scoring, equipment, gang, and persistence state. Tracking clients receive sanitized snapshots. Optional APIs are isolated, optional data-pack entries use `required: false`, no mixins/coremods replace third-party behavior, event actors never force-load chunks, and fake/test players without a network channel remain safe.
 
-`tools/generate_models.py` creates original JetSetCraft equipment meshes and supporting textures. `tools/generate_animations.py` creates deterministic animation resources. `tools/validate_assets.py` enforces JSON validity, OBJ integrity, model quality floors, held-item safety, and the lower-body combat-composition contract. Review `docs/ASSET_PROVENANCE.md` before adding any external asset.
+See [Architecture](docs/ARCHITECTURE.md), [Compatibility Covenant](docs/STANDALONE_COMPATIBILITY_COVENANT.md), [Asset Provenance](docs/ASSET_PROVENANCE.md), and [Changelog](CHANGELOG.md).
 
-## Status
+## Rights
 
-`0.2.0-alpha.1` is an active playable alpha. The current release is designed for immediate testing while preserving explicit future gates: real-client visual acceptance, large-modpack interoperability, multiplayer soak testing, and further authored VFX/audio/rig polish. Those gates are tracked openly rather than replaced by weaker claims.
+Project code and original JetSetCraft content are All Rights Reserved unless a file or ledger entry says otherwise. Third-party/reference inputs retain their own permissions and are not relicensed. See [LICENSE](LICENSE), [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md), and the asset ledger before redistributing or adding external material.

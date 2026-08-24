@@ -1,52 +1,39 @@
 # JetSetCraft
 
-JetSetCraft turns ordinary Minecraft worlds into a street-sports playground. Inline skates, quad skates, skateboards, BMX bikes, hoverboards, and scooters all use one momentum-first movement system built around speed preservation, tricks, grinding, transfers, wall rides, powerslides, manuals, breakdance, graffiti, combat composition, and emergent Minecraft physics.
+JetSetCraft `0.3.0` turns ordinary Minecraft worlds into a momentum-first street-sports playground. Inline skates, quad skates, a street board, BMX, hoverboard, and scooter share one continuous movement system built around boost, tricks, world-geometry grinding, transfers, wall rides, powerslides, manuals, dance, graffiti, combat composition, and emergent Minecraft physics.
 
-The goal is not to place the player inside a disconnected vehicle minigame. The player remains a Minecraft player: they can explore dimensions, fight mobs, use weapons and spell systems, ride through villages and modded structures, grind real world geometry, and turn blocks such as powered rails, ice, slime, honey, soul sand, fluids, pistons, and explosions into movement tech.
+The player remains a Minecraft player—not a disconnected vehicle entity. Weapons, tools, inventory, enchantments, dimensions, mobs, rails, terrain, redstone, fluids, pistons, explosions, and optional mods remain part of the same play space.
 
-## Style Flow release
+## v0.3.0 release surface
 
-The `0.2.0-alpha.1` Style Flow release adds:
-
-- Six first-class ride styles plus the no-gear dance system.
-- Twenty-four named air, grind, and ground tricks with style-specific vocabulary.
-- Sixty-eight validated animation clips, including eight ride-trick variants, eight grind-trick variants, 28 dance phrases, and eight full-body ground stunts.
-- Twenty-eight named dance moves across Toprock, Popping, House, Breaking, Hip-Hop, and Locking, each with its own addressable full-body phrase.
-- Automatic dance chaining, multiplayer cyphers, repeat penalties, trick-variety rewards, Flow ranks, boost tricks, and graded landings.
-- A dedicated high-detail hoverboard model instead of a skateboard reuse, plus a high-detail street scooter.
-- Optional, non-required integrations for Create, The Aether, Twilight Forest, TACZ, and broad Forge rail/block ecosystems.
-- A polished HUD for boost, Flow, rank, combo, trick names, landing grades, dance moves, and cypher size.
-- A reduced-motion option that disables camera roll/FOV pulses and rapid equipment stunt rotations.
-
-## Gang Wars, Boombox & Mob Atlas expansion
-
-The next major living-world pillar is defined in [[Gang Wars, Boombox & Mob Atlas|Gang-Wars-Boombox-and-Mob-Atlas]]. It establishes the Boombox as the universal street-jam initializer, **persistent equipment-bound gangification** that augments rather than replaces vanilla/modded mobs, dynamic reputation and membership with every gang, renameable crew aliases backed by stable IDs, rare cinematic encounters, competitive gang AI, Turf Wars, graffiti contests, trick battles, Tag, races, dance battles, spray combat, themed rewards, a complete vanilla Gang Atlas, a Junior/Baby Gang Atlas, and a runtime Atlas for mobs from installed mods.
-
-The core interoperability promise is strict: **Minecraft and other mods keep ownership of their entities; JetSetCraft adds an optional street-culture layer on top.** A normal mob becomes a gang rider only when actual JetSetCraft Street Gear is equipped. Ending an event does not revert it. It remains gangified across normal idle time, chunk reloads, and save/restart until that gear is genuinely removed, stolen, broken, or unequipped.
-
-Rare natural crews use the [[Gang Hangouts, Territory & Reputation|Hangouts-Territory-and-Reputation]] architecture: gangs adopt already-generated places as **soft territories** with tiny persistent site records, small resident crews, geometry-aware additive micro-furniture, no chunk tickets, and only low-frequency idle AI. Boombox/event crews are a separate ephemeral cast that skate away/despawn after the event, so repeatable challenges never steadily fill the save with permanent mobs. Canonical reputation remains per `gang_id`, while a specific hangout can remember only a small bounded amount of local chapter history.
-
-For the hard compatibility rules—including Fox/Allay/native pickup, dropped-gear walk-over, direct equip, dispenser/redstone equip, and anatomy-aware skating for quadrupeds, spiders, slimes, babies, and modded animals—read the [[Standalone Compatibility Covenant|Standalone-Compatibility-Covenant]]. That covenant supersedes any older temporary/event-only wording.
+- Six ride styles, 24 tricks, 28 dance moves, Flow/combo scoring, landing grades, and multiplayer cyphers.
+- Sixty-eight validated animation clips, dense original equipment meshes, a synchronized HUD, and reduced-motion controls.
+- Exposed-edge, fence, wall, pane, vanilla/Forge rail, and optional Create track grinding.
+- Minecraft-native speed routes across ice, slime, honey, Soul Speed, water, bubbles, redstone rails, and external impulses.
+- 139 persistent aspect-aware graffiti decals with repainting, support cleanup, and per-chunk limits.
+- Persistent physical Street Gear on compatible source-owned mobs without changing their type, UUID, AI, or owner.
+- A physical Boombox with mob-head tuning, data-driven gang identity, bounded event-only actors, anti-farm cleanup, and eighty original entrance stingers.
 
 ## Start here
 
-1. Read [[Getting Started|Getting-Started]] for installation and first ride.
+1. Read [[Getting Started|Getting-Started]] for installation and a first ride.
 2. Learn the complete input language on [[Controls]].
 3. Choose equipment on [[Ride Styles|Ride-Styles]].
-4. Build long lines with [[Tricks, Combos and Flow|Tricks-Combos-and-Flow]].
-5. Turn your world into a course with [[Grinding and Transfers|Grinding-and-Transfers]] and [[World Physics|World-Physics]].
-6. Explore the future rival-crew ecosystem in [[Gang Wars, Boombox & Mob Atlas|Gang-Wars-Boombox-and-Mob-Atlas]].
-7. See how persistent crews live without performance bloat in [[Gang Hangouts, Territory & Reputation|Hangouts-Territory-and-Reputation]].
-8. Read the [[Standalone Compatibility Covenant|Standalone-Compatibility-Covenant]], then review [[Compatibility]] before assembling a large modpack.
+4. Build lines with [[Tricks, Combos and Flow|Tricks-Combos-and-Flow]].
+5. Learn [[Grinding and Transfers|Grinding-and-Transfers]] and [[World Physics|World-Physics]].
+6. Use [[Graffiti]], then explore the shipped runtime checkpoint and preserved future design in [[Gang Wars, Boombox & Mob Atlas|Gang-Wars-Boombox-and-Mob-Atlas]].
+7. Review the [[Standalone Compatibility Covenant|Standalone-Compatibility-Covenant]], [[Compatibility]], and [[Multiplayer and Servers|Multiplayer-and-Servers]].
 
-## Core design promises
+## Core promises
 
-**Momentum is continuous.** Legitimate speed from boosts, slopes, rails, ice, pistons, explosions, currents, knockback, and modded mechanics is allowed to become tech rather than being flattened back to a vehicle cap.
+**Momentum is continuous.** Legitimate speed from boosts, slopes, rails, ice, pistons, explosions, currents, knockback, and modded mechanics becomes movement tech instead of being flattened.
 
-**The world is the skatepark.** JetSetCraft follows real rail shapes, collision-shape ledges, walls, Create track geometry, and datapack tags. It does not require special purpose-built course blocks.
+**The world is the skatepark.** JetSetCraft follows real rail shapes, collision-shape ledges, walls, and optional Create geometry rather than requiring special course blocks.
 
-**Combat remains composable.** Normal item use and third-party combat systems keep their input and upper-body animation authority while JetSetCraft owns movement and lower-body ride presentation. Full-body dance/stunt clips are suppressed when a weapon overlay is active.
+**Combat remains composable.** Ordinary locomotion owns lower-body presentation; item and weapon systems retain arms, hands, held items, head, and input.
 
-**Optional mods stay optional.** Compatibility entries use APIs, Forge behavior, registry lookups, or non-required datapack tags. The Aether, Twilight Forest, Create, TACZ, and other supported mods are never hard dependencies.
+**Optional mods stay optional.** Integrations use isolated APIs, Forge behavior, registry checks, or non-required datapack entries.
 
-**Mobs keep their owners.** JetSetCraft never needs to replace vanilla or modded entity types to make them gang members. JetSetCraft owns only its persistent Street Gear/gang layer. The actual source mob remains the original entity, and gear removal cleanly restores source-owned non-gang behavior.
+**Mobs keep their owners.** JetSetCraft adds reversible physical gear and stable gang data to an existing mob. It never replaces the source entity to make a rider.
+
+Broader territory, reputation, chapter, posse, Junior Atlas, and competitive-mode pages are preserved design lineage for possible later releases—not v0.3.0 feature claims.

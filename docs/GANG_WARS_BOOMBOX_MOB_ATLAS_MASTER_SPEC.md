@@ -2,8 +2,11 @@
 
 **Project:** JetSetCraft  
 **Primary target:** Minecraft Java Edition 1.20.1 / Forge  
-**Document role:** Canonical development specification, Pro Chat execution prompt, and GitHub Wiki source for the gang/minigame/mob-compatibility expansion  
-**Status:** Approved direction — extend the existing project without replacing working systems
+**Document role:** Preserved design lineage for possible post-v0.3 expansions
+**Status:** Reference direction; the README, changelog, runtime guide, and release evidence define shipped behavior
+
+> **Not a v0.3.0 feature list.** This document preserves broader Gang Wars, territory, reputation, chapter, and
+> atlas concepts for later releases. A concept here is not a release claim unless the runtime/release documents say so.
 
 ---
 
@@ -509,15 +512,17 @@ A polished challenge should be able to flow like this:
 9. Gameplay begins without excessive control stealing.
 10. Music can react to score, final seconds, victory, defeat, sudden death, or leader phases.
 
-## 3.2 Placeholder audio assets
+## 3.2 Shipped entrance stingers
 
-Create resource paths and valid silent audio stubs where the game requires actual audio files. **Do not create zero-byte or malformed OGG files.**
+v0.3.0 packages eighty distinct original 3.2-second entrance stingers. `tools/generate_audio.py` synthesizes them
+without third-party samples, `tools/audio_manifest.json` records exact hashes/duration/PCM measurements, and asset
+validation rejects silence, corruption, truncation, or undeclared files.
 
 Suggested path:
 
 `assets/jetsetcraft/sounds/music/gangs/`
 
-Initial track slots:
+Example stable sound paths:
 
 - `creepaku_gouji.ogg`
 - `bone_drones.ogg`
@@ -530,7 +535,7 @@ Initial track slots:
 - `night_shift.ogg`
 - `gold_rush.ogg`
 
-Use metadata such as:
+Future full-length music systems can extend the stable IDs with metadata such as:
 
 - display title
 - source resource location
@@ -544,7 +549,7 @@ Use metadata such as:
 - defeat cue
 - junior/baby mix resource
 
-Until final songs exist, use titles like **“Creepaku Gouji — Placeholder Mix”** rather than broken resources.
+Resource packs can replace the original stingers while retaining the same gang and sound IDs.
 
 ## 3.3 Beat data is gameplay data
 
@@ -1709,7 +1714,7 @@ Friendly junior crews begin friendly just like their parent species. Hostile jun
 
 Each junior crew receives a **cute/squeaky remix slot** of the adult gang theme.
 
-The final owner-made music can later replace these resources. For now, define valid silent audio placeholders and metadata for:
+If a later release adds junior-specific arrangements, it can extend the adult stinger IDs with metadata for:
 
 - higher-pitched/squeaky instrumentation profile
 - toy percussion profile
@@ -2509,9 +2514,9 @@ Two or more clients
 
 ---
 
-# 35. Implementation Order — Vertical Slices, Not Placeholder Sprawl
+# 35. Reference implementation order — complete vertical slices
 
-Do not stop at interfaces, stubs, mock menus, or documentation.
+Each release slice must include its runtime, persistence, tests, assets, and truthful documentation.
 
 A strong development order is:
 
@@ -2519,7 +2524,7 @@ A strong development order is:
 2. Implement **persistent equipment-bound** GangMemberAttachment on existing mobs; event lifecycle must never clear gang state while Street Gear remains equipped.
 3. Implement Street Gear attachment, natural acquisition/removal paths (source-owned pickup, Fox/Allay handling, dropped-gear collision, direct interaction, dispenser/redstone), and species-aware Ground Contact / Ride Rig anchors for biped, quadruped, multi-leg, body-contact, juvenile, and modded creatures.
 4. Implement Boombox block/entity, empty random targeting, and target slot.
-5. Implement music metadata + valid silent placeholder assets.
+5. Implement original entrance audio plus exact validation metadata.
 6. Implement one complete flagship gang end-to-end; Arachnaphobia is a strong architecture stress test.
 7. Implement generic challenge lifecycle/scoring.
 8. Implement Turf War plus one movement-focused mode and Dance Battle.

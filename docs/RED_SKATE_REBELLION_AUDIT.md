@@ -41,7 +41,7 @@ Elbow/knee/helmet-style optional gear can become a clean future extension surfac
 
 - Do not adopt any premise that JetSetCraft should avoid its own movement system. JetSetCraft's momentum/trick/grind/combat architecture remains the core.
 - Do not ship the prototype ice-skate OBJ as a final model. The inspected standalone OBJ is only about 356 vertices and the JAR contains broken/missing model/texture references.
-- Do not replace JetSetCraft's current high-detail skates, BMX, board or animation pipeline with Red Skate placeholder assets.
+- Do not replace JetSetCraft's current high-detail skates, BMX, board or animation pipeline with Red Skate's lower-detail assets.
 - Do not add a dead gear UI until its slots perform real JetSetCraft functions.
 
 ## Integration northpoint

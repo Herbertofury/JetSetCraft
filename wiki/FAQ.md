@@ -30,7 +30,7 @@ The catalog includes 28 named moves across Toprock, Popping, House, Breaking, Hi
 
 ## Is it safe for an existing world?
 
-JetSetCraft stores a player capability, item stacks, graffiti entities, and normal datapack resources. As with any alpha mod, back up the world and test the exact modpack. The project emphasizes stable IDs and save/load GameTests.
+JetSetCraft stores a player capability, item stacks, graffiti entities, Boombox block entities, and normal datapack resources. Back up valuable worlds before changing any modpack and test the exact mod combination. The release emphasizes stable IDs, bounded persistent state, and save/load GameTests.
 
 ## Can a resource/datapack extend it?
 

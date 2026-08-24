@@ -53,9 +53,9 @@ The Boombox consumes `HeadGangTargetResolver`, so the same provider-agnostic com
 
 Exact known runtime targets and the All The Heads future-version identity contract are documented in `MOB_HEAD_GANG_COMPATIBILITY.md`.
 
-## Music slots
+## Entrance stingers
 
-Every curated gang has a dedicated stable sound path registered through `ModSounds`. The repository ships valid short silent Vorbis placeholders instead of malformed/missing audio. Original gang music can replace those files later without changing the gang IDs or runtime code.
+Every curated gang has a dedicated stable sound path registered through `ModSounds`. The repository ships eighty distinct original 3.2-second procedural entrance stingers with exact hashes, loudness floors, and duration recorded in `tools/audio_manifest.json`. Servers or resource packs can replace a stinger without changing gang IDs or runtime code.
 
 ## Vanilla recipe
 

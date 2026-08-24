@@ -7,7 +7,7 @@
 3. **The server owns truth.** Inputs are sent to the server. Movement, scoring, Flow, dancing, cyphers, landings, loadout state, and combo state are authoritative and synchronized to local and tracking clients.
 4. **World geometry is the playground.** Grinding understands arbitrary exposed collision-shape edges and authored rail networks. Vanilla/Forge rails use their real `RailShape`; Create uses native track axes, normals, graph junctions, and Bezier geometry.
 5. **Optional integrations remain optional.** Missing mods cannot cause classloading or datapack errors. APIs are isolated behind adapters and optional block entries use `required: false`.
-6. **Animation is presentation, not gameplay authority.** Gameplay state never depends on PlayerAnimator, GeckoLib, Epic Fight, TACZ, Better Combat, or YSM internals.
+6. **Animation is presentation, not gameplay authority.** Gameplay state never depends on PlayerAnimator, Epic Fight, TACZ, Better Combat, or YSM internals.
 7. **Accessibility preserves control.** Reduced-motion settings remove presentation effects, never mechanics, responsiveness, score, or authoritative movement.
 
 ## State flow
@@ -69,8 +69,8 @@ The repository verifies implementation in layers:
 1. deterministic model, animation, and brand generation;
 2. JSON, model, animation, gameplay-contract, and wiki validators;
 3. ForgeGradle production build;
-4. five real Forge GameTests for hoverboard and scooter persistence/movement, no-gear dance scoring, immediate combat sovereignty, and stable complete trick/dance catalogs;
+4. seven real Forge GameTests for hoverboard/scooter persistence and movement, no-gear dance scoring, combat sovereignty, hostile state/input handling, mob Street Gear/Boombox lifecycle, and graffiti support cleanup;
 5. real dedicated-server startup smoke;
 6. exact tested-source and binary artifact publication.
 
-The next visual milestone is an articulated equipment rig with named wheels, steering, deck, compression, and grind-contact bones. It must preserve the current gameplay state machine, combat composition, accessibility settings, and dense silhouettes rather than replacing working mechanics with a renderer rewrite.
+The v0.3.0 release uses dense original item meshes and renderer-agnostic player/mob equipment layers. Any later presentation upgrade must preserve the current gameplay state machine, combat composition, accessibility settings, source-mob identity, and optional-mod isolation.

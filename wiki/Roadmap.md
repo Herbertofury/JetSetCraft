@@ -1,27 +1,21 @@
 # Roadmap
 
-JetSetCraft `0.3.0-alpha.1` now has two runtime-proven pillars: the Style Flow movement/dance/trick foundation and the first production Gang Runtime. The current branch has passed Forge compilation, all six required real GameTests, and dedicated-server startup with the physical Boombox, source-owned gang actors, anti-farm cleanup, stable gang music slots, and mob-head targeting.
+JetSetCraft `0.3.0` is the completed Forge 1.20.1 release surface documented in the README and changelog. Everything below is possible post-v0.3 direction, not a promise that the feature already exists.
 
-## Current 0.3 convergence
+## Possible later work
 
-The current pass is closing the remaining architecture gap between the Gang Wars specification and the verified runtime:
+1. Expand live modpack compatibility coverage across more creature models, head providers, dimensions, combat systems, and rail ecosystems.
+2. Add bounded territory, reputation, aliases, relationships, and adopted hangouts on top of stable `gang_id` data.
+3. Add complete scored challenge modes—Turf War, timed lines, races, dance battles, graffiti contests, and Tag—using the existing bounded actor lifecycle.
+4. Extend presentation with articulated equipment parts, more anatomy-specific choreography, richer Boombox visuals, and opt-in full-length resource-pack music.
+5. Consider newer Minecraft versions or additional loaders only after behavior and evidence can be carried forward without feature reduction.
 
-1. **Data-driven gangs and targeting** — server/datapack overlays for gang presentation/source mappings plus exact item → mob/gang mappings, while stable built-ins remain fail-safe defaults.
-2. **Real-client acceptance** — visual Boombox/head rendering, ride/dance/trick transforms, HUD/VFX/reduced-motion behavior, and gang audio smoke on an actual client.
-3. **Live compatibility worlds** — Create 6.0.8 track geometry, TACZ aim/fire/reload composition, Aether/Twilight route mechanics, and popular Forge 1.20.1 mob-head packs.
-4. **Multiplayer soak** — movement/cyphers/combat, Boombox concurrency, dimension transfer, persistence, disconnect/reconnect, and cleanup under more than one player.
-5. **Mob Atlas + reputation** — cached discovery and durable stable-gang reputation/aliases/relationships built on the now-real Gang Registry, not parallel identity systems.
-6. **Territory, hangouts and competition layer** — street-jam spaces, challenge/minigame rules, crew battles, timed lines, rewards and later chapters, all using the same bounded actor lifecycle.
-7. **Presentation depth** — gang-colored Boombox/equalizer presentation, authored owner-approved music, stickers/graffiti, articulated ride equipment, and more species-aware entrance/victory choreography.
-8. **Later loader/version ports** — NeoForge/Fabric/newer Minecraft only after the Forge 1.20.1 behavior remains reproducibly verified with no silent feature reduction.
+## Permanent guardrails
 
-## Non-negotiable guardrails
-
-- Never flatten legitimate momentum just to simplify the solver.
-- Never require optional adventure/combat/head mods for base startup.
-- Never seize weapon arms with ordinary ride locomotion.
-- Never replace source mobs just to make them gang members.
-- Never guess ambiguous player-head identity from textures/display names.
-- Never turn event casts into loot/XP/Street-Gear farms or permanent world clutter.
-- Never ship unfinished equipment models, fake controls, malformed audio, or UI that implies unsupported behavior.
-- Never call a checkpoint verified without a fresh JAR, required real Forge GameTests, dedicated-server readiness, and exact artifact identity.
+- Preserve legitimate momentum and ordinary Minecraft mechanics.
+- Keep optional adventure, combat, head, model, and rail mods non-required.
+- Keep ordinary ride animation off weapon arms/hands/head.
+- Never replace source mobs to create gang members.
+- Never guess ambiguous player-head identity from texture or display-name heuristics.
+- Keep event casts bounded, chunk-safe, temporary, and ineligible for loot/XP/Street-Gear farming.
+- Require a fresh JAR, validators, real Forge GameTests, dedicated-server readiness, and exact artifact identity for every release claim.

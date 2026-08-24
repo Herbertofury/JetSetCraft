@@ -137,7 +137,7 @@ A representative test route must be able to chain ordinary ground -> Iron Bars/f
 
 ## Style Flow optional dimension routes
 
-`0.2.0-alpha.1` extends the same data-driven interaction language into optional dimensions without requiring either mod:
+`0.3.0` carries the same data-driven interaction language into optional dimensions without requiring either mod:
 
 - The Aether Quicksoil, Quicksoil Glass, and Quicksoil Glass Pane are optional speed-route entries.
 - Blue Aercloud is an optional bounce-route entry; JetSetCraft composes with the block rather than replacing its native vertical launch behavior.
@@ -148,7 +148,7 @@ Every external registry entry is encoded as `{ "id": "namespace:block", "require
 
 ## Style Flow completed requirements
 
-The earlier hoverboard and material-feedback requirements are now implemented at the alpha level:
+The earlier hoverboard and material-feedback requirements are implemented in the v0.3.0 release:
 
 - hoverboard is a first-class ride style with persistence, tuning, dedicated mesh, animations, GameTest, and universal trick/grind/world-physics behavior;
 - scooter is a first-class sixth ride style using the same server-authoritative system;
