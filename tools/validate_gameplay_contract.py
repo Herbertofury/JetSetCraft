@@ -38,6 +38,12 @@ mob_rig = (ROOT / 'src/main/java/com/herberto/jetsetcraft/mob/MobRideRigResolver
 mob_events = (ROOT / 'src/main/java/com/herberto/jetsetcraft/event/MobStreetGearEvents.java').read_text(encoding='utf-8')
 mob_layer = (ROOT / 'src/main/java/com/herberto/jetsetcraft/client/render/MobRideGearLayer.java').read_text(encoding='utf-8')
 mob_packet = (ROOT / 'src/main/java/com/herberto/jetsetcraft/network/S2CMobGearPacket.java').read_text(encoding='utf-8')
+gang_registry = (ROOT / 'src/main/java/com/herberto/jetsetcraft/gang/GangRegistry.java').read_text(encoding='utf-8')
+head_resolver = (ROOT / 'src/main/java/com/herberto/jetsetcraft/gang/HeadGangTargetResolver.java').read_text(encoding='utf-8')
+gang_data_listener = (ROOT / 'src/main/java/com/herberto/jetsetcraft/gang/data/GangDefinitionReloadListener.java').read_text(encoding='utf-8')
+head_data_listener = (ROOT / 'src/main/java/com/herberto/jetsetcraft/gang/data/HeadTargetMappingReloadListener.java').read_text(encoding='utf-8')
+gang_data_events = (ROOT / 'src/main/java/com/herberto/jetsetcraft/gang/data/GangDataEvents.java').read_text(encoding='utf-8')
+gang_challenge = (ROOT / 'src/main/java/com/herberto/jetsetcraft/gang/GangChallengeController.java').read_text(encoding='utf-8')
 build_workflow = (ROOT / '.github/workflows/build.yml').read_text(encoding='utf-8')
 style_flow_tests = (ROOT / 'src/main/java/com/herberto/jetsetcraft/gametest/StyleFlowGameTests.java').read_text(encoding='utf-8')
 hoverboard_tests = (ROOT / 'src/main/java/com/herberto/jetsetcraft/gametest/HoverboardGameTests.java').read_text(encoding='utf-8')
@@ -290,6 +296,33 @@ for generated_function in ('make_hoverboard', 'make_scooter'):
         errors.append(f'asset generator must define {generated_function} exactly once')
 if "'shell':'hover_deck'" not in model_generator:
     errors.append('hoverboard generator is not bound to its dedicated deck texture')
+
+# Gang definitions and head/emblem compatibility are server-data contracts, not hardcoded-only behavior.
+for needle, label, source in [
+    ('replaceDataOverrides', 'atomic datapack gang overlays over stable built-ins', gang_registry),
+    ('BUILTIN_BY_GANG', 'stable built-in fallback gang atlas', gang_registry),
+    ('SimpleJsonResourceReloadListener', 'server gang JSON reload listener', gang_data_listener),
+    ('jetsetcraft_gangs', 'gang datapack directory', gang_data_listener),
+    ('entities', 'multiple source-entity mapping support', gang_data_listener),
+    ('jetsetcraft_head_targets', 'exact head/emblem datapack directory', head_data_listener),
+    ('ForgeRegistries.ITEMS.containsKey', 'optional head item presence validation', head_data_listener),
+    ('DATA_PACK_MAPPING', 'datapack target resolution provenance', head_resolver),
+    ('HeadTargetMappingRegistry.find', 'exact item mapping before registry-name guessing', head_resolver),
+    ('AddReloadListenerEvent', 'Forge server reload registration', gang_data_events),
+    ('definition.musicId()', 'data-selected registered gang music resolution', gang_challenge),
+]:
+    if needle not in source:
+        errors.append(f'missing data-driven gang/head contract: {label}')
+for path in (
+    ROOT / 'src/main/resources/data/jetsetcraft/jetsetcraft_gangs/dead_beat.json',
+    ROOT / 'src/main/resources/data/jetsetcraft/jetsetcraft_head_targets/zombie_head.json',
+):
+    if not path.exists():
+        errors.append(f'missing bundled data-reload acceptance resource: {path.relative_to(ROOT)}')
+if 'GangRegistry.dataOverrideCount() < 1' not in street_gear_tests or 'HeadTargetMappingRegistry.dataMappingCount() < 1' not in street_gear_tests:
+    errors.append('real Forge Street Gear GameTest does not prove gang/head datapack listeners loaded')
+if 'ResolutionSource.DATA_PACK_MAPPING' not in street_gear_tests:
+    errors.append('real Forge Street Gear GameTest does not prove exact datapack head mapping precedence')
 
 # Optional dimension-mod integrations must never make those mods required.
 for tag_name, optional_ids in {
