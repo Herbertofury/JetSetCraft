@@ -11,6 +11,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
@@ -61,7 +62,7 @@ public final class GangChallengeController {
         long lifetime = JetSetConfig.SERVER.boomboxChallengeLifetimeTicks.get();
         boombox.beginChallenge(player, chosen, actorCount, now + ENTRANCE_DELAY, now + lifetime);
 
-        ModSounds.music(definition.id()).ifPresent(sound ->
+        musicFor(definition).ifPresent(sound ->
                 level.playSound(null, pos, sound, SoundSource.RECORDS, 0.95F, 1.0F));
         level.playSound(null, pos, SoundEvents.NOTE_BLOCK_BASS.value(), SoundSource.RECORDS, 0.7F, 1.08F);
         level.sendParticles(ParticleTypes.NOTE, pos.getX() + 0.5D, pos.getY() + 1.15D, pos.getZ() + 0.5D,
@@ -168,6 +169,12 @@ public final class GangChallengeController {
         }
         return !List.of("piglin", "piglin_brute", "zombified_piglin", "hoglin", "zoglin", "blaze", "ghast",
                 "magma_cube", "strider", "wither_skeleton", "shulker").contains(path);
+    }
+
+    private static Optional<SoundEvent> musicFor(GangDefinition definition) {
+        SoundEvent configured = ForgeRegistries.SOUND_EVENTS.getValue(definition.musicId());
+        if (configured != null) return Optional.of(configured);
+        return ModSounds.music(definition.id());
     }
 
     private static void notifyOwner(ServerLevel level, BoomboxBlockEntity boombox, Component message) {
