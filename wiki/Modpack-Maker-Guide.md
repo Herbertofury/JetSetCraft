@@ -45,3 +45,21 @@ Recommended acceptance checks:
 ## Pack defaults
 
 Server/common values live in the Forge common/server config. Client HUD and camera preferences stay client-side. Do not force camera roll or FOV effects as a server requirement; players may need reduced motion.
+
+## Gang and Boombox datapacks
+
+JetSetCraft's Gang Runtime can be extended without Java mixins or optional-mod hard dependencies. Server packs can overlay gang definitions under `data/<namespace>/jetsetcraft_gangs/*.json` and add exact mob-head/emblem mappings under `data/<namespace>/jetsetcraft_head_targets/*.json`.
+
+A gang overlay may change its display name, disposition, music resource ID, primary/secondary colors, actor bounds, Boombox eligibility/legendary flag, and source `entity`/`entities` mappings. If the `gang_id` matches a built-in gang, omitted fields inherit the stable built-in values. This keeps small pack tweaks small and preserves stable save identities.
+
+An exact head mapping uses:
+
+```json
+{
+  "item": "yourmod:creature_head",
+  "entity": "yourmod:creature",
+  "gang": "yourpack:creature_crew"
+}
+```
+
+The optional `gang` field defaults to the gang currently mapped to the source entity. Missing optional items/entities are skipped cleanly at reload instead of becoming startup dependencies.
