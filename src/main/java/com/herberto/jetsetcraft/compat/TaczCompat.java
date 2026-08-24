@@ -1,10 +1,22 @@
 package com.herberto.jetsetcraft.compat;
 
-import com.tacz.guns.api.item.IGun;
 import net.minecraft.world.item.ItemStack;
 
-/** Loaded only when TacZ is present. Keeps TacZ classes out of the standalone hot path. */
+/** Loaded only when TacZ is present. Keeps TacZ classes and its large distribution out of the build classpath. */
 public final class TaczCompat {
-    public static boolean isGun(ItemStack stack) { return !stack.isEmpty() && stack.getItem() instanceof IGun; }
+    private static final Class<?> GUN_TYPE = loadGunType();
+
+    public static boolean isGun(ItemStack stack) {
+        return GUN_TYPE != null && !stack.isEmpty() && GUN_TYPE.isInstance(stack.getItem());
+    }
+
+    private static Class<?> loadGunType() {
+        try {
+            return Class.forName("com.tacz.guns.api.item.IGun", false, TaczCompat.class.getClassLoader());
+        } catch (ClassNotFoundException | LinkageError ignored) {
+            return null;
+        }
+    }
+
     private TaczCompat() {}
 }
