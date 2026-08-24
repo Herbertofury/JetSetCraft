@@ -14,8 +14,11 @@ import java.util.Optional;
  * The table is deliberately registry-ID based so optional mods never become hard classloading dependencies.
  */
 public final class GangRegistry {
-    private static final Map<ResourceLocation, GangDefinition> BY_GANG = new LinkedHashMap<>();
-    private static final Map<ResourceLocation, ResourceLocation> ENTITY_TO_GANG = new LinkedHashMap<>();
+    private static final Map<ResourceLocation, GangDefinition> BUILTIN_BY_GANG = new LinkedHashMap<>();
+    private static final Map<ResourceLocation, ResourceLocation> BUILTIN_ENTITY_TO_GANG = new LinkedHashMap<>();
+    private static volatile Map<ResourceLocation, GangDefinition> BY_GANG = Map.of();
+    private static volatile Map<ResourceLocation, ResourceLocation> ENTITY_TO_GANG = Map.of();
+    private static volatile int dataOverrideCount;
 
     static {
         // Friendly / passive-start crews.
@@ -104,6 +107,7 @@ public final class GangRegistry {
         crew("minecraft:zombie_horse", "night_mares", "Night Mares", GangDefinition.Disposition.NEUTRAL, 0x5B7562, 0x252A2A, 1, 2, false, true);
         crew("minecraft:illusioner", "smoke_and_mirrors", "Smoke & Mirrors", GangDefinition.Disposition.HOSTILE, 0x647080, 0xB8C7D8, 1, 2, false, true);
         crew("minecraft:giant", "dead_beat_titan", "Dead Beat Titan", GangDefinition.Disposition.HOSTILE, 0x4F8A53, 0x262F6A, 1, 1, false, true);
+        replaceDataOverrides(Map.of(), Map.of());
     }
 
     public static ResourceLocation gangIdForEntity(ResourceLocation entityId) {
@@ -134,6 +138,37 @@ public final class GangRegistry {
         return Optional.empty();
     }
 
+    /** Stable built-in definition before datapack/server overlays are applied. */
+    public static Optional<GangDefinition> builtInById(ResourceLocation gangId) {
+        return gangId == null ? Optional.empty() : Optional.ofNullable(BUILTIN_BY_GANG.get(gangId));
+    }
+
+    public static int dataOverrideCount() {
+        return dataOverrideCount;
+    }
+
+    /**
+     * Atomically replaces the current datapack/server overlays while preserving all built-in fallback identities.
+     * Entity mappings may point at a newly defined gang or override the built-in gang for an installed source mob.
+     */
+    public static synchronized void replaceDataOverrides(Map<ResourceLocation, GangDefinition> definitions,
+                                                         Map<ResourceLocation, ResourceLocation> entityMappings) {
+        LinkedHashMap<ResourceLocation, GangDefinition> mergedDefinitions = new LinkedHashMap<>(BUILTIN_BY_GANG);
+        if (definitions != null) {
+            definitions.entrySet().stream().sorted(Map.Entry.comparingByKey())
+                    .forEach(entry -> mergedDefinitions.put(entry.getKey(), entry.getValue()));
+        }
+        LinkedHashMap<ResourceLocation, ResourceLocation> mergedEntities = new LinkedHashMap<>(BUILTIN_ENTITY_TO_GANG);
+        if (entityMappings != null) {
+            entityMappings.entrySet().stream().sorted(Map.Entry.comparingByKey()).forEach(entry -> {
+                if (mergedDefinitions.containsKey(entry.getValue())) mergedEntities.put(entry.getKey(), entry.getValue());
+            });
+        }
+        BY_GANG = Map.copyOf(mergedDefinitions);
+        ENTITY_TO_GANG = Map.copyOf(mergedEntities);
+        dataOverrideCount = definitions == null ? 0 : definitions.size();
+    }
+
     public static Optional<ResourceLocation> representativeEntity(ResourceLocation gangId) {
         return ENTITY_TO_GANG.entrySet().stream().filter(entry -> entry.getValue().equals(gangId))
                 .map(Map.Entry::getKey).findFirst();
@@ -155,8 +190,8 @@ public final class GangRegistry {
         ResourceLocation music = id(JetSetCraft.MOD_ID + ":music/gangs/" + path);
         GangDefinition definition = new GangDefinition(gangId, name, disposition, music, primary, secondary,
                 minActors, maxActors, boomboxEligible, legendary);
-        ENTITY_TO_GANG.put(entityId, gangId);
-        BY_GANG.putIfAbsent(gangId, definition);
+        BUILTIN_ENTITY_TO_GANG.put(entityId, gangId);
+        BUILTIN_BY_GANG.putIfAbsent(gangId, definition);
     }
 
     private static ResourceLocation id(String value) {
