@@ -41,6 +41,7 @@ import java.util.Locale;
 
 public final class ClientEvents {
     private static final String CATEGORY = "key.categories.jetsetcraft";
+    private static final int ACTIVE_INPUT_HEARTBEAT_TICKS = 5;
     public static final KeyMapping BOOST = new KeyMapping("key.jetsetcraft.boost", KeyConflictContext.IN_GAME, InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_LEFT_ALT, CATEGORY);
     public static final KeyMapping TRICK = new KeyMapping("key.jetsetcraft.trick", KeyConflictContext.IN_GAME, InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_R, CATEGORY);
     public static final KeyMapping GRIND = new KeyMapping("key.jetsetcraft.grind", KeyConflictContext.IN_GAME, InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_G, CATEGORY);
@@ -134,13 +135,18 @@ public final class ClientEvents {
             ClientRideState.Snapshot snapshot = ClientRideState.get(mc.player.getId());
             boolean analogChanged = Float.floatToIntBits(forward) != Float.floatToIntBits(lastForward)
                     || Float.floatToIntBits(strafe) != Float.floatToIntBits(lastStrafe);
+            boolean liveInput = mask != 0 || forward != 0.0F || strafe != 0.0F;
+            boolean needsHeartbeat = snapshot.active() || snapshot.dancing() || liveInput;
             heartbeat++;
-            if (mask != lastMask || analogChanged || snapshot.active() || snapshot.dancing() || heartbeat >= 5) {
+            if (mask != lastMask || analogChanged || (needsHeartbeat && heartbeat >= ACTIVE_INPUT_HEARTBEAT_TICKS)) {
                 JetSetNetwork.sendInput(mask, forward, strafe);
                 lastMask = mask;
                 lastForward = forward;
                 lastStrafe = strafe;
                 heartbeat = 0;
+            } else if (!needsHeartbeat && heartbeat >= ACTIVE_INPUT_HEARTBEAT_TICKS) {
+                // Neutral, inactive state is already known server-side after the release packet; avoid idle packet churn.
+                heartbeat = ACTIVE_INPUT_HEARTBEAT_TICKS;
             }
         }
 
