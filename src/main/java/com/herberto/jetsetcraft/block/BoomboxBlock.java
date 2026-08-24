@@ -119,7 +119,7 @@ public final class BoomboxBlock extends BaseEntityBlock {
         if (!state.is(newState.getBlock())) {
             BlockEntity raw = level.getBlockEntity(pos);
             if (raw instanceof BoomboxBlockEntity boombox && !level.isClientSide) {
-                boombox.cancelChallenge(true);
+                boombox.cancelChallengeForRemoval();
                 ItemStack target = boombox.removeTarget();
                 if (!target.isEmpty()) net.minecraft.world.Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), target);
             }
