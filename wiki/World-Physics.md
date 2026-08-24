@@ -16,8 +16,8 @@ JetSetCraft treats Minecraft mechanics as movement vocabulary. The server sample
 | Snow layers | Drag scales with snow depth |
 | Cobweb / powder snow | Real movement traps instead of ignored decoration |
 | Magma / cactus / campfire | Hazard-aware edge rejection and normal damage semantics |
-| Water | Retains currents, bubble columns, Depth Strider, and Dolphin's Grace composition |
-| Lava | Heavy but controllable movement without pretending it is normal ground |
+| Water | JetSetCraft yields the complete movement/pose path to vanilla swimming, currents, bubble columns, equipped boots, and status effects |
+| Lava | JetSetCraft yields movement to Minecraft's native lava behavior rather than substituting a ground controller |
 
 ## External impulses
 

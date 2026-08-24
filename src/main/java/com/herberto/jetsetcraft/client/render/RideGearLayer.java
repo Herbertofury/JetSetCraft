@@ -46,6 +46,7 @@ public final class RideGearLayer extends RenderLayer<AbstractClientPlayer, Playe
         poseStack.pushPose();
         getParentModel().leftLeg.translateAndRotate(poseStack);
         poseStack.translate(0.0, 0.72, -0.04);
+        poseStack.mulPose(Axis.XP.rotationDegrees(180.0f));
         poseStack.scale(0.72f, 0.72f, 0.72f);
         renderItem(stack, poseStack, buffer, light, player);
         poseStack.popPose();
@@ -53,6 +54,7 @@ public final class RideGearLayer extends RenderLayer<AbstractClientPlayer, Playe
         poseStack.pushPose();
         getParentModel().rightLeg.translateAndRotate(poseStack);
         poseStack.translate(0.0, 0.72, -0.04);
+        poseStack.mulPose(Axis.XP.rotationDegrees(180.0f));
         poseStack.mulPose(Axis.YP.rotationDegrees(180.0f));
         poseStack.scale(0.72f, 0.72f, 0.72f);
         renderItem(stack, poseStack, buffer, light, player);
@@ -65,7 +67,8 @@ public final class RideGearLayer extends RenderLayer<AbstractClientPlayer, Playe
         poseStack.pushPose();
         boolean reduced = JetSetConfig.CLIENT.reducedMotion.get();
         double bob = hover && !reduced ? Math.sin((player.tickCount + partialTick) * 0.24) * 0.012 : 0.0;
-        poseStack.translate(0.0, (hover ? -0.085 : -0.035) + bob, 0.0);
+        poseStack.translate(0.0, (hover ? 0.59 : 0.64) + bob, 0.0);
+        poseStack.mulPose(Axis.XP.rotationDegrees(180.0f));
         if (state.trickTicks() > 0 && !reduced) {
             float progress = (22.0f - state.trickTicks() + partialTick) / 22.0f;
             poseStack.mulPose(Axis.YP.rotationDegrees(progress * 360.0f));
@@ -82,7 +85,8 @@ public final class RideGearLayer extends RenderLayer<AbstractClientPlayer, Playe
     private void renderBmx(PoseStack poseStack, MultiBufferSource buffer, int light,
                            AbstractClientPlayer player, ClientRideState.Snapshot state, float partialTick) {
         poseStack.pushPose();
-        poseStack.translate(0.0, -0.02, 0.12);
+        poseStack.translate(0.0, 0.65, 0.12);
+        poseStack.mulPose(Axis.XP.rotationDegrees(180.0f));
         if (state.trickTicks() > 0 && !JetSetConfig.CLIENT.reducedMotion.get()) {
             float progress = (22.0f - state.trickTicks() + partialTick) / 22.0f;
             poseStack.mulPose(Axis.ZP.rotationDegrees((float) Math.sin(progress * Math.PI) * 28.0f));
@@ -95,7 +99,8 @@ public final class RideGearLayer extends RenderLayer<AbstractClientPlayer, Playe
     private void renderScooter(PoseStack poseStack, MultiBufferSource buffer, int light,
                                AbstractClientPlayer player, ClientRideState.Snapshot state, float partialTick) {
         poseStack.pushPose();
-        poseStack.translate(0.0, -0.01, 0.12);
+        poseStack.translate(0.0, 0.65, 0.12);
+        poseStack.mulPose(Axis.XP.rotationDegrees(180.0f));
         if (state.trickTicks() > 0 && !JetSetConfig.CLIENT.reducedMotion.get()) {
             float progress = (22.0f - state.trickTicks() + partialTick) / 22.0f;
             poseStack.mulPose(Axis.YP.rotationDegrees(progress * 360.0f));
@@ -108,7 +113,9 @@ public final class RideGearLayer extends RenderLayer<AbstractClientPlayer, Playe
 
     private static void renderItem(ItemStack stack, PoseStack poseStack, MultiBufferSource buffer,
                                    int light, AbstractClientPlayer player) {
-        Minecraft.getInstance().getItemRenderer().renderStatic(stack, ItemDisplayContext.FIXED, light,
+        // Render the authored mesh in model space. FIXED applies item-frame transforms a second time here,
+        // which offsets and enlarges ride gear instead of keeping it attached to the rider.
+        Minecraft.getInstance().getItemRenderer().renderStatic(stack, ItemDisplayContext.NONE, light,
                 OverlayTexture.NO_OVERLAY, poseStack, buffer, player.level(), player.getId());
     }
 }

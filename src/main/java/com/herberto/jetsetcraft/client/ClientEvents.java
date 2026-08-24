@@ -31,6 +31,7 @@ import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.client.event.RenderGuiOverlayEvent;
 import net.minecraftforge.client.event.ViewportEvent;
+import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
 import net.minecraftforge.client.settings.KeyConflictContext;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -49,10 +50,12 @@ public final class ClientEvents {
     public static final KeyMapping BRAKE = new KeyMapping("key.jetsetcraft.brake", KeyConflictContext.IN_GAME, InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_V, CATEGORY);
     public static final KeyMapping DANCE = new KeyMapping("key.jetsetcraft.dance", KeyConflictContext.IN_GAME, InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_B, CATEGORY);
     public static final KeyMapping RIDE_TOGGLE = new KeyMapping("key.jetsetcraft.ride_toggle", KeyConflictContext.IN_GAME, InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_K, CATEGORY);
+    public static final KeyMapping HUD_TOGGLE = new KeyMapping("key.jetsetcraft.hud_toggle", KeyConflictContext.IN_GAME, InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_H, CATEGORY);
     private static int lastMask = -1;
     private static float lastForward = Float.NaN;
     private static float lastStrafe = Float.NaN;
     private static int heartbeat;
+    private static boolean hudVisible = true;
 
     @Mod.EventBusSubscriber(modid = JetSetCraft.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
     public static final class ModBus {
@@ -65,6 +68,7 @@ public final class ClientEvents {
             event.register(BRAKE);
             event.register(DANCE);
             event.register(RIDE_TOGGLE);
+            event.register(HUD_TOGGLE);
         }
 
         @SubscribeEvent
@@ -116,6 +120,12 @@ public final class ClientEvents {
             while (RIDE_TOGGLE.consumeClick()) {
                 // Always drain queued clicks so a key pressed in chat/inventory cannot fire after the screen closes.
                 if (gameplayInput) JetSetNetwork.sendRideLoadoutAction(mc.options.keyShift.isDown());
+            }
+            while (HUD_TOGGLE.consumeClick()) {
+                if (!gameplayInput) continue;
+                hudVisible = !hudVisible;
+                mc.player.displayClientMessage(Component.translatable(hudVisible
+                        ? "message.jetsetcraft.hud_on" : "message.jetsetcraft.hud_off"), true);
             }
 
             int mask = 0;
@@ -200,18 +210,16 @@ public final class ClientEvents {
         @SubscribeEvent
         public static void hud(RenderGuiOverlayEvent.Post event) {
             Minecraft mc = Minecraft.getInstance();
-            if (mc.player == null || mc.options.hideGui || !JetSetConfig.CLIENT.showStyleHud.get()) return;
+            if (event.getOverlay() != VanillaGuiOverlay.HOTBAR.type() || mc.player == null || mc.options.hideGui
+                    || !hudVisible || !JetSetConfig.CLIENT.showStyleHud.get()) return;
             ClientRideState.Snapshot state = ClientRideState.get(mc.player.getId());
             if (!state.active() && !state.dancing() && state.comboScore() == 0 && state.landingTicks() == 0) return;
 
             GuiGraphics gui = event.getGuiGraphics();
             int width = mc.getWindow().getGuiScaledWidth();
             int height = mc.getWindow().getGuiScaledHeight();
-            int panelWidth = 196;
-            int x = width / 2 - panelWidth / 2;
-            int y = height - 76;
-            gui.fill(x - 5, y - 5, x + panelWidth + 5, y + 57, 0xB0101018);
-            gui.fill(x - 5, y - 5, x + 3, y + 57, 0xFFE938A8);
+            int x = width / 2 + 10;
+            int y = height - 61;
 
             String modeLabel;
             if (state.dancing()) {
@@ -224,37 +232,37 @@ public final class ClientEvents {
             } else {
                 modeLabel = "STYLE CHAIN";
             }
-            Component mode = Component.literal(modeLabel).withStyle(state.dancing() ? ChatFormatting.LIGHT_PURPLE
-                    : state.grinding() ? ChatFormatting.GOLD : ChatFormatting.AQUA);
-            gui.drawString(mc.font, mode, x, y, 0xFFFFFF, true);
+            if (modeLabel.length() > 15) modeLabel = modeLabel.substring(0, 15);
+            Component mode = Component.literal(modeLabel).withStyle(state.grinding() ? ChatFormatting.GOLD : ChatFormatting.WHITE);
+            gui.drawString(mc.font, mode, x, y - 10, 0xFFFFFF, true);
             String rank = TrickCatalog.rankName(state.comboScore(), state.comboMultiplier(), state.flow());
-            gui.drawString(mc.font, Component.literal(rank), x + panelWidth - mc.font.width(rank), y, 0xFFFFD33D, true);
+            gui.drawString(mc.font, Component.literal(rank), x + 81 - mc.font.width(rank), y - 10, 0xFFFFD35A, true);
 
-            int boostWidth = Math.round(88.0f * clamp01(state.boost() / 100.0f));
-            int flowWidth = Math.round(88.0f * clamp01(state.flow() / 100.0f));
-            gui.fill(x, y + 13, x + 88, y + 19, 0xFF262630);
-            gui.fill(x, y + 13, x + boostWidth, y + 19, 0xFFEAF23A);
-            gui.fill(x + 104, y + 13, x + 192, y + 19, 0xFF262630);
-            gui.fill(x + 104, y + 13, x + 104 + flowWidth, y + 19, 0xFF34E1E5);
-            gui.drawString(mc.font, Component.literal("BOOST " + Math.round(state.boost())), x, y + 22, 0xFFF3F3F3, false);
-            gui.drawString(mc.font, Component.literal("FLOW " + Math.round(state.flow())), x + 104, y + 22, 0xFFF3F3F3, false);
+            int boostPips = Math.round(10.0f * clamp01(state.boost() / 100.0f));
+            int flowPips = Math.round(10.0f * clamp01(state.flow() / 100.0f));
+            for (int i = 0; i < 10; i++) {
+                int px = x + i * 8;
+                gui.fill(px, y, px + 7, y + 7, 0xB0181818);
+                if (i < boostPips) gui.fill(px + 1, y + 1, px + 6, y + 6, 0xFFFFC83D);
+                if (i < flowPips) gui.fill(px + 1, y + 8, px + 6, y + 10, 0xFF55D7DD);
+            }
 
             if (state.comboScore() > 0) {
                 String combo = state.comboScore() + "  x" + String.format(Locale.ROOT, "%.2f", state.comboMultiplier());
-                gui.drawString(mc.font, Component.literal(combo), x, y + 34, 0xFFFF78D7, true);
+                gui.drawString(mc.font, Component.literal(combo), x, y + 12, 0xFFFFFFFF, true);
             }
             if (JetSetConfig.CLIENT.showTrickNames.get() && state.dancing()) {
                 String dance = DanceCatalog.name(state.danceMoveId());
-                gui.drawString(mc.font, Component.literal(dance), x + panelWidth - mc.font.width(dance), y + 34,
-                        0xFFFFA7E3, true);
+                gui.drawString(mc.font, Component.literal(dance), x + 81 - mc.font.width(dance), y + 12,
+                        0xFFFFFFFF, true);
             } else if (JetSetConfig.CLIENT.showTrickNames.get() && state.trickTicks() > 0) {
                 String trick = (state.boostTrick() ? "BOOST • " : "")
                         + TrickCatalog.name(state.trickIndex(), state.style());
-                gui.drawString(mc.font, Component.literal(trick), x + panelWidth - mc.font.width(trick), y + 34,
+                gui.drawString(mc.font, Component.literal(trick), x + 81 - mc.font.width(trick), y + 12,
                         state.boostTrick() ? 0xFFEAF23A : state.groundStunt() ? 0xFFFFA633 : 0xFFFAFAFA, true);
             } else if (JetSetConfig.CLIENT.showTrickNames.get() && state.landingTicks() > 0) {
                 String landing = TrickCatalog.landingName(state.landingGrade());
-                gui.drawString(mc.font, Component.literal(landing), x + panelWidth - mc.font.width(landing), y + 34,
+                gui.drawString(mc.font, Component.literal(landing), x + 81 - mc.font.width(landing), y + 12,
                         state.landingGrade() == 3 ? 0xFF65FF8F : 0xFFFFFFFF, true);
             }
         }

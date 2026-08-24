@@ -37,6 +37,8 @@ Start with these actions:
 - Hold **V** while steering to powerslide.
 - Press **B** while standing to begin dancing, even with no ride gear equipped.
 
+Release the movement keys whenever you want to stop: JetSetCraft does not auto-drive or rebuild stale momentum from the camera direction. Ride gear also stays out of the way in water and lava, so ordinary Minecraft swimming, diving, currents, and bubble columns keep full control.
+
 ## Quick practice course
 
 Operators can run `/jetsetcraft build_vanilla_lab` in a test world. The command creates lanes for ice, powered rails, detector/activator rails, water and bubble columns, slime, honey, hazards, micro-terrain, fences, walls, panes, and other world-geometry acceptance cases.

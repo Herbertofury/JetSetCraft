@@ -55,7 +55,7 @@ jobs:
       - name: Clean Forge build
         run: ./gradlew clean build --no-daemon
 
-      - name: Run seven real Forge GameTests
+      - name: Run eight real Forge GameTests
         shell: bash
         run: |
           set -euo pipefail
@@ -64,6 +64,7 @@ jobs:
           timeout 240s ./gradlew runGameTestServer --no-daemon | tee "$log"
           for marker in \
             'JETSETCRAFT_GAMETEST_PASS hoverboard' \
+            'JETSETCRAFT_GAMETEST_PASS ride_controls' \
             'JETSETCRAFT_GAMETEST_PASS scooter' \
             'JETSETCRAFT_GAMETEST_PASS dance_flow' \
             'JETSETCRAFT_GAMETEST_PASS combat_sovereignty' \
@@ -72,8 +73,8 @@ jobs:
             'JETSETCRAFT_GAMETEST_PASS graffiti_lifecycle'; do
             grep -Fq "$marker" "$log" || { echo "::error::Missing GameTest marker: $marker"; exit 1; }
           done
-          grep -Eq 'All 7 required tests passed|7 tests? passed' "$log" || {
-            echo '::error::Forge did not report all seven GameTests passing.'
+          grep -Eq 'All 8 required tests passed|8 tests? passed' "$log" || {
+            echo '::error::Forge did not report all eight GameTests passing.'
             exit 1
           }
 

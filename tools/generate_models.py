@@ -354,14 +354,16 @@ def texture_gradient(path:Path, size, stops, noise=0):
 
 
 def make_textures():
-    texture_gradient(TEX_DIR/'skate_shell.png',(256,256),[(16,12,36),(42,20,78),(18,190,205),(245,51,169)],1)
-    texture_gradient(TEX_DIR/'bike_frame.png',(256,256),[(10,35,48),(16,194,201),(230,43,160),(255,180,38)],1)
+    # Restrained street-sport materials replace the old cyan/magenta gradients that made separate mesh
+    # components read as one corrupted neon mass in third person.
+    texture_gradient(TEX_DIR/'skate_shell.png',(256,256),[(22,25,31),(52,62,68),(226,222,202),(188,54,42)],1)
+    texture_gradient(TEX_DIR/'bike_frame.png',(256,256),[(13,16,19),(38,45,48),(178,48,38),(226,132,42)],1)
     texture_gradient(TEX_DIR/'metal.png',(128,128),[(55,62,70),(198,214,220),(72,82,92)],1)
     texture_gradient(TEX_DIR/'rubber.png',(128,128),[(10,10,14),(38,40,46),(13,13,17)],1)
-    texture_gradient(TEX_DIR/'wheel.png',(128,128),[(22,18,34),(78,34,110),(20,210,220)],1)
-    texture_gradient(TEX_DIR/'accent.png',(128,128),[(255,60,180),(255,190,35),(20,220,220)],0)
-    texture_gradient(TEX_DIR/'hover_deck.png',(512,512),[(16,12,35),(34,30,82),(18,190,205),(245,51,169)],1)
-    texture_gradient(TEX_DIR/'energy.png',(128,128),[(12,40,80),(30,235,245),(255,75,196),(255,224,70)],0)
+    texture_gradient(TEX_DIR/'wheel.png',(128,128),[(12,13,15),(38,42,45),(76,82,85)],1)
+    texture_gradient(TEX_DIR/'accent.png',(128,128),[(215,58,38),(239,146,39),(244,218,88)],0)
+    texture_gradient(TEX_DIR/'hover_deck.png',(512,512),[(10,18,22),(22,45,50),(34,116,121),(220,205,154)],1)
+    texture_gradient(TEX_DIR/'energy.png',(128,128),[(9,35,45),(25,143,151),(88,224,218),(230,242,212)],0)
 
     # deck: original, busy cel-graffiti pattern with grip/noise details
     im=Image.new('RGB',(512,512),(17,18,24)); d=ImageDraw.Draw(im)
@@ -370,7 +372,7 @@ def make_textures():
         d.polygon([(x,512),(x+90,512),(x+330,0),(x+240,0)], fill=(20+(i*17)%130, 50+(i*37)%180, 80+(i*53)%170))
     for r in range(14):
         cx=(r*97)%560-20; cy=(r*151)%560-20; rad=25+(r*13)%70
-        d.ellipse((cx-rad,cy-rad,cx+rad,cy+rad),outline=(248,62,180),width=8)
+        d.ellipse((cx-rad,cy-rad,cx+rad,cy+rad),outline=(210,61,42),width=8)
     d.text((28,196),'JET SET',fill=(248,244,220),stroke_width=5,stroke_fill=(25,16,38))
     d.text((68,260),'CRAFT',fill=(255,193,43),stroke_width=6,stroke_fill=(25,16,38))
     im=im.filter(ImageFilter.UnsharpMask(radius=1,percent=140,threshold=2)); im.save(TEX_DIR/'deck.png')

@@ -109,7 +109,8 @@ public final class MobRideGearLayer<T extends LivingEntity, M extends EntityMode
         float anatomyScale = 0.90f + rig.footprintScale() * 0.18f;
         float scale = Mth.clamp(width * baseScale * anatomyScale * ageScale, 0.32f, 1.75f);
         float hoverLift = style == RideStyle.HOVER ? 0.04f : 0.0f;
-        poseStack.translate(0.0D, -0.035D + hoverLift + bob, 0.0D);
+        poseStack.translate(0.0D, entity.getBbHeight() * 0.36D - 0.035D + hoverLift + bob, 0.0D);
+        poseStack.mulPose(Axis.XP.rotationDegrees(180.0f));
         poseStack.mulPose(Axis.ZP.rotationDegrees(lean));
         poseStack.scale(scale, scale, scale);
         renderItem(stack, poseStack, buffer, light, entity);
@@ -119,7 +120,8 @@ public final class MobRideGearLayer<T extends LivingEntity, M extends EntityMode
     private static void renderAt(PoseStack poseStack, MultiBufferSource buffer, int light, LivingEntity entity,
                                  ItemStack stack, float x, float y, float z, float scale, float motion) {
         poseStack.pushPose();
-        poseStack.translate(x, -0.015f + y, z);
+        poseStack.translate(x, entity.getBbHeight() * 0.36D - 0.015f + y, z);
+        poseStack.mulPose(Axis.XP.rotationDegrees(180.0f));
         // Both sides point in the travel direction. Rotating one skate 180 degrees made half the rig face backward.
         if (!JetSetConfig.CLIENT.reducedMotion.get()) {
             poseStack.mulPose(Axis.XP.rotationDegrees(motion * Mth.sin((entity.tickCount + x * 17.0f + z * 13.0f)
@@ -132,7 +134,7 @@ public final class MobRideGearLayer<T extends LivingEntity, M extends EntityMode
 
     private static void renderItem(ItemStack stack, PoseStack poseStack, MultiBufferSource buffer,
                                    int light, LivingEntity entity) {
-        Minecraft.getInstance().getItemRenderer().renderStatic(stack, ItemDisplayContext.FIXED, light,
+        Minecraft.getInstance().getItemRenderer().renderStatic(stack, ItemDisplayContext.NONE, light,
                 OverlayTexture.NO_OVERLAY, poseStack, buffer, entity.level(), entity.getId());
     }
 }

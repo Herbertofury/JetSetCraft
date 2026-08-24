@@ -62,5 +62,5 @@ JetSetCraft uses separate Forge server/common and client specifications. Exact f
 | `maxExtraFov` | 7.0 | Maximum normal speed FOV bonus |
 | `boostExtraFov` | 4.0 | Additional boost FOV |
 | `reducedMotion` | false | Disable roll/FOV pulses and rapid equipment rotations |
-| `showStyleHud` | true | Show Boost/Flow/combo/rank panel |
+| `showStyleHud` | true | Enable the compact vanilla-adjacent Boost/Flow/combo/rank display; `H` can hide/show it instantly for the current session |
 | `showTrickNames` | true | Show trick, dance, and landing callouts |

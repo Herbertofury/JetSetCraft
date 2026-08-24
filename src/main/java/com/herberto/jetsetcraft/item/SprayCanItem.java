@@ -1,7 +1,9 @@
 package com.herberto.jetsetcraft.item;
 
 import com.herberto.jetsetcraft.config.JetSetConfig;
+import com.herberto.jetsetcraft.client.ClientPacketHandlers;
 import com.herberto.jetsetcraft.entity.GraffitiEntity;
+import com.herberto.jetsetcraft.graffiti.CustomGraffiti;
 import com.herberto.jetsetcraft.graffiti.GraffitiCatalog;
 import com.herberto.jetsetcraft.registry.ModEntities;
 import net.minecraft.ChatFormatting;
@@ -9,16 +11,30 @@ import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.phys.AABB;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.fml.DistExecutor;
 
 public final class SprayCanItem extends Item {
-    private static final String VARIANT_TAG = "JetSetCraftGraffitiVariant";
+    public static final String VARIANT_TAG = "JetSetCraftGraffitiVariant";
+    public static final String CUSTOM_TAG = "JetSetCraftGraffitiCustom";
 
     public SprayCanItem(Properties properties) {
         super(properties);
+    }
+
+    @Override
+    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+        if (level.isClientSide) openSelector(hand);
+        return InteractionResultHolder.sidedSuccess(player.getItemInHand(hand), level.isClientSide);
     }
 
     @Override
@@ -30,26 +46,22 @@ public final class SprayCanItem extends Item {
         var player = context.getPlayer();
         var stack = context.getItemInHand();
         if (player != null && player.isShiftKeyDown()) {
-            if (!context.getLevel().isClientSide) {
-                int next = Math.floorMod(stack.getOrCreateTag().getInt(VARIANT_TAG) + 1, GraffitiCatalog.size());
-                stack.getOrCreateTag().putInt(VARIANT_TAG, next);
-                player.displayClientMessage(Component.translatable("message.jetsetcraft.graffiti_variant",
-                                GraffitiCatalog.id(next))
-                        .withStyle(ChatFormatting.LIGHT_PURPLE), true);
-            }
+            if (context.getLevel().isClientSide) openSelector(context.getHand());
             return InteractionResult.sidedSuccess(context.getLevel().isClientSide);
         }
 
         if (context.getLevel() instanceof ServerLevel serverLevel) {
-            int variant = Math.floorMod(stack.getOrCreateTag().getInt(VARIANT_TAG), GraffitiCatalog.size());
+            int variant = getCatalogSelection(stack);
+            String custom = getCustomSelection(stack);
             GraffitiEntity graffiti = new GraffitiEntity(ModEntities.GRAFFITI.get(), serverLevel);
-            graffiti.configure(context.getClickedPos(), face, variant);
+            graffiti.configure(context.getClickedPos(), face, variant, custom);
 
             // One tag per exact wall patch: repainting replaces the old decal instead of stacking z-fighting quads.
-            var entry = GraffitiCatalog.get(variant);
+            float renderWidth = custom.isEmpty() ? GraffitiCatalog.get(variant).renderWidth() : 1.6f;
+            float renderHeight = custom.isEmpty() ? GraffitiCatalog.get(variant).renderHeight() : 1.0f;
             AABB patch = new AABB(graffiti.position(), graffiti.position())
-                    .inflate(Math.max(0.14, entry.renderWidth() * 0.48), Math.max(0.55, entry.renderHeight() * 0.48),
-                            Math.max(0.14, entry.renderWidth() * 0.48));
+                    .inflate(Math.max(0.14, renderWidth * 0.48), Math.max(0.55, renderHeight * 0.48),
+                            Math.max(0.14, renderWidth * 0.48));
             var replaced = serverLevel.getEntitiesOfClass(GraffitiEntity.class, patch, e -> e.getFace() == face);
 
             ChunkPos chunk = new ChunkPos(graffiti.blockPosition());
@@ -72,5 +84,31 @@ public final class SprayCanItem extends Item {
             }
         }
         return InteractionResult.sidedSuccess(context.getLevel().isClientSide);
+    }
+
+    public static int getCatalogSelection(ItemStack stack) {
+        return Math.floorMod(stack.getOrCreateTag().getInt(VARIANT_TAG), GraffitiCatalog.size());
+    }
+
+    public static String getCustomSelection(ItemStack stack) {
+        return CustomGraffiti.normalize(stack.getOrCreateTag().getString(CUSTOM_TAG));
+    }
+
+    public static boolean hasCustomSelection(ItemStack stack) { return !getCustomSelection(stack).isEmpty(); }
+
+    public static void setCatalogSelection(ItemStack stack, int variant) {
+        stack.getOrCreateTag().putInt(VARIANT_TAG, Math.floorMod(variant, GraffitiCatalog.size()));
+        stack.getOrCreateTag().remove(CUSTOM_TAG);
+    }
+
+    public static void setCustomSelection(ItemStack stack, String custom) {
+        String normalized = CustomGraffiti.normalize(custom);
+        if (normalized.isEmpty()) stack.getOrCreateTag().remove(CUSTOM_TAG);
+        else stack.getOrCreateTag().putString(CUSTOM_TAG, normalized);
+    }
+
+    @SuppressWarnings("deprecation")
+    private static void openSelector(InteractionHand hand) {
+        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> ClientPacketHandlers.openGraffitiSelector(hand));
     }
 }

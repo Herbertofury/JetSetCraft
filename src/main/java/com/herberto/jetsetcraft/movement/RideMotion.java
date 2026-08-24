@@ -19,6 +19,27 @@ final class RideMotion {
         double cap = style.cruiseCap() * scale * world.cruiseCapMultiplier();
         double acceleration = style.acceleration() * scale * world.accelerationMultiplier();
 
+        // With no directional input, Minecraft's own travel step has already applied the familiar
+        // ground friction to `current`. Treat that real velocity as the entire source of truth instead
+        // of reconstructing motion from stale ride momentum (or from the camera's look direction).
+        // This makes releasing WASD settle exactly like vanilla and guarantees a stationary player
+        // cannot be launched forward by an old momentum value.
+        if (inputMagnitude <= 0.05 && !data.powersliding() && !data.manual()) {
+            double speed = currentSpeed;
+            if (data.pressed(InputFlags.BRAKE)) speed *= 0.72 * world.brakeMultiplier();
+            if (speed < 0.025) speed = 0.0;
+            data.setMomentum(speed);
+            Vec3 old = player.getDeltaMovement();
+            if (speed == 0.0 || currentSpeed <= 1.0e-6) {
+                player.setDeltaMovement(0.0, old.y, 0.0);
+            } else if (speed != currentSpeed) {
+                Vec3 direction = current.normalize();
+                player.setDeltaMovement(direction.x * speed, old.y, direction.z * speed);
+            }
+            player.hurtMarked = true;
+            return;
+        }
+
         if (inputMagnitude > 0.05 && !data.powersliding()) {
             if (momentum < cap) {
                 momentum = Math.min(cap, momentum + acceleration * (0.45 + inputMagnitude * 0.55)
@@ -55,9 +76,11 @@ final class RideMotion {
                         .add(direction.scale(steering)), direction);
             }
         } else if (currentSpeed > 0.02) direction = current.normalize();
-        else direction = MovementMath.horizontalLook(player);
+        else direction = Vec3.ZERO;
 
         Vec3 old = player.getDeltaMovement();
+        if (direction.lengthSqr() <= 1.0e-7) momentum = 0.0;
+        data.setMomentum(momentum);
         player.setDeltaMovement(direction.x * momentum, old.y, direction.z * momentum);
         player.hurtMarked = true;
     }
@@ -76,26 +99,6 @@ final class RideMotion {
         player.hurtMarked = true;
     }
 
-    static void applyFluidMovement(ServerPlayer player, JetSetData data) {
-        Vec3 current = player.getDeltaMovement();
-        Vec3 horizontal = EdgeFinder.horizontal(current);
-        Vec3 desired = MovementMath.desiredDirection(player, data);
-        double retention = player.isInLava() ? 0.55 : VanillaWorldPhysics.waterRetention(player, data);
-        double speed = Math.max(horizontal.length(), data.momentum()) * retention;
-        if (speed < 0.015) speed = 0.0;
-        Vec3 currentDir = horizontal.lengthSqr() > 1.0e-6 ? horizontal.normalize() : MovementMath.horizontalLook(player);
-        Vec3 direction = currentDir;
-        if (desired.lengthSqr() > 1.0e-5) {
-            double control = player.isInLava() ? 0.045 : (player.isUnderWater() ? 0.08 : 0.14);
-            if (data.externalImpulseTicks() > 0) control *= 0.35;
-            direction = MovementMath.safeNormalize(currentDir.scale(1.0 - control).add(desired.normalize().scale(control)), currentDir);
-        }
-        data.setMomentum(speed);
-        // Vertical velocity is intentionally untouched: water currents and bubble columns remain Minecraft-native.
-        player.setDeltaMovement(direction.x * speed, current.y, direction.z * speed);
-        player.hurtMarked = true;
-    }
-
     static void handleBoost(ServerPlayer player, JetSetData data, VanillaWorldPhysics.Surface surface) {
         if (!data.boosting()) {
             if (player.onGround() && !data.grinding()) data.setBoost(data.boost() + JetSetConfig.SERVER.boostRechargePerTick.get().floatValue());
@@ -107,12 +110,17 @@ final class RideMotion {
         Vec3 velocity = player.getDeltaMovement();
         Vec3 horizontal = EdgeFinder.horizontal(velocity);
         Vec3 direction = MovementMath.desiredDirection(player, data);
-        if (direction.lengthSqr() < 1.0e-5) direction = horizontal.lengthSqr() > 1.0e-5 ? horizontal.normalize() : MovementMath.horizontalLook(player);
+        if (direction.lengthSqr() < 1.0e-5) direction = horizontal.lengthSqr() > 1.0e-5 ? horizontal.normalize() : Vec3.ZERO;
         else {
             direction = direction.normalize();
             if (data.externalImpulseTicks() > 0 && horizontal.lengthSqr() > 1.0e-5) {
                 direction = MovementMath.safeNormalize(horizontal.normalize().scale(0.82).add(direction.scale(0.18)), horizontal.normalize());
             }
+        }
+        if (direction.lengthSqr() <= 1.0e-7) {
+            data.setBoosting(false);
+            data.setMomentum(0.0);
+            return;
         }
         double fluidScale = player.isInLava() ? 0.34 : (player.isInWater() ? (player.isUnderWater() ? 0.48 : 0.68) : 1.0);
         double cap = style.boostCap() * scale * world.boostCapMultiplier() * fluidScale;

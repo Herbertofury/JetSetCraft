@@ -26,6 +26,7 @@ import java.util.Map;
 import java.util.Objects;
 
 public final class RideAnimationController {
+    private static final float MOVING_MOMENTUM = 0.035f;
     private static final ResourceLocation RIDE_LAYER = ResourceLocation.fromNamespaceAndPath(JetSetCraft.MOD_ID, "ride_lower_body");
     private static final ResourceLocation ACTION_LAYER = ResourceLocation.fromNamespaceAndPath(JetSetCraft.MOD_ID, "style_full_body");
     private static final Map<Integer, ResourceLocation> ACTIVE_RIDE = new HashMap<>();
@@ -58,7 +59,8 @@ public final class RideAnimationController {
         ClientRideState.Snapshot state = ClientRideState.get(player.getId());
         boolean weaponOverlay = CompatManager.hasWeaponOverlay(player);
         apply(player, RIDE_LAYER, ACTIVE_RIDE, chooseRide(state));
-        apply(player, ACTION_LAYER, ACTIVE_ACTION, chooseAction(state, weaponOverlay));
+        boolean handsFree = player.getMainHandItem().isEmpty() && player.getOffhandItem().isEmpty();
+        apply(player, ACTION_LAYER, ACTIVE_ACTION, chooseAction(state, weaponOverlay, handsFree));
     }
 
     @SuppressWarnings("unchecked")
@@ -107,6 +109,7 @@ public final class RideAnimationController {
         if (state.wallRiding()) return id("wallride");
         if (state.powersliding()) return id("powerslide");
         if (state.manual()) return id("manual");
+        if (state.momentum() <= MOVING_MOMENTUM) return null;
         if (state.style() == RideStyle.BMX) return id(state.boosting() ? "bmx_boost" : "bmx_ride");
         if (state.style() == RideStyle.HOVER) return id(state.boosting() ? "hover_boost" : "hover_ride");
         if (state.style() == RideStyle.SCOOTER) return id(state.boosting() ? "scooter_boost" : "scooter_ride");
@@ -116,7 +119,7 @@ public final class RideAnimationController {
         return null;
     }
 
-    private static ResourceLocation chooseAction(ClientRideState.Snapshot state, boolean weaponOverlay) {
+    private static ResourceLocation chooseAction(ClientRideState.Snapshot state, boolean weaponOverlay, boolean handsFree) {
         if (weaponOverlay) return null;
         if (state.dancing()) {
             int animation = DanceCatalog.byId(state.danceMoveId()).animationIndex();
@@ -125,6 +128,13 @@ public final class RideAnimationController {
         if (state.groundStunt() && state.trickTicks() > 0) {
             int animation = TrickCatalog.byId(state.trickIndex()).animationIndex();
             return id("stunt_" + animation);
+        }
+        // Keep hands visibly connected to handlebars only while they are genuinely free. Any held item or
+        // weapon overlay immediately yields both arms back to Minecraft/the owning mod.
+        if (state.active() && state.momentum() > MOVING_MOMENTUM && handsFree
+                && !state.grinding() && state.trickTicks() <= 0) {
+            if (state.style() == RideStyle.BMX) return id(state.boosting() ? "bmx_controls_boost" : "bmx_controls");
+            if (state.style() == RideStyle.SCOOTER) return id(state.boosting() ? "scooter_controls_boost" : "scooter_controls");
         }
         return null;
     }

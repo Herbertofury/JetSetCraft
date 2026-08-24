@@ -48,8 +48,9 @@ for p in sorted((ROOT/'src/main/resources').rglob('*.json')):
     try: json.loads(p.read_text(encoding='utf-8'))
     except Exception as e: errors.append(f'{p.relative_to(ROOT)}: invalid JSON: {e}')
 
-# Locomotion remains lower-body only so combat mods retain arms/hands. Explicit dances and ground stunts
-# are full-body performance clips, and the client suppresses them whenever a weapon overlay is active.
+# Locomotion remains lower-body only so combat mods retain arms/hands. Dedicated hands-free handlebar clips
+# own only the arms/body and are disabled whenever either hand is occupied or a weapon overlay is active.
+# Explicit dances and ground stunts are full-body performance clips with the same weapon-overlay suppression.
 for p in sorted((ASSETS/'player_animation').glob('*.json')):
     data=json.loads(p.read_text(encoding='utf-8'))
     text=json.dumps(data)
@@ -70,6 +71,7 @@ for p in sorted((ASSETS/'player_animation').glob('*.json')):
                 if not isinstance(value, (int, float)) or not math.isfinite(value):
                     errors.append(f'{p.relative_to(ROOT)}: non-finite {bone}.{axis} value')
     full_body = p.stem.startswith('dance_') or p.stem.startswith('stunt_')
+    handlebar = '_controls' in p.stem
     if not full_body and len(moves) < 5:
         errors.append(f'{p.relative_to(ROOT)}: gameplay motion clip has only {len(moves)} keyframes; premium floor is 5')
     if full_body:
@@ -79,6 +81,13 @@ for p in sorted((ASSETS/'player_animation').glob('*.json')):
         for forbidden in ('leftItem','rightItem'):
             if forbidden in text:
                 errors.append(f'{p.relative_to(ROOT)}: performance clip must not animate held-item bones {forbidden}')
+    elif handlebar:
+        for required in ('body','leftArm','rightArm'):
+            if required not in text:
+                errors.append(f'{p.relative_to(ROOT)}: handlebar clip missing {required}')
+        for forbidden in ('head','leftLeg','rightLeg','leftItem','rightItem'):
+            if forbidden in text:
+                errors.append(f'{p.relative_to(ROOT)}: unsafe handlebar key {forbidden}')
     else:
         for forbidden in ('leftArm','rightArm','head','leftItem','rightItem'):
             if forbidden in text:
@@ -118,6 +127,7 @@ for p in list((ROOT/'src/main/java/com/herberto/jetsetcraft').rglob('*.java')) +
 required_clips={
     'inline_ride','inline_boost','quad_ride','quad_boost','board_ride','board_boost',
     'bmx_ride','bmx_boost','hover_ride','hover_boost','scooter_ride','scooter_boost',
+    'bmx_controls','bmx_controls_boost','scooter_controls','scooter_controls_boost',
     'grind','wallride','manual','powerslide',
     *{f'trick_{i}' for i in range(8)},
     *{f'grind_trick_{i}' for i in range(8)},

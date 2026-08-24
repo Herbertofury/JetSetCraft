@@ -31,6 +31,23 @@ public final class JetSetMovement {
         }
         data.setDancing(false);
 
+        // Active ride gear is equipment, not a replacement swimming controller. Yield the complete
+        // velocity vector and pose back to Minecraft in fluids so swimming, diving, currents, bubble
+        // columns and other mods retain full authority. Zeroing the visual momentum mirror also lets
+        // Player Animator return to Minecraft's native swim animation immediately.
+        if (player.isInWater() || player.isInLava() || player.isSwimming()) {
+            data.resetTransientRideState();
+            data.setGroundStunt(false);
+            data.setBoostTrick(false);
+            data.setTrickTicks(0);
+            data.setMomentum(0.0);
+            data.setLastVerticalVelocity(player.getDeltaMovement().y);
+            data.setLastSolverVelocity(player.getDeltaMovement());
+            data.setPreviousInputMask(data.inputMask());
+            periodicSync(player, data, 3);
+            return;
+        }
+
         if (data.groundStunt() && data.trickTicks() > 0) {
             boolean cancel = !player.onGround() || player.isUsingItem() || player.swinging
                     || data.pressed(InputFlags.JUMP) || data.pressed(InputFlags.GRIND);
@@ -106,8 +123,6 @@ public final class JetSetMovement {
                 // Yield vertical control to ladders/vines/scaffolding-like vanilla behavior; only retain a modest
                 // horizontal memory for a clean jump/transfer away.
                 data.setMomentum(Math.max(EdgeFinder.horizontal(player.getDeltaMovement()).length(), data.momentum() * 0.96));
-            } else if (player.isInWater() || player.isInLava()) {
-                RideMotion.applyFluidMovement(player, data);
             } else if (grounded) RideMotion.applyGroundMovement(player, data, surface);
             else if (!surfaceHandled) RideMotion.applyAirControl(player, data);
             if (!surfaceHandled) RideMotion.handleBoost(player, data, surface);

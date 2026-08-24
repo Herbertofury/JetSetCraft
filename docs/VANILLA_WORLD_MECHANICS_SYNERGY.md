@@ -69,12 +69,11 @@ This document mirrors the durable design doctrine stored in the JetSetCraft Driv
 
 ### Water, lava and bubble columns
 
-- Shallow/deep water progressively drains ground momentum instead of causing an arbitrary hard reset.
-- Current horizontal motion is preserved as the base direction so flowing water can bias the line.
-- Depth Strider and Dolphin's Grace improve water retention.
-- Lava heavily drains momentum but is still allowed to move the rider.
-- Vertical velocity is deliberately left to Minecraft so bubble columns, sinking/rising and other fluid impulses still work.
-- Future hoverboard water-skimming must plug into the same `fluid_skimmable` data profile rather than bypassing water semantics.
+- Active ride gear is equipment, not a replacement swimming controller.
+- Water, lava, or an active swimming pose creates an explicit authority boundary: JetSetCraft does not rewrite any component of the player's velocity.
+- Swimming, diving, currents, bubble columns, equipped boots, status effects, and other mods therefore retain their normal Minecraft behavior.
+- Ride movement/trick/handlebar animation layers disengage in fluids so the vanilla swim pose is not blocked.
+- Future hoverboard water-skimming must be deliberate, input-driven, speed-gated, and opt-in through `fluid_skimmable`; it must not weaken this default vanilla authority boundary.
 
 ### Status effects and enchantments
 

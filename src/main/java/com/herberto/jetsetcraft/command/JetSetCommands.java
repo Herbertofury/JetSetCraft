@@ -1,5 +1,6 @@
 package com.herberto.jetsetcraft.command;
 
+import com.herberto.jetsetcraft.JetSetCraft;
 import com.herberto.jetsetcraft.data.JetSetData;
 import com.herberto.jetsetcraft.data.JetSetDataProvider;
 import com.herberto.jetsetcraft.item.RideLoadout;
@@ -8,6 +9,8 @@ import com.herberto.jetsetcraft.movement.GrindFinder;
 import com.herberto.jetsetcraft.movement.JetSetMovement;
 import com.herberto.jetsetcraft.movement.TrickCatalog;
 import com.herberto.jetsetcraft.movement.VanillaWorldPhysics;
+import com.herberto.jetsetcraft.network.JetSetNetwork;
+import com.herberto.jetsetcraft.registry.ModItems;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.DoubleArgumentType;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -36,7 +39,7 @@ import java.util.Locale;
  */
 public final class JetSetCommands {
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
-        dispatcher.register(Commands.literal("jetsetcraft")
+        var root = Commands.literal("jetsetcraft")
                 .then(Commands.literal("status")
                         .executes(context -> status(context.getSource())))
                 .then(Commands.literal("set_momentum")
@@ -46,7 +49,13 @@ public final class JetSetCommands {
                                         DoubleArgumentType.getDouble(context, "speed")))))
                 .then(Commands.literal("build_vanilla_lab")
                         .requires(source -> source.hasPermission(2))
-                        .executes(context -> buildVanillaLab(context.getSource()))));
+                        .executes(context -> buildVanillaLab(context.getSource())));
+        if (Boolean.getBoolean("jetsetcraft.visualAudit")) {
+            root.then(Commands.literal("visual_audit")
+                        .requires(source -> source.hasPermission(2))
+                        .executes(context -> visualAudit(context.getSource())));
+        }
+        dispatcher.register(root);
     }
 
     private static int status(CommandSourceStack source) {
@@ -134,6 +143,44 @@ public final class JetSetCommands {
         player.hurtMarked = true;
         source.sendSuccess(() -> Component.literal(String.format(Locale.ROOT,
                 "JetSetCraft momentum set to %.3f for runtime testing.", speed)).withStyle(ChatFormatting.YELLOW), false);
+        return 1;
+    }
+
+    /** Deterministic maintainer scene used by the opt-in client screenshot audit; never runs during normal play. */
+    private static int visualAudit(CommandSourceStack source) {
+        ServerPlayer player;
+        try {
+            player = source.getPlayerOrException();
+        } catch (CommandSyntaxException exception) {
+            source.sendFailure(Component.literal("JetSetCraft visual audit requires a player."));
+            return 0;
+        }
+        JetSetData data = player.getCapability(JetSetDataProvider.CAPABILITY).resolve().orElse(null);
+        if (data == null) return 0;
+        data.setRideGear(new net.minecraft.world.item.ItemStack(ModItems.BMX.get()));
+        data.setStyle(com.herberto.jetsetcraft.movement.RideStyle.BMX);
+        data.setActive(true);
+        data.setBoost(72.0f);
+        data.setFlow(46.0f);
+        data.setComboScore(1840);
+        data.setComboMultiplier(2.25f);
+        data.setComboGrace(1200);
+        player.getInventory().setItem(8, new net.minecraft.world.item.ItemStack(ModItems.SPRAY_CAN.get()));
+        player.getInventory().setItem(player.getInventory().selected, net.minecraft.world.item.ItemStack.EMPTY);
+        ServerLevel level = player.serverLevel();
+        BlockPos stage = player.blockPosition().offset(0, 12, 0);
+        for (int x = -8; x <= 8; x++) {
+            for (int z = -8; z <= 8; z++) {
+                level.setBlockAndUpdate(stage.offset(x, -1, z), Blocks.SMOOTH_STONE.defaultBlockState());
+                for (int y = 0; y <= 7; y++) level.setBlockAndUpdate(stage.offset(x, y, z), Blocks.AIR.defaultBlockState());
+            }
+        }
+        player.teleportTo(stage.getX() + 0.5D, stage.getY(), stage.getZ() + 0.5D);
+        player.setDeltaMovement(Vec3.ZERO);
+        player.setYRot(180.0f);
+        player.setXRot(8.0f);
+        JetSetNetwork.sync(player, data);
+        JetSetCraft.LOGGER.info("JetSetCraft visual audit scene ready for {}", player.getGameProfile().getName());
         return 1;
     }
 

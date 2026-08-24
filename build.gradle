@@ -19,7 +19,15 @@ minecraft {
             property 'forge.logging.console.level', 'info'
             mods { jetsetcraft { source sourceSets.main } }
         }
-        client {}
+        client {
+            // PlayerAnimator ships production (SRG) mixin targets; remap those targets in Forge's named dev runtime.
+            property 'mixin.env.remapRefMap', 'true'
+            property 'mixin.env.refMapRemappingFile', file("${buildDir}/createSrgToMcp/output.srg").absolutePath
+            property 'jetsetcraft.visualAudit', System.getProperty('jetsetcraft.visualAudit', 'false')
+            if (System.getProperty('jetsetcraft.visualAudit', 'false') == 'true') {
+                args '--quickPlaySingleplayer', 'New World'
+            }
+        }
         server { args '--nogui' }
         gameTestServer {
             property 'forge.enabledGameTestNamespaces', mod_id

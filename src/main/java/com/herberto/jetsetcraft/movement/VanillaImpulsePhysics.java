@@ -9,7 +9,6 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
@@ -134,15 +133,6 @@ final class VanillaImpulsePhysics {
     static double jumpMultiplier(ServerPlayer player) {
         MobEffectInstance jump = player.getEffect(MobEffects.JUMP);
         return jump == null ? 1.0 : 1.0 + 0.12 * (jump.getAmplifier() + 1);
-    }
-
-    static double waterRetention(ServerPlayer player, JetSetData data) {
-        int depth = VanillaEnchantments.effectiveEnchantmentLevel(player, data, Enchantments.DEPTH_STRIDER);
-        boolean dolphins = player.hasEffect(MobEffects.DOLPHINS_GRACE);
-        double base = player.isUnderWater() ? 0.88 : 0.94;
-        base += Math.min(0.075, depth * 0.025);
-        if (dolphins) base = Math.max(base, 0.985);
-        return Math.min(0.995, base);
     }
 
     static boolean applyAirborneSurfaceInteractions(ServerPlayer player, JetSetData data) {

@@ -131,6 +131,35 @@ def lower_body_pose(name: str, boost: bool, scooter: bool):
     write_clip(name, end, moves, loop=True)
 
 
+def handlebar_clip(name: str, boost: bool, scooter: bool):
+    """Hands-free control pose used above the lower-body ride layer; held items disable it at runtime."""
+    end = 20
+    lean = 0.20 if boost else 0.10
+    reach = -1.20 if scooter else -0.93
+    spread = 0.16 if scooter else 0.24
+    elbow = 0.10 if boost else 0.04
+    base = dict(
+        body=part(lean, 0.0, 0.0),
+        leftArm=part(reach, -spread, -0.16 - elbow),
+        rightArm=part(reach, spread, 0.16 + elbow),
+    )
+    turn = dict(
+        body=part(lean + 0.035, 0.025, 0.018),
+        leftArm=part(reach - 0.035, -spread - 0.035, -0.19 - elbow),
+        rightArm=part(reach + 0.025, spread - 0.025, 0.13 + elbow),
+    )
+    moves = [
+        frame(0, **base),
+        frame(5, 'INOUTSINE', **turn),
+        frame(10, **base),
+        frame(15, 'INOUTSINE', body=part(lean + 0.035, -0.025, -0.018),
+              leftArm=part(reach + 0.025, -spread + 0.025, -0.13 - elbow),
+              rightArm=part(reach - 0.035, spread + 0.035, 0.19 + elbow)),
+        frame(end, **base),
+    ]
+    write_clip(name, end, moves, loop=True)
+
+
 def trick_clip(index: int, grind: bool):
     name = f'grind_trick_{index}' if grind else f'trick_{index}'
     end = 18 if grind else 22
@@ -425,6 +454,10 @@ def main():
     lower_body_pose('hover_boost', True, False)
     lower_body_pose('scooter_ride', False, True)
     lower_body_pose('scooter_boost', True, True)
+    handlebar_clip('bmx_controls', False, False)
+    handlebar_clip('bmx_controls_boost', True, False)
+    handlebar_clip('scooter_controls', False, True)
+    handlebar_clip('scooter_controls_boost', True, True)
     for index in range(8):
         trick_clip(index, False)
         trick_clip(index, True)
@@ -432,7 +465,7 @@ def main():
         dance_clip(index)
     for index in range(8):
         stunt_clip(index)
-    print('generated JetSetCraft animation clips:', 12 + 4 + 16 + DANCE_COUNT + 8)
+    print('generated JetSetCraft animation clips:', 12 + 4 + 4 + 16 + DANCE_COUNT + 8)
 
 
 if __name__ == '__main__':

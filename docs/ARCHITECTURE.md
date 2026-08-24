@@ -2,7 +2,7 @@
 
 ## Non-negotiable gameplay contracts
 
-1. **Momentum is continuous.** Boosting, landing, grinding, wall riding, tricks, block materials, slopes, fluids, redstone, and external impulses may add, redirect, or bleed momentum. Ordinary state transitions must not flat-reset legitimate speed.
+1. **Momentum follows real motion.** Boosting, landing, grinding, wall riding, tricks, block materials, slopes, redstone, and external impulses may add, redirect, or bleed momentum. Neutral input may settle to a complete vanilla-like stop; stale solver state may never manufacture camera-forward velocity.
 2. **Combat is composable.** A weapon or item action is not an implicit ride-state exit. Movement owns translation and lower-body ride presentation; weapon systems retain item input and upper-body animation authority.
 3. **The server owns truth.** Inputs are sent to the server. Movement, scoring, Flow, dancing, cyphers, landings, loadout state, and combo state are authoritative and synchronized to local and tracking clients.
 4. **World geometry is the playground.** Grinding understands arbitrary exposed collision-shape edges and authored rail networks. Vanilla/Forge rails use their real `RailShape`; Create uses native track axes, normals, graph junctions, and Bezier geometry.
@@ -38,8 +38,9 @@
 - `GrindFinder`: arbitrates native rails/tracks versus arbitrary block edges and preserves active rail kind through transfers.
 - `GrindTraversal`: continuation, curve shaping, junction steering, rail hops, stuck recovery, and dimension-transition grace.
 - `WallRideFinder` / `WallTraversal`: real collision-based wall detection and continuation.
-- `VanillaWorldPhysics`: surfaces, redstone rails, enchantments, fluids, block materials, external impulses, bounce/sticky contact, and micro-terrain continuity.
-- `RideMotion`: ground acceleration, steering, air control, fluids, and boost while preserving above-cap external momentum.
+- `VanillaWorldPhysics`: surfaces, redstone rails, enchantments, block materials, external impulses, bounce/sticky contact, and micro-terrain continuity.
+- `RideMotion`: input-driven ground acceleration, steering, air control, neutral/standstill authority, and boost while preserving above-cap external momentum.
+- `JetSetMovement` fluid boundary: immediately yields the complete velocity vector and pose to Minecraft in water, lava, or swimming states.
 - `RideStyle`: handling data for inline, quad, board, BMX, hoverboard, and scooter.
 
 ## Animation and combat layering
@@ -48,6 +49,8 @@ JetSetCraft registers two PlayerAnimator layers:
 
 - `ride_lower_body` at lower priority for ride, boost, grind, manual, powerslide, wallride, and ordinary trick clips. These clips are validated to exclude arms, hands, held-item bones, and head.
 - `style_full_body` at higher priority for dances and low-speed ground stunts. This layer is presentation-only and is suppressed when a weapon overlay or active item action needs upper-body ownership.
+
+Hands-free BMX and scooter handlebar clips may use the arms only while the rider is genuinely moving and both hands are empty. At rest, while swimming, or when any held-item/weapon presentation takes authority, both animation layers disengage and vanilla/owning-mod poses resume.
 
 `tools/validate_assets.py` enforces the separation. A clip cannot silently seize weapon bones merely because it looks correct in isolation.
 
@@ -69,8 +72,9 @@ The repository verifies implementation in layers:
 1. deterministic model, animation, and brand generation;
 2. JSON, model, animation, gameplay-contract, and wiki validators;
 3. ForgeGradle production build;
-4. seven real Forge GameTests for hoverboard/scooter persistence and movement, no-gear dance scoring, combat sovereignty, hostile state/input handling, mob Street Gear/Boombox lifecycle, and graffiti support cleanup;
-5. real dedicated-server startup smoke;
-6. exact tested-source and binary artifact publication.
+4. eight real Forge GameTests for hoverboard/scooter persistence and movement, neutral/stop/swim authority, no-gear dance scoring, combat sovereignty, hostile state/input handling, mob Street Gear/Boombox lifecycle, and graffiti support cleanup;
+5. unattended real-client ride/HUD/graffiti visual capture;
+6. real dedicated-server startup smoke;
+7. exact tested-source and binary artifact publication.
 
 The v0.3.0 release uses dense original item meshes and renderer-agnostic player/mob equipment layers. Any later presentation upgrade must preserve the current gameplay state machine, combat composition, accessibility settings, source-mob identity, and optional-mod isolation.

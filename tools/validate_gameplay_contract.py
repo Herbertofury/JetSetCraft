@@ -60,7 +60,7 @@ for needle, label in [
     ('captureExternalImpulse', 'external impulse bridge'),
     ('applyMicroTerrainContinuity', 'micro-height terrain continuity'),
     ('baseSpeed < cap', 'above-cap momentum preservation'),
-    ('applyFluidMovement', 'fluid composition'),
+    ('player.isInWater() || player.isInLava() || player.isSwimming()', 'vanilla fluid authority boundary'),
     ('applyAirborneSurfaceInteractions', 'honey/slime side-contact composition'),
     ('applyVanillaRail', 'vanilla rail semantics'),
     ('jumpMultiplier', 'Jump Boost composition'),
@@ -75,8 +75,6 @@ required_world_tokens = {
     'Blocks.SLIME_BLOCK': 'slime bounce',
     'Blocks.HONEY_BLOCK': 'honey drag/wall interaction',
     'Enchantments.SOUL_SPEED': 'Soul Speed route',
-    'Enchantments.DEPTH_STRIDER': 'Depth Strider water composition',
-    'MobEffects.DOLPHINS_GRACE': "Dolphin's Grace composition",
     'Blocks.POWERED_RAIL': 'powered/unpowered rail semantics',
     'Blocks.DETECTOR_RAIL': 'detector rail redstone',
     'Blocks.ACTIVATOR_RAIL': 'activator rail action pulse',
@@ -369,11 +367,12 @@ else:
         for field in record_fields:
             if field != 'entityId' and f'packet.{field}()' not in client_state:
                 errors.append(f'client snapshot does not consume S2C field {field}')
-if 'private static final String PROTOCOL = "7"' not in network:
-    errors.append('network protocol was not bumped for the expanded Style Flow packet')
+if 'private static final String PROTOCOL = "8"' not in network:
+    errors.append('network protocol was not bumped for the synchronized graffiti editor selection')
 
 required_gametest_markers = {
     'JETSETCRAFT_GAMETEST_PASS hoverboard': hoverboard_tests,
+    'JETSETCRAFT_GAMETEST_PASS ride_controls': hoverboard_tests,
     'JETSETCRAFT_GAMETEST_PASS scooter': style_flow_tests,
     'JETSETCRAFT_GAMETEST_PASS dance_flow': style_flow_tests,
     'JETSETCRAFT_GAMETEST_PASS combat_sovereignty': style_flow_tests,

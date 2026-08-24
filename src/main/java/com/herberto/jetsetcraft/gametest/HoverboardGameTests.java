@@ -4,8 +4,10 @@ import com.herberto.jetsetcraft.JetSetCraft;
 import com.herberto.jetsetcraft.data.JetSetData;
 import com.herberto.jetsetcraft.item.RideGearItem;
 import com.herberto.jetsetcraft.item.RideLoadout;
+import com.herberto.jetsetcraft.movement.JetSetMovement;
 import com.herberto.jetsetcraft.movement.RideStyle;
 import com.herberto.jetsetcraft.movement.VanillaWorldPhysics;
+import com.herberto.jetsetcraft.network.InputFlags;
 import com.herberto.jetsetcraft.registry.ModItems;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.core.BlockPos;
@@ -82,6 +84,54 @@ public final class HoverboardGameTests {
         }
 
         System.out.println("JETSETCRAFT_GAMETEST_PASS hoverboard");
+        helper.succeed();
+    }
+
+    @GameTest(template = "hoverboard_empty", timeoutTicks = 80)
+    public static void rideControlsStopCleanlyAndYieldToSwimming(GameTestHelper helper) {
+        helper.setBlock(new BlockPos(1, 0, 1), Blocks.STONE);
+        UUID uuid = UUID.nameUUIDFromBytes((JetSetCraft.MOD_ID + ":gametest:ride_controls")
+                .getBytes(StandardCharsets.UTF_8));
+        ServerPlayer player = FakePlayerFactory.get(helper.getLevel(), new GameProfile(uuid, "JSC_ride_controls"));
+        BlockPos feet = helper.absolutePos(new BlockPos(1, 1, 1));
+        player.moveTo(feet.getX() + 0.5, feet.getY(), feet.getZ() + 0.5, 0.0F, 0.0F);
+        player.setOnGround(true);
+
+        JetSetData data = new JetSetData();
+        data.setRideGear(new ItemStack(ModItems.HOVERBOARD.get()));
+        data.setStyle(RideStyle.HOVER);
+        data.setActive(true);
+        data.setMomentum(0.55);
+        data.setInputForward(0.0F);
+        data.setInputStrafe(0.0F);
+        player.setDeltaMovement(Vec3.ZERO);
+        invokeProductionGroundSolver(player, data, VanillaWorldPhysics.ground(player));
+        if (player.getDeltaMovement().horizontalDistanceSqr() != 0.0 || data.momentum() != 0.0) {
+            throw new GameTestAssertException("Neutral controls relaunched stale momentum toward the camera");
+        }
+
+        // A deliberate input still accelerates through the authored ride solver.
+        data.setInputForward(1.0F);
+        invokeProductionGroundSolver(player, data, VanillaWorldPhysics.ground(player));
+        if (player.getDeltaMovement().horizontalDistanceSqr() <= 0.0 || data.momentum() <= 0.0) {
+            throw new GameTestAssertException("Directional ride input no longer accelerates after a complete stop");
+        }
+
+        // Swimming is an explicit authority boundary: not one component of vanilla fluid velocity may be replaced.
+        Vec3 vanillaSwimVelocity = new Vec3(0.13, 0.08, -0.07);
+        player.setOnGround(false);
+        player.setSwimming(true);
+        player.setDeltaMovement(vanillaSwimVelocity);
+        data.setMomentum(0.70);
+        data.setInputMask(InputFlags.BOOST);
+        data.setLastSyncTick(helper.getLevel().getGameTime());
+        JetSetMovement.tickServer(player, data);
+        if (!player.getDeltaMovement().equals(vanillaSwimVelocity) || data.momentum() != 0.0
+                || data.boosting() || data.grinding() || data.wallRiding()) {
+            throw new GameTestAssertException("Ride solver did not yield complete movement authority while swimming");
+        }
+
+        System.out.println("JETSETCRAFT_GAMETEST_PASS ride_controls");
         helper.succeed();
     }
 

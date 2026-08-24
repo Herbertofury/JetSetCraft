@@ -19,8 +19,8 @@ src/main/resources/assets/jetsetcraft/textures/graffiti/tag_*.png
 __pycache__/
 *.pyc
 
-# Owner-supplied brand source stays in durable project storage; generated derivatives are reproducible.
-art/generated/
+# Owner-supplied brand source stays in durable project storage. Public generated banner/icon derivatives
+# are committed because README and repository identity must render before any local generator is run.
 src/main/resources/jetsetcraft.png
 src/main/resources/assets/jetsetcraft/textures/graffiti/jsr/*.png
 src/main/resources/assets/jetsetcraft/graffiti/catalog.json

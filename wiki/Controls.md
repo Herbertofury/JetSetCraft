@@ -7,6 +7,7 @@ All JetSetCraft keys are standard Forge key mappings and can be rebound from Min
 | Right-click ride gear | Equip that item into the dedicated ride slot and activate it |
 | K | Toggle the equipped ride on or off |
 | Shift + K | Unequip and return ride gear to inventory |
+| H | Instantly show or hide the compact Boost/Flow HUD |
 | Left Alt | Boost |
 | R | Contextual trick: air, grind, or grounded stunt |
 | Left Alt + R | Boost trick when enabled and boost is available |
@@ -16,7 +17,8 @@ All JetSetCraft keys are standard Forge key mappings and can be rebound from Min
 | V | Brake/powerslide; also a Breaking selector when starting dance |
 | B | Begin dance, switch dance family, or chain a new move |
 | Shift + B | Stop dancing |
-| Shift + use spray can | Cycle graffiti selection |
+| Use spray can in air | Open the paged graffiti selector |
+| Shift + use spray can on a block | Open the selector without painting |
 | Use spray can on a wall | Place or repaint a graffiti decal |
 
 ## Dance selection chords
@@ -34,6 +36,12 @@ The first neutral **B** press prioritizes Breaking. Direction and action modifie
 | V + B | Breaking |
 
 Dance moves automatically chain when their animation phrase ends. Tap **B** again to immediately move into another phrase. Walking away, jumping, boosting, grinding, tricking, using an item, swinging a weapon, entering water/lava, or leaving the ground ends the dance cleanly.
+
+## Movement authority
+
+Ride acceleration follows actual directional input. Releasing movement keys allows Minecraft's ordinary ground travel and friction to settle the rider to a complete stop; stored momentum never invents camera-forward motion. Pressing Boost at a true standstill does not launch the player without a direction.
+
+Entering water, lava, or the swimming pose immediately gives the full velocity vector and animation pose back to Minecraft. Swimming, diving, currents, bubble columns, and compatible modded fluid behavior remain available while ride gear stays safely equipped.
 
 ## Context rules
 

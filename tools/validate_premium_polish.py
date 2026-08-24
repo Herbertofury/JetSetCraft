@@ -190,8 +190,8 @@ for clip_path in clips:
         if pose(moves[0]) != pose(moves[-1]):
             fail(f"{clip_path.relative_to(ROOT)}: looping animation has a visible first/last pose seam")
 
-if len(clips) != 68:
-    fail(f"expected exactly 68 authored player animation clips, found {len(clips)}")
+if len(clips) != 72:
+    fail(f"expected exactly 72 authored player animation clips, found {len(clips)}")
 
 
 # Compatibility boundary: production Java can depend on Minecraft/Forge/player-animation, never on an optional

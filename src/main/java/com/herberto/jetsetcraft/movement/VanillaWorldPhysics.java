@@ -5,7 +5,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -58,7 +57,6 @@ public final class VanillaWorldPhysics {
     public static void applyRideEnchantments(ServerPlayer player, JetSetData data) { VanillaEnchantments.applyRideEnchantments(player, data); }
     public static float augmentFallDamageProtection(ServerPlayer player, JetSetData data, DamageSource source, float amount) { return VanillaEnchantments.augmentFallDamageProtection(player, data, source, amount); }
     public static double jumpMultiplier(ServerPlayer player) { return VanillaImpulsePhysics.jumpMultiplier(player); }
-    public static double waterRetention(ServerPlayer player, JetSetData data) { return VanillaImpulsePhysics.waterRetention(player, data); }
     public static GrindMaterialProfile grindMaterial(ServerPlayer player, GrindTarget target) { return VanillaGrindPhysics.grindMaterial(player, target); }
     public static void emitGrindFeedback(ServerPlayer player, GrindTarget target, GrindMaterialProfile material) { VanillaGrindPhysics.emitGrindFeedback(player, target, material); }
     public static boolean applyAirborneSurfaceInteractions(ServerPlayer player, JetSetData data) { return VanillaImpulsePhysics.applyAirborneSurfaceInteractions(player, data); }

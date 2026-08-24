@@ -3,6 +3,7 @@ package com.herberto.jetsetcraft.gametest;
 import com.herberto.jetsetcraft.JetSetCraft;
 import com.herberto.jetsetcraft.blockentity.BoomboxBlockEntity;
 import com.herberto.jetsetcraft.entity.GraffitiEntity;
+import com.herberto.jetsetcraft.graffiti.CustomGraffiti;
 import com.herberto.jetsetcraft.gang.GangMemberState;
 import com.herberto.jetsetcraft.gang.GangRegistry;
 import com.herberto.jetsetcraft.gang.HeadTargetMappingRegistry;
@@ -50,8 +51,15 @@ public final class StreetGearGameTests {
         BlockPos wallWorld = helper.absolutePos(wallRelative);
         helper.setBlock(wallRelative, Blocks.STONE);
 
+        byte[] pixels = new byte[CustomGraffiti.PIXELS];
+        pixels[0] = 3;
+        pixels[CustomGraffiti.PIXELS - 1] = 8;
+        String customPattern = CustomGraffiti.encode(pixels);
+        if (!CustomGraffiti.isValid(customPattern) || CustomGraffiti.decode(customPattern)[0] != 3) {
+            throw new GameTestAssertException("Bounded custom graffiti codec did not round-trip");
+        }
         GraffitiEntity graffiti = new GraffitiEntity(ModEntities.GRAFFITI.get(), helper.getLevel());
-        graffiti.configure(wallWorld, Direction.NORTH, 2);
+        graffiti.configure(wallWorld, Direction.NORTH, 2, customPattern);
         if (!helper.getLevel().addFreshEntity(graffiti)) {
             throw new GameTestAssertException("Could not add a real graffiti entity to the GameTest level");
         }
@@ -60,8 +68,9 @@ public final class StreetGearGameTests {
         graffiti.saveWithoutId(saved);
         GraffitiEntity restored = new GraffitiEntity(ModEntities.GRAFFITI.get(), helper.getLevel());
         restored.load(saved);
-        if (restored.getVariant() != 2 || restored.getFace() != Direction.NORTH) {
-            throw new GameTestAssertException("Graffiti did not preserve its variant/facing NBT");
+        if (restored.getVariant() != 2 || restored.getFace() != Direction.NORTH
+                || !customPattern.equals(restored.getCustomPattern())) {
+            throw new GameTestAssertException("Graffiti did not preserve its variant/facing/custom NBT");
         }
 
         helper.runAfterDelay(5, () -> {
