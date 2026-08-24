@@ -1,0 +1,13 @@
+{
+  "schema": 1,
+  "purpose": "JetSetCraft Boombox + Gang Runtime checkpoint",
+  "base_head": "99c62c613552b44b6c19a5a0194d340eb3278ea9",
+  "primary": {
+    "xz_sha256": "b992ff16cf91958f575909fda8652649aefe058a85cca3b2f19a4bf85e87cbad",
+    "patch_sha256": "1859b7cbce38f24e0933d1f088cde2d15bfbc2d08ad7501a2fc53f519be31212"
+  },
+  "repair": {
+    "xz_sha256": "bae06273c798a07c7387a64f3e699d1586ac3fcce224425163e305fbe641ef5f",
+    "patch_sha256": "dd95222b639b2da7e915d0435702dfb6e639be127dabffb4e6f15e7ef404a328"
+  }
+}
