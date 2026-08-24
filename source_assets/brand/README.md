@@ -1,11 +1,5 @@
-# JetSetCraft official brand art
+# Official JetSetCraft brand master
 
-The canonical source image for JetSetCraft branding is the artwork supplied by the project owner in ChatGPT on 2026-08-20/21.
+`jetsetcraft_official_art.png` is the owner-supplied 1,254 × 1,254 canonical source image (1,399,884 bytes; SHA-256 `08c7e3f4998b268a7776c5a962082eb5eaa86124b4a0f53d9e502a74e2a8bf4d`).
 
-When the original binary is available to the build workspace, save it exactly as:
-
-`source_assets/brand/jetsetcraft_official_art.png`
-
-Do not redraw, AI-regenerate, recolor, sharpen, denoise, or otherwise reinterpret the source. `tools/generate_brand.py` only performs deterministic resampling/canvas placement for the output sizes required by Forge and distribution pages.
-
-Generated derivatives are intentionally ignored by Git and rebuilt from the canonical source.
+The binary master is present in the complete Desktop/Drive project and intentionally excluded from Git. `tools/generate_brand.py` produces the tracked Forge icon and repository presentation derivatives without repainting or AI transformation.

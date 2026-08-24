@@ -1,11 +1,47 @@
 #!/usr/bin/env python3
 from __future__ import annotations
-import json, math, re, sys
+import hashlib, json, math, re, sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 ASSETS = ROOT/'src/main/resources/assets/jetsetcraft'
 errors=[]
+
+# Committed gang audio must be original generated program material, not silence or malformed filler bytes.
+audio_manifest_path = ROOT/'tools/audio_manifest.json'
+if not audio_manifest_path.exists():
+    errors.append('missing tools/audio_manifest.json')
+else:
+    try:
+        audio_manifest = json.loads(audio_manifest_path.read_text(encoding='utf-8'))
+        audio_entries = audio_manifest.get('entries', [])
+        if audio_manifest.get('asset_count') != len(audio_entries) or len(audio_entries) < 4:
+            errors.append('audio manifest asset count is invalid')
+        declared_paths = set()
+        for entry in audio_entries:
+            rel = str(entry.get('path', ''))
+            path = ROOT/rel
+            declared_paths.add(rel)
+            if not path.exists():
+                errors.append(f'missing generated audio asset {rel}')
+                continue
+            payload = path.read_bytes()
+            if not payload.startswith(b'OggS'):
+                errors.append(f'audio asset is not an Ogg stream: {rel}')
+            if len(payload) != int(entry.get('bytes', -1)):
+                errors.append(f'audio asset size mismatch: {rel}')
+            if hashlib.sha256(payload).hexdigest() != entry.get('sha256'):
+                errors.append(f'audio asset SHA-256 mismatch: {rel}')
+            if float(entry.get('duration_seconds', 0.0)) < 2.0:
+                errors.append(f'audio asset is too short: {rel}')
+            if float(entry.get('pcm_peak', 0.0)) < 0.10 or float(entry.get('pcm_rms', 0.0)) < 0.025:
+                errors.append(f'audio asset is silent or effectively empty: {rel}')
+        disk_audio = {p.relative_to(ROOT).as_posix() for p in
+                      (ASSETS/'sounds/music/gangs').glob('*.ogg')}
+        if declared_paths != disk_audio:
+            errors.append('audio manifest paths do not exactly match packaged gang audio')
+    except Exception as exc:
+        errors.append(f'audio manifest validation failed: {exc}')
 
 # All JSON must parse.
 for p in sorted((ROOT/'src/main/resources').rglob('*.json')):

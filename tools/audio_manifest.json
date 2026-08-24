@@ -1,0 +1,650 @@
+{
+  "schema": 1,
+  "generator": "tools/generate_audio.py",
+  "license": "Original JetSetCraft procedural audio; project code/content license applies",
+  "sample_rate": 22050,
+  "channels": 1,
+  "asset_count": 80,
+  "entries": [
+    {
+      "path": "src/main/resources/assets/jetsetcraft/sounds/music/gangs/ancient_current.ogg",
+      "bytes": 17356,
+      "sha256": "b7af8a6fc71f79c7addc54cc2dbf1c15cf4c533c3099636a4b297af3de4dfd8e",
+      "duration_seconds": 3.2,
+      "pcm_peak": 0.713728,
+      "pcm_rms": 0.174256
+    },
+    {
+      "path": "src/main/resources/assets/jetsetcraft/sounds/music/gangs/arachnaphobia.ogg",
+      "bytes": 17840,
+      "sha256": "b52cfdac735cab8ebba094a72bbc5b6405b2b6059e66ee1f52cfe2ede4672a36",
+      "duration_seconds": 3.2,
+      "pcm_peak": 0.758414,
+      "pcm_rms": 0.178785
+    },
+    {
+      "path": "src/main/resources/assets/jetsetcraft/sounds/music/gangs/axe_to_grind.ogg",
+      "bytes": 18703,
+      "sha256": "1e9338c4324136bf3312e2f9837a6da755c26b8a51ddebdd97aba2ad81ff5a00",
+      "duration_seconds": 3.2,
+      "pcm_peak": 0.781879,
+      "pcm_rms": 0.183579
+    },
+    {
+      "path": "src/main/resources/assets/jetsetcraft/sounds/music/gangs/bad_spirits.ogg",
+      "bytes": 18015,
+      "sha256": "d51b2854c0ed1b87458aa498a29c89cc90e53d1b90ea1fc63359d1cde5c10566",
+      "duration_seconds": 3.2,
+      "pcm_peak": 0.774476,
+      "pcm_rms": 0.184563
+    },
+    {
+      "path": "src/main/resources/assets/jetsetcraft/sounds/music/gangs/bamboo_b_sides.ogg",
+      "bytes": 18401,
+      "sha256": "15ede3e3828fc0205faefd77c346f38b4e64b0046df5b307ff9e9b30a2c0413b",
+      "duration_seconds": 3.2,
+      "pcm_peak": 0.741477,
+      "pcm_rms": 0.178599
+    },
+    {
+      "path": "src/main/resources/assets/jetsetcraft/sounds/music/gangs/blackout_bones.ogg",
+      "bytes": 16698,
+      "sha256": "23abeb8096467ba1f9dfeda97e020b471c313d0f65cdc6c8580ab6c9ca0d72ab",
+      "duration_seconds": 3.2,
+      "pcm_peak": 0.711059,
+      "pcm_rms": 0.171521
+    },
+    {
+      "path": "src/main/resources/assets/jetsetcraft/sounds/music/gangs/block_party.ogg",
+      "bytes": 18110,
+      "sha256": "b2ae9e520b185ff2b83c4de89cb031719296c61211330e7e91acae7c36b16a11",
+      "duration_seconds": 3.2,
+      "pcm_peak": 0.763015,
+      "pcm_rms": 0.179443
+    },
+    {
+      "path": "src/main/resources/assets/jetsetcraft/sounds/music/gangs/blue_notes.ogg",
+      "bytes": 17124,
+      "sha256": "36134e75ed11c4fe375d348761c8aa390286c233f3e5e37c148587f8991a784b",
+      "duration_seconds": 3.2,
+      "pcm_peak": 0.719354,
+      "pcm_rms": 0.17411
+    },
+    {
+      "path": "src/main/resources/assets/jetsetcraft/sounds/music/gangs/bone_drones.ogg",
+      "bytes": 17845,
+      "sha256": "9941b9ba8ad15dbfeaa144ed6237a265701c49e4a3477201be4fc49a80e2b602",
+      "duration_seconds": 3.2,
+      "pcm_peak": 0.705951,
+      "pcm_rms": 0.169726
+    },
+    {
+      "path": "src/main/resources/assets/jetsetcraft/sounds/music/gangs/boxed_in.ogg",
+      "bytes": 16786,
+      "sha256": "58838ad8df0fa5a766548bc47c8f5e074ef3d4a5b4bbb840e3fd97045e9f6184",
+      "duration_seconds": 3.2,
+      "pcm_peak": 0.740872,
+      "pcm_rms": 0.166917
+    },
+    {
+      "path": "src/main/resources/assets/jetsetcraft/sounds/music/gangs/bridle_breakers.ogg",
+      "bytes": 18015,
+      "sha256": "20292c0a55e8c84f4892d9060d7852a4f98d911ec7b04a657dbfca5e2308f703",
+      "duration_seconds": 3.2,
+      "pcm_peak": 0.766436,
+      "pcm_rms": 0.180664
+    },
+    {
+      "path": "src/main/resources/assets/jetsetcraft/sounds/music/gangs/burnout_brigade.ogg",
+      "bytes": 18180,
+      "sha256": "d61737a7eb4777997a22c7a8cbc6f6142abd597c8904fee7959bfc0d14cc8746",
+      "duration_seconds": 3.2,
+      "pcm_peak": 0.750399,
+      "pcm_rms": 0.176177
+    },
+    {
+      "path": "src/main/resources/assets/jetsetcraft/sounds/music/gangs/caravan_crew.ogg",
+      "bytes": 18242,
+      "sha256": "e7ce92ce26b019843769125fdbef947fbcf8c342501cf6db54e06e724199e87e",
+      "duration_seconds": 3.2,
+      "pcm_peak": 0.759523,
+      "pcm_rms": 0.181071
+    },
+    {
+      "path": "src/main/resources/assets/jetsetcraft/sounds/music/gangs/cod_frequency.ogg",
+      "bytes": 17727,
+      "sha256": "705edfeef2e4ecdc1c525f0b65e95c7355e76f868e663fa5b2948b9295b8d2f2",
+      "duration_seconds": 3.2,
+      "pcm_peak": 0.730053,
+      "pcm_rms": 0.179952
+    },
+    {
+      "path": "src/main/resources/assets/jetsetcraft/sounds/music/gangs/cold_front.ogg",
+      "bytes": 16934,
+      "sha256": "c4dd45569ef46ef6bede8618b41256191ad4003c8193060b78dc1342a92b4591",
+      "duration_seconds": 3.2,
+      "pcm_peak": 0.747131,
+      "pcm_rms": 0.169614
+    },
+    {
+      "path": "src/main/resources/assets/jetsetcraft/sounds/music/gangs/cold_shots.ogg",
+      "bytes": 17696,
+      "sha256": "1ac175436668680f906242987e2029eadfc3b26efd90792e1b1c4bc868669580",
+      "duration_seconds": 3.2,
+      "pcm_peak": 0.730998,
+      "pcm_rms": 0.172957
+    },
+    {
+      "path": "src/main/resources/assets/jetsetcraft/sounds/music/gangs/conjure_club.ogg",
+      "bytes": 16954,
+      "sha256": "db4df7be441d2241c5055d5a8f6dd452652ce2395a323d223a10c90c9b4230fe",
+      "duration_seconds": 3.2,
+      "pcm_peak": 0.743172,
+      "pcm_rms": 0.167394
+    },
+    {
+      "path": "src/main/resources/assets/jetsetcraft/sounds/music/gangs/creepaku_gouji.ogg",
+      "bytes": 18466,
+      "sha256": "dc0f42562d5a395ca88c7eae7dd3b2d0e9c97f3d689ebe815b2216529fac117f",
+      "duration_seconds": 3.2,
+      "pcm_peak": 0.733535,
+      "pcm_rms": 0.175722
+    },
+    {
+      "path": "src/main/resources/assets/jetsetcraft/sounds/music/gangs/current_affairs.ogg",
+      "bytes": 18434,
+      "sha256": "4d2d1422aa75655e007617ca6ab80f84090607d62f82ece154d8e9af47385a10",
+      "duration_seconds": 3.2,
+      "pcm_peak": 0.725052,
+      "pcm_rms": 0.17565
+    },
+    {
+      "path": "src/main/resources/assets/jetsetcraft/sounds/music/gangs/dead_beat.ogg",
+      "bytes": 17539,
+      "sha256": "8bddceecfad2dd979eb63be4670367b3ef3a6946636a9661d4fe3bc417b164cb",
+      "duration_seconds": 3.2,
+      "pcm_peak": 0.737645,
+      "pcm_rms": 0.177336
+    },
+    {
+      "path": "src/main/resources/assets/jetsetcraft/sounds/music/gangs/dead_beat_titan.ogg",
+      "bytes": 18152,
+      "sha256": "eca5206d8a70d1ee11d33da70284b845bcd330e88b864c455c9557810d4cfa01",
+      "duration_seconds": 3.2,
+      "pcm_peak": 0.741268,
+      "pcm_rms": 0.183963
+    },
+    {
+      "path": "src/main/resources/assets/jetsetcraft/sounds/music/gangs/dead_locals.ogg",
+      "bytes": 17132,
+      "sha256": "24ba00936d0a6fb5c659c6dff811a85b5613b2a3bdf2c6129d86658ae5ce8bbb",
+      "duration_seconds": 3.2,
+      "pcm_peak": 0.711826,
+      "pcm_rms": 0.167811
+    },
+    {
+      "path": "src/main/resources/assets/jetsetcraft/sounds/music/gangs/dead_mint.ogg",
+      "bytes": 18391,
+      "sha256": "d83f03e4bc9be251112ba3d570d0b19d5c483e6198641b603e4197bd6f7d0193",
+      "duration_seconds": 3.2,
+      "pcm_peak": 0.75747,
+      "pcm_rms": 0.175298
+    },
+    {
+      "path": "src/main/resources/assets/jetsetcraft/sounds/music/gangs/dead_water.ogg",
+      "bytes": 17872,
+      "sha256": "8a7b89dd3513b862874142878741528338847ee31326547e7cc030a93e9953d7",
+      "duration_seconds": 3.2,
+      "pcm_peak": 0.713124,
+      "pcm_rms": 0.177432
+    },
+    {
+      "path": "src/main/resources/assets/jetsetcraft/sounds/music/gangs/deep_cuts.ogg",
+      "bytes": 17949,
+      "sha256": "9628f662653c6f8391ad6e996d2f119d2dc0576ecd38544d24ff4cab1ec8ca34",
+      "duration_seconds": 3.2,
+      "pcm_peak": 0.754946,
+      "pcm_rms": 0.178283
+    },
+    {
+      "path": "src/main/resources/assets/jetsetcraft/sounds/music/gangs/dry_spell.ogg",
+      "bytes": 17380,
+      "sha256": "155382248acbb8e4bb7f354892234f62dfa99b947f76fd6518d84f6501a88e4d",
+      "duration_seconds": 3.2,
+      "pcm_peak": 0.717416,
+      "pcm_rms": 0.178272
+    },
+    {
+      "path": "src/main/resources/assets/jetsetcraft/sounds/music/gangs/dune_cruisers.ogg",
+      "bytes": 17756,
+      "sha256": "f91a893dbd51da20d70b6d0d190f14a2071ba1c2372a24acd17fa32695dc644e",
+      "duration_seconds": 3.2,
+      "pcm_peak": 0.736218,
+      "pcm_rms": 0.17534
+    },
+    {
+      "path": "src/main/resources/assets/jetsetcraft/sounds/music/gangs/echo_chamber.ogg",
+      "bytes": 18081,
+      "sha256": "2d14794d37055183e1b1bec8ba128d0997c42ea9470109cb54aa5878a547694d",
+      "duration_seconds": 3.2,
+      "pcm_peak": 0.710505,
+      "pcm_rms": 0.171317
+    },
+    {
+      "path": "src/main/resources/assets/jetsetcraft/sounds/music/gangs/ender_the_influence.ogg",
+      "bytes": 17288,
+      "sha256": "ffbc6b60d6afea0a4cf788028f45d5a8d8ee36d1f41667b52334c5b988367541",
+      "duration_seconds": 3.2,
+      "pcm_peak": 0.760107,
+      "pcm_rms": 0.173325
+    },
+    {
+      "path": "src/main/resources/assets/jetsetcraft/sounds/music/gangs/final_flight.ogg",
+      "bytes": 16693,
+      "sha256": "33efbc1f8a9a71512ad6d1043c78b2ba86c9c8963fd0cba87c92992565f2f83f",
+      "duration_seconds": 3.2,
+      "pcm_peak": 0.750726,
+      "pcm_rms": 0.170619
+    },
+    {
+      "path": "src/main/resources/assets/jetsetcraft/sounds/music/gangs/fleece_fleet.ogg",
+      "bytes": 17939,
+      "sha256": "18a50339fa4268896467d110c251604e96a0b5013a25ea2618a772ea7290ea25",
+      "duration_seconds": 3.2,
+      "pcm_peak": 0.74572,
+      "pcm_rms": 0.174517
+    },
+    {
+      "path": "src/main/resources/assets/jetsetcraft/sounds/music/gangs/fox_trot.ogg",
+      "bytes": 17375,
+      "sha256": "8b53910ed8b77855b236d6249862bb997b55342cacf5f3bd640b589d64b8aa5e",
+      "duration_seconds": 3.2,
+      "pcm_peak": 0.701764,
+      "pcm_rms": 0.169826
+    },
+    {
+      "path": "src/main/resources/assets/jetsetcraft/sounds/music/gangs/generic.ogg",
+      "bytes": 18375,
+      "sha256": "0bf04817cb790f22290b1f6d539b805d01ffdc12c02228ac9321b2256c1c83d5",
+      "duration_seconds": 3.2,
+      "pcm_peak": 0.745159,
+      "pcm_rms": 0.186506
+    },
+    {
+      "path": "src/main/resources/assets/jetsetcraft/sounds/music/gangs/gillty_pleasure.ogg",
+      "bytes": 18215,
+      "sha256": "e59126744abe64d7fd93843e5de8b2e2297e521cc55c8160384c290637298132",
+      "duration_seconds": 3.2,
+      "pcm_peak": 0.73577,
+      "pcm_rms": 0.180266
+    },
+    {
+      "path": "src/main/resources/assets/jetsetcraft/sounds/music/gangs/gold_rush.ogg",
+      "bytes": 18540,
+      "sha256": "bac6c2ba7c20c7157d62bf8db5901992b0e7f7f6abfc1b85997742695e010993",
+      "duration_seconds": 3.2,
+      "pcm_peak": 0.753269,
+      "pcm_rms": 0.18338
+    },
+    {
+      "path": "src/main/resources/assets/jetsetcraft/sounds/music/gangs/gold_standard.ogg",
+      "bytes": 18043,
+      "sha256": "16a1ca371db449c0799e3cfe333b33b124b04fc8edea30b7a3cf3b3b7f1520f1",
+      "duration_seconds": 3.2,
+      "pcm_peak": 0.774467,
+      "pcm_rms": 0.175284
+    },
+    {
+      "path": "src/main/resources/assets/jetsetcraft/sounds/music/gangs/goo_groove.ogg",
+      "bytes": 17068,
+      "sha256": "6a233bcff9abde163a097397ca3aa0800560bce7f2db28299aee8b5b1f473500",
+      "duration_seconds": 3.2,
+      "pcm_peak": 0.71782,
+      "pcm_rms": 0.169812
+    },
+    {
+      "path": "src/main/resources/assets/jetsetcraft/sounds/music/gangs/hare_trigger.ogg",
+      "bytes": 18066,
+      "sha256": "0e49bdff69075e53df0aff2131f8e856f1cb37f643b367d3dc4bd193317712d0",
+      "duration_seconds": 3.2,
+      "pcm_peak": 0.730347,
+      "pcm_rms": 0.173551
+    },
+    {
+      "path": "src/main/resources/assets/jetsetcraft/sounds/music/gangs/hex_appeal.ogg",
+      "bytes": 18143,
+      "sha256": "a8541d7ec76fc23a02eefb5e2b9c9a372d4b67939d213781ac53449d79b2b336",
+      "duration_seconds": 3.2,
+      "pcm_peak": 0.745529,
+      "pcm_rms": 0.179987
+    },
+    {
+      "path": "src/main/resources/assets/jetsetcraft/sounds/music/gangs/high_ground.ogg",
+      "bytes": 17780,
+      "sha256": "cb54eb09c7e9f7512b90fd4ac87e9461d95598138380e9e99fa7de2c6cf7c442",
+      "duration_seconds": 3.2,
+      "pcm_peak": 0.739402,
+      "pcm_rms": 0.179005
+    },
+    {
+      "path": "src/main/resources/assets/jetsetcraft/sounds/music/gangs/hive_five.ogg",
+      "bytes": 17878,
+      "sha256": "7c8410511efc2d082b800e6c3e6d59953c3143ef133f5f901a8120b55b0c3303",
+      "duration_seconds": 3.2,
+      "pcm_peak": 0.736559,
+      "pcm_rms": 0.176912
+    },
+    {
+      "path": "src/main/resources/assets/jetsetcraft/sounds/music/gangs/hog_wild.ogg",
+      "bytes": 17997,
+      "sha256": "8881ae5d529ade128a54fd03048db40db94f5a7c3b023a2ea9c18b60cda388f9",
+      "duration_seconds": 3.2,
+      "pcm_peak": 0.737234,
+      "pcm_rms": 0.177755
+    },
+    {
+      "path": "src/main/resources/assets/jetsetcraft/sounds/music/gangs/hot_bounce.ogg",
+      "bytes": 17614,
+      "sha256": "f706427110e7c96b4c6cfd9f51bab2399cc4bb92284d4fdf15257bbf877c86b6",
+      "duration_seconds": 3.2,
+      "pcm_peak": 0.72539,
+      "pcm_rms": 0.176807
+    },
+    {
+      "path": "src/main/resources/assets/jetsetcraft/sounds/music/gangs/ice_breakers.ogg",
+      "bytes": 18050,
+      "sha256": "830f303adbc9050a6e1ff4590032a11c8dd6f2ae56f1fca61f93764f32ba24da",
+      "duration_seconds": 3.2,
+      "pcm_peak": 0.720914,
+      "pcm_rms": 0.174565
+    },
+    {
+      "path": "src/main/resources/assets/jetsetcraft/sounds/music/gangs/inkognito.ogg",
+      "bytes": 18364,
+      "sha256": "ecf3d6a880d09dfe0c1312d3c492c62f92f4ff02509de56fc74ffb3cea439926",
+      "duration_seconds": 3.2,
+      "pcm_peak": 0.757862,
+      "pcm_rms": 0.185674
+    },
+    {
+      "path": "src/main/resources/assets/jetsetcraft/sounds/music/gangs/ironclad.ogg",
+      "bytes": 18177,
+      "sha256": "c45b9662ce717753efabe5777879a4d0f70d49ce8cf1c67f6994a2306926b7d4",
+      "duration_seconds": 3.2,
+      "pcm_peak": 0.711358,
+      "pcm_rms": 0.182547
+    },
+    {
+      "path": "src/main/resources/assets/jetsetcraft/sounds/music/gangs/kickback.ogg",
+      "bytes": 18238,
+      "sha256": "953bd60b4927caf2549bb97efbbb2b120b3ce29d0403947dd89e7179ea3c904d",
+      "duration_seconds": 3.2,
+      "pcm_peak": 0.755705,
+      "pcm_rms": 0.185349
+    },
+    {
+      "path": "src/main/resources/assets/jetsetcraft/sounds/music/gangs/lava_lanes.ogg",
+      "bytes": 18216,
+      "sha256": "fe1abfdc9ce252f5442d1073e2d7b6b07d7ffb435374edc6d4b533822b3ae605",
+      "duration_seconds": 3.2,
+      "pcm_peak": 0.695292,
+      "pcm_rms": 0.17475
+    },
+    {
+      "path": "src/main/resources/assets/jetsetcraft/sounds/music/gangs/milk_run.ogg",
+      "bytes": 16664,
+      "sha256": "8c599910d598a9c25015969dd9b1d277fa62cdfe1ec48f2a9707e9163e622385",
+      "duration_seconds": 3.2,
+      "pcm_peak": 0.724345,
+      "pcm_rms": 0.169427
+    },
+    {
+      "path": "src/main/resources/assets/jetsetcraft/sounds/music/gangs/neon_ink.ogg",
+      "bytes": 16788,
+      "sha256": "60a90a9faee52129bc817f67adc35637e3fc786a6e46964480fadba86a9764fe",
+      "duration_seconds": 3.2,
+      "pcm_peak": 0.751487,
+      "pcm_rms": 0.169598
+    },
+    {
+      "path": "src/main/resources/assets/jetsetcraft/sounds/music/gangs/night_mares.ogg",
+      "bytes": 17215,
+      "sha256": "3c317114e3ae6a22916646dc2871392481e9a786b350e289ad172bd0fd2aab4b",
+      "duration_seconds": 3.2,
+      "pcm_peak": 0.710763,
+      "pcm_rms": 0.169935
+    },
+    {
+      "path": "src/main/resources/assets/jetsetcraft/sounds/music/gangs/night_shift.ogg",
+      "bytes": 17471,
+      "sha256": "dc682318351c54bb5ca20509054df9517e05c59714a5354b59e989903fc362c5",
+      "duration_seconds": 3.2,
+      "pcm_peak": 0.748778,
+      "pcm_rms": 0.173361
+    },
+    {
+      "path": "src/main/resources/assets/jetsetcraft/sounds/music/gangs/nine_lives.ogg",
+      "bytes": 17179,
+      "sha256": "6778c00f6957322d80c5a446d03d0da23ec29fb3bf51066270b73d21ed645588",
+      "duration_seconds": 3.2,
+      "pcm_peak": 0.769072,
+      "pcm_rms": 0.169059
+    },
+    {
+      "path": "src/main/resources/assets/jetsetcraft/sounds/music/gangs/pack_attack.ogg",
+      "bytes": 18061,
+      "sha256": "6936a79b698263b0722b832c8f76f53cbbc7b6395eeffbb18a5017253b028eb6",
+      "duration_seconds": 3.2,
+      "pcm_peak": 0.748314,
+      "pcm_rms": 0.177427
+    },
+    {
+      "path": "src/main/resources/assets/jetsetcraft/sounds/music/gangs/pack_mentality.ogg",
+      "bytes": 17928,
+      "sha256": "7d2380dd64618628b57c1a5771617a5143154b148e525c8ff8503865ea947633",
+      "duration_seconds": 3.2,
+      "pcm_peak": 0.706188,
+      "pcm_rms": 0.17942
+    },
+    {
+      "path": "src/main/resources/assets/jetsetcraft/sounds/music/gangs/pale_riders.ogg",
+      "bytes": 17198,
+      "sha256": "f3134fdb926108ef89a05cdb39bc575f230c042a56fb78d42d85c610cac094d3",
+      "duration_seconds": 3.2,
+      "pcm_peak": 0.728196,
+      "pcm_rms": 0.17544
+    },
+    {
+      "path": "src/main/resources/assets/jetsetcraft/sounds/music/gangs/pecking_order.ogg",
+      "bytes": 17099,
+      "sha256": "61f53a9eec27f500814fc851b7fc08f38c960d284fe7ecc2ad86c4f613b8b748",
+      "duration_seconds": 3.2,
+      "pcm_peak": 0.68501,
+      "pcm_rms": 0.16869
+    },
+    {
+      "path": "src/main/resources/assets/jetsetcraft/sounds/music/gangs/puff_piece.ogg",
+      "bytes": 18555,
+      "sha256": "358401ddfc1b65be802a3d87150a8aa9619ddc6080172a9327f199ebc6c1dacd",
+      "duration_seconds": 3.2,
+      "pcm_peak": 0.751895,
+      "pcm_rms": 0.183636
+    },
+    {
+      "path": "src/main/resources/assets/jetsetcraft/sounds/music/gangs/raid_parade.ogg",
+      "bytes": 17967,
+      "sha256": "c04bddc47cb1b5e559dd065f65db93092452124ebe2aea42b8396e1257c53f62",
+      "duration_seconds": 3.2,
+      "pcm_peak": 0.72883,
+      "pcm_rms": 0.181726
+    },
+    {
+      "path": "src/main/resources/assets/jetsetcraft/sounds/music/gangs/razorbacks.ogg",
+      "bytes": 17798,
+      "sha256": "1b4d7463af7627742845ce9417b34392114ef446aec7c6fab94d8bf004de59fa",
+      "duration_seconds": 3.2,
+      "pcm_peak": 0.707977,
+      "pcm_rms": 0.17248
+    },
+    {
+      "path": "src/main/resources/assets/jetsetcraft/sounds/music/gangs/reef_riders.ogg",
+      "bytes": 17885,
+      "sha256": "6276ad6a116f395ded7e8c1b4c1b6162b8871f274c4404e71f2f6def93fa4f5f",
+      "duration_seconds": 3.2,
+      "pcm_peak": 0.697541,
+      "pcm_rms": 0.17238
+    },
+    {
+      "path": "src/main/resources/assets/jetsetcraft/sounds/music/gangs/repeat_offenders.ogg",
+      "bytes": 17850,
+      "sha256": "9b8e98c0724db4f383b471ba9c277d2e58129ac8544598946e7e3a22658b8fe5",
+      "duration_seconds": 3.2,
+      "pcm_peak": 0.749357,
+      "pcm_rms": 0.17658
+    },
+    {
+      "path": "src/main/resources/assets/jetsetcraft/sounds/music/gangs/ribbit_riot.ogg",
+      "bytes": 17311,
+      "sha256": "fd75867c7f2927c9f9bf75f6d142e82bb4fa16782a151ae56612547d927baf85",
+      "duration_seconds": 3.2,
+      "pcm_peak": 0.692372,
+      "pcm_rms": 0.174766
+    },
+    {
+      "path": "src/main/resources/assets/jetsetcraft/sounds/music/gangs/roadshow.ogg",
+      "bytes": 18175,
+      "sha256": "d6928d802e4f9f26a5dac6cf98b1c817450c9abd94037e0ec0658bb2a409315e",
+      "duration_seconds": 3.2,
+      "pcm_peak": 0.743866,
+      "pcm_rms": 0.177971
+    },
+    {
+      "path": "src/main/resources/assets/jetsetcraft/sounds/music/gangs/rotten_rush.ogg",
+      "bytes": 17663,
+      "sha256": "5b0a4bd68ce2cef74582d9d21b2fa12c9982c46585789b70c75fa113a54d937c",
+      "duration_seconds": 3.2,
+      "pcm_peak": 0.705537,
+      "pcm_rms": 0.172175
+    },
+    {
+      "path": "src/main/resources/assets/jetsetcraft/sounds/music/gangs/shell_rollers.ogg",
+      "bytes": 17952,
+      "sha256": "41cadb1ac2b957b1e0affe0e369ac801e6645f460cdd5a2674302fc7ac335642",
+      "duration_seconds": 3.2,
+      "pcm_peak": 0.750652,
+      "pcm_rms": 0.176543
+    },
+    {
+      "path": "src/main/resources/assets/jetsetcraft/sounds/music/gangs/silver_static.ogg",
+      "bytes": 17982,
+      "sha256": "2ff5ca16ad8e556183430824b68b091435067e8764b9f648420d0cfa127162f1",
+      "duration_seconds": 3.2,
+      "pcm_peak": 0.727636,
+      "pcm_rms": 0.17377
+    },
+    {
+      "path": "src/main/resources/assets/jetsetcraft/sounds/music/gangs/small_fry.ogg",
+      "bytes": 16519,
+      "sha256": "83b97a3cf85bc6a685f471583557742c05d30754cc91113a9ebff53df2806d49",
+      "duration_seconds": 3.2,
+      "pcm_peak": 0.726166,
+      "pcm_rms": 0.171284
+    },
+    {
+      "path": "src/main/resources/assets/jetsetcraft/sounds/music/gangs/smoke_and_mirrors.ogg",
+      "bytes": 17695,
+      "sha256": "29a39b8beeafc2055cebee16a2d71725af7017b87fae6d7d93c8fa7380521547",
+      "duration_seconds": 3.2,
+      "pcm_peak": 0.74824,
+      "pcm_rms": 0.176047
+    },
+    {
+      "path": "src/main/resources/assets/jetsetcraft/sounds/music/gangs/spit_take.ogg",
+      "bytes": 18359,
+      "sha256": "a307ce4324af32f12bd5fff7236828e18d2f6d34af9707250762d2d026a66670",
+      "duration_seconds": 3.2,
+      "pcm_peak": 0.76753,
+      "pcm_rms": 0.185537
+    },
+    {
+      "path": "src/main/resources/assets/jetsetcraft/sounds/music/gangs/spore_score.ogg",
+      "bytes": 18310,
+      "sha256": "d2a76b0e80fdaca010ed36426ea48bc11d5a2b41a502144bb78e3dcb991a85ba",
+      "duration_seconds": 3.2,
+      "pcm_peak": 0.708195,
+      "pcm_rms": 0.18026
+    },
+    {
+      "path": "src/main/resources/assets/jetsetcraft/sounds/music/gangs/spot_check.ogg",
+      "bytes": 18448,
+      "sha256": "f0bbb612392386c9511aa1c691ca67bc0f59e63d6079027a1c86c573ff61de0a",
+      "duration_seconds": 3.2,
+      "pcm_peak": 0.763325,
+      "pcm_rms": 0.175445
+    },
+    {
+      "path": "src/main/resources/assets/jetsetcraft/sounds/music/gangs/static_noise.ogg",
+      "bytes": 17432,
+      "sha256": "7e874b1c493a182225e0d6d149cd28d2a15b5f8e86ed6a7c8ec853c3ddb7e06b",
+      "duration_seconds": 3.2,
+      "pcm_peak": 0.744795,
+      "pcm_rms": 0.174044
+    },
+    {
+      "path": "src/main/resources/assets/jetsetcraft/sounds/music/gangs/throwbacks.ogg",
+      "bytes": 17982,
+      "sha256": "522639927cb122a5b66a28f9f3f015eb8ebf37c7b413cceff756a66411df4ea2",
+      "duration_seconds": 3.2,
+      "pcm_peak": 0.730324,
+      "pcm_rms": 0.174254
+    },
+    {
+      "path": "src/main/resources/assets/jetsetcraft/sounds/music/gangs/triple_threat.ogg",
+      "bytes": 18123,
+      "sha256": "a0b962e34b4da949d70c8ca18dfb74ae0578f8b459bbf86b9486ec4735d0e2ff",
+      "duration_seconds": 3.2,
+      "pcm_peak": 0.740669,
+      "pcm_rms": 0.175402
+    },
+    {
+      "path": "src/main/resources/assets/jetsetcraft/sounds/music/gangs/underweb.ogg",
+      "bytes": 17876,
+      "sha256": "d47312199ae37933bf35f5a1b471204ef60b9066d9e63786cbdbcac81e0115e8",
+      "duration_seconds": 3.2,
+      "pcm_peak": 0.722593,
+      "pcm_rms": 0.179455
+    },
+    {
+      "path": "src/main/resources/assets/jetsetcraft/sounds/music/gangs/upstream.ogg",
+      "bytes": 16918,
+      "sha256": "af952a56cf83a8eb50004e4800266a02dcee0348c0ea4beeef1f89eb17671569",
+      "duration_seconds": 3.2,
+      "pcm_peak": 0.722117,
+      "pcm_rms": 0.174726
+    },
+    {
+      "path": "src/main/resources/assets/jetsetcraft/sounds/music/gangs/wail_riders.ogg",
+      "bytes": 18091,
+      "sha256": "685df60f92fb2f87687ddbbe52f8c08d56be0e75abd204e556d0e5db81598eb4",
+      "duration_seconds": 3.2,
+      "pcm_peak": 0.746655,
+      "pcm_rms": 0.174321
+    },
+    {
+      "path": "src/main/resources/assets/jetsetcraft/sounds/music/gangs/wave_riders.ogg",
+      "bytes": 18199,
+      "sha256": "c9a7e011a46e74c0cd4f8b597b8c591fecf13edd635c1bbc3690d5c330c38f50",
+      "duration_seconds": 3.2,
+      "pcm_peak": 0.748934,
+      "pcm_rms": 0.173605
+    },
+    {
+      "path": "src/main/resources/assets/jetsetcraft/sounds/music/gangs/wrecking_crew.ogg",
+      "bytes": 17822,
+      "sha256": "407474b69f66d300b5b413326483534d744c9c239c1ff0c07025508c337beee6",
+      "duration_seconds": 3.2,
+      "pcm_peak": 0.713673,
+      "pcm_rms": 0.183547
+    }
+  ]
+}
