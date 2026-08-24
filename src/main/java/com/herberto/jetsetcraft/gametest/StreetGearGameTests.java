@@ -20,11 +20,14 @@ import com.mojang.authlib.GameProfile;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.Slime;
 import net.minecraft.world.entity.monster.Spider;
 import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.phys.AABB;
 import net.minecraftforge.common.util.FakePlayerFactory;
 import net.minecraftforge.gametest.GameTestHolder;
 import net.minecraftforge.gametest.PrefixGameTestTemplate;
@@ -151,10 +154,30 @@ public final class StreetGearGameTests {
                 || firstChallenge.equals(boombox.challengeId())) {
             throw new GameTestAssertException("Boombox could not start a fresh session immediately after cancel");
         }
-        boombox.cancelChallenge(true);
 
-        ItemStack recoveredHead = boombox.removeTarget();
-        if (recoveredHead.getItem() != Items.ZOMBIE_HEAD || !boombox.targetStack().isEmpty()) {
+        // Breaking an active Boombox must clean up the session without fighting the replacement block state,
+        // and the physical target head must still be returned to the world rather than duplicated or deleted.
+        helper.setBlock(boomboxRelative, Blocks.AIR);
+        if (!helper.getLevel().getBlockState(boomboxWorld).isAir()) {
+            throw new GameTestAssertException("Breaking an active Boombox caused it to survive/reappear");
+        }
+        AABB droppedTargetArea = new AABB(boomboxWorld).inflate(1.25D);
+        boolean returnedPhysicalTarget = !helper.getLevel().getEntitiesOfClass(ItemEntity.class, droppedTargetArea,
+                item -> item.getItem().is(Items.ZOMBIE_HEAD)).isEmpty();
+        if (!returnedPhysicalTarget) {
+            throw new GameTestAssertException("Breaking an active Boombox did not return its physical target head");
+        }
+
+        helper.setBlock(boomboxRelative, ModBlocks.BOOMBOX.get());
+        if (!(helper.getLevel().getBlockEntity(boomboxWorld) instanceof BoomboxBlockEntity replacementBoombox)) {
+            throw new GameTestAssertException("Re-placed Boombox did not restore its block entity");
+        }
+        if (!replacementBoombox.setTarget(new ItemStack(Items.ZOMBIE_HEAD))) {
+            throw new GameTestAssertException("Re-placed Boombox refused a valid target");
+        }
+
+        ItemStack recoveredHead = replacementBoombox.removeTarget();
+        if (recoveredHead.getItem() != Items.ZOMBIE_HEAD || !replacementBoombox.targetStack().isEmpty()) {
             throw new GameTestAssertException("Boombox target slot did not return its physical mob head intact");
         }
 
