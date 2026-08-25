@@ -1,41 +1,92 @@
-# JetSetCraft
+# 🛼 JetSetCraft
 
-JetSetCraft `0.3.0` turns ordinary Minecraft worlds into a momentum-first street-sports playground. Inline skates, quad skates, a street board, BMX, hoverboard, and scooter share one continuous movement system built around boost, tricks, world-geometry grinding, transfers, wall rides, powerslides, manuals, dance, graffiti, combat composition, and emergent Minecraft physics.
+![Release](https://img.shields.io/badge/release-0.3.0-16d6d1?style=for-the-badge)
+![Minecraft](https://img.shields.io/badge/Minecraft-Forge%201.20.1-62b347?style=for-the-badge)
+![Movement](https://img.shields.io/badge/movement-momentum%20first-f4d03f?style=for-the-badge)
+![Verification](https://img.shields.io/badge/verification-9%20GameTests-e84393?style=for-the-badge)
 
-The player remains a Minecraft player—not a disconnected vehicle entity. Weapons, tools, inventory, enchantments, dimensions, mobs, rails, terrain, redstone, fluids, pistons, explosions, and optional mods remain part of the same play space.
+> [!IMPORTANT]
+> **JetSetCraft turns ordinary Minecraft worlds into a momentum-first street-sports playground without replacing the player, the world, or vanilla control.** Inline skates, quad skates, a street board, BMX, hoverboard, and scooter share one expressive movement language built around tricks, grinding, flow, dance, graffiti, and emergent Minecraft physics.
 
-## v0.3.0 release surface
+## ✨ Start here
 
-- Six ride styles, 24 tricks, 28 dance moves, Flow/combo scoring, landing grades, and multiplayer cyphers.
-- Seventy-two validated animation clips, dense equipment meshes, leg-baked skates, a synchronized compact HUD, and reduced-motion controls.
-- Exposed-edge, fence, wall, pane, vanilla/Forge rail, and optional Create track grinding.
-- Minecraft-native speed routes across ice, slime, honey, Soul Speed, water, bubbles, redstone rails, and external impulses.
-- 139 persistent aspect-aware tags, a bounded custom editor, Tag/Free Paint spray modes, and sixteen throwable paint-balloon colors.
-- Persistent physical Street Gear on compatible source-owned mobs without changing their type, UUID, AI, or owner.
-- A physical Boombox with mob-head tuning, data-driven gang identity, bounded event-only actors, anti-farm cleanup, and eighty original entrance stingers.
+| I want to… | Go here |
+|---|---|
+| Install the verified release and take a first ride | **[Getting Started](Getting-Started)** |
+| See exactly what is shipped and tested | **[Release & Capability Status](Release-Status)** |
+| Understand the complete feature set | **[Feature Overview](Feature-Overview)** |
+| Learn every input without permanent forward motion | **[Controls](Controls)** |
+| Pick skates, a board, BMX, hoverboard, or scooter | **[Ride Styles](Ride-Styles)** |
+| Build tricks, combos, transfers, and Flow | **[Tricks, Combos & Flow](Tricks-Combos-and-Flow)** |
+| Paint tags, create custom art, or use Free Paint | **[Graffiti](Graffiti)** |
+| Browse the 173-project inspiration atlas | **[Inspiration & Research](Inspiration-and-Research)** |
+| Build a compatible modpack or server | **[Modpack Maker Guide](Modpack-Maker-Guide)** |
+| Inspect architecture and verification evidence | **[Developer Architecture](Developer-Architecture)** · **[Testing](Testing-and-Verification)** |
 
-## Start here
+## 🎮 The current experience
 
-1. Read [[Getting Started|Getting-Started]] for installation and a first ride.
-2. Learn the complete input language on [[Controls]].
-3. Choose equipment on [[Ride Styles|Ride-Styles]].
-4. Build lines with [[Tricks, Combos and Flow|Tricks-Combos-and-Flow]].
-5. Learn [[Grinding and Transfers|Grinding-and-Transfers]] and [[World Physics|World-Physics]].
-6. Use [[Graffiti]], then explore the shipped runtime checkpoint and preserved future design in [[Gang Wars, Boombox & Mob Atlas|Gang-Wars-Boombox-and-Mob-Atlas]].
-7. Review the [[Standalone Compatibility Covenant|Standalone-Compatibility-Covenant]], [[Compatibility]], and [[Multiplayer and Servers|Multiplayer-and-Servers]].
+| Ride, world physics, and compact HUD | Tag selector and custom painting |
+|---|---|
+| <img src="https://raw.githubusercontent.com/Herbertofury/JetSetCraft/main/art/screenshots/v0.3.0-ride-hud.png" alt="JetSetCraft ride, world painting, and HUD" width="100%"> | <img src="https://raw.githubusercontent.com/Herbertofury/JetSetCraft/main/art/screenshots/v0.3.0-graffiti-selector.png" alt="JetSetCraft graffiti selector" width="100%"> |
 
-## Core promises
+## 🟢 What exists today
 
-**Momentum is continuous.** Legitimate speed from boosts, slopes, rails, ice, pistons, explosions, currents, knockback, and modded mechanics becomes movement tech instead of being flattened.
+| System | Shipped surface |
+|---|---|
+| **Street movement** | Player-controlled stride acceleration, neutral stopping, powerslides, manuals, ledge vaults, wall kicks, wind redirects, world-geometry grinding, transfers, and preserved vanilla swimming. |
+| **Ride identities** | Six ride styles with attached player-following models, distinct tuning, 24 tricks, and 72 validated animation clips. |
+| **Flow & presentation** | Combo/Flow scoring, landing grades, a compact vanilla-aligned HUD, reduced-motion controls, and 28 dance moves with multiplayer cyphers. |
+| **Graffiti** | 139 persistent aspect-aware tags, custom tag creation, Tag/Free Paint modes, 16 colors, six-face splashes, and throwable paint balloons. |
+| **Minecraft physics** | Ice, slime, honey, Soul Speed, water, bubbles, redstone rails, pistons, explosions, currents, knockback, and optional Create geometry remain useful movement tech. |
+| **Street Gear & gangs** | Reversible gear on compatible source-owned mobs, physical Boombox tuning, data-driven gang identity, bounded actors, anti-farm cleanup, and original entrance stingers. |
+| **Verification** | Deterministic asset generation, nine real Forge GameTests, clean client/server builds, dedicated-server smoke, real-client visual audit, and TestGrid protocol proof. |
 
-**Neutral means neutral.** Releasing directional input settles through Minecraft friction to a complete stop. Sprint kickoffs, ledge vaults, wall kicks, and wind redirects require deliberate input and never manufacture permanent camera-forward motion.
+## 🧭 What makes JetSetCraft different
 
-**The world is the skatepark.** JetSetCraft follows real rail shapes, collision-shape ledges, walls, and optional Create geometry rather than requiring special course blocks.
+**The player stays the player.** Weapons, tools, inventory, enchantments, dimensions, mobs, rails, terrain, redstone, fluids, and optional mods remain part of the same play space.
 
-**Combat remains composable.** Ordinary locomotion owns lower-body presentation; item and weapon systems retain arms, hands, held items, head, and input.
+**Neutral means neutral.** Releasing directional input settles through Minecraft friction to a complete stop. Sprint kickoffs, vaults, wall kicks, and redirects require deliberate input—there is no permanent camera-forward motion.
 
-**Optional mods stay optional.** Integrations use isolated APIs, Forge behavior, registry checks, or non-required datapack entries.
+**The world is the skatepark.** JetSetCraft follows real rail shapes, collision-shape ledges, walls, and optional Create tracks rather than requiring a separate course made from special blocks.
 
-**Mobs keep their owners.** JetSetCraft adds reversible physical gear and stable gang data to an existing mob. It never replaces the source entity to make a rider.
+**Research is additive.** The project studies excellent work across Java, Bedrock, tools, models, animation, graffiti, music, and vehicles while preserving JetSetCraft's identity and recording permission/provenance boundaries.
 
-Broader territory, reputation, chapter, posse, Junior Atlas, and competitive-mode pages are preserved design lineage for possible later releases—not v0.3.0 feature claims.
+```mermaid
+flowchart LR
+    I[Player Input] --> M[Momentum Core]
+    W[Minecraft World Physics] --> M
+    M --> R[Ride Style]
+    R --> T[Tricks + Transfers]
+    T --> F[Flow + Landing]
+    F --> H[Vanilla-aligned HUD]
+    R --> G[Grinding]
+    R --> P[Graffiti + Free Paint]
+    R --> D[Dance + Cyphers]
+    X[Optional Mods] -. additive adapters .-> W
+```
+
+## 🚦 Status legend
+
+| Badge | Meaning |
+|---|---|
+| ✅ **Verified** | Runtime or packaged-artifact evidence exists for the exact release. |
+| 🟢 **Implemented** | Present in current source and documented as a current capability. |
+| 🧪 **Experimental** | Implemented behind a deliberate compatibility or stability boundary. |
+| 📚 **Research** | Inspiration or an implementation reference—not bundled code or a shipped promise. |
+| 🚧 **In development** | Active work that is not safe to call complete. |
+| 📋 **Design lineage** | Preserved future design, explicitly separated from `0.3.0`. |
+
+## 🔗 Project links
+
+- **Repository:** https://github.com/Herbertofury/JetSetCraft
+- **Verified 0.3.0 release:** https://github.com/Herbertofury/JetSetCraft/releases/tag/v0.3.0
+- **Research atlas:** https://docs.google.com/spreadsheets/d/1liWhRQL7rmPy8LLgSRVlkrLANqUIJE4UbFX3--KMJjg/edit?gid=1570163195#gid=1570163195
+- **Canonical project Drive:** https://drive.google.com/drive/folders/1npHf1VwOj-tybm791XShz2IvY8LmjjUU
+- **Roadmap:** [Roadmap](Roadmap)
+
+> [!NOTE]
+> Territory, reputation, chapters, posse systems, Junior Atlas, and expanded competitive modes are preserved as design lineage unless the **[Release Status](Release-Status)** page marks them shipped.
+
+---
+
+**New here?** Continue with **[Getting Started →](Getting-Started)**.
