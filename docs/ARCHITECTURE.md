@@ -72,7 +72,7 @@ The repository verifies implementation in layers:
 1. deterministic model, animation, and brand generation;
 2. JSON, model, animation, gameplay-contract, and wiki validators;
 3. ForgeGradle production build;
-4. eight real Forge GameTests for hoverboard/scooter persistence and movement, neutral/stop/swim authority, no-gear dance scoring, combat sovereignty, hostile state/input handling, mob Street Gear/Boombox lifecycle, and graffiti support cleanup;
+4. nine real Forge GameTests for hoverboard/scooter persistence and movement, neutral/stop/swim authority, kickoff intent, no-gear dance scoring, combat sovereignty, hostile state/input handling, mob Street Gear/Boombox lifecycle, graffiti support cleanup, and bounded paint-balloon splashes;
 5. unattended real-client ride/HUD/graffiti visual capture;
 6. real dedicated-server startup smoke;
 7. exact tested-source and binary artifact publication.

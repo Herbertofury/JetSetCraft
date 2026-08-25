@@ -7,10 +7,10 @@ The player remains a Minecraft player—not a disconnected vehicle entity. Weapo
 ## v0.3.0 release surface
 
 - Six ride styles, 24 tricks, 28 dance moves, Flow/combo scoring, landing grades, and multiplayer cyphers.
-- Sixty-eight validated animation clips, dense original equipment meshes, a synchronized HUD, and reduced-motion controls.
+- Seventy-two validated animation clips, dense equipment meshes, leg-baked skates, a synchronized compact HUD, and reduced-motion controls.
 - Exposed-edge, fence, wall, pane, vanilla/Forge rail, and optional Create track grinding.
 - Minecraft-native speed routes across ice, slime, honey, Soul Speed, water, bubbles, redstone rails, and external impulses.
-- 139 persistent aspect-aware graffiti decals with repainting, support cleanup, and per-chunk limits.
+- 139 persistent aspect-aware tags, a bounded custom editor, Tag/Free Paint spray modes, and sixteen throwable paint-balloon colors.
 - Persistent physical Street Gear on compatible source-owned mobs without changing their type, UUID, AI, or owner.
 - A physical Boombox with mob-head tuning, data-driven gang identity, bounded event-only actors, anti-farm cleanup, and eighty original entrance stingers.
 
@@ -27,6 +27,8 @@ The player remains a Minecraft player—not a disconnected vehicle entity. Weapo
 ## Core promises
 
 **Momentum is continuous.** Legitimate speed from boosts, slopes, rails, ice, pistons, explosions, currents, knockback, and modded mechanics becomes movement tech instead of being flattened.
+
+**Neutral means neutral.** Releasing directional input settles through Minecraft friction to a complete stop. Sprint kickoffs, ledge vaults, wall kicks, and wind redirects require deliberate input and never manufacture permanent camera-forward motion.
 
 **The world is the skatepark.** JetSetCraft follows real rail shapes, collision-shape ledges, walls, and optional Create geometry rather than requiring special course blocks.
 

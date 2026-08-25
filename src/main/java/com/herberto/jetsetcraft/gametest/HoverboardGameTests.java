@@ -7,6 +7,7 @@ import com.herberto.jetsetcraft.item.RideLoadout;
 import com.herberto.jetsetcraft.movement.JetSetMovement;
 import com.herberto.jetsetcraft.movement.RideStyle;
 import com.herberto.jetsetcraft.movement.VanillaWorldPhysics;
+import com.herberto.jetsetcraft.movement.ParkourTraversal;
 import com.herberto.jetsetcraft.network.InputFlags;
 import com.herberto.jetsetcraft.registry.ModItems;
 import com.mojang.authlib.GameProfile;
@@ -115,6 +116,31 @@ public final class HoverboardGameTests {
         invokeProductionGroundSolver(player, data, VanillaWorldPhysics.ground(player));
         if (player.getDeltaMovement().horizontalDistanceSqr() <= 0.0 || data.momentum() <= 0.0) {
             throw new GameTestAssertException("Directional ride input no longer accelerates after a complete stop");
+        }
+
+        // Spirit Vector-inspired kickoff remains intentional: sprint+jump with directional input works, neutral
+        // sprint+jump never manufactures permanent forward motion from the camera.
+        player.setDeltaMovement(Vec3.ZERO);
+        data.setMomentum(0.0);
+        data.setInputForward(0.0F);
+        if (ParkourTraversal.tryKickoff(player, data) || player.getDeltaMovement().horizontalDistanceSqr() != 0.0) {
+            throw new GameTestAssertException("Neutral kickoff manufactured forward movement");
+        }
+        data.setInputForward(1.0F);
+        if (!ParkourTraversal.tryKickoff(player, data) || player.getDeltaMovement().horizontalDistanceSqr() <= 0.0) {
+            throw new GameTestAssertException("Directional sprint kickoff did not engage");
+        }
+
+        // A real one-block obstacle must pass the lower ray, clear the upper ray and leave a collision-free
+        // destination above its top plane. This catches sub-block destination probes that make vaulting impossible.
+        player.moveTo(feet.getX() + 0.5, feet.getY(), feet.getZ() + 0.5, 0.0F, 0.0F);
+        player.setOnGround(false);
+        player.setDeltaMovement(Vec3.ZERO);
+        data.setMomentum(0.28);
+        data.setInputForward(1.0F);
+        helper.setBlock(new BlockPos(1, 1, 2), Blocks.STONE);
+        if (!ParkourTraversal.tryLedgeVault(player, data) || player.getDeltaMovement().y < 0.54D) {
+            throw new GameTestAssertException("Collision-checked one-block ledge vault did not engage");
         }
 
         // Swimming is an explicit authority boundary: not one component of vanilla fluid velocity may be replaced.

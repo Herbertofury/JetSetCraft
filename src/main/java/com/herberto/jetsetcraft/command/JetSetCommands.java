@@ -10,7 +10,12 @@ import com.herberto.jetsetcraft.movement.JetSetMovement;
 import com.herberto.jetsetcraft.movement.TrickCatalog;
 import com.herberto.jetsetcraft.movement.VanillaWorldPhysics;
 import com.herberto.jetsetcraft.network.JetSetNetwork;
+import com.herberto.jetsetcraft.registry.ModEntities;
 import com.herberto.jetsetcraft.registry.ModItems;
+import com.herberto.jetsetcraft.entity.GraffitiEntity;
+import com.herberto.jetsetcraft.graffiti.PaintColor;
+import com.herberto.jetsetcraft.graffiti.PaintSplash;
+import com.herberto.jetsetcraft.item.SprayCanItem;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.DoubleArgumentType;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -157,16 +162,19 @@ public final class JetSetCommands {
         }
         JetSetData data = player.getCapability(JetSetDataProvider.CAPABILITY).resolve().orElse(null);
         if (data == null) return 0;
-        data.setRideGear(new net.minecraft.world.item.ItemStack(ModItems.BMX.get()));
-        data.setStyle(com.herberto.jetsetcraft.movement.RideStyle.BMX);
+        data.setRideGear(new net.minecraft.world.item.ItemStack(ModItems.INLINE_SKATES.get()));
+        data.setStyle(com.herberto.jetsetcraft.movement.RideStyle.INLINE);
         data.setActive(true);
         data.setBoost(72.0f);
         data.setFlow(46.0f);
         data.setComboScore(1840);
         data.setComboMultiplier(2.25f);
         data.setComboGrace(1200);
-        player.getInventory().setItem(8, new net.minecraft.world.item.ItemStack(ModItems.SPRAY_CAN.get()));
+        net.minecraft.world.item.ItemStack sprayCan = new net.minecraft.world.item.ItemStack(ModItems.SPRAY_CAN.get());
+        SprayCanItem.setFreePaint(sprayCan, true);
+        SprayCanItem.setPaintColor(sprayCan, PaintColor.CYAN);
         player.getInventory().setItem(player.getInventory().selected, net.minecraft.world.item.ItemStack.EMPTY);
+        player.getInventory().setItem(8, sprayCan);
         ServerLevel level = player.serverLevel();
         BlockPos stage = player.blockPosition().offset(0, 12, 0);
         for (int x = -8; x <= 8; x++) {
@@ -174,6 +182,20 @@ public final class JetSetCommands {
                 level.setBlockAndUpdate(stage.offset(x, -1, z), Blocks.SMOOTH_STONE.defaultBlockState());
                 for (int y = 0; y <= 7; y++) level.setBlockAndUpdate(stage.offset(x, y, z), Blocks.AIR.defaultBlockState());
             }
+        }
+        for (int x = -5; x <= 5; x++) {
+            for (int y = 0; y <= 4; y++) {
+                level.setBlockAndUpdate(stage.offset(x, y, -4), Blocks.LIGHT_GRAY_CONCRETE.defaultBlockState());
+            }
+        }
+        PaintColor[] auditColors = {PaintColor.CYAN, PaintColor.MAGENTA, PaintColor.YELLOW, PaintColor.LIME};
+        for (int index = 0; index < auditColors.length; index++) {
+            BlockPos support = stage.offset(-3 + index * 2, 1 + index % 2, -4);
+            GraffitiEntity splash = new GraffitiEntity(ModEntities.GRAFFITI.get(), level);
+            splash.configureSplash(support, net.minecraft.core.Direction.SOUTH,
+                    PaintSplash.createSplatPattern(auditColors[index], 0.72F, 9001L + index),
+                    0.82F);
+            level.addFreshEntity(splash);
         }
         player.teleportTo(stage.getX() + 0.5D, stage.getY(), stage.getZ() + 0.5D);
         player.setDeltaMovement(Vec3.ZERO);

@@ -22,6 +22,8 @@ public final class GraffitiEntity extends Entity {
     private static final EntityDataAccessor<Integer> VARIANT = SynchedEntityData.defineId(GraffitiEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Byte> FACE = SynchedEntityData.defineId(GraffitiEntity.class, EntityDataSerializers.BYTE);
     private static final EntityDataAccessor<String> CUSTOM = SynchedEntityData.defineId(GraffitiEntity.class, EntityDataSerializers.STRING);
+    private static final EntityDataAccessor<Float> RENDER_WIDTH = SynchedEntityData.defineId(GraffitiEntity.class, EntityDataSerializers.FLOAT);
+    private static final EntityDataAccessor<Float> RENDER_HEIGHT = SynchedEntityData.defineId(GraffitiEntity.class, EntityDataSerializers.FLOAT);
     private BlockPos supportPos;
 
     public GraffitiEntity(EntityType<? extends GraffitiEntity> type, Level level) {
@@ -39,10 +41,24 @@ public final class GraffitiEntity extends Entity {
         setVariant(variant);
         setFace(face);
         setCustomPattern(customPattern);
+        setRenderSize(customPattern == null || customPattern.isEmpty() ? 0.0F : 1.6F,
+                customPattern == null || customPattern.isEmpty() ? 0.0F : 1.0F);
         double x = blockPos.getX() + 0.5 + face.getStepX() * 0.505;
         double y = blockPos.getY() + 0.62;
         double z = blockPos.getZ() + 0.5 + face.getStepZ() * 0.505;
         setPos(x, y, z);
+    }
+
+    /** Configure a compact paint patch on any of Minecraft's six block faces. */
+    public void configureSplash(BlockPos blockPos, Direction face, String customPattern, float size) {
+        supportPos = blockPos.immutable();
+        setVariant(0);
+        setFace(face);
+        setCustomPattern(customPattern);
+        setRenderSize(size, size);
+        setPos(blockPos.getX() + 0.5 + face.getStepX() * 0.505,
+                blockPos.getY() + 0.5 + face.getStepY() * 0.505,
+                blockPos.getZ() + 0.5 + face.getStepZ() * 0.505);
     }
 
     public int getVariant() {
@@ -65,11 +81,22 @@ public final class GraffitiEntity extends Entity {
 
     public void setCustomPattern(String pattern) { entityData.set(CUSTOM, CustomGraffiti.normalize(pattern)); }
 
+    public float getRenderWidth() { return entityData.get(RENDER_WIDTH); }
+    public float getRenderHeight() { return entityData.get(RENDER_HEIGHT); }
+    public BlockPos getSupportPos() { return supportPos; }
+
+    public void setRenderSize(float width, float height) {
+        entityData.set(RENDER_WIDTH, Float.isFinite(width) ? Math.max(0.0F, Math.min(2.5F, width)) : 0.0F);
+        entityData.set(RENDER_HEIGHT, Float.isFinite(height) ? Math.max(0.0F, Math.min(2.5F, height)) : 0.0F);
+    }
+
     @Override
     protected void defineSynchedData() {
         entityData.define(VARIANT, 0);
         entityData.define(FACE, (byte) Direction.NORTH.get3DDataValue());
         entityData.define(CUSTOM, "");
+        entityData.define(RENDER_WIDTH, 0.0F);
+        entityData.define(RENDER_HEIGHT, 0.0F);
     }
 
     @Override
@@ -78,6 +105,7 @@ public final class GraffitiEntity extends Entity {
         setFace(Direction.from3DDataValue(tag.getByte("Face")));
         supportPos = tag.contains("SupportPos", Tag.TAG_LONG) ? BlockPos.of(tag.getLong("SupportPos")) : null;
         setCustomPattern(tag.getString("CustomPattern"));
+        setRenderSize(tag.getFloat("RenderWidth"), tag.getFloat("RenderHeight"));
     }
 
     @Override
@@ -86,6 +114,8 @@ public final class GraffitiEntity extends Entity {
         tag.putByte("Face", (byte) getFace().get3DDataValue());
         if (supportPos != null) tag.putLong("SupportPos", supportPos.asLong());
         if (!getCustomPattern().isEmpty()) tag.putString("CustomPattern", getCustomPattern());
+        if (getRenderWidth() > 0.0F) tag.putFloat("RenderWidth", getRenderWidth());
+        if (getRenderHeight() > 0.0F) tag.putFloat("RenderHeight", getRenderHeight());
     }
 
     @Override

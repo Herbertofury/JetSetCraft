@@ -45,7 +45,9 @@ public final class GraffitiRenderer extends EntityRenderer<GraffitiEntity> {
             vertex(consumer, matrix, normal, halfWidth, halfHeight, 0, 1, 0, packedLight, 255, 255, 255);
             vertex(consumer, matrix, normal, -halfWidth, halfHeight, 0, 0, 0, packedLight, 255, 255, 255);
         } else {
-            renderCustom(consumer, matrix, normal, custom, packedLight);
+            float width = entity.getRenderWidth() > 0.0F ? entity.getRenderWidth() : 1.6F;
+            float height = entity.getRenderHeight() > 0.0F ? entity.getRenderHeight() : 1.0F;
+            renderCustom(consumer, matrix, normal, custom, packedLight, width, height);
         }
         poseStack.popPose();
         super.render(entity, entityYaw, partialTick, poseStack, buffer, packedLight);
@@ -57,7 +59,8 @@ public final class GraffitiRenderer extends EntityRenderer<GraffitiEntity> {
             case EAST -> poseStack.mulPose(Axis.YP.rotationDegrees(-90.0f));
             case WEST -> poseStack.mulPose(Axis.YP.rotationDegrees(90.0f));
             case SOUTH -> { }
-            default -> { }
+            case UP -> poseStack.mulPose(Axis.XP.rotationDegrees(-90.0F));
+            case DOWN -> poseStack.mulPose(Axis.XP.rotationDegrees(90.0F));
         }
     }
 
@@ -73,10 +76,10 @@ public final class GraffitiRenderer extends EntityRenderer<GraffitiEntity> {
     }
 
     private static void renderCustom(VertexConsumer consumer, Matrix4f matrix, Matrix3f normal,
-                                     String encoded, int light) {
+                                     String encoded, int light, float renderWidth, float renderHeight) {
         byte[] pixels = CustomGraffiti.decode(encoded);
-        float pixelWidth = 1.6f / CustomGraffiti.WIDTH;
-        float pixelHeight = 1.0f / CustomGraffiti.HEIGHT;
+        float pixelWidth = renderWidth / CustomGraffiti.WIDTH;
+        float pixelHeight = renderHeight / CustomGraffiti.HEIGHT;
         for (int py = 0; py < CustomGraffiti.HEIGHT; py++) {
             for (int px = 0; px < CustomGraffiti.WIDTH; px++) {
                 int palette = pixels[py * CustomGraffiti.WIDTH + px] & 15;
@@ -85,9 +88,9 @@ public final class GraffitiRenderer extends EntityRenderer<GraffitiEntity> {
                 int red = (argb >>> 16) & 255;
                 int green = (argb >>> 8) & 255;
                 int blue = argb & 255;
-                float left = -0.8f + px * pixelWidth;
+                float left = -renderWidth * 0.5F + px * pixelWidth;
                 float right = left + pixelWidth + 0.0005f;
-                float top = 0.5f - py * pixelHeight;
+                float top = renderHeight * 0.5F - py * pixelHeight;
                 float bottom = top - pixelHeight - 0.0005f;
                 vertex(consumer, matrix, normal, left, bottom, 0, 0, 1, light, red, green, blue);
                 vertex(consumer, matrix, normal, right, bottom, 0, 1, 1, light, red, green, blue);

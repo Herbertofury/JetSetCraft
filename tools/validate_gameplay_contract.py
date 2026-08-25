@@ -48,6 +48,11 @@ build_workflow = (ROOT / '.github/workflows/build.yml').read_text(encoding='utf-
 style_flow_tests = (ROOT / 'src/main/java/com/herberto/jetsetcraft/gametest/StyleFlowGameTests.java').read_text(encoding='utf-8')
 hoverboard_tests = (ROOT / 'src/main/java/com/herberto/jetsetcraft/gametest/HoverboardGameTests.java').read_text(encoding='utf-8')
 street_gear_tests = (ROOT / 'src/main/java/com/herberto/jetsetcraft/gametest/StreetGearGameTests.java').read_text(encoding='utf-8')
+parkour = (ROOT / 'src/main/java/com/herberto/jetsetcraft/movement/ParkourTraversal.java').read_text(encoding='utf-8')
+paint_splash = (ROOT / 'src/main/java/com/herberto/jetsetcraft/graffiti/PaintSplash.java').read_text(encoding='utf-8')
+paint_balloon = (ROOT / 'src/main/java/com/herberto/jetsetcraft/entity/PaintBalloonEntity.java').read_text(encoding='utf-8')
+spray_can = (ROOT / 'src/main/java/com/herberto/jetsetcraft/item/SprayCanItem.java').read_text(encoding='utf-8')
+rollerblade_model = (ROOT / 'src/main/java/com/herberto/jetsetcraft/client/render/RollerbladeModel.java').read_text(encoding='utf-8')
 model_generator = (ROOT / 'tools/generate_models.py').read_text(encoding='utf-8')
 lang = json.loads((ROOT / 'src/main/resources/assets/jetsetcraft/lang/en_us.json').read_text(encoding='utf-8'))
 
@@ -67,6 +72,23 @@ for needle, label in [
 ]:
     if needle not in movement and needle not in world:
         errors.append(f'missing gameplay contract: {label}')
+
+for needle, label, source in [
+    ('stridePulse', 'stride-pulsed ground acceleration', movement),
+    ('bestDriftTurn', 'charged angular drift release', movement),
+    ('wallKicksRemaining', 'bounded grounded-reset wall kicks', movement + data_java),
+    ('lastWallPlane', 'same-wall parkour reuse protection', movement + data_java),
+    ('tryKickoff', 'intentional sprint kickoff', parkour),
+    ('tryLedgeVault', 'collision-checked ledge vault', parkour),
+    ('add(0, 1.08D, 0)', 'full-block ledge destination clearance', parkour),
+    ('BALLOON_RAYS = 1000', 'full paint-balloon exposure pass', paint_splash),
+    ('maxPatches', 'bounded paint-splash entity count', paint_splash),
+    ('instanceof EntityHitResult', 'paint balloons burst on entity impact', paint_balloon),
+    ('isFreePaint', 'spray-can Tag/Free Paint mode', spray_can),
+    ('rightLeg.copyFrom', 'leg-baked rollerblade pose', rollerblade_model),
+]:
+    if needle not in source:
+        errors.append(f'missing upstream-merge contract: {label}')
 
 required_world_tokens = {
     'Blocks.BLUE_ICE': 'Blue Ice extreme speed',
@@ -367,8 +389,8 @@ else:
         for field in record_fields:
             if field != 'entityId' and f'packet.{field}()' not in client_state:
                 errors.append(f'client snapshot does not consume S2C field {field}')
-if 'private static final String PROTOCOL = "8"' not in network:
-    errors.append('network protocol was not bumped for the synchronized graffiti editor selection')
+if 'private static final String PROTOCOL = "9"' not in network:
+    errors.append('network protocol was not bumped for synchronized graffiti mode/color selection')
 
 required_gametest_markers = {
     'JETSETCRAFT_GAMETEST_PASS hoverboard': hoverboard_tests,
@@ -379,6 +401,7 @@ required_gametest_markers = {
     'JETSETCRAFT_GAMETEST_PASS catalogs': style_flow_tests,
     'JETSETCRAFT_GAMETEST_PASS street_gear': street_gear_tests,
     'JETSETCRAFT_GAMETEST_PASS graffiti_lifecycle': street_gear_tests,
+    'JETSETCRAFT_GAMETEST_PASS paint_balloon_splash': street_gear_tests,
 }
 for pass_marker, source in required_gametest_markers.items():
     if pass_marker not in source:

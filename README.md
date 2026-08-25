@@ -15,9 +15,11 @@ JetSetCraft turns ordinary Minecraft terrain into a momentum-first street sports
 - Twenty-four named tricks and twenty-eight dance moves with combo variety, Flow, boost rewards, landing grades, and multiplayer cyphers.
 - Exposed block-edge, fence, wall, pane, vanilla/Forge rail, and optional Create 6.0.8 track grinding.
 - Minecraft-native momentum tech across ice, slime, honey, Soul Speed, redstone rails, pistons, explosions, knockback, and small terrain transitions, while vanilla swimming retains complete control.
+- Street Art/Spirit Vector movement merge: rhythmic skate strides, charged angular powerslides, three wall kicks, wind redirects, sprint kickoffs, ledge vaults, and same-wall reuse protection—with exact neutral stopping preserved.
 - A hands-free, server-authoritative ride slot that leaves both hands and the vanilla boots slot available.
 - Combat-safe presentation: ride locomotion owns the lower body while item and weapon systems retain arms, hands, held items, and head.
-- A 139-entry graffiti gallery plus an in-game 16 × 10 custom-paint canvas, repaint-in-place behavior, support cleanup, durability, and a configurable per-chunk safety limit.
+- A 139-entry graffiti gallery plus an in-game 16 × 10 custom-paint canvas, toggleable 16-color Free Paint, all 16 throwable paint balloons, six-face surface splashes, repaint-in-place behavior, support cleanup, durability, and a configurable per-chunk safety limit.
+- Leg-baked rollerblade meshes follow the player's actual animated legs instead of floating as duplicated item models.
 - Persistent Street Gear for compatible vanilla and modded mobs, using conservative anatomy rigs without replacing the original entity, AI, ownership, UUID, or registry type.
 - A physical Boombox and mob-head gang tuner with data-pack mappings, safe event-only actors, cleanup/anti-farm rules, and eighty original gang entrance stingers.
 - A compact vanilla-adjacent Boost/Flow HUD with an instant `H` toggle, plus reduced-motion, camera, FOV, and trick-name controls.
@@ -26,9 +28,9 @@ The [wiki](https://github.com/Herbertofury/JetSetCraft/wiki) covers mechanics, c
 
 ## In game
 
-![BMX ride and compact Boost/Flow HUD](art/screenshots/v0.3.0-ride-hud.png)
+![Leg-baked inline skates, painted wall, and compact Boost/Flow HUD](art/screenshots/v0.3.0-ride-hud.png)
 
-![Paged graffiti selector](art/screenshots/v0.3.0-graffiti-selector.png)
+![Paged graffiti selector in persistent Free Paint mode](art/screenshots/v0.3.0-graffiti-selector.png)
 
 ![Custom 16 by 10 graffiti painter](art/screenshots/v0.3.0-custom-graffiti.png)
 
@@ -60,11 +62,16 @@ All keys are ordinary Forge mappings and can be rebound.
 | `C` | Manual; Hip-Hop dance selector |
 | `V` | Brake/powerslide; Breaking dance selector |
 | `Space` while grinding | Hop or transfer |
+| `Space` while wall-riding | Kick away; up to three wall kicks before touching ground |
+| `Sprint + Space` with movement | Kickoff from the ground |
+| `Space` at a clear ledge | Collision-checked ledge vault |
 | `B` / `Shift + B` | Dance or change move / stop dancing |
 | `W/S/A/D + B` | Select Toprock, House, Locking, or Popping |
 | Use spray can in air | Open the paged graffiti selector |
 | Shift + use spray can on a block | Open the selector without painting |
 | Use spray can on a wall | Paint the selected decal |
+| Tag / Free Paint selector toggle | Switch between full tags and quick six-face color splashes |
+| Use a paint balloon | Throw a wide surface-aware color splash |
 | Use ride gear on a mob | Equip persistent Street Gear |
 | Sneak + empty-hand use on geared mob | Recover its gear |
 
@@ -86,15 +93,15 @@ python tools/validate_wiki.py
 ./gradlew runGameTestServer
 ```
 
-On Windows, use `gradlew.bat`. The JAR is written to `build/libs/`. CI regenerates deterministic assets, rejects dirty generator output, performs a clean build, requires all eight Forge GameTests, starts a real dedicated server, and publishes the JAR, checksums, and logs as one workflow artifact.
+On Windows, use `gradlew.bat`. The JAR is written to `build/libs/`. CI regenerates deterministic assets, rejects dirty generator output, performs a clean build, requires all nine Forge GameTests, starts a real dedicated server, and publishes the JAR, checksums, and logs as one workflow artifact.
 
-In a development world, `/jetsetcraft status` reports authoritative movement and style state. Operators can use `/jetsetcraft build_vanilla_lab` to create a compact acceptance course and `/jetsetcraft set_momentum <speed>` as a controlled test aid. Maintainers can run `gradlew.bat -Djetsetcraft.visualAudit=true runClient` for an unattended real-client ride/HUD/selector/editor capture.
+In a development world, `/jetsetcraft status` reports authoritative movement and style state. Operators can use `/jetsetcraft build_vanilla_lab` to create a compact acceptance course and `/jetsetcraft set_momentum <speed>` as a controlled test aid. Maintainers can run `gradlew.bat -Djetsetcraft.visualAudit=true runClient` for an unattended real-client inline-skate/HUD/painted-wall/Free-Paint-selector/editor capture.
 
 ## Architecture and compatibility
 
 Clients send bounded input samples; the server owns movement, scoring, equipment, gang, and persistence state. Tracking clients receive sanitized snapshots. Optional APIs are isolated, optional data-pack entries use `required: false`, no mixins/coremods replace third-party behavior, event actors never force-load chunks, and fake/test players without a network channel remain safe.
 
-See [Architecture](docs/ARCHITECTURE.md), [Compatibility Covenant](docs/STANDALONE_COMPATIBILITY_COVENANT.md), [Asset Provenance](docs/ASSET_PROVENANCE.md), and [Changelog](CHANGELOG.md).
+See [Architecture](docs/ARCHITECTURE.md), [Upstream Merge](docs/UPSTREAM-MERGE.md), [Compatibility Covenant](docs/STANDALONE_COMPATIBILITY_COVENANT.md), [Asset Provenance](docs/ASSET_PROVENANCE.md), and [Changelog](CHANGELOG.md).
 
 ## Rights
 

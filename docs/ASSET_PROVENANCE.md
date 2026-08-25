@@ -8,6 +8,32 @@ JetSetCraft keeps source provenance separate from runtime derivatives so an asse
 - `textures/graffiti/tag_0.png` through `tag_3.png`: original deterministic JetSetCraft fallback/project tags.
 - `textures/graffiti/jsr/*.png`: 135 runtime decals extracted without redraw from the exact owner-supplied `JSRGraffiti.zip` described below. Dimensions and aspect ratios are recorded in `graffiti/catalog.json`.
 - `sounds/music/gangs/*.ogg`: eighty original deterministic JetSetCraft entrance stingers described below.
+- `textures/entity/ride/street_art/*.png` and `textures/item/street_art/paint_balloon/*.png`: MIT-licensed
+  Street Art rollerblade and 16-color paint-balloon assets described below.
+
+## Authorized MIT upstream merges
+
+### Street Art
+
+- Source: [BeeIsYou/street-art](https://github.com/BeeIsYou/street-art), revision
+  `63771c98742b76e2949223215aa2a60f1b6386e9`.
+- License: MIT, copyright 2026 BeeIsYou; preserved at `third_party/street-art/LICENSE`.
+- Canonical full-source snapshot: `source_assets/authorized/street-art/street-art-63771c9-source.zip`, 355,469
+  bytes, SHA-256 `86db7e55ed8153dd52ebfc2be3ed04a191246dbcb426cab812fd4ad43f7078fc`.
+- Runtime extracts: 16 original paint-balloon textures; red/green rollerblade textures; rollerblade mesh geometry;
+  adapted movement and paint-splash code identified in `THIRD_PARTY_NOTICES.md`.
+- Inline texture SHA-256: `9578598b316299c426031e041c5cc014b714567c08c656cb987ac7ceb78d0903`.
+- Quad texture SHA-256: `d535d82e7c703b7285d74e1a7c22d86629b6a1bc7864118955c1dd132327bf6e`.
+
+### Dream Burst Spirit Vector
+
+- Source: [HamaIndustries/spirit-vector](https://github.com/HamaIndustries/spirit-vector), revision
+  `623e7df026788add9737ea508b65baf80f66623d`.
+- License: MIT, copyright 2024 hama Industries; preserved at `third_party/spirit-vector/LICENSE`.
+- Canonical full-source snapshot: `source_assets/authorized/spirit-vector/spirit-vector-623e7df-source.zip`,
+  58,038,317 bytes, SHA-256 `a494063098ffadb48d21adfba2404fae56838629a05689e0a387cbdac230650c`.
+- Runtime use is a Forge 1.20.1 adaptation of selected kickoff, ledge-vault, wall-plane and state-machine ideas;
+  Spirit Vector's fantasy items, runes, soundtrack, branding, and alternate HUD are not bundled.
 
 ## SEGA authorization evidence
 

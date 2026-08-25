@@ -8,12 +8,13 @@ The server owns movement and scoring. Client code presents synchronized state; i
 
 ## Movement modules
 
-- `RideMotion`: ground acceleration, steering, air control, fluids, boost.
+- `RideMotion`: stride-pulsed ground acceleration, angular drift steering/release, wind-state air control, and boost.
 - `GrindFinder` / `GrindTraversal`: path arbitration, continuation, junctions, hops, transfers, stuck recovery.
 - `EdgeFinder`: exposed collision-shape ledges and clearance validation.
 - `VanillaRailFinder`: real `RailShape` traversal.
 - `CreateRailProvider`: optional native Create axes/Bezier geometry.
-- `WallRideFinder` / `WallTraversal`: wall detection and continuation.
+- `WallRideFinder` / `WallTraversal`: wall detection, plane-aware continuation, grounded-reset wall kicks, and wind redirect state.
+- `ParkourTraversal`: input-gated sprint kickoff and collision-checked ledge vaults.
 - `VanillaWorldPhysics`: facade over surfaces, rails, impulses, enchantments, landing, materials, and feedback.
 - `TrickCombo` / `TrickCatalog`: move selection, repeat/variety scoring, boost tricks, landing grades, Flow.
 - `DanceSystem` / `DanceCatalog`: 28 moves, phrase chaining, no-gear dance, cyphers.
@@ -30,6 +31,8 @@ Gameplay state is backend-independent. PlayerAnimator consumes state but does no
 ## Assets
 
 `tools/generate_models.py` builds dense deterministic OBJ equipment and textures. `tools/generate_animations.py` builds deterministic UUID-stable animation JSON. Validators enforce model coverage, face indices, minimum mesh quality, animation bone contracts, catalog integrity, and exact brand/source rules.
+
+`PaintSplash` owns server-authoritative Fibonacci-sphere surface exposure, six-face support/permission checks, deterministic 16 × 10 splat encoding, repaint replacement, and per-chunk limits. `RollerbladeModel` copies the actual player-leg pose into the authorized baked skate mesh every frame. The public source contains the adapted implementation and MIT notices; immutable authorized upstream snapshots remain in the private canonical archive.
 
 ## Compatibility boundaries
 

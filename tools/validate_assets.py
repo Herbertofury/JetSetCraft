@@ -100,6 +100,20 @@ for item in registered:
     model=ASSETS/'models/item'/f'{item}.json'
     if not model.exists(): errors.append(f'missing item model for {item}: {model.relative_to(ROOT)}')
 
+paint_colors = ('white','orange','magenta','light_blue','yellow','lime','pink','gray',
+                'light_gray','cyan','purple','blue','brown','green','red','black')
+for color in paint_colors:
+    model = ASSETS/'models/item'/f'{color}_paint_balloon.json'
+    texture = ASSETS/'textures/item/street_art/paint_balloon'/f'{color}.png'
+    recipe = ROOT/'src/main/resources/data/jetsetcraft/recipes'/f'{color}_paint_balloon.json'
+    for path in (model, texture, recipe):
+        if not path.exists(): errors.append(f'missing authorized paint-balloon asset: {path.relative_to(ROOT)}')
+    if model.exists():
+        payload = json.loads(model.read_text(encoding='utf-8'))
+        expected = f'jetsetcraft:item/street_art/paint_balloon/{color}'
+        if payload.get('textures', {}).get('layer0') != expected:
+            errors.append(f'{model.relative_to(ROOT)}: expected texture {expected}')
+
 for obj in sorted((ASSETS/'models/obj').glob('*.obj')):
     vertices=0
     faces=0
@@ -200,4 +214,5 @@ if errors:
     print('JetSetCraft asset validation FAILED')
     for e in errors: print(' -',e)
     sys.exit(1)
-print(f'JetSetCraft asset validation OK: {len(registered)} registered items, {len(actual)} animation clips')
+print(f'JetSetCraft asset validation OK: {len(registered)} literal + {len(paint_colors)} generated item registrations, '
+      f'{len(actual)} animation clips')

@@ -5,10 +5,15 @@ import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+import net.minecraft.core.Direction;
 import java.util.Optional;
 
 public final class WallRideFinder {
-    public record Wall(Vec3 normal, Vec3 tangent) {}
+    public record Wall(Vec3 normal, Vec3 tangent, Direction face, int planeCoordinate) {
+        public long planeKey() {
+            return ((long) face.get3DDataValue() << 32) ^ (planeCoordinate & 0xFFFFFFFFL);
+        }
+    }
 
     public static Optional<Wall> find(ServerPlayer player, Vec3 horizontalVelocity) {
         Vec3 forward = EdgeFinder.horizontal(horizontalVelocity);
@@ -32,7 +37,9 @@ public final class WallRideFinder {
         Vec3 normal = new Vec3(hit.getDirection().getStepX(), 0, hit.getDirection().getStepZ()).normalize();
         Vec3 tangent = forward.subtract(normal.scale(forward.dot(normal)));
         if (tangent.lengthSqr() < 0.05) return null;
-        return new Wall(normal, tangent.normalize());
+        Direction face = hit.getDirection();
+        int plane = face.getAxis() == Direction.Axis.X ? hit.getBlockPos().getX() : hit.getBlockPos().getZ();
+        return new Wall(normal, tangent.normalize(), face, plane);
     }
 
     private WallRideFinder() {}

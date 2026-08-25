@@ -7,11 +7,15 @@
 - Added persistent server-authoritative player loadouts and same-entity Street Gear for compatible vanilla/modded mobs.
 - Added data-driven mob-head gang resolution, physical Boombox sessions, event-only cast cleanup/anti-farm handling, and eighty original generated entrance stingers.
 - Added a paged 139-entry graffiti selector, bounded 16 × 10 custom-paint editor, repainting, wall-support cleanup, and per-chunk limits.
+- Merged Street Art's useful movement, leg-baked rollerblade model, 16-color paint-balloon assets/projectile loop, Fibonacci-sphere surface exposure, and free-paint ideas into the Forge 1.20.1 runtime under its MIT license.
+- Merged Spirit Vector's useful grounded kickoff, collision-checked ledge-vault, wall-plane reuse, coyote-time, and explicit parkour-state ideas under its MIT license.
+- Added a persistent Tag / Free Paint selector toggle, full 16-color palette, removable six-face splat decals, and dispenser-compatible paint balloons without removing the 139 tags or custom editor.
+- Added rhythmic skate-stride acceleration, angular drift charge/release, three grounded-reset wall kicks, and 20-tick wind redirection while preserving neutral stop and full vanilla fluid control.
 - Replaced the oversized opaque style panel with a compact vanilla-adjacent Boost/Flow display and instant `H` toggle.
 - Corrected ride-model transforms and added hands-free BMX/scooter handlebar animation layers that disengage at rest or during item/weapon use.
 - Removed camera-forward relaunch from stale momentum, restored a true stationary state, and made boost require a real direction or existing motion.
 - Hardened client/server packet boundaries, hostile input/NBT sanitization, lost-input recovery, block-removal lifecycle, optional-mob spawn failures, and fake-player networking.
-- Reconciled the valuable Git branch history and added a Gradle wrapper, read-only CI, eight real Forge GameTests, clean builds, dedicated-server verification, and an unattended real-client visual audit.
+- Reconciled the valuable Git branch history and added a Gradle wrapper, read-only CI, nine real Forge GameTests, clean builds, dedicated-server verification, and an unattended real-client visual audit.
 
 ## 0.2.0-alpha.1
 

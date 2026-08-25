@@ -68,7 +68,7 @@ jobs:
             sleep 20
           done
 
-      - name: Run eight real Forge GameTests
+      - name: Run nine real Forge GameTests
         shell: bash
         run: |
           set -euo pipefail
@@ -83,11 +83,12 @@ jobs:
             'JETSETCRAFT_GAMETEST_PASS combat_sovereignty' \
             'JETSETCRAFT_GAMETEST_PASS catalogs' \
             'JETSETCRAFT_GAMETEST_PASS street_gear' \
-            'JETSETCRAFT_GAMETEST_PASS graffiti_lifecycle'; do
+            'JETSETCRAFT_GAMETEST_PASS graffiti_lifecycle' \
+            'JETSETCRAFT_GAMETEST_PASS paint_balloon_splash'; do
             grep -Fq "$marker" "$log" || { echo "::error::Missing GameTest marker: $marker"; exit 1; }
           done
-          grep -Eq 'All 8 required tests passed|8 tests? passed' "$log" || {
-            echo '::error::Forge did not report all eight GameTests passing.'
+          grep -Eq 'All 9 required tests passed|9 tests? passed' "$log" || {
+            echo '::error::Forge did not report all nine GameTests passing.'
             exit 1
           }
 

@@ -4,6 +4,9 @@ import com.herberto.jetsetcraft.JetSetCraft;
 import com.herberto.jetsetcraft.blockentity.BoomboxBlockEntity;
 import com.herberto.jetsetcraft.entity.GraffitiEntity;
 import com.herberto.jetsetcraft.graffiti.CustomGraffiti;
+import com.herberto.jetsetcraft.graffiti.PaintColor;
+import com.herberto.jetsetcraft.graffiti.PaintSplash;
+import com.herberto.jetsetcraft.item.SprayCanItem;
 import com.herberto.jetsetcraft.gang.GangMemberState;
 import com.herberto.jetsetcraft.gang.GangRegistry;
 import com.herberto.jetsetcraft.gang.HeadTargetMappingRegistry;
@@ -45,6 +48,60 @@ import java.util.UUID;
 @GameTestHolder(JetSetCraft.MOD_ID)
 @PrefixGameTestTemplate(false)
 public final class StreetGearGameTests {
+    @GameTest(template = "hoverboard_empty", timeoutTicks = 80)
+    public static void paintBalloonsCreateBoundedSixFaceSplashes(GameTestHelper helper) {
+        if (ModItems.PAINT_BALLOONS.size() != PaintColor.values().length) {
+            throw new GameTestAssertException("The complete 16-color paint-balloon palette was not registered");
+        }
+        for (PaintColor color : PaintColor.values()) {
+            ResourceLocation recipeId = ResourceLocation.fromNamespaceAndPath(JetSetCraft.MOD_ID,
+                    color.serializedName() + "_paint_balloon");
+            if (helper.getLevel().getRecipeManager().byKey(recipeId).isEmpty()) {
+                throw new GameTestAssertException("Craftable paint-balloon recipe was not loaded by Minecraft: "
+                        + recipeId);
+            }
+        }
+        String deterministic = PaintSplash.createSplatPattern(PaintColor.CYAN, 0.8F, 42L);
+        if (!CustomGraffiti.isValid(deterministic)
+                || CustomGraffiti.decode(deterministic)[(CustomGraffiti.HEIGHT / 2) * CustomGraffiti.WIDTH
+                + CustomGraffiti.WIDTH / 2] == 0) {
+            throw new GameTestAssertException("Paint splat codec did not create a bounded visible canvas");
+        }
+        ItemStack spray = new ItemStack(ModItems.SPRAY_CAN.get());
+        SprayCanItem.setFreePaint(spray, true);
+        SprayCanItem.setPaintColor(spray, PaintColor.CYAN);
+        if (!SprayCanItem.isFreePaint(spray) || SprayCanItem.getPaintColor(spray) != PaintColor.CYAN) {
+            throw new GameTestAssertException("Spray-can Tag/Free Paint mode and color did not persist in item NBT");
+        }
+
+        for (int y = 1; y <= 3; y++) {
+            for (int z = 1; z <= 3; z++) helper.setBlock(new BlockPos(4, y, z), Blocks.STONE);
+        }
+        var source = EntityType.ARMOR_STAND.create(helper.getLevel());
+        if (source == null) throw new GameTestAssertException("Could not create splash source");
+        BlockPos originBlock = helper.absolutePos(new BlockPos(2, 2, 2));
+        source.moveTo(originBlock.getX() + 0.5D, originBlock.getY() + 0.5D, originBlock.getZ() + 0.5D);
+        helper.getLevel().addFreshEntity(source);
+        int placed = PaintSplash.throwBalloon(helper.getLevel(), source, null, source.position(), PaintColor.CYAN);
+        if (placed < 1 || placed > 18) {
+            throw new GameTestAssertException("Balloon splash violated its bounded placement contract: " + placed);
+        }
+        // ServerLevel indexes newly added entities at the end of the current tick. Assert after that authoritative
+        // boundary rather than confusing a transient section-index count with lost paint.
+        helper.runAfterDelay(2, () -> {
+            AABB area = source.getBoundingBox().inflate(4.0D);
+            var decals = helper.getLevel().getEntitiesOfClass(GraffitiEntity.class, area);
+            long malformed = decals.stream().filter(decal -> decal.getCustomPattern().isEmpty()
+                    || decal.getRenderWidth() <= 0.0F || decal.getRenderHeight() <= 0.0F).count();
+            if (decals.size() != placed || malformed > 0) {
+                throw new GameTestAssertException("Surface splash did not materialize as persistent sized decals: placed="
+                        + placed + " found=" + decals.size() + " malformed=" + malformed);
+            }
+            System.out.println("JETSETCRAFT_GAMETEST_PASS paint_balloon_splash");
+            helper.succeed();
+        });
+    }
+
     @GameTest(template = "hoverboard_empty", timeoutTicks = 100)
     public static void graffitiPersistsAndLeavesWithItsWall(GameTestHelper helper) {
         BlockPos wallRelative = new BlockPos(2, 1, 2);

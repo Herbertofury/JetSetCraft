@@ -5,6 +5,8 @@ import com.herberto.jetsetcraft.client.ClientPacketHandlers;
 import com.herberto.jetsetcraft.entity.GraffitiEntity;
 import com.herberto.jetsetcraft.graffiti.CustomGraffiti;
 import com.herberto.jetsetcraft.graffiti.GraffitiCatalog;
+import com.herberto.jetsetcraft.graffiti.PaintColor;
+import com.herberto.jetsetcraft.graffiti.PaintSplash;
 import com.herberto.jetsetcraft.registry.ModEntities;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.Direction;
@@ -20,12 +22,15 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
 
 public final class SprayCanItem extends Item {
     public static final String VARIANT_TAG = "JetSetCraftGraffitiVariant";
     public static final String CUSTOM_TAG = "JetSetCraftGraffitiCustom";
+    public static final String FREE_PAINT_TAG = "JetSetCraftFreePaint";
+    public static final String PAINT_COLOR_TAG = "JetSetCraftPaintColor";
 
     public SprayCanItem(Properties properties) {
         super(properties);
@@ -40,7 +45,6 @@ public final class SprayCanItem extends Item {
     @Override
     public InteractionResult useOn(UseOnContext context) {
         Direction face = context.getClickedFace();
-        if (!face.getAxis().isHorizontal()) return InteractionResult.FAIL;
         if (!JetSetConfig.SERVER.allowGraffiti.get()) return InteractionResult.FAIL;
 
         var player = context.getPlayer();
@@ -49,6 +53,20 @@ public final class SprayCanItem extends Item {
             if (context.getLevel().isClientSide) openSelector(context.getHand());
             return InteractionResult.sidedSuccess(context.getLevel().isClientSide);
         }
+
+        if (isFreePaint(stack)) {
+            if (context.getLevel() instanceof ServerLevel serverLevel && player != null) {
+                BlockHitResult hit = new BlockHitResult(context.getClickLocation(), face,
+                        context.getClickedPos(), false);
+                int painted = PaintSplash.freeSpray(serverLevel, player, hit, getPaintColor(stack), stack);
+                if (painted > 0 && !player.getAbilities().instabuild) {
+                    stack.hurtAndBreak(1, player, p -> p.broadcastBreakEvent(context.getHand()));
+                }
+            }
+            return InteractionResult.sidedSuccess(context.getLevel().isClientSide);
+        }
+
+        if (!face.getAxis().isHorizontal()) return InteractionResult.FAIL;
 
         if (context.getLevel() instanceof ServerLevel serverLevel) {
             int variant = getCatalogSelection(stack);
@@ -95,6 +113,22 @@ public final class SprayCanItem extends Item {
     }
 
     public static boolean hasCustomSelection(ItemStack stack) { return !getCustomSelection(stack).isEmpty(); }
+
+    public static boolean isFreePaint(ItemStack stack) {
+        return stack.getOrCreateTag().getBoolean(FREE_PAINT_TAG);
+    }
+
+    public static void setFreePaint(ItemStack stack, boolean enabled) {
+        stack.getOrCreateTag().putBoolean(FREE_PAINT_TAG, enabled);
+    }
+
+    public static PaintColor getPaintColor(ItemStack stack) {
+        return PaintColor.byId(stack.getOrCreateTag().getInt(PAINT_COLOR_TAG));
+    }
+
+    public static void setPaintColor(ItemStack stack, PaintColor color) {
+        stack.getOrCreateTag().putInt(PAINT_COLOR_TAG, color == null ? PaintColor.WHITE.id() : color.id());
+    }
 
     public static void setCatalogSelection(ItemStack stack, int variant) {
         stack.getOrCreateTag().putInt(VARIANT_TAG, Math.floorMod(variant, GraffitiCatalog.size()));

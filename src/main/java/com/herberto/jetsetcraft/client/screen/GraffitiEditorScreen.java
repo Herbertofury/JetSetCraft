@@ -43,7 +43,9 @@ public final class GraffitiEditorScreen extends Screen {
         String encoded = CustomGraffiti.encode(pixels);
         if (minecraft.player != null) {
             SprayCanItem.setCustomSelection(minecraft.player.getItemInHand(hand), encoded);
-            JetSetNetwork.sendGraffitiSelection(hand, 0, encoded);
+            SprayCanItem.setFreePaint(minecraft.player.getItemInHand(hand), false);
+            JetSetNetwork.sendGraffitiSelection(hand, 0, encoded, false,
+                    SprayCanItem.getPaintColor(minecraft.player.getItemInHand(hand)).id());
             minecraft.player.displayClientMessage(Component.translatable("message.jetsetcraft.graffiti_custom_saved"), true);
         }
         minecraft.setScreen(parent);

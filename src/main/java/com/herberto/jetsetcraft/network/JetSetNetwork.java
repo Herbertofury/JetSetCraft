@@ -12,7 +12,7 @@ import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.network.simple.SimpleChannel;
 
 public final class JetSetNetwork {
-    private static final String PROTOCOL = "8";
+    private static final String PROTOCOL = "9";
     private static final SimpleChannel CHANNEL = NetworkRegistry.ChannelBuilder
             .named(ResourceLocation.fromNamespaceAndPath(JetSetCraft.MOD_ID, "main"))
             .networkProtocolVersion(() -> PROTOCOL).clientAcceptedVersions(PROTOCOL::equals).serverAcceptedVersions(PROTOCOL::equals)
@@ -36,8 +36,9 @@ public final class JetSetNetwork {
     }
     public static void sendInput(int mask, float forward, float strafe) { CHANNEL.sendToServer(new C2SInputPacket(mask, forward, strafe)); }
     public static void sendRideLoadoutAction(boolean unequip) { CHANNEL.sendToServer(new C2SRideLoadoutPacket(unequip)); }
-    public static void sendGraffitiSelection(InteractionHand hand, int variant, String customPattern) {
-        CHANNEL.sendToServer(new C2SGraffitiSelectionPacket(hand, variant, customPattern));
+    public static void sendGraffitiSelection(InteractionHand hand, int variant, String customPattern,
+                                             boolean freePaint, int colorId) {
+        CHANNEL.sendToServer(new C2SGraffitiSelectionPacket(hand, variant, customPattern, freePaint, colorId));
     }
 
     /**

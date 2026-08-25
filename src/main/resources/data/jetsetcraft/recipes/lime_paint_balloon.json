@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "group": "jetsetcraft:paint_balloons",
+  "ingredients": [
+    { "item": "minecraft:dried_kelp" },
+    { "item": "minecraft:paper" },
+    { "item": "minecraft:lime_dye" }
+  ],
+  "result": {
+    "item": "jetsetcraft:lime_paint_balloon",
+    "count": 8
+  }
+}

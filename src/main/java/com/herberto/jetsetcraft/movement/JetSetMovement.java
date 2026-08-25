@@ -75,6 +75,12 @@ public final class JetSetMovement {
         if (data.grindReattachCooldown() > 0) data.setGrindReattachCooldown(data.grindReattachCooldown() - 1);
 
         boolean grounded = player.onGround();
+        if (grounded) {
+            data.setWallKicksRemaining(3);
+            data.setWindTicks(0);
+            data.setWindBias(Vec3.ZERO);
+        }
+        ParkourTraversal.tick(player, data, grounded);
         VanillaWorldPhysics.captureExternalImpulse(player, data);
         VanillaWorldPhysics.applyRideEnchantments(player, data);
         VanillaWorldPhysics.Surface surface = VanillaWorldPhysics.ground(player);
@@ -86,10 +92,13 @@ public final class JetSetMovement {
         Vec3 velocity = player.getDeltaMovement();
         Vec3 horizontal = EdgeFinder.horizontal(velocity);
         double horizontalSpeed = horizontal.length();
+        boolean wasPowersliding = data.powersliding();
         boolean wantsPowerslide = grounded && !data.grinding() && !data.wallRiding() && data.pressed(InputFlags.BRAKE)
                 && Math.abs(data.inputStrafe()) > 0.20f && Math.max(horizontalSpeed, data.momentum()) > 0.18;
+        if (wantsPowerslide && !wasPowersliding) RideMotion.beginPowerslide(data);
         data.setPowersliding(wantsPowerslide);
         data.setPowerslideTicks(wantsPowerslide ? data.powerslideTicks() + 1 : 0);
+        if (!wantsPowerslide && wasPowersliding) RideMotion.finishPowerslide(player, data);
         data.setManual(grounded && !data.grinding() && !data.wallRiding() && !wantsPowerslide
                 && data.pressed(InputFlags.MANUAL) && data.momentum() > 0.14);
         data.setBoosting(data.pressed(InputFlags.BOOST) && data.boost() > 0.0f);
@@ -101,6 +110,9 @@ public final class JetSetMovement {
 
         if (data.grinding() && data.justPressed(InputFlags.JUMP) && JetSetConfig.SERVER.allowRailTricks.get()) {
             GrindTraversal.hopFromGrind(player, data);
+        }
+        if (data.wallRiding() && data.justPressed(InputFlags.JUMP)) {
+            WallTraversal.kickFromWall(player, data);
         }
 
         if (data.grinding()) {

@@ -25,6 +25,7 @@ final class RideMotion {
         // This makes releasing WASD settle exactly like vanilla and guarantees a stationary player
         // cannot be launched forward by an old momentum value.
         if (inputMagnitude <= 0.05 && !data.powersliding() && !data.manual()) {
+            data.setStrideTicks(0);
             double speed = currentSpeed;
             if (data.pressed(InputFlags.BRAKE)) speed *= 0.72 * world.brakeMultiplier();
             if (speed < 0.025) speed = 0.0;
@@ -41,8 +42,14 @@ final class RideMotion {
         }
 
         if (inputMagnitude > 0.05 && !data.powersliding()) {
+            data.setStrideTicks(data.strideTicks() + 1);
+            // Street Art's grounded controller expresses acceleration as alternating skate pushes. Keep that
+            // physical rhythm, but retain a non-zero floor so keyboard/analogue control never feels unresponsive.
+            double stride = Math.sin(data.strideTicks() * Math.PI * 2.0 * 0.04);
+            // The first push must always clear the solver's tiny-velocity dead zone; subsequent ticks pulse.
+            double stridePulse = data.strideTicks() <= 2 ? 1.0 : 0.55 + 0.45 * stride * stride;
             if (momentum < cap) {
-                momentum = Math.min(cap, momentum + acceleration * (0.45 + inputMagnitude * 0.55)
+                momentum = Math.min(cap, momentum + acceleration * stridePulse * (0.45 + inputMagnitude * 0.55)
                         + world.passiveAssistPerTick());
             } else {
                 // Momentum above the ordinary cap came from a boost, slope, explosion, piston, rail or other
@@ -50,9 +57,11 @@ final class RideMotion {
                 momentum *= Math.max(world.coastingRetention(), 0.9970);
             }
         } else if (!data.powersliding()) {
+            data.setStrideTicks(0);
             momentum *= world.coastingRetention();
         }
         if (data.powersliding()) {
+            data.setStrideTicks(0);
             momentum *= Math.max(0.985, world.coastingRetention() - 0.0030);
             data.setComboGrace(MovementTuning.COMBO_GRACE_TICKS);
             if (player.tickCount % 6 == 0) TrickCombo.addStyle(data, 20, 0.012f);
@@ -64,7 +73,17 @@ final class RideMotion {
         data.setMomentum(momentum);
 
         Vec3 direction;
-        if (desired.lengthSqr() > 1.0e-5) {
+        if (data.powersliding() && currentSpeed > 0.05 && desired.lengthSqr() > 1.0e-5) {
+            // Drift steering is angular rather than a direct velocity replacement. Holding the slide longer
+            // permits a tighter line, while accumulated turn determines the small release kick.
+            double maxTurn = 0.045 + Math.min(1.0, data.powerslideTicks() / 40.0) * 0.045;
+            double turn = Math.max(-maxTurn, Math.min(maxTurn,
+                    MovementMath.signedHorizontalAngle(current, desired)));
+            data.setDriftTurn(data.driftTurn() + turn);
+            data.setBestDriftTurn(Math.max(data.bestDriftTurn(), Math.abs(data.driftTurn())));
+            direction = MovementMath.safeNormalize(MovementMath.rotateHorizontal(current.normalize(), turn),
+                    current.normalize());
+        } else if (desired.lengthSqr() > 1.0e-5) {
             direction = desired.normalize();
             if (currentSpeed > 0.04) {
                 double impulseSteeringScale = data.externalImpulseTicks() > 0 ? 0.28 : 1.0;
@@ -89,14 +108,55 @@ final class RideMotion {
         Vec3 current = player.getDeltaMovement();
         Vec3 horizontal = EdgeFinder.horizontal(current);
         Vec3 desired = MovementMath.desiredDirection(player, data);
-        if (desired.lengthSqr() < 1.0e-5) return;
+        if (desired.lengthSqr() < 1.0e-5) {
+            if (data.windTicks() > 0) data.setWindTicks(data.windTicks() - 1);
+            return;
+        }
         double speed = Math.max(horizontal.length(), data.momentum());
         Vec3 currentDir = horizontal.lengthSqr() > 1.0e-5 ? horizontal.normalize() : desired.normalize();
+        if (data.windTicks() > 0 && horizontal.length() >= 0.25) {
+            double decay = Math.max(0.0, Math.min(1.0, data.windTicks() / 10.0 - 1.0));
+            Vec3 bias = MovementMath.safeNormalize(data.windBias(), currentDir);
+            double alignment = Math.max(0.0, Math.min(1.0, currentDir.dot(desired.normalize()) * 2.0));
+            alignment *= Math.max(0.0, Math.min(1.0, currentDir.dot(bias) * 2.0));
+            double maxTurn = 0.25 * decay * alignment;
+            double turn = Math.max(-maxTurn, Math.min(maxTurn,
+                    MovementMath.signedHorizontalAngle(currentDir, desired)));
+            Vec3 redirected = MovementMath.rotateHorizontal(currentDir, turn);
+            player.setDeltaMovement(redirected.x * speed, current.y * 0.985, redirected.z * speed);
+            player.hurtMarked = true;
+            data.setWindTicks(data.windTicks() - 1);
+            return;
+        }
+        if (data.windTicks() > 0) data.setWindTicks(data.windTicks() - 1);
         double control = data.style().airControl() * (data.externalImpulseTicks() > 0 ? 0.30 : 1.0);
         Vec3 blended = MovementMath.safeNormalize(currentDir.scale(1.0 - control)
                 .add(desired.normalize().scale(control)), desired.normalize());
         player.setDeltaMovement(blended.x * speed, current.y, blended.z * speed);
         player.hurtMarked = true;
+    }
+
+    static void beginPowerslide(JetSetData data) {
+        data.setDriftTurn(0.0);
+        data.setBestDriftTurn(0.0);
+    }
+
+    static void finishPowerslide(ServerPlayer player, JetSetData data) {
+        double strength = Math.max(0.0, Math.min(1.0, data.bestDriftTurn() / Math.PI * 4.0 - 1.0));
+        Vec3 horizontal = EdgeFinder.horizontal(player.getDeltaMovement());
+        if (strength > 0.0 && horizontal.lengthSqr() > 1.0e-5
+                && Math.hypot(data.inputForward(), data.inputStrafe()) > 0.05) {
+            double speed = horizontal.length() + strength * 0.10;
+            Vec3 direction = horizontal.normalize();
+            Vec3 old = player.getDeltaMovement();
+            player.setDeltaMovement(direction.x * speed, old.y, direction.z * speed);
+            player.hurtMarked = true;
+            data.setMomentum(Math.max(data.momentum(), speed));
+            data.setComboGrace(MovementTuning.COMBO_GRACE_TICKS);
+            TrickCombo.addStyle(data, 45 + (int) Math.round(strength * 55.0), 0.04f);
+        }
+        data.setDriftTurn(0.0);
+        data.setBestDriftTurn(0.0);
     }
 
     static void handleBoost(ServerPlayer player, JetSetData data, VanillaWorldPhysics.Surface surface) {

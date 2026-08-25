@@ -43,6 +43,9 @@ public final class JetSetData {
     private boolean boosting;
     private boolean powersliding;
     private int powerslideTicks;
+    private int strideTicks;
+    private double driftTurn;
+    private double bestDriftTurn;
     private float wallSide;
     private Vec3 grindDirection = Vec3.ZERO;
     private Vec3 wallNormal = Vec3.ZERO;
@@ -50,6 +53,12 @@ public final class JetSetData {
     private int grindStuckTicks;
     private double grindCurveFactor = 1.0;
     private int wallRideTicks;
+    private int wallKicksRemaining = 3;
+    private int windTicks;
+    private Vec3 windBias = Vec3.ZERO;
+    private long wallPlane = Long.MIN_VALUE;
+    private long lastWallPlane = Long.MIN_VALUE;
+    private int parkourCooldown;
     private int inputMask;
     private int previousInputMask;
     private float inputForward;
@@ -142,6 +151,14 @@ public final class JetSetData {
     public void setPowersliding(boolean value) { powersliding = value; }
     public int powerslideTicks() { return powerslideTicks; }
     public void setPowerslideTicks(int value) { powerslideTicks = Math.max(0, value); }
+    public int strideTicks() { return strideTicks; }
+    public void setStrideTicks(int value) { strideTicks = Math.max(0, value); }
+    public double driftTurn() { return driftTurn; }
+    public void setDriftTurn(double value) { driftTurn = Double.isFinite(value) ? value : 0.0; }
+    public double bestDriftTurn() { return bestDriftTurn; }
+    public void setBestDriftTurn(double value) {
+        bestDriftTurn = Double.isFinite(value) ? Math.max(0.0, value) : 0.0;
+    }
     public float wallSide() { return wallSide; }
     public void setWallSide(float value) { wallSide = clamp(value, -1f, 1f); }
     public Vec3 grindDirection() { return grindDirection; }
@@ -158,6 +175,18 @@ public final class JetSetData {
     }
     public int wallRideTicks() { return wallRideTicks; }
     public void setWallRideTicks(int value) { wallRideTicks = Math.max(0, value); }
+    public int wallKicksRemaining() { return wallKicksRemaining; }
+    public void setWallKicksRemaining(int value) { wallKicksRemaining = Math.max(0, Math.min(3, value)); }
+    public int windTicks() { return windTicks; }
+    public void setWindTicks(int value) { windTicks = Math.max(0, value); }
+    public Vec3 windBias() { return windBias; }
+    public void setWindBias(Vec3 value) { windBias = finiteVector(value); }
+    public long wallPlane() { return wallPlane; }
+    public void setWallPlane(long value) { wallPlane = value; }
+    public long lastWallPlane() { return lastWallPlane; }
+    public void setLastWallPlane(long value) { lastWallPlane = value; }
+    public int parkourCooldown() { return parkourCooldown; }
+    public void setParkourCooldown(int value) { parkourCooldown = Math.max(0, value); }
     public int inputMask() { return inputMask; }
     public void setInputMask(int value) {
         int sanitized = value & InputFlags.ALL;
@@ -257,6 +286,9 @@ public final class JetSetData {
         boosting = false;
         powersliding = false;
         powerslideTicks = 0;
+        strideTicks = 0;
+        driftTurn = 0.0;
+        bestDriftTurn = 0.0;
         wallSide = 0f;
         grindDirection = Vec3.ZERO;
         wallNormal = Vec3.ZERO;
@@ -264,6 +296,12 @@ public final class JetSetData {
         grindStuckTicks = 0;
         grindCurveFactor = 1.0;
         wallRideTicks = 0;
+        wallKicksRemaining = 3;
+        windTicks = 0;
+        windBias = Vec3.ZERO;
+        wallPlane = Long.MIN_VALUE;
+        lastWallPlane = Long.MIN_VALUE;
+        parkourCooldown = 0;
         lastDetectorRailPos = Long.MIN_VALUE;
         lastActivatorRailPos = Long.MIN_VALUE;
         lastSideBouncePos = Long.MIN_VALUE;

@@ -22,6 +22,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
+import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.world.entity.EntityType;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.event.entity.EntityLeaveLevelEvent;
@@ -74,6 +75,7 @@ public final class ClientEvents {
         @SubscribeEvent
         public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
             event.registerEntityRenderer(ModEntities.GRAFFITI.get(), GraffitiRenderer::new);
+            event.registerEntityRenderer(ModEntities.PAINT_BALLOON.get(), ThrownItemRenderer::new);
             event.registerBlockEntityRenderer(ModBlockEntities.BOOMBOX.get(), BoomboxRenderer::new);
         }
 
@@ -140,6 +142,7 @@ public final class ClientEvents {
                 if (DANCE.isDown()) mask |= InputFlags.DANCE;
                 if (mc.options.keyJump.isDown()) mask |= InputFlags.JUMP;
                 if (mc.options.keyShift.isDown()) mask |= InputFlags.SNEAK;
+                if (mc.options.keySprint.isDown()) mask |= InputFlags.SPRINT;
                 forward = finiteUnit(mc.player.input.forwardImpulse);
                 strafe = finiteUnit(mc.player.input.leftImpulse);
             }

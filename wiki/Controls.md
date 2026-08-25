@@ -13,13 +13,17 @@ All JetSetCraft keys are standard Forge key mappings and can be rebound from Min
 | Left Alt + R | Boost trick when enabled and boost is available |
 | G | Seek/grab a grind target; in the air it can begin a wall ride |
 | Space while grinding | Rail hop or transfer while preserving momentum |
+| Space while wall-riding | Kick away from the wall; up to three kicks reset on ground contact |
+| Sprint + Space + direction on ground | Intentional parkour kickoff |
+| Space + direction beside a low ledge in air | Collision-checked ledge vault |
 | C | Manual; also a Hip-Hop selector when starting dance |
 | V | Brake/powerslide; also a Breaking selector when starting dance |
 | B | Begin dance, switch dance family, or chain a new move |
 | Shift + B | Stop dancing |
 | Use spray can in air | Open the paged graffiti selector |
 | Shift + use spray can on a block | Open the selector without painting |
-| Use spray can on a wall | Place or repaint a graffiti decal |
+| Use spray can on a block | Place the selected Tag, or spray a compact Free Paint splat on any face |
+| Use paint balloon | Throw a dye-colored 1,000-ray bounded surface splash |
 
 ## Dance selection chords
 
@@ -42,6 +46,8 @@ Dance moves automatically chain when their animation phrase ends. Tap **B** agai
 Ride acceleration follows actual directional input. Releasing movement keys allows Minecraft's ordinary ground travel and friction to settle the rider to a complete stop; stored momentum never invents camera-forward motion. Pressing Boost at a true standstill does not launch the player without a direction.
 
 Entering water, lava, or the swimming pose immediately gives the full velocity vector and animation pose back to Minecraft. Swimming, diving, currents, bubble columns, and compatible modded fluid behavior remain available while ride gear stays safely equipped.
+
+Ground acceleration is delivered as responsive skate-push pulses. Powerslides steer angularly and can earn a small release kick from a committed turn. Wall kicks enter a brief wind state that permits controlled airborne redirection without replacing Minecraft gravity or outside impulses.
 
 ## Context rules
 

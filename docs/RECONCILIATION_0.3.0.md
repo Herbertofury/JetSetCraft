@@ -30,7 +30,7 @@ The complete canonical project retains owner-supplied and research-only inputs u
 - 8 registered-item and 72 animation-clip asset validation;
 - seven dense authored OBJ mesh checks plus animation seam checks;
 - packet, input, persistence, gameplay, compatibility, and wiki contract validation;
-- eight real Forge GameTests, including neutral stop and vanilla swimming authority;
+- nine real Forge GameTests, including neutral stop, vanilla swimming authority, and bounded surface paint;
 - unattended real-client ride/HUD/graffiti screenshots;
 - exact release JAR launch in a clean standalone Forge server;
 - Minecraft Mod Vault TestGrid Java status probe against that live server;

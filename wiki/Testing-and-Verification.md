@@ -25,13 +25,14 @@ The model generator is offline-safe: when the pinned optional graffiti archive c
 The GameTest server verifies:
 
 1. Hoverboard registry identity, persistent loadout NBT, and the production ground movement solver.
-2. Neutral ride input cannot relaunch stale momentum, deliberate input restarts correctly, and swimming retains the exact vanilla velocity vector.
+2. Neutral ride input cannot relaunch stale momentum, deliberate input restarts correctly, directional sprint kickoff works while neutral kickoff cannot manufacture motion, and swimming retains the exact vanilla velocity vector.
 3. Scooter registry identity, persistent loadout NBT, and the universal `JetSetMovement` path.
 4. Breakdance starting with no ride gear, server-owned move selection, completed-phrase scoring, and Flow.
 5. Immediate dance cancellation when a combat swing takes presentation/input authority.
 6. Stable one-to-one identity for all 28 dance moves, complete 24-trick catalog coverage, and hostile input/NBT sanitization.
 7. Same-entity Street Gear identity, physical-item persistence, real entity NBT save/load, clean removal, spider/slime anatomy routing, persistent gangification/de-gangification, and a real placed Boombox proving Zombie Head → Dead Beat tuning plus start/cancel/immediate-restart/target-return behavior.
-8. Built-in and custom graffiti NBT persistence plus automatic removal after the supporting wall is broken.
+8. All sixteen registered/craftable paint-balloon colors, deterministic bounded splat encoding, Tag/Free Paint item state, real 1,000-ray surface placement, exact decal materialization, and persistent six-face sizing.
+9. Built-in and custom graffiti NBT persistence plus automatic removal after the supporting wall is broken.
 
 The player tests use uniquely identified Forge fake players and a real `ServerLevel` rather than mocked movement classes. Unique profiles prevent parallel GameTests from moving or mutating the same automation player.
 
@@ -45,7 +46,7 @@ CI launches Forge with `eula=true`, waits for the real ready line, and fails on 
 
 ## Real-client visual audit
 
-Run `gradlew.bat -Djetsetcraft.visualAudit=true runClient --no-daemon` on Windows (or the wrapper equivalent elsewhere). The opt-in harness quick-loads its development world, creates a controlled BMX/HUD scene, captures the paged graffiti selector and custom painter, prints `JETSETCRAFT_VISUAL_AUDIT_PASS`, and exits cleanly. It is inert in ordinary launches.
+Run `gradlew.bat -Djetsetcraft.visualAudit=true runClient --no-daemon` on Windows (or the wrapper equivalent elsewhere). The opt-in harness quick-loads its development world, creates a controlled inline-skate/HUD/painted-wall scene, captures the selector in persistent Free Paint mode and the custom painter, prints `JETSETCRAFT_VISUAL_AUDIT_PASS`, and exits cleanly. It is inert in ordinary launches.
 
 ## Runtime acceptance world
 

@@ -27,5 +27,18 @@ final class MovementMath {
         return v != null && v.lengthSqr() > 1e-7 ? v.normalize() : fallback;
     }
 
+    static double signedHorizontalAngle(Vec3 from, Vec3 to) {
+        Vec3 a = safeNormalize(new Vec3(from.x, 0, from.z), new Vec3(0, 0, 1));
+        Vec3 b = safeNormalize(new Vec3(to.x, 0, to.z), a);
+        return Math.atan2(a.x * b.z - a.z * b.x, a.dot(b));
+    }
+
+    static Vec3 rotateHorizontal(Vec3 vector, double radians) {
+        double cos = Math.cos(radians);
+        double sin = Math.sin(radians);
+        return new Vec3(vector.x * cos - vector.z * sin, 0,
+                vector.z * cos + vector.x * sin);
+    }
+
     private MovementMath() {}
 }

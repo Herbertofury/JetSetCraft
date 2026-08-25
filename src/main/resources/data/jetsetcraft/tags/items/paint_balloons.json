@@ -1,0 +1,21 @@
+{
+  "replace": false,
+  "values": [
+    "jetsetcraft:white_paint_balloon",
+    "jetsetcraft:orange_paint_balloon",
+    "jetsetcraft:magenta_paint_balloon",
+    "jetsetcraft:light_blue_paint_balloon",
+    "jetsetcraft:yellow_paint_balloon",
+    "jetsetcraft:lime_paint_balloon",
+    "jetsetcraft:pink_paint_balloon",
+    "jetsetcraft:gray_paint_balloon",
+    "jetsetcraft:light_gray_paint_balloon",
+    "jetsetcraft:cyan_paint_balloon",
+    "jetsetcraft:purple_paint_balloon",
+    "jetsetcraft:blue_paint_balloon",
+    "jetsetcraft:brown_paint_balloon",
+    "jetsetcraft:green_paint_balloon",
+    "jetsetcraft:red_paint_balloon",
+    "jetsetcraft:black_paint_balloon"
+  ]
+}

@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "jetsetcraft:item/street_art/paint_balloon/black"
+  }
+}

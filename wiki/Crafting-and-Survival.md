@@ -11,8 +11,9 @@ JetSetCraft is usable in normal survival worlds. Ride gear is a persistent item,
 - Flux Hoverboard
 - Neon Street Scooter
 - Graffiti Spray Can
+- Paint Balloons in all sixteen vanilla dye colors
 
-Recipes use ordinary Minecraft materials such as iron, leather, planks, sticks, copper, redstone, and an ender pearl for the hoverboard. Recipe viewers such as JEI can display the exact shaped layouts.
+Recipes use ordinary Minecraft materials such as iron, leather, planks, sticks, copper, redstone, and an ender pearl for the hoverboard. Each shapeless balloon recipe combines dried kelp, paper, and its matching dye to make eight. Recipe viewers such as JEI can display the exact layouts.
 
 ## Equip and death behavior
 
