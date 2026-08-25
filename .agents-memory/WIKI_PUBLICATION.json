@@ -1,9 +1,9 @@
 {
   "schema": 1,
-  "source_commit": "0c0bdfd403d3d8563c3329fd647c92f15521dbac",
-  "wiki_commit": "a70ac7a275fced32be5b52c0df5a3c07ce6481d3",
+  "source_commit": "bb18e2070692fc7afa51747a5765957ec2289071",
+  "wiki_commit": "299cdac100389ea99d207613c08b88870160ea27",
   "wiki_branch": "master",
-  "page_count": 25,
+  "page_count": 32,
   "pages": [
     "Breakdance-and-Cyphers.md",
     "Compatibility.md",
@@ -12,15 +12,22 @@
     "Crafting-and-Survival.md",
     "Developer-Architecture.md",
     "FAQ.md",
+    "Feature-Overview.md",
     "Gang-Wars-Boombox-and-Mob-Atlas.md",
     "Getting-Started.md",
     "Graffiti.md",
     "Grinding-and-Transfers.md",
     "Hangouts-Territory-and-Reputation.md",
     "Home.md",
+    "Inspiration-and-Research.md",
     "Modpack-Maker-Guide.md",
     "Multiplayer-and-Servers.md",
     "Player-Chapters-Posse-and-Mob-Archetypes.md",
+    "Release-Status.md",
+    "Research-Animation-Models-and-Creators.md",
+    "Research-Frameworks-Java-and-Bedrock.md",
+    "Research-Graffiti-Music-and-Audio.md",
+    "Research-Street-Movement-and-Rides.md",
     "Ride-Styles.md",
     "Roadmap.md",
     "Standalone-Compatibility-Covenant.md",
@@ -32,6 +39,6 @@
     "_Sidebar.md"
   ],
   "validated": true,
-  "published_at_utc": "2026-08-25T00:19:07.642092+00:00",
+  "published_at_utc": "2026-08-25T01:11:38.091797+00:00",
   "url": "https://github.com/Herbertofury/JetSetCraft/wiki"
 }
