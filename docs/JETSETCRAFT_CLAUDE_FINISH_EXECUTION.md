@@ -8,6 +8,8 @@ Finish **JetSetCraft** as the best possible Forge 1.20.1 street-movement mod: sk
 
 The user wants the result to feel like something Mojang could have shipped in an ambitious movement/adventure update: readable, tactile, immediate, low-friction, and visually integrated with vanilla HUD language — while still carrying the depth and style of Jet Set Radio / Bomb Rush Cyberfunk / aggressive skating culture.
 
+For this project, the user states that they already hold **full studio authorization to reuse and ship Jet Set Radio / Jet Set Radio Future / Bomb Rush Cyberfunk source-game material**, including models, textures, graffiti/art, music, SFX, dances/animations, props, and other relevant game assets. Treat that user-provided authorization as an explicit project permission boundary rather than downgrading these sources to inspiration-only. Preserve per-asset provenance/credits and any written authorization evidence supplied with the project, but do not refuse to integrate an otherwise useful covered asset merely because it originated in one of those games.
+
 A core social fantasy is that **any ordinary AI mob—vanilla or modded—can be approached as a real participant in street culture**. While the player is wearing skates/Street Gear, a dedicated rebindable Challenge modifier plus normal interaction should open a compact Minecraft-native interaction flow for Dance Battle, Skate-Off, and other context-valid challenges. A mob that needs skates should receive safe temporary loaner Street Gear/ride presentation for the activity and have its exact prior state restored afterward. This must extend source mobs rather than replace them.
 
 The project is not complete merely because it compiles. It is complete only when the exact current build is exercised in real Forge runtime and the final user-facing behavior matches this contract.
@@ -63,6 +65,37 @@ Before changing code, compare the actual current worktree/repo state against thi
 19. **Never destroy mod-owned AI state.** Do not clear goal selectors, wipe Brain memories, replace navigation implementations, erase equipment, or replace the entity to make it participate in a challenge. Use a bounded reversible JetSetCraft activity lease/controller and restore the original mob state.
 20. **Temporary challenge gear is a loan, not loot.** Loaner skates/Street Gear may never enter normal inventories, drops, trades, loot tables, equipment persistence, or duplication paths and must be removed/restored on every exit path.
 21. **Universal means default-eligible.** Every real AI `Mob` should be challengeable by default; an exclusion requires a concrete runtime safety/ownership reason (dead/removed entity, incompatible scripted state, no safe activity space, explicit provider opt-out, etc.) and the player must receive a useful reason instead of a silent failure.
+22. **Authorized JSR/BRC assets are first-class production inputs.** The user's stated authorization covers direct reuse/integration of relevant Jet Set Radio-family and Bomb Rush Cyberfunk game assets. Do not replace licensed source assets with lower-fidelity approximations merely to avoid using them.
+23. **Provenance is mandatory, not a blocker.** Track source title, source path/archive, asset type, conversion/transformation, author/artist metadata when known, and the project authorization record for every imported licensed asset; provenance/credits must survive packaging and updates.
+24. **Core gameplay must not depend on a brittle giant-asset load.** Heavy licensed media may be packaged as a first-party JetSetCraft content/resource pack or split release artifact when that improves startup/memory/patching, but it must install and activate as a seamless supported part of the official JetSetCraft release rather than a manual scavenger hunt.
+25. **Music ownership stays user-controlled.** Radio playback, playlist state, volume, shuffle/repeat, favorites, station choice, and whether licensed music plays are client/user preferences unless a server-owned world event intentionally broadcasts local in-world audio.
+
+## 2A. User-authorized Jet Set Radio / Bomb Rush Cyberfunk production asset scope
+
+Claude must treat the following as **authorized production material for this project**, based on the user's explicit statement that permission has already been established with the relevant studios/rightsholders:
+
+- **Jet Set Radio** and authorized official variants/releases;
+- **Jet Set Radio Future** and authorized official variants/releases;
+- **Bomb Rush Cyberfunk** and authorized official variants/releases;
+- studio-provided/exported/source packages, official asset bundles, or game-install assets that fall under that permission;
+- covered **character/NPC/gear/vehicle/prop models**, rigs, textures/materials, graffiti/art, particles/VFX, SFX, music, dances/emotes/animations, UI/icon motifs, environmental props, and other directly useful game content.
+
+The implementation rule is **reuse/adapt when superior, not mimic when the real authorized asset is available**. Convert assets into Minecraft/Forge/GeckoLib/resource-pack-friendly representations while preserving the source character, timing, silhouette, animation intent, audio quality, and artistic identity as closely as Minecraft's renderer/gameplay permits.
+
+### Rights/provenance operating rule
+
+The authorization statement in this handoff is user-provided project authority. Claude should not silently relabel these assets as "reference only," strip them because they are copyrighted, or replace them with generic substitutes. At the same time, maintain a durable manifest such as `docs/LICENSED_ASSET_MANIFEST.*` / `assets/licensed_manifest.*` that records enough provenance to update, credit, audit, and reproduce the imported content later. If the project contains the studio permission/grant itself, retain/link it in the private project evidence location without exposing confidential text in public builds unless the user wants that published.
+
+### Asset-quality rule
+
+- Prefer direct source extraction/export from the highest-quality authorized source available.
+- Avoid lossy re-ripping when a cleaner source/export exists.
+- Preserve original animation timing/keyframe intent before adapting scale/rig coordinates.
+- Preserve high-quality source audio; transcode only as needed for Minecraft playback/distribution and avoid destructive repeated transcoding.
+- Preserve texture alpha/emissive/material information where Minecraft/GeckoLib can represent it.
+- Do not collapse distinct dances, music tracks, props, characters, or skins into a small sample just to reduce work.
+- Deduplicate identical assets by content hash while retaining all title/credit aliases in the manifest.
+- Asset ingestion must be reproducible so a future refresh can re-import updated source packages without hand-editing hundreds of files.
 
 ## 3. Current verified v0.3.0 capability that must survive
 
@@ -329,11 +362,45 @@ The default HUD must look intentional with vanilla, but compatibility cannot dep
 - [ ] **T082** · Improve Boombox presentation: animated controls/equalizer, gang color theme, visible target emblem/head, clear tuned/active state.
 - [ ] **T083** · Keep comparator behavior useful and documented.
 - [ ] **T084** · Preserve 80 original gang entrance stingers and stable gang music IDs.
-- [ ] **T085** · Add opt-in full-length resource-pack music support through stable IDs without bundling unauthorized copyrighted tracks.
+- [ ] **T085** · Replace the old unauthorized-track restriction with the user's authorized-content model: support full-length licensed JSR/JSRF/BRC music through stable track IDs and the first-party licensed content/resource-pack pipeline, with seamless official release installation.
 - [ ] **T086** · Make gang arrival/departure cinematic but bounded: skating/grinding exits when practical, safe timeout cleanup otherwise.
 - [ ] **T087** · Ensure event actors cannot become loot/XP/Street-Gear farms.
 - [ ] **T088** · Ensure cancellation and immediate restart remain safe and deterministic.
 - [ ] **G006 · GATE** — Boombox tuning and gang encounters are polished, physical, data-driven, safe, and fun before deeper progression is added.
+
+# PHASE F2 — Authorized JSR / JSRF / BRC asset integration and complete radio system
+
+This phase is **accepted implementation scope**, not a research-only appendix. The user has explicitly stated full permission to use the covered source-game assets. Take advantage of that permission wherever it materially improves JetSetCraft.
+
+- [ ] **T269** · Resolve the authorized source asset locations/packages for Jet Set Radio, Jet Set Radio Future, and Bomb Rush Cyberfunk without replacing a higher-quality known source with a lower-quality web rip.
+- [ ] **T270** · Build or extend a deterministic licensed-asset ingest pipeline that inventories models, rigs, textures/materials, graffiti/art, dances/animations, SFX/VFX, props, UI/icon material, and music by source title and stable asset ID.
+- [ ] **T271** · Create a durable licensed-asset provenance manifest containing source title, original asset identifier/path, content hash, imported output path, conversion steps, artist/author/track metadata when known, credits, and authorization-evidence pointer.
+- [ ] **T272** · Deduplicate byte-identical/repackaged source assets by hash without losing title-specific aliases, metadata, credits, or legitimate alternate versions.
+- [ ] **T273** · Convert authorized character/NPC models and useful outfit/gear pieces into high-fidelity Minecraft/GeckoLib-compatible assets while preserving silhouette, proportions, material identity, and animation attachment points.
+- [ ] **T274** · Integrate authorized skates, boards, BMX/scooter/ride props, boombox/radio props, graffiti props, environmental street props, and other useful equipment/models where they improve existing JetSetCraft content rather than sitting unused in an archive.
+- [ ] **T275** · Import/adapt the full useful authorized dance/emote/pose library and preserve source timing, loops, transitions, expressive keyframes, and character intent; map dances into JetSetCraft's dance/challenge system instead of exposing them as disconnected test animations.
+- [ ] **T276** · Re-target dances/animations across compatible Minecraft/player/mob rigs with graceful species-aware fallback while retaining the original motion identity as closely as possible.
+- [ ] **T277** · Import useful authorized trick/movement animation material and blend it into JetSetCraft ride/trick presentation where it improves fidelity without violating movement authority or combat-arm ownership invariants.
+- [ ] **T278** · Import authorized graffiti/art textures and organize them into coherent galleries/categories with source-game/title provenance, search/favorites compatibility, and proper scaling/filtering for Minecraft surfaces.
+- [ ] **T279** · Import useful authorized SFX/VFX/particles and map them to appropriate movement, graffiti, boombox, menu, gang-arrival, dance, trick, and challenge feedback without creating an overwhelming constant-noise layer.
+- [ ] **T280** · Preserve/adapt authorized UI/icon motifs only where they enhance JetSetCraft while still respecting the contract's vanilla-native in-game interaction rules; licensed style may decorate, but must not turn normal Minecraft interaction into an unrelated console-game menu.
+- [ ] **T281** · Build a stable music catalog containing **every authorized track available from the covered JSR/JSRF/BRC source sets**, not a hand-picked sample, with title, artist, source game, album/station grouping where available, duration, stable track ID, content hash, and credits.
+- [ ] **T282** · Preserve the highest practical authorized audio quality and perform at most one controlled distribution transcode per source when Minecraft-compatible encoding is required; prevent repeated generation-loss across rebuilds.
+- [ ] **T283** · Implement a real **JetSetCraft Radio** music browser/player with vanilla-feeling compact controls and both world/Boombox access and a convenient player-accessible radio surface.
+- [ ] **T284** · Radio must expose All Tracks plus title/station groupings for Jet Set Radio, Jet Set Radio Future, Bomb Rush Cyberfunk, and JetSetCraft-original music/stingers without mixing provenance or losing track identity.
+- [ ] **T285** · Implement search, sort, title/game/artist filters, favorites, user playlists, queue, previous/next, seek/progress where technically reliable, shuffle, repeat-one/repeat-all, and clear Now Playing metadata.
+- [ ] **T286** · Persist each client's selected station/playlist, favorites, queue policy, shuffle/repeat state, music volume, radio enabled/disabled state, and resume preference across restart without server-side cosmetic preference overwrite.
+- [ ] **T287** · Provide configurable music ducking/mixing against Minecraft music, records, ambient sounds, dialogue/important SFX, Boombox-local playback, and other mods rather than simply blasting two music sources over one another.
+- [ ] **T288** · Prevent simultaneous duplicate playback when the same licensed track is requested by personal radio, nearby Boombox/event music, menu preview, or another JetSetCraft source; establish clear priority/crossfade/hand-off rules.
+- [ ] **T289** · Make Boomboxes able to browse/play the authorized catalog through stable IDs, including per-game stations, custom user playlists, gang/event presets, and JetSetCraft originals, while preserving normal spatial audio behavior for in-world playback.
+- [ ] **T290** · Keep personal-radio playback client-owned/private by default; multiplayer servers may synchronize event/Boombox track identity and timing for shared local playback without forcing every client to use the same personal station outside the event.
+- [ ] **T291** · Handle clients missing/corrupt licensed content gracefully with exact diagnostics and repair/reinstall guidance while preserving gameplay/network compatibility; do not crash a dedicated server because audio/model content is client-side missing.
+- [ ] **T292** · Package heavy licensed assets in the architecture that gives the best startup/memory/update behavior—core JAR only when appropriate, otherwise a first-party JetSetCraft licensed content/resource pack automatically discovered/activated by the official release bundle—with no manual copying required for a normal install.
+- [ ] **T293** · Add versioned asset-pack identity/hash checks so updates patch/replace changed media deterministically and stale partial packs cannot silently mix incompatible models/animations/audio.
+- [ ] **T294** · Add an in-game Credits/Licensed Content view with source-game/artist/studio attribution and track/model/dance provenance sourced from the manifest, without exposing confidential permission documents unless explicitly approved.
+- [ ] **T295** · Add deterministic validators/tests for catalog completeness, duplicate IDs, broken media references, manifest/hash drift, missing credits/provenance, invalid animation/model outputs, and unresolvable radio tracks.
+- [ ] **T296** · Real-runtime test the complete licensed-content path: representative imported character/gear model, multiple source dances, source graffiti/props/SFX, and music playback from every covered title through both personal Radio and an in-world Boombox; verify save/restart and multiplayer behavior.
+- [ ] **G020 · GATE** — The user's authorized JSR/JSRF/BRC content is genuinely integrated at production quality: useful models/dances/art/SFX are in real gameplay, the complete authorized music catalog is available through a polished Radio/Boombox system, provenance/credits are durable, asset packaging is performant/update-safe, and runtime proof shows the actual shipped content working rather than placeholder media.
 
 # PHASE G — Implement the full Gang Atlas / Black Book
 
@@ -537,7 +604,7 @@ When the player is looking at a valid AI mob in normal interaction range:
 
 - [ ] **T198** · Update README to reflect only actually shipped capability.
 - [ ] **T199** · Update wiki pages for HUD (including Auto-Avoid + per-user Layout Editor), ride styles, Flow, graffiti, gangs, Atlas, hangouts, relationships, universal mob challenges/loaner Street Gear, challenge modes, chapters/posse, compatibility and verification.
-- [ ] **T200** · Update `THIRD_PARTY_NOTICES.md` and provenance if any additional Spirit Vector / upstream material is actually adapted.
+- [ ] **T200** · Update `THIRD_PARTY_NOTICES.md`, licensed-content credits/manifest, and provenance for Spirit Vector/upstream material plus all authorized JSR/JSRF/BRC assets actually imported; keep open-source license obligations distinct from the user's studio-authorization evidence.
 - [ ] **T201** · Preserve exact source revision/license boundaries for all upstream material.
 - [ ] **T202** · Run all deterministic generators and validators.
 - [ ] **T203** · Run clean Forge build.
@@ -582,9 +649,17 @@ gradlew.bat -Djetsetcraft.visualAudit=true runClient --no-daemon
 
 Do not repeatedly rerun the entire suite after micro-edits. Use the cheapest decisive changed-path check during iteration, then broad gates at parent/final convergence.
 
-## 8. Reference hierarchy Claude should study — without letting references override JetSetCraft identity
+## 8. Reference and authorized-source hierarchy Claude should use — without letting references override JetSetCraft architecture
 
-### Already-authorized / existing integration lineage
+### User-authorized production asset sources
+
+These are not inspiration-only for this project. Direct asset integration is authorized by the user and should be preferred when it produces a better result than recreating an approximation:
+
+- **Jet Set Radio** — authorized models/characters/props, art/graffiti, animations/dances, music, SFX/VFX, UI/icon material, and other useful covered game assets.
+- **Jet Set Radio Future** — same authorized production-use scope.
+- **Bomb Rush Cyberfunk** — same authorized production-use scope, including movestyle/character/gear/dance/music/street-art material where useful.
+
+### Already-authorized / existing open-source integration lineage
 
 - **Dream Burst Spirit Vector** — movement state machine, Poise/style economy, wing/feather HUD language, vault/wall/kickoff ideas.
 - **Street Art** — rollerblade presentation, painting/splash behavior, movement/media cohesion.
@@ -600,7 +675,7 @@ Do not repeatedly rerun the entire suite after micro-edits. Use the cheapest dec
 - **Momentum for Automobility** — steering/acceleration/braking/HUD tuning.
 - **Emotecraft** — extensible emotes/networking/radial UX inspiration.
 
-References are evidence and inspiration, not authority. Do not silently import incompatible ownership models, proprietary assets, or lower-quality architecture.
+Unlicensed external references remain evidence/inspiration rather than authority. **The user-authorized JSR/JSRF/BRC production sources above are the explicit exception:** covered assets may be directly imported/adapted, while JetSetCraft still keeps its own server authority, gameplay architecture, persistence, compatibility, and vanilla-native interaction rules.
 
 ## 9. UI design principles
 
@@ -650,6 +725,9 @@ Then perform one whole-project challenge pass for:
 - challenge sessions that clear/replace source AI, leak targets, strand navigation state, or fail to restore mod-owned entity data;
 - temporary/loaner skates entering loot, inventory, trade, drop, save, or duplication paths;
 - a vanilla/modded AI mob class excluded only because no one implemented a compatible rig/adapter rather than because of a concrete safety constraint;
+- licensed JSR/JSRF/BRC assets silently omitted, downsampled, replaced with generic approximations, or left in an unused archive despite being useful and covered by the user's authorization;
+- incomplete radio catalog coverage, duplicate/broken track IDs, lost artist/title/source-game credits, repeated lossy audio transcodes, or stale partial content packs;
+- licensed media packaging that causes unnecessary startup/memory regressions when a first-party split content/resource pack would preserve full quality with better performance;
 - missing native runtime proof;
 - features documented as shipped but not actually implemented.
 
@@ -657,4 +735,4 @@ Then perform one whole-project challenge pass for:
 
 Do not answer this handoff with another summary or roadmap. Start by resolving the real current source/checkpoint, then implement the earliest ready task. Continue automatically across bounded execution windows. Ask the user only for a genuinely user-only decision or authorization that blocks the next required mutation.
 
-- [ ] **G017 · FINAL COMPLETION GATE** — Every accepted task and parent gate above is complete; no blocker remains; the final artifact is a fresh verified Forge 1.20.1 build; the exact changed gameplay paths have been exercised in real client/server runtime; Boost/Flow HUD visibly follows the Spirit Vector-inspired vanilla survival-HUD principle while retaining JetSetCraft identity, auto-coexists with real mod overlays, and gives each user persistent full placement control; Challenge+Interact works end-to-end against representative vanilla and modded AI mobs for Dance Battle/Skate-Off with reversible loaner skates and exact source-AI/equipment/provider-state restoration; all preserved gang/Atlas/hangout/reputation/challenge/chapter/posse systems are real and production-wired; performance improvements preserve full results; docs match reality; and final source/artifacts are durably checkpointed and published.
+- [ ] **G017 · FINAL COMPLETION GATE** — Every accepted task and parent gate above is complete; no blocker remains; the final artifact is a fresh verified Forge 1.20.1 build; the exact changed gameplay paths have been exercised in real client/server runtime; Boost/Flow HUD visibly follows the Spirit Vector-inspired vanilla survival-HUD principle while retaining JetSetCraft identity, auto-coexists with real mod overlays, and gives each user persistent full placement control; Challenge+Interact works end-to-end against representative vanilla and modded AI mobs for Dance Battle/Skate-Off with reversible loaner skates and exact source-AI/equipment/provider-state restoration; the user's authorized JSR/JSRF/BRC production assets are genuinely integrated rather than treated as reference-only, the complete available authorized soundtrack catalog is playable through polished personal Radio and in-world Boombox flows with durable provenance/credits and performant packaging; all preserved gang/Atlas/hangout/reputation/challenge/chapter/posse systems are real and production-wired; performance improvements preserve full results; docs match reality; and final source/artifacts are durably checkpointed and published.
