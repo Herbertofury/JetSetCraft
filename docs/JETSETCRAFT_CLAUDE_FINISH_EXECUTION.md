@@ -8,6 +8,8 @@ Finish **JetSetCraft** as the best possible Forge 1.20.1 street-movement mod: sk
 
 The user wants the result to feel like something Mojang could have shipped in an ambitious movement/adventure update: readable, tactile, immediate, low-friction, and visually integrated with vanilla HUD language — while still carrying the depth and style of Jet Set Radio / Bomb Rush Cyberfunk / aggressive skating culture.
 
+A core social fantasy is that **any ordinary AI mob—vanilla or modded—can be approached as a real participant in street culture**. While the player is wearing skates/Street Gear, a dedicated rebindable Challenge modifier plus normal interaction should open a compact Minecraft-native interaction flow for Dance Battle, Skate-Off, and other context-valid challenges. A mob that needs skates should receive safe temporary loaner Street Gear/ride presentation for the activity and have its exact prior state restored afterward. This must extend source mobs rather than replace them.
+
 The project is not complete merely because it compiles. It is complete only when the exact current build is exercised in real Forge runtime and the final user-facing behavior matches this contract.
 
 ## 1. Canonical project identity and continuity
@@ -56,6 +58,11 @@ Before changing code, compare the actual current worktree/repo state against thi
 14. No fake buttons, fake progress, decorative menus, placeholder systems, or tests that bypass production wiring.
 15. Every major failure discovered during implementation should become a regression test or reusable hardening rule.
 16. Do not claim completion while any accepted task below is blocked or unverified.
+17. **The player owns JetSetCraft HUD placement.** Default auto-layout must coexist with vanilla and mod overlays, while a full client-side layout editor lets each user move/scale/anchor/compact/hide JetSetCraft HUD modules without a server forcing cosmetic placement.
+18. **Never steal another mod's interaction.** Universal mob challenges are entered only through an explicit rebindable Challenge modifier/context action; ordinary right-click/use behavior remains source-owned when that modifier is not active.
+19. **Never destroy mod-owned AI state.** Do not clear goal selectors, wipe Brain memories, replace navigation implementations, erase equipment, or replace the entity to make it participate in a challenge. Use a bounded reversible JetSetCraft activity lease/controller and restore the original mob state.
+20. **Temporary challenge gear is a loan, not loot.** Loaner skates/Street Gear may never enter normal inventories, drops, trades, loot tables, equipment persistence, or duplication paths and must be removed/restored on every exit path.
+21. **Universal means default-eligible.** Every real AI `Mob` should be challengeable by default; an exclusion requires a concrete runtime safety/ownership reason (dead/removed entity, incompatible scripted state, no safe activity space, explicit provider opt-out, etc.) and the player must receive a useful reason instead of a silent failure.
 
 ## 3. Current verified v0.3.0 capability that must survive
 
@@ -135,6 +142,10 @@ Do adapt the **interaction language**:
 - readable at Minecraft GUI scales;
 - no conflict with armor, food, air, mount health, modded status rows, or accessibility settings;
 - reserve room intelligently when vanilla HUD elements shift;
+- dynamically coexist with Forge-registered and adapter-known mod overlays instead of assuming the vanilla HUD is the only occupant;
+- expose full per-user placement control: drag/drop, anchor, X/Y offset, scale, spacing, stack direction, compactness, opacity, context visibility, lock, reset, and Auto-Avoid versus Fixed placement;
+- persist layout per client/user and normalize it across GUI scale/resolution changes so a custom layout does not drift off-screen;
+- publish JetSetCraft overlay bounds/anchors through a lightweight optional client integration surface so other mods can cooperate without hard dependencies;
 - reduced-motion mode must remove pulsing/rapid effects without reducing information;
 - Boost and Flow remain distinct resources with instantly understandable meaning.
 
@@ -224,6 +235,29 @@ Known current owners include:
 - [ ] **T027** · Add deterministic HUD state tests where feasible and real-client visual-audit scenes for Boost empty/partial/full and Flow ranks.
 - [ ] **T028** · Capture real-client screenshots at representative GUI scales for final acceptance.
 - [ ] **G002 · GATE** — JetSetCraft’s in-game status UI reads like a natural Minecraft survival HUD extension while conveying Boost/Flow/style immediately.
+
+
+## PHASE B2 — HUD coexistence, collision avoidance, and full user layout control
+
+The default HUD must look intentional with vanilla, but compatibility cannot depend on every other mod choosing a different corner. Treat JetSetCraft HUD modules as cooperative overlays with an automatic layout mode **and** a complete user-owned editor.
+
+- [ ] **T221** · Audit the actual Forge 1.20.1 overlay/render APIs and JetSetCraft's current HUD hooks; prefer public overlay ordering/events over brittle injections, and document any unavoidable mixin boundary before extending it.
+- [ ] **T222** · Introduce one shared client-side JetSetCraft HUD layout owner for Boost, Flow, combo/rank, trick/landing feedback, challenge prompts/status, and future modules; do not let each widget invent private coordinates.
+- [ ] **T223** · Model each JetSetCraft HUD element as a bounded module with an anchor, measured bounds, preferred/default position, priority, visibility policy, scale, and layout mode so collision handling is deterministic.
+- [ ] **T224** · Implement **Auto-Avoid** layout that accounts for current vanilla HUD rectangles and Forge-registered overlays when discoverable, then shifts/stacks JetSetCraft modules instead of drawing through occupied space.
+- [ ] **T225** · Add an adapter mechanism for important HUD mods whose occupied regions cannot be discovered generically; adapters must be optional, version-gated, fail-soft, and must never hard-classload absent mods.
+- [ ] **T226** · Expose JetSetCraft's own current overlay bounds/anchors through a lightweight optional client integration API/event so cooperating mods can avoid JetSetCraft in return without depending on JetSetCraft internals.
+- [ ] **T227** · Build a polished **HUD Layout Editor** accessible from JetSetCraft client settings with live in-game-style preview and direct drag/drop positioning.
+- [ ] **T228** · Give the user full per-module controls for anchor, X/Y offset, scale, spacing, stack direction, compactness, opacity, visibility/context rules, lock/unlock, and reset-to-default.
+- [ ] **T229** · Support at least **Auto-Avoid**, **Fixed/User Position**, **Compact**, and **Hidden** behavior where sensible; an explicit user-fixed position wins over automatic movement except for hard screen-bound/clipping safety.
+- [ ] **T230** · Keep the editor Minecraft-native: pixel/safe-zone snapping, keyboard nudging, clear selection outlines, Reset This Module, Reset All, and a one-click return to the recommended vanilla-style layout.
+- [ ] **T231** · Persist HUD layout **per client/user**, not as a server-authored cosmetic coordinate. Allow optional named local layout profiles if the existing config architecture supports them cleanly; server configuration may control gameplay information availability but not silently relocate a user's cosmetic HUD.
+- [ ] **T232** · Store positions in anchor-relative/safe-area form so layouts survive GUI-scale changes, window resize, fullscreen/windowed transitions, ultrawide/narrow aspect ratios, and resolution changes without drifting off-screen.
+- [ ] **T233** · Recompute expensive collision/layout decisions only when relevant state changes (GUI scale, resolution, overlay visibility/registration, context row, user edit), not through broad per-frame registry or screen scans.
+- [ ] **T234** · Preserve mouse/keyboard/focus ownership: the ordinary HUD never intercepts input, the editor has correct focus/tab/escape behavior, and reduced-motion/accessibility settings remain honored.
+- [ ] **T235** · Create a compatibility matrix covering vanilla survival rows plus representative Forge overlays such as nutrition/status extensions, minimap/info overlays, combat/status bars, Curios/accessory UI, mount/boss rows, subtitles/chat, and at least several real popular 1.20.1 HUD mods present in the test environment.
+- [ ] **T236** · Runtime-prove Auto-Avoid and manually fixed layouts at multiple GUI scales/resolutions with simultaneous mod overlays; restart the client and verify the exact user layout survives with no clipping, jitter, overlap thrash, or per-frame layout churn.
+- [ ] **G018 · GATE** — JetSetCraft HUD is cooperative by default and fully user-owned when customized: it auto-avoids vanilla/modded UI where possible, exposes integration bounds, persists user placement, never steals input, and remains stable across scale/resolution/context changes.
 
 # PHASE C — Finish the ride system as one premium movement grammar
 
@@ -403,6 +437,55 @@ Implement complete scored modes on top of the existing actor lifecycle rather th
 - [ ] **T162** · Run multiplayer runtime tests for at least race, dance battle, Turf War, and Tag.
 - [ ] **G012 · GATE** — All six challenge families are real, replayable, server-authoritative, and converge on shared progression/cleanup architecture.
 
+
+## PHASE L2 — Challenge any AI mob: Minecraft-native social interaction + reversible loaner skates
+
+The player should not need a mob to already belong to a gang before street interaction becomes fun. **Every ordinary AI mob is a potential opponent.** This must work for vanilla and modded mobs while preserving the source entity's identity, equipment, AI, owner/job/quest state, and normal interaction semantics.
+
+### Player interaction contract
+
+When the player is looking at a valid AI mob in normal interaction range:
+
+- holding/pressing a dedicated **rebindable Challenge modifier** while using/interacting opens a compact vanilla-style challenge interaction rather than stealing ordinary right-click;
+- while the player is wearing skates/Street Gear, **Skate-Off** is prominently offered along with **Dance Battle** and other context-valid modes;
+- without skates, Dance Battle can still be offered and the UI may explain what gear is needed for a skating mode;
+- the target acknowledges the invitation with a short readable look/emote/sound/particle/text response, then a normal countdown starts;
+- if the target needs ride gear, JetSetCraft visibly loans it compatible skates/Street Gear for the activity and restores the target afterward.
+
+- [ ] **T237** · Define one universal challenge-target resolver over real AI `Mob` entities, including modded entities. Default to eligible; reject only concrete unsafe states and return a player-facing reason code/message.
+- [ ] **T238** · Add a dedicated rebindable **Challenge** modifier/action and ensure it composes with normal Use/Interact instead of replacing or globally cancelling another mod's right-click behavior.
+- [ ] **T239** · When Challenge+Interact targets a mob in valid range/line-of-sight, open a compact Minecraft-native interaction menu/prompt showing target name plus **Dance Battle**, **Skate-Off**, and other challenge types that are currently valid.
+- [ ] **T240** · Make the menu contextual and fast: if the player is currently wearing skates, default/highlight Skate-Off; if a mode lacks a safe nearby setup, explain the concrete requirement rather than hiding the mob or failing silently.
+- [ ] **T241** · Server-authoritatively validate target entity ID/UUID, dimension, alive/loaded state, reach/line-of-sight, challenge availability, and request freshness before starting a session; never trust the client to enroll arbitrary entities.
+- [ ] **T242** · Add a bounded **challenge activity lease/controller** that temporarily coordinates a source mob only while it participates. It must not clear/replace goal selectors, Brain memories, navigation implementations, ownership/taming data, profession/job data, quest state, or provider capabilities.
+- [ ] **T243** · Preserve ordinary source AI as the base personality. Challenge behavior may temporarily steer navigation/velocity/look/animation through public safe hooks and JetSetCraft-owned state, then release control so the exact source behavior resumes.
+- [ ] **T244** · For hostile mobs, make the active participant relationship safe enough to perform the challenge without permanently pacifying the mob: suppress only participant-vs-participant challenge-disrupting aggression through bounded session state and restore original hostility/targets afterward.
+- [ ] **T245** · External danger remains real by default. Damage from third parties/environment may interrupt/cancel a challenge according to configurable safe rules; cancellation must converge through the same restoration path rather than leaving an invulnerable/frozen mob.
+- [ ] **T246** · If the target is not wearing suitable JetSetCraft ride gear, create **temporary loaner Street Gear/skates** owned by the challenge session and visibly fit it through `MobRideRigResolver`/the canonical rig pipeline.
+- [ ] **T247** · Never overwrite existing modded/vanilla equipment to fake loaner skates. Where the anatomy lacks a real equipment slot, use JetSetCraft's reversible attachment/rig presentation while keeping the source entity/equipment intact.
+- [ ] **T248** · If the target already owns/equips JetSetCraft Street Gear, reuse that exact item/state and never replace its custom data with a generic loaner.
+- [ ] **T249** · Snapshot only the minimum JetSetCraft-owned/transient state required for the activity and restore it atomically on win/loss/cancel, player disconnect, target unload/death, dimension transfer, server stop, exception recovery, or later save reconciliation.
+- [ ] **T250** · Loaner gear can never enter normal inventory/trading/loot/drop/equipment persistence paths and cannot be duplicated, stolen, retained after the session, or farmed by killing the target.
+- [ ] **T251** · Make **Dance Battle available to every safe AI mob** using anatomy-aware dance/pose adapters; when an animation skeleton cannot express a human move literally, map the same beat/intent to a species-appropriate motion rather than replacing the mob model.
+- [ ] **T252** · Make **Skate-Off available to every safe AI mob** through the existing generic ride-rig architecture. Bipeds, quadrupeds, tiny/large mobs, flying mobs, and modded anatomies must use appropriate reversible rig/stance adapters rather than being excluded merely for body shape.
+- [ ] **T253** · Resolve a safe activity space/route before Skate-Off. Never teleport an aquatic, flying, large, or scripted mob into lethal/incompatible terrain just to satisfy the mode; preserve the invitation and give an actionable “move to/open a suitable lane” result when the current location cannot safely host it.
+- [ ] **T254** · Let providers/modpacks customize what “safe activity space” means through tags/adapters/API, including aquatic/aerial/special navigation, without hard dependencies or global pathfinding replacement.
+- [ ] **T255** · Drive AI opponents with the same canonical trick/Flow/dance scoring rules as players. AI may choose lines/tricks/phrases through a server-side opponent controller, but it may not receive impossible score authority, teleport through checkpoints, or bypass landing/route rules.
+- [ ] **T256** · Add deterministic configurable AI skill/personality profiles (casual, capable, expert, gang/legendary variants) using stable entity/gang/session seeds so behavior feels intentional instead of random every tick.
+- [ ] **T257** · Make the invitation itself expressive: target looks toward the player, responds with a short species/personality-aware acknowledgement, loaner gear appears/equips cleanly when needed, and the countdown begins without a giant modal RPG screen.
+- [ ] **T258** · A random non-gang mob challenged this way remains a **neutral Street Challenge participant**; do not invent permanent gang membership. Existing gangified mobs keep their real gang identity and may affect normal gang reputation/rewards.
+- [ ] **T259** · Preserve tamed-owner state, villager profession/trades, Brain memories, age/variant, leash/passenger state, custom name, attributes, inventories, capabilities, and mod-owned persistent data across the challenge; add targeted restoration tests for each relevant category.
+- [ ] **T260** · Prevent concurrent ownership conflicts: one mob cannot be controlled by two incompatible challenge sessions at once, requests use stable session/entity identity, and multiplayer receives a clean “already challenged/busy” response rather than racing state.
+- [ ] **T261** · Make challenge join/cancel/result idempotent and safe under duplicated packets, reconnect, chunk unload/reload, save/restart, and late/stale client input.
+- [ ] **T262** · Keep challenge movement/AI performance bounded: no global mob scans, no per-tick registry sweeps, no permanent extra AI goals on every mob; target discovery happens from the player's explicit interaction and only active participants receive challenge work.
+- [ ] **T263** · Expose optional compatibility hooks/tags/events for other mods to mark temporary busy/protected states, customize acceptance/response/animation/rig behavior, or veto only their own genuinely unsafe scripted entities without taking ownership of JetSetCraft challenge state.
+- [ ] **T264** · Preserve interaction-mod compatibility: ordinary right-click, trading, taming, mounting, pet commands, quest dialogue, mob-specific GUIs, and mod actions work exactly as before whenever the Challenge modifier is not intentionally held.
+- [ ] **T265** · Integrate accessibility/reduced motion: every invitation/result has readable text/subtitle feedback; particles/camera motion are optional; the Challenge key is fully rebindable and does not require rapid or simultaneous inaccessible input.
+- [ ] **T266** · Balance repeat challenges through skill/difficulty/variety/first-time bonuses and normal progression rather than arbitrary real-time waiting; prevent one easy mob from becoming an infinite reward/reputation farm.
+- [ ] **T267** · Add deterministic GameTests/regression fixtures for eligibility, request validation, temporary gear lifecycle, AI-state preservation, duplicate packets, unload/reload, interruption, hostile participant restoration, and reward anti-farm behavior.
+- [ ] **T268** · Native-runtime test the complete flow against a representative matrix: passive mob, hostile mob, villager/trader, tamed mob, tiny mob, large mob, flying mob, aquatic/special-navigation mob in a safe route, existing gang member, and at least several real modded AI mobs. For each, prove invitation -> acknowledgement -> temporary gear if needed -> challenge -> cleanup -> exact source behavior/state restoration.
+- [ ] **G019 · GATE** — The player can naturally Challenge+Interact with essentially any safe vanilla/modded AI mob, receive a Minecraft-native Dance Battle/Skate-Off flow, see compatible temporary skates when needed, complete a fair server-authoritative challenge, and return the exact original source mob to normal with no lost AI/equipment/provider state, no duplicated gear, and no stolen interactions.
+
 # PHASE M — Player chapters, Chapter Boombox, permanent crew, and posse
 
 - [ ] **T163** · Unlock gang-specific **Chapter Boomboxes** at high configured reputation/membership tiers.
@@ -453,7 +536,7 @@ Implement complete scored modes on top of the existing actor lifecycle rather th
 # PHASE P — Documentation, release surface, and real runtime proof
 
 - [ ] **T198** · Update README to reflect only actually shipped capability.
-- [ ] **T199** · Update wiki pages for HUD, ride styles, Flow, graffiti, gangs, Atlas, hangouts, relationships, challenges, chapters/posse, compatibility and verification.
+- [ ] **T199** · Update wiki pages for HUD (including Auto-Avoid + per-user Layout Editor), ride styles, Flow, graffiti, gangs, Atlas, hangouts, relationships, universal mob challenges/loaner Street Gear, challenge modes, chapters/posse, compatibility and verification.
 - [ ] **T200** · Update `THIRD_PARTY_NOTICES.md` and provenance if any additional Spirit Vector / upstream material is actually adapted.
 - [ ] **T201** · Preserve exact source revision/license boundaries for all upstream material.
 - [ ] **T202** · Run all deterministic generators and validators.
@@ -462,14 +545,14 @@ Implement complete scored modes on top of the existing actor lifecycle rather th
 - [ ] **T205** · Run real dedicated-server startup/readiness/shutdown with the exact final JAR.
 - [ ] **T206** · Run real client/integrated-server verification with the exact final build.
 - [ ] **T207** · Exercise all six ride styles in the runtime acceptance world.
-- [ ] **T208** · Exercise Boost/Flow HUD at multiple GUI scales and reduced-motion mode.
+- [ ] **T208** · Exercise Boost/Flow HUD at multiple GUI scales and reduced-motion mode, including Auto-Avoid against real mod overlays and persisted manually placed user layouts.
 - [ ] **T209** · Exercise graffiti selector/editor/paint balloons/persistence/cleanup.
 - [ ] **T210** · Exercise Boombox tuning and gang session start/cancel/restart.
 - [ ] **T211** · Exercise at least one Natural Hangout lifecycle from activation through unload/reload/revalidation.
 - [ ] **T212** · Exercise Gang Atlas relationship progression and Crew Naming Rights.
 - [ ] **T213** · Exercise Installed-Mod Mob Atlas with at least one optional mod creature and one missing-provider recovery scenario.
 - [ ] **T214** · Exercise Chapter Boombox create/move/reload/resident death/recovery/posse flow.
-- [ ] **T215** · Exercise every challenge mode end-to-end with cleanup proof.
+- [ ] **T215** · Exercise every challenge mode end-to-end with cleanup proof, including Challenge+Interact against vanilla and modded AI mobs with temporary-loaner-gear restoration.
 - [ ] **T216** · Exercise combat while riding with at least vanilla + one compatible combat/weapon mod path.
 - [ ] **T217** · Inspect fresh client/server logs and resolve all task-related warnings/errors.
 - [ ] **T218** · Build the final distributable JAR and record SHA-256/size.
@@ -562,6 +645,11 @@ Then perform one whole-project challenge pass for:
 - optional-mod hard dependencies;
 - performance wins achieved by doing less;
 - UI that looks modded/generic rather than vanilla-native;
+- HUD overlap/jitter with other mods or a user layout that fails to persist across scale/resolution/restart;
+- ordinary mob interactions accidentally hijacked when the Challenge modifier is not held;
+- challenge sessions that clear/replace source AI, leak targets, strand navigation state, or fail to restore mod-owned entity data;
+- temporary/loaner skates entering loot, inventory, trade, drop, save, or duplication paths;
+- a vanilla/modded AI mob class excluded only because no one implemented a compatible rig/adapter rather than because of a concrete safety constraint;
 - missing native runtime proof;
 - features documented as shipped but not actually implemented.
 
@@ -569,4 +657,4 @@ Then perform one whole-project challenge pass for:
 
 Do not answer this handoff with another summary or roadmap. Start by resolving the real current source/checkpoint, then implement the earliest ready task. Continue automatically across bounded execution windows. Ask the user only for a genuinely user-only decision or authorization that blocks the next required mutation.
 
-- [ ] **G017 · FINAL COMPLETION GATE** — Every accepted task and parent gate above is complete; no blocker remains; the final artifact is a fresh verified Forge 1.20.1 build; the exact changed gameplay paths have been exercised in real client/server runtime; Boost/Flow HUD visibly follows the Spirit Vector-inspired vanilla survival-HUD principle while retaining JetSetCraft identity; all preserved gang/Atlas/hangout/reputation/challenge/chapter/posse systems are real and production-wired; performance improvements preserve full results; docs match reality; and final source/artifacts are durably checkpointed and published.
+- [ ] **G017 · FINAL COMPLETION GATE** — Every accepted task and parent gate above is complete; no blocker remains; the final artifact is a fresh verified Forge 1.20.1 build; the exact changed gameplay paths have been exercised in real client/server runtime; Boost/Flow HUD visibly follows the Spirit Vector-inspired vanilla survival-HUD principle while retaining JetSetCraft identity, auto-coexists with real mod overlays, and gives each user persistent full placement control; Challenge+Interact works end-to-end against representative vanilla and modded AI mobs for Dance Battle/Skate-Off with reversible loaner skates and exact source-AI/equipment/provider-state restoration; all preserved gang/Atlas/hangout/reputation/challenge/chapter/posse systems are real and production-wired; performance improvements preserve full results; docs match reality; and final source/artifacts are durably checkpointed and published.
