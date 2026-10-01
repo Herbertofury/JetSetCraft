@@ -42,7 +42,7 @@ The Wave 2A curation is now wired into the actual mod, not only documented:
 - CI runs `tools/validate_wave2_compat.py`, enforcing 90/43/39 safe records, 7/2/0 hidden records, stable unique gang/entity IDs, complete rig/challenge/graffiti metadata, and boss/owner gating;
 - the existing real Forge Street Gear GameTest now asserts that Wave 2 profiles and hidden technical IDs are actually present after a real resource reload.
 
-Provider-present native runtime testing with the pinned third-party JARs remains a separate verification gate; the wiki does not label those adapters runtime-verified until that proof exists.
+Provider-present baseline runtime verification is now implemented and passing for the pinned releases, both individually and with all three providers loaded together. The verification lane runs the real Forge 1.20.1 GameTest server and dedicated server with the third-party JARs present, requires exact provider fingerprints, exhaustively proves that every live provider `Mob` is either curated or explicitly hidden, and rejects uncatalogued live mobs.
 
 ### Version drift and verification
 
@@ -50,7 +50,7 @@ Alex's Mobs 1.22.9 and Alex's Caves 2.0.2 were reconciled against their 1.20.1 s
 
 A fingerprint mismatch never rebinds by display name. Missing known IDs go dormant with history preserved; added safe mobs get generic compatibility until curated; absent mods simply produce an `ABSENT` adapter state.
 
-Wave 2 curation is complete, but provider-present runtime verification is a separate gate: pinned-release boot, exact live ID resolution, Street Gear persistence, multiplayer sync, boss/pet edge cases, representative anatomy rigs, and zero tick-time registry scans must all pass before the adapters are labeled runtime-verified.
+Wave 2 curation and the provider-present baseline are verified. On the pinned releases, the live registry proof resolved **116 Alex's Mobs EntityTypes / 90 curated mobs**, **83 Alex's Caves EntityTypes / 43 curated mobs**, and **103 Cataclysm EntityTypes / 39 curated mobs**, with **zero uncatalogued live Mob IDs** in each individual lane and again with all three providers loaded together. The hard-hidden manifest remains **7 + 2 + 0 = 9 technical/helper IDs**; only **3 + 1 + 0** of those instantiate as `Mob` objects because the remainder are non-Mob multipart/helper entities. All nine JetSetCraft GameTests and dedicated-server readiness passed in every individual provider lane and in the combined lane. Deeper client-facing persistence/reconnect, multiplayer synchronization, and representative boss/pet/anatomy interaction checks remain separate gameplay-proof tasks rather than being implied by the registry/server baseline.
 
 
 ## Gangification and the installed-mod Mob Atlas
