@@ -79,15 +79,21 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          mkdir -p build/verification
           for attempt in 1 2 3; do
-            if ./gradlew clean build -Pwave2Provider=${{ matrix.provider }} --no-daemon; then
+            log="build/verification/provider-build-${{ matrix.provider }}-attempt-$attempt.log"
+            if ./gradlew clean build -Pwave2Provider=${{ matrix.provider }} --no-daemon 2>&1 | tee "$log"; then
               exit 0
             fi
-            if [[ "$attempt" -eq 3 ]]; then
-              echo "::error::Provider-present Forge build failed after three attempts for ${{ matrix.provider }}."
+            if grep -Eq 'Compilation failed|> Task :compile(Java|TestJava) FAILED|(^|[[:space:]])error:' "$log"; then
+              echo "::error::Deterministic compile failure for ${{ matrix.provider }}; refusing an unchanged retry."
               exit 1
             fi
-            echo "::warning::Provider dependency/build attempt $attempt failed; retrying in 20 seconds."
+            if [[ "$attempt" -eq 3 ]]; then
+              echo "::error::Provider-present Forge build failed after three evidence-changing attempts for ${{ matrix.provider }}."
+              exit 1
+            fi
+            echo "::warning::Possible transient dependency/service build failure on attempt $attempt; retrying once state can change."
             sleep 20
           done
 
