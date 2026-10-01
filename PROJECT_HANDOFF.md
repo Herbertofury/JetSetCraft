@@ -30,3 +30,13 @@ The custom graffiti format is deliberately bounded to a 16 × 10, 4-bit palette 
 - `gradlew.bat -Djetsetcraft.visualAudit=true runClient --no-daemon`
 
 Release evidence and the exact artifact checksum are recorded in `docs/RELEASE_EVIDENCE_0.3.0.md`.
+
+
+## Current expansion execution authority
+
+For ongoing post-v0.3 implementation, do not rely on this short release handoff alone. Use:
+
+- `docs/JETSETCRAFT_CLAUDE_FINISH_EXECUTION.md` — the executable finish contract, including HUD, movement, progression, universal challenges, curated modded gangs, and runtime/release gates.
+- `docs/CURATED_MODDED_GANG_ATLAS.md` — the version-aware curated gang map for popular mod mobs plus per-gang collectible graffiti/tag/logo/mural progression.
+
+Those documents preserve stable task IDs and must be resumed rather than rewritten from scratch. The universal runtime Mob Atlas remains the fallback for any installed creature not yet premium-curated.
