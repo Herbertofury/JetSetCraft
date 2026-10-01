@@ -47,6 +47,7 @@ jobs:
           python tools/validate_gameplay_contract.py
           python tools/validate_java_syntax.py
           python tools/validate_premium_polish.py
+          python tools/validate_wave2_compat.py
           python tools/validate_wiki.py
           python -m compileall -q tools
           git diff --check
