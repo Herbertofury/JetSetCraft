@@ -44,7 +44,36 @@ public final class ClientVisualAudit {
         if (worldTicks == 265) minecraft.setScreen(new GraffitiEditorScreen(
                 new GraffitiSelectorScreen(InteractionHand.MAIN_HAND), InteractionHand.MAIN_HAND));
         if (worldTicks == 310) capture(minecraft, "graffiti-editor");
-        if (worldTicks == 340) finish(minecraft, true, "three real-client captures completed");
+
+        String wave2Provider = System.getProperty("jetsetcraft.wave2Provider", "").trim();
+        if (wave2Provider.isEmpty()) {
+            if (worldTicks == 340) finish(minecraft, true, "three real-client captures completed");
+            return;
+        }
+
+        if (worldTicks == 340) {
+            minecraft.setScreen(null);
+            minecraft.options.hideGui = true;
+            minecraft.options.setCameraType(CameraType.FIRST_PERSON);
+            minecraft.player.setYRot(180.0F);
+            minecraft.player.setXRot(4.0F);
+            minecraft.player.connection.sendCommand("jetsetcraft visual_audit_wave2 "
+                    + ("all".equals(wave2Provider) ? "alexsmobs" : wave2Provider));
+        }
+
+        if ("all".equals(wave2Provider)) {
+            if (worldTicks == 400) capture(minecraft, "wave2-alexsmobs-rigs");
+            if (worldTicks == 420) minecraft.player.connection.sendCommand("jetsetcraft visual_audit_wave2 alexscaves");
+            if (worldTicks == 480) capture(minecraft, "wave2-alexscaves-rigs");
+            if (worldTicks == 500) minecraft.player.connection.sendCommand("jetsetcraft visual_audit_wave2 cataclysm");
+            if (worldTicks == 560) capture(minecraft, "wave2-cataclysm-rigs");
+            if (worldTicks == 590) finish(minecraft, true,
+                    "six real-client captures completed including all Wave 2 provider rig scenes");
+        } else {
+            if (worldTicks == 400) capture(minecraft, "wave2-" + wave2Provider + "-rigs");
+            if (worldTicks == 430) finish(minecraft, true,
+                    "four real-client captures completed including Wave 2 provider rig scene");
+        }
     }
 
     private static void capture(Minecraft minecraft, String label) {
