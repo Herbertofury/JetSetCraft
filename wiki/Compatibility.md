@@ -2,6 +2,39 @@
 
 JetSetCraft is designed to enter large adventure/combat modpacks without making those mods dependencies.
 
+<!-- JETSETCRAFT_WAVE2_EXACT_CURATED_2026-10-01 -->
+## Wave 2 exact creature compatibility
+
+The first premium installed-mod curation wave now has an exact data contract for three major Forge 1.20.1 creature ecosystems. **Curated does not mean copied or replaced**: each mob remains its provider's original registered entity and JetSetCraft only layers reversible Street Gear, social/challenge identity, reputation, stingers, and graffiti rewards.
+
+| Provider | Pinned target | Exact safe curated mobs | Technical/helper records excluded from independent gangs |
+|---|---:|---:|---:|
+| **Alex's Mobs** (`alexsmobs`) | 1.22.9 | **90** | **7** |
+| **Alex's Caves** (`alexscaves`) | 2.0.2 | **43** | **2** |
+| **L_Ender's Cataclysm** (`cataclysm`) | 3.31 | **39** candidate records | **0 living multipart records** |
+| **Total** | | **172** | **9** |
+
+The full mob-by-mob ledger is in **[Wave 2 Exact Mod Compatibility](../docs/JETSETCRAFT_WAVE_2_EXACT_MOD_COMPATIBILITY.md)** and includes each namespaced EntityType, stable gang ID, crew family, ride/contact profile, challenge safety profile, and bespoke graffiti direction.
+
+### What “supreme compatibility” means here
+
+- **No optional-mod hard dependency:** provider classes are not required for JetSetCraft to boot. Missing providers leave dormant curated data.
+- **No source AI takeover:** provider goals, navigation, combat, variants, tame/owner state, boss controllers, loot, structures, animations, and renderers stay provider-owned.
+- **Anatomy-aware rigs:** quadrupeds, bipeds, aquatic creatures, flyers, multi-leg mobs, serpentine bodies, slimes/contact-plane creatures, tiny mobs, and massive mobs receive explicit safe contact/ride profiles rather than a two-feet assumption.
+- **Multipart/helper safety:** implementation segments/helpers never gain independent gear, gang state, rewards, or challenge targeting.
+- **Boss and pet safety:** active Cataclysm boss/arena logic always wins, and owned/tamed creatures retain owner UUID and provider commands across equip, challenge, unload/reload, restart, and unequip.
+- **Forward-compatible by default:** unknown safe future `Mob` IDs receive generic Mob Atlas behavior immediately; known curated IDs keep premium identity. Roster drift warns once and fails open instead of crashing or disabling the provider.
+- **No hot-path tax:** provider discovery/fingerprinting is bounded to startup/data reload and cached. JetSetCraft does not rescan the entity registry every tick.
+
+### Version drift and verification
+
+Alex's Mobs 1.22.9 and Alex's Caves 2.0.2 were reconciled against their 1.20.1 source registries, living-attribute registration, and spawn-egg surfaces. Cataclysm is pinned to 3.31, while the public 1.20.1 source lineage inspected for its exact entity roster is older; JetSetCraft therefore treats the 39 Cataclysm records as the curated candidate set and uses the **live Forge registry fingerprint** as runtime authority.
+
+A fingerprint mismatch never rebinds by display name. Missing known IDs go dormant with history preserved; added safe mobs get generic compatibility until curated; absent mods simply produce an `ABSENT` adapter state.
+
+Wave 2 curation is complete, but provider-present runtime verification is a separate gate: pinned-release boot, exact live ID resolution, Street Gear persistence, multiplayer sync, boss/pet edge cases, representative anatomy rigs, and zero tick-time registry scans must all pass before the adapters are labeled runtime-verified.
+
+
 ## Gangification and the installed-mod Mob Atlas
 
 The gang system follows a strict ownership boundary: **JetSetCraft does not replace vanilla mobs or another mod's entities.** A normal mob remains the original registered entity. Actual JetSetCraft Street Gear is the persistent transformation trigger: once compatible gear is equipped, that same source mob remains a JetSetCraft rider/gang member across events, chunk unload/reload, and save/restart for as long as the gear remains equipped. Ending a race, Turf War, dance battle, or Boombox event removes only transient challenge state. Only actual gear removal, theft, breakage, or unequip restores the mob's ordinary non-gang state.
