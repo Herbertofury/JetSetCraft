@@ -2033,3 +2033,18 @@ The target is not “gang mobs added.”
 The target is a **living, data-driven, cross-mod street-culture ecosystem** where almost any Minecraft creature can become part of JetSetCraft without JetSetCraft fighting the original game or other mods for ownership.
 
 > **Cool mob. Now give it skates.**
+
+
+---
+
+## Curated popular-mod gang atlas and collectible gang art
+
+The universal Installed-Mod Mob Atlas remains the fallback for every safe detected Mob, but high-value ecosystems also receive authored premium gang identities. The canonical exact-ID/provider mapping is maintained in [`docs/CURATED_MODDED_GANG_ATLAS.md`](../docs/CURATED_MODDED_GANG_ATLAS.md).
+
+The first curated wave covers **The Aether, Twilight Forest, The Undergarden, and Advent of Ascension**, with provider/version checks, per-entity or family mappings, Junior/legendary relationships, and safe dormant state when an optional provider disappears. AoA mappings are activated only for IDs actually present in the installed compatible build; source-branch candidates are not treated as runtime fact.
+
+### Gang-art progression is part of leveling
+
+Every curated gang must have a real collectible art path tied to the stable `gang_id`: discovery preview -> sticker/palette -> canonical graffiti tag -> full emblem/logo -> alternate throw-up/stencil/character mark -> prestige mural/masterpiece. Earned art is usable through JetSetCraft's normal Graffiti Gallery/selector/placement pipeline and may also feed supported ride, Boombox, Chapter, badge, and sticker surfaces. Rename/alias changes must never invalidate rewards, and provider removal must preserve unlock receipts for automatic restoration after reinstall.
+
+Premium art direction must be genuinely gang-specific: no repeated generic logo template, no default crown motif, no photoreal creature pasted beside generated text, and no recolor-only prestige art.
