@@ -963,3 +963,32 @@ Wave 2A's **mob-by-mob data contract is now complete** for Alex's Mobs 1.22.9, A
 Do **not** label the three provider adapters runtime-verified merely because the curation ledger exists. Runtime completion requires loading the pinned providers on Forge 47.4.23 / Java 17, reconciling the live registry, proving equip/unequip + restart persistence, exercising boss/pet/anatomy edge cases, validating multiplayer state, and confirming the compatibility scan does not enter any tick/render hot path.
 
 For Cataclysm specifically, the public 1.20.1 source lineage inspected for the roster is behind the pinned 3.31 binary release. The 39-record curated set is therefore a candidate exact roster until the 3.31 live Forge registry fingerprint is captured; any difference must stay fail-open and must never be hidden by suppressing provider errors.
+
+
+<!-- JETSETCRAFT_WAVE2_RUNTIME_WIRING_2026-10-01 -->
+## Wave 2B implementation checkpoint — curated compatibility is wired into runtime
+
+The Wave 2A roster is no longer documentation-only. The canonical runtime now consumes the exact curated records for Alex's Mobs 1.22.9, Alex's Caves 2.0.2, and L_Ender's Cataclysm 3.31 through optional, data-driven compatibility paths.
+
+### Implemented
+
+- Added three bundled provider manifests under `src/main/resources/data/jetsetcraft/jetsetcraft_gangs/wave2_*.json`: **90 + 43 + 39 = 172** safe curated records plus **7 + 2 + 0 = 9** hard-hidden technical/helper IDs.
+- Extended `GangDefinitionReloadListener` to support atomic provider bundles while preserving the legacy one-definition-per-file format and installed-provider fail-soft mapping.
+- Added `MobCompatibilityProfile` and `MobCompatibilityRegistry` as cached reload-time metadata. No optional-provider class is linked and no provider registry scan is added to the tick/render hot path.
+- Wired curated anatomy profiles into `MobRideRigResolver` after explicit datapack tag overrides and before geometry heuristics.
+- Wired the hidden technical set into normal Street Gear eligibility so multipart/helper entities cannot fall through to generic gear support.
+- Added centralized Boombox safety gating so hidden, `boss-gated`, and `owner-gated` records are rejected both before challenge start and again in actor spawning.
+- Added `tools/validate_wave2_compat.py` and made CI enforce exact 90/43/39 safe counts, 7/2/0 hidden counts, unique stable entity/gang IDs, complete family/ride/challenge/graffiti metadata, and boss/owner spawn gating.
+- Extended the existing real Forge Street Gear GameTest to assert Wave 2 resource-reload visibility, anatomy mapping, hidden helper handling, provider coverage counts, and boss/owner Boombox safety.
+- Updated the repository compatibility wiki and published it through the existing actual-wiki workflow.
+
+### Verification state
+
+- Deterministic manifest generation reconciled exactly **172 safe + 9 hidden** records against the accepted Wave 2 curation ledger.
+- Actual GitHub Wiki publication workflow succeeded for the Wave 2 compatibility page update.
+- The current full Java 17 / Forge 1.20.1 CI run must finish on the latest implementation commit before this runtime wiring is marked build/GameTest/server-smoke verified.
+- Provider-present testing with the pinned third-party JARs remains required before calling Alex's Mobs, Alex's Caves, or Cataclysm **provider-present runtime verified**. This gate includes live registry reconciliation, owner/boss behavior, persistence/restart, multiplayer state, representative anatomy rigs, and no hot-path registry work.
+
+### Exact next action
+
+Let the latest `Verify JetSetCraft` run converge on the current implementation. If it fails, repair the first causal compile/validator/GameTest/server-smoke failure without weakening the Wave 2 contract. If it passes, preserve that commit as the provider-absent verified checkpoint, publish the updated checkpoint to Drive, then run the three pinned provider-present lanes.
