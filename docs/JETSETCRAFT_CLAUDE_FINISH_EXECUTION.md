@@ -941,3 +941,25 @@ Then perform one whole-project challenge pass for:
 Do not answer this handoff with another summary or roadmap. Start by resolving the real current source/checkpoint, then implement the earliest ready task. Continue automatically across bounded execution windows. Ask the user only for a genuinely user-only decision or authorization that blocks the next required mutation.
 
 - [ ] **G017 · FINAL COMPLETION GATE** — Every accepted task and parent gate above is complete; no blocker remains; the final artifact is a fresh verified Forge 1.20.1 build; the exact changed gameplay paths have been exercised in real client/server runtime; Boost/Flow HUD visibly follows the Spirit Vector-inspired vanilla survival-HUD principle while retaining JetSetCraft identity, auto-coexists with real mod overlays, and gives each user persistent full placement control; Challenge+Interact works end-to-end against representative vanilla and modded AI mobs for Dance Battle/Skate-Off with reversible loaner skates and exact source-AI/equipment/provider-state restoration; the user's authorized JSR/JSRF/BRC production assets are genuinely integrated rather than treated as reference-only, the complete available authorized soundtrack catalog is playable through polished personal Radio and in-world Boombox flows with durable provenance/credits and performant packaging; all preserved gang/Atlas/hangout/reputation/challenge/chapter/posse systems are real and production-wired, the approved Sift/modern gang defaults and unlockable alternate names are implemented with stable `gang_id` identity and naming-rights persistence; Street Level, build-defining skill trees, ride mastery, per-gang reputation ladders, respec/loadouts, and thematic Gang Signature Techniques are persistent, balanced, server-authoritative, non-grindy, and runtime-proven; performance improvements preserve full results; docs match reality; and final source/artifacts are durably checkpointed and published.
+
+
+<!-- JETSETCRAFT_WAVE2_EXACT_CURATED_2026-10-01 -->
+## Wave 2A execution checkpoint — exact creature compatibility curation
+
+Wave 2A's **mob-by-mob data contract is now complete** for Alex's Mobs 1.22.9, Alex's Caves 2.0.2, and L_Ender's Cataclysm 3.31. The exhaustive 172-record ledger is `docs/JETSETCRAFT_WAVE_2_EXACT_MOD_COMPATIBILITY.md`; the curated atlas mirrors the milestone.
+
+### Completed in this checkpoint
+
+- Curated **90** Alex's Mobs safe mobs, **43** Alex's Caves safe mobs, and **39** Cataclysm candidate safe mobs: **172** exact namespaced records total.
+- Hard-hidden **9** multipart/helper implementation entities so they cannot become duplicate gangs, challenge targets, Street Gear holders, or reward farms.
+- Assigned each safe record a stable gang ID, provider-scoped crew family, readable gang name, anatomy-aware ride/contact profile, challenge/safety classification, and bespoke graffiti motif.
+- Defined explicit boss-gated and pet-owner-gated behavior for Cataclysm and universal preservation rules for provider AI, combat, ownership, variants, loot, structures, and renderers.
+- Added startup/data-reload provider fingerprint semantics: `EXACT`, `FORWARD_COMPAT`, `ROSTER_DRIFT`, and `ABSENT`. Unknown future safe mobs fail open to generic Mob Atlas compatibility.
+- Added the Mark → Throwie → Masterpiece art/reward quality gate and the provider-present/provider-absent/runtime-drift acceptance matrix.
+- Updated the repository compatibility wiki source to surface the Wave 2 compatibility contract to modpack/server users.
+
+### Remaining implementation/verification gate
+
+Do **not** label the three provider adapters runtime-verified merely because the curation ledger exists. Runtime completion requires loading the pinned providers on Forge 47.4.23 / Java 17, reconciling the live registry, proving equip/unequip + restart persistence, exercising boss/pet/anatomy edge cases, validating multiplayer state, and confirming the compatibility scan does not enter any tick/render hot path.
+
+For Cataclysm specifically, the public 1.20.1 source lineage inspected for the roster is behind the pinned 3.31 binary release. The 39-record curated set is therefore a candidate exact roster until the 3.31 live Forge registry fingerprint is captured; any difference must stay fail-open and must never be hidden by suppressing provider errors.
