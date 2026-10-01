@@ -227,6 +227,17 @@ public final class StreetGearGameTests {
             throw new GameTestAssertException("Wave 2 provider coverage ledger did not load 90/43/39 + 7/2/0");
         }
 
+        String providerUnderTest = System.getProperty("jetsetcraft.wave2Provider", "").trim();
+        if (!providerUnderTest.isEmpty()) {
+            var liveStatus = MobCompatibilityRegistry.providerStatuses().get(providerUnderTest);
+            if (liveStatus == null || liveStatus.state() != MobCompatibilityRegistry.ProviderState.READY
+                    || liveStatus.resolvedSafeCount() != liveStatus.expectedSafeCount()
+                    || !liveStatus.missingKnownIds().isEmpty()) {
+                throw new GameTestAssertException("Pinned Wave 2 provider did not reconcile exactly: "
+                        + providerUnderTest + " -> " + liveStatus);
+            }
+        }
+
         if (GangRegistry.dataOverrideCount() < 173 || HeadTargetMappingRegistry.dataMappingCount() < 1) {
             throw new GameTestAssertException("Server datapack gang/head mapping listeners did not load bundled acceptance data");
         }
