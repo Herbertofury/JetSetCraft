@@ -41,6 +41,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraftforge.common.util.FakePlayerFactory;
 import net.minecraftforge.gametest.GameTestHolder;
 import net.minecraftforge.gametest.PrefixGameTestTemplate;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.nio.charset.StandardCharsets;
 import java.util.UUID;
@@ -227,14 +228,13 @@ public final class StreetGearGameTests {
             throw new GameTestAssertException("Wave 2 provider coverage ledger did not load 90/43/39 + 7/2/0");
         }
 
-        String providerUnderTest = System.getProperty("jetsetcraft.wave2Provider", "").trim();
-        if (!providerUnderTest.isEmpty()) {
-            var liveStatus = MobCompatibilityRegistry.providerStatuses().get(providerUnderTest);
-            if (liveStatus == null || liveStatus.state() != MobCompatibilityRegistry.ProviderState.EXACT
-                    || liveStatus.resolvedSafeCount() != liveStatus.expectedSafeCount()
-                    || !liveStatus.missingKnownIds().isEmpty()) {
-                throw new GameTestAssertException("Pinned Wave 2 provider did not reconcile exactly: "
-                        + providerUnderTest + " -> " + liveStatus);
+        String providerSelection = System.getProperty("jetsetcraft.wave2Provider", "").trim();
+        if (!providerSelection.isEmpty()) {
+            java.util.List<String> providersUnderTest = "all".equals(providerSelection)
+                    ? java.util.List.of("alexsmobs", "alexscaves", "cataclysm")
+                    : java.util.List.of(providerSelection);
+            for (String providerUnderTest : providersUnderTest) {
+                assertLiveProviderRoster(helper, providerUnderTest);
             }
         }
 
@@ -327,6 +327,66 @@ public final class StreetGearGameTests {
 
         System.out.println("JETSETCRAFT_GAMETEST_PASS street_gear");
         helper.succeed();
+    }
+
+    private static void assertLiveProviderRoster(GameTestHelper helper, String providerUnderTest) {
+        var liveStatus = MobCompatibilityRegistry.providerStatuses().get(providerUnderTest);
+        if (liveStatus == null || liveStatus.state() != MobCompatibilityRegistry.ProviderState.EXACT
+                || liveStatus.resolvedSafeCount() != liveStatus.expectedSafeCount()
+                || !liveStatus.missingKnownIds().isEmpty()) {
+            throw new GameTestAssertException("Pinned Wave 2 provider did not reconcile exactly: "
+                    + providerUnderTest + " -> " + liveStatus);
+        }
+
+        // T381 live-registry proof: instantiate every provider EntityType in the real Forge GameTest server.
+        // Every actual Mob must be either explicitly curated or explicitly hidden as a technical/helper entity.
+        // Projectiles, vehicles, effects, and other non-Mob EntityTypes remain provider-owned and are ignored.
+        java.util.ArrayList<ResourceLocation> unexpectedMobs = new java.util.ArrayList<>();
+        java.util.ArrayList<ResourceLocation> curatedNonMobs = new java.util.ArrayList<>();
+        int providerEntityTypes = 0;
+        int liveCuratedMobs = 0;
+        int liveHiddenMobs = 0;
+        for (var registryEntry : ForgeRegistries.ENTITY_TYPES.getEntries()) {
+            ResourceLocation liveId = registryEntry.getKey().location();
+            if (!providerUnderTest.equals(liveId.getNamespace())) continue;
+            providerEntityTypes++;
+            net.minecraft.world.entity.Entity probe = null;
+            try {
+                probe = registryEntry.getValue().create(helper.getLevel());
+                boolean curated = MobCompatibilityRegistry.profile(liveId).isPresent();
+                boolean hidden = MobCompatibilityRegistry.hidden(liveId);
+                if (probe instanceof net.minecraft.world.entity.Mob) {
+                    if (curated) liveCuratedMobs++;
+                    else if (hidden) liveHiddenMobs++;
+                    else unexpectedMobs.add(liveId);
+                } else if (curated) {
+                    curatedNonMobs.add(liveId);
+                }
+            } catch (RuntimeException error) {
+                if (MobCompatibilityRegistry.profile(liveId).isPresent()
+                        || MobCompatibilityRegistry.hidden(liveId)) {
+                    throw new GameTestAssertException("Known Wave 2 entity could not be instantiated for live roster proof: "
+                            + liveId + " (" + error.getClass().getSimpleName() + ")");
+                }
+            } finally {
+                if (probe != null) probe.discard();
+            }
+        }
+        unexpectedMobs.sort(java.util.Comparator.naturalOrder());
+        curatedNonMobs.sort(java.util.Comparator.naturalOrder());
+        if (!unexpectedMobs.isEmpty()) {
+            throw new GameTestAssertException("Pinned Wave 2 provider has uncatalogued live Mob IDs: "
+                    + unexpectedMobs);
+        }
+        if (!curatedNonMobs.isEmpty() || liveCuratedMobs != liveStatus.expectedSafeCount()) {
+            throw new GameTestAssertException("Pinned Wave 2 curated roster is not entirely live Mob EntityTypes: curated="
+                    + liveCuratedMobs + "/" + liveStatus.expectedSafeCount() + " nonMob=" + curatedNonMobs);
+        }
+        System.out.println("JETSETCRAFT_WAVE2_LIVE_ROSTER " + providerUnderTest
+                + " entity_types=" + providerEntityTypes
+                + " curated_mobs=" + liveCuratedMobs
+                + " hidden_mobs=" + liveHiddenMobs
+                + " unexpected_mobs=0");
     }
 
     private StreetGearGameTests() {}

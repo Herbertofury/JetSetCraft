@@ -57,15 +57,21 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          mkdir -p build/verification
           for attempt in 1 2 3; do
-            if ./gradlew clean build --no-daemon; then
+            log="build/verification/forge-build-attempt-$attempt.log"
+            if ./gradlew clean build --no-daemon 2>&1 | tee "$log"; then
               exit 0
             fi
-            if [[ "$attempt" -eq 3 ]]; then
-              echo '::error::Forge build failed after three attempts.'
+            if grep -Eq 'Compilation failed|> Task :compile(Java|TestJava) FAILED|(^|[[:space:]])error:' "$log"; then
+              echo '::error::Deterministic compile failure; refusing an unchanged retry.'
               exit 1
             fi
-            echo "::warning::Forge dependency service/build attempt $attempt failed; retrying in 20 seconds."
+            if [[ "$attempt" -eq 3 ]]; then
+              echo '::error::Forge build failed after three evidence-changing attempts.'
+              exit 1
+            fi
+            echo "::warning::Possible transient dependency/service build failure on attempt $attempt; retrying once state can change."
             sleep 20
           done
 
@@ -100,19 +106,45 @@ jobs:
           mkdir -p run build/verification
           printf 'eula=true\n' > run/eula.txt
           log=build/verification/server-smoke.log
-          set +e
-          timeout 180s ./gradlew runServer --no-daemon > "$log" 2>&1
-          exit_code=$?
-          set -e
+          : > "$log"
+          setsid ./gradlew runServer --no-daemon > "$log" 2>&1 &
+          server_pid=$!
+          ready=0
+          deadline=$((SECONDS + 120))
+          while kill -0 "$server_pid" 2>/dev/null; do
+            if grep -Eq 'Done \([0-9.]+s\)!' "$log"; then
+              ready=1
+              break
+            fi
+            if grep -Eiq 'ModLoadingException|Failed to complete lifecycle event|Exception in thread "main"|FATAL.*jetsetcraft' "$log"; then
+              break
+            fi
+            if (( SECONDS >= deadline )); then
+              break
+            fi
+            sleep 2
+          done
           cat "$log"
-          grep -Eq 'Done \([0-9.]+s\)!' "$log" || {
+          if [[ "$ready" -ne 1 ]]; then
+            kill -TERM -- "-$server_pid" 2>/dev/null || true
+            sleep 2
+            kill -KILL -- "-$server_pid" 2>/dev/null || true
+            wait "$server_pid" 2>/dev/null || true
             echo '::error::Forge dedicated server never reached ready state.'
-            exit "${exit_code:-1}"
-          }
+            exit 1
+          fi
           if grep -Eiq 'ModLoadingException|Failed to complete lifecycle event|Exception in thread "main"|FATAL.*jetsetcraft' "$log"; then
+            kill -TERM -- "-$server_pid" 2>/dev/null || true
+            sleep 2
+            kill -KILL -- "-$server_pid" 2>/dev/null || true
+            wait "$server_pid" 2>/dev/null || true
             echo '::error::A fatal JetSetCraft/mod-loading error occurred.'
             exit 1
           fi
+          kill -TERM -- "-$server_pid" 2>/dev/null || true
+          sleep 2
+          kill -KILL -- "-$server_pid" 2>/dev/null || true
+          wait "$server_pid" 2>/dev/null || true
 
       - name: Seal artifact checksums
         shell: bash
