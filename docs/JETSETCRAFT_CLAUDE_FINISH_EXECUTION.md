@@ -422,7 +422,80 @@ This is preserved design lineage and is now accepted implementation scope.
 - [ ] **T102** · Integrate rewards, cosmetics, Chapter Boombox unlocks, naming rights, challenge variants, and allied interactions into progression.
 - [ ] **T103** · Keep progression optional to normal Minecraft survival; JetSetCraft must enrich a world, not turn every save into a mandatory quest campaign.
 - [ ] **T104** · Add server config for progression scale without permitting contradictory or corrupt relationship states.
-- [ ] **G007 · GATE** — The Gang Atlas is a complete, persistent, useful social/progression system rather than a lore menu.
+
+## Approved Sift + modern-vanilla gang naming expansion
+
+Treat the following display names as **approved JetSetCraft defaults**. Every row keeps one stable namespaced `gang_id`; the visible name is presentation only. When a player reaches the existing **Crew Naming Rights** threshold for that gang, the Gang Atlas must expose the curated **Alternate** as an instant preset alongside any server-permitted custom alias. Switching names must never fork reputation, membership, allies/rivals, Chapter state, rewards, or save identity.
+
+For Sift mobs whose upstream/public mob label is still provisional or changes before vanilla release, bind the stable gang mapping to the actual registry/provider identity or durable semantic archetype rather than baking a temporary community label into save identity. Display-name migrations must be lossless.
+
+### Sift crews
+
+| Mob / archetype | Default JetSetCraft gang name | Unlockable alternate | Design identity |
+|---|---|---|---|
+| Seedling | **Fresh Cuts** | **Root Rookies** | tiny fresh-start street crew |
+| Nester | **Nest Level** | **Home Turf** | territorial home-base crew |
+| Sentinel | **Dead Center** | **Lock-On** | precision / homing-shot crew |
+| Pollinator | **Pollen Posse** | **Buzz Business** | projectile / territory support crew |
+| Sprout | **Support Group** | **Green Room** | buff/support crew |
+| Bloombud | **Petal Pushers** | **Bud Breakers** | aggressive flower punks |
+| Shroomer / durable provider archetype | **Mush Pit** | **Cap Crew** | mushroom mosh-pit crew |
+| Fusefly | **Flash Mob** | **Short Fuse** | flying explosive chaos crew |
+| Hurler | **Pitch Perfect** | **Throwdown** | projectile + musical crew |
+| Roamroot | **Root Runners** | **Road Roots** | traversal / roaming crew |
+| Wobble | **Wobble Trouble** | **Loose Steps** | unstable goofy trick crew |
+| Stalker | **Cut Above** | **Slash Track** | aggressive cutting/spin crew |
+| Scavenger | **Soul Searchers** | **Ghost Notes** | soul-projectile crew |
+| Hunter / Monarchling family | **Crown Chasers** | **Royal Runners** | Monarch-linked hunter crew |
+| Blub | **Blub Club** | **Bubble Trouble** | cute aquatic street crew |
+| Singer | **Headliners** | **Lead Vocals** | performance / social crew |
+| Tuner | **Pocket Beats** | **Fine Tuned** | tiny rhythm-tech crew |
+| Echo Golem | **Soul Speakers** | **Heavy Reverb** | heavyweight music/soul crew |
+| Slabber | **Slow Jam** | **Low Tempo** | laid-back heavy ambient crew |
+| Nuzzle | **Snuggle Hustle** | **Soft Touch** | cute social crew |
+| Prickle / durable provider archetype | **Point Taken** | **Sharp Dressed** | spiky precision crew |
+| Trill | **High Notes** | **Sky Chorus** | aerial rhythm/flock crew |
+| Antenna Sifter / durable provider archetype | **Signal Boost** | **Good Reception** | communication / signal crew |
+
+### Sift legendary / boss identities
+
+These are Atlas legendary encounter identities, not ordinary common-spawn gangs. They still use stable encounter/gang IDs where progression hooks require them, and their alternate title unlock follows the same naming-rights presentation rule when applicable.
+
+| Encounter | Default identity | Unlockable alternate |
+|---|---|---|
+| Harmonizer | **Perfect Pitch** | **Resonance** |
+| Dartback | **Needle Drop** | **Backspin** |
+| Monarch | **Crown Control** | **King of the Hill** |
+| Sculk Monstrosity | **Feedback Loop** | **Bass Abyss** |
+| Twisted Warden | **Deep Cuts — Twisted Mix** | **Deep Cuts — B-Side** |
+
+### Modern vanilla catch-up crews missing from the original 1.20.1-era Atlas
+
+| Mob / archetype | Default JetSetCraft gang name | Unlockable alternate | Design identity |
+|---|---|---|---|
+| Armadillo | **Roll Models** | **Round Trip** | rolling / armor / downhill crew |
+| Breeze | **Air Time** | **Gust Hustle** | wind boosts and aerial combos |
+| Bogged | **Muck Shots** | **Bog Standard** | swamp projectile crew |
+| Creaking | **Dead Wood** | **Stiff Competition** | eerie stop/go forest crew |
+| Happy Ghast | **Cloud Nine** | **Sky High** | peaceful aerial riding crew |
+| Ghastling | **Little Lift** | **Cloud Cubs** | Junior Atlas partner to Cloud Nine |
+| Copper Golem | **The Conductors** | **Patina Patrol** | copper/music-conductor crew |
+| Nautilus | **Pressure Drop** | **Shell Riders** | underwater pressure/speed crew |
+| Zombie Nautilus | **Dead Reckoning** | **Sunken Circuit** | undead ocean rider crew |
+| Camel Husk | **Dead Heat** | **Dune Dread** | undead desert racing crew |
+| Parched | **Dry Fire** | **Weak Links** | desert ranged / Weakness crew |
+| Sulfur Cube | **Bounce House** | **Cube Roots** | sulfur-zone bounce/absorption crew |
+| Frostbite | **Freeze Frame** | **Cold Snap** | freezing / ice projectile crew |
+
+Variant policy: biome/temperature/color variants of an existing mob stay with the parent gang unless they have materially distinct gameplay/identity. Coral Zombie Nautilus belongs under **Dead Reckoning** as a variant/chapter; warm/cold pig/cow/chicken variants stay with **Hog Wild / The Milk Run / The Pecking Order**; wolf variants stay **Pack Mentality**; baby forms belong in the Junior Atlas instead of becoming duplicate adult gangs.
+
+- [ ] **T363** · Add the complete approved Sift crew table above to the data-driven Gang Atlas with stable IDs/archetype bindings, default names, curated alternate aliases, colors/music/challenge hooks, and no dependence on temporary display labels for persistence.
+- [ ] **T364** · Add the Sift legendary identities above as rare/boss encounter profiles rather than ordinary roaming populations, preserving source boss ownership and existing `Deep Cuts` Warden lineage.
+- [ ] **T365** · Add the complete modern-vanilla catch-up table above, including **Sulfur Cube = Bounce House** by default with **Cube Roots** as its unlockable alternate.
+- [ ] **T366** · Upgrade Crew Naming Rights so reaching the configured naming-rights reputation/membership threshold unlocks a polished Atlas rename control with the curated alternate(s) as one-click presets plus server-permitted custom alias entry; changing display name must never change `gang_id` or fork progression/state.
+- [ ] **T367** · Persist personal/shared alias choices, permissions, rename history needed for moderation/recovery, and migration-safe fallback when a curated default/alternate is renamed in a later JetSetCraft update.
+- [ ] **T368** · Add validation/runtime coverage proving default -> alternate -> custom/default restoration survives save/reload/reconnect and multiplayer, with two players allowed independent personal aliases when personal mode is enabled and one authoritative shared alias when shared-world mode is enabled.
+- [ ] **G007 · GATE** — The Gang Atlas is a complete, persistent, useful social/progression system rather than a lore menu; approved Sift/modern crews have stable identity, and unlocked renaming changes presentation without ever splitting gang state.
 
 # PHASE H — Universal Installed-Mod Mob Atlas + archetype intelligence
 
@@ -723,7 +796,7 @@ When the player is looking at a valid AI mob in normal interaction range:
 - [ ] **T209** · Exercise graffiti selector/editor/paint balloons/persistence/cleanup.
 - [ ] **T210** · Exercise Boombox tuning and gang session start/cancel/restart.
 - [ ] **T211** · Exercise at least one Natural Hangout lifecycle from activation through unload/reload/revalidation.
-- [ ] **T212** · Exercise Gang Atlas relationship progression and Crew Naming Rights.
+- [ ] **T212** · Exercise Gang Atlas relationship progression and Crew Naming Rights, including a default gang name -> curated alternate -> persisted alias round trip without changing stable gang identity.
 - [ ] **T213** · Exercise Installed-Mod Mob Atlas with at least one optional mod creature and one missing-provider recovery scenario.
 - [ ] **T214** · Exercise Chapter Boombox create/move/reload/resident death/recovery/posse flow.
 - [ ] **T215** · Exercise every challenge mode end-to-end with cleanup proof, including Challenge+Interact against vanilla and modded AI mobs with temporary-loaner-gear restoration.
@@ -842,4 +915,4 @@ Then perform one whole-project challenge pass for:
 
 Do not answer this handoff with another summary or roadmap. Start by resolving the real current source/checkpoint, then implement the earliest ready task. Continue automatically across bounded execution windows. Ask the user only for a genuinely user-only decision or authorization that blocks the next required mutation.
 
-- [ ] **G017 · FINAL COMPLETION GATE** — Every accepted task and parent gate above is complete; no blocker remains; the final artifact is a fresh verified Forge 1.20.1 build; the exact changed gameplay paths have been exercised in real client/server runtime; Boost/Flow HUD visibly follows the Spirit Vector-inspired vanilla survival-HUD principle while retaining JetSetCraft identity, auto-coexists with real mod overlays, and gives each user persistent full placement control; Challenge+Interact works end-to-end against representative vanilla and modded AI mobs for Dance Battle/Skate-Off with reversible loaner skates and exact source-AI/equipment/provider-state restoration; the user's authorized JSR/JSRF/BRC production assets are genuinely integrated rather than treated as reference-only, the complete available authorized soundtrack catalog is playable through polished personal Radio and in-world Boombox flows with durable provenance/credits and performant packaging; all preserved gang/Atlas/hangout/reputation/challenge/chapter/posse systems are real and production-wired; Street Level, build-defining skill trees, ride mastery, per-gang reputation ladders, respec/loadouts, and thematic Gang Signature Techniques are persistent, balanced, server-authoritative, non-grindy, and runtime-proven; performance improvements preserve full results; docs match reality; and final source/artifacts are durably checkpointed and published.
+- [ ] **G017 · FINAL COMPLETION GATE** — Every accepted task and parent gate above is complete; no blocker remains; the final artifact is a fresh verified Forge 1.20.1 build; the exact changed gameplay paths have been exercised in real client/server runtime; Boost/Flow HUD visibly follows the Spirit Vector-inspired vanilla survival-HUD principle while retaining JetSetCraft identity, auto-coexists with real mod overlays, and gives each user persistent full placement control; Challenge+Interact works end-to-end against representative vanilla and modded AI mobs for Dance Battle/Skate-Off with reversible loaner skates and exact source-AI/equipment/provider-state restoration; the user's authorized JSR/JSRF/BRC production assets are genuinely integrated rather than treated as reference-only, the complete available authorized soundtrack catalog is playable through polished personal Radio and in-world Boombox flows with durable provenance/credits and performant packaging; all preserved gang/Atlas/hangout/reputation/challenge/chapter/posse systems are real and production-wired, the approved Sift/modern gang defaults and unlockable alternate names are implemented with stable `gang_id` identity and naming-rights persistence; Street Level, build-defining skill trees, ride mastery, per-gang reputation ladders, respec/loadouts, and thematic Gang Signature Techniques are persistent, balanced, server-authoritative, non-grindy, and runtime-proven; performance improvements preserve full results; docs match reality; and final source/artifacts are durably checkpointed and published.
