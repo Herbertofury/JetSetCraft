@@ -11,6 +11,7 @@ import com.herberto.jetsetcraft.gang.GangMemberState;
 import com.herberto.jetsetcraft.gang.GangRegistry;
 import com.herberto.jetsetcraft.gang.HeadTargetMappingRegistry;
 import com.herberto.jetsetcraft.gang.HeadGangTargetResolver;
+import com.herberto.jetsetcraft.mob.MobCompatibilityRegistry;
 import com.herberto.jetsetcraft.mob.MobRideRig;
 import com.herberto.jetsetcraft.mob.MobRideRigResolver;
 import com.herberto.jetsetcraft.mob.MobStreetGear;
@@ -204,7 +205,25 @@ public final class StreetGearGameTests {
             throw new GameTestAssertException("Species-aware rig resolver regressed for vanilla stress-test anatomies");
         }
 
-        if (GangRegistry.dataOverrideCount() < 1 || HeadTargetMappingRegistry.dataMappingCount() < 1) {
+        ResourceLocation alexBear = ResourceLocation.fromNamespaceAndPath("alexsmobs", "grizzly_bear");
+        ResourceLocation alexPart = ResourceLocation.fromNamespaceAndPath("alexsmobs", "bone_serpent_part");
+        var alexProfile = MobCompatibilityRegistry.profile(alexBear)
+                .orElseThrow(() -> new GameTestAssertException("Wave 2 Alex's Mobs curated profile was not loaded"));
+        if (alexProfile.broadRig() != MobRideRig.QUADRUPED
+                || !alexProfile.gangId().equals(ResourceLocation.fromNamespaceAndPath("jetsetcraft", "w2_alexsmobs_grizzly_bear"))
+                || !MobCompatibilityRegistry.hidden(alexPart)) {
+            throw new GameTestAssertException("Wave 2 compatibility metadata/technical hiding did not load exactly");
+        }
+        var alexStatus = MobCompatibilityRegistry.providerStatuses().get("alexsmobs");
+        var cavesStatus = MobCompatibilityRegistry.providerStatuses().get("alexscaves");
+        var cataclysmStatus = MobCompatibilityRegistry.providerStatuses().get("cataclysm");
+        if (alexStatus == null || alexStatus.expectedSafeCount() != 90 || alexStatus.hiddenCount() != 7
+                || cavesStatus == null || cavesStatus.expectedSafeCount() != 43 || cavesStatus.hiddenCount() != 2
+                || cataclysmStatus == null || cataclysmStatus.expectedSafeCount() != 39 || cataclysmStatus.hiddenCount() != 0) {
+            throw new GameTestAssertException("Wave 2 provider coverage ledger did not load 90/43/39 + 7/2/0");
+        }
+
+        if (GangRegistry.dataOverrideCount() < 173 || HeadTargetMappingRegistry.dataMappingCount() < 1) {
             throw new GameTestAssertException("Server datapack gang/head mapping listeners did not load bundled acceptance data");
         }
         HeadGangTargetResolver.Target zombieHead = HeadGangTargetResolver.resolve(new ItemStack(Items.ZOMBIE_HEAD))
