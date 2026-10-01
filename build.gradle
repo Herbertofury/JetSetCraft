@@ -9,6 +9,8 @@ group = mod_group_id
 base { archivesName = "${mod_id}-${minecraft_version}" }
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
+def wave2Provider = providers.gradleProperty('wave2Provider').orElse('').get().trim()
+
 minecraft {
     mappings channel: 'official', version: minecraft_version
     copyIdeResources = true
@@ -17,6 +19,7 @@ minecraft {
             workingDirectory project.file('run')
             property 'forge.logging.markers', 'REGISTRIES'
             property 'forge.logging.console.level', 'info'
+            property 'jetsetcraft.wave2Provider', wave2Provider
             mods { jetsetcraft { source sourceSets.main } }
         }
         client {
@@ -37,6 +40,11 @@ minecraft {
 
 repositories {
     mavenCentral()
+    maven {
+        name = 'CurseMaven'
+        url = 'https://www.cursemaven.com'
+        content { includeGroup 'curse.maven' }
+    }
     maven { name = 'KosmX'; url = 'https://maven.kosmx.dev/' }
     maven {
         name = 'Create'
@@ -51,6 +59,22 @@ dependencies {
 
     // Create 6.0.8 is optional at runtime; the official slim artifact compiles the native track geometry adapter.
     compileOnly fg.deobf("com.simibubi.create:create-1.20.1:6.0.8-289:slim") { transitive = false }
+
+    // Wave 2 provider-present verification is opt-in. These never enter JetSetCraft's normal runtime dependency set
+    // or mods.toml, so production remains fully optional/fail-soft when the provider is absent.
+    if (wave2Provider == 'alexsmobs') {
+        runtimeOnly fg.deobf("curse.maven:citadel-331936:7476570") // Citadel 2.6.3, current 1.20.1 release
+        runtimeOnly fg.deobf("curse.maven:alexs-mobs-426558:5698791") // Alex's Mobs 1.22.9
+    } else if (wave2Provider == 'alexscaves') {
+        runtimeOnly fg.deobf("curse.maven:citadel-331936:7476570") // Citadel 2.6.3; Alex's Caves requires >=2.6.0
+        runtimeOnly fg.deobf("curse.maven:alexs-caves-924854:5848216") // Alex's Caves 2.0.2
+    } else if (wave2Provider == 'cataclysm') {
+        runtimeOnly fg.deobf("curse.maven:curios-309927:6418456") // Curios 5.14.1+1.20.1
+        runtimeOnly fg.deobf("curse.maven:lionfish-api-1001614:8095554") // Lionfish API 3.0
+        runtimeOnly fg.deobf("curse.maven:lendercataclysm-551586:8246047") // L_Ender's Cataclysm 3.31
+    } else if (!wave2Provider.isEmpty()) {
+        throw new GradleException("Unknown -Pwave2Provider=" + wave2Provider)
+    }
 }
 
 sourceSets.main.resources { srcDir 'src/generated/resources' }
