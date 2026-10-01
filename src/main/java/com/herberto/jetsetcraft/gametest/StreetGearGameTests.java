@@ -467,6 +467,21 @@ public final class StreetGearGameTests {
             mob.saveWithoutId(sourceTag);
             CompoundTag sourceWithoutJetSet = withoutJetSetState(sourceTag);
 
+            // Establish the provider's own save/load normalization as the control. Some third-party mobs legitimately
+            // normalize transient/provider fields when they are deserialized; JetSetCraft must match that baseline,
+            // not falsely require upstream byte-for-byte idempotence that the provider itself does not promise.
+            net.minecraft.world.entity.Entity controlRaw = type.create(helper.getLevel());
+            if (!(controlRaw instanceof net.minecraft.world.entity.Mob control)) {
+                if (controlRaw != null) controlRaw.discard();
+                mob.discard();
+                throw new GameTestAssertException("Could not create provider NBT control mob " + entityId);
+            }
+            control.load(sourceTag);
+            CompoundTag providerRoundTripTag = new CompoundTag();
+            control.saveWithoutId(providerRoundTripTag);
+            CompoundTag providerRoundTripWithoutJetSet = withoutJetSetState(providerRoundTripTag);
+            control.discard();
+
             MobStreetGear.EquipResult equip = MobStreetGear.equip(mob, new ItemStack(ModItems.INLINE_SKATES.get()),
                     StreetGearAcquisition.COMMAND, false);
             var profile = MobCompatibilityRegistry.profile(entityId)
@@ -516,9 +531,10 @@ public final class StreetGearGameTests {
 
             CompoundTag restoredTag = new CompoundTag();
             restored.saveWithoutId(restoredTag);
-            if (!sourceWithoutJetSet.equals(withoutJetSetState(restoredTag))) {
+            if (!providerRoundTripWithoutJetSet.equals(withoutJetSetState(restoredTag))) {
                 restored.discard();
-                throw new GameTestAssertException("Provider-owned NBT changed across Wave 2 save/load for " + entityId);
+                throw new GameTestAssertException("Wave 2 save/load diverged from the provider's own NBT round-trip baseline for "
+                        + entityId);
             }
 
             if (!helper.getLevel().addFreshEntity(restored)) {
