@@ -115,19 +115,45 @@ jobs:
           mkdir -p run build/verification
           printf 'eula=true\n' > run/eula.txt
           log="build/verification/wave2-${{ matrix.provider }}-server.log"
-          set +e
-          timeout 240s ./gradlew runServer -Pwave2Provider=${{ matrix.provider }} --no-daemon > "$log" 2>&1
-          exit_code=$?
-          set -e
+          : > "$log"
+          setsid ./gradlew runServer -Pwave2Provider=${{ matrix.provider }} --no-daemon > "$log" 2>&1 &
+          server_pid=$!
+          ready=0
+          deadline=$((SECONDS + 150))
+          while kill -0 "$server_pid" 2>/dev/null; do
+            if grep -Eq 'Done \([0-9.]+s\)!' "$log"; then
+              ready=1
+              break
+            fi
+            if grep -Eiq 'ModLoadingException|Failed to complete lifecycle event|Exception in thread "main"|FATAL.*jetsetcraft' "$log"; then
+              break
+            fi
+            if (( SECONDS >= deadline )); then
+              break
+            fi
+            sleep 2
+          done
           cat "$log"
-          grep -Eq 'Done \([0-9.]+s\)!' "$log" || {
+          if [[ "$ready" -ne 1 ]]; then
+            kill -TERM -- "-$server_pid" 2>/dev/null || true
+            sleep 2
+            kill -KILL -- "-$server_pid" 2>/dev/null || true
+            wait "$server_pid" 2>/dev/null || true
             echo "::error::Provider-present server never reached ready state for ${{ matrix.provider }}."
-            exit "${exit_code:-1}"
-          }
+            exit 1
+          fi
           if grep -Eiq 'ModLoadingException|Failed to complete lifecycle event|Exception in thread "main"|FATAL.*jetsetcraft' "$log"; then
+            kill -TERM -- "-$server_pid" 2>/dev/null || true
+            sleep 2
+            kill -KILL -- "-$server_pid" 2>/dev/null || true
+            wait "$server_pid" 2>/dev/null || true
             echo "::error::Fatal mod-loading/runtime error with ${{ matrix.provider }} present."
             exit 1
           fi
+          kill -TERM -- "-$server_pid" 2>/dev/null || true
+          sleep 2
+          kill -KILL -- "-$server_pid" 2>/dev/null || true
+          wait "$server_pid" 2>/dev/null || true
 
       - name: Seal evidence
         shell: bash
