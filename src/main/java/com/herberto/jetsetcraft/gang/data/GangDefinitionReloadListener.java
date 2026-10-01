@@ -69,8 +69,8 @@ public final class GangDefinitionReloadListener extends SimpleJsonResourceReload
                         JetSetCraft.LOGGER.warn("JetSetCraft compatibility roster drift for {} {}: resolved {}/{} known safe ids; missing {}",
                                 status.modId(), status.installedVersion(), status.resolvedSafeCount(),
                                 status.expectedSafeCount(), status.missingKnownIds());
-                    } else if (status.state() == MobCompatibilityRegistry.ProviderState.VERSION_DRIFT) {
-                        JetSetCraft.LOGGER.warn("JetSetCraft compatibility version drift for {}: curated {}, installed {}; known roster still resolves {}/{}",
+                    } else if (status.state() == MobCompatibilityRegistry.ProviderState.FORWARD_COMPAT) {
+                        JetSetCraft.LOGGER.warn("JetSetCraft compatibility {} -> FORWARD_COMPAT: curated {}, installed {}; known roster still resolves {}/{} and unknown safe mobs remain generic",
                                 status.modId(), status.expectedVersion(), status.installedVersion(),
                                 status.resolvedSafeCount(), status.expectedSafeCount());
                     } else {
