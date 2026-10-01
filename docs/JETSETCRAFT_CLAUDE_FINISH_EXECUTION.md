@@ -984,11 +984,14 @@ The Wave 2A roster is no longer documentation-only. The canonical runtime now co
 
 ### Verification state
 
-- Deterministic manifest generation reconciled exactly **172 safe + 9 hidden** records against the accepted Wave 2 curation ledger.
-- Actual GitHub Wiki publication workflow succeeded for the Wave 2 compatibility page update.
-- The current full Java 17 / Forge 1.20.1 CI run must finish on the latest implementation commit before this runtime wiring is marked build/GameTest/server-smoke verified.
-- Provider-present testing with the pinned third-party JARs remains required before calling Alex's Mobs, Alex's Caves, or Cataclysm **provider-present runtime verified**. This gate includes live registry reconciliation, owner/boss behavior, persistence/restart, multiplayer state, representative anatomy rigs, and no hot-path registry work.
+- Deterministic manifest generation reconciles exactly **172 safe + 9 hidden** records against the accepted Wave 2 curation ledger.
+- Provider-absent Java 17 / Forge 1.20.1 build, all nine real Forge GameTests, and dedicated-server readiness are green.
+- Provider-present CI is green for Alex's Mobs 1.22.9, Alex's Caves 2.0.2, and Cataclysm 3.31 both individually and in a combined all-three lane.
+- Live Forge registry proof observed **116 / 83 / 103 total provider EntityTypes** and **90 / 43 / 39 curated live Mob instances**, respectively, with **zero uncatalogued live Mob IDs**. The manifest keeps **7 / 2 / 0** technical/helper IDs hidden; only **3 / 1 / 0** instantiate as `Mob` because the remaining helpers are non-Mob multipart/technical entities.
+- Every provider lane and the combined lane passed all nine JetSetCraft GameTests and reached dedicated-server `Done (...s)!`.
+- CI now remaps third-party mixin refmaps correctly in ForgeGradle userdev, generates canonical authored assets before provider tests, rejects deterministic compile failures without wasteful unchanged retries, and terminates server-smoke processes immediately after readiness proof.
+- The actual GitHub Wiki compatibility page has been updated to reflect the verified provider-present baseline.
 
-### Exact next action
+### Remaining gameplay-proof gate
 
-Let the latest `Verify JetSetCraft` run converge on the current implementation. If it fails, repair the first causal compile/validator/GameTest/server-smoke failure without weakening the Wave 2 contract. If it passes, preserve that commit as the provider-absent verified checkpoint, publish the updated checkpoint to Drive, then run the three pinned provider-present lanes.
+Do not overstate the baseline as full end-user interaction proof. The remaining Wave 2 runtime work is to exercise representative provider-owned boss/pet/anatomy paths through actual JetSetCraft equip/unequip, save/reload/reconnect, multiplayer synchronization, and challenge start/cancel/restore behavior while preserving source AI/equipment/provider state. This is the next implementation/verification target; registry coverage, startup compatibility, GameTests, and dedicated-server boot are no longer blockers.
