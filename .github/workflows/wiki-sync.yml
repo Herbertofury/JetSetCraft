@@ -1,0 +1,42 @@
+name: Sync GitHub Wiki
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "wiki/**"
+      - ".github/workflows/wiki-sync.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: jetsetcraft-wiki-sync
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout canonical repository
+        uses: actions/checkout@v4
+
+      - name: Publish mirrored wiki pages to the actual GitHub Wiki
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          test -d wiki
+          git clone "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.wiki.git" actual-wiki
+          cp -f wiki/*.md actual-wiki/
+          cd actual-wiki
+          git add -- '*.md'
+          if git diff --cached --quiet; then
+            echo "Actual GitHub Wiki is already synchronized."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "docs: sync JetSetCraft wiki from canonical mirror"
+          git push origin HEAD:master
