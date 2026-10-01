@@ -3,6 +3,7 @@ package com.herberto.jetsetcraft.gang;
 import com.herberto.jetsetcraft.JetSetCraft;
 import com.herberto.jetsetcraft.blockentity.BoomboxBlockEntity;
 import com.herberto.jetsetcraft.config.JetSetConfig;
+import com.herberto.jetsetcraft.mob.MobCompatibilityRegistry;
 import com.herberto.jetsetcraft.registry.ModSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -44,6 +45,11 @@ public final class GangChallengeController {
         }
 
         HeadGangTargetResolver.Target chosen = target.get();
+        if (!MobCompatibilityRegistry.boomboxAllowed(chosen.entityId())) {
+            player.displayClientMessage(Component.translatable("message.jetsetcraft.boombox_legendary_locked",
+                    GangRegistry.definitionForEntity(chosen.entityId()).canonicalName()), true);
+            return false;
+        }
         GangDefinition definition = GangRegistry.definitionForEntity(chosen.entityId());
         if (definition.legendary() || !definition.boomboxEligible()) {
             player.displayClientMessage(Component.translatable("message.jetsetcraft.boombox_legendary_locked",
@@ -151,6 +157,7 @@ public final class GangChallengeController {
     }
 
     private static boolean isBoomboxEligible(ResourceLocation entityId) {
+        if (!MobCompatibilityRegistry.boomboxAllowed(entityId)) return false;
         EntityType<?> type = ForgeRegistries.ENTITY_TYPES.getValue(entityId);
         if (type == null) return false;
         GangDefinition definition = GangRegistry.definitionForEntity(entityId);
