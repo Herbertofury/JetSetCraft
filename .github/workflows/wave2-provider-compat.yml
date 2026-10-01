@@ -96,6 +96,10 @@ jobs:
             echo "::error::Forge did not report all nine JetSetCraft GameTests passing for ${{ matrix.provider }}."
             exit 1
           }
+          grep -Eq "JETSETCRAFT_WAVE2_LIVE_ROSTER ${{ matrix.provider }} .*unexpected_mobs=0" "$log" || {
+            echo "::error::Live provider Mob roster proof was missing or incomplete for ${{ matrix.provider }}."
+            exit 1
+          }
           case "${{ matrix.provider }}" in
             alexsmobs)
               grep -Fq 'JetSetCraft compatibility alexsmobs -> EXACT (90/90 known safe ids, 7 hidden technical ids)' "$log"
