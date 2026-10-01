@@ -18,8 +18,8 @@ import java.util.Set;
 public final class MobCompatibilityRegistry {
     public enum ProviderState {
         ABSENT,
-        READY,
-        VERSION_DRIFT,
+        EXACT,
+        FORWARD_COMPAT,
         ROSTER_DRIFT
     }
 
@@ -95,8 +95,8 @@ public final class MobCompatibilityRegistry {
             ProviderState state;
             if (!loaded) state = ProviderState.ABSENT;
             else if (!missing.isEmpty()) state = ProviderState.ROSTER_DRIFT;
-            else if (!expected.isBlank() && !installed.isBlank() && !expected.equals(installed)) state = ProviderState.VERSION_DRIFT;
-            else state = ProviderState.READY;
+            else if (!expected.isBlank() && !installed.isBlank() && !expected.equals(installed)) state = ProviderState.FORWARD_COMPAT;
+            else state = ProviderState.EXACT;
             statuses.put(provider, new ProviderStatus(provider, expected, installed, known.size(), resolved,
                     hiddenCount, List.copyOf(missing), state));
         }
