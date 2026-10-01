@@ -12,6 +12,16 @@ on:
       - "src/main/resources/data/jetsetcraft/jetsetcraft_gangs/wave2_*.json"
       - "tools/validate_wave2_compat.py"
       - ".github/workflows/wave2-provider-compat.yml"
+  pull_request:
+    paths:
+      - "build.gradle"
+      - "gradle.properties"
+      - "src/main/java/com/herberto/jetsetcraft/mob/**"
+      - "src/main/java/com/herberto/jetsetcraft/gang/**"
+      - "src/main/java/com/herberto/jetsetcraft/gametest/StreetGearGameTests.java"
+      - "src/main/resources/data/jetsetcraft/jetsetcraft_gangs/wave2_*.json"
+      - "tools/validate_wave2_compat.py"
+      - ".github/workflows/wave2-provider-compat.yml"
   workflow_dispatch:
 
 permissions:
