@@ -340,3 +340,36 @@ Curated gang art should look like a real elite street artist designed it for tha
 - premium variants should be genuinely new compositions, not a recolor.
 
 The gameplay implementation must treat these as normal authored resources with stable IDs and provenance, regardless of how the final art is produced.
+
+<!-- JETSETCRAFT_WAVE2_EXACT_CURATED_2026-10-01 -->
+## Wave 2A — exact mob-by-mob curation: Alex's Mobs + Alex's Caves + Cataclysm
+
+**Status: curated data contract complete; runtime/provider-present verification is still required before calling the adapters runtime-verified.**
+
+Wave 2A converts the first three high-value creature ecosystems from broad family planning into an exact, namespaced compatibility ledger. The canonical row-by-row roster lives in [JETSETCRAFT_WAVE_2_EXACT_MOD_COMPATIBILITY.md](JETSETCRAFT_WAVE_2_EXACT_MOD_COMPATIBILITY.md).
+
+| Provider | Pinned 1.20.1 target | Exact safe curated mobs | Hard-hidden technical/helper entities | Compatibility stance |
+|---|---:|---:|---:|---|
+| Alex's Mobs (`alexsmobs`) | 1.22.9 | **90** | **7** | Exact curated records plus generic fail-open support for future safe mobs |
+| Alex's Caves (`alexscaves`) | 2.0.2 | **43** | **2** | Exact curated records across all five cave ecosystems plus generic fail-open support |
+| L_Ender's Cataclysm (`cataclysm`) | 3.31 | **39** candidate records | **0 living multipart records** | Boss/pet aware; 3.31 live-registry fingerprint is authoritative |
+| **Wave 2A total** |  | **172** | **9** | No provider becomes a hard dependency |
+
+### Required behavior for every Wave 2 record
+
+- Keep the provider entity, AI, navigation, combat, ownership, variants, structures, loot, animation controller, and renderer provider-owned. JetSetCraft only layers reversible Street Gear, gang identity, challenge presentation, reputation, stingers, and graffiti rewards.
+- Resolve providers by mod ID + namespaced entity ID, never by direct optional-provider class references in unconditional code.
+- Enumerate/calculate compatibility at startup or data reload, cache the result, and keep the movement hot path free of registry scans or optional-provider reflection.
+- Technical multipart/helper entities never receive independent gang state, rewards, Street Gear, drops, or challenge targeting; they resolve to the parent or are ignored.
+- Tamed/owned mobs preserve owner UUID, sit/follow state, variant/inventory state, and provider commands across equip, challenge, chunk unload, restart, dimension transfer, and unequip.
+- Cataclysm boss/arena state always wins. Boss-gated records may have Atlas identity and rewards, but JetSetCraft cannot seize movement/control during combat, invulnerability/cutscene phases, scripted arena logic, or death sequences.
+- Anatomy is data, not an assumption: aquatic, flying, tiny, giant, serpentine, multi-leg, slime/contact-plane, and unusual mobs use an explicit Ground Contact / Ride Rig profile. If a safe visual rig does not exist, fall back to a non-invasive board/hover presentation or refuse that gear type instead of mutating the provider model.
+- Unknown safe future `Mob` entity IDs remain playable through the universal generic Mob Atlas path. A provider roster drift is a maintenance signal, never a crash or reason to disable the whole provider.
+
+### Wave 2 graffiti/reward quality bar
+
+Every curated mob record has a stable `gang_id`, a provider-scoped `crew_family_id`, a distinct display identity, an explicit ride/contact profile, a challenge/safety profile, and a bespoke graffiti motif. Each record must resolve a three-step **Mark → Throwie → Masterpiece** reward chain. Shared family art direction is allowed; recolor-only “unique” art is not.
+
+### Runtime acceptance gate
+
+Wave 2A is not considered runtime-verified until the pinned releases pass provider-present and provider-absent boots, all **172** safe IDs resolve exactly once, all **9** technical/helper IDs remain hidden, unknown safe injected mobs fall back generically, roster drift fails open, owner/boss state survives untouched, multiplayer persistence works after restart, representative anatomy rigs render safely, and no per-tick registry enumeration is introduced.
