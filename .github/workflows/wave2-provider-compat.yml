@@ -118,10 +118,18 @@ jobs:
                 echo "::error::Combined live Mob roster proof was missing or incomplete for $provider."
                 exit 1
               }
+              grep -Eq "JETSETCRAFT_WAVE2_GAMEPLAY $provider representative_mobs=6 .*provider_nbt_mutations=0" "$log" || {
+                echo "::error::Combined provider gameplay/NBT proof was missing or incomplete for $provider."
+                exit 1
+              }
             done
           else
             grep -Eq "JETSETCRAFT_WAVE2_LIVE_ROSTER ${{ matrix.provider }} .*unexpected_mobs=0" "$log" || {
               echo "::error::Live provider Mob roster proof was missing or incomplete for ${{ matrix.provider }}."
+              exit 1
+            }
+            grep -Eq "JETSETCRAFT_WAVE2_GAMEPLAY ${{ matrix.provider }} representative_mobs=6 .*provider_nbt_mutations=0" "$log" || {
+              echo "::error::Provider gameplay/NBT proof was missing or incomplete for ${{ matrix.provider }}."
               exit 1
             }
           fi
