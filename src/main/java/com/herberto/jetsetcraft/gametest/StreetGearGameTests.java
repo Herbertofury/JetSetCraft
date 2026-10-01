@@ -437,7 +437,9 @@ public final class StreetGearGameTests {
                 throw new GameTestAssertException("Representative Wave 2 entity is not a Mob: " + entityId);
             }
 
-            mob.moveTo(helper.absolutePos(new BlockPos(1, 1, 1)).getCenter());
+            BlockPos representativePos = helper.absolutePos(new BlockPos(1, 1, 1));
+            mob.moveTo(representativePos.getX() + 0.5D, representativePos.getY(),
+                    representativePos.getZ() + 0.5D, 0.0F, 0.0F);
             mob.setPersistenceRequired();
             mob.setHealth(Math.max(1.0F, mob.getMaxHealth() * 0.75F));
 
