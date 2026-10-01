@@ -50,6 +50,11 @@ public final class MobCompatibilityRegistry {
         return entityId != null && HIDDEN.contains(entityId);
     }
 
+    public static boolean boomboxAllowed(ResourceLocation entityId) {
+        if (hidden(entityId)) return false;
+        return profile(entityId).map(profile -> !profile.bossGated() && !profile.ownerGated()).orElse(true);
+    }
+
     public static Map<String, ProviderStatus> providerStatuses() {
         return PROVIDERS;
     }
