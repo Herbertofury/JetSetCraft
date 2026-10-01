@@ -211,8 +211,12 @@ public final class StreetGearGameTests {
                 .orElseThrow(() -> new GameTestAssertException("Wave 2 Alex's Mobs curated profile was not loaded"));
         if (alexProfile.broadRig() != MobRideRig.QUADRUPED
                 || !alexProfile.gangId().equals(ResourceLocation.fromNamespaceAndPath("jetsetcraft", "w2_alexsmobs_grizzly_bear"))
-                || !MobCompatibilityRegistry.hidden(alexPart)) {
-            throw new GameTestAssertException("Wave 2 compatibility metadata/technical hiding did not load exactly");
+                || !MobCompatibilityRegistry.hidden(alexPart)
+                || MobCompatibilityRegistry.boomboxAllowed(alexPart)
+                || !MobCompatibilityRegistry.boomboxAllowed(alexBear)
+                || MobCompatibilityRegistry.boomboxAllowed(ResourceLocation.fromNamespaceAndPath("cataclysm", "ignis"))
+                || MobCompatibilityRegistry.boomboxAllowed(ResourceLocation.fromNamespaceAndPath("cataclysm", "netherite_ministrosity"))) {
+            throw new GameTestAssertException("Wave 2 compatibility metadata/technical/boss-owner gating did not load exactly");
         }
         var alexStatus = MobCompatibilityRegistry.providerStatuses().get("alexsmobs");
         var cavesStatus = MobCompatibilityRegistry.providerStatuses().get("alexscaves");
