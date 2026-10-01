@@ -79,12 +79,15 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          mkdir -p build/verification
           for attempt in 1 2 3; do
-            log="build/verification/provider-build-${{ matrix.provider }}-attempt-$attempt.log"
+            log="$RUNNER_TEMP/jetsetcraft-provider-${{ matrix.provider }}-build-attempt-$attempt.log"
             if ./gradlew clean build -Pwave2Provider=${{ matrix.provider }} --no-daemon 2>&1 | tee "$log"; then
+              mkdir -p build/verification
+              cp "$log" "build/verification/provider-build-${{ matrix.provider }}-attempt-$attempt.log"
               exit 0
             fi
+            mkdir -p build/verification
+            cp "$log" "build/verification/provider-build-${{ matrix.provider }}-attempt-$attempt.log"
             if grep -Eq 'Compilation failed|> Task :compile(Java|TestJava) FAILED|(^|[[:space:]])error:' "$log"; then
               echo "::error::Deterministic compile failure for ${{ matrix.provider }}; refusing an unchanged retry."
               exit 1
