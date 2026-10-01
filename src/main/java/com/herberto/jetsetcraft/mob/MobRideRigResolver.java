@@ -33,6 +33,10 @@ public final class MobRideRigResolver {
         if (type.is(AERIAL)) return MobRideRig.AERIAL;
         if (type.is(AQUATIC)) return MobRideRig.AQUATIC;
 
+        ResourceLocation entityId = net.minecraftforge.registries.ForgeRegistries.ENTITY_TYPES.getKey(type);
+        MobRideRig curated = MobCompatibilityRegistry.broadRig(entityId);
+        if (curated != MobRideRig.GENERIC) return curated;
+
         if (entity instanceof Slime) return MobRideRig.BODY_CONTACT;
         if (entity instanceof AbstractFish || entity instanceof Squid || entity instanceof WaterAnimal) {
             return MobRideRig.AQUATIC;
@@ -54,7 +58,8 @@ public final class MobRideRigResolver {
     }
 
     public static boolean incompatible(LivingEntity entity) {
-        return entity.getType().is(INCOMPATIBLE);
+        ResourceLocation entityId = net.minecraftforge.registries.ForgeRegistries.ENTITY_TYPES.getKey(entity.getType());
+        return entity.getType().is(INCOMPATIBLE) || MobCompatibilityRegistry.hidden(entityId);
     }
 
     private static TagKey<EntityType<?>> tag(String path) {
