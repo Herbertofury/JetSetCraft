@@ -34,7 +34,8 @@ minecraft {
             property 'mixin.env.refMapRemappingFile', file("${buildDir}/createSrgToMcp/output.srg").absolutePath
             property 'jetsetcraft.visualAudit', System.getProperty('jetsetcraft.visualAudit', 'false')
             if (System.getProperty('jetsetcraft.visualAudit', 'false') == 'true') {
-                args '--quickPlaySingleplayer', 'New World'
+                args '--width', '1280', '--height', '720',
+                        '--quickPlaySingleplayer', 'New World'
             }
         }
         server { args '--nogui' }
