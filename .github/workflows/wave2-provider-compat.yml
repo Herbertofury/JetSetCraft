@@ -98,13 +98,13 @@ jobs:
           }
           case "${{ matrix.provider }}" in
             alexsmobs)
-              grep -Fq 'JetSetCraft compatibility alexsmobs -> READY (90/90 known safe ids, 7 hidden technical ids)' "$log"
+              grep -Fq 'JetSetCraft compatibility alexsmobs -> EXACT (90/90 known safe ids, 7 hidden technical ids)' "$log"
               ;;
             alexscaves)
-              grep -Fq 'JetSetCraft compatibility alexscaves -> READY (43/43 known safe ids, 2 hidden technical ids)' "$log"
+              grep -Fq 'JetSetCraft compatibility alexscaves -> EXACT (43/43 known safe ids, 2 hidden technical ids)' "$log"
               ;;
             cataclysm)
-              grep -Fq 'JetSetCraft compatibility cataclysm -> READY (39/39 known safe ids, 0 hidden technical ids)' "$log"
+              grep -Fq 'JetSetCraft compatibility cataclysm -> EXACT (39/39 known safe ids, 0 hidden technical ids)' "$log"
               ;;
           esac
 
