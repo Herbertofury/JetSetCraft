@@ -26,6 +26,24 @@ The full mob-by-mob ledger is in **[Wave 2 Exact Mod Compatibility](../docs/JETS
 - **Forward-compatible by default:** unknown safe future `Mob` IDs receive generic Mob Atlas behavior immediately; known curated IDs keep premium identity. Roster drift warns once and fails open instead of crashing or disabling the provider.
 - **No hot-path tax:** provider discovery/fingerprinting is bounded to startup/data reload and cached. JetSetCraft does not rescan the entity registry every tick.
 
+
+
+<!-- JETSETCRAFT_WAVE2_RUNTIME_IMPLEMENTATION_2026-10-01 -->
+### Wave 2 runtime implementation
+
+The Wave 2A curation is now wired into the actual mod, not only documented:
+
+- three bundled datapack manifests live under `data/jetsetcraft/jetsetcraft_gangs/wave2_*.json` and carry all **172** exact entity IDs plus the **9** hard-hidden helper/segment IDs;
+- the gang reload listener loads provider bundles atomically at server data reload, maps only installed EntityTypes into active gang identities, and keeps absent-provider profiles dormant without optional class links;
+- `MobCompatibilityRegistry` caches provider version/known-roster state at reload time, so entity interaction does not enumerate registries every tick;
+- `MobRideRigResolver` consumes the curated anatomy profile before geometry heuristics, while explicit datapack tags remain the highest-priority override;
+- hidden multipart/helper IDs are rejected by the normal Street Gear eligibility path instead of falling through to generic compatibility;
+- boss-gated and owner-gated curated records are not Boombox-spawn eligible; provider-owned boss/pet behavior remains authoritative;
+- CI runs `tools/validate_wave2_compat.py`, enforcing 90/43/39 safe records, 7/2/0 hidden records, stable unique gang/entity IDs, complete rig/challenge/graffiti metadata, and boss/owner gating;
+- the existing real Forge Street Gear GameTest now asserts that Wave 2 profiles and hidden technical IDs are actually present after a real resource reload.
+
+Provider-present native runtime testing with the pinned third-party JARs remains a separate verification gate; the wiki does not label those adapters runtime-verified until that proof exists.
+
 ### Version drift and verification
 
 Alex's Mobs 1.22.9 and Alex's Caves 2.0.2 were reconciled against their 1.20.1 source registries, living-attribute registration, and spawn-egg surfaces. Cataclysm is pinned to 3.31, while the public 1.20.1 source lineage inspected for its exact entity roster is older; JetSetCraft therefore treats the 39 Cataclysm records as the curated candidate set and uses the **live Forge registry fingerprint** as runtime authority.
