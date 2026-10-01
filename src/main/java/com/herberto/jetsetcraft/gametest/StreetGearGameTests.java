@@ -140,13 +140,16 @@ public final class StreetGearGameTests {
                 throw new GameTestAssertException("Supported graffiti removed itself prematurely");
             }
             helper.setBlock(wallRelative, Blocks.AIR);
-        });
-        helper.runAfterDelay(50, () -> {
-            if (!graffiti.isRemoved()) {
-                throw new GameTestAssertException("Graffiti survived after its supporting wall was removed");
-            }
-            System.out.println("JETSETCRAFT_GAMETEST_PASS graffiti_lifecycle");
-            helper.succeed();
+
+            // Graffiti intentionally performs a low-cost support check every 40 entity ticks. Assert the real
+            // eventual contract until the GameTest timeout instead of sampling one fixed server tick, which can
+            // race the entity-tick phase when large optional providers are present.
+            helper.succeedWhen(() -> {
+                if (!graffiti.isRemoved()) {
+                    throw new GameTestAssertException("Graffiti is still waiting for its bounded support check");
+                }
+                System.out.println("JETSETCRAFT_GAMETEST_PASS graffiti_lifecycle");
+            });
         });
     }
 
