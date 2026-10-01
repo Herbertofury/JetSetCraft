@@ -230,7 +230,7 @@ public final class StreetGearGameTests {
         String providerUnderTest = System.getProperty("jetsetcraft.wave2Provider", "").trim();
         if (!providerUnderTest.isEmpty()) {
             var liveStatus = MobCompatibilityRegistry.providerStatuses().get(providerUnderTest);
-            if (liveStatus == null || liveStatus.state() != MobCompatibilityRegistry.ProviderState.READY
+            if (liveStatus == null || liveStatus.state() != MobCompatibilityRegistry.ProviderState.EXACT
                     || liveStatus.resolvedSafeCount() != liveStatus.expectedSafeCount()
                     || !liveStatus.missingKnownIds().isEmpty()) {
                 throw new GameTestAssertException("Pinned Wave 2 provider did not reconcile exactly: "
