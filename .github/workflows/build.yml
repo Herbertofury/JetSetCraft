@@ -57,15 +57,21 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          mkdir -p build/verification
           for attempt in 1 2 3; do
-            if ./gradlew clean build --no-daemon; then
+            log="build/verification/forge-build-attempt-$attempt.log"
+            if ./gradlew clean build --no-daemon 2>&1 | tee "$log"; then
               exit 0
             fi
-            if [[ "$attempt" -eq 3 ]]; then
-              echo '::error::Forge build failed after three attempts.'
+            if grep -Eq 'Compilation failed|> Task :compile(Java|TestJava) FAILED|(^|[[:space:]])error:' "$log"; then
+              echo '::error::Deterministic compile failure; refusing an unchanged retry.'
               exit 1
             fi
-            echo "::warning::Forge dependency service/build attempt $attempt failed; retrying in 20 seconds."
+            if [[ "$attempt" -eq 3 ]]; then
+              echo '::error::Forge build failed after three evidence-changing attempts.'
+              exit 1
+            fi
+            echo "::warning::Possible transient dependency/service build failure on attempt $attempt; retrying once state can change."
             sleep 20
           done
 
