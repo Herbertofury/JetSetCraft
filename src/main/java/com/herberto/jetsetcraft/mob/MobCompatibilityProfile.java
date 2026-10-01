@@ -23,6 +23,17 @@ public record MobCompatibilityProfile(
 
     public MobRideRig broadRig() {
         String value = rideProfile;
+
+        // Premium profiles sometimes encode a behavior/state more precisely than the broad renderer rig.
+        // Resolve those semantic aliases before the generic token families so unusual anatomy never falls
+        // through to bounding-box guesses (which produced fake feet on Murmur/Rocky Roller/Sugar Glider).
+        if (value.equals("multipart_ground") || value.equals("contact_sphere")) {
+            return MobRideRig.BODY_CONTACT;
+        }
+        if (value.equals("glide_small")) {
+            return MobRideRig.QUADRUPED;
+        }
+
         if (value.contains("aquatic")) return MobRideRig.AQUATIC;
         if (value.contains("flight") || value.contains("hover") || value.contains("aerial")) return MobRideRig.AERIAL;
         if (value.contains("multi_leg")) return MobRideRig.MULTI_LEG;
