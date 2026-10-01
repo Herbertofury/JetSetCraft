@@ -50,7 +50,15 @@ jobs:
           wiki_branch="$(git branch --show-current)"
 
           cd "$GITHUB_WORKSPACE"
-          python - "$wiki_commit" "$wiki_branch" <<'PY'
+
+          # The wiki publication may overlap unrelated main-branch commits. Base the receipt on the
+          # latest main tip instead of the workflow's original checkout so a successful wiki publish
+          # can never fail merely because main advanced while the wiki was being cloned/pushed.
+          git fetch origin main
+          git checkout -B main origin/main
+
+          write_receipt() {
+            python - "$wiki_commit" "$wiki_branch" <<'PY'
           import datetime
           import json
           import pathlib
@@ -73,7 +81,9 @@ jobs:
           target.parent.mkdir(parents=True, exist_ok=True)
           target.write_text(json.dumps(receipt, indent=2) + '\n', encoding='utf-8')
           PY
+          }
 
+          write_receipt
           git config user.name 'JetSetCraft Wiki Bot'
           git config user.email 'actions@users.noreply.github.com'
           git add .agents-memory/WIKI_PUBLICATION.json
@@ -82,4 +92,17 @@ jobs:
             exit 0
           fi
           git commit -m "Record published JetSetCraft wiki ${wiki_commit:0:12}"
-          git push origin HEAD:main
+
+          # If main advances again between fetch and push, rebase the single receipt commit and retry.
+          for attempt in 1 2 3; do
+            if git push origin HEAD:main; then
+              exit 0
+            fi
+            if [[ "$attempt" -eq 3 ]]; then
+              echo '::error::Wiki was published, but the publication receipt could not be synchronized to main.'
+              exit 1
+            fi
+            git fetch origin main
+            git rebase origin/main
+            sleep 2
+          done
