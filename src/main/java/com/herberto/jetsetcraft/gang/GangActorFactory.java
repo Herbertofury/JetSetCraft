@@ -1,6 +1,7 @@
 package com.herberto.jetsetcraft.gang;
 
 import com.herberto.jetsetcraft.JetSetCraft;
+import com.herberto.jetsetcraft.mob.MobCompatibilityRegistry;
 import com.herberto.jetsetcraft.mob.MobStreetGear;
 import com.herberto.jetsetcraft.mob.StreetGearAcquisition;
 import net.minecraft.core.BlockPos;
@@ -22,7 +23,8 @@ import java.util.UUID;
 public final class GangActorFactory {
     public static Optional<Mob> spawn(ServerLevel level, BlockPos anchor, HeadGangTargetResolver.Target target,
                                       UUID challengeId, int memberIndex, long expiresAt, double radius) {
-        if (level == null || target == null || challengeId == null) return Optional.empty();
+        if (level == null || target == null || challengeId == null
+                || !MobCompatibilityRegistry.boomboxAllowed(target.entityId())) return Optional.empty();
         EntityType<?> type = ForgeRegistries.ENTITY_TYPES.getValue(target.entityId());
         if (type == null) return Optional.empty();
 
