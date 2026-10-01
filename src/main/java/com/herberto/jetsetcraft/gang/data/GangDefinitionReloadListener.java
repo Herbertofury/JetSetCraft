@@ -138,8 +138,11 @@ public final class GangDefinitionReloadListener extends SimpleJsonResourceReload
         String challengeProfile = GsonHelper.getAsString(json, "challenge_profile", "default");
         String graffitiMotif = GsonHelper.getAsString(json, "graffiti_motif", "");
 
+        boolean compatibilityMetadata = requireGangId || json.has("crew_family_id") || json.has("ride_profile")
+                || json.has("challenge_profile") || json.has("graffiti_motif");
         for (ResourceLocation entityId : entityIds(json)) {
             addEntity(entityId, gangId, entityMappings);
+            if (!compatibilityMetadata) continue;
             MobCompatibilityProfile profile = new MobCompatibilityProfile(entityId, gangId, family, rideProfile,
                     challengeProfile, graffitiMotif);
             MobCompatibilityProfile previous = profiles.put(entityId, profile);
