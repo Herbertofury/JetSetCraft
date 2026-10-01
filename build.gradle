@@ -20,6 +20,12 @@ minecraft {
             property 'forge.logging.markers', 'REGISTRIES'
             property 'forge.logging.console.level', 'info'
             property 'jetsetcraft.wave2Provider', wave2Provider
+            // Production provider jars ship SRG/refmap mixin targets. ForgeGradle's named userdev runtime
+            // must remap those targets for GameTest/server verification; production Minecraft does not need this.
+            if (!wave2Provider.isEmpty()) {
+                property 'mixin.env.remapRefMap', 'true'
+                property 'mixin.env.refMapRemappingFile', file("${buildDir}/createSrgToMcp/output.srg").absolutePath
+            }
             mods { jetsetcraft { source sourceSets.main } }
         }
         client {
