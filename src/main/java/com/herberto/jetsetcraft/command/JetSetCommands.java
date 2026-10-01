@@ -8,6 +8,8 @@ import com.herberto.jetsetcraft.movement.DanceCatalog;
 import com.herberto.jetsetcraft.movement.GrindFinder;
 import com.herberto.jetsetcraft.movement.JetSetMovement;
 import com.herberto.jetsetcraft.movement.TrickCatalog;
+import com.herberto.jetsetcraft.mob.MobStreetGear;
+import com.herberto.jetsetcraft.mob.StreetGearAcquisition;
 import com.herberto.jetsetcraft.movement.VanillaWorldPhysics;
 import com.herberto.jetsetcraft.network.JetSetNetwork;
 import com.herberto.jetsetcraft.registry.ModEntities;
@@ -26,6 +28,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -56,9 +60,18 @@ public final class JetSetCommands {
                         .requires(source -> source.hasPermission(2))
                         .executes(context -> buildVanillaLab(context.getSource())));
         if (Boolean.getBoolean("jetsetcraft.visualAudit")) {
+            // These commands exist only in the explicit maintainer visual-audit JVM. Keeping them permissionless
+            // there lets a disposable Quick Play singleplayer world drive deterministic screenshots even when the
+            // copied QA save has cheats disabled.
             root.then(Commands.literal("visual_audit")
-                        .requires(source -> source.hasPermission(2))
                         .executes(context -> visualAudit(context.getSource())));
+            root.then(Commands.literal("visual_audit_wave2")
+                    .then(Commands.literal("alexsmobs")
+                            .executes(context -> visualAuditWave2(context.getSource(), "alexsmobs")))
+                    .then(Commands.literal("alexscaves")
+                            .executes(context -> visualAuditWave2(context.getSource(), "alexscaves")))
+                    .then(Commands.literal("cataclysm")
+                            .executes(context -> visualAuditWave2(context.getSource(), "cataclysm"))));
         }
         dispatcher.register(root);
     }
@@ -204,6 +217,99 @@ public final class JetSetCommands {
         JetSetNetwork.sync(player, data);
         JetSetCraft.LOGGER.info("JetSetCraft visual audit scene ready for {}", player.getGameProfile().getName());
         return 1;
+    }
+
+    private static int visualAuditWave2(CommandSourceStack source, String provider) {
+        ServerPlayer player;
+        try {
+            player = source.getPlayerOrException();
+        } catch (CommandSyntaxException exception) {
+            source.sendFailure(Component.literal("JetSetCraft Wave 2 visual audit requires a player."));
+            return 0;
+        }
+
+        String selected = System.getProperty("jetsetcraft.wave2Provider", "").trim();
+        if (!("all".equals(selected) || provider.equals(selected))) {
+            source.sendFailure(Component.literal("Wave 2 provider " + provider + " is not loaded in this audit JVM."));
+            return 0;
+        }
+
+        ServerLevel level = player.serverLevel();
+        String auditTag = "jetsetcraft_wave2_visual_audit";
+        net.minecraft.world.phys.AABB cleanup = new net.minecraft.world.phys.AABB(player.blockPosition()).inflate(40.0D);
+        for (Mob existing : level.getEntitiesOfClass(Mob.class, cleanup,
+                mob -> mob.getTags().contains(auditTag))) {
+            existing.discard();
+        }
+
+        record VisualSubject(String path, net.minecraftforge.registries.RegistryObject<? extends net.minecraft.world.item.Item> gear) {}
+        java.util.List<VisualSubject> subjects = switch (provider) {
+            case "alexsmobs" -> java.util.List.of(
+                    new VisualSubject("grizzly_bear", ModItems.INLINE_SKATES),
+                    new VisualSubject("blue_jay", ModItems.STREET_BOARD),
+                    new VisualSubject("mimicube", ModItems.QUAD_SKATES),
+                    new VisualSubject("orca", ModItems.HOVERBOARD));
+            case "alexscaves" -> java.util.List.of(
+                    new VisualSubject("raycat", ModItems.INLINE_SKATES),
+                    new VisualSubject("teletor", ModItems.STREET_BOARD),
+                    new VisualSubject("gammaroach", ModItems.QUAD_SKATES),
+                    new VisualSubject("radgill", ModItems.HOVERBOARD));
+            case "cataclysm" -> java.util.List.of(
+                    new VisualSubject("ender_golem", ModItems.INLINE_SKATES),
+                    new VisualSubject("netherite_ministrosity", ModItems.STREET_BOARD),
+                    new VisualSubject("amethyst_crab", ModItems.QUAD_SKATES),
+                    new VisualSubject("lionfish", ModItems.HOVERBOARD));
+            default -> java.util.List.of();
+        };
+        if (subjects.isEmpty()) return 0;
+
+        BlockPos camera = player.blockPosition();
+        int[] xOffsets = {-6, -2, 2, 6};
+        int spawned = 0;
+        for (int index = 0; index < subjects.size(); index++) {
+            VisualSubject subject = subjects.get(index);
+            ResourceLocation id = ResourceLocation.fromNamespaceAndPath(provider, subject.path());
+            EntityType<?> type = ForgeRegistries.ENTITY_TYPES.getValue(id);
+            if (type == null) {
+                JetSetCraft.LOGGER.error("JETSETCRAFT_VISUAL_WAVE2_MISSING {}", id);
+                continue;
+            }
+            net.minecraft.world.entity.Entity raw = type.create(level);
+            if (!(raw instanceof Mob mob)) {
+                if (raw != null) raw.discard();
+                JetSetCraft.LOGGER.error("JETSETCRAFT_VISUAL_WAVE2_NOT_MOB {}", id);
+                continue;
+            }
+            BlockPos pos = camera.offset(xOffsets[index], 0, -6);
+            mob.moveTo(pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D, 0.0F, 0.0F);
+            mob.setNoAi(true);
+            mob.setNoGravity(true);
+            mob.setInvulnerable(true);
+            mob.setPersistenceRequired();
+            mob.addTag(auditTag);
+            mob.setCustomName(Component.literal(subject.path().replace('_', ' ')));
+            mob.setCustomNameVisible(true);
+            if (!level.addFreshEntity(mob)) {
+                mob.discard();
+                JetSetCraft.LOGGER.error("JETSETCRAFT_VISUAL_WAVE2_ADD_FAILED {}", id);
+                continue;
+            }
+            if (!MobStreetGear.equip(mob, new net.minecraft.world.item.ItemStack(subject.gear().get()),
+                    StreetGearAcquisition.COMMAND, false).equipped()) {
+                mob.discard();
+                JetSetCraft.LOGGER.error("JETSETCRAFT_VISUAL_WAVE2_EQUIP_FAILED {}", id);
+                continue;
+            }
+            JetSetNetwork.syncMobGear(player, mob);
+            spawned++;
+        }
+
+        player.teleportTo(camera.getX() + 0.5D, camera.getY(), camera.getZ() + 0.5D);
+        player.setYRot(180.0F);
+        player.setXRot(4.0F);
+        JetSetCraft.LOGGER.info("JETSETCRAFT_VISUAL_WAVE2_SCENE {} spawned={}/{} camera={}",
+                provider, spawned, subjects.size(), camera.toShortString());
+        return spawned == subjects.size() ? 1 : 0;
     }
 
     private static int buildVanillaLab(CommandSourceStack source) {
