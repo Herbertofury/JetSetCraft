@@ -4,7 +4,7 @@
 
 ## 0. Objective
 
-Finish **JetSetCraft** as the best possible Forge 1.20.1 street-movement mod: skating, BMX, scooter, hoverboard, grinding, parkour, tricks, graffiti, dances, boomboxes, gangs, progression, hangouts, challenges, reputation, posse/chapter systems, and installed-mod creature compatibility should feel like one coherent Minecraft-native system rather than separate minigames.
+Finish **JetSetCraft** as the best possible Forge 1.20.1 street-movement mod: skating, BMX, scooter, hoverboard, grinding, parkour, tricks, graffiti, dances, boomboxes, gangs, deep Street Level/skill-tree/ride-mastery progression, hangouts, challenges, per-gang reputation/Signature Techniques, posse/chapter systems, and installed-mod creature compatibility should feel like one coherent Minecraft-native system rather than separate minigames.
 
 The user wants the result to feel like something Mojang could have shipped in an ambitious movement/adventure update: readable, tactile, immediate, low-friction, and visually integrated with vanilla HUD language — while still carrying the depth and style of Jet Set Radio / Bomb Rush Cyberfunk / aggressive skating culture.
 
@@ -486,6 +486,113 @@ This is preserved design lineage and is now accepted implementation scope.
 - [ ] **T150** · Persist and migrate reputation safely across updates.
 - [ ] **G011 · GATE** — Reputation and relationships are persistent, understandable, bounded, and affect real gameplay.
 
+# PHASE K2 — Street Level, mastery, skill trees, and gang-specific progression
+
+JetSetCraft should feel rewarding for hundreds of hours without becoming a grindy MMO bolted onto Minecraft. Progression must reward **playing stylishly, trying new things, exploring, improving, befriending/rivaling gangs, and mastering ride styles**. It must never reward AFK movement, repetitive exploit loops, or mandatory daily chores.
+
+Use three complementary progression layers with one canonical server-authoritative owner:
+
+1. **Street Level** — the player-wide long-term progression track and primary source of general Technique Points.
+2. **Ride Mastery** — separate mastery tracks for Skates, Skateboard, BMX, Scooter, Hoverboard, and Parkour/On-Foot movement, earned primarily by actually using that style well.
+3. **Gang Reputation** — one persistent relationship/reputation track per stable `gang_id`, with gang-specific social reactions, unlocks, Signature Techniques, cosmetics, chapter/posse privileges, music/flavor, and world behavior.
+
+These layers may interact, but they must not become three copies of the same XP bar. Street Level represents broad mastery, Ride Mastery represents mechanical specialization, and Gang Reputation represents social/world progression.
+
+## Street Level and progression economy
+
+- [ ] **T297** · Implement a persistent server-authoritative **Street Level** with a deliberately tuned finite power curve and a post-cap Legend/Prestige-style continuation that primarily rewards expression, collection, cosmetics, titles, mastery challenges, and bragging rights rather than runaway stat inflation.
+- [ ] **T298** · Award Street XP for meaningful play: completing challenges, varied tricks/combos, clean landings, discovering new lines/hangouts/gangs, meaningful graffiti, dance battles, exploration objectives, first-time Atlas discoveries, crew activities, and difficult stylish movement accomplishments.
+- [ ] **T299** · Do not award exploitable XP for raw time moving, AFK loops, standing on automated transport, trivial repeated hops, packet spam, repeatedly challenging the same easy mob, or other low-information repetition.
+- [ ] **T300** · Implement variety and novelty weighting: first-time tricks, new trick chains, new locations/surfaces, new opponents, harder lines, clean execution, underdog wins, risky routes, and creative mixed-style play should be worth more than grinding one optimal action forever.
+- [ ] **T301** · Apply bounded diminishing returns to identical short-loop repetition without punishing normal practice. Recovery should be gameplay/variety based rather than real-time daily timers.
+- [ ] **T302** · Keep XP arithmetic deterministic and server-authoritative; client HUD/UI may predict presentation but never grant progression.
+- [ ] **T303** · Persist Street Level, XP, unspent Technique Points, unlocked nodes, loadouts, mastery, reputation-linked unlock receipts, and migration versioning safely across save/reload/update.
+- [ ] **T304** · Add server configuration for progression pace, XP multipliers, maximum effective power scaling, respec policy, and optional disable/vanilla-light modes without corrupting saves or invalidating earned cosmetic/social unlocks.
+- [ ] **T305** · Add clear anti-exploit accounting and diagnostics so duplicate packet/action rewards, reconnect duplication, challenge-abort farming, mob-respawn farming, or concurrent reward races cannot mint XP/points twice.
+
+## General Street Skill Tree
+
+The general tree must be fun to browse and make builds feel different, but **no mandatory trap choices** and no permanent irreversible mistakes. Use strong milestones, sidegrades, synergies, and new actions rather than hundreds of tiny +1% filler nodes.
+
+- [ ] **T306** · Build a vanilla-native **Street Skills** screen integrated with the Gang Atlas/Black Book family rather than a web-dashboard UI. Use Minecraft-style panels, advancement-like spatial readability, item/icon language, tooltips, keyboard/controller navigation, and clear locked/unlocked/available states.
+- [ ] **T307** · Give each node a stable data-driven ID, prerequisites, cost, category, effects, tooltip/lore, optional icon, server config policy, and migration-safe unlock state. Do not hardcode the entire tree in client rendering code.
+- [ ] **T308** · Implement a **Momentum / Speed** branch centered on acceleration quality, momentum retention, carve/pump efficiency, slope conversion, landing carry, high-speed control, and advanced traversal—not flat unconditional movement-speed inflation that breaks Minecraft.
+- [ ] **T309** · Implement a **Boost / Burst** branch centered on Boost capacity/efficiency, recharge through skillful play, burst shaping, launch control, boost-combo interactions, recovery from near-misses, and higher-skill perfect-boost windows.
+- [ ] **T310** · Implement a **Flow / Style** branch centered on combo grace, Flow retention through legitimate transitions, multiplier expression, perfect landing bonuses, transfer creativity, recovery tools, and additional ways to convert varied stylish play into Flow.
+- [ ] **T311** · Implement an **Air / Rail / Parkour** branch centered on aerial control, wall/ledge transitions, manuals/balances, rail transfers, vault quality, wall-kick options, landing precision, and route creativity rather than automated movement.
+- [ ] **T312** · Implement a **Rhythm / Dance** branch centered on timing windows, chained emotes/dances, dance-battle expression, crowd/crew synergy, rhythm-based Flow conversion, and music-linked challenge options without turning success into an inaccessible rhythm-game requirement.
+- [ ] **T313** · Implement a **Graffiti / Creative** branch centered on faster expressive tagging, additional creative/editor affordances, combo-to-paint synergy, mural/collab capabilities, paint economy/QoL, and cosmetic presentation—not bypassing server permissions or protection mods.
+- [ ] **T314** · Implement a **Crew / Street Legend** branch centered on social/challenge QoL, posse coordination, gang interaction options, challenge stakes, crowd hype, rescue/rejoin tools, Chapter benefits, and long-term world presence without replacing source mob AI.
+- [ ] **T315** · Include meaningful cross-branch synergy nodes so builds such as high-speed Flow, boost-heavy aerial, rail technician, rhythm skater, graffiti runner, or crew leader feel distinct without requiring one mathematically mandatory meta tree.
+- [ ] **T316** · Prefer nodes that create a new decision/action/timing opportunity over passive number inflation. Small numeric modifiers are acceptable only where they support a tangible mechanical identity.
+- [ ] **T317** · Enforce soft/hard safety caps on effective speed, acceleration, boost impulse, air control, knockback interaction, and collision-sensitive effects so maxed progression remains fast and exciting without tunneling through blocks, desyncing, invalidating server authority, or breaking ordinary combat/world physics.
+- [ ] **T318** · Make all progression effects conditional on the correct JetSetCraft state/gear/context; do not globally mutate vanilla base attributes in ways that remain active while sleeping, swimming normally, flying, riding unrelated mounts, using Elytra, or participating in another mod's movement state.
+- [ ] **T319** · Add at least several active/triggered high-tier techniques—perfect-timed boost, advanced transfer, controlled recovery, signature landing, rhythm burst, or similar—so the endgame adds mastery rather than only bigger numbers.
+
+## Respecs, loadouts, and experimentation
+
+- [ ] **T320** · Allow players to respec without deleting progression. Default behavior should encourage experimentation rather than punish a player for trying a build.
+- [ ] **T321** · Prevent exploitative mid-challenge or mid-combat respec swapping; apply changes only when safe, such as out of an active challenge/combat state or at a Boombox/Atlas interaction depending on chosen UX.
+- [ ] **T322** · Add multiple named **Skill Loadout** presets that remember node allocation and can be switched through a vanilla-native screen when safe.
+- [ ] **T323** · Make unavailable nodes explain *why* they are locked (level, prerequisite, mastery milestone, gang technique, challenge achievement) instead of silently graying out.
+- [ ] **T324** · Add a one-click recommended starter path and branch previews for players who do not want to theorycraft, while never auto-spending points without explicit user action.
+- [ ] **T325** · Preserve skill loadouts and UI preferences per player across reconnect/restart; server policy remains authoritative over which nodes/effects are enabled.
+
+## Ride Mastery — use the style to master the style
+
+- [ ] **T326** · Implement independent mastery tracks for **Skates, Skateboard, BMX, Scooter, Hoverboard, and Parkour/On-Foot** using the existing six-style ride taxonomy.
+- [ ] **T327** · Award mastery from representative real actions for that style—clean tricks, difficult routes, transfers, unique lines, challenges, speed control, terrain use—not simple distance/time accumulation.
+- [ ] **T328** · Give each mastery track milestone unlocks including style-specific tricks, handling techniques, signature animations, cosmetic parts/variants, trick slots/variants, titles/badges, and carefully bounded mechanical perks.
+- [ ] **T329** · Create style-specific high-tier techniques that reinforce identity: e.g. skate rail/edge expertise, board manual/carve depth, BMX pump/bunny-hop/air control, scooter spin/transfer precision, hoverboard hover/energy handling, parkour wall/vault/landing mastery.
+- [ ] **T330** · Allow mastery to contribute to general build synergies without making one ride style mandatory for unlocking unrelated core functionality.
+- [ ] **T331** · Add clear mastery progress visibility to the ride/style selection UI and Street Skills screen without cluttering the moment-to-moment HUD.
+
+## Gang reputation as a full game system
+
+Each stable `gang_id` gets its own persistent relationship. This expands the existing GangReputation architecture; do **not** replace it with a second incompatible faction system.
+
+- [ ] **T332** · Expand each gang's reputation track into a clear progression ladder such as **Unknown/Hostile -> Recognized -> Neutral -> Friendly -> Trusted -> Member -> Veteran -> Legend/Family**, while allowing gangs to start at different dispositions and preserving configurable internal thresholds.
+- [ ] **T333** · Keep the underlying reputation value and relationship state separate enough that temporary hostility, betrayal, event context, or allied/rival modifiers can be represented without destroying earned history.
+- [ ] **T334** · Make each gang respond visibly to reputation: greeting/taunting, challenge willingness, idle reactions, prices/rewards where applicable, entrance behavior, ally assistance, posse eligibility, hangout access, Chapter privileges, naming rights, and dialogue/UI flavor.
+- [ ] **T335** · Award gang reputation for gang-relevant actions: challenges, helping/defending residents, participating in their preferred activity, respectful wins/losses, graffiti/turf events, contracts, rescuing members, shared rival events, chapter interaction, and other data-driven gang-specific hooks.
+- [ ] **T336** · Apply coherent negative reputation for betrayal, attacking members, sabotaging events, siding with rivals in explicit conflicts, vandalizing protected gang interests, or abusing a gang's trust; never infer betrayal from unrelated vanilla combat events without strong context.
+- [ ] **T337** · Preserve the prior rule that a long-term player can ultimately repair and maximize relationship with every gang. Rivalry must create interesting friction and consequences, not permanent mutually-exclusive save-file lockouts unless a server/datapack explicitly opts into that mode.
+- [ ] **T338** · Implement reconciliation arcs: apology/rematch/help contracts, restitution challenges, defending a former rival, or other gameplay routes to repair damaged trust instead of waiting out a timer.
+- [ ] **T339** · Keep local `site_id` affinity/history bounded and secondary; a specific hangout can remember the player while canonical gang reputation remains the main relationship track.
+- [ ] **T340** · Make relationship history inspectable in the Gang Atlas through concise milestone memories—first meeting, first win/loss, betrayal, reconciliation, membership, legendary victory, chapter founded—without an unbounded event log.
+
+## Gang Signature Techniques, rewards, and themed mini-trees
+
+- [ ] **T341** · Give every gang a data-driven **reputation reward table** keyed to stable `gang_id` and normalized tiers, with support for cosmetics, music, graffiti, gear skins, emotes/dances, titles, challenge variants, Chapter/posse rights, and technique unlocks.
+- [ ] **T342** · Implement **Gang Signature Techniques**: special movement/boost/Flow/trick/dance/graffiti/crew abilities learned from a gang at appropriate trust/membership tiers. These should reflect that gang's personality/species/context rather than being palette-swapped generic perks.
+- [ ] **T343** · Surface learned Signature Techniques as an optional side-tree/socket layer that can synergize with general Street Skills while remaining bounded by the same server-authoritative movement and safety caps.
+- [ ] **T344** · Do not require the player to permanently choose only one gang's techniques. Let players collect techniques across a long-running world, then use loadout/slot/budget rules if needed for balance.
+- [ ] **T345** · Tie major gang rewards to memorable milestones and bespoke challenges—not only numeric reputation thresholds—so joining a gang, becoming Veteran, or learning its signature move feels earned and distinct.
+- [ ] **T346** · Integrate approved adult gangs, Junior Atlas crews, legendary/boss gangs, and future datapack/modded gangs through the same reward/technique schema, with graceful fallback when a gang supplies no custom tree.
+- [ ] **T347** · Allow datapacks/server packs to define or override gang tier names, XP/rep sources, reward tables, signature techniques, icons, descriptions, and challenge unlock conditions through validated schemas rather than code forks.
+
+## Progression presentation and moment-to-moment feedback
+
+- [ ] **T348** · Add compact optional vanilla-native progression feedback: XP/rep gain toasts or action-bar feedback, level-up celebration, mastery milestone, rank-up, and Signature Technique learned. Batch/deduplicate spam during long combo sessions.
+- [ ] **T349** · Level-up/rank-up presentation may use licensed JSR/JSRF/BRC music/SFX/visual motifs under the established authorization lane, but keep effects readable, accessibility-aware, and not constantly intrusive.
+- [ ] **T350** · Let the player independently configure or disable Street XP, mastery, and reputation popups/sounds without disabling the systems themselves.
+- [ ] **T351** · The Gang Atlas should show each gang's current rep/rank, next meaningful unlock, recent major relationship milestone, available challenges/contracts, and learned/available Signature Techniques.
+- [ ] **T352** · The Street Skills screen should show current Street Level, XP to next level, Technique Points, active loadout, branch investment, ride mastery summaries, and gang-technique slots without exposing internal debug arithmetic.
+- [ ] **T353** · Use readable vanilla-style icons/tooltips and colorblind-safe state differences; do not rely on color alone for available/locked/maxed/reputation states.
+
+## Balance, compatibility, and proof
+
+- [ ] **T354** · Build a data-driven progression simulator/test harness that can replay representative XP/rep events and verify level curves, point totals, unlock timing, diminishing returns, respecs, migrations, and duplicate-reward protection deterministically.
+- [ ] **T355** · Playtest/tune at least three build archetypes—speed/boost specialist, technical Flow/trick specialist, and social/gang/creative specialist—and prove each has meaningful strengths without invalidating the others.
+- [ ] **T356** · Test max-effective progression against collision, server correction, combat, Elytra, swimming, mounts, teleportation, portals, ladders, vehicles, common movement mods, and low-TPS conditions; progression must not create a new desync/dupe/exploit class.
+- [ ] **T357** · Test reputation with ally/rival interactions, betrayal/recovery, gang challenge wins/losses, hostile-start gangs, Junior crews, Chapter/posse unlocks, event cleanup, save/reload, and multiple players with independent relationships.
+- [ ] **T358** · Ensure multiplayer rewards are contribution-aware and non-duplicating: co-op challenge participation can reward every legitimate participant without multiplying one mob/event transaction into exploitable server-wide XP/rep.
+- [ ] **T359** · Profile progression hot paths. No per-tick global gang/player scans, no repeated full-tree recomputation, and no client UI traversal of every gang every frame; use event-driven updates, cached derived stats, stable IDs, and dirty/versioned recomputation.
+- [ ] **T360** · Provide admin/debug commands or equivalent diagnostics to inspect/set/reset Street Level, Technique Points, Ride Mastery, gang reputation, unlocked nodes, and reward receipts for testing/support, with permission checks and no ordinary-player exploit surface.
+- [ ] **T361** · Add migration coverage so future tree rebalance/node removal/renames never silently eat spent points or corrupt saves; refund or remap safely with explicit versioned rules.
+- [ ] **T362** · Native-runtime proof must show a new player earning Street XP, leveling, spending points, switching/respeccing a loadout safely, raising and lowering reputation with at least two distinct gangs, unlocking a gang Signature Technique, advancing one ride mastery track, reconnecting/restarting, and retaining the exact intended progression state.
+- [ ] **G021 · GATE** — JetSetCraft has a deep, replayable, non-grindy progression game: Street Level and skill-tree builds create meaningful mechanical expression, every ride style has mastery, every gang has persistent relationship/reward progression, Signature Techniques feel thematic and collectible, respec/loadouts encourage experimentation, max progression remains compatible/server-safe, and real runtime proof demonstrates persistence and balance rather than only UI or test fixtures.
+
 # PHASE L — Full challenge/minigame system
 
 Implement complete scored modes on top of the existing actor lifecycle rather than one-off scripts.
@@ -735,4 +842,4 @@ Then perform one whole-project challenge pass for:
 
 Do not answer this handoff with another summary or roadmap. Start by resolving the real current source/checkpoint, then implement the earliest ready task. Continue automatically across bounded execution windows. Ask the user only for a genuinely user-only decision or authorization that blocks the next required mutation.
 
-- [ ] **G017 · FINAL COMPLETION GATE** — Every accepted task and parent gate above is complete; no blocker remains; the final artifact is a fresh verified Forge 1.20.1 build; the exact changed gameplay paths have been exercised in real client/server runtime; Boost/Flow HUD visibly follows the Spirit Vector-inspired vanilla survival-HUD principle while retaining JetSetCraft identity, auto-coexists with real mod overlays, and gives each user persistent full placement control; Challenge+Interact works end-to-end against representative vanilla and modded AI mobs for Dance Battle/Skate-Off with reversible loaner skates and exact source-AI/equipment/provider-state restoration; the user's authorized JSR/JSRF/BRC production assets are genuinely integrated rather than treated as reference-only, the complete available authorized soundtrack catalog is playable through polished personal Radio and in-world Boombox flows with durable provenance/credits and performant packaging; all preserved gang/Atlas/hangout/reputation/challenge/chapter/posse systems are real and production-wired; performance improvements preserve full results; docs match reality; and final source/artifacts are durably checkpointed and published.
+- [ ] **G017 · FINAL COMPLETION GATE** — Every accepted task and parent gate above is complete; no blocker remains; the final artifact is a fresh verified Forge 1.20.1 build; the exact changed gameplay paths have been exercised in real client/server runtime; Boost/Flow HUD visibly follows the Spirit Vector-inspired vanilla survival-HUD principle while retaining JetSetCraft identity, auto-coexists with real mod overlays, and gives each user persistent full placement control; Challenge+Interact works end-to-end against representative vanilla and modded AI mobs for Dance Battle/Skate-Off with reversible loaner skates and exact source-AI/equipment/provider-state restoration; the user's authorized JSR/JSRF/BRC production assets are genuinely integrated rather than treated as reference-only, the complete available authorized soundtrack catalog is playable through polished personal Radio and in-world Boombox flows with durable provenance/credits and performant packaging; all preserved gang/Atlas/hangout/reputation/challenge/chapter/posse systems are real and production-wired; Street Level, build-defining skill trees, ride mastery, per-gang reputation ladders, respec/loadouts, and thematic Gang Signature Techniques are persistent, balanced, server-authoritative, non-grindy, and runtime-proven; performance improvements preserve full results; docs match reality; and final source/artifacts are durably checkpointed and published.
