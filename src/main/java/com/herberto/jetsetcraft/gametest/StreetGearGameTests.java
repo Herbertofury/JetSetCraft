@@ -499,6 +499,24 @@ public final class StreetGearGameTests {
                         + entityId);
             }
 
+            // Exercise the same reversible challenge attachment used by JetSetCraft activities on the real
+            // provider-owned entity. Cancelling must yield immediately back to the durable gear/gang state.
+            UUID challengeId = UUID.nameUUIDFromBytes(("jetsetcraft:wave2:challenge:" + entityId)
+                    .getBytes(StandardCharsets.UTF_8));
+            GangMemberState.attach(mob, profile.gangId(), "racer", challengeId, false, 0L);
+            if (!GangMemberState.matchesChallenge(mob, challengeId)) {
+                mob.discard();
+                throw new GameTestAssertException("Wave 2 challenge state did not attach to provider mob " + entityId);
+            }
+            GangMemberState.clearChallenge(mob);
+            var afterChallenge = GangMemberState.snapshot(mob);
+            if (!afterChallenge.present() || afterChallenge.inChallenge()
+                    || !profile.gangId().equals(afterChallenge.gangId()) || !MobStreetGear.hasGear(mob)) {
+                mob.discard();
+                throw new GameTestAssertException("Wave 2 challenge cancel did not restore durable provider gang/gear state for "
+                        + entityId);
+            }
+
             CompoundTag equippedTag = new CompoundTag();
             mob.saveWithoutId(equippedTag);
             if (!sourceWithoutJetSet.equals(withoutJetSetState(equippedTag))) {
@@ -568,6 +586,7 @@ public final class StreetGearGameTests {
 
         System.out.println("JETSETCRAFT_WAVE2_GAMEPLAY " + providerUnderTest
                 + " representative_mobs=" + representatives.size()
+                + " challenge_roundtrips=" + representatives.size()
                 + " tamable_owner_roundtrips=" + tamableChecks
                 + " provider_nbt_mutations=0");
     }
