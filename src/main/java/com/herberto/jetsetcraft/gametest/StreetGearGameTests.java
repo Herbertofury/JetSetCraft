@@ -26,10 +26,12 @@ import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestAssertException;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.Slime;
 import net.minecraft.world.entity.monster.Spider;
@@ -44,6 +46,7 @@ import net.minecraftforge.gametest.PrefixGameTestTemplate;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 import java.util.UUID;
 
 /** Real Forge acceptance for additive, same-entity, equipment-bound mob Street Gear. */
@@ -137,13 +140,16 @@ public final class StreetGearGameTests {
                 throw new GameTestAssertException("Supported graffiti removed itself prematurely");
             }
             helper.setBlock(wallRelative, Blocks.AIR);
-        });
-        helper.runAfterDelay(50, () -> {
-            if (!graffiti.isRemoved()) {
-                throw new GameTestAssertException("Graffiti survived after its supporting wall was removed");
-            }
-            System.out.println("JETSETCRAFT_GAMETEST_PASS graffiti_lifecycle");
-            helper.succeed();
+
+            // Graffiti intentionally performs a low-cost support check every 40 entity ticks. Assert the real
+            // eventual contract until the GameTest timeout instead of sampling one fixed server tick, which can
+            // race the entity-tick phase when large optional providers are present.
+            helper.succeedWhen(() -> {
+                if (!graffiti.isRemoved()) {
+                    throw new GameTestAssertException("Graffiti is still waiting for its bounded support check");
+                }
+                System.out.println("JETSETCRAFT_GAMETEST_PASS graffiti_lifecycle");
+            });
         });
     }
 
@@ -235,6 +241,7 @@ public final class StreetGearGameTests {
                     : java.util.List.of(providerSelection);
             for (String providerUnderTest : providersUnderTest) {
                 assertLiveProviderRoster(helper, providerUnderTest);
+                assertRepresentativeProviderGameplay(helper, providerUnderTest);
             }
         }
 
@@ -343,6 +350,8 @@ public final class StreetGearGameTests {
         // Projectiles, vehicles, effects, and other non-Mob EntityTypes remain provider-owned and are ignored.
         java.util.ArrayList<ResourceLocation> unexpectedMobs = new java.util.ArrayList<>();
         java.util.ArrayList<ResourceLocation> curatedNonMobs = new java.util.ArrayList<>();
+        java.util.ArrayList<ResourceLocation> rigMismatches = new java.util.ArrayList<>();
+        java.util.ArrayList<ResourceLocation> ineligibleCuratedMobs = new java.util.ArrayList<>();
         int providerEntityTypes = 0;
         int liveCuratedMobs = 0;
         int liveHiddenMobs = 0;
@@ -355,10 +364,18 @@ public final class StreetGearGameTests {
                 probe = registryEntry.getValue().create(helper.getLevel());
                 boolean curated = MobCompatibilityRegistry.profile(liveId).isPresent();
                 boolean hidden = MobCompatibilityRegistry.hidden(liveId);
-                if (probe instanceof net.minecraft.world.entity.Mob) {
-                    if (curated) liveCuratedMobs++;
-                    else if (hidden) liveHiddenMobs++;
-                    else unexpectedMobs.add(liveId);
+                if (probe instanceof net.minecraft.world.entity.Mob mob) {
+                    if (curated) {
+                        liveCuratedMobs++;
+                        MobCompatibilityRegistry.profile(liveId).ifPresent(profile -> {
+                            if (MobRideRigResolver.resolve(mob) != profile.broadRig()) rigMismatches.add(liveId);
+                        });
+                        if (!MobStreetGear.eligible(mob)) ineligibleCuratedMobs.add(liveId);
+                    } else if (hidden) {
+                        liveHiddenMobs++;
+                    } else {
+                        unexpectedMobs.add(liveId);
+                    }
                 } else if (curated) {
                     curatedNonMobs.add(liveId);
                 }
@@ -374,6 +391,8 @@ public final class StreetGearGameTests {
         }
         unexpectedMobs.sort(java.util.Comparator.naturalOrder());
         curatedNonMobs.sort(java.util.Comparator.naturalOrder());
+        rigMismatches.sort(java.util.Comparator.naturalOrder());
+        ineligibleCuratedMobs.sort(java.util.Comparator.naturalOrder());
         if (!unexpectedMobs.isEmpty()) {
             throw new GameTestAssertException("Pinned Wave 2 provider has uncatalogued live Mob IDs: "
                     + unexpectedMobs);
@@ -382,11 +401,205 @@ public final class StreetGearGameTests {
             throw new GameTestAssertException("Pinned Wave 2 curated roster is not entirely live Mob EntityTypes: curated="
                     + liveCuratedMobs + "/" + liveStatus.expectedSafeCount() + " nonMob=" + curatedNonMobs);
         }
+        if (!rigMismatches.isEmpty()) {
+            throw new GameTestAssertException("Curated Wave 2 anatomy profiles disagreed with the runtime rig resolver: "
+                    + rigMismatches);
+        }
+        if (!ineligibleCuratedMobs.isEmpty()) {
+            throw new GameTestAssertException("Curated Wave 2 mobs unexpectedly failed Street Gear eligibility: "
+                    + ineligibleCuratedMobs);
+        }
         System.out.println("JETSETCRAFT_WAVE2_LIVE_ROSTER " + providerUnderTest
                 + " entity_types=" + providerEntityTypes
                 + " curated_mobs=" + liveCuratedMobs
                 + " hidden_mobs=" + liveHiddenMobs
                 + " unexpected_mobs=0");
+    }
+
+    private static void assertRepresentativeProviderGameplay(GameTestHelper helper, String providerUnderTest) {
+        List<String> representatives = switch (providerUnderTest) {
+            case "alexsmobs" -> List.of("grizzly_bear", "bone_serpent", "blue_jay",
+                    "cachalot_whale", "centipede_head", "mimicube");
+            case "alexscaves" -> List.of("raycat", "gammaroach", "gum_worm",
+                    "hullbreaker", "teletor", "tremorsaurus");
+            case "cataclysm" -> List.of("netherite_ministrosity", "ignis", "lionfish",
+                    "ancient_remnant", "amethyst_crab", "the_leviathan");
+            default -> throw new GameTestAssertException("Unknown Wave 2 provider gameplay lane: " + providerUnderTest);
+        };
+
+        int tamableChecks = 0;
+        for (String path : representatives) {
+            ResourceLocation entityId = ResourceLocation.fromNamespaceAndPath(providerUnderTest, path);
+            EntityType<?> type = ForgeRegistries.ENTITY_TYPES.getValue(entityId);
+            if (type == null) {
+                throw new GameTestAssertException("Representative Wave 2 entity is missing from the live registry: " + entityId);
+            }
+            net.minecraft.world.entity.Entity raw = type.create(helper.getLevel());
+            if (!(raw instanceof net.minecraft.world.entity.Mob mob)) {
+                if (raw != null) raw.discard();
+                throw new GameTestAssertException("Representative Wave 2 entity is not a Mob: " + entityId);
+            }
+
+            BlockPos representativePos = helper.absolutePos(new BlockPos(1, 1, 1));
+            mob.moveTo(representativePos.getX() + 0.5D, representativePos.getY(),
+                    representativePos.getZ() + 0.5D, 0.0F, 0.0F);
+            mob.setPersistenceRequired();
+            mob.setHealth(Math.max(1.0F, mob.getMaxHealth() * 0.75F));
+
+            UUID expectedOwner = null;
+            boolean expectedSit = false;
+            if (mob instanceof TamableAnimal tameable) {
+                expectedOwner = UUID.nameUUIDFromBytes(("jetsetcraft:wave2:" + entityId)
+                        .getBytes(StandardCharsets.UTF_8));
+                tameable.setTame(true);
+                tameable.setOwnerUUID(expectedOwner);
+                tameable.setOrderedToSit(true);
+                expectedSit = tameable.isOrderedToSit();
+                tamableChecks++;
+            }
+
+            if (!helper.getLevel().addFreshEntity(mob)) {
+                mob.discard();
+                throw new GameTestAssertException("Could not add representative Wave 2 mob to the real GameTest level: "
+                        + entityId);
+            }
+
+            UUID originalUuid = mob.getUUID();
+            EntityType<?> originalType = mob.getType();
+            CompoundTag sourceTag = new CompoundTag();
+            mob.saveWithoutId(sourceTag);
+            CompoundTag sourceWithoutJetSet = withoutJetSetState(sourceTag);
+
+            // Establish the provider's own save/load normalization as the control. Some third-party mobs legitimately
+            // normalize transient/provider fields when they are deserialized; JetSetCraft must match that baseline,
+            // not falsely require upstream byte-for-byte idempotence that the provider itself does not promise.
+            net.minecraft.world.entity.Entity controlRaw = type.create(helper.getLevel());
+            if (!(controlRaw instanceof net.minecraft.world.entity.Mob control)) {
+                if (controlRaw != null) controlRaw.discard();
+                mob.discard();
+                throw new GameTestAssertException("Could not create provider NBT control mob " + entityId);
+            }
+            control.load(sourceTag);
+            CompoundTag providerRoundTripTag = new CompoundTag();
+            control.saveWithoutId(providerRoundTripTag);
+            CompoundTag providerRoundTripWithoutJetSet = withoutJetSetState(providerRoundTripTag);
+            control.discard();
+
+            MobStreetGear.EquipResult equip = MobStreetGear.equip(mob, new ItemStack(ModItems.INLINE_SKATES.get()),
+                    StreetGearAcquisition.COMMAND, false);
+            var profile = MobCompatibilityRegistry.profile(entityId)
+                    .orElseThrow(() -> new GameTestAssertException("Representative Wave 2 profile vanished: " + entityId));
+            var equipped = MobStreetGear.snapshot(mob);
+            var gang = GangMemberState.snapshot(mob);
+            if (!equip.equipped() || !equipped.equipped() || equipped.rig() != profile.broadRig()
+                    || !gang.present() || !profile.gangId().equals(gang.gangId())
+                    || mob.getType() != originalType || !mob.getUUID().equals(originalUuid)) {
+                mob.discard();
+                throw new GameTestAssertException("Street Gear did not layer cleanly onto representative provider mob "
+                        + entityId);
+            }
+
+            // Exercise the same reversible challenge attachment used by JetSetCraft activities on the real
+            // provider-owned entity. Cancelling must yield immediately back to the durable gear/gang state.
+            UUID challengeId = UUID.nameUUIDFromBytes(("jetsetcraft:wave2:challenge:" + entityId)
+                    .getBytes(StandardCharsets.UTF_8));
+            GangMemberState.attach(mob, profile.gangId(), "racer", challengeId, false, 0L);
+            if (!GangMemberState.matchesChallenge(mob, challengeId)) {
+                mob.discard();
+                throw new GameTestAssertException("Wave 2 challenge state did not attach to provider mob " + entityId);
+            }
+            GangMemberState.clearChallenge(mob);
+            var afterChallenge = GangMemberState.snapshot(mob);
+            if (!afterChallenge.present() || afterChallenge.inChallenge()
+                    || !profile.gangId().equals(afterChallenge.gangId()) || !MobStreetGear.hasGear(mob)) {
+                mob.discard();
+                throw new GameTestAssertException("Wave 2 challenge cancel did not restore durable provider gang/gear state for "
+                        + entityId);
+            }
+
+            CompoundTag equippedTag = new CompoundTag();
+            mob.saveWithoutId(equippedTag);
+            if (!sourceWithoutJetSet.equals(withoutJetSetState(equippedTag))) {
+                mob.discard();
+                throw new GameTestAssertException("Street Gear mutated provider-owned NBT while equipping " + entityId);
+            }
+
+            mob.discard();
+
+            net.minecraft.world.entity.Entity restoredRaw = type.create(helper.getLevel());
+            if (!(restoredRaw instanceof net.minecraft.world.entity.Mob restored)) {
+                if (restoredRaw != null) restoredRaw.discard();
+                throw new GameTestAssertException("Could not reconstruct representative provider mob " + entityId);
+            }
+            restored.load(equippedTag);
+            var restoredGear = MobStreetGear.snapshot(restored);
+            var restoredGang = GangMemberState.snapshot(restored);
+            if (!restoredGear.equipped() || restoredGear.rig() != profile.broadRig()
+                    || !restoredGang.present() || !profile.gangId().equals(restoredGang.gangId())
+                    || restored.getType() != originalType || !restored.getUUID().equals(originalUuid)) {
+                restored.discard();
+                throw new GameTestAssertException("Wave 2 gear/gang state did not survive entity save/load for " + entityId);
+            }
+            if (expectedOwner != null) {
+                if (!(restored instanceof TamableAnimal restoredTameable)
+                        || !expectedOwner.equals(restoredTameable.getOwnerUUID())
+                        || restoredTameable.isOrderedToSit() != expectedSit) {
+                    restored.discard();
+                    throw new GameTestAssertException("Provider tame/owner/sit state did not survive Wave 2 save/load for "
+                            + entityId);
+                }
+            }
+
+            CompoundTag restoredTag = new CompoundTag();
+            restored.saveWithoutId(restoredTag);
+            if (!providerRoundTripWithoutJetSet.equals(withoutJetSetState(restoredTag))) {
+                restored.discard();
+                throw new GameTestAssertException("Wave 2 save/load diverged from the provider's own NBT round-trip baseline for "
+                        + entityId);
+            }
+
+            if (!helper.getLevel().addFreshEntity(restored)) {
+                restored.discard();
+                throw new GameTestAssertException("Could not re-add restored Wave 2 mob to the real GameTest level: "
+                        + entityId);
+            }
+            CompoundTag beforeUnequip = new CompoundTag();
+            restored.saveWithoutId(beforeUnequip);
+            ItemStack returned = MobStreetGear.unequip(restored);
+            CompoundTag afterUnequip = new CompoundTag();
+            restored.saveWithoutId(afterUnequip);
+            if (returned.getItem() != ModItems.INLINE_SKATES.get()
+                    || MobStreetGear.hasStoredState(restored)
+                    || GangMemberState.snapshot(restored).present()
+                    || !withoutJetSetState(beforeUnequip).equals(withoutJetSetState(afterUnequip))) {
+                restored.discard();
+                throw new GameTestAssertException("Unequip did not restore provider-owned state exactly for " + entityId);
+            }
+            if (expectedOwner != null && restored instanceof TamableAnimal restoredTameable
+                    && (!expectedOwner.equals(restoredTameable.getOwnerUUID())
+                    || restoredTameable.isOrderedToSit() != expectedSit)) {
+                restored.discard();
+                throw new GameTestAssertException("Provider tame/owner/sit state changed during unequip for " + entityId);
+            }
+            restored.discard();
+        }
+
+        System.out.println("JETSETCRAFT_WAVE2_GAMEPLAY " + providerUnderTest
+                + " representative_mobs=" + representatives.size()
+                + " challenge_roundtrips=" + representatives.size()
+                + " tamable_owner_roundtrips=" + tamableChecks
+                + " provider_nbt_mutations=0");
+    }
+
+    private static CompoundTag withoutJetSetState(CompoundTag source) {
+        CompoundTag copy = source.copy();
+        if (!copy.contains("ForgeData", Tag.TAG_COMPOUND)) return copy;
+        CompoundTag forgeData = copy.getCompound("ForgeData");
+        forgeData.remove(MobStreetGear.ROOT_KEY);
+        forgeData.remove(GangMemberState.ROOT_KEY);
+        if (forgeData.isEmpty()) copy.remove("ForgeData");
+        else copy.put("ForgeData", forgeData);
+        return copy;
     }
 
     private StreetGearGameTests() {}
