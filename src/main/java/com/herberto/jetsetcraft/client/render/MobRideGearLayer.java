@@ -25,6 +25,13 @@ import net.minecraft.world.item.ItemStack;
  * the actual physical item follows conservative contact points derived from the mob's body footprint.
  */
 public final class MobRideGearLayer<T extends LivingEntity, M extends EntityModel<T>> extends RenderLayer<T, M> {
+    /**
+     * LivingEntityRenderer normalizes layer/model space around the standard 24px (1.5 block) ground plane.
+     * Entity bounding-box height is therefore NOT a vertical layer-space coordinate. Multiplying by bbHeight
+     * lifted equipment onto/above tiny and aquatic mobs while only looking correct on very tall mobs.
+     */
+    private static final float GROUND_CONTACT_Y = 1.42F;
+
     public MobRideGearLayer(RenderLayerParent<T, M> parent) {
         super(parent);
     }
@@ -108,8 +115,11 @@ public final class MobRideGearLayer<T extends LivingEntity, M extends EntityMode
         };
         float anatomyScale = 0.90f + rig.footprintScale() * 0.18f;
         float scale = Mth.clamp(width * baseScale * anatomyScale * ageScale, 0.32f, 1.75f);
-        float hoverLift = style == RideStyle.HOVER ? 0.04f : 0.0f;
-        poseStack.translate(0.0D, entity.getBbHeight() * 0.36D - 0.035D + hoverLift + bob, 0.0D);
+        // Positive layer Y moves toward the entity's ground plane after LivingEntityRenderer's
+        // inverted model transform. Keep platform gear at that shared ground coordinate instead of scaling Y by
+        // bbHeight. Hoverboards intentionally subtract a little Y to float above the contact plane.
+        float hoverLift = style == RideStyle.HOVER ? 0.08f : 0.0f;
+        poseStack.translate(0.0D, GROUND_CONTACT_Y - 0.035D - hoverLift + bob, 0.0D);
         poseStack.mulPose(Axis.XP.rotationDegrees(180.0f));
         poseStack.mulPose(Axis.ZP.rotationDegrees(lean));
         poseStack.scale(scale, scale, scale);
@@ -120,7 +130,7 @@ public final class MobRideGearLayer<T extends LivingEntity, M extends EntityMode
     private static void renderAt(PoseStack poseStack, MultiBufferSource buffer, int light, LivingEntity entity,
                                  ItemStack stack, float x, float y, float z, float scale, float motion) {
         poseStack.pushPose();
-        poseStack.translate(x, entity.getBbHeight() * 0.36D - 0.015f + y, z);
+        poseStack.translate(x, GROUND_CONTACT_Y - 0.015f + y, z);
         poseStack.mulPose(Axis.XP.rotationDegrees(180.0f));
         // Both sides point in the travel direction. Rotating one skate 180 degrees made half the rig face backward.
         if (!JetSetConfig.CLIENT.reducedMotion.get()) {

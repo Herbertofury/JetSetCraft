@@ -1,0 +1,271 @@
+name: Verify Wave 2 Native Client
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "build.gradle"
+      - "src/main/java/com/herberto/jetsetcraft/client/ClientVisualAudit.java"
+      - "src/main/java/com/herberto/jetsetcraft/client/ClientEvents.java"
+      - "src/main/java/com/herberto/jetsetcraft/client/render/MobRideGearLayer.java"
+      - "src/main/java/com/herberto/jetsetcraft/command/JetSetCommands.java"
+      - "src/main/java/com/herberto/jetsetcraft/mob/**"
+      - "src/main/java/com/herberto/jetsetcraft/network/S2CMobGearPacket.java"
+      - "src/main/resources/data/jetsetcraft/jetsetcraft_gangs/wave2_*.json"
+      - ".github/workflows/wave2-client-visual.yml"
+  pull_request:
+    paths:
+      - "build.gradle"
+      - "src/main/java/com/herberto/jetsetcraft/client/ClientVisualAudit.java"
+      - "src/main/java/com/herberto/jetsetcraft/client/ClientEvents.java"
+      - "src/main/java/com/herberto/jetsetcraft/client/render/MobRideGearLayer.java"
+      - "src/main/java/com/herberto/jetsetcraft/command/JetSetCommands.java"
+      - "src/main/java/com/herberto/jetsetcraft/mob/**"
+      - "src/main/java/com/herberto/jetsetcraft/network/S2CMobGearPacket.java"
+      - "src/main/resources/data/jetsetcraft/jetsetcraft_gangs/wave2_*.json"
+      - ".github/workflows/wave2-client-visual.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: jetsetcraft-wave2-native-client-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  visual:
+    name: All Wave 2 providers / native Forge client
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+
+    steps:
+      - name: Check out sources
+        uses: actions/checkout@v6
+
+      - name: Set up Temurin 17
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Set up Gradle wrapper cache
+        uses: gradle/actions/setup-gradle@v6
+
+      - name: Set up asset and image tooling
+        run: python -m pip install --requirement tools/requirements.txt
+
+      - name: Regenerate deterministic authored assets
+        run: |
+          python tools/generate_models.py
+          python tools/generate_animations.py
+          python tools/generate_brand.py
+          git diff --check
+          git diff --exit-code
+
+      - name: Install virtual-display runtime
+        shell: bash
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y xvfb libgl1-mesa-dri libglx-mesa0
+
+      - name: Build with all Wave 2 providers
+        shell: bash
+        run: |
+          set -euo pipefail
+          ./gradlew clean build -Pwave2Provider=all --no-daemon
+
+      - name: Create disposable Quick Play QA world
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p run build/verification
+          printf 'eula=true\n' > run/eula.txt
+          log=build/verification/wave2-client-world-seed-server.log
+          : > "$log"
+          setsid ./gradlew runServer -Pwave2Provider=all --no-daemon > "$log" 2>&1 &
+          server_pid=$!
+          ready=0
+          deadline=$((SECONDS + 150))
+          while kill -0 "$server_pid" 2>/dev/null; do
+            if grep -Eq 'Done \([0-9.]+s\)!' "$log"; then
+              ready=1
+              break
+            fi
+            if grep -Eiq 'ModLoadingException|Failed to complete lifecycle event|Exception in thread "main"|FATAL.*jetsetcraft' "$log"; then
+              break
+            fi
+            if (( SECONDS >= deadline )); then
+              break
+            fi
+            sleep 2
+          done
+          cat "$log"
+          if [[ "$ready" -ne 1 ]]; then
+            kill -TERM -- "-$server_pid" 2>/dev/null || true
+            sleep 2
+            kill -KILL -- "-$server_pid" 2>/dev/null || true
+            wait "$server_pid" 2>/dev/null || true
+            echo '::error::Could not create the disposable provider-present QA world.'
+            exit 1
+          fi
+
+          kill -TERM -- "-$server_pid" 2>/dev/null || true
+          for _ in {1..10}; do
+            kill -0 "$server_pid" 2>/dev/null || break
+            sleep 1
+          done
+          kill -KILL -- "-$server_pid" 2>/dev/null || true
+          wait "$server_pid" 2>/dev/null || true
+
+          test -s run/world/level.dat
+          mkdir -p run/saves
+          rm -rf "run/saves/New World"
+          cp -a run/world "run/saves/New World"
+          rm -f "run/saves/New World/session.lock"
+          test -s "run/saves/New World/level.dat"
+
+      - name: Run real Forge client visual audit
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p build/verification
+          log=build/verification/wave2-native-client.log
+          set +e
+          timeout 900s env LIBGL_ALWAYS_SOFTWARE=1 ALSOFT_DRIVERS=null             xvfb-run -a -s "-screen 0 1280x720x24"             ./gradlew -Djetsetcraft.visualAudit=true runClient -Pwave2Provider=all --no-daemon             2>&1 | tee "$log"
+          exit_code=${PIPESTATUS[0]}
+          set -e
+
+          grep -Fq 'JETSETCRAFT_VISUAL_AUDIT_PASS seven real-client captures completed including visible Wave 2 provider rig scenes' "$log" || {
+            echo '::error::Native client did not complete the Wave 2 visual audit.'
+            exit "${exit_code:-1}"
+          }
+          grep -Eq 'JETSETCRAFT_VISUAL_WAVE2_STAGE ready ' "$log" || {
+            echo '::error::Dedicated Wave 2 visual stage did not initialize.'
+            exit 1
+          }
+          grep -Eq 'JETSETCRAFT_VISUAL_AUDIT_CAPTURE wave2-stage-empty ' "$log" || {
+            echo '::error::Missing empty Wave 2 stage baseline screenshot marker.'
+            exit 1
+          }
+          for provider in alexsmobs alexscaves cataclysm; do
+            grep -Eq "JETSETCRAFT_VISUAL_WAVE2_SCENE $provider spawned=4/4" "$log" || {
+              echo "::error::Native client scene did not contain all four $provider representatives."
+              exit 1
+            }
+            slot_count="$(grep -Ec "JETSETCRAFT_VISUAL_WAVE2_SLOT $provider slot=[0-3] " "$log" || true)"
+            if [[ "$slot_count" -ne 4 ]]; then
+              echo "::error::Expected four explicit visual slots for $provider; saw $slot_count."
+              exit 1
+            fi
+            grep -Eq "JETSETCRAFT_VISUAL_AUDIT_CAPTURE wave2-$provider-rigs " "$log" || {
+              echo "::error::Missing native screenshot marker for $provider."
+              exit 1
+            }
+          done
+          if grep -Eiq 'ModLoadingException|Failed to complete lifecycle event|Mixin apply failed|Exception in thread "Render thread"|FATAL.*jetsetcraft' "$log"; then
+            echo '::error::Fatal client/provider runtime error was present in the visual-audit log.'
+            exit 1
+          fi
+
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from PIL import Image, ImageChops, ImageStat
+
+          paths = sorted(Path('run/screenshots').glob('*.png'), key=lambda p: p.stat().st_mtime_ns)
+          if len(paths) < 7:
+              raise SystemExit(f'expected at least 7 native screenshots, found {len(paths)}')
+
+          selected = paths[-7:]
+          images = []
+          for path in selected:
+              with Image.open(path) as image:
+                  rgb = image.convert('RGB')
+                  if rgb.size != (1280, 720):
+                      raise SystemExit(f'{path}: expected 1280x720, got {rgb.size}')
+                  stat = ImageStat.Stat(rgb)
+                  if sum(stat.stddev) < 6.0:
+                      raise SystemExit(f'{path}: image variance is too low; likely blank/failed render')
+                  images.append(rgb.copy())
+
+          # The final four screenshots are: empty isolated stage, Alex's Mobs, Alex's Caves, Cataclysm.
+          # Compare each provider against the exact same stage background. Every quarter must visibly change,
+          # otherwise a spawned-but-occluded/off-camera subject would recreate the previous false-positive.
+          baseline = images[-4]
+
+          # The isolated stage must actually fill the camera with its neutral concrete backdrop. A blue-sky
+          # baseline means the client camera faced away from the stage; provider diffs could then be caused by
+          # clouds/terrain changes rather than visible mobs.
+          center = baseline.crop((240, 70, 1040, 600))
+          sky_like = sum(
+              1 for r, g, b in center.getdata()
+              if b >= 145 and b > r + 12 and b >= g + 2
+          )
+          sky_fraction = sky_like / float(center.width * center.height)
+          if sky_fraction > 0.18:
+              raise SystemExit(
+                  f'Wave 2 empty-stage baseline is facing away from the concrete backdrop '
+                  f'(sky-like center fraction={sky_fraction:.3f})'
+              )
+
+          providers = ('alexsmobs', 'alexscaves', 'cataclysm')
+          evidence = {'stage': {'sky_like_center_fraction': sky_fraction}}
+          for provider, image in zip(providers, images[-3:]):
+              diff = ImageChops.difference(image, baseline)
+              # The audit camera uses Minecraft's vertical FOV on a 16:9 target, so the four world-space
+              # X offsets do not project into equal 320px screen quarters. Use generous projection-aware bands
+              # entirely inside the static concrete backdrop. This keeps cloud/terrain changes out of the proof
+              # while still requiring a distinct visible subject at every intended slot.
+              slot_bands = [(220, 440), (460, 620), (640, 820), (850, 1060)]
+              per_slot = []
+              total_changed = 0
+              for slot, (x0, x1) in enumerate(slot_bands):
+                  crop = diff.crop((x0, 40, x1, 690))
+                  changed = sum(
+                      1 for r, g, b in crop.getdata()
+                      if max(r, g, b) >= 18
+                  )
+                  per_slot.append(changed)
+                  total_changed += changed
+                  if changed < 120:
+                      raise SystemExit(
+                          f'{provider}: visual slot {slot} changed only {changed} pixels in band {x0}:{x1} '
+                          'versus empty stage; subject is likely occluded/off-camera'
+                      )
+              if total_changed < 1500:
+                  raise SystemExit(
+                      f'{provider}: provider scene changed only {total_changed} pixels versus empty stage'
+                  )
+              evidence[provider] = {
+                  'slot_bands': slot_bands,
+                  'per_slot_changed_pixels': per_slot,
+                  'total_changed_pixels': total_changed,
+              }
+
+          Path('build/verification').mkdir(parents=True, exist_ok=True)
+          Path('build/verification/wave2-visual-diff.json').write_text(
+              json.dumps(evidence, indent=2, sort_keys=True) + '\n',
+              encoding='utf-8'
+          )
+          print('Wave 2 visible provider screenshots OK:', json.dumps(evidence, sort_keys=True))
+          PY
+
+          if [[ "$exit_code" -ne 0 ]]; then
+            echo "::error::runClient exited with code $exit_code despite visual markers."
+            exit "$exit_code"
+          fi
+
+      - name: Upload native-client evidence
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: jetsetcraft-wave2-native-client-${{ github.sha }}
+          path: |
+            run/screenshots/*.png
+            run/logs/latest.log
+            build/verification/wave2-native-client.log
+            build/verification/wave2-client-world-seed-server.log
+            build/verification/wave2-visual-diff.json
+            build/libs/*.jar
+          if-no-files-found: warn

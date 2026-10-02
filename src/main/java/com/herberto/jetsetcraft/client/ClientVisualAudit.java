@@ -44,7 +44,46 @@ public final class ClientVisualAudit {
         if (worldTicks == 265) minecraft.setScreen(new GraffitiEditorScreen(
                 new GraffitiSelectorScreen(InteractionHand.MAIN_HAND), InteractionHand.MAIN_HAND));
         if (worldTicks == 310) capture(minecraft, "graffiti-editor");
-        if (worldTicks == 340) finish(minecraft, true, "three real-client captures completed");
+
+        String wave2Provider = System.getProperty("jetsetcraft.wave2Provider", "").trim();
+        if (wave2Provider.isEmpty()) {
+            if (worldTicks == 340) finish(minecraft, true, "three real-client captures completed");
+            return;
+        }
+
+        if (worldTicks == 340) {
+            minecraft.setScreen(null);
+            minecraft.options.hideGui = true;
+            minecraft.options.setCameraType(CameraType.FIRST_PERSON);
+            minecraft.player.connection.sendCommand("jetsetcraft visual_audit_wave2_stage");
+        }
+
+        // Server-side setYRot is not an authoritative client camera command. Lock the local audit camera every
+        // frame after the stage teleport so the screenshot cannot silently face away from the provider stage.
+        if (worldTicks >= 345) {
+            minecraft.player.setYRot(180.0F);
+            minecraft.player.setXRot(2.0F);
+            minecraft.player.yRotO = 180.0F;
+            minecraft.player.xRotO = 2.0F;
+        }
+
+        if (worldTicks == 380) capture(minecraft, "wave2-stage-empty");
+
+        if ("all".equals(wave2Provider)) {
+            if (worldTicks == 390) minecraft.player.connection.sendCommand("jetsetcraft visual_audit_wave2 alexsmobs");
+            if (worldTicks == 450) capture(minecraft, "wave2-alexsmobs-rigs");
+            if (worldTicks == 470) minecraft.player.connection.sendCommand("jetsetcraft visual_audit_wave2 alexscaves");
+            if (worldTicks == 530) capture(minecraft, "wave2-alexscaves-rigs");
+            if (worldTicks == 550) minecraft.player.connection.sendCommand("jetsetcraft visual_audit_wave2 cataclysm");
+            if (worldTicks == 610) capture(minecraft, "wave2-cataclysm-rigs");
+            if (worldTicks == 640) finish(minecraft, true,
+                    "seven real-client captures completed including visible Wave 2 provider rig scenes");
+        } else {
+            if (worldTicks == 390) minecraft.player.connection.sendCommand("jetsetcraft visual_audit_wave2 " + wave2Provider);
+            if (worldTicks == 450) capture(minecraft, "wave2-" + wave2Provider + "-rigs");
+            if (worldTicks == 480) finish(minecraft, true,
+                    "five real-client captures completed including visible Wave 2 provider rig scene");
+        }
     }
 
     private static void capture(Minecraft minecraft, String label) {
