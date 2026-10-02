@@ -136,15 +136,28 @@ jobs:
           exit_code=${PIPESTATUS[0]}
           set -e
 
-          grep -Fq 'JETSETCRAFT_VISUAL_AUDIT_PASS six real-client captures completed including all Wave 2 provider rig scenes' "$log" || {
+          grep -Fq 'JETSETCRAFT_VISUAL_AUDIT_PASS seven real-client captures completed including visible Wave 2 provider rig scenes' "$log" || {
             echo '::error::Native client did not complete the Wave 2 visual audit.'
             exit "${exit_code:-1}"
+          }
+          grep -Eq 'JETSETCRAFT_VISUAL_WAVE2_STAGE ready ' "$log" || {
+            echo '::error::Dedicated Wave 2 visual stage did not initialize.'
+            exit 1
+          }
+          grep -Eq 'JETSETCRAFT_VISUAL_AUDIT_CAPTURE wave2-stage-empty ' "$log" || {
+            echo '::error::Missing empty Wave 2 stage baseline screenshot marker.'
+            exit 1
           }
           for provider in alexsmobs alexscaves cataclysm; do
             grep -Eq "JETSETCRAFT_VISUAL_WAVE2_SCENE $provider spawned=4/4" "$log" || {
               echo "::error::Native client scene did not contain all four $provider representatives."
               exit 1
             }
+            slot_count="$(grep -Ec "JETSETCRAFT_VISUAL_WAVE2_SLOT $provider slot=[0-3] " "$log" || true)"
+            if [[ "$slot_count" -ne 4 ]]; then
+              echo "::error::Expected four explicit visual slots for $provider; saw $slot_count."
+              exit 1
+            fi
             grep -Eq "JETSETCRAFT_VISUAL_AUDIT_CAPTURE wave2-$provider-rigs " "$log" || {
               echo "::error::Missing native screenshot marker for $provider."
               exit 1
@@ -156,13 +169,17 @@ jobs:
           fi
 
           python - <<'PY'
+          import json
           from pathlib import Path
-          from PIL import Image, ImageStat
+          from PIL import Image, ImageChops, ImageStat
 
           paths = sorted(Path('run/screenshots').glob('*.png'), key=lambda p: p.stat().st_mtime_ns)
-          if len(paths) < 6:
-              raise SystemExit(f'expected at least 6 native screenshots, found {len(paths)}')
-          for path in paths[-6:]:
+          if len(paths) < 7:
+              raise SystemExit(f'expected at least 7 native screenshots, found {len(paths)}')
+
+          selected = paths[-7:]
+          images = []
+          for path in selected:
               with Image.open(path) as image:
                   rgb = image.convert('RGB')
                   if rgb.size != (1280, 720):
@@ -170,7 +187,45 @@ jobs:
                   stat = ImageStat.Stat(rgb)
                   if sum(stat.stddev) < 6.0:
                       raise SystemExit(f'{path}: image variance is too low; likely blank/failed render')
-          print('Wave 2 native screenshots OK:', ', '.join(p.name for p in paths[-6:]))
+                  images.append(rgb.copy())
+
+          # The final four screenshots are: empty isolated stage, Alex's Mobs, Alex's Caves, Cataclysm.
+          # Compare each provider against the exact same stage background. Every quarter must visibly change,
+          # otherwise a spawned-but-occluded/off-camera subject would recreate the previous false-positive.
+          baseline = images[-4]
+          providers = ('alexsmobs', 'alexscaves', 'cataclysm')
+          evidence = {}
+          for provider, image in zip(providers, images[-3:]):
+              diff = ImageChops.difference(image, baseline)
+              per_slot = []
+              total_changed = 0
+              for slot in range(4):
+                  x0 = slot * 320
+                  x1 = (slot + 1) * 320
+                  crop = diff.crop((x0, 40, x1, 690))
+                  changed = sum(
+                      1 for r, g, b in crop.getdata()
+                      if max(r, g, b) >= 18
+                  )
+                  per_slot.append(changed)
+                  total_changed += changed
+                  if changed < 120:
+                      raise SystemExit(
+                          f'{provider}: visual slot {slot} changed only {changed} pixels versus empty stage; '
+                          'subject is likely occluded/off-camera'
+                      )
+              if total_changed < 1500:
+                  raise SystemExit(
+                      f'{provider}: provider scene changed only {total_changed} pixels versus empty stage'
+                  )
+              evidence[provider] = {'per_slot_changed_pixels': per_slot, 'total_changed_pixels': total_changed}
+
+          Path('build/verification').mkdir(parents=True, exist_ok=True)
+          Path('build/verification/wave2-visual-diff.json').write_text(
+              json.dumps(evidence, indent=2, sort_keys=True) + '\n',
+              encoding='utf-8'
+          )
+          print('Wave 2 visible provider screenshots OK:', json.dumps(evidence, sort_keys=True))
           PY
 
           if [[ "$exit_code" -ne 0 ]]; then
@@ -188,5 +243,6 @@ jobs:
             run/logs/latest.log
             build/verification/wave2-native-client.log
             build/verification/wave2-client-world-seed-server.log
+            build/verification/wave2-visual-diff.json
             build/libs/*.jar
           if-no-files-found: warn
