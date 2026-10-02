@@ -614,7 +614,15 @@ public final class StreetGearGameTests {
 
         UUID challengeId = UUID.nameUUIDFromBytes(("jetsetcraft:wave2:factory:" + entityId)
                 .getBytes(StandardCharsets.UTF_8));
-        BlockPos anchor = helper.absolutePos(new BlockPos(4, 1, 4));
+
+        // GangActorFactory deliberately spawns against the world's motion-blocking surface, not the floating
+        // GameTest structure Y. Use the real surface height at the test X/Z so this proves the production spawn
+        // path instead of accidentally asking it to spawn ~100 blocks away from its own height-safety envelope.
+        BlockPos testPoint = helper.absolutePos(new BlockPos(4, 1, 4));
+        int surfaceY = helper.getLevel().getHeight(
+                net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                testPoint.getX(), testPoint.getZ());
+        BlockPos anchor = new BlockPos(testPoint.getX(), surfaceY, testPoint.getZ());
         HeadGangTargetResolver.Target target = new HeadGangTargetResolver.Target(
                 entityId, profile.gangId(), HeadGangTargetResolver.ResolutionSource.EXPLICIT_METADATA);
 
