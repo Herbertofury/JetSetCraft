@@ -213,11 +213,14 @@ jobs:
           evidence = {'stage': {'sky_like_center_fraction': sky_fraction}}
           for provider, image in zip(providers, images[-3:]):
               diff = ImageChops.difference(image, baseline)
+              # The audit camera uses Minecraft's vertical FOV on a 16:9 target, so the four world-space
+              # X offsets do not project into equal 320px screen quarters. Use generous projection-aware bands
+              # entirely inside the static concrete backdrop. This keeps cloud/terrain changes out of the proof
+              # while still requiring a distinct visible subject at every intended slot.
+              slot_bands = [(220, 440), (460, 620), (640, 820), (850, 1060)]
               per_slot = []
               total_changed = 0
-              for slot in range(4):
-                  x0 = slot * 320
-                  x1 = (slot + 1) * 320
+              for slot, (x0, x1) in enumerate(slot_bands):
                   crop = diff.crop((x0, 40, x1, 690))
                   changed = sum(
                       1 for r, g, b in crop.getdata()
@@ -227,14 +230,18 @@ jobs:
                   total_changed += changed
                   if changed < 120:
                       raise SystemExit(
-                          f'{provider}: visual slot {slot} changed only {changed} pixels versus empty stage; '
-                          'subject is likely occluded/off-camera'
+                          f'{provider}: visual slot {slot} changed only {changed} pixels in band {x0}:{x1} '
+                          'versus empty stage; subject is likely occluded/off-camera'
                       )
               if total_changed < 1500:
                   raise SystemExit(
                       f'{provider}: provider scene changed only {total_changed} pixels versus empty stage'
                   )
-              evidence[provider] = {'per_slot_changed_pixels': per_slot, 'total_changed_pixels': total_changed}
+              evidence[provider] = {
+                  'slot_bands': slot_bands,
+                  'per_slot_changed_pixels': per_slot,
+                  'total_changed_pixels': total_changed,
+              }
 
           Path('build/verification').mkdir(parents=True, exist_ok=True)
           Path('build/verification/wave2-visual-diff.json').write_text(
