@@ -1,0 +1,23 @@
+name: Probe Drive Bootstrap Transport
+
+on:
+  push:
+    branches: [ feature/ultimate-street-movement ]
+    paths: [ '.github/workflows/test-drive-bootstrap.yml' ]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download durable Street Flow overlay from Drive
+        shell: bash
+        run: |
+          set -euo pipefail
+          url='https://drive.google.com/uc?export=download&id=1eDUGlsigLpdFTf8oYzLHwZcb7podV55O'
+          curl -L --fail --retry 3 --retry-all-errors --output /tmp/overlay.tar.xz "$url"
+          file /tmp/overlay.tar.xz
+          stat -c '%s bytes' /tmp/overlay.tar.xz
+          sha256sum /tmp/overlay.tar.xz
+          echo 'a44004b338d8e5bb6969cd845d6ffc6388e4e266c98f2fbb9918e4cbe127e5f6  /tmp/overlay.tar.xz' | sha256sum -c -
