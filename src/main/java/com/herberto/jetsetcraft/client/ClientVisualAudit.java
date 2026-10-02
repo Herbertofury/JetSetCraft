@@ -55,24 +55,24 @@ public final class ClientVisualAudit {
             minecraft.setScreen(null);
             minecraft.options.hideGui = true;
             minecraft.options.setCameraType(CameraType.FIRST_PERSON);
-            minecraft.player.setYRot(180.0F);
-            minecraft.player.setXRot(4.0F);
-            minecraft.player.connection.sendCommand("jetsetcraft visual_audit_wave2 "
-                    + ("all".equals(wave2Provider) ? "alexsmobs" : wave2Provider));
+            minecraft.player.connection.sendCommand("jetsetcraft visual_audit_wave2_stage");
         }
+        if (worldTicks == 380) capture(minecraft, "wave2-stage-empty");
 
         if ("all".equals(wave2Provider)) {
-            if (worldTicks == 400) capture(minecraft, "wave2-alexsmobs-rigs");
-            if (worldTicks == 420) minecraft.player.connection.sendCommand("jetsetcraft visual_audit_wave2 alexscaves");
-            if (worldTicks == 480) capture(minecraft, "wave2-alexscaves-rigs");
-            if (worldTicks == 500) minecraft.player.connection.sendCommand("jetsetcraft visual_audit_wave2 cataclysm");
-            if (worldTicks == 560) capture(minecraft, "wave2-cataclysm-rigs");
-            if (worldTicks == 590) finish(minecraft, true,
-                    "six real-client captures completed including all Wave 2 provider rig scenes");
+            if (worldTicks == 390) minecraft.player.connection.sendCommand("jetsetcraft visual_audit_wave2 alexsmobs");
+            if (worldTicks == 450) capture(minecraft, "wave2-alexsmobs-rigs");
+            if (worldTicks == 470) minecraft.player.connection.sendCommand("jetsetcraft visual_audit_wave2 alexscaves");
+            if (worldTicks == 530) capture(minecraft, "wave2-alexscaves-rigs");
+            if (worldTicks == 550) minecraft.player.connection.sendCommand("jetsetcraft visual_audit_wave2 cataclysm");
+            if (worldTicks == 610) capture(minecraft, "wave2-cataclysm-rigs");
+            if (worldTicks == 640) finish(minecraft, true,
+                    "seven real-client captures completed including visible Wave 2 provider rig scenes");
         } else {
-            if (worldTicks == 400) capture(minecraft, "wave2-" + wave2Provider + "-rigs");
-            if (worldTicks == 430) finish(minecraft, true,
-                    "four real-client captures completed including Wave 2 provider rig scene");
+            if (worldTicks == 390) minecraft.player.connection.sendCommand("jetsetcraft visual_audit_wave2 " + wave2Provider);
+            if (worldTicks == 450) capture(minecraft, "wave2-" + wave2Provider + "-rigs");
+            if (worldTicks == 480) finish(minecraft, true,
+                    "five real-client captures completed including visible Wave 2 provider rig scene");
         }
     }
 
