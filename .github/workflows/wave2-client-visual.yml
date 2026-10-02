@@ -193,8 +193,24 @@ jobs:
           # Compare each provider against the exact same stage background. Every quarter must visibly change,
           # otherwise a spawned-but-occluded/off-camera subject would recreate the previous false-positive.
           baseline = images[-4]
+
+          # The isolated stage must actually fill the camera with its neutral concrete backdrop. A blue-sky
+          # baseline means the client camera faced away from the stage; provider diffs could then be caused by
+          # clouds/terrain changes rather than visible mobs.
+          center = baseline.crop((240, 70, 1040, 600))
+          sky_like = sum(
+              1 for r, g, b in center.getdata()
+              if b >= 145 and b > r + 12 and b >= g + 2
+          )
+          sky_fraction = sky_like / float(center.width * center.height)
+          if sky_fraction > 0.18:
+              raise SystemExit(
+                  f'Wave 2 empty-stage baseline is facing away from the concrete backdrop '
+                  f'(sky-like center fraction={sky_fraction:.3f})'
+              )
+
           providers = ('alexsmobs', 'alexscaves', 'cataclysm')
-          evidence = {}
+          evidence = {'stage': {'sky_like_center_fraction': sky_fraction}}
           for provider, image in zip(providers, images[-3:]):
               diff = ImageChops.difference(image, baseline)
               per_slot = []
