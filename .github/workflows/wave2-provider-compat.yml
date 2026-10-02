@@ -121,8 +121,12 @@ jobs:
                 echo "::error::Combined live Mob roster proof was missing or incomplete for $provider."
                 exit 1
               }
-              grep -Eq "JETSETCRAFT_WAVE2_GAMEPLAY $provider representative_mobs=6 challenge_roundtrips=6 .*provider_nbt_mutations=0" "$log" || {
+              grep -Eq "JETSETCRAFT_WAVE2_GAMEPLAY $provider representative_mobs=6 challenge_roundtrips=6 challenge_factory_roundtrips=1 .*provider_nbt_mutations=0" "$log" || {
                 echo "::error::Combined provider gameplay/NBT proof was missing or incomplete for $provider."
+                exit 1
+              }
+              grep -Eq "JETSETCRAFT_WAVE2_CHALLENGE_FACTORY $provider entity=$provider:.* spawn_cancel=1" "$log" || {
+                echo "::error::Combined real challenge actor spawn/cancel proof was missing for $provider."
                 exit 1
               }
             done
@@ -131,8 +135,12 @@ jobs:
               echo "::error::Live provider Mob roster proof was missing or incomplete for ${{ matrix.provider }}."
               exit 1
             }
-            grep -Eq "JETSETCRAFT_WAVE2_GAMEPLAY ${{ matrix.provider }} representative_mobs=6 challenge_roundtrips=6 .*provider_nbt_mutations=0" "$log" || {
+            grep -Eq "JETSETCRAFT_WAVE2_GAMEPLAY ${{ matrix.provider }} representative_mobs=6 challenge_roundtrips=6 challenge_factory_roundtrips=1 .*provider_nbt_mutations=0" "$log" || {
               echo "::error::Provider gameplay/NBT proof was missing or incomplete for ${{ matrix.provider }}."
+              exit 1
+            }
+            grep -Eq "JETSETCRAFT_WAVE2_CHALLENGE_FACTORY ${{ matrix.provider }} entity=${{ matrix.provider }}:.* spawn_cancel=1" "$log" || {
+              echo "::error::Real challenge actor spawn/cancel proof was missing for ${{ matrix.provider }}."
               exit 1
             }
           fi
