@@ -7,6 +7,8 @@ import com.herberto.jetsetcraft.graffiti.CustomGraffiti;
 import com.herberto.jetsetcraft.graffiti.PaintColor;
 import com.herberto.jetsetcraft.graffiti.PaintSplash;
 import com.herberto.jetsetcraft.item.SprayCanItem;
+import com.herberto.jetsetcraft.gang.GangActorFactory;
+import com.herberto.jetsetcraft.gang.GangChallengeController;
 import com.herberto.jetsetcraft.gang.GangMemberState;
 import com.herberto.jetsetcraft.gang.GangRegistry;
 import com.herberto.jetsetcraft.gang.HeadTargetMappingRegistry;
@@ -584,11 +586,68 @@ public final class StreetGearGameTests {
             restored.discard();
         }
 
+        assertProviderChallengeFactoryRoundTrip(helper, providerUnderTest);
+
         System.out.println("JETSETCRAFT_WAVE2_GAMEPLAY " + providerUnderTest
                 + " representative_mobs=" + representatives.size()
                 + " challenge_roundtrips=" + representatives.size()
+                + " challenge_factory_roundtrips=1"
                 + " tamable_owner_roundtrips=" + tamableChecks
                 + " provider_nbt_mutations=0");
+    }
+
+    private static void assertProviderChallengeFactoryRoundTrip(GameTestHelper helper, String providerUnderTest) {
+        String representative = switch (providerUnderTest) {
+            case "alexsmobs" -> "grizzly_bear";
+            case "alexscaves" -> "raycat";
+            case "cataclysm" -> "amethyst_crab";
+            default -> throw new GameTestAssertException("Unknown Wave 2 provider challenge lane: " + providerUnderTest);
+        };
+
+        ResourceLocation entityId = ResourceLocation.fromNamespaceAndPath(providerUnderTest, representative);
+        var profile = MobCompatibilityRegistry.profile(entityId)
+                .orElseThrow(() -> new GameTestAssertException("Wave 2 challenge representative lost profile: " + entityId));
+        if (!MobCompatibilityRegistry.boomboxAllowed(entityId)) {
+            throw new GameTestAssertException("Safe Wave 2 challenge representative was unexpectedly Boombox-gated: "
+                    + entityId);
+        }
+
+        UUID challengeId = UUID.nameUUIDFromBytes(("jetsetcraft:wave2:factory:" + entityId)
+                .getBytes(StandardCharsets.UTF_8));
+        BlockPos anchor = helper.absolutePos(new BlockPos(4, 1, 4));
+        HeadGangTargetResolver.Target target = new HeadGangTargetResolver.Target(
+                entityId, profile.gangId(), HeadGangTargetResolver.ResolutionSource.EXPLICIT_METADATA);
+
+        var spawned = GangActorFactory.spawn(helper.getLevel(), anchor, target, challengeId,
+                0, helper.getLevel().getGameTime() + 200L, 8.0D)
+                .orElseThrow(() -> new GameTestAssertException(
+                        "Actual GangActorFactory could not spawn Wave 2 challenge actor " + entityId));
+
+        if (spawned.getType() != ForgeRegistries.ENTITY_TYPES.getValue(entityId)
+                || !MobStreetGear.hasGear(spawned)
+                || !GangMemberState.matchesChallenge(spawned, challengeId)) {
+            spawned.discard();
+            throw new GameTestAssertException("Actual Wave 2 challenge actor did not retain provider type/gear/session: "
+                    + entityId);
+        }
+        GangMemberState.Snapshot challengeState = GangMemberState.snapshot(spawned);
+        if (!challengeState.present() || !challengeState.ephemeral()
+                || !profile.gangId().equals(challengeState.gangId())) {
+            spawned.discard();
+            throw new GameTestAssertException("Actual Wave 2 challenge actor had invalid ephemeral gang state: "
+                    + entityId);
+        }
+
+        UUID actorId = spawned.getUUID();
+        GangChallengeController.removeActors(helper.getLevel(), java.util.List.of(actorId), challengeId);
+        if (!spawned.isRemoved() || helper.getLevel().getEntity(actorId) != null) {
+            spawned.discard();
+            throw new GameTestAssertException("Cancelling an actual Wave 2 challenge did not remove its ephemeral actor: "
+                    + entityId);
+        }
+
+        System.out.println("JETSETCRAFT_WAVE2_CHALLENGE_FACTORY " + providerUnderTest
+                + " entity=" + entityId + " spawn_cancel=1");
     }
 
     private static CompoundTag withoutJetSetState(CompoundTag source) {
