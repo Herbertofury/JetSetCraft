@@ -66,6 +66,8 @@ public final class JetSetCommands {
             // copied QA save has cheats disabled.
             root.then(Commands.literal("visual_audit")
                         .executes(context -> visualAudit(context.getSource())));
+            root.then(Commands.literal("visual_audit_wave2_stage")
+                    .executes(context -> visualAuditWave2Stage(context.getSource())));
             root.then(Commands.literal("visual_audit_wave2")
                     .then(Commands.literal("alexsmobs")
                             .executes(context -> visualAuditWave2(context.getSource(), "alexsmobs")))
@@ -220,6 +222,60 @@ public final class JetSetCommands {
         return 1;
     }
 
+    private static int visualAuditWave2Stage(CommandSourceStack source) {
+        ServerPlayer player;
+        try {
+            player = source.getPlayerOrException();
+        } catch (CommandSyntaxException exception) {
+            source.sendFailure(Component.literal("JetSetCraft Wave 2 visual stage requires a player."));
+            return 0;
+        }
+
+        ServerLevel level = player.serverLevel();
+        BlockPos stage = wave2VisualStage(level);
+        String auditTag = "jetsetcraft_wave2_visual_audit";
+        net.minecraft.world.phys.AABB cleanup = new net.minecraft.world.phys.AABB(stage).inflate(48.0D);
+        for (Mob existing : level.getEntitiesOfClass(Mob.class, cleanup,
+                mob -> mob.getTags().contains(auditTag))) {
+            existing.discard();
+        }
+
+        // Build a dedicated neutral stage far away from the normal visual-audit wall. The previous scene reused
+        // the player's existing lab position, which let the graffiti wall fully occlude Alex's Mobs/Alex's Caves
+        // while the CI only proved that a nonblank screenshot existed.
+        for (int x = -12; x <= 12; x++) {
+            for (int z = -4; z <= 14; z++) {
+                level.setBlockAndUpdate(stage.offset(x, -1, z), Blocks.SMOOTH_STONE.defaultBlockState());
+                for (int y = 0; y <= 10; y++) {
+                    level.setBlockAndUpdate(stage.offset(x, y, z), Blocks.AIR.defaultBlockState());
+                }
+            }
+        }
+        for (int x = -12; x <= 12; x++) {
+            for (int y = 0; y <= 9; y++) {
+                level.setBlockAndUpdate(stage.offset(x, y, -3), Blocks.LIGHT_GRAY_CONCRETE.defaultBlockState());
+            }
+        }
+
+        level.setDayTime(6000L);
+        level.setWeatherParameters(0, 0, false, false);
+        BlockPos camera = stage.offset(0, 0, 11);
+        player.teleportTo(camera.getX() + 0.5D, camera.getY(), camera.getZ() + 0.5D);
+        player.setDeltaMovement(Vec3.ZERO);
+        player.setYRot(180.0F);
+        player.setXRot(2.0F);
+        JetSetCraft.LOGGER.info("JETSETCRAFT_VISUAL_WAVE2_STAGE ready stage={} camera={}",
+                stage.toShortString(), camera.toShortString());
+        return 1;
+    }
+
+    private static BlockPos wave2VisualStage(ServerLevel level) {
+        BlockPos spawn = level.getSharedSpawnPos();
+        int stageY = Math.min(level.getMaxBuildHeight() - 20,
+                Math.max(level.getMinBuildHeight() + 32, Math.max(120, spawn.getY() + 48)));
+        return new BlockPos(spawn.getX(), stageY, spawn.getZ() + 48);
+    }
+
     private static int visualAuditWave2(CommandSourceStack source, String provider) {
         ServerPlayer player;
         try {
@@ -236,8 +292,10 @@ public final class JetSetCommands {
         }
 
         ServerLevel level = player.serverLevel();
+        BlockPos stage = wave2VisualStage(level);
+        BlockPos camera = stage.offset(0, 0, 11);
         String auditTag = "jetsetcraft_wave2_visual_audit";
-        net.minecraft.world.phys.AABB cleanup = new net.minecraft.world.phys.AABB(player.blockPosition()).inflate(40.0D);
+        net.minecraft.world.phys.AABB cleanup = new net.minecraft.world.phys.AABB(stage).inflate(32.0D);
         for (Mob existing : level.getEntitiesOfClass(Mob.class, cleanup,
                 mob -> mob.getTags().contains(auditTag))) {
             existing.discard();
@@ -264,7 +322,6 @@ public final class JetSetCommands {
         };
         if (subjects.isEmpty()) return 0;
 
-        BlockPos camera = player.blockPosition();
         int[] xOffsets = {-6, -2, 2, 6};
         int spawned = 0;
         for (int index = 0; index < subjects.size(); index++) {
@@ -281,15 +338,18 @@ public final class JetSetCommands {
                 JetSetCraft.LOGGER.error("JETSETCRAFT_VISUAL_WAVE2_NOT_MOB {}", id);
                 continue;
             }
-            BlockPos pos = camera.offset(xOffsets[index], 0, -6);
-            mob.moveTo(pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D, 0.0F, 0.0F);
+
+            // Keep tiny fliers/aquatics visually centered while leaving large bosses grounded. Every subject faces
+            // south toward the camera; the dedicated backdrop guarantees they cannot be hidden behind the old lab.
+            double subjectY = stage.getY() + Math.max(0.05D, 2.25D - mob.getBbHeight() * 0.5D);
+            mob.moveTo(stage.getX() + xOffsets[index] + 0.5D, subjectY, stage.getZ() + 0.5D,
+                    0.0F, 0.0F);
             mob.setNoAi(true);
             mob.setNoGravity(true);
             mob.setInvulnerable(true);
             mob.setPersistenceRequired();
             mob.addTag(auditTag);
-            mob.setCustomName(Component.literal(subject.path().replace('_', ' ')));
-            mob.setCustomNameVisible(true);
+            mob.setCustomNameVisible(false);
             if (!level.addFreshEntity(mob)) {
                 mob.discard();
                 JetSetCraft.LOGGER.error("JETSETCRAFT_VISUAL_WAVE2_ADD_FAILED {}", id);
@@ -302,14 +362,19 @@ public final class JetSetCommands {
                 continue;
             }
             JetSetNetwork.syncMobGear(player, mob);
+            ResourceLocation gearId = ForgeRegistries.ITEMS.getKey(subject.gear().get());
+            JetSetCraft.LOGGER.info(
+                    "JETSETCRAFT_VISUAL_WAVE2_SLOT {} slot={} entity={} gear={} width={} height={} pos={}",
+                    provider, index, id, gearId, mob.getBbWidth(), mob.getBbHeight(), mob.blockPosition().toShortString());
             spawned++;
         }
 
         player.teleportTo(camera.getX() + 0.5D, camera.getY(), camera.getZ() + 0.5D);
+        player.setDeltaMovement(Vec3.ZERO);
         player.setYRot(180.0F);
-        player.setXRot(4.0F);
-        JetSetCraft.LOGGER.info("JETSETCRAFT_VISUAL_WAVE2_SCENE {} spawned={}/{} camera={}",
-                provider, spawned, subjects.size(), camera.toShortString());
+        player.setXRot(2.0F);
+        JetSetCraft.LOGGER.info("JETSETCRAFT_VISUAL_WAVE2_SCENE {} spawned={}/{} stage={} camera={}",
+                provider, spawned, subjects.size(), stage.toShortString(), camera.toShortString());
         return spawned == subjects.size() ? 1 : 0;
     }
 
