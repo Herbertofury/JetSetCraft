@@ -57,6 +57,16 @@ public final class ClientVisualAudit {
             minecraft.options.setCameraType(CameraType.FIRST_PERSON);
             minecraft.player.connection.sendCommand("jetsetcraft visual_audit_wave2_stage");
         }
+
+        // Server-side setYRot is not an authoritative client camera command. Lock the local audit camera every
+        // frame after the stage teleport so the screenshot cannot silently face away from the provider stage.
+        if (worldTicks >= 345) {
+            minecraft.player.setYRot(180.0F);
+            minecraft.player.setXRot(2.0F);
+            minecraft.player.yRotO = 180.0F;
+            minecraft.player.xRotO = 2.0F;
+        }
+
         if (worldTicks == 380) capture(minecraft, "wave2-stage-empty");
 
         if ("all".equals(wave2Provider)) {
