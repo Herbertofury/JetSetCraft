@@ -9,6 +9,7 @@
 **[✨ Feature Overview](Feature-Overview)**
 
 ### 🎮 Ride & Flow
+- [🏁 Terrain-Aware Circuits & Boss Arenas](Terrain‐Aware-Event-Circuits-and-Boss-Arenas)
 - [🎛️ Controls](Controls)
 - [🛼 Ride Styles](Ride-Styles)
 - [⚡ Tricks, Combos & Flow](Tricks-Combos-and-Flow)
@@ -17,10 +18,25 @@
 - [🌍 World Physics](World-Physics)
 
 ### 🎨 Street Culture
+- [MoccaSins — Music & Unlockable Names](MoccaSins)
+- [💥 Krumpaz — Krump Crew](Krumpaz)
+- [👟 Footworkas — Chicago Footwork](Footworkas)
+- [🎶 Reactive Music, Dances & Mob Bosses](https://github.com/Herbertofury/JetSetCraft/wiki/Music%E2%80%90Driven-Dances-and-Mob%E2%80%90Themed-Bosses)
+- [⚡ Hardtekkas & Tekkistas To-dos](https://github.com/Herbertofury/JetSetCraft/wiki/Hardtekkas)
+- [🔊 Phonkistas & To-dos](https://github.com/Herbertofury/JetSetCraft/wiki/Phonkistas)
+- [🎹 Cumbias Rival Gang & To-dos](https://github.com/Herbertofury/JetSetCraft/wiki/Cumbias%E2%80%90and%E2%80%90Multi%E2%80%90Rival%E2%80%90Gang%E2%80%90War)
+- [🔥 Gabberina's Campaign & To-dos](https://github.com/Herbertofury/JetSetCraft/wiki/Gabberinas%E2%80%90and%E2%80%90Gang%E2%80%90War%E2%80%90Campaign)
 - [🎨 Graffiti](Graffiti)
-- [📻 Gang Wars, Boombox & Mob Atlas](Gang-Wars-Boombox-and-Mob-Atlas)
 - [🗺️ Hangouts, Territory & Reputation](Hangouts-Territory-and-Reputation)
 - [👥 Chapters, Posse & Mob Archetypes](Player-Chapters-Posse-and-Mob-Archetypes)
+
+### 🐾 Mob Gangs
+
+- [📖 Mob Gangs — Overview](Mob-Gangs)
+- [⛏️ Vanilla Mob Gangs & Juniors](Vanilla-Mob-Gangs)
+- [🧩 Modded Mob Gangs](Modded-Mob-Gangs)
+- [🎵 Per-Mob Music, Dance, Art & Unlocks](Gang-Profile-and-Reference-Standard)
+- [📻 Gang Wars & Boombox Master Spec](Gang-Wars-Boombox-and-Mob-Atlas)
 
 ### 🔬 Inspiration & Research
 - [🧭 Research Atlas](Inspiration-and-Research)
@@ -43,3 +59,4 @@
 - [🧯 Troubleshooting](Troubleshooting)
 - [❓ FAQ](FAQ)
 - [🗺️ Roadmap](Roadmap)
+
