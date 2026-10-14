@@ -72,3 +72,24 @@ All receive distinctive sounds, animations, unlocks, customization and applicabl
 
 Primary movement references: [Bomb Rush Cyberfunk](https://store.steampowered.com/app/1353230/Bomb_Rush_Cyberfunk/), [HYPERFUNK](https://store.steampowered.com/app/3183480/HYPERFUNK/). See the [research comparison](Ride-Research-and-New-Styles) for other sources.
 
+## Wingsuit plus every ride: required combination system
+The wingsuit must work with **all ride styles**, including the existing six and the approved snowboard, skis, ice skates, mountain bike, aquatic carveboard and mountainboard. It is a composable glide layer over the equipped ride, not a mutually exclusive replacement. Compatible boostpacks remain usable in the combination.
+
+- Let players launch from a grind, jump, wall-ride, bike ramp, snow slope or water breach, deploy the wingsuit, perform style-specific aerial tricks, then land or reattach to a rail without resetting the combo solely because the movement mode changed.
+- Bikes/boards/skates remain visibly equipped with appropriate tucked, carried or riding poses; wing/pack deployment needs collision-free animation and readable silhouette.
+- Use explicit ground, airborne, gliding, boosting, grinding and submerged transitions. Deploying wings does not grant a fresh jump/boost resource or erase fall risk for free.
+- Keep underwater ride behavior intact: wings fold while submerged, with deliberate breach-to-glide and glide-to-water transitions rather than forcing air-glide physics underwater.
+- Support every combination with keyboard/controller input, safe dismount, multiplayer synchronization, first/third-person cameras and recovery from failed landings.
+- Course scoring rewards creative combinations and clean transitions; prevent repeating mode switches from generating trick score or ammo without a real maneuver.
+- Test every ride × wingsuit and every ride × wingsuit × boostpack combination, including low/high speed, water, rails, death, disconnect and dimension changes.
+
+### Crafting requires vanilla elytra
+The **vanilla wings are called Elytra**, and an elytra is a required consumed ingredient in the wingsuit recipe. Other materials and recipe shape are balancing/design decisions still to specify; do not quietly replace this requirement with an easy early-game recipe.
+
+Crafting is a one-to-one upgrade transaction: one eligible elytra becomes one wingsuit. Preserve its supported enchantments, custom name, prior-work/repair metadata and remaining durability proportion through a documented conversion. If an enchantment or metadata field cannot be represented, reject with a clear explanation or provide a reviewed lossless migration; do not silently erase valuable equipment data.
+
+A plain recipe output that discards input ItemStack metadata is insufficient. Implement and test an input-aware crafting result, including repair limits, damaged and enchanted inputs, full inventories, shift-click crafting, automation and rollback. If a future disassembly recipe is added, it must never duplicate the original elytra or its enchantments.
+
+Mending, Unbreaking and the glide durability/repair policy need explicit compatibility tests. Exact support must be verified against the actual target build; this section states the required behavior, not completed runtime support.
+
+

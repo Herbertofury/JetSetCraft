@@ -38,6 +38,8 @@ These are **approved development requirements**, not claims of released or teste
 | Aquatic Carveboard | Surface carving, breach jumps, underwater slaloms and barrel rolls | Ocean/water-mob challenges and surface-to-submerged routes | Hull/deck, fins, pads, propulsion module, wake and underwater trail |
 | Mountainboard | Off-road carving, powerslides, grabs and rough-ground jumps | Dirt trails, roots, forest gaps and natural terrain | Deck, trucks, pneumatic wheels/tires, bearings and bindings |
 
+**Wingsuit combinations:** Wingsuits must work with every ride, including ride + wingsuit + boostpack builds. Launch from a grind/ramp/jump/water breach, glide and perform aerial tricks, then land back into the ride without resetting the combo just for switching movement modes. Wings fold underwater, with explicit breach-to-glide transitions. The crafting recipe must consume a vanilla **elytra**, preserving supported enchantments, name and durability through an input-aware, duplication-safe upgrade. [Detailed combination and crafting requirements](Approved-Ride-Expansion-and-Trick-Combat#wingsuit-plus-every-ride-required-combination-system).
+
 Aquatic Carveboard is a specialist; other compatible rides still support the requested underwater skating and tricks. Wingsuit flight is a distinct movement mode with explicit equipment compatibility, not an excuse to overwrite vanilla armor or backpack slots.
 
 ## Earnable, customizable boostpack
