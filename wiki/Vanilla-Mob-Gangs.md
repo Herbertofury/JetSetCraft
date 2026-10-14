@@ -8,6 +8,10 @@ Individual music and dance references and finished art are pending unless explic
 
 The original atlas lists Spider in both conditional and hostile contexts; this is one entity/crew, not two collectibles. Warden and Elder Guardian likewise cross-link to their special-encounter treatment. The listed disposition is design lineage, not permission to rewrite source AI; Pufferfish remains a defensive source creature despite the historical hostile-section placement. Technical entities stay opt-in.
 
+## Newer releases and upcoming mobs
+
+The original roster below is the 1.20.1-era foundation. The restored [Modern and Upcoming Mob Gangs](Modern-and-Upcoming-Mob-Gangs) adds the approved 13 modern entries, 23 Sift crews and five legendary identities, with released/testing/planned status and source links.
+
 ## Friendly and passive-start
 
 | Vanilla mob | Default gang name | Design hook |
@@ -106,7 +110,7 @@ The original atlas lists Spider in both conditional and hostile contexts; this i
 | Wither | Triple Threat | legendary multi-head boss challenge |
 | Warden | Deep Cuts | ultra-rare elite crew/leader encounter |
 | Elder Guardian | Ancient Current | elite monument crew |
-| Zombie Horse | Night Mares | proposed special/technical crew; hidden unless available/enabled |
+| Zombie Horse | Night Mares | version-dependent: technical/special on older builds; newer Mounts of Mayhem/provider support permits normal mounted encounters; preserve Night Mares identity |
 | Illusioner | Smoke & Mirrors | hidden/technical entry unless explicitly enabled |
 | Giant | Dead Beat Titan | hidden/technical Dead Beat boss variant |
 

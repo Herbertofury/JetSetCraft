@@ -1,5 +1,7 @@
 # Ride Research and New Styles
 
+**Scope update:** The user has now approved seven new equipment styles, a customizable earnable boostpack and trick-based ammunition replenishment. [Approved expansion and combat requirements](Approved-Ride-Expansion-and-Trick-Combat) supersede earlier proposal-only wording about that scope. Implementation remains pending.
+
 Research checked 2026-10-14. Recommendations below are **proposals for JetSetCraft**, not claims of implemented support or announcements by the reference games. Preserve the existing six [Ride Styles](Ride-Styles).
 
 ## What the reference games actually contribute

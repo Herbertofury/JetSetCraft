@@ -14,6 +14,7 @@
 - [🛼 Ride Styles](Ride-Styles)
 - [🛠️ Ride Workshop, Parts & Enchantments](Ride-Workshop,-Parts-and-Enchantments)
 - [🏂 Ride Research & New Styles](Ride-Research-and-New-Styles)
+- [🚀 Approved Rides, Boostpack & Trick Combat](Approved-Ride-Expansion-and-Trick-Combat)
 - [⚡ Tricks, Combos & Flow](Tricks-Combos-and-Flow)
 - [🕺 Breakdance & Cyphers](Breakdance-and-Cyphers)
 - [🛤️ Grinding & Transfers](Grinding-and-Transfers)
@@ -36,6 +37,7 @@
 
 - [📖 Mob Gangs — Overview](Mob-Gangs)
 - [⛏️ Vanilla Mob Gangs & Juniors](Vanilla-Mob-Gangs)
+- [🌌 Modern, Upcoming & Sift Gangs](Modern-and-Upcoming-Mob-Gangs)
 - [🧩 Modded Mob Gangs](Modded-Mob-Gangs)
 - [🎵 Per-Mob Music, Dance, Art & Unlocks](Gang-Profile-and-Reference-Standard)
 - [📻 Gang Wars & Boombox Master Spec](Gang-Wars-Boombox-and-Mob-Atlas)

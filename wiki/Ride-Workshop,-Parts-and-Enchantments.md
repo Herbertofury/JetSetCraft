@@ -1,5 +1,7 @@
 # Ride Workshop, Parts and Enchantments
 
+**Scope update:** The user has now approved seven new equipment styles, a customizable earnable boostpack and trick-based ammunition replenishment. [Approved expansion and combat requirements](Approved-Ride-Expansion-and-Trick-Combat) supersede earlier proposal-only wording about that scope. Implementation remains pending.
+
 Status: **approved design requirements and implementation backlog**, 2026-10-14. This page does not claim the workshop, new enchantments or additional ride classes are implemented.
 
 ## Baseline to preserve

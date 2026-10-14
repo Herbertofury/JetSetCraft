@@ -1,5 +1,7 @@
 # Mob Gangs
 
+**Latest roster expansion:** [Modern and Upcoming Mob Gangs](Modern-and-Upcoming-Mob-Gangs) restores the previously approved Sift and modern-Minecraft catch-up identities, including naming-rights unlocks and verified release/snapshot distinctions.
+
 The creature crews of JetSetCraft: individual mob identities, music, dances, signature techniques, rivalries, collectible graffiti and recruitment. This is a separate wiki section directly below **Street Culture**. Human music-genre crews remain in Street Culture; this section covers the source mobs they encounter, recruit and compete to control.
 
 ## Browse the atlas
