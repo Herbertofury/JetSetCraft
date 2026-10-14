@@ -12,6 +12,8 @@
 - [🏁 Terrain-Aware Circuits & Boss Arenas](Terrain‐Aware-Event-Circuits-and-Boss-Arenas)
 - [🎛️ Controls](Controls)
 - [🛼 Ride Styles](Ride-Styles)
+- [🛠️ Ride Workshop, Parts & Enchantments](Ride-Workshop,-Parts-and-Enchantments)
+- [🏂 Ride Research & New Styles](Ride-Research-and-New-Styles)
 - [⚡ Tricks, Combos & Flow](Tricks-Combos-and-Flow)
 - [🕺 Breakdance & Cyphers](Breakdance-and-Cyphers)
 - [🛤️ Grinding & Transfers](Grinding-and-Transfers)
