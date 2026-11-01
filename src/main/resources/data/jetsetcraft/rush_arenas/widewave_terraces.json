@@ -1,0 +1,17 @@
+{
+  "name": "Widewave Terraces",
+  "description": "Bright quartz and cyan lines open into rising terraces. Sweep between the levels to grow ability area and bring training progress home to your crew.",
+  "radius": 32,
+  "seconds": 180,
+  "defeats": 12,
+  "layout": "terraces",
+  "reward": "area",
+  "reward_ranks": 1,
+  "shared_reward": "training",
+  "palette": {
+    "floor": "minecraft:smooth_quartz",
+    "accent": "minecraft:cyan_concrete",
+    "wall": "minecraft:blue_concrete",
+    "rail": "minecraft:iron_bars"
+  }
+}

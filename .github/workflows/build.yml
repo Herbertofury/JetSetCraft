@@ -80,7 +80,7 @@ jobs:
             sleep 20
           done
 
-      - name: Run nineteen real Forge GameTests
+      - name: Run all real Forge GameTests
         shell: bash
         run: |
           set -euo pipefail
@@ -106,11 +106,21 @@ jobs:
             'JETSETCRAFT_GAMETEST_PASS crew_house' \
             'JETSETCRAFT_GAMETEST_PASS crew_missions' \
             'JETSETCRAFT_GAMETEST_PASS crew_persistence' \
-            'JETSETCRAFT_GAMETEST_PASS crew_rush'; do
+            'JETSETCRAFT_GAMETEST_PASS crew_rush' \
+            'JETSETCRAFT_GAMETEST_PASS activity_progression' \
+            'JETSETCRAFT_GAMETEST_PASS activity_tag' \
+            'JETSETCRAFT_GAMETEST_PASS activity_safety' \
+            'JETSETCRAFT_GAMETEST_PASS activity_hill' \
+            'JETSETCRAFT_GAMETEST_PASS rush_spell_relay' \
+            'JETSETCRAFT_GAMETEST_PASS activity_dimension_return' \
+            'JETSETCRAFT_GAMETEST_PASS rush_arena_catalogue' \
+            'JETSETCRAFT_GAMETEST_PASS rush_arena_rules' \
+            'JETSETCRAFT_GAMETEST_PASS rush_arena_session'; do
             grep -Fq "$marker" "$log" || { echo "::error::Missing GameTest marker: $marker"; exit 1; }
           done
-          grep -Eq 'All 19 required tests passed|19 tests? passed' "$log" || {
-            echo '::error::Forge did not report all nineteen GameTests passing.'
+          expected_tests=$(python -c "import pathlib,re; print(sum(len(re.findall(r'@GameTest\\s*\\(', p.read_text()) ) for p in pathlib.Path('src/main/java/com/herberto/jetsetcraft/gametest').glob('*.java')))")
+          grep -Eq "All ${expected_tests} required tests passed|${expected_tests} tests? passed" "$log" || {
+            echo '::error::Forge did not report every declared GameTest passing.'
             exit 1
           }
 
@@ -191,7 +201,7 @@ jobs:
           fi
           test -s run/world/level.dat
 
-      - name: Verify Rival Rush and crew houses in a real Minecraft client
+      - name: Verify activities, arena journeys and crew houses in a real Minecraft client
         shell: bash
         env:
           LIBGL_ALWAYS_SOFTWARE: "true"
@@ -217,12 +227,13 @@ jobs:
           timeout 300s xvfb-run -a -s '-screen 0 1280x720x24' ./gradlew runClient -Djetsetcraft.rushVisualAudit=true --no-daemon 2>&1 | tee "$log"
           grep -Fq 'JETSETCRAFT_RUSH_VISUAL_AUDIT_PASS' "$log"
           grep -Fq 'JETSETCRAFT_CREW_VISUAL_AUDIT_PASS' "$log"
+          grep -Fq 'JETSETCRAFT_ACTIVITY_VISUAL_AUDIT_PASS' "$log"
           grep -Fq 'JETSETCRAFT_RUSH_VISUAL_AUDIT_FIXTURE_OBSERVED' "$log"
           if grep -Fq 'JETSETCRAFT_RUSH_VISUAL_AUDIT_FAIL' "$log"; then
             echo '::error::Rival Rush client audit reported failure.'
             exit 1
           fi
-          for capture in 01-setup 02-district-hud 03-album 04-return-result 05-crew-home 06-crew-roster 07-crew-facilities 08-crew-jobs; do
+          for capture in 01-setup 02-district-hud 03-album 04-return-result 05-crew-home 06-crew-roster 07-crew-facilities 08-crew-jobs 09-activities 10-arena-route; do
             grep -Fq "JETSETCRAFT_RUSH_VISUAL_AUDIT_CAPTURE $capture " "$log"
             compgen -G "run/screenshots/rival-rush-*-$capture.png" >/dev/null
           done

@@ -1,0 +1,17 @@
+{
+  "name": "Relic Relay",
+  "description": "A violet loop wraps around pale End-stone markers. Keep a flowing line through the rivals and finish with an artifact for your build plus shared crew progress.",
+  "radius": 36,
+  "seconds": 210,
+  "defeats": 16,
+  "layout": "loop",
+  "reward": "relic",
+  "reward_ranks": 1,
+  "shared_reward": "balanced",
+  "palette": {
+    "floor": "minecraft:purpur_block",
+    "accent": "minecraft:end_stone_bricks",
+    "wall": "minecraft:purple_concrete",
+    "rail": "minecraft:end_stone_brick_wall"
+  }
+}

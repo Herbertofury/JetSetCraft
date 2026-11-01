@@ -10,6 +10,15 @@ base { archivesName = "${mod_id}-${minecraft_version}" }
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 def wave2Provider = providers.gradleProperty('wave2Provider').orElse('').get().trim()
+def validProviderSelections = ['', 'alexsmobs', 'alexscaves', 'cataclysm', 'all',
+                               'aether', 'irons_spells', 'aoa', 'adventure_all']
+if (!validProviderSelections.contains(wave2Provider)) {
+    throw new GradleException("Unknown -Pwave2Provider=" + wave2Provider)
+}
+// Keep the existing exhaustive Wave 2 roster test scoped to its curated namespaces. The new
+// adventure lanes use their own presence/behavior proofs, not fabricated Wave 2 manifests.
+def wave2RosterProvider = ['aether', 'irons_spells', 'aoa'].contains(wave2Provider) ? '' :
+                         (wave2Provider == 'adventure_all' ? 'cataclysm' : wave2Provider)
 
 minecraft {
     mappings channel: 'official', version: minecraft_version
@@ -19,7 +28,8 @@ minecraft {
             workingDirectory project.file('run')
             property 'forge.logging.markers', 'REGISTRIES'
             property 'forge.logging.console.level', 'info'
-            property 'jetsetcraft.wave2Provider', wave2Provider
+            property 'jetsetcraft.wave2Provider', wave2RosterProvider
+            property 'jetsetcraft.providerSelection', wave2Provider
             // Production provider jars ship SRG/refmap mixin targets. ForgeGradle's named userdev runtime
             // must remap those targets for GameTest/server verification; production Minecraft does not need this.
             if (!wave2Provider.isEmpty()) {
@@ -72,15 +82,14 @@ dependencies {
     // Create 6.0.8 is optional at runtime; the official slim artifact compiles the native track geometry adapter.
     compileOnly fg.deobf("com.simibubi.create:create-1.20.1:6.0.8-289:slim") { transitive = false }
 
-    // Wave 2 provider-present verification is opt-in. These never enter JetSetCraft's normal runtime dependency set
+    // Provider-present verification is opt-in. These never enter JetSetCraft's normal runtime dependency set
     // or mods.toml, so production remains fully optional/fail-soft when the provider is absent.
-    def validWave2Providers = ['', 'alexsmobs', 'alexscaves', 'cataclysm', 'all']
-    if (!validWave2Providers.contains(wave2Provider)) {
-        throw new GradleException("Unknown -Pwave2Provider=" + wave2Provider)
-    }
     def testAlexsMobs = wave2Provider == 'alexsmobs' || wave2Provider == 'all'
     def testAlexsCaves = wave2Provider == 'alexscaves' || wave2Provider == 'all'
-    def testCataclysm = wave2Provider == 'cataclysm' || wave2Provider == 'all'
+    def testCataclysm = ['cataclysm', 'all', 'adventure_all'].contains(wave2Provider)
+    def testAether = wave2Provider == 'aether' || wave2Provider == 'adventure_all'
+    def testIronsSpells = wave2Provider == 'irons_spells' || wave2Provider == 'adventure_all'
+    def testAoA = wave2Provider == 'aoa' || wave2Provider == 'adventure_all'
 
     if (testAlexsMobs || testAlexsCaves) {
         runtimeOnly fg.deobf("curse.maven:citadel-331936:7476570") // Citadel 2.6.3, shared by both Alex providers
@@ -91,10 +100,32 @@ dependencies {
     if (testAlexsCaves) {
         runtimeOnly fg.deobf("curse.maven:alexs-caves-924854:5848216") // Alex's Caves 2.0.2
     }
-    if (testCataclysm) {
+    // Resolve common libraries once, including releases with older embedded copies. Forge's
+    // provider-present lane must prove the actual resolved combination; build pins alone do not.
+    if (testCataclysm || testAether || testIronsSpells) {
         runtimeOnly fg.deobf("curse.maven:curios-309927:6418456") // Curios 5.14.1+1.20.1
+    }
+    if (testIronsSpells || testAoA) {
+        runtimeOnly fg.deobf("curse.maven:geckolib-388172:5386948") // GeckoLib Forge 1.20.1 4.4.5
+    }
+    if (testCataclysm) {
         runtimeOnly fg.deobf("curse.maven:lionfish-api-1001614:8095554") // Lionfish API 3.0
         runtimeOnly fg.deobf("curse.maven:lendercataclysm-551586:8246047") // L_Ender's Cataclysm 3.31
+    }
+    if (testAether) {
+        // This 1.20.1 release is explicitly listed for Forge AND NeoForge despite its suffix.
+        // Nitrogen, Cumulus and MixinExtras are included in the official release archive.
+        runtimeOnly fg.deobf("curse.maven:aether-255308:6134920") // Aether 1.20.1-1.5.2-neoforge
+    }
+    if (testIronsSpells) {
+        runtimeOnly fg.deobf("curse.maven:caelus-308989:4581481") // Caelus 3.1.0+1.20
+        // PlayerAnimator is already present above; never add a second animation-library artifact.
+        runtimeOnly fg.deobf("curse.maven:irons-spells-n-spellbooks-855414:5765121") // 1.20.1-3.4.0.2
+    }
+    if (testAoA) {
+        // Exact Forge 1.20.1 beta, not a later NeoForge-only release or the legacy full-dimension roster.
+        // The all.jar also embeds SmartBrainLib 1.13, TslatEffectsLib 1.7 and HSQLDB 2.7.2.
+        runtimeOnly fg.deobf("curse.maven:advent-of-ascension-nevermine-311054:4988685") // AoA 3.7.1
     }
 }
 

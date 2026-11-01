@@ -1,0 +1,17 @@
+{
+  "name": "Greenroom Steps",
+  "description": "Mossy stone and lime markers spread across roomy terraces. Take the long line, find space to recover and bring fresh training progress back to your crew.",
+  "radius": 40,
+  "seconds": 240,
+  "defeats": 20,
+  "layout": "terraces",
+  "reward": "recovery",
+  "reward_ranks": 1,
+  "shared_reward": "training",
+  "palette": {
+    "floor": "minecraft:mossy_stone_bricks",
+    "accent": "minecraft:lime_concrete",
+    "wall": "minecraft:green_concrete",
+    "rail": "minecraft:mossy_stone_brick_wall"
+  }
+}

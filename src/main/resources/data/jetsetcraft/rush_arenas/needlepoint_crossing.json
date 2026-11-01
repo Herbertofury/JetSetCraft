@@ -1,0 +1,17 @@
+{
+  "name": "Needlepoint Crossing",
+  "description": "Magenta markers split dark stone into crossing lines. Cut around the wall sections, pick clean angles and build critical hits and crew reputation.",
+  "radius": 28,
+  "seconds": 150,
+  "defeats": 10,
+  "layout": "cross",
+  "reward": "critical",
+  "reward_ranks": 1,
+  "shared_reward": "reputation",
+  "palette": {
+    "floor": "minecraft:polished_deepslate",
+    "accent": "minecraft:magenta_concrete",
+    "wall": "minecraft:black_concrete",
+    "rail": "minecraft:polished_blackstone_wall"
+  }
+}

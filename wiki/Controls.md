@@ -58,3 +58,9 @@ Ground acceleration is delivered as responsive skate-push pulses. Powerslides st
 **Ground stunt:** press R at low speed or while braking, manualing, or powersliding. The ride gear temporarily disappears into the loadout while the full-body breakdance move plays, then returns automatically.
 
 **Perfect landing:** land a sufficiently long air sequence with low impact. Holding Manual during a controlled touchdown can protect a clean grade. Hard impacts still land but receive a lower grade.
+
+## Activity chooser and arena circuit
+
+Use a tuned Boombox with an empty hand to open **Tag / King of the Hill / Crew showdown / Rival Rush**, or choose **Surprise me**. `/jetsetcraft activity` opens a random preview, and `/jetsetcraft activity cancel` cancels a street game. A preview requires explicit acceptance. Rival Rush entry is optional and its menu always offers **Return to Minecraft**.
+
+Rush setup also offers **Free streets** and **Arena circuit**. The circuit shows three next-room rewards; choose a room, return to riding, and follow the lit connection. The Journey HUD shows distance and arena progress. Upgrade drafts and route choices use the mouse/menu controls and pause that player's run. No extra movement keys are required.

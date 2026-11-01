@@ -1,6 +1,7 @@
 package com.herberto.jetsetcraft.blockentity;
 
 import com.herberto.jetsetcraft.block.BoomboxBlock;
+import com.herberto.jetsetcraft.activity.ActivityManager;
 import com.herberto.jetsetcraft.gang.GangChallengeController;
 import com.herberto.jetsetcraft.gang.GangDefinition;
 import com.herberto.jetsetcraft.gang.GangRegistry;
@@ -315,6 +316,13 @@ public final class BoomboxBlockEntity extends BlockEntity {
     }
 
     public static void serverTick(Level level, BlockPos pos, BlockState state, BoomboxBlockEntity boombox) {
-        if (level instanceof ServerLevel server) GangChallengeController.tick(server, pos, boombox);
+        if (level instanceof ServerLevel server) {
+            GangChallengeController.tick(server, pos, boombox);
+            // Live activities deliberately do not resume after a crash or unloaded-area cancellation.
+            // Repair only the stale light/comparator state; never infer a completed game from absent actors.
+            if (!boombox.isChallengeActive() && state.getValue(BoomboxBlock.ACTIVE)
+                    && !ActivityManager.anchorActive(server, pos))
+                level.setBlock(pos, state.setValue(BoomboxBlock.ACTIVE, false), Block.UPDATE_ALL);
+        }
     }
 }

@@ -1,0 +1,30 @@
+{
+  "name": "Cloudline Circuit",
+  "description": "Quicksoil accent strips carry speed through a pale holystone loop. Ride the translucent edges, keep the pickups flowing and bring training progress home.",
+  "requires_mod": "aether",
+  "radius": 32,
+  "seconds": 180,
+  "defeats": 12,
+  "layout": "loop",
+  "reward": "magnet",
+  "reward_ranks": 1,
+  "shared_reward": "training",
+  "palette": {
+    "floor": [
+      "aether:holystone_bricks",
+      "minecraft:smooth_stone"
+    ],
+    "accent": [
+      "aether:quicksoil_glass",
+      "minecraft:light_blue_concrete"
+    ],
+    "wall": [
+      "aether:aerogel",
+      "minecraft:white_stained_glass"
+    ],
+    "rail": [
+      "aether:quicksoil_glass_pane",
+      "minecraft:iron_bars"
+    ]
+  }
+}

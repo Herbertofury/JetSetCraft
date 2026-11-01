@@ -20,6 +20,17 @@ public final class RushRun {
         VITALITY("Second wind", "Add 12 maximum run vitality and recover that amount.", 8),
         RECOVERY("Easy breathing", "Recover more run vitality between threats.", 6),
         FLOW("Style dividends", "Increase mode-only style rewards by 10% per rank.", 6),
+        PRECISION("Critical rhythm", "Add 5 percentage points to paint critical chance per rank; capped at 35%.", 6),
+        CRITICAL("Finishing touch", "Critical hits deal an additional 25% base damage per rank.", 6),
+        AMPLITUDE("Bigger chorus", "Increase paint and artifact area by 12% per rank.", 6),
+        RESONANCE("Fast rewind", "Reduce artifact intervals by 8% per rank, with a bounded minimum.", 6),
+        CHAIN("Arc paint", "Paint hits chain to nearby rivals. One of three artifact slots.", 4),
+        FIREWORK("Firework cap", "Every sixth paint hit bursts around its target. One of three artifact slots.", 4),
+        WIND("Bass horn", "Periodically push nearby rivals away and stagger them. One of three artifact slots.", 4),
+        SHOCKWAVE("Rail shockwave", "Moving tricks, grinds and wall rides send a damaging forward pulse. One of three artifact slots.", 4),
+        TEMPO("Tempo drive", "Every eighth defeat gives a short firing-rate burst. One of three artifact slots.", 4),
+        SOUL("Soul mixtape", "Defeats charge a small automatic recovery pulse. One of three artifact slots.", 4),
+        SPELL_RELAY("Firebolt relay", "Launch a real Iron's Spells Firebolt at intervals. Optional provider; one artifact slot.", 4),
         REPAIR("Fresh wheels", "Recover half your maximum run vitality now.", 0),
         CACHE("Victory lap", "Bank a chapter-scaled score bonus; no vanilla reward.", 0),
         SURGE("Overdrive", "Refresh a 15-second, 25% tag-damage surge.", 0);
@@ -38,6 +49,12 @@ public final class RushRun {
         public String description() { return description; }
         public int maxRank() { return maxRank; }
         public boolean repeatable() { return maxRank == 0; }
+        public boolean artifact() {
+            return switch (this) {
+                case CHAIN, FIREWORK, WIND, SHOCKWAVE, TEMPO, SOUL, SPELL_RELAY -> true;
+                default -> false;
+            };
+        }
     }
 
     private final UUID id;
@@ -49,6 +66,8 @@ public final class RushRun {
     private boolean awaitingEncore;
     private boolean finished;
     private boolean startingPerkGranted;
+    private boolean circuit;
+    private boolean spellRelayAvailable;
     private long elapsedTicks;
     private long xp;
     private long score;
@@ -56,6 +75,10 @@ public final class RushRun {
     private int level = 1;
     private int offerVersion;
     private int surgeTicks;
+    private int magnetTicks;
+    private int tempoTicks;
+    private int soulCharge;
+    private long hits;
     private double vitality = 100.0D;
     private List<Upgrade> offers = List.of();
 
@@ -89,18 +112,58 @@ public final class RushRun {
     public int rank(Upgrade upgrade) { return ranks.getOrDefault(upgrade, 0); }
     public long chapter() { return elapsedTicks / 6000L + 1L; }
     public double damageMultiplier() { return (1.0D + rank(Upgrade.FORCE) * 0.15D) * (surgeTicks > 0 ? 1.25D : 1.0D); }
-    public double cadenceMultiplier() { return Math.max(0.35D, 1.0D - rank(Upgrade.CADENCE) * 0.07D); }
-    public double splashRadius() { return 1.5D + rank(Upgrade.SPLASH) * 0.3D; }
-    public double pickupRadius() { return 3.0D + rank(Upgrade.PICKUP) * 1.5D; }
+    public double cadenceMultiplier() { return Math.max(0.25D, (1.0D - rank(Upgrade.CADENCE) * 0.07D) * (tempoTicks > 0 ? 0.7D : 1.0D)); }
+    public double splashRadius() { return (1.5D + rank(Upgrade.SPLASH) * 0.3D) * areaMultiplier(); }
+    public double pickupRadius() { return magnetTicks > 0 ? 128.0D : 3.0D + rank(Upgrade.PICKUP) * 1.5D; }
     public double recoveryPerSecond() { return rank(Upgrade.RECOVERY) * 0.35D; }
     public double flowMultiplier() { return 1.0D + rank(Upgrade.FLOW) * 0.1D; }
+    public double criticalChance() { return 0.05D + rank(Upgrade.PRECISION) * 0.05D; }
+    public double criticalMultiplier() { return 1.5D + rank(Upgrade.CRITICAL) * 0.25D; }
+    public double areaMultiplier() { return 1.0D + rank(Upgrade.AMPLITUDE) * 0.12D; }
+    public double artifactIntervalMultiplier() { return Math.max(0.5D, 1.0D - rank(Upgrade.RESONANCE) * 0.08D); }
+    public int soulCharge() { return soulCharge; }
+    public long hits() { return hits; }
+    public boolean circuit() { return circuit; }
+    public int artifactCount() { return (int) ranks.keySet().stream().filter(u -> u.artifact() && rank(u) > 0).count(); }
+    public void configureCircuit() { if (elapsedTicks == 0L) circuit = true; }
+    public void enableSpellRelay(boolean available) { spellRelayAvailable = available; }
+    public boolean canAdvance(Upgrade upgrade) {
+        return upgrade != null && !upgrade.repeatable() && rank(upgrade) < upgrade.maxRank()
+                && (upgrade != Upgrade.SPELL_RELAY || spellRelayAvailable)
+                && (!upgrade.artifact() || rank(upgrade) > 0 || artifactCount() < 3);
+    }
+
+    /** Server-earned arena/POI reward. Full builds receive useful score instead of an unusable rank. */
+    public boolean grantReward(Upgrade upgrade) {
+        if (finished || awaitingEncore || upgrade == null) return false;
+        if (!canAdvance(upgrade)) { addScore(250); heal(5); return false; }
+        ranks.put(upgrade, rank(upgrade) + 1);
+        if (upgrade == Upgrade.VITALITY) heal(12);
+        if (hasOffer()) refreshOffer();
+        return true;
+    }
+    public void magnet(int ticks) { if (!finished) magnetTicks = Math.max(magnetTicks, Math.min(200, Math.max(0, ticks))); }
+    public boolean spendSouls() { if (soulCharge < 5 || rank(Upgrade.SOUL) == 0) return false; soulCharge -= 5; return true; }
+    public void pauseForEncore() { if (!finished) awaitingEncore = true; }
+
+    /** Deterministic per-run critical sequence, called only after an owned valid hit is accepted. */
+    public boolean recordHitAndRollCritical() {
+        hits = saturatingAdd(hits, 1);
+        long value = seed + hits * 0x9E3779B97F4A7C15L;
+        value = (value ^ (value >>> 30)) * 0xBF58476D1CE4E5B9L;
+        value = (value ^ (value >>> 27)) * 0x94D049BB133111EBL;
+        value ^= value >>> 31;
+        return (value >>> 11) * 0x1.0p-53 < criticalChance();
+    }
 
     /** Only active simulation time advances; the manager decides when menu/transition pauses apply. */
     public void tickActive() {
         if (finished || awaitingEncore) return;
         elapsedTicks = saturatingAdd(elapsedTicks, 1L);
         if (surgeTicks > 0) surgeTicks--;
-        if (!endless && elapsedTicks >= SESSION_TICKS) awaitingEncore = true;
+        if (magnetTicks > 0) magnetTicks--;
+        if (tempoTicks > 0) tempoTicks--;
+        if (!circuit && !endless && elapsedTicks >= SESSION_TICKS) awaitingEncore = true;
     }
 
     public void gainXp(int amount) {
@@ -113,6 +176,7 @@ public final class RushRun {
     public boolean choose(int offerIndex, int version) {
         if (finished || version != offerVersion || offerIndex < 0 || offerIndex >= offers.size()) return false;
         Upgrade upgrade = offers.get(offerIndex);
+        if (!upgrade.repeatable() && !canAdvance(upgrade)) { refreshOffer(); return false; }
         offers = List.of();
         if (upgrade.repeatable()) {
             switch (upgrade) {
@@ -157,7 +221,11 @@ public final class RushRun {
     }
 
     public void recordDefeat() {
-        if (!finished && !awaitingEncore) defeats = saturatingAdd(defeats, 1L);
+        if (!finished && !awaitingEncore) {
+            defeats = saturatingAdd(defeats, 1L);
+            if (rank(Upgrade.SOUL) > 0) soulCharge = Math.min(20, soulCharge + 1);
+            if (rank(Upgrade.TEMPO) > 0 && defeats % 8 == 0) tempoTicks = 80 + rank(Upgrade.TEMPO) * 20;
+        }
     }
 
     /** Returns true exactly when this hit exhausts run vitality. It never changes a Player's real health. */
@@ -179,10 +247,15 @@ public final class RushRun {
         if (finished || awaitingEncore || !offers.isEmpty() || xp < xpToNextLevel()) return;
         xp -= xpToNextLevel();
         if (level < Integer.MAX_VALUE) level++;
+        refreshOffer();
+    }
+
+    /** A reward cache can change slot/rank eligibility while an XP draft is already open. */
+    private void refreshOffer() {
         offerVersion = offerVersion == Integer.MAX_VALUE ? 1 : offerVersion + 1;
         List<Upgrade> available = new ArrayList<>();
         for (Upgrade upgrade : Upgrade.values()) {
-            if (!upgrade.repeatable() && rank(upgrade) < upgrade.maxRank()) available.add(upgrade);
+            if (canAdvance(upgrade)) available.add(upgrade);
         }
         Collections.shuffle(available, new Random(seed ^ ((long) offerVersion << 32) ^ level));
         for (Upgrade terminal : List.of(Upgrade.REPAIR, Upgrade.CACHE, Upgrade.SURGE)) {

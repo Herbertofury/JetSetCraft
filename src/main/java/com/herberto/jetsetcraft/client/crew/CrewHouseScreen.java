@@ -159,7 +159,7 @@ final class CrewHouseScreen extends Screen {
             Runnable click;
             switch (view) {
                 case CREW -> {
-                    title += "  •  Lv " + entry.getInt("Level") + "  •  " + (entry.getBoolean("Training") ? "Rush training" : entry.getString("Status"));
+                    title += "  •  Lv " + entry.getInt("Level") + "  •  " + (entry.getBoolean("Training") ? "Training focus" : entry.getString("Status"));
                     hint = entry.getString("SpeciesName") + " • " + entry.getString("RoleName") + ". " + entry.getString("Status");
                     click = () -> { memberId = id(entry); navigate(View.MEMBER); };
                 }
@@ -203,9 +203,9 @@ final class CrewHouseScreen extends Screen {
         detail(member.getString("Name") + " • " + member.getString("SpeciesName"), GREEN);
         detail(member.getString("RoleName") + " • Level " + member.getInt("Level") + " • " + member.getString("Status"), WHITE);
         detail(xp("Member", member.getLong("Xp"), member.getLong("NextXp")), CYAN);
-        detail("Roster profiles support timed jobs and Rush training. Selecting a training focus gives that member experience from eligible Rush results.", MUTED);
+        detail("Your selected idle member gains XP from completed street games, arena clears and qualifying Rush returns. Jobs grant their own XP.", MUTED);
         boolean training = member.getBoolean("Training");
-        twoButtons(firstActions(), training ? "Stop Rush training" : "Train in Rival Rush",
+        twoButtons(firstActions(), training ? "Stop training" : "Start training",
                 training ? state().getBoolean("CanManage") : member.getBoolean("CanTrain"), state().getString("ManageReason"),
                 () -> send(training ? "focus_off" : "focus", "", 0, memberId),
                 "Rename", state().getBoolean("CanManage"), state().getString("ManageReason"),

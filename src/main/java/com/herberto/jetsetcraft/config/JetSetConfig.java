@@ -48,6 +48,8 @@ public final class JetSetConfig {
         public final ForgeConfigSpec.DoubleValue boomboxSpawnRadius;
         public final ForgeConfigSpec.BooleanValue enableRivalRush;
         public final ForgeConfigSpec.BooleanValue enableCrewHouse;
+        public final ForgeConfigSpec.BooleanValue enableStreetActivities;
+        public final ForgeConfigSpec.IntValue maxStreetActivities;
 
         private Server(ForgeConfigSpec.Builder b) {
             b.push("movement");
@@ -122,6 +124,12 @@ public final class JetSetConfig {
             b.push("crewHouse");
             enableCrewHouse = b.comment("Allow optional player-built crew homes, roster missions and mode-only Rush preparation. No land protection or chunk loading is added.")
                     .define("enabled", true);
+            b.pop();
+            b.push("streetActivities");
+            enableStreetActivities = b.comment("Allow opt-in Boombox activities with shared crew progression.")
+                    .define("enabled", true);
+            maxStreetActivities = b.comment("Maximum concurrent live-world street activities; never adds chunk tickets.")
+                    .defineInRange("maxConcurrent", 32, 1, 128);
             b.pop();
         }
     }

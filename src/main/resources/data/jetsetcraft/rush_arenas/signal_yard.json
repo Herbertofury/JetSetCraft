@@ -1,0 +1,17 @@
+{
+  "name": "Signal Yard",
+  "description": "Warm orange lines cut through an open concrete plaza. Link the low rail to a wallride, then bank stronger paint and balanced crew progress.",
+  "radius": 24,
+  "seconds": 120,
+  "defeats": 8,
+  "layout": "plaza",
+  "reward": "damage",
+  "reward_ranks": 1,
+  "shared_reward": "balanced",
+  "palette": {
+    "floor": "minecraft:smooth_stone",
+    "accent": "minecraft:orange_concrete",
+    "wall": "minecraft:gray_concrete",
+    "rail": "minecraft:iron_bars"
+  }
+}

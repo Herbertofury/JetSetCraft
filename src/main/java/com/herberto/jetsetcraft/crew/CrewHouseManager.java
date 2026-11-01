@@ -1,5 +1,6 @@
 package com.herberto.jetsetcraft.crew;
 
+import com.herberto.jetsetcraft.activity.ActivityManager;
 import com.herberto.jetsetcraft.blockentity.BoomboxBlockEntity;
 import com.herberto.jetsetcraft.config.JetSetConfig;
 import com.herberto.jetsetcraft.gang.GangRegistry;
@@ -182,10 +183,10 @@ public final class CrewHouseManager {
                 member.name = CrewProfile.safeName(value, member.name); profile.changed(); return "Member name updated.";
             }
             case "focus" -> {
-                if (!profile.members.containsKey(target) || profile.busy(target)) return "Choose an idle member for Rush training.";
-                profile.focus = target; profile.changed(); return "Training focus selected. Genuine completed Rush participation trains this member while they are idle.";
+                if (!profile.members.containsKey(target) || profile.busy(target)) return "Choose an idle member for activity training.";
+                profile.focus = target; profile.changed(); return "Training focus selected. Completed street games, arenas and earned Rush participation train this member while they are idle.";
             }
-            case "focus_off" -> { profile.focus = null; profile.changed(); return "Rush member training disabled."; }
+            case "focus_off" -> { profile.focus = null; profile.changed(); return "Activity member training disabled."; }
             case "assign" -> {
                 int bonus = missionBonus(player.getServer(), profile);
                 CrewProfile.Member member = profile.members.get(target);
@@ -249,27 +250,76 @@ public final class CrewHouseManager {
         return Optional.empty();
     }
 
-    /** Settles genuine mode participation into virtual progression; never awards Minecraft items or XP. */
+    public record ActivityReward(boolean accepted, int supplies, int crewXp, int memberXp, int reputation,
+                                 boolean pendingHouse) {
+        public static final ActivityReward NONE = new ActivityReward(false, 0, 0, 0, 0, false);
+    }
+
+    /** Server-authored preview, shared by the invitation and completion paths; this never awards anything. */
+    public static ActivityReward activityReward(String mode) {
+        return switch (mode == null ? "" : mode) {
+            case "tag" -> new ActivityReward(false, 8, 55, 20, 6, false);
+            case "king_of_hill" -> new ActivityReward(false, 14, 90, 32, 8, false);
+            case "showdown" -> new ActivityReward(false, 12, 75, 25, 8, false);
+            case "rush_arena" -> new ActivityReward(false, 6, 35, 15, 4, false);
+            case "rush_arena_supplies" -> new ActivityReward(false, 12, 25, 10, 3, false);
+            case "rush_arena_training" -> new ActivityReward(false, 4, 45, 35, 3, false);
+            case "rush_arena_reputation" -> new ActivityReward(false, 4, 30, 10, 9, false);
+            default -> ActivityReward.NONE;
+        };
+    }
+
+    /** Called only by completed server-owned objectives. No packet accepts reward amounts or objective counts. */
+    public static ActivityReward bankActivity(ServerPlayer player, UUID eventId, ResourceLocation gang,
+                                              String mode, long activeTicks, int objectives, long score) {
+        if (mode == null || activeTicks < 0 || objectives < 0 || score < 0) return ActivityReward.NONE;
+        boolean eligible = switch (mode) {
+            case "tag" -> activeTicks >= 40 && objectives >= 6;
+            case "showdown" -> activeTicks >= 40 && objectives >= 4;
+            case "king_of_hill" -> activeTicks >= 480 && objectives >= 3;
+            case "rush_arena", "rush_arena_supplies", "rush_arena_training", "rush_arena_reputation" -> activeTicks >= 200 && objectives >= 1;
+            default -> false;
+        };
+        if (!eligible) return ActivityReward.NONE;
+        ActivityReward reward = activityReward(mode);
+        return settle(player, eventId, gang, reward.supplies, reward.crewXp, reward.memberXp, reward.reputation);
+    }
+
+    /** Settles genuine mode participation into the same account, including earnings before founding a home. */
     public static void bankRush(ServerPlayer player, UUID runId, ResourceLocation rivalGang, long activeTicks,
                                 long cards, long defeats, long score) {
-        if (player == null || runId == null || rivalGang == null || !JetSetConfig.SERVER.enableCrewHouse.get()
+        if (player == null || player.getServer() == null || runId == null || rivalGang == null || !JetSetConfig.SERVER.enableCrewHouse.get()
                 || activeTicks < 1200 || defeats < 3 || cards < 0 || score < 0) return;
-        CrewHouseData data = CrewHouseData.get(player.getServer());
-        CrewProfile profile = data.profile(player.getUUID());
-        if (profile == null || data.blocked(player.getUUID()) || profile.settledRuns.contains(runId)) return;
-        profile.settledRuns.add(runId);
-        while (profile.settledRuns.size() > 128) profile.settledRuns.remove(profile.settledRuns.iterator().next());
         int minutes = (int) Math.min(30, activeTicks / 1200);
         int cardBonus = (int) Math.min(20, cards);
-        profile.addSupplies(Math.min(60, 8 + minutes + cardBonus / 3));
-        profile.addXp(Math.min(300, 20 + minutes * 6 + cardBonus * 2));
-        profile.addReputation(rivalGang.toString(), Math.min(40, 2 + minutes));
-        CrewProfile.Member member = profile.members.get(profile.focus);
-        if (member != null && !profile.busy(member.id)) {
-            int training = operationalLevel(player.getServer(), profile, Kind.TRAINING);
-            member.xp = CrewProfile.clampXp(member.xp + Math.min(180, 20 + minutes * 3 + training * 10));
-        }
-        profile.changed(); data.setDirty();
+        CrewProfile profile = CrewHouseData.get(player.getServer()).profile(player.getUUID());
+        int training = profile == null ? 0 : operationalLevel(player.getServer(), profile, Kind.TRAINING);
+        settle(player, runId, rivalGang, Math.min(60, 8 + minutes + cardBonus / 3),
+                Math.min(300, 20 + minutes * 6 + cardBonus * 2), Math.min(180, 20 + minutes * 3 + training * 10),
+                Math.min(40, 2 + minutes));
+    }
+
+    private static ActivityReward settle(ServerPlayer player, UUID receipt, ResourceLocation gang,
+                                         int supplies, int xp, int training, int reputation) {
+        if (player == null || player.getServer() == null || receipt == null || gang == null
+                || !JetSetConfig.SERVER.enableCrewHouse.get()) return ActivityReward.NONE;
+        CrewHouseData data = CrewHouseData.get(player.getServer());
+        if (data.blocked(player.getUUID())) return ActivityReward.NONE;
+        CrewProfile profile = data.profile(player.getUUID());
+        CrewProfile.Member member = profile == null ? null : profile.members.get(profile.focus);
+        int beforeSupplies = profile == null ? data.pendingSupplies(player.getUUID()) : profile.supplies;
+        long beforeXp = profile == null ? data.pendingXp(player.getUUID()) : profile.xp;
+        long beforeTraining = profile == null ? data.pendingTraining(player.getUUID()) : member == null ? 0 : member.xp;
+        int beforeReputation = profile == null ? data.pendingReputation(player.getUUID(), gang.toString()) : profile.reputation(gang.toString());
+        if (!data.award(player.getUUID(), receipt, gang.toString(), Math.max(0, Math.min(60, supplies)),
+                Math.max(0, Math.min(300, xp)), Math.max(0, Math.min(180, training)), Math.max(0, Math.min(40, reputation))))
+            return ActivityReward.NONE;
+        return new ActivityReward(true,
+                (profile == null ? data.pendingSupplies(player.getUUID()) : profile.supplies) - beforeSupplies,
+                (int) ((profile == null ? data.pendingXp(player.getUUID()) : profile.xp) - beforeXp),
+                (int) ((profile == null ? data.pendingTraining(player.getUUID()) : member == null ? 0 : member.xp) - beforeTraining),
+                (profile == null ? data.pendingReputation(player.getUUID(), gang.toString()) : profile.reputation(gang.toString())) - beforeReputation,
+                profile == null);
     }
 
     public static CompoundTag snapshot(ServerPlayer player) {
@@ -281,6 +331,9 @@ public final class CrewHouseManager {
         out.putBoolean("HasCandidate", candidate != null);
         out.putString("CandidateLabel", candidate == null ? "Use the Crew Charter on a placed Boombox or facility." : positionLabel(candidate.dimension, candidate.position));
         out.putBoolean("Exists", profile != null);
+        out.putInt("PendingSupplies", data.pendingSupplies(player.getUUID()));
+        out.putLong("PendingCrewXp", data.pendingXp(player.getUUID()));
+        out.putLong("PendingTraining", data.pendingTraining(player.getUUID()));
         String founding = foundingReason(player, data, profile);
         out.putBoolean("CanFound", profile == null && founding.isEmpty());
         out.putBoolean("CanRelocate", profile != null && founding.isEmpty()); out.putString("FoundReason", founding);
@@ -376,6 +429,7 @@ public final class CrewHouseManager {
     private static String normalModeReason(ServerPlayer player) {
         if (!JetSetConfig.SERVER.enableCrewHouse.get()) return "Crew homes are disabled by this server; saved progression is retained.";
         if (RivalRushManager.active(player) || RushWorld.isRush(player.level())) return "Return to Minecraft before managing your home.";
+        if (ActivityManager.active(player)) return "Finish or cancel your street activity before managing your home.";
         if (!player.isAlive() || player.isSpectator()) return "Manage your crew while alive and outside Spectator mode.";
         return "";
     }
@@ -403,7 +457,8 @@ public final class CrewHouseManager {
         ServerLevel level = player.serverLevel();
         if (!level.hasChunkAt(candidate.position) || !level.getBlockState(candidate.position).is(ModBlocks.BOOMBOX.get())
                 || !(level.getBlockEntity(candidate.position) instanceof BoomboxBlockEntity boombox)) return "The selected block must be a placed Boombox.";
-        if (boombox.isChallengeActive()) return "Finish the Boombox challenge before using this home anchor.";
+        if (boombox.isChallengeActive() || ActivityManager.anchorActive(level, candidate.position))
+            return "Finish the Boombox challenge before using this home anchor.";
         return plotReason(level, candidate.position, existing == null ? 8 : existing.radius(), data, existing);
     }
     private static String expansionReason(ServerPlayer player, CrewProfile profile) {

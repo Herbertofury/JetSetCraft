@@ -1,8 +1,8 @@
 # Player Chapters, Crew Houses, Posse & Mob Archetypes
 
-**Development status: `0.4.0-alpha.2` implementation with recorded machine verification.** The current slice adds player-built house facilities, a persistent named roster, levels, dispatch jobs and optional Rival Rush preparation. **Members are saved profiles: visible residents, skating followers and physical posse AI are future work.** Stable `v0.3.0` is unchanged. The [Crew House design study](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/CREW_HOUSE_DESIGN.md) contains eight primary-source inspirations and clearly labelled extensions.
+**Development status: `0.4.0-alpha.3` shared-progression candidate; new verification pending.** Player-built facilities, a persistent named roster, levels, dispatch jobs and optional Rival Rush preparation were introduced in alpha.2, whose recorded verification remains below. The alpha.3 candidate adds shared street-game/arena rewards and banking before the first house. **Members are saved profiles: visible residents, skating followers and physical posse AI are future work.** Stable `v0.3.0` is unchanged. The [Crew House design study](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/CREW_HOUSE_DESIGN.md) contains eight primary-source inspirations and clearly labelled extensions.
 
-## Actual crew-house captures
+## Historical alpha.2 crew-house captures
 
 These four **1280 × 720** images come from the alpha.2 real-client audit. They show the actual profile-based implementation and its placed-workshop fixture. [Open all eight captures and the source/binary verification receipt](https://github.com/Herbertofury/JetSetCraft/tree/main/docs/verification/crew-house).
 
@@ -12,21 +12,21 @@ These four **1280 × 720** images come from the alpha.2 real-client audit. They 
 | **Registered physical facilities** | **Dispatch jobs** |
 | ![Actual registered workshop and facilities tab](https://raw.githubusercontent.com/Herbertofury/JetSetCraft/main/docs/verification/crew-house/07-crew-facilities.png) | ![Actual courier job in progress](https://raw.githubusercontent.com/Herbertofury/JetSetCraft/main/docs/verification/crew-house/08-crew-jobs.png) |
 
-### Recorded verification
+### Recorded alpha.2 verification
 
 [Verify JetSetCraft #274](https://github.com/Herbertofury/JetSetCraft/actions/runs/41350812751) passed the clean Forge build, **19 real GameTests**, dedicated-server readiness and normal RCON shutdown, and the eight-screen graphical client audit. [All four optional-provider configurations](https://github.com/Herbertofury/JetSetCraft/actions/runs/41350812645) passed the same 19 tests and server smoke. The [receipt](https://github.com/Herbertofury/JetSetCraft/tree/main/docs/verification/crew-house) identifies the tested source, binary and [PR #40 publication](https://github.com/Herbertofury/JetSetCraft/pull/40).
 
-The client used the Charter, founded a home through production actions, displayed its two apprentices, registered an operational placed workshop and dispatched a real timed job. That job was still running in the capture; deterministic Forge checks cover its saved ready-time boundary, claim and replay rejection. These are machine integration checks, not a human house-progression playtest or proof of physical NPC behavior. [Testing and Verification](Testing-and-Verification) lists the four crew test markers and their scope.
+The client used the Charter, founded a home through production actions, displayed its two apprentices, registered an operational placed workshop and dispatched a real timed job. That job was still running in the capture; deterministic Forge checks cover its saved ready-time boundary, claim and replay rejection. These are historical machine integration checks, not a human house-progression playtest or proof of physical NPC behavior. They do not verify the later alpha.3 shared-activity or pre-house banking changes. [Testing and Verification](Testing-and-Verification) distinguishes those checkpoints and their scope.
 
 ## Start a crew house
 
 1. Craft a reusable **Crew Charter** from **book + cyan dye + copper ingot**. Use it in the air, or enter `/jetsetcraft crew`, to open the crew book.
 2. Place a normal Boombox at your chosen home. Its resolved gang becomes the chapter's gang when founded; a box without a resolved target defaults to Dead Beat. Finish any active Boombox challenge first.
 3. Use the Charter on the Boombox, choose **Found a home**, review the location and confirm **Found here**. Selecting a block or reading the book alone never founds a house or spends supplies.
-4. Build your own house and facilities. Founding supplies **24 Crew Supplies** and two named apprentice profiles: **Riff** (Courier) and **Patches** (Tagger). No structure or resident mob is generated.
+4. Build your own house and facilities. Founding grants **24 starting Crew Supplies, plus any previously banked activity earnings**, and creates two named profiles: **Riff** (Courier) and **Patches** (Tagger). Pending crew XP and reputation transfer too; all pending member training goes to **Riff, the initially focused member**, so he can begin above level one. No structure or resident mob is generated.
 5. In **Crew**, choose a member and a job; in **Jobs**, claim its result when ready. You can keep building, skating or playing ordinary Minecraft while the assignment advances.
 
-The book has **Home**, **Crew**, **Facilities** and **Jobs** tabs. You can inspect it away from home; managing members, jobs or facilities requires returning to the same dimension, standing inside the registered plot and having its Boombox naturally loaded and present. Management is unavailable while in Rival Rush. The server can disable this optional feature with `[crewHouse] enabled = false` while retaining saved progression.
+The book has **Home**, **Crew**, **Facilities** and **Jobs** tabs. You can inspect it away from home; managing members, jobs or facilities requires returning to the same dimension, standing inside the registered plot and having its Boombox naturally loaded and present. Finish or cancel a street activity, or return from Rival Rush, before managing the house. The server can disable this optional feature with `[crewHouse] enabled = false` while retaining saved progression.
 
 Each player has one owned house. **Show boundary** previews its square footprint. This area determines which facilities belong to the house; it does not protect blocks, reserve building permissions, create terrain or force-load chunks. Registered crew plots cannot overlap one another or extend past the world border, but ordinary Minecraft building remains governed by the server's usual rules.
 
@@ -60,15 +60,15 @@ Each operational tier above 1 adds **5 percentage points** to mission supply rew
 
 ## Name, recruit and develop members
 
-Members have a permanent profile ID, name, creature identity, gang, role and member XP. Rename them in the crew book. Recruiting costs **max(20, 20 + 5 × current member count − home-gang reputation discount)** Crew Supplies. A newly founded house has no discount, so adding the first extra member to its two apprentices costs **30**. Choose **Courier**, **Tagger**, **Technician** or **DJ** at recruitment.
+Members have a permanent profile ID, name, creature identity, gang, role and member XP. Rename them in the crew book. Recruiting costs **max(20, 20 + 5 × current member count − home-gang reputation discount)** Crew Supplies. With no prior home-gang reputation, adding the first extra member to the two starters costs **30**. Reputation earned before founding can already qualify the new house for a discount. Choose **Courier**, **Tagger**, **Technician** or **DJ** at recruitment.
 
 The available species pool includes a representative of the house's gang plus eligible installed species already discovered in your mob-card album, up to 64 choices. Recruiting creates a roster profile; it does not capture, replace or remove a world mob. The starting gang representative remains recruitable without playing Rush, so house expansion and role development have a non-Rush route.
 
 Member level is capped at **10**. The cumulative XP required for level `L` is `60 × (L − 1)²`: level 2 needs 60 XP and level 3 needs 240. A level contributes **2% more mission supplies per level above 1**, reaching **18% at level 10**. Crew XP is a separate house-wide record, capped at level **20**, with cumulative threshold `50 × (L − 1) × L`. Neither is Minecraft experience, and a crew level does not automatically purchase an expansion or facility.
 
-**Train in Rival Rush** selects an idle member to receive member XP from qualifying run results. **Stop Rush training** clears that selection. A dispatched member remains busy until the job is claimed or cancelled and cannot receive this idle-member training while busy. The selected profile does not follow the player into the district.
+Use **Start training** to select **one idle member** to receive XP from completed **Tag, King of the Hill, Showdown and arena objectives**, as well as qualifying Rush returns. The roster marks that member **Training focus**; **Stop training** clears the selection. A dispatched member remains busy until the job is claimed or cancelled and receives no activity training while busy. Claiming a mission separately grants its frozen XP to the assigned member. The selected profile does not follow the player into an activity.
 
-Reputation is stored by player and canonical gang identity. A mission grants its reputation once for the assigned member's gang; a Rush result grants its reputation once for the rival gang. Home-gang reputation reduces recruitment prices by **2 / 4 / 6 / 8 Crew Supplies** at **50 / 150 / 400 / 1,000 reputation**, with a minimum price of **20**. The crew book shows the current discount. Growth remains available without a reputation threshold. Wider trust-gated chapter skins, individual bond scenes and follower privileges described later are future design.
+Reputation is stored by player and canonical gang identity. A claimed mission grants reputation for its assigned member's gang; completed street games, arena clears and qualifying Rush returns grant reputation for their target or rival gang. Home-gang reputation reduces recruitment prices by **2 / 4 / 6 / 8 Crew Supplies** at **50 / 150 / 400 / 1,000 reputation**, with a minimum price of **20**. The crew book shows the current discount. Growth remains available without a reputation threshold. Wider trust-gated chapter skins, individual bond scenes and follower privileges described later are future design.
 
 ## Dispatch jobs without a login schedule
 
@@ -87,13 +87,13 @@ Choose **Claim rewards** at home to bank the saved supplies, member XP, crew XP 
 
 ## Keep Rival Rush optional
 
-Missions can fund house growth without entering Rush. Conversely, a qualifying Rush result can bank Crew Supplies, crew XP and gang reputation, plus training for the selected idle member. The current eligibility threshold is at least **one minute of active run time and three rival defeats**. Rewards are bounded and recorded once per run ID; unloading an ordinary Boombox challenge is not a qualifying run result. Crew Supplies never become vanilla items or XP orbs.
+Missions and completed **Tag, King of the Hill and Showdown** rounds can fund house growth without entering Rush. Arena clears also settle their own shared rewards. A qualifying Rush return adds a separate reward after at least **one minute of active run time and three rival defeats**; finishing all six arenas is not required. [The exact shared reward table](Rival-Rush#shared-completion-rewards) lists supplies, crew XP, member training and reputation. These rewards can be earned before founding and transfer with their recent settlement receipts when the first house is created. Ordinary mob kills, menu refreshes, cancelled street rounds and unloaded legacy Boombox actors do not settle these rewards. Crew Supplies never become vanilla items or XP orbs.
 
 In **Facilities**, **Choose preparation** selects at most **one** starting perk from an operational facility. The default is **No house preparation**. The benefit applies only when starting Rush from inside the valid, loaded home plot, and always grants one rank even if the facility is tier 3. It does not change ordinary Minecraft health, damage or item yield. The existing mob-card album's starting-draft milestones remain a separate Rush system.
 
 The first slice provides no physical NPC residents, follower navigation, provider-backed recovery, playable expeditions, personal bond scenes or music-timed house activities. Those ideas have a clear place in the extension design below and in the [eight-game research study](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/CREW_HOUSE_DESIGN.md).
 
-House progression lives in the world's saved crew record, separately from Rush's temporary player-return snapshot. Claims update the job and its rewards together in memory; durability follows ordinary Minecraft world saves. An abrupt crash can lose changes since the last completed world save. Unrecognized save schemas are retained read-only, with management blocked until recovery or a compatible mod version is available.
+House progression and pre-house earnings live in the world's saved crew record, separately from Rush's temporary player-return snapshot. Activity receipts and their rewards update together; the account retains the most recent **128 receipts** to reject repeated settlements, and founding transfers those identities with the pending earnings. Claiming a mission removes its job and adds its rewards together. These are bounded server-side replay protections; durability follows ordinary Minecraft world saves. An abrupt crash can lose changes since the last completed world save. Unrecognized save schemas are retained read-only, with management blocked until recovery or a compatible mod version is available.
 
 ## Future physical chapters and posse design
 

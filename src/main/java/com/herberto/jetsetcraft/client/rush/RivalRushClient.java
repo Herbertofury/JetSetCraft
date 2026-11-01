@@ -32,6 +32,7 @@ public final class RivalRushClient {
     private static CompoundTag state = new CompoundTag();
     private static ListTag album = new ListTag();
     private static ListTag roster = new ListTag();
+    private static ListTag arenaCatalogue = new ListTag();
     private static int albumPage, rosterPage;
     private static int albumPages = 1, rosterPages = 1;
 
@@ -48,6 +49,11 @@ public final class RivalRushClient {
             roster = boundedPage(incoming.getList("Roster", Tag.TAG_COMPOUND));
             rosterPage = Math.max(0, incoming.getInt("Page"));
             rosterPages = Math.max(1, incoming.getInt("TotalPages"));
+        }
+        if (incoming.contains("ArenaCatalogue", Tag.TAG_LIST)) {
+            arenaCatalogue = new ListTag();
+            ListTag source = incoming.getList("ArenaCatalogue", Tag.TAG_COMPOUND);
+            for (int i = 0; i < Math.min(32, source.size()); i++) arenaCatalogue.add(source.getCompound(i).copy());
         }
         if (minecraft.player == null) return;
         if (minecraft.screen instanceof RivalRushScreen screen) {
@@ -66,6 +72,13 @@ public final class RivalRushClient {
     static CompoundTag state() { return state; }
     static ListTag album() { return album; }
     static ListTag roster() { return roster; }
+    static ListTag arenaCatalogue() { return arenaCatalogue; }
+    static CompoundTag journey() { return state.getCompound("Journey"); }
+    static boolean choosingRoute() { return state.getBoolean("Active") && "choosing".equals(journey().getString("Phase")); }
+    public static CompoundTag stateSnapshot() { return state.copy(); }
+    public static boolean isJourneyScreenOpen() {
+        return Minecraft.getInstance().screen instanceof RivalRushScreen screen && screen.isRouteView();
+    }
     static int page(boolean cards) { return cards ? albumPage : rosterPage; }
     static int pages(boolean cards) { return cards ? albumPages : rosterPages; }
     static ListTag offers() { return state.getList("Offers", Tag.TAG_COMPOUND); }
@@ -82,6 +95,11 @@ public final class RivalRushClient {
     static void request(String action, String value, int number) {
         if (Minecraft.getInstance().getConnection() == null) return;
         JetSetNetwork.sendRushAction(action, value, number, runId(), state.getInt("Version"));
+    }
+
+    public static void requestJourney(String profileId) {
+        if (Minecraft.getInstance().getConnection() == null) return;
+        JetSetNetwork.sendRushAction("journey_choose", profileId, 0, runId(), journey().getInt("Version"));
     }
 
     static String clock(long ticks) {
@@ -108,10 +126,18 @@ public final class RivalRushClient {
         gui.fill(0, 0, 2, HUD_HEIGHT, 0xFFC5ED55);
         gui.drawString(font, "RIVAL RUSH", 7, 6, 0xFFC5ED55, true);
         boolean active = state.getBoolean("Active");
-        String timer = active ? (state.getBoolean("Endless") ? "+ " + clock(state.getLong("Ticks"))
+        boolean circuit = active && state.contains("Journey", Tag.TAG_COMPOUND);
+        CompoundTag journey = journey();
+        String timer = circuit ? switch (journey.getString("Phase")) {
+            case "choosing" -> "Choose";
+            case "travel" -> Math.max(0, (int) Math.ceil(journey.getDouble("Distance"))) + "m";
+            case "complete" -> "Set done";
+            default -> clock(journey.getLong("TicksLeft"));
+        } : active ? (state.getBoolean("Endless") ? "+ " + clock(state.getLong("Ticks"))
                 : clock(Math.max(0L, 36_000L - state.getLong("Ticks")))) : "HUD preview";
         gui.drawString(font, timer, HUD_WIDTH - 7 - font.width(timer), 6, 0xFFFFFFFF, true);
-        String gang = active ? state.getString("Gang") : "Your rival crew";
+        String gang = circuit ? "Arena " + journey.getInt("Stage") + "/" + Math.max(1, journey.getInt("StagesPerSet"))
+                + " • " + journey.getString("CurrentName") : active ? state.getString("Gang") : "Your rival crew";
         gui.drawString(font, clipped(gang, HUD_WIDTH - 14), 7, 20, 0xFFE7E7E7, true);
         long xp = Math.max(0L, state.getLong("Xp"));
         long next = Math.max(1L, state.getLong("NextXp"));
@@ -129,6 +155,7 @@ public final class RivalRushClient {
                 + Math.max(0L, state.getLong("Cards")) : "Score and card progress";
         gui.drawString(font, clipped(progress, HUD_WIDTH - 14), 7, 73, 0xFFE7E7E7, true);
         String objective = !active ? "Objective / upgrade reminder" : !offers().isEmpty() ? "Choose an upgrade — open Rush menu"
+                : choosingRoute() ? "Choose the next arena — open Rush menu"
                 : state.getBoolean("Finale") ? "Set complete — extract or play Encore" : state.getString("Objective");
         gui.drawString(font, clipped(objective, HUD_WIDTH - 14), 7, 86, 0xFFE6DBA6, true);
         gui.pose().popPose();
@@ -175,6 +202,7 @@ public final class RivalRushClient {
             state = new CompoundTag();
             album = new ListTag();
             roster = new ListTag();
+            arenaCatalogue = new ListTag();
             albumPage = rosterPage = 0;
             albumPages = rosterPages = 1;
         }
