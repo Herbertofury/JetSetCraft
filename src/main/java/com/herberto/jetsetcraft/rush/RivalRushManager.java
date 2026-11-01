@@ -582,6 +582,7 @@ public final class RivalRushManager {
         for (int attempt = 0; attempt < 12; attempt++) {
             double angle = (s.sequence + attempt * 5) * 2.399963229728653;
             double distance = 18 + attempt % 3 * 4 + mob.getBbWidth();
+            if (s.circuit != null) distance = Math.min(distance, Math.max(6, s.circuit.current().radius() - 6));
             double x = s.player.getX() + Math.cos(angle) * distance;
             double z = s.player.getZ() + Math.sin(angle) * distance;
             if (s.circuit != null && !s.circuit.inArena(new Vec3(x, RushWorld.FLOOR_Y + 1, z), -4)) continue;

@@ -20,6 +20,7 @@ public final class RushArenaBuilder {
     private final ArrayDeque<BlockPos> pending = new ArrayDeque<>();
     private final Set<Long> connector = new HashSet<>();
     private final Map<Long, BlockState> authored = new HashMap<>();
+    private final Set<Long> unfinished = new HashSet<>();
 
     public RushArenaBuilder(RushArenaCatalog.Profile profile, BlockPos from, BlockPos center) {
         this.profile = profile; this.center = center;
@@ -45,6 +46,7 @@ public final class RushArenaBuilder {
             }
         }
         for (RushArenaCatalog.MapBlock block : profile.blocks()) authored.put(center.offset(block.offset()).asLong(), block.state());
+        pending.forEach(p -> unfinished.add(p.asLong()));
     }
 
     /** At most 192 columns/1728 block comparisons per tick; unloaded columns stay queued, without chunk requests. */
@@ -61,6 +63,7 @@ public final class RushArenaBuilder {
                 BlockState state = desired(column.getX() - center.getX(), y, column.getZ() - center.getZ(), pos);
                 if (!level.getBlockState(pos).equals(state)) level.setBlock(pos, state, 2);
             }
+            unfinished.remove(column.asLong());
         }
     }
 
@@ -70,6 +73,7 @@ public final class RushArenaBuilder {
         return pending.stream().noneMatch(p -> Math.abs(p.getX() - center.getX()) <= 12 && Math.abs(p.getZ() - center.getZ()) <= 12);
     }
     public int remainingColumns() { return pending.size(); }
+    public boolean columnReady(BlockPos pos) { return !unfinished.contains(new BlockPos(pos.getX(), RushWorld.FLOOR_Y, pos.getZ()).asLong()); }
     public BlockPos center() { return center; }
 
     private BlockState desired(int x, int y, int z, BlockPos pos) {

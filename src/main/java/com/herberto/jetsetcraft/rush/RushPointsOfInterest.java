@@ -16,16 +16,20 @@ import java.util.Map;
 
 /** Personal reward caches, paid only after owned defeats. No loot, vanilla XP or block entities. */
 public final class RushPointsOfInterest {
-    private record Cache(BlockPos position, RushArenaCatalog.Reward reward) {}
+    private record Cache(long key, BlockPos position, RushArenaCatalog.Reward reward) {}
     private final Map<Long, Cache> caches = new LinkedHashMap<>();
-    private final java.util.Set<Long> claimed = new java.util.HashSet<>();
+    // A fixed conservative cooldown ledger remembers visited regions without an unbounded Endless set.
+    // A hash collision can delay another cache, but can never shorten a previously claimed cache's cooldown.
+    private final long[] claimTimes = new long[2048];
     private long lastClaimDefeats;
     private boolean roomPlaced;
 
-    public void reset() { caches.clear(); claimed.clear(); roomPlaced = false; }
+    public RushPointsOfInterest() { java.util.Arrays.fill(claimTimes, -12001L); }
+    public void reset() { caches.clear(); java.util.Arrays.fill(claimTimes, -12001L); roomPlaced = false; }
 
     public String tick(ServerPlayer player, RushRun run, RushCircuit circuit) {
         if (run.elapsedTicks() % 10 != 0 || run.hasOffer()) return "";
+        caches.values().removeIf(cache -> player.distanceToSqr(Vec3.atCenterOf(cache.position)) > 160 * 160);
         if (circuit != null) {
             if (circuit.phase() != RushCircuit.Phase.ARENA) return "";
             if (!roomPlaced) {
@@ -33,7 +37,10 @@ public final class RushPointsOfInterest {
                 BlockPos center = circuit.center();
                 RushArenaCatalog.Reward[] rewards = RushArenaCatalog.Reward.values();
                 int[][] locations = {{-d,-d},{d,-d},{-d,d},{d,d},{-d,6},{d,-6}};
-                for (int i = 0; i < rewards.length; i++) add(player, center.offset(locations[i][0], 1, locations[i][1]), rewards[i]);
+                for (int i = 0; i < rewards.length; i++) {
+                    BlockPos position = center.offset(locations[i][0], 1, locations[i][1]);
+                    if (circuit.builder().columnReady(position)) add(player, position, rewards[i]);
+                }
                 roomPlaced = caches.size() == 6;
             }
         } else {
@@ -45,7 +52,7 @@ public final class RushPointsOfInterest {
                 add(player, position, RushArenaCatalog.Reward.values()[index]);
             }
         }
-        Cache nearest = caches.values().stream().filter(c -> !claimed.contains(c.position.asLong()))
+        Cache nearest = caches.values().stream().filter(c -> run.elapsedTicks() - claimTimes[bucket(c.key)] >= 12000)
                 .min(Comparator.comparingDouble(c -> player.distanceToSqr(Vec3.atCenterOf(c.position)))).orElse(null);
         if (nearest == null || player.distanceToSqr(Vec3.atCenterOf(nearest.position)) > 48 * 48) return "";
         BlockPos pos = nearest.position;
@@ -53,7 +60,7 @@ public final class RushPointsOfInterest {
                 6, .25, .5, .25, .02);
         long needed = Math.max(0, 3 - (run.defeats() - lastClaimDefeats));
         if (player.distanceToSqr(Vec3.atCenterOf(pos)) <= 6.25 && needed == 0) {
-            claimed.add(pos.asLong()); lastClaimDefeats = run.defeats();
+            claimTimes[bucket(nearest.key)] = run.elapsedTicks(); lastClaimDefeats = run.defeats();
             String result = grant(run, nearest.reward, 1);
             player.serverLevel().playSound(null, pos, SoundEvents.NOTE_BLOCK_CHIME.value(), SoundSource.PLAYERS, .7f, 1.2f);
             player.serverLevel().sendParticles(ParticleTypes.FIREWORK, pos.getX() + .5, pos.getY() + 1, pos.getZ() + .5, 18, .6, .6, .6, .03);
@@ -68,9 +75,14 @@ public final class RushPointsOfInterest {
                 || player.serverLevel().getChunkSource().getChunkNow(position.getX() >> 4, position.getZ() >> 4) == null) return;
         BlockPos standing = position;
         for (int height = 0; height < 8 && !player.serverLevel().getBlockState(standing).isAir(); height++) standing = standing.above();
-        caches.put(position.asLong(), new Cache(standing, reward));
+        caches.put(position.asLong(), new Cache(position.asLong(), standing, reward));
         // A visible in-floor marker remains passable and carries no transferable loot.
         player.serverLevel().setBlock(standing.below(), Blocks.SEA_LANTERN.defaultBlockState(), 2);
+    }
+
+    private static int bucket(long key) {
+        long hash = key * 0x9E3779B97F4A7C15L;
+        return (int) ((hash ^ (hash >>> 32)) & 2047);
     }
 
     public static String grant(RushRun run, RushArenaCatalog.Reward reward, int ranks) {

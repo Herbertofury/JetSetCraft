@@ -140,11 +140,13 @@ public final class RushArenaCatalog extends SimpleJsonResourceReloadListener {
                 && block != Blocks.CACTUS && block != Blocks.MAGMA_BLOCK && block != Blocks.RESPAWN_ANCHOR
                 && block != Blocks.PISTON && block != Blocks.STICKY_PISTON && block != Blocks.MOVING_PISTON;
     }
-    @SuppressWarnings({"rawtypes", "unchecked"})
     private static BlockState property(BlockState state, String name, String value) {
-        Property property = state.getBlock().getStateDefinition().getProperty(name);
+        Property<?> property = state.getBlock().getStateDefinition().getProperty(name);
         if (property == null) throw new IllegalArgumentException("Unknown block property " + name);
-        Comparable parsed = (Comparable) property.getValue(value).orElseThrow(() -> new IllegalArgumentException("Invalid block property value"));
+        return propertyValue(state, property, value);
+    }
+    private static <T extends Comparable<T>> BlockState propertyValue(BlockState state, Property<T> property, String value) {
+        T parsed = property.getValue(value).orElseThrow(() -> new IllegalArgumentException("Invalid block property value"));
         BlockState result = state.setValue(property, parsed);
         if (!safe(result)) throw new IllegalArgumentException("Unsafe block state");
         return result;
