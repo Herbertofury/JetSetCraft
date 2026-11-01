@@ -408,5 +408,74 @@
     "Custom data-pack profiles support bounded block maps and rewards, not arbitrary structure/NBT imports or an in-game map editor.",
     "The Crossfade Yard example is statically validated, not separately human playtested.",
     "Two exact Sonic recording metadata entries and an audio importer are included; supplied recording masters are not bundled or auditioned."
-  ]
+  ],
+  "audit_followup": {
+    "schema": 1,
+    "conclusion": "success",
+    "pull_request": "https://github.com/Herbertofury/JetSetCraft/pull/42",
+    "feature_commit": "fe679cf32dfcaee145a77a8d3c7f3d8a52c23592",
+    "tested_pr_merge_commit": "c0b202846e6c0a0b448906c81b25dd7eaa7b103d",
+    "main_merge_commit": "76f44fe808fa4141c811df3dd5dc7f57713c687d",
+    "tested_and_merged_tree": "ffc85769b8d50143cb7c2e1c66f240ed01515bf8",
+    "tree_identity_verified_via_github_git_commits": true,
+    "workflow": {
+      "id": 41357798877,
+      "number": 282,
+      "url": "https://github.com/Herbertofury/JetSetCraft/actions/runs/41357798877",
+      "job_id": 125001513156,
+      "job_url": "https://github.com/Herbertofury/JetSetCraft/actions/runs/41357798877/job/125001513156",
+      "conclusion": "success",
+      "configuration": "base",
+      "gametests_passed": 28,
+      "dedicated_server_smoke": "passed",
+      "native_client_captures": 10
+    },
+    "observed_markers": [
+      "2026-11-01T22:38:01.1180445Z [22:38:01] [IO-Worker-7/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_RUSH_VISUAL_AUDIT_CAPTURE 01-setup /home/runner/work/JetSetCraft/JetSetCraft/run/./screenshots/rival-rush-1793572647060-01-setup.png",
+      "2026-11-01T22:38:05.9160414Z [22:38:05] [IO-Worker-7/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_RUSH_VISUAL_AUDIT_CAPTURE 02-district-hud /home/runner/work/JetSetCraft/JetSetCraft/run/./screenshots/rival-rush-1793572647060-02-district-hud.png",
+      "2026-11-01T22:38:07.2150783Z [22:38:07] [IO-Worker-4/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_RUSH_VISUAL_AUDIT_CAPTURE 03-album /home/runner/work/JetSetCraft/JetSetCraft/run/./screenshots/rival-rush-1793572647060-03-album.png",
+      "2026-11-01T22:38:08.5170209Z [22:38:08] [IO-Worker-10/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_RUSH_VISUAL_AUDIT_CAPTURE 04-return-result /home/runner/work/JetSetCraft/JetSetCraft/run/./screenshots/rival-rush-1793572647060-04-return-result.png",
+      "2026-11-01T22:38:09.2169744Z [22:38:09] [Server thread/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_CREW_AUDIT_ROOM_PLACED dimension=minecraft:overworld standing=0, 52, 0 anchor=2, 52, 0 workshop=4, 52, 0",
+      "2026-11-01T22:38:10.2190120Z [22:38:10] [Render thread/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_CREW_AUDIT_ROOM_OBSERVED dimension=minecraft:overworld position=(0.5, 52.0, 0.5) grounded=true dry=true anchorDistance=2.093895891851546 workshopDistance=4.0477648160327675",
+      "2026-11-01T22:38:11.6239975Z [22:38:11] [IO-Worker-4/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_RUSH_VISUAL_AUDIT_CAPTURE 05-crew-home /home/runner/work/JetSetCraft/JetSetCraft/run/./screenshots/rival-rush-1793572647060-05-crew-home.png",
+      "2026-11-01T22:38:12.7160027Z [22:38:12] [IO-Worker-10/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_RUSH_VISUAL_AUDIT_CAPTURE 06-crew-roster /home/runner/work/JetSetCraft/JetSetCraft/run/./screenshots/rival-rush-1793572647060-06-crew-roster.png",
+      "2026-11-01T22:38:14.2160089Z [22:38:14] [IO-Worker-5/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_RUSH_VISUAL_AUDIT_CAPTURE 07-crew-facilities /home/runner/work/JetSetCraft/JetSetCraft/run/./screenshots/rival-rush-1793572647060-07-crew-facilities.png",
+      "2026-11-01T22:38:15.3164777Z [22:38:15] [IO-Worker-8/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_RUSH_VISUAL_AUDIT_CAPTURE 08-crew-jobs /home/runner/work/JetSetCraft/JetSetCraft/run/./screenshots/rival-rush-1793572647060-08-crew-jobs.png",
+      "2026-11-01T22:38:15.4169562Z [22:38:15] [Render thread/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_CREW_VISUAL_AUDIT_PASS real charter use; founded home; two profiles; physical workshop; real timed job",
+      "2026-11-01T22:38:15.4195226Z [22:38:15] [Server thread/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_ACTIVITY_AUDIT_ANCHOR_VERIFIED dimension=minecraft:overworld anchor=2, 52, 0 player=(0.5, 52.0, 0.5) grounded=true distance=2.093895891851546",
+      "2026-11-01T22:38:16.8150449Z [22:38:16] [IO-Worker-4/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_RUSH_VISUAL_AUDIT_CAPTURE 09-activities /home/runner/work/JetSetCraft/JetSetCraft/run/./screenshots/rival-rush-1793572647060-09-activities.png",
+      "2026-11-01T22:38:18.6150278Z [22:38:18] [IO-Worker-9/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_RUSH_VISUAL_AUDIT_CAPTURE 10-arena-route /home/runner/work/JetSetCraft/JetSetCraft/run/./screenshots/rival-rush-1793572647060-10-arena-route.png",
+      "2026-11-01T22:38:20.6217946Z [22:38:20] [Render thread/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_ACTIVITY_VISUAL_AUDIT_PASS real Boombox preview; explicit Rival Rush; genuine first route choice; entered connected arena travel; inventory/XP/dimension restored",
+      "2026-11-01T22:38:20.6319949Z [22:38:20] [Render thread/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_RUSH_VISUAL_AUDIT_PASS ten real-client captures; street and arena inventory/XP/dimension restored; actual Charter, crew facilities, job, Boombox activity and first arena choice verified"
+    ],
+    "source_changes_under_src": [
+      "src/main/java/com/herberto/jetsetcraft/client/activity/ActivityJourneyVisualAudit.java",
+      "src/main/java/com/herberto/jetsetcraft/client/crew/CrewHouseVisualAudit.java"
+    ],
+    "production_gameplay_sources_and_resources_identical_to_pr41": true,
+    "delivered_jar": "Original PR #41 artifact recorded in the primary receipt; not rebuilt from this audit-only follow-up.",
+    "correction": "Prepare a real dry supported room in the guarded disposable visual-audit world, observe grounded state and pass the completed home's authoritative anchor to the activity audit. Ordinary item-use packets, native screenshots and restoration assertions remain in use.",
+    "preceding_failed_repeat": {
+      "run_id": 41357044926,
+      "job_id": 124999233200,
+      "url": "https://github.com/Herbertofury/JetSetCraft/actions/runs/41357044926/job/124999233200",
+      "build": "passed",
+      "gametests_passed": 28,
+      "dedicated_server_smoke": "passed",
+      "native_client_captures_before_failure": 8,
+      "failure": "Placed house Boombox is missing from the actual audit world",
+      "scope": "Opt-in visual fixture handoff; production gameplay and provider checks passed."
+    },
+    "merge_capture": {
+      "file": "12-pr-audit-merge.jpg",
+      "bytes": 76276,
+      "sha256": "6041519fb7b7e6458addd78f58f88c13e56446ebc55991cde93e80b445a71061",
+      "visually_reviewed": true,
+      "description": "Actual GitHub browser state showing PR #42 merged, commit 76f44fe and one check passed."
+    },
+    "limits": [
+      "This follow-up ran the base workflow; the nine-configuration provider evidence belongs to the separately identified original PR #41 JAR.",
+      "Follow-up capture completion is verified from native logs; the ten images in the primary gallery remain the original inspected PR #41 captures."
+    ]
+  }
 }

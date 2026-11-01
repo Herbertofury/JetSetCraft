@@ -20,6 +20,14 @@ The verified feature commit is [`c733852`](https://github.com/Herbertofury/JetSe
 | AoA 1.20.1-3.7.1 Beta | [Provider #56 — `aoa`](https://github.com/Herbertofury/JetSetCraft/actions/runs/41356358302/job/124997134536): build, 28 GameTests and dedicated-server readiness/save/shutdown |
 | Aether + Iron's Spells + AoA + Cataclysm | [Provider #56 — `adventure_all`](https://github.com/Herbertofury/JetSetCraft/actions/runs/41356358302/job/124997134611): build, 28 GameTests and dedicated-server readiness/save/shutdown |
 
+### Client-audit follow-up
+
+A post-merge repeat passed build, all 28 GameTests and dedicated-server smoke but stopped after eight client captures when the disposable house fixture's activity handoff could not locate its Boombox. [PR #42](https://github.com/Herbertofury/JetSetCraft/pull/42) supplies a real dry supported room, observes grounded client state and hands over the completed home's authoritative anchor. It preserves ordinary item-use packets, native screenshots and return assertions; only two opt-in audit Java classes changed under `src`.
+
+[Verify JetSetCraft #282](https://github.com/Herbertofury/JetSetCraft/actions/runs/41357798877/job/125001513156) then passed its build, all 28 GameTests, server smoke, ten captures and all three visual-audit PASS markers. The feature `fe679cf`, tested integration `c0b2028` and actual merge `76f44fe` share tree `ffc85769b8d50143cb7c2e1c66f240ed01515bf8`. The [complete follow-up receipt](https://github.com/Herbertofury/JetSetCraft/tree/main/docs/verification/arena-circuit#follow-up-repeatable-client-fixture-and-final-guides) records the initial failure and observed room/anchor checks.
+
+The downloadable JAR remains the exact original PR #41 artifact tested in all nine configurations. PR #42 has its own passing base result; ordinary gameplay sources and resources are identical. The primary ten-image gallery remains the original inspected capture set.
+
 ### Activity and arena test coverage
 
 | Alpha.3 marker | Scope |

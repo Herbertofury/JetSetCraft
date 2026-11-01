@@ -12,6 +12,8 @@
 - Extended provider CI to Aether, Iron's Spells, AoA and a combined adventure configuration alongside the existing Wave 2 configurations. Added real objective, circuit, provider-collision and dimension-return tests; the new client audit exercises the actual Boombox menu and first route choice.
 - Merged through [PR #41](https://github.com/Herbertofury/JetSetCraft/pull/41). [Base verification #280](https://github.com/Herbertofury/JetSetCraft/actions/runs/41356358215) and [all eight provider configurations #56](https://github.com/Herbertofury/JetSetCraft/actions/runs/41356358302) passed all 28 real GameTests and server smoke. The base client also produced ten inspected native captures. The [alpha.3 receipt and gallery](docs/verification/arena-circuit/README.md) records the identical tested/merged tree, exact JAR checksum, native provider scope and observed upstream warnings. Human pacing and long-session progression balance remain to be evaluated.
 
+- Follow-up [PR #42](https://github.com/Herbertofury/JetSetCraft/pull/42) stabilizes only the disposable client-audit house-to-activity handoff and publishes the final player guides. [Base #282](https://github.com/Herbertofury/JetSetCraft/actions/runs/41357798877) passed all 28 GameTests, server smoke and ten client captures. The distributed JAR remains the exact nine-configuration PR #41 artifact; production gameplay sources and resources did not change.
+
 ## 0.4.0-alpha.2 — crew-house development, 2026-11-01
 
 - Added a reusable **Crew Charter** and separate Home, Crew, Jobs and Facilities ledger for a house the player builds around an existing Boombox.

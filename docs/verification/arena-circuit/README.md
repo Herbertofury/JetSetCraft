@@ -19,7 +19,7 @@ This checkpoint connects completed street games, Rival Rush arenas and run settl
 | Artifact ZIP size | 6,495,440 bytes |
 | Artifact ZIP SHA-256 | `02dd91630c3daaf898e78ecb531fedee53d29cc77111234e6935f6b5a964582e` |
 
-The downloaded ZIP matched GitHub's artifact digest, and the JAR matched the artifact's `libs/SHA256SUMS`. GitHub's commit records confirmed that the tested integration and actual merge have the same tree. This receipt and the subsequent wiki updates are documentation-only; they do not rebuild or modify the delivered JAR. The stable **v0.3.0** release remains a separate published release.
+The downloaded ZIP matched GitHub's artifact digest, and the JAR matched the artifact's `libs/SHA256SUMS`. GitHub's commit records confirmed that the tested integration and actual merge have the same tree. The delivered JAR remains that exact PR #41 artifact. The later PR #42 correction changes two opt-in visual-audit classes and is recorded separately below; ordinary gameplay sources and resources are identical. This final receipt update does not rebuild the JAR. The stable **v0.3.0** release remains a separate published release.
 
 Runtime: **Minecraft 1.20.1, Forge 47.4.23, Java 17, PlayerAnimator 1.0.2-rc1+1.20 on clients, JetSetCraft network protocol 12**. A dedicated server does not require PlayerAnimator.
 
@@ -44,6 +44,23 @@ This is **252 successful test executions across nine configurations**, not 252 d
 The added coverage includes actual Tag and hill objectives, activity ownership and cancellation safety, shared receipts and pre-house banking, provider dimension return, the native spell relay, arena catalogue/rules and a real arena session. Existing movement, combat sovereignty, graffiti, Street Gear, Rush, house and mission tests remain in the gate.
 
 Remote FakePlayer fixtures use temporary, expiring GameTest-only chunk tickets; normal activity and arena code does not acquire those tickets. The hill fixture clears native terrain above its test floor and asserts its expected height. The graffiti lifecycle test observes 40 actual supported entity ticks before removing support and checks native discarded removal afterward. These corrections make the fixtures exercise the intended state across the provider seeds without relaxing production clearance or lifecycle rules.
+
+## Follow-up: repeatable client fixture and final guides
+
+The automatic post-merge [base repetition](https://github.com/Herbertofury/JetSetCraft/actions/runs/41357044926/job/124999233200) passed its clean build, all 28 GameTests and dedicated-server smoke, then stopped after eight client captures because the activity audit could not find the placed house Boombox. The preceding disposable-world fixture had no supported standing room, and the activity handoff searched only near the player's later position.
+
+[PR #42](https://github.com/Herbertofury/JetSetCraft/pull/42) prepares a real dry room and stone floor in that guarded audit save, observes 20 grounded client ticks, and passes the completed home's authoritative anchor to the activity audit. Both sides validate the loaded native Boombox and ordinary interaction distance. It retains normal item-use packets, native screenshots and the original inventory/XP/dimension assertions. Only `ActivityJourneyVisualAudit.java` and `CrewHouseVisualAudit.java` differ under `src` from the PR #41 merge; production gameplay and resource files are unchanged.
+
+The follow-up [Verify JetSetCraft #282](https://github.com/Herbertofury/JetSetCraft/actions/runs/41357798877/job/125001513156) passed the clean build, all 28 GameTests, dedicated-server smoke and ten native client captures, with all three visual-audit PASS markers. Its log records `JETSETCRAFT_CREW_AUDIT_ROOM_OBSERVED` with `grounded=true dry=true` and `JETSETCRAFT_ACTIVITY_AUDIT_ANCHOR_VERIFIED` at the actual house anchor before the ordinary Boombox interaction.
+
+| Follow-up identity | Value |
+|---|---|
+| Feature | `fe679cf32dfcaee145a77a8d3c7f3d8a52c23592` |
+| Tested PR integration | `c0b202846e6c0a0b448906c81b25dd7eaa7b103d` |
+| Actual merged commit | `76f44fe808fa4141c811df3dd5dc7f57713c687d` |
+| Identical feature/tested/merged tree | `ffc85769b8d50143cb7c2e1c66f240ed01515bf8` |
+
+The fresh follow-up ran the base workflow. The nine-configuration provider evidence and delivered JAR above remain the original PR #41 checkpoint; they are not relabeled as PR #42 results. The ten client images below remain the original inspected captures. The supplemental machine record and downloadable logs preserve the failed repetition and successful correction separately.
 
 ## What the graphical client actually did
 
@@ -118,6 +135,12 @@ Three actual offered rooms expose their different build rewards, shared crew rew
 The browser shows PR #41 merged into `main` at `e57e9ab`, nine checks passed, and the successful closed state. This is an unmodified browser capture of the completed merge.
 
 ![GitHub confirmation of the completed PR 41 merge](11-pr-merge.jpg)
+
+### 12 — Actual audit follow-up merge
+
+The browser shows PR #42 merged into `main` at `76f44fe`, one passing base check and the successful closed state. This unmodified capture records the audit correction and guide publication separately from the original gameplay merge.
+
+![GitHub confirmation of the completed PR 42 merge](12-pr-audit-merge.jpg)
 
 ## Provider scope and observed upstream messages
 
