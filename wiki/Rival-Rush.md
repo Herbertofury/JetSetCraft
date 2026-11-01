@@ -8,7 +8,28 @@ Use a tuned Boombox with an empty hand, or `/jetsetcraft activity`. The activity
 
 Tag, King of the Hill and Showdown now have real server-owned objectives on nearby loaded terrain. Only the accepting player's valid actions advance those objectives. Actor removal, chunk unload, missing anchors and cancellation do not award a victory. The activity menu displays the current objective and reward.
 
-All completed activities use the same **Crew Supplies, crew XP, member training and gang reputation** as house development and dispatch missions. Before a first house exists, the account retains those earnings. Founding the house transfers them once, including training to its starter roster. This progression is virtual and never replaces Minecraft XP, item drops or the ordinary inventory.
+Completed **Tag, King of the Hill and Showdown objectives, arena clears, qualifying Rush returns and claimed house missions** feed the same **Crew Supplies, crew XP, member training and gang reputation** account. Before a first house exists, earned activity rewards remain in that account. Founding transfers them into the house alongside its **24 starting Supplies**; accumulated training goes to **Riff, the initially focused starter member**. Pending reputation can already qualify the new house for a recruitment discount. These rewards are virtual and do not award Minecraft items or Minecraft XP.
+
+### Shared completion rewards
+
+These are the candidate's configured amounts, with crew progression enabled and room below the account caps. They remain tuning choices awaiting human progression playtests.
+
+| Completed activity | Crew Supplies | Crew XP | Member training XP | Gang reputation |
+|---|---:|---:|---:|---:|
+| Tag: six rivals tagged | 8 | 55 | 20 | 6 |
+| King of the Hill: three hills captured | 14 | 90 | 32 | 8 |
+| Showdown: four rivals, three tags each | 12 | 75 | 25 | 8 |
+| Arena clear: balanced | 6 | 35 | 15 | 4 |
+| Arena clear: supplies emphasis | 12 | 25 | 10 | 3 |
+| Arena clear: training emphasis | 4 | 45 | 35 | 3 |
+| Arena clear: reputation emphasis | 4 | 30 | 10 | 9 |
+| Qualifying Rush return, Free streets or circuit | 9–44 | 26–240 | 23–140 | 3–32 |
+
+After founding, activity training goes to **one selected idle member**. A member away on a mission receives no activity training until that job is claimed or cancelled; clearing the training focus also disables it. A claimed mission trains its assigned member. [The crew-house guide](Player-Chapters-Posse-and-Mob-Archetypes) lists mission rewards and physical upgrade costs.
+
+A Rush return qualifies after at least **one active minute and three genuine rival defeats**. Let `M` be completed active minutes capped at 30, `C` collected cards capped at 20, and `T` the loaded operational Practice yard tier, or zero. Its reward is `8 + M + floor(C / 3)` Supplies, `20 + 6M + 2C` crew XP, `20 + 3M + 10T` training XP and `2 + M` reputation. Training reaches at most 110 without a facility bonus, or 140 with tier three. An arena clear and the later qualifying return are separate earned rewards with separate receipt IDs; a full six-room finish is not required to qualify for the return reward.
+
+The account retains its most recent **128 settlement receipts** to reject repeated reward calls, and those receipts move with pre-house earnings on founding. Each result also has a server-owned completion lifecycle. Mission claims remove the claimed job. These are bounded replay protections; durability follows normal world saves, so an abrupt crash can lose changes since the last completed save. Menu refreshes, ordinary mob kills, cancelled street games and unloaded legacy Boombox actors do not settle these rewards.
 
 ## Arena circuit: choose, ride, clear, collect
 
@@ -34,7 +55,7 @@ Rooms are generated only inside the registered Rush dimension. Terrain from the 
 
 Glowing personal caches offer **magnet, paint damage, critical chance/power, area, recovery or an artifact**. Three additional owned rival defeats charge the next claim. Skate through a charged cache to collect it. A magnet reaches only owned run-card pickups; it does not attract vanilla items or another player's rewards. Each arena has a fresh set. Free streets continually discovers new nearby caches; previously claimed locations replenish after at least ten active minutes, with a bounded conservative cooldown ledger.
 
-Runs have **three artifact-family slots**. Taking more ranks strengthens an existing family. Full builds still receive useful score/recovery rewards; a stale draft cannot open a fourth slot.
+Runs have **three artifact-family slots**. The ranked catalogue contains **18 choices: eleven stat upgrades and seven artifact families**. Firebolt relay requires the optional Iron's provider/API, leaving seventeen ranked choices without it. Taking more ranks strengthens an existing family. Full builds still receive useful score/recovery rewards; a stale draft cannot open a fourth slot.
 
 | Artifact | Implemented behavior |
 |---|---|
@@ -89,13 +110,14 @@ If the entry checkpoint cannot be saved, the run stops before lending equipment 
 
 The loan inventory supplies paint balloons, a spray can, and all six existing ride styles. The equipped physical ride is preserved across the return snapshot. Run paint is supplied by the session; it is not a way to manufacture normal-world items.
 
-## Three separate rewards
+## Run, album and shared crew rewards
 
 | Reward | Earned from | What happens after returning |
 |---|---|---|
 | **Rush XP** | Collected cards, eligible new graffiti patches, movement style, music stops and captains | Temporary level/build ends; vanilla XP is untouched |
 | **Run score** | Rival defeats, collection mastery, walls, style, cyphers and terminal draft rewards | Shown in the result summary; never converted into vanilla currency |
 | **Mob-card album** | Actually collected mode-owned card pickups | Persists by original mob registry ID and crew ID |
+| **Shared crew progression** | Completed street objectives, arena clears, qualifying Rush returns and claimed missions | Supplies, crew XP, member progress and gang reputation remain in the house account or its pre-house balance |
 
 The run has its own **vitality**, separate from Minecraft hearts. Only the owning session's director resolves its rival attacks. Another player's run, native mob damage and unrelated projectiles cannot spend that vitality. Falling outside the playable district returns the player safely.
 
@@ -122,8 +144,12 @@ A [player-built crew house](Player-Chapters-Posse-and-Mob-Archetypes) can prepar
 | **Second wind** | More maximum run vitality and immediate recovery |
 | **Easy breathing** | Recovery after avoiding damage |
 | **Style dividends** | Stronger mode rewards for eligible walls and movement |
+| **Critical rhythm** | Higher paint critical chance, capped at 35% |
+| **Finishing touch** | More critical-hit damage |
+| **Bigger chorus** | Larger paint and artifact area |
+| **Fast rewind** | Shorter artifact intervals, with bounded minimums |
 
-Stat ranks have defined ceilings. Once capped, drafts remain useful through **Fresh wheels** healing, **Victory lap** score, and temporary **Overdrive** damage. Choices validate the player, current run UUID, offer version and offered index. Replaying an old request cannot buy an upgrade in a new run.
+These eleven stat upgrades join the seven artifact families listed above; the original alpha.2 pool had seven stat upgrades. Stat and artifact ranks have defined ceilings. Once capped, drafts remain useful through **Fresh wheels** healing, **Victory lap** score, and temporary **Overdrive** damage. Choices validate the player, current run UUID, offer version and offered index. Replaying an old request cannot buy an upgrade in a new run.
 
 ## Optional crew-house preparation and training
 
@@ -182,6 +208,8 @@ Add a roster at `data/<namespace>/jetsetcraft_rush_rosters/<name>.json`:
 The mode filters absent entity IDs without requiring optional mods. A completely unavailable cast cannot start. Use the existing gang data system to define or map additional named crews. The client HUD has independent drag, scale, visibility and reset controls, persisted locally; those preferences cannot award gameplay state.
 
 ### Custom arena data packs
+
+Start with the [ready-to-edit Crossfade Yard data pack](https://github.com/Herbertofury/JetSetCraft/tree/main/examples/arena-data-pack). It contains the pack metadata, a complete arena definition, four authored corner markers and installation instructions.
 
 Add `data/<namespace>/rush_arenas/<name>.json`. The server loads at most 32 profiles. The optional `requires_mod` key hides a provider-specific profile when that provider is absent. Palette entries may be one block ID or an ordered array of up to eight fallback IDs.
 

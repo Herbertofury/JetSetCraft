@@ -89,7 +89,12 @@ final class RivalRushScreen extends Screen {
 
     private void selectView(CompoundTag incoming) {
         if (incoming.getBoolean("Active") && !RivalRushClient.offers().isEmpty()) view = View.UPGRADES;
-        else if (RivalRushClient.choosingRoute()) view = View.ROUTE;
+        else if (RivalRushClient.choosingRoute()) {
+            // A requested collection page remains usable while the next route waits for a decision.
+            if (incoming.contains("Album", Tag.TAG_LIST)) { view = View.ALBUM; window = responseWindow; responseWindow = 0; }
+            else if (incoming.contains("Roster", Tag.TAG_LIST)) { view = View.ROSTER; window = responseWindow; responseWindow = 0; }
+            else if (view != View.ALBUM && view != View.CARD && view != View.ROSTER) view = View.ROUTE;
+        }
         else if (!incoming.getString("Summary").isBlank()) { resultSummary = incoming.getString("Summary"); view = View.RESULT; }
         else if (incoming.getBoolean("Finale")) view = View.RUN;
         else if (incoming.contains("Album", Tag.TAG_LIST)) { view = View.ALBUM; window = responseWindow; responseWindow = 0; }
@@ -121,7 +126,7 @@ final class RivalRushScreen extends Screen {
         boolean active = RivalRushClient.state().getBoolean("Active");
         int third = active ? (span - 12) / 4 : (span - 8) / 3;
         addRenderableWidget(Button.builder(Component.literal("Run"), button -> navigate(
-                RivalRushClient.offers().isEmpty() ? View.RUN : View.UPGRADES))
+                !RivalRushClient.offers().isEmpty() ? View.UPGRADES : RivalRushClient.choosingRoute() ? View.ROUTE : View.RUN))
                 .bounds(left, 45, third, 20).build());
         addRenderableWidget(Button.builder(Component.literal("Rival crews"), button -> {
             navigate(View.ROSTER);
@@ -209,15 +214,15 @@ final class RivalRushScreen extends Screen {
             }).bounds(left, 144, span, 20).build());
         }
         timedButton = addRenderableWidget(Button.builder(Component.literal(circuit ? "Start 6-arena journey" : "Start 30-minute run"), button -> start(false))
-                .bounds(left, height - 53, half, 20).build());
-        endlessButton = addRenderableWidget(Button.builder(Component.literal(circuit ? "Endless journey" : "Start Endless"), button -> start(true))
-                .bounds(left + half + 4, height - 53, span - half - 4, 20).build());
+                .bounds(left, height - 53, circuit ? span : half, 20).build());
         timedButton.setTooltip(Tooltip.create(Component.literal(circuit
                 ? "Six arenas connected by actual riding. Each room shows its duration and reward; choose Return or Encore after the set."
                 : "Thirty active minutes, then an explicit Return or Encore choice.")));
-        endlessButton.setTooltip(Tooltip.create(Component.literal(circuit
-                ? "Keep your build through further arena sets. Each completed arena offers a new route; Return remains available."
-                : "Keep the run going through escalating street sets. Return at any time.")));
+        if (!circuit) {
+            endlessButton = addRenderableWidget(Button.builder(Component.literal("Start Endless"), button -> start(true))
+                    .bounds(left + half + 4, height - 53, span - half - 4, 20).build());
+            endlessButton.setTooltip(Tooltip.create(Component.literal("Keep the run going through escalating street sets. Return at any time.")));
+        }
         updateStartButtons();
     }
 
@@ -303,8 +308,8 @@ final class RivalRushScreen extends Screen {
     }
 
     private void updateStartButtons() {
-        if (timedButton != null && endlessButton != null)
-            timedButton.active = endlessButton.active = !pending && validIds(gang, mob);
+        if (timedButton != null) timedButton.active = !pending && validIds(gang, mob);
+        if (endlessButton != null) endlessButton.active = !pending && validIds(gang, mob);
         if (applyButton != null && gangField != null && mobField != null)
             applyButton.active = validIds(gangField.getValue(), mobField.getValue());
     }
@@ -432,7 +437,7 @@ final class RivalRushScreen extends Screen {
         if (view == View.RUN) {
             if (!state.getBoolean("Active")) {
                 gui.drawString(font, RivalRushClient.clipped("Theme: " + mobName(mob), span), left, 102, 0xFF87E1EA);
-                if (circuit) wrap(gui, "Six arenas per set. Preview rewards; ride the connecting routes.", left, 170, span, 1, 0xFFDDDDDD);
+                if (circuit) wrap(gui, "Six arenas, then Return or Encore with your build.", left, 170, span, 1, 0xFFDDDDDD);
                 else wrap(gui, "Explore endless streets, tag rivals and collect cards. Return whenever you choose.",
                         left, 146, span, Math.max(1, (height - 200) / 10), 0xFFDDDDDD);
             } else {

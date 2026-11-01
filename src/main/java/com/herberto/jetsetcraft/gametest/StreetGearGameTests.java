@@ -30,6 +30,8 @@ import net.minecraft.nbt.Tag;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.TicketType;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -38,6 +40,7 @@ import net.minecraft.world.entity.monster.Spider;
 import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.common.util.FakePlayerFactory;
@@ -111,6 +114,16 @@ public final class StreetGearGameTests {
     public static void graffitiPersistsAndLeavesWithItsWall(GameTestHelper helper) {
         BlockPos wallRelative = new BlockPos(2, 1, 2);
         BlockPos wallWorld = helper.absolutePos(wallRelative);
+        // A loaded GameTest structure does not establish that this decal's section is entity-ticking.
+        // Keep the support and its neighboring decal section ticking only for this fixture. Renewals
+        // stop when the helper finishes; timeout2 also releases the ticket after failure or timeout.
+        TicketType<BlockPos> fixtureTicket = TicketType.create("jetsetcraft_graffiti_gametest", BlockPos::compareTo, 2);
+        ChunkPos fixtureChunk = new ChunkPos(wallWorld);
+        Runnable keepFixtureTicking = () -> helper.getLevel().getChunkSource()
+                .addRegionTicket(fixtureTicket, fixtureChunk, 3, wallWorld);
+        Runnable releaseFixture = () -> helper.getLevel().getChunkSource()
+                .removeRegionTicket(fixtureTicket, fixtureChunk, 3, wallWorld);
+        keepFixtureTicking.run(); helper.onEachTick(keepFixtureTicking);
         helper.setBlock(wallRelative, Blocks.STONE);
 
         byte[] pixels = new byte[CustomGraffiti.PIXELS];
@@ -131,26 +144,50 @@ public final class StreetGearGameTests {
         GraffitiEntity restored = new GraffitiEntity(ModEntities.GRAFFITI.get(), helper.getLevel());
         restored.load(saved);
         if (restored.getVariant() != 2 || restored.getFace() != Direction.NORTH
-                || !customPattern.equals(restored.getCustomPattern())) {
-            throw new GameTestAssertException("Graffiti did not preserve its variant/facing/custom NBT");
+                || !customPattern.equals(restored.getCustomPattern()) || !wallWorld.equals(restored.getSupportPos())) {
+            throw new GameTestAssertException("Graffiti did not preserve its variant/facing/custom/support NBT");
         }
 
-        helper.runAfterDelay(5, () -> {
-            if (!graffiti.isAlive()) {
-                throw new GameTestAssertException("Supported graffiti removed itself prematurely");
-            }
-            helper.setBlock(wallRelative, Blocks.AIR);
-
-            // Graffiti intentionally performs a low-cost support check every 40 entity ticks. Assert the real
-            // eventual contract until the GameTest timeout instead of sampling one fixed server tick, which can
-            // race the entity-tick phase when large optional providers are present.
-            helper.succeedWhen(() -> {
-                if (!graffiti.isRemoved()) {
-                    throw new GameTestAssertException("Graffiti is still waiting for its bounded support check");
-                }
-                System.out.println("JETSETCRAFT_GAMETEST_PASS graffiti_lifecycle");
-            });
-        });
+        int[] removedSupportAt = {-1};
+        java.util.function.Supplier<String> diagnostics = () -> "entityTicks=" + graffiti.tickCount
+                + ", removedSupportAt=" + removedSupportAt[0]
+                + ", entityTicking=" + helper.getLevel().isPositionEntityTicking(graffiti.blockPosition())
+                + ", wall=" + helper.getLevel().getBlockState(wallWorld)
+                + ", removal=" + graffiti.getRemovalReason();
+        helper.startSequence()
+                .thenWaitUntil(() -> {
+                    if (!graffiti.isAlive()) {
+                        throw new GameTestAssertException("Supported graffiti removed itself prematurely: " + diagnostics.get());
+                    }
+                    // Prove a real supported check occurred before testing removal. Never invoke Entity.tick
+                    // manually or substitute elapsed GameTest/server time for the decal's own tick count.
+                    if (graffiti.tickCount < 40) {
+                        throw new GameTestAssertException("Graffiti fixture has not completed its first native support cycle: " + diagnostics.get());
+                    }
+                })
+                .thenExecute(() -> {
+                    removedSupportAt[0] = graffiti.tickCount;
+                    helper.setBlock(wallRelative, Blocks.AIR);
+                    if (!helper.getLevel().getBlockState(wallWorld).isAir()) {
+                        throw new GameTestAssertException("Graffiti fixture did not remove the actual support block: " + diagnostics.get());
+                    }
+                })
+                .thenWaitUntil(() -> {
+                    if (!graffiti.isRemoved()) {
+                        throw new GameTestAssertException("Graffiti is still waiting for its bounded native support check: " + diagnostics.get());
+                    }
+                })
+                .thenExecute(() -> {
+                    int removalTicks = graffiti.tickCount - removedSupportAt[0];
+                    if (graffiti.getRemovalReason() != Entity.RemovalReason.DISCARDED
+                            || removalTicks < 1 || removalTicks > 40
+                            || !helper.getLevel().getBlockState(wallWorld).isAir()) {
+                        throw new GameTestAssertException("Unsupported graffiti did not discard within 40 native entity ticks: " + diagnostics.get());
+                    }
+                    releaseFixture.run();
+                    System.out.println("JETSETCRAFT_GAMETEST_PASS graffiti_lifecycle native_support_ticks=" + removalTicks);
+                })
+                .thenSucceed();
     }
 
     @GameTest(template = "hoverboard_empty", timeoutTicks = 80)

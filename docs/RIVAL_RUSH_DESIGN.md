@@ -12,20 +12,24 @@ Source observations are separated from JetSetCraft recommendations. All locally 
 
 ### Alpha.3 implementation inventory
 
-The new activity hub implements Tag, King of the Hill, Showdown and a reviewed random invitation alongside Rival Rush. Completed street objectives, arena clears, qualifying Rush results and house missions feed one account. Pre-house earnings are saved and claimed once when a home is founded.
+The new activity hub implements Tag, King of the Hill, Showdown and a reviewed random invitation alongside Rival Rush. Completed Tag/KOTH/Showdown objectives, arena clears, qualifying Rush returns and claimed house missions feed one account. Founding adds pending supplies to the house's **24 starting Supplies**, transfers crew XP and reputation, and gives pending member training to **Riff, the initially focused starter member**. Pre-house reputation can already unlock a recruitment discount. After founding, activity training uses one selected idle member; mission claims train their assigned member. The [shared reward table](../wiki/Rival-Rush.md#shared-completion-rewards) records the exact amounts and eligibility rules.
+
+Arena clears and the later qualifying Rush return are separate earned results. Their server-owned receipts settle supplies, crew XP, training and reputation together. The account retains its most recent 128 receipts, transfers those identities when a house is founded, and saves through ordinary world SavedData. It is a bounded replay ledger, not an unlimited transaction archive or a guarantee against progress loss since the last world save. Missing actors, cancelled street rounds and unloaded legacy Boombox challenges do not settle rewards.
 
 A circuit is six arena clears. Each next room is selected from up to three server-held profiles with different reward families; the player skates along a nine-block-wide connector to the selected room. Six vanilla profiles and one conditional Aether profile cover plaza, crossing, loop and terrace layouts. Profiles specify bounded size, timed objective, genuine-defeat target, static block map and reward emphasis. Choosing upgrades/routes pauses that run; moving outside the active room pauses its objective. Encore starts another six-room set with the same build. The separate Free streets mode retains its thirty-minute boundary.
 
-Builds now have eleven ranked stat upgrades, six common artifact families and one provider-gated artifact, plus three repeatable fallback rewards. At most three artifact families can be held. Real paint chains, firework bursts, knockback/stagger, movement-triggered shockwaves, defeat-triggered firing boosts and charged recovery are implemented. Critical chance/power and area scale actual virtual combat. A cache can grant a run rank and invalidates any now-stale XP offer; old requests cannot fill a fourth artifact slot.
+Builds now have **18 ranked choices: eleven stat upgrades, six common artifact families and one provider-gated artifact**, plus three repeatable fallback rewards. Seventeen ranked choices remain when the optional Firebolt relay provider/API is absent. At most three artifact families can be held. Real paint chains, firework bursts, knockback/stagger, movement-triggered shockwaves, defeat-triggered firing boosts and charged recovery are implemented. Critical chance/power and area scale actual virtual combat. A cache can grant a run rank and invalidates any now-stale XP offer; old requests cannot fill a fourth artifact slot.
 
 Reward caches require three additional owned defeats per claim. Arena completion requires both its active duration and genuine defeat target, then grants the advertised run reward, gathers owned cards and settles a unique shared reward receipt. This is a gameplay implementation, with tuning still subject to human playtesting. It does not import the complete Dungeons I/II item catalogues or their original assets.
 
 The optional Iron's adapter creates the real `irons_spellbooks:firebolt` entity with its actual collision/damage path. Only server-created relays are admitted. It does not cast a player's spellbook or modify provider mana/cooldowns/capabilities. Provider tests distinguish loading, actual native collision, dimension return and curated mob behavior.
 
 
-The table below preserves the alpha.2 baseline. The alpha.3 implementation inventory immediately above it supersedes entries that previously described circuits or artifact families as proposals. The recorded tests cover the cases stated below; a feature appearing here is not evidence that every lifecycle or optional-mod combination has passed.
+### Historical alpha.2 implementation baseline
 
-| Area | Implemented alpha surface | Further design, not implemented by this slice |
+The table below preserves the alpha.2 baseline. The alpha.3 implementation inventory above supersedes entries that previously described circuits or artifact families as proposals. Its seven-choice upgrade count belongs to alpha.2; the current candidate has eighteen ranked choices. The recorded tests cover their stated checkpoint only; a feature appearing here is not evidence that every lifecycle or optional-mod combination has passed.
+
+| Area | Recorded alpha.2 surface | Further design at that checkpoint |
 |---|---|---|
 | **Entry and return** | An opt-in mode menu and command path; a dedicated `jetsetcraft:rival_rush` dimension; temporary loaned ride/paint equipment; a persisted pre-entry return journal and restoration paths. | A polished in-world event host, authored entry sequence, and verified adapters for arbitrary foreign player capabilities. |
 | **Run progression** | Separate run XP, score, vitality, seven ranked stat/reward upgrades, and three repeatable fallback rewards. Server-owned offers carry a run identity and offer version. | The eight interacting build families in section 6; family-aware offer steering, rerolls, evolutions, and run-specific equipment combinations. |
@@ -37,9 +41,11 @@ The table below preserves the alpha.2 baseline. The alpha.3 implementation inven
 | **World and Endless** | Generated local wall/rail/ramp/Boombox patterns; five-minute chapter labels with composition changes and a six-chapter rotation; bounded enemy movement speed and counters. | A rich procedural neighborhood graph, distinct authored route forks, boss duets, the full modifier catalogue, and measured long-duration performance guarantees. |
 | **Optional crew-house bridge — alpha.2** | A player-built house can prepare one selected mode-only starting rank. Qualifying Rush results bank bounded crew supplies, XP, gang reputation and idle-profile training; dispatch jobs provide a non-Rush progression route. See the [Crew House design](CREW_HOUSE_DESIGN.md) and [runtime guide](../wiki/Player-Chapters-Posse-and-Mob-Archetypes.md). | Physical companions, playable expeditions, deep bonds, inhabited-room activities and music-timed house games. Current members are persistent profiles. |
 
-### First-slice upgrade vocabulary
+### Current alpha.3 upgrade catalogue
 
-The seven ranked choices are **Paint pressure** (damage), **Quick hands** (firing interval), **Wide spray** (splash radius), **Magnetic mixtape** (pickup reach), **Second wind** (maximum mode vitality), **Easy breathing** (recovery), and **Style dividends** (mode style rewards). After the ranked pool becomes exhausted, **Fresh wheels**, **Victory lap**, and **Overdrive** provide healing, score, or a temporary damage surge. These are a foundation for build design; they do not yet implement tag chaining, rail-triggered pulses, painted trails, or other interaction families proposed below.
+The eleven stat choices are **Paint pressure** (damage), **Quick hands** (firing interval), **Wide spray** (splash radius), **Magnetic mixtape** (pickup reach), **Second wind** (maximum mode vitality), **Easy breathing** (recovery), **Style dividends** (mode style rewards), **Critical rhythm** (critical chance), **Finishing touch** (critical damage), **Bigger chorus** (paint/artifact area) and **Fast rewind** (artifact intervals).
+
+The seven ranked artifact families are **Arc paint**, **Firework cap**, **Bass horn**, **Rail shockwave**, **Tempo drive**, **Soul mixtape** and optional **Firebolt relay**. Three family slots limit one run's build; further ranks strengthen an existing family. The relay enters the offer pool only when its optional Iron's provider/API is available. After applicable ranks or slots are exhausted, **Fresh wheels**, **Victory lap** and **Overdrive** provide healing, score or a temporary damage surge. The current bounded chain, burst, stagger and movement-pulse effects are implemented; the broader interaction designs in section 6 remain proposals where explicitly described.
 
 The chapter rotation currently changes tagger/bruiser frequency, lowers pressure and increases music-stop benefits in the cypher chapter, and shortens tagger cadence in the crossfire chapter. Its open-street and relay phases use the baseline mixture. These are concrete encounter changes, with further variety still to author and test.
 
@@ -199,7 +205,7 @@ A removed optional mod should leave a readable historical entry rather than dele
 
 ## 6. Builds that make skating matter
 
-These eight families are proposed mechanics, not a claim that the reference games contain these exact effects and not features implemented by this slice. The current seven ranked upgrades are listed in section 0.
+These eight families describe broader interaction proposals, not effects attributed to the reference games. The alpha.3 candidate already implements bounded paint chaining, movement-triggered shockwaves, push/stagger and other artifact effects listed among its eighteen ranked choices in section 0. The exact stored-burst, landing-timing, trail and combination mechanics below remain proposals; sharing a family name does not mean that complete design has shipped.
 
 | Build family | Basic action | Example interaction | Player expression |
 |---|---|---|---|

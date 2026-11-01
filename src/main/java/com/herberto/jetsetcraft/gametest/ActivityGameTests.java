@@ -28,6 +28,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
@@ -293,8 +294,24 @@ public final class ActivityGameTests {
         Runnable keepFixtureLoaded = () -> helper.getLevel().getChunkSource()
                 .addRegionTicket(FIXTURE_TICKET, new ChunkPos(anchor), 3, anchor);
         keepFixtureLoaded.run(); helper.onEachTick(keepFixtureLoaded);
-        for (int dx = -12; dx <= 12; dx++) for (int dz = -12; dz <= 12; dz++)
-            helper.getLevel().setBlockAndUpdate(anchor.offset(dx, -1, dz), Blocks.STONE.defaultBlockState());
+        for (int dx = -12; dx <= 12; dx++) for (int dz = -12; dz <= 12; dz++) {
+            BlockPos column = anchor.offset(dx, 0, dz);
+            // Native world generation is seed/provider dependent. A floor alone can leave tree trunks,
+            // terrain or fluids above it, changing both the heightmap and the production clearance check.
+            // Clear this test column to its highest existing block, then author the intended dry floor.
+            int top = helper.getLevel().getHeight(Heightmap.Types.WORLD_SURFACE, column.getX(), column.getZ());
+            for (int y = Math.min(top, helper.getLevel().getMaxBuildHeight()) - 1; y >= anchor.getY(); y--) {
+                BlockPos existing = new BlockPos(column.getX(), y, column.getZ());
+                if (!helper.getLevel().getBlockState(existing).isAir())
+                    helper.getLevel().setBlockAndUpdate(existing, Blocks.AIR.defaultBlockState());
+            }
+            helper.getLevel().setBlockAndUpdate(column.below(), Blocks.STONE.defaultBlockState());
+        }
+        for (int index = 0; index < 3; index++) {
+            BlockPos site = BlockPos.containing(hill(anchor, index));
+            check(helper.getLevel().getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, site.getX(), site.getZ()) == anchor.getY(),
+                    "Authored activity fixture did not leave its hill at the intended floor height: " + hillDiagnostics(helper, anchor));
+        }
         helper.getLevel().setBlockAndUpdate(anchor, ModBlocks.BOOMBOX.get().defaultBlockState());
         BoomboxBlockEntity box = (BoomboxBlockEntity) helper.getLevel().getBlockEntity(anchor);
         ItemStack head = new ItemStack(Items.PLAYER_HEAD);
@@ -328,7 +345,27 @@ public final class ActivityGameTests {
                 + ", canLaunch=" + state.getBoolean("CanLaunch") + ", version=" + state.getInt("Version")
                 + ", anchorLoaded=" + player.serverLevel().hasChunkAt(anchor)
                 + ", entityTicking=" + player.serverLevel().isPositionEntityTicking(anchor)
-                + ", distanceSquared=" + player.distanceToSqr(Vec3.atCenterOf(anchor));
+                + ", distanceSquared=" + player.distanceToSqr(Vec3.atCenterOf(anchor))
+                + ", hills=" + hillDiagnostics(player.serverLevel(), anchor);
+    }
+    private static String hillDiagnostics(GameTestHelper helper, BlockPos anchor) {
+        return hillDiagnostics(helper.getLevel(), anchor);
+    }
+    private static String hillDiagnostics(net.minecraft.server.level.ServerLevel level, BlockPos anchor) {
+        StringBuilder out = new StringBuilder();
+        for (int index = 0; index < 3; index++) {
+            BlockPos site = BlockPos.containing(hill(anchor, index));
+            if (index > 0) out.append("; ");
+            out.append(index + 1).append(":");
+            if (!level.hasChunksAt(site.offset(-2, 0, -2), site.offset(2, 2, 2))) { out.append("unloaded"); continue; }
+            int y = level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, site.getX(), site.getZ());
+            BlockPos feet = new BlockPos(site.getX(), y, site.getZ());
+            AABB space = new AABB(feet).inflate(1.0, 0, 1.0).expandTowards(0, 1, 0);
+            out.append("y=").append(y).append(", floor=").append(level.getBlockState(feet.below()))
+                    .append(", clear=").append(level.noCollision(space))
+                    .append(", liquid=").append(level.containsAnyLiquid(space));
+        }
+        return out.toString();
     }
     private static void checkVanilla(ServerPlayer player) {
         check(player.experienceLevel == 23 && player.totalExperience == 587 && player.experienceProgress == .625F

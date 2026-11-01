@@ -17,6 +17,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.storage.LevelResource;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
+import org.lwjgl.glfw.GLFW;
 
 import java.nio.file.Path;
 import java.util.UUID;
@@ -25,7 +26,7 @@ import java.util.function.Predicate;
 
 /** Actual Boombox selection and a short arena-journey round trip in the guarded disposable audit world. */
 public final class ActivityJourneyVisualAudit {
-    private static int phase, ticks;
+    private static int phase, ticks, captureStableTicks;
     private static BlockPos anchor;
     private static volatile boolean fixtureApplied;
     private static volatile String fixtureFailure;
@@ -75,7 +76,7 @@ public final class ActivityJourneyVisualAudit {
                 require(!activity.getBoolean("Active") && activity.getBoolean("CanLaunch"),
                         "Real Boombox did not provide a launchable preview: " + activity.getString("Summary"));
                 require(activity.getList("Activities", Tag.TAG_COMPOUND).size() >= 4, "Shared activity catalogue is incomplete");
-                if (++ticks < 20) return false;
+                if (!captureReady(minecraft)) return false;
                 capture.accept("09-activities"); next(4);
             }
             case 4 -> {
@@ -110,7 +111,7 @@ public final class ActivityJourneyVisualAudit {
                 require(rush.hasUUID("Run") && journey.getList("Choices", Tag.TAG_COMPOUND).size() == 3,
                         "First arena decision is not a real three-choice server offer");
                 runId = rush.getUUID("Run");
-                if (++ticks < 20) return false;
+                if (!captureReady(minecraft)) return false;
                 capture.accept("10-arena-route"); next(8);
             }
             case 8 -> {
@@ -212,7 +213,38 @@ public final class ActivityJourneyVisualAudit {
         throw new IllegalStateException("Missing real activity choice: " + label);
     }
 
+    private static boolean captureReady(Minecraft minecraft) {
+        ticks++;
+        long window = minecraft.getWindow().getWindow();
+        boolean focused = GLFW.glfwGetWindowAttrib(window, GLFW.GLFW_FOCUSED) == GLFW.GLFW_TRUE;
+        double x = minecraft.mouseHandler.xpos(), y = minecraft.mouseHandler.ypos();
+        boolean corner = x >= 0 && x <= 24 && y >= 0 && y <= 24;
+        if (focused && corner) {
+            if (++captureStableTicks >= 20) {
+                JetSetCraft.LOGGER.info("JETSETCRAFT_ACTIVITY_AUDIT_CURSOR_SETTLED phase={} observed=({}, {})", phase, x, y);
+                return true;
+            }
+        } else {
+            captureStableTicks = 0;
+            if (!focused) {
+                if (ticks == 1 || ticks % 10 == 0) GLFW.glfwFocusWindow(window);
+            } else {
+                // X11 suppresses the event matching GLFW's last warp. Two genuine native moves allow
+                // the first event through; alternating coordinates also avoids a cached-position no-op.
+                double offset = ticks & 1;
+                GLFW.glfwSetCursorPos(window, 8 + offset, 8);
+                GLFW.glfwSetCursorPos(window, 12 + offset, 12);
+            }
+        }
+        if (ticks >= 60) {
+            JetSetCraft.LOGGER.warn("JETSETCRAFT_ACTIVITY_AUDIT_CURSOR_UNCONFIRMED phase={} focused={} observed=({}, {}); preserving the actual capture",
+                    phase, focused, x, y);
+            return true;
+        }
+        return false;
+    }
+
     private static void require(boolean condition, String reason) { if (!condition) throw new IllegalStateException(reason); }
-    private static void next(int value) { phase = value; ticks = 0; JetSetCraft.LOGGER.info("JETSETCRAFT_ACTIVITY_VISUAL_AUDIT_PHASE {}", value); }
+    private static void next(int value) { phase = value; ticks = 0; captureStableTicks = 0; JetSetCraft.LOGGER.info("JETSETCRAFT_ACTIVITY_VISUAL_AUDIT_PHASE {}", value); }
     private ActivityJourneyVisualAudit() {}
 }

@@ -43,6 +43,8 @@ Use a tuned Boombox with an empty hand, or `/jetsetcraft activity`, to choose **
 
 Rival Rush now offers **Free streets** and a **six-arena circuit**. Pick one of three arena rewards, skate along the generated connection, complete its timed combat objective, and take the next route. The circuit has six vanilla arena profiles and an additional Aether palette profile when that mod is installed. Arena sizes, layouts, authored block maps and bounded rewards are editable through data packs. See [Rival Rush](wiki/Rival-Rush.md) for the exact format.
 
+The [Crossfade Yard example pack](examples/arena-data-pack/README.md) is ready to copy into a world's `datapacks` folder and edit. It supplies a full room definition, authored corner markers and separate run/shared rewards.
+
 Three artifact slots give a run a recognizable build: paint chaining, firework bursts, a bass horn, rail-triggered shockwaves, tempo boosts and soul recovery. The optional Iron's Spells relay launches a real provider Firebolt through an ownership-checked integration; ordinary spellbooks, mana, summons and foreign capability snapshots are outside this adapter's scope. Shared progression remains separate from Minecraft XP and ordinary loot.
 
 ## Build a crew house — development alpha

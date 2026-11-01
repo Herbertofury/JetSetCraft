@@ -1,8 +1,8 @@
 # Crew House: Construction, Members and Missions
 
-**Status: `0.4.0-alpha.2` implementation with recorded machine verification.** This document separates the agreed runtime slice from future design proposals. It also records eight focused primary-source references checked on 1 November 2026. Source observations are not claims of hands-on playtesting, and proposed mechanics are not implemented features.
+**Status: `0.4.0-alpha.3` shared-progression candidate; new verification pending.** The crew-house foundation introduced in alpha.2 has recorded machine verification; those historical checks are preserved below and do not verify later changes. This document separates the runtime candidate from future design proposals. It also records eight focused primary-source references checked on 1 November 2026. Source observations are not claims of hands-on playtesting, and proposed mechanics are not implemented features.
 
-## Implemented first slice
+## House foundation and alpha.3 progression candidate
 
 The current runtime has a deliberately smaller scope than the inhabited-house vision below:
 
@@ -11,10 +11,11 @@ The current runtime has a deliberately smaller scope than the inhabited-house vi
 - **Workshop, training, studio and recovery** facilities use registered, physically placed vanilla blocks. Registering and upgrading facilities require those physical blocks plus a saved **Crew Supplies** balance. Plot expansion spends supplies to enlarge the recognized footprint and roster allowance; the player still constructs the extension.
 - Named roster profiles persist, gain levels and have a training focus. The first slice has a small starting roster and additional recruiting. **It does not spawn visible residents, skating followers or a physical posse.** A profile is not evidence that a mob AI has been implemented or tested.
 - Dispatch assignments use the overworld's game time, require no remote entities or loaded mission chunks, and have explicit claimable results. Time stops when the server stops; on a running multiplayer server it may advance while an individual player is offline. Ready rewards do not expire, decay or auto-repeat.
-- Missions provide a non-Rush route to Crew Supplies, member progress and canonical gang reputation. Home-gang reputation grants bounded recruitment discounts without gating expansion. Completed Rush results can also contribute through one transaction per run ID; unloading a Boombox is not a completed run.
+- Claimed missions and completed Tag, King of the Hill and Showdown objectives provide non-Rush routes to Crew Supplies, crew/member progress and canonical gang reputation. Arena clears and qualifying Rush returns feed the same account through distinct server-owned receipts. Home-gang reputation grants bounded recruitment discounts without gating expansion; unloading a legacy Boombox is not a completed objective.
+- Activity earnings can be saved before the first house. Founding transfers supplies, crew XP, reputation and recent receipt IDs alongside the **24 starting Supplies**; pending training goes to **Riff, the initially focused starter member**. Pre-house reputation can already qualify a new home for recruitment discounts. Later activity training goes only to the selected idle member; a mission trains its assigned member when claimed.
 - The Rush connection prepares **one selected starting perk**. It does not turn every house investment into another stacking permanent combat bonus or award vanilla experience.
 
-Exact costs, timers, capacities and interaction steps are recorded in the [existing chapter wiki reference](../wiki/Player-Chapters-Posse-and-Mob-Archetypes.md). The earlier chapter design's approximately five physical residents is a future design example, not the starting roster contract for this slice. Music assets and permissions are separate work; this document does not claim that a soundtrack is bundled.
+Exact costs, timers, capacities and interaction steps are recorded in the [chapter wiki reference](../wiki/Player-Chapters-Posse-and-Mob-Archetypes.md); the [shared reward table](../wiki/Rival-Rush.md#shared-completion-rewards) records the activity amounts and Rush-return formula. Settlement retains the most recent 128 receipt IDs, and founding moves those IDs with the pending account. Persistence follows normal world saves. The earlier chapter design's approximately five physical residents is a future design example, not the starting roster contract for this slice. Music assets and permissions are separate work; this document does not claim that a soundtrack is bundled.
 
 ### Recorded alpha.2 evidence
 
@@ -111,7 +112,7 @@ A future movable facility should preserve its identity and unlocks. Repeated pla
 Keep **crew reputation**, **individual skill** and **personal bonds** distinct.
 
 - **Gang reputation** answers whether a gang trusts the player and which chapter privileges it offers. Resolve it once per meaningful event, with the existing reconciliation/naming policy.
-- **Member skill** answers what this permanent character has learned. The first slice awards progress through explicit completed/claimed missions and run outcomes. Later add teaching and concrete shared accomplishments; repeatedly opening a menu or moving a facility must not become a training exploit.
+- **Member skill** answers what this permanent character has learned. The alpha.3 candidate awards progress through claimed missions, completed Tag/KOTH/Showdown objectives, arena clears and qualifying Rush returns. Activity training uses the selected idle member; mission XP uses its assigned member. Later add teaching and concrete shared accomplishments; repeatedly opening a menu or moving a facility must not become a training exploit.
 - **Bond memories** answer what the player and member have done together. Use a few memorable unlock conditions instead of another infinite affection bar or a daily chore list.
 
 A small role roster can support many creature types:
