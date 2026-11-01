@@ -1,0 +1,36 @@
+{
+  "schema": 1,
+  "permission_basis": "Project owner reported obtained music rights in the development conversation on 2026-11-01.",
+  "reported_scope_labels": [
+    "Sonic Mania",
+    "SEGA SOUND TEAM",
+    "Kr0w! (owner wrote Krow)",
+    "Masato Nakamura (owner wrote Masata Nakamure)",
+    "Tee Lopes",
+    "Naofumi Hataya"
+  ],
+  "scope_note": "Records the owner's statement. This manifest does not independently verify agreements or infer exact recording-specific terms. Catalogue entries identify recordings; an import receipt records the actual supplied files.",
+  "recordings": [
+    {
+      "track_id": "krow_mystic_cave_zone",
+      "title": "Mystic Cave Zone",
+      "credited_artist": "Kr0w!",
+      "reference_url": "https://open.spotify.com/track/3F9Vgaws51YS7pd3BlnWG0",
+      "metadata_source": "Spotify public track-page metadata and oEmbed, retrieved 2026-11-01",
+      "audio_status": "awaiting_owner_audio",
+      "source_sha256": null,
+      "encoded_sha256": null
+    },
+    {
+      "track_id": "sega_collision_chaos",
+      "title": "Collision Chaos",
+      "credited_artist": "SEGA SOUND TEAM",
+      "album": "SONIC THE HEDGEHOG CD Original Soundtrack (20th Anniversary Edition)",
+      "reference_url": "https://open.spotify.com/track/4IuWcXy4xrmcTPVbvRsnWR",
+      "metadata_source": "Spotify public track-page metadata and oEmbed, retrieved 2026-11-01",
+      "audio_status": "awaiting_owner_audio",
+      "source_sha256": null,
+      "encoded_sha256": null
+    }
+  ]
+}

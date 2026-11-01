@@ -1,0 +1,11 @@
+{
+  "title": "Collision Chaos",
+  "artist": "SEGA SOUND TEAM",
+  "album": "SONIC THE HEDGEHOG CD Original Soundtrack (20th Anniversary Edition)",
+  "sound_event": "jetsetcraft:licensed/sega_collision_chaos",
+  "audio_resource": "jetsetcraft:sounds/music/licensed/sega_collision_chaos.ogg",
+  "contexts": ["home", "rush"],
+  "volume": 0.65,
+  "source_url": "https://open.spotify.com/track/4IuWcXy4xrmcTPVbvRsnWR",
+  "recording_status": "awaiting_owner_audio"
+}

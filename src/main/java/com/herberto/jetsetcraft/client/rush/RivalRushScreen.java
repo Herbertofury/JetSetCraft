@@ -1,6 +1,7 @@
 package com.herberto.jetsetcraft.client.rush;
 
 import com.herberto.jetsetcraft.gang.GangRegistry;
+import com.herberto.jetsetcraft.network.JetSetNetwork;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
@@ -136,13 +137,13 @@ final class RivalRushScreen extends Screen {
             rememberFields();
             minecraft.setScreen(new RivalRushHudScreen(this));
         }).bounds(left + closeWidth + 4, height - 26, closeWidth, 20).build());
-        Button returnButton = addRenderableWidget(Button.builder(Component.literal(active ? "Return to Minecraft" : "Close"), button -> {
+        Button returnButton = addRenderableWidget(Button.builder(Component.literal(active ? "Return to Minecraft" : "Crew House"), button -> {
             if (active) RivalRushClient.request("leave", "", 0);
-            else onClose();
+            else JetSetNetwork.sendCrewAction("open", "", 0, null, null, 0L);
         }).bounds(left + (closeWidth + 4) * 2, height - 26, span - (closeWidth + 4) * 2, 20).build());
         returnButton.setTooltip(Tooltip.create(Component.literal(active
                 ? "End this run and restore your Minecraft state. Collected mode cards stay in the album."
-                : "Return to normal play. A run starts only when you choose Start.")));
+                : "Open your optional crew home, training and supply jobs. Done closes this menu.")));
     }
 
     private void buildRun(int left, int span) {

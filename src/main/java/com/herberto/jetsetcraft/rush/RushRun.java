@@ -129,7 +129,7 @@ public final class RushRun {
         return true;
     }
 
-    /** Album unlock selection is validated by the manager; a run can accept at most one starting perk. */
+    /** A loaded, physical crew facility is validated by the manager; at most one starting rank is accepted. */
     public boolean grantStartingPerk(Upgrade upgrade) {
         if (upgrade == null || upgrade.repeatable() || startingPerkGranted || elapsedTicks != 0L || finished) return false;
         startingPerkGranted = true;

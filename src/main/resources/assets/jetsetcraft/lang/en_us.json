@@ -71,5 +71,11 @@
   "item.jetsetcraft.black_paint_balloon": "Black Paint Balloon",
   "entity.jetsetcraft.paint_balloon": "Paint Balloon",
   "key.jetsetcraft.rush_menu": "Rival Rush menu",
-  "item.jetsetcraft.rush_flyer": "Rival Rush Flyer"
+  "item.jetsetcraft.rush_flyer": "Rival Rush Flyer",
+  "item.jetsetcraft.crew_charter": "Crew Charter",
+  "tooltip.jetsetcraft.crew_charter.home": "Use on a Boombox to choose a crew home.",
+  "tooltip.jetsetcraft.crew_charter.facility": "Use on a facility block to register it.",
+  "tooltip.jetsetcraft.crew_charter.open": "Use in the air to open your crew book.",
+  "tooltip.jetsetcraft.crew_charter.build": "Build freely; home bounds track facilities.",
+  "tooltip.jetsetcraft.crew_charter.profiles": "Profiles train and run timed supply jobs."
 }

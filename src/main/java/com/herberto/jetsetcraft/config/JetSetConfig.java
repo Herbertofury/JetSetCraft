@@ -47,6 +47,7 @@ public final class JetSetConfig {
         public final ForgeConfigSpec.IntValue boomboxChallengeLifetimeTicks;
         public final ForgeConfigSpec.DoubleValue boomboxSpawnRadius;
         public final ForgeConfigSpec.BooleanValue enableRivalRush;
+        public final ForgeConfigSpec.BooleanValue enableCrewHouse;
 
         private Server(ForgeConfigSpec.Builder b) {
             b.push("movement");
@@ -116,6 +117,10 @@ public final class JetSetConfig {
 
             b.push("rivalRush");
             enableRivalRush = b.comment("Allow explicit entry to the separate Rival Rush dimension. Ordinary Minecraft is unchanged until a player opts in.")
+                    .define("enabled", true);
+            b.pop();
+            b.push("crewHouse");
+            enableCrewHouse = b.comment("Allow optional player-built crew homes, roster missions and mode-only Rush preparation. No land protection or chunk loading is added.")
                     .define("enabled", true);
             b.pop();
         }

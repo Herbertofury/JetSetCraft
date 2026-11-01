@@ -6,14 +6,17 @@ This document records the performance/compatibility architecture for persistent 
 
 - **Natural Hangout:** ultra-rare persistent `site_id`, small resident crew, additive micro-dressing, no chunk ticket.
 - **Natural resident:** original vanilla/mod-owned mob with real JetSetCraft Street Gear; remains gangified while gear remains equipped and keeps a soft home around the site.
+- **Player-founded chapter / crew house:** an explicitly placed Boombox anchor, player-built facilities and an expandable soft plot. The plot defines feature eligibility, not Minecraft land protection; see [Crew House design](CREW_HOUSE_DESIGN.md) for the current implementation scope and future resident activities.
 - **Boombox/event actor:** explicit ephemeral challenge cast; leaves/despawns after the event and does not create permanent world population.
 - **Reputation:** canonical progression is per `gang_id`; a hangout may keep only a tiny bounded `site_id` chapter-memory bias/flags. Never track full reputation per disposable mob.
 
 ## Soft territory
 
-A site record contains only a stable ID, parent gang, dimension/anchor/radius, resident references, discovery state, tiny chapter memory, dressing seed/manifest, bounded notable-history flags, and terrain validity state.
+A natural site record contains only a stable ID, parent gang, dimension/anchor/radius, resident references, discovery state, tiny chapter memory, dressing seed/manifest, bounded notable-history flags, and terrain validity state.
 
 The site does not force-load chunks, reserve terrain, alter biome/structure generation, block player building, or stop other mods from using the area. When unloaded it has no live gang AI.
+
+Player-founded houses are the explicit exception to the older no-plot design: the owner can expand the area where manually placed facilities count and upgrade the house's roster allowance. This does not authorize automatic construction, replacement of player/source blocks, building protection or chunk tickets. Natural hangouts retain the soft-territory and non-invasive dressing rules above. A saved crew profile or dispatch assignment does not imply a spawned physical resident or follower AI.
 
 ## Adaptive furniture
 

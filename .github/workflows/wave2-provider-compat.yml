@@ -8,6 +8,10 @@ on:
       - "gradle.properties"
       - "src/main/java/com/herberto/jetsetcraft/mob/**"
       - "src/main/java/com/herberto/jetsetcraft/gang/**"
+      - "src/main/java/com/herberto/jetsetcraft/crew/**"
+      - "src/main/java/com/herberto/jetsetcraft/rush/**"
+      - "src/main/java/com/herberto/jetsetcraft/gametest/Crew*"
+      - "src/main/java/com/herberto/jetsetcraft/gametest/RivalRushGameTests.java"
       - "src/main/java/com/herberto/jetsetcraft/gametest/StreetGearGameTests.java"
       - "src/main/resources/data/jetsetcraft/jetsetcraft_gangs/wave2_*.json"
       - "tools/validate_wave2_compat.py"
@@ -18,6 +22,10 @@ on:
       - "gradle.properties"
       - "src/main/java/com/herberto/jetsetcraft/mob/**"
       - "src/main/java/com/herberto/jetsetcraft/gang/**"
+      - "src/main/java/com/herberto/jetsetcraft/crew/**"
+      - "src/main/java/com/herberto/jetsetcraft/rush/**"
+      - "src/main/java/com/herberto/jetsetcraft/gametest/Crew*"
+      - "src/main/java/com/herberto/jetsetcraft/gametest/RivalRushGameTests.java"
       - "src/main/java/com/herberto/jetsetcraft/gametest/StreetGearGameTests.java"
       - "src/main/resources/data/jetsetcraft/jetsetcraft_gangs/wave2_*.json"
       - "tools/validate_wave2_compat.py"
@@ -111,14 +119,14 @@ jobs:
             echo "::error::Wave 2 Street Gear/compatibility GameTest did not pass for ${{ matrix.provider }}."
             exit 1
           }
-          for marker in rush_rules rush_album rush_return rush_session rush_ownership rush_objectives; do
+          for marker in rush_rules rush_album rush_return rush_session rush_ownership rush_objectives crew_house crew_missions crew_persistence crew_rush; do
             grep -Fq "JETSETCRAFT_GAMETEST_PASS $marker" "$log" || {
-              echo "::error::Rival Rush GameTest $marker did not pass with ${{ matrix.provider }} installed."
+              echo "::error::Rush/crew GameTest $marker did not pass with ${{ matrix.provider }} installed."
               exit 1
             }
           done
-          grep -Eq 'All 15 required tests passed|15 tests? passed' "$log" || {
-            echo "::error::Forge did not report all fifteen JetSetCraft GameTests passing for ${{ matrix.provider }}."
+          grep -Eq 'All 19 required tests passed|19 tests? passed' "$log" || {
+            echo "::error::Forge did not report all nineteen JetSetCraft GameTests passing for ${{ matrix.provider }}."
             exit 1
           }
           if [[ "${{ matrix.provider }}" == "all" ]]; then

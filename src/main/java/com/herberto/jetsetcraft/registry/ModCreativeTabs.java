@@ -24,6 +24,7 @@ public final class ModCreativeTabs {
                 ModItems.PAINT_BALLOONS.values().forEach(balloon -> output.accept(balloon.get()));
                 output.accept(ModItems.BOOMBOX.get());
                 output.accept(ModItems.RUSH_FLYER.get());
+                output.accept(ModItems.CREW_CHARTER.get());
             }).build());
 
     private ModCreativeTabs() {}

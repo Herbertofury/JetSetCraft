@@ -2,6 +2,7 @@ package com.herberto.jetsetcraft.rush;
 
 import com.herberto.jetsetcraft.JetSetCraft;
 import com.herberto.jetsetcraft.config.JetSetConfig;
+import com.herberto.jetsetcraft.crew.CrewHouseManager;
 import com.herberto.jetsetcraft.data.JetSetData;
 import com.herberto.jetsetcraft.data.JetSetDataProvider;
 import com.herberto.jetsetcraft.entity.PaintBalloonEntity;
@@ -58,6 +59,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.WeakHashMap;
 
@@ -224,6 +226,11 @@ public final class RivalRushManager {
             } finally { if (check != null) check.discard(); }
         }
         if (roster.isEmpty()) return fail(player, "This crew's roster has no installed, Street Gear-compatible AI mobs.");
+        Optional<RushRun.Upgrade> preparation = Optional.empty();
+        try { preparation = CrewHouseManager.rushPreparation(player); }
+        catch (RuntimeException error) {
+            JetSetCraft.LOGGER.error("Could not read optional house preparation for {}; starting without it", player.getUUID(), error);
+        }
         if (!RushReturnState.capture(player)) return fail(player, "Could not safely preserve your return state; no run was started.");
         if (!RushPlayerStorage.flush(player)) {
             // No loan or teleport has happened. Keep the ordinary player state and let logout retry its save.
@@ -233,6 +240,7 @@ public final class RivalRushManager {
             return false;
         }
         RushRun run = new RushRun(UUID.randomUUID(), player.getUUID(), district.getRandom().nextLong(), endless, gangId.toString());
+        preparation.ifPresent(run::grantStartingPerk);
         Session s = new Session(player, run, gang, roster);
         sessions(player.getServer()).put(player.getUUID(), s);
         try {
@@ -298,6 +306,16 @@ public final class RivalRushManager {
         if (!restored) {
             if (s != null) s.exiting = false;
             return fail(player, "Your return snapshot is retained. Use Return again or reconnect to recover safely.");
+        }
+        if (s != null) {
+            try {
+                CrewHouseManager.bankRush(player, s.run.id(), s.gang.id(), s.run.elapsedTicks(),
+                        s.cards, s.run.defeats(), s.run.score());
+            } catch (RuntimeException error) {
+                // Optional progression must never prevent the player returning to their ordinary world.
+                JetSetCraft.LOGGER.error("Could not settle crew progress for Rush {} owned by {}; Minecraft state was restored",
+                        s.run.id(), player.getUUID(), error);
+            }
         }
         sessions(player.getServer()).remove(player.getUUID());
         LAST_MENU.remove(player.getUUID());

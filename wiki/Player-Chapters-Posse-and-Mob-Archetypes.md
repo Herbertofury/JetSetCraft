@@ -1,4 +1,87 @@
-# Player Chapters, Posse & Mob Archetypes
+# Player Chapters, Crew Houses, Posse & Mob Archetypes
+
+**Development status: crew-house implementation under verification.** The current slice adds player-built house facilities, a persistent named roster, levels, dispatch jobs and optional Rival Rush preparation. **Members are saved profiles: visible residents, skating followers and physical posse AI are future work.** Stable `v0.3.0` is unchanged. The [Crew House design study](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/CREW_HOUSE_DESIGN.md) contains eight primary-source inspirations and clearly labelled extensions.
+
+## Start a crew house
+
+1. Craft a reusable **Crew Charter** from **book + cyan dye + copper ingot**. Use it in the air, or enter `/jetsetcraft crew`, to open the crew book.
+2. Place a normal Boombox at your chosen home. Its resolved gang becomes the chapter's gang when founded; a box without a resolved target defaults to Dead Beat. Finish any active Boombox challenge first.
+3. Use the Charter on the Boombox, choose **Found a home**, review the location and confirm **Found here**. Selecting a block or reading the book alone never founds a house or spends supplies.
+4. Build your own house and facilities. Founding supplies **24 Crew Supplies** and two named apprentice profiles: **Riff** (Courier) and **Patches** (Tagger). No structure or resident mob is generated.
+5. In **Crew**, choose a member and a job; in **Jobs**, claim its result when ready. You can keep building, skating or playing ordinary Minecraft while the assignment advances.
+
+The book has **Home**, **Crew**, **Facilities** and **Jobs** tabs. You can inspect it away from home; managing members, jobs or facilities requires returning to the same dimension, standing inside the registered plot and having its Boombox naturally loaded and present. Management is unavailable while in Rival Rush. The server can disable this optional feature with `[crewHouse] enabled = false` while retaining saved progression.
+
+Each player has one owned house. **Show boundary** previews its square footprint. This area determines which facilities belong to the house; it does not protect blocks, reserve building permissions, create terrain or force-load chunks. Registered crew plots cannot overlap one another or extend past the world border, but ordinary Minecraft building remains governed by the server's usual rules.
+
+## Expand the space you build
+
+| Stage | Radius from the anchor | Recognized footprint | Roster capacity | Concurrent jobs | Cost to reach this stage |
+|---|---:|---:|---:|---:|---:|
+| Founded house | 8 blocks | 17 × 17 | 3 | 2 | Founding |
+| First expansion | 12 blocks | 25 × 25 | 5 | 2 | 40 Crew Supplies |
+| Second expansion | 16 blocks | 33 × 33 | 8 | 3 | 100 Crew Supplies |
+| Third expansion | 24 blocks | 49 × 49 | 12 | 3 | 200 Crew Supplies |
+
+An expansion increases the recognized area and roster allowance. **It does not place walls, rooms or decorations.** Facility upgrades below give the blocks you construct a specific use. These initial costs and limits are tuning choices, not evidence of a balanced progression curve.
+
+To move, use the Charter on another eligible placed Boombox, choose **Move home**, and review **Confirm move**. Your house identity, names, members, jobs, XP, supplies and purchased facility tiers remain. Register the facilities at their new physical locations; re-registration is free and requires the blocks for their already-purchased tiers. Moving does not copy your building or create another roster. A missing home Boombox leaves the saved crew and jobs intact: replace it at the anchor or relocate.
+
+## Build and register four useful facilities
+
+Place the ordinary Minecraft blocks yourself, use the Charter on the facility's base block, then choose **Register facility**. First registration costs **8 Crew Supplies**. Upgrading from tier 1 to 2 costs **16**; tier 2 to 3 costs **32**.
+
+| Facility | Base block for tier 1 | Add for tier 2 | Also add for tier 3 | Optional Rush preparation |
+|---|---|---|---|---|
+| **Paint workshop** | Crafting table or smithing table | Anvil, chipped anvil or damaged anvil | Grindstone | **Paint pressure**: one damage rank |
+| **Practice yard** | Target block | Iron bars | Smooth stone slab | **Quick hands**: one firing-rate rank |
+| **Mix studio** | Jukebox | Note block | Redstone lamp | **Style dividends**: one style-reward rank |
+| **Recovery corner** | Brewing stand | Empty or water-filled cauldron | Bed | **Easy breathing**: one recovery rank |
+
+Supports must be within **two blocks along each axis** of the registered base, inside the plot and naturally loaded. Tier 3 requires both supporting block types. The blocks retain their ordinary Minecraft function and are not consumed by registration. If a required block is removed or unloaded, the facility stops contributing until its full purchased-tier requirements are valid again; the purchased tier remains saved.
+
+Each operational tier above 1 adds **5 percentage points** to mission supply rewards. A DJ assigned with an operational Mix studio adds another **10 percentage points** within the same **30% total facility-bonus cap**. These bonuses are evaluated when a job starts. The studio does not yet provide an interactive music minigame, and the recovery corner does not spawn or heal physical crew NPCs.
+
+## Name, recruit and develop members
+
+Members have a permanent profile ID, name, creature identity, gang, role and member XP. Rename them in the crew book. Recruiting costs **20 + 5 × the current member count** Crew Supplies, so adding the first extra member to the two apprentices costs **30**. Choose **Courier**, **Tagger**, **Technician** or **DJ** at recruitment.
+
+The available species pool includes a representative of the house's gang plus eligible installed species already discovered in your mob-card album, up to 64 choices. Recruiting creates a roster profile; it does not capture, replace or remove a world mob. The starting gang representative remains recruitable without playing Rush, so house expansion and role development have a non-Rush route.
+
+Member level is capped at **10**. The cumulative XP required for level `L` is `60 × (L − 1)²`: level 2 needs 60 XP and level 3 needs 240. A level contributes **2% more mission supplies per level above 1**, reaching **18% at level 10**. Crew XP is a separate house-wide record, capped at level **20**, with cumulative threshold `50 × (L − 1) × L`. Neither is Minecraft experience, and a crew level does not automatically purchase an expansion or facility.
+
+**Train in Rival Rush** selects an idle member to receive member XP from qualifying run results. **Stop Rush training** clears that selection. A dispatched member remains busy until the job is claimed or cancelled and cannot receive this idle-member training while busy. The selected profile does not follow the player into the district.
+
+Reputation is stored by player and canonical gang identity. A mission grants its reputation once for the assigned member's gang; a Rush result grants its reputation once for the rival gang. Home-gang reputation reduces recruitment prices by **2 / 4 / 6 / 8 Crew Supplies** at **50 / 150 / 400 / 1,000 reputation**, with a minimum price of **20**. The crew book shows the current discount. Growth remains available without a reputation threshold. Wider trust-gated chapter skins, individual bond scenes and follower privileges described later are future design.
+
+## Dispatch jobs without a login schedule
+
+| Assignment | Matching role | Duration in server game time | Base Crew Supplies | Member XP | Crew XP | Gang reputation |
+|---|---|---:|---:|---:|---:|---:|
+| **Neighborhood delivery** | Courier | 3 minutes | 12 | 35 | 40 | 6 |
+| **Community mural commission** | Tagger | 8 minutes | 30 | 90 | 100 | 14 |
+| **Workshop salvage circuit** | Technician | 15 minutes | 55 | 160 | 180 | 25 |
+| **Soundcheck circuit** | DJ | 8 minutes | 30 | 90 | 100 | 14 |
+
+Any idle member can take any job. A matching role adds **25%** to base supplies; member-level and facility percentages are added to that bonus, then the final supply amount is rounded down. The XP and reputation amounts in the table do not receive this supply multiplier. All inputs are fixed at dispatch: a later level-up, broken facility or upgrade does not retroactively change an active assignment's promised reward.
+
+Durations use the overworld's game time, with the displayed minutes assuming normal 20-tick-per-second simulation. Time stops when the server stops; it can advance while you are offline if a multiplayer server keeps running. Ready results remain available indefinitely. There is no reward expiry, decay, automatic repeat or missed-login penalty, and no remote mission chunks or travelling mobs are simulated.
+
+Choose **Claim rewards** at home to bank the saved supplies, member XP, crew XP and gang reputation together once. A ready job still occupies its member and slot until claimed. **Cancel job** requires confirmation and returns the member without rewards. These assignments are a background roster activity; the named mural, delivery and soundcheck jobs do not yet contain playable field missions.
+
+## Keep Rival Rush optional
+
+Missions can fund house growth without entering Rush. Conversely, a qualifying Rush result can bank Crew Supplies, crew XP and gang reputation, plus training for the selected idle member. The current eligibility threshold is at least **one minute of active run time and three rival defeats**. Rewards are bounded and recorded once per run ID; unloading an ordinary Boombox challenge is not a qualifying run result. Crew Supplies never become vanilla items or XP orbs.
+
+In **Facilities**, **Choose preparation** selects at most **one** starting perk from an operational facility. The default is **No house preparation**. The benefit applies only when starting Rush from inside the valid, loaded home plot, and always grants one rank even if the facility is tier 3. It does not change ordinary Minecraft health, damage or item yield. The existing mob-card album's starting-draft milestones remain a separate Rush system.
+
+The first slice provides no physical NPC residents, follower navigation, provider-backed recovery, playable expeditions, personal bond scenes or music-timed house activities. Those ideas have a clear place in the extension design below and in the [eight-game research study](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/CREW_HOUSE_DESIGN.md).
+
+House progression lives in the world's saved crew record, separately from Rush's temporary player-return snapshot. Claims update the job and its rewards together in memory; durability follows ordinary Minecraft world saves. An abrupt crash can lose changes since the last completed world save. Unrecognized save schemas are retained read-only, with management blocked until recovery or a compatible mod version is available.
+
+## Future physical chapters and posse design
+
+**Everything in this section is the longer-term design contract, not a claim about the profile-only crew-house runtime above.** Its approximate five-resident example, high-trust founding reward, themed Chapter Boomboxes, physical followers and archetype recovery describe later work. The current reusable Charter and roster rules above take precedence for the implemented first slice.
 
 High reputation with a gang should eventually let the player bring that gang **home** without turning JetSetCraft into a settlement/worldgen mod.
 
@@ -6,7 +89,7 @@ The prestige reward is a gang-specific **Chapter Boombox**: a themed version of 
 
 Examples should be playful and species-aware. A Mooshroom gang can award a mushroom-covered **Shroom Box**; aquatic gangs can use bubbles/water motifs; Bone Drones can use skeletal speaker cages. These are data-driven gang models/skins over one compatible Chapter Boombox implementation rather than separate invasive systems.
 
-## Found Your Own Chapter
+### Found Your Own Chapter
 
 At a high configurable reputation tier (default target: Member/Veteran-level trust), the player unlocks that gang's Chapter Boombox.
 
@@ -21,7 +104,7 @@ Placing it:
 
 The Chapter Boombox can be intentionally picked up and moved. Its `site_id`, roster, customizations, gang identity, names, and posse assignments survive the move. Re-placing the same chapter anchor relocates home without duplicating residents.
 
-## Stable crew roster, temporary physical bodies
+### Stable crew roster, temporary physical bodies
 
 Each permanent member gets a JetSetCraft `crew_member_id`. That is the character identity across deaths and provider changes; a runtime entity UUID is only the current physical body.
 
@@ -42,7 +125,7 @@ A roster entry can persist:
 
 These residents are not disposable event actors. The player can name them, interact with them, and—after sufficient trust—invite them into their **posse**.
 
-## Posse followers
+### Posse followers
 
 Eligible chapter residents can become followers and travel/skate with the player, join JetSetCraft activities, pose/dance, and return home when dismissed.
 
@@ -57,7 +140,7 @@ Performance remains bounded:
 
 The player still has one canonical reputation relationship with the gang's `gang_id`; naming individual members does not create five global reputation meters.
 
-## Chapter Boombox is their bed/spawn point
+### Chapter Boombox is their bed/spawn point
 
 The placed Chapter Boombox is the permanent crew's **home/spawn anchor**, conceptually like a player's bed while remaining entirely JetSetCraft-owned.
 
@@ -74,7 +157,7 @@ JetSetCraft minigame defeats do not have to kill the mob. A non-lethal downed/re
 
 If the Chapter Boombox is picked up while a member is recovering, the member remains safely pending until that same chapter anchor is placed again.
 
-### No death-farm or duplication exploit
+#### No death-farm or duplication exploit
 
 Home recovery must not duplicate equipment, inventories, or turn permanent residents into infinite source-mob farms.
 
@@ -82,7 +165,7 @@ Home recovery must not duplicate equipment, inventories, or turn permanent resid
 - Any death/loot adjustments apply only to JetSetCraft-owned chapter residents through narrow Forge events/accounting; never modify global loot tables or unrelated mobs.
 - Repeatable resurrection must have sensible loot/cooldown rules so repeatedly killing one chapter member cannot farm vanilla/modded drops forever.
 
-## Super-intelligent Mob Archetype Resolver
+### Super-intelligent Mob Archetype Resolver
 
 JetSetCraft must recognize **creature concepts**, not depend on one provider mod forever.
 
@@ -105,7 +188,7 @@ Resolution should be confidence-based and cached after registry load:
 
 Never identify an archetype by one Java class, one namespace, a mod filename, renderer internals, or texture scanning. Optional providers remain optional and must never be hard-classloaded when absent.
 
-### Multiple providers
+#### Multiple providers
 
 If two mods both provide a Moobloom:
 
@@ -114,7 +197,7 @@ If two mods both provide a Moobloom:
 - expose the chosen provider in the Mob Atlas/debug UI;
 - never randomly swap an already-living member's entity type.
 
-### Provider changed or removed
+#### Provider changed or removed
 
 Persist both `mob_archetype_id` and the last provider.
 
@@ -127,7 +210,7 @@ If the provider disappears:
 
 This architecture should generalize beyond Mooblooms to old-vote mobs, backports, variants, butterflies, sharks, fireflies, copper golems, rascal-style mobs, and any future creature concept implemented by competing mods.
 
-## Acceptance gates
+### Acceptance gates
 
 1. High reputation unlocks the correct gang-specific Chapter Boombox via stable `gang_id`.
 2. Placing it at the player's chosen base creates one bounded chapter with about five permanent roster members and no worldgen/chunk-ticket side effects.

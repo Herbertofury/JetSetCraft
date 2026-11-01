@@ -61,6 +61,7 @@ public final class JetSetCommands {
                         .executes(context -> visualAudit(context.getSource())));
         }
         dispatcher.register(root);
+        CrewHouseCommands.register(dispatcher);
     }
 
     private static int status(CommandSourceStack source) {

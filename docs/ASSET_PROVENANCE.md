@@ -39,6 +39,12 @@ JetSetCraft keeps source provenance separate from runtime derivatives so an asse
 
 The user supplied a screenshot in this project conversation of a SEGA support email as authorization evidence regarding Jet Set Radio asset use. The exact wording shown in that evidence governs; this ledger does not broaden or reinterpret the grant. The screenshot itself is not currently stored as a repository file.
 
+### Owner-reported Sonic music permissions, 2026-11-01
+
+The project owner additionally reported obtained music rights associated with Sonic Mania, SEGA SOUND TEAM, Kr0w!, Masato Nakamura, Tee Lopes and Naofumi Hataya. [`tools/music_rights_manifest.json`](../tools/music_rights_manifest.json) preserves that owner statement and the exact linked recordings: **Mystic Cave Zone — Kr0w!** and **Collision Chaos — SEGA SOUND TEAM**, the latter from the Sonic CD 20th Anniversary soundtrack. Spotify's official public metadata establishes the recording identities; it is not the permission evidence.
+
+The development alpha ships catalogue metadata and optional resource-pack playback support. **Neither recording's audio is bundled at this checkpoint.** [`tools/import_music.py`](../tools/import_music.py) converts an owner-supplied local recording into a streaming resource pack and writes source/encoded SHA-256 receipts and credits. See [Music Integration](MUSIC_INTEGRATION.md). Existing eighty original gang stingers retain their independent manifest and provenance.
+
 ## Official JetSetCraft brand art
 
 - Source: project-owner-supplied artwork in the ChatGPT project conversation (2026-08-20/21).
