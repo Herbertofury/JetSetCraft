@@ -18,7 +18,6 @@ public final class RushWorld {
     public static final ResourceKey<Level> DIMENSION = ResourceKey.create(Registries.DIMENSION,
             ResourceLocation.fromNamespaceAndPath(JetSetCraft.MOD_ID, "rival_rush"));
     public static final int FLOOR_Y = 63;
-    private static final String DECORATED = "jetsetcraft:rush_streets_v1";
 
     public static boolean isRush(Level level) { return level != null && level.dimension().equals(DIMENSION); }
 
@@ -30,7 +29,7 @@ public final class RushWorld {
             for (int x = -radius; x <= radius; x++) for (int z = -radius; z <= radius; z++) {
                 if (Math.max(Math.abs(x), Math.abs(z)) != radius) continue;
                 LevelChunk chunk = level.getChunkSource().getChunkNow(cx + x, cz + z);
-                if (chunk == null || chunk.getPersistentData().getBoolean(DECORATED)) continue;
+                if (chunk == null || decorated(chunk)) continue;
                 decorate(level, chunk);
                 return;
             }
@@ -70,8 +69,8 @@ public final class RushWorld {
             place(level, x + 9, FLOOR_Y, z + 8, Blocks.SEA_LANTERN.defaultBlockState());
             place(level, x + 9, FLOOR_Y + 1, z + 8, ModBlocks.BOOMBOX.get().defaultBlockState());
         }
-        chunk.getPersistentData().putBoolean(DECORATED, true);
-        chunk.setUnsaved(true);
+        // Written last: the persistent in-world marker also survives a reload without a global chunk index.
+        place(level, x + 15, FLOOR_Y, z + 15, Blocks.SEA_LANTERN.defaultBlockState());
     }
 
     public static BlockPos nearestBoombox(ServerLevel level, BlockPos center) {
@@ -80,7 +79,7 @@ public final class RushWorld {
         int cx = center.getX() >> 4, cz = center.getZ() >> 4;
         for (int dx = -2; dx <= 2; dx++) for (int dz = -2; dz <= 2; dz++) {
             LevelChunk chunk = level.getChunkSource().getChunkNow(cx + dx, cz + dz);
-            if (chunk == null || !chunk.getPersistentData().getBoolean(DECORATED)) continue;
+            if (chunk == null || !decorated(chunk)) continue;
             BlockPos candidate = new BlockPos((cx + dx) * 16 + 9, FLOOR_Y + 1, (cz + dz) * 16 + 8);
             if (!level.getBlockState(candidate).is(ModBlocks.BOOMBOX.get())) continue;
             double squared = candidate.distSqr(center);
@@ -92,6 +91,11 @@ public final class RushWorld {
     private static void place(ServerLevel level, int x, int y, int z,
                               net.minecraft.world.level.block.state.BlockState state) {
         level.setBlock(new BlockPos(x, y, z), state, 2);
+    }
+
+    private static boolean decorated(LevelChunk chunk) {
+        return chunk.getBlockState(new BlockPos(chunk.getPos().getMinBlockX() + 15, FLOOR_Y,
+                chunk.getPos().getMinBlockZ() + 15)).is(Blocks.SEA_LANTERN);
     }
 
     private RushWorld() {}

@@ -47,7 +47,6 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -220,7 +219,13 @@ public final class RivalRushManager {
         }
         if (roster.isEmpty()) return fail(player, "This crew's roster has no installed, Street Gear-compatible AI mobs.");
         if (!RushReturnState.capture(player)) return fail(player, "Could not safely preserve your return state; no run was started.");
-        if (!(player instanceof FakePlayer)) player.getServer().getPlayerList().save(player);
+        if (!RushPlayerStorage.flush(player)) {
+            // No loan or teleport has happened. Keep the ordinary player state and let logout retry its save.
+            player.getPersistentData().getCompound(Player.PERSISTED_NBT_TAG).remove(RushReturnState.KEY);
+            player.connection.disconnect(Component.literal(
+                    "Rival Rush could not save your return checkpoint. Your Minecraft belongings were not changed. Reconnect after the server can save player data."));
+            return false;
+        }
         RushRun run = new RushRun(UUID.randomUUID(), player.getUUID(), district.getRandom().nextLong(), endless, gangId.toString());
         Session s = new Session(player, run, gang, roster);
         sessions(player.getServer()).put(player.getUUID(), s);
@@ -290,7 +295,13 @@ public final class RivalRushManager {
         }
         sessions(player.getServer()).remove(player.getUUID());
         LAST_MENU.remove(player.getUUID());
-        if (!(player instanceof FakePlayer)) player.getServer().getPlayerList().save(player);
+        if (!RushPlayerStorage.flush(player)) {
+            // Restoration already succeeded in memory. Do not reinsert/replay a stale journal or permit
+            // container transactions before the restored state is saved; normal logout retries the save.
+            player.connection.disconnect(Component.literal(
+                    "Rival Rush restored your Minecraft state, but the server could not save it. Reconnect after the server can save player data."));
+            return false;
+        }
         syncRide(player);
         send(player, true, summary, -1, -1);
         return true;
@@ -563,7 +574,7 @@ public final class RivalRushManager {
         ItemStack card = new ItemStack(Items.PAPER);
         card.setHoverName(Component.literal(actor.species.getPath().replace('_', ' ') + " · Rush card"));
         ItemEntity drop = new ItemEntity(s.player.serverLevel(), actor.mob.getX(), actor.mob.getY() + 0.3, actor.mob.getZ(), card);
-        drop.setPickUpDelay(32767); drop.setInvulnerable(true); drop.setOwner(s.player.getUUID());
+        drop.setPickUpDelay(32767); drop.setInvulnerable(true);
         mark(drop, s);
         s.pickups.put(drop.getUUID(), new Pickup(drop, actor.species));
         if (!s.player.serverLevel().addFreshEntity(drop)) s.pickups.remove(drop.getUUID());

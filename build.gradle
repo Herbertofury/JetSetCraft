@@ -33,7 +33,13 @@ minecraft {
             property 'mixin.env.remapRefMap', 'true'
             property 'mixin.env.refMapRemappingFile', file("${buildDir}/createSrgToMcp/output.srg").absolutePath
             property 'jetsetcraft.visualAudit', System.getProperty('jetsetcraft.visualAudit', 'false')
-            if (System.getProperty('jetsetcraft.visualAudit', 'false') == 'true') {
+            property 'jetsetcraft.rushVisualAudit', System.getProperty('jetsetcraft.rushVisualAudit', 'false')
+            if (System.getProperty('jetsetcraft.rushVisualAudit', 'false') == 'true') {
+                if (System.getProperty('jetsetcraft.visualAudit', 'false') == 'true') {
+                    throw new GradleException('Run the ordinary and Rival Rush visual audits separately.')
+                }
+                args '--quickPlaySingleplayer', 'RivalRushAudit', '--width', '1280', '--height', '720'
+            } else if (System.getProperty('jetsetcraft.visualAudit', 'false') == 'true') {
                 args '--quickPlaySingleplayer', 'New World'
             }
         }

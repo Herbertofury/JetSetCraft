@@ -111,8 +111,14 @@ jobs:
             echo "::error::Wave 2 Street Gear/compatibility GameTest did not pass for ${{ matrix.provider }}."
             exit 1
           }
-          grep -Eq 'All 9 required tests passed|9 tests? passed' "$log" || {
-            echo "::error::Forge did not report all nine JetSetCraft GameTests passing for ${{ matrix.provider }}."
+          for marker in rush_rules rush_album rush_return rush_session rush_ownership rush_objectives; do
+            grep -Fq "JETSETCRAFT_GAMETEST_PASS $marker" "$log" || {
+              echo "::error::Rival Rush GameTest $marker did not pass with ${{ matrix.provider }} installed."
+              exit 1
+            }
+          done
+          grep -Eq 'All 15 required tests passed|15 tests? passed' "$log" || {
+            echo "::error::Forge did not report all fifteen JetSetCraft GameTests passing for ${{ matrix.provider }}."
             exit 1
           }
           if [[ "${{ matrix.provider }}" == "all" ]]; then
