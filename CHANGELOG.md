@@ -10,7 +10,7 @@
 - Added charged reward caches for magnet, damage, critical chance/power, ability area, recovery and artifacts. Cache claims require genuine owned rival defeats; victory gathers nearby owned cards.
 - Added critical-hit calculations, area scaling, cooldown upgrades and three artifact slots: Arc paint, Firework cap, Bass horn, Rail shockwave, Tempo drive, Soul mixtape and an optional native Iron's Firebolt relay.
 - Extended provider CI to Aether, Iron's Spells, AoA and a combined adventure configuration alongside the existing Wave 2 configurations. Added real objective, circuit, provider-collision and dimension-return tests; the new client audit exercises the actual Boombox menu and first route choice.
-- Verification for this candidate is pending. Historical alpha.2 results below are not evidence for these changes. Human pacing and long-session progression balance remain to be evaluated.
+- Merged through [PR #41](https://github.com/Herbertofury/JetSetCraft/pull/41). [Base verification #280](https://github.com/Herbertofury/JetSetCraft/actions/runs/41356358215) and [all eight provider configurations #56](https://github.com/Herbertofury/JetSetCraft/actions/runs/41356358302) passed all 28 real GameTests and server smoke. The base client also produced ten inspected native captures. The [alpha.3 receipt and gallery](docs/verification/arena-circuit/README.md) records the identical tested/merged tree, exact JAR checksum, native provider scope and observed upstream warnings. Human pacing and long-session progression balance remain to be evaluated.
 
 ## 0.4.0-alpha.2 — crew-house development, 2026-11-01
 

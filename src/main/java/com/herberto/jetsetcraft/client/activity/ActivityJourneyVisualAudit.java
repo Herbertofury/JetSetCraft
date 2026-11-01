@@ -2,6 +2,7 @@ package com.herberto.jetsetcraft.client.activity;
 
 import com.herberto.jetsetcraft.JetSetCraft;
 import com.herberto.jetsetcraft.blockentity.BoomboxBlockEntity;
+import com.herberto.jetsetcraft.client.crew.CrewHouseVisualAudit;
 import com.herberto.jetsetcraft.client.rush.RivalRushClient;
 import com.herberto.jetsetcraft.network.JetSetNetwork;
 import com.herberto.jetsetcraft.registry.ModBlocks;
@@ -30,7 +31,7 @@ public final class ActivityJourneyVisualAudit {
     private static BlockPos anchor;
     private static volatile boolean fixtureApplied;
     private static volatile String fixtureFailure;
-    private static String originalDimension;
+    private static String fixtureDimension, originalDimension;
     private static String previousRushSummary = "";
     private static Vec3 originalPosition;
     private static ListTag originalInventory;
@@ -153,13 +154,9 @@ public final class ActivityJourneyVisualAudit {
         Path expected = minecraft.gameDirectory.toPath().resolve("saves/RivalRushAudit").toAbsolutePath().normalize();
         require(server != null && server.getWorldPath(LevelResource.ROOT).toAbsolutePath().normalize().equals(expected),
                 "Activity fixture requires the exact disposable RivalRushAudit save");
-        BlockPos playerPos = minecraft.player.blockPosition();
-        for (BlockPos pos : BlockPos.betweenClosed(playerPos.offset(-4, -1, -4), playerPos.offset(4, 1, 4))) {
-            if (minecraft.level.hasChunkAt(pos) && minecraft.level.getBlockState(pos).is(ModBlocks.BOOMBOX.get())) {
-                anchor = pos.immutable(); break;
-            }
-        }
-        require(anchor != null, "Placed house Boombox is missing from the actual audit world");
+        anchor = CrewHouseVisualAudit.completedHomeAnchor(minecraft);
+        fixtureDimension = minecraft.level.dimension().location().toString();
+        requireBoombox(minecraft);
         UUID playerId = minecraft.player.getUUID();
         server.execute(() -> {
             try {
@@ -167,9 +164,18 @@ public final class ActivityJourneyVisualAudit {
                         && server.getWorldPath(LevelResource.ROOT).toAbsolutePath().normalize().equals(expected), "Activity fixture lost its world guard");
                 var player = server.getPlayerList().getPlayer(playerId);
                 require(player != null, "Activity fixture player disconnected");
-                var source = server.createCommandSourceStack().withPermission(4).withEntity(player).withSuppressedOutput();
+                require(player.level().dimension().location().toString().equals(fixtureDimension)
+                        && player.serverLevel().hasChunkAt(anchor)
+                        && player.serverLevel().getBlockState(anchor).is(ModBlocks.BOOMBOX.get())
+                        && player.serverLevel().getBlockEntity(anchor) instanceof BoomboxBlockEntity
+                        && player.getEyePosition().distanceToSqr(Vec3.atCenterOf(anchor).add(0, 0.5, 0)) <= 4.5 * 4.5,
+                        "The exact founded Boombox is unavailable or outside genuine server interaction range");
+                var source = player.createCommandSourceStack().withPermission(4).withSuppressedOutput();
                 require(server.getCommands().performPrefixedCommand(source, "give @s minecraft:zombie_head 1") > 0,
                         "Vanilla head fixture command failed");
+                JetSetCraft.LOGGER.info("JETSETCRAFT_ACTIVITY_AUDIT_ANCHOR_VERIFIED dimension={} anchor={} player={} grounded={} distance={}",
+                        fixtureDimension, anchor.toShortString(), player.position(), player.onGround(),
+                        player.getEyePosition().distanceTo(Vec3.atCenterOf(anchor).add(0, 0.5, 0)));
                 fixtureApplied = true;
             } catch (RuntimeException error) {
                 fixtureFailure = "Activity fixture failed: " + error.getMessage();
@@ -188,9 +194,24 @@ public final class ActivityJourneyVisualAudit {
 
     private static void use(Minecraft minecraft, int slot) {
         require(slot >= 0 && minecraft.gameMode != null, "Missing actual tuner item or empty-hand slot");
+        requireBoombox(minecraft);
         minecraft.player.getInventory().selected = slot;
         minecraft.gameMode.useItemOn(minecraft.player, InteractionHand.MAIN_HAND,
                 new BlockHitResult(Vec3.atCenterOf(anchor).add(0, 0.5, 0), Direction.UP, anchor, false));
+    }
+
+    private static void requireBoombox(Minecraft minecraft) {
+        double distance = minecraft.player == null || anchor == null ? Double.NaN
+                : minecraft.player.getEyePosition().distanceTo(Vec3.atCenterOf(anchor).add(0, 0.5, 0));
+        require(minecraft.level != null && minecraft.player != null && anchor != null
+                && minecraft.level.dimension().location().toString().equals(fixtureDimension)
+                && minecraft.level.hasChunkAt(anchor) && minecraft.level.getBlockState(anchor).is(ModBlocks.BOOMBOX.get())
+                && minecraft.level.getBlockEntity(anchor) instanceof BoomboxBlockEntity
+                && minecraft.player.onGround() && !minecraft.player.isInWaterOrBubble()
+                && distance <= 4.5,
+                "The exact founded Boombox is missing, unloaded or outside the supported client interaction position: anchor="
+                        + anchor + ", player=" + (minecraft.player == null ? "disconnected" : minecraft.player.position())
+                        + ", grounded=" + (minecraft.player != null && minecraft.player.onGround()) + ", distance=" + distance);
     }
 
     private static void click(Minecraft minecraft, String label) {

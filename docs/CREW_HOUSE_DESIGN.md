@@ -1,8 +1,8 @@
 # Crew House: Construction, Members and Missions
 
-**Status: `0.4.0-alpha.3` shared-progression candidate; new verification pending.** The crew-house foundation introduced in alpha.2 has recorded machine verification; those historical checks are preserved below and do not verify later changes. This document separates the runtime candidate from future design proposals. It also records eight focused primary-source references checked on 1 November 2026. Source observations are not claims of hands-on playtesting, and proposed mechanics are not implemented features.
+**Status: `0.4.0-alpha.3`, merged and machine-verified through [PR #41](https://github.com/Herbertofury/JetSetCraft/pull/41).** The [alpha.3 verification receipt](verification/arena-circuit/README.md) records the shared progression, activity and arena checkpoint; the crew-house foundation's alpha.2 evidence is preserved separately below. This document separates implemented behavior from future design proposals. It also records eight focused primary-source references checked on 1 November 2026. Source observations are not claims of hands-on playtesting, and proposed mechanics are not implemented features.
 
-## House foundation and alpha.3 progression candidate
+## House foundation and alpha.3 progression
 
 The current runtime has a deliberately smaller scope than the inhabited-house vision below:
 
@@ -17,7 +17,15 @@ The current runtime has a deliberately smaller scope than the inhabited-house vi
 
 Exact costs, timers, capacities and interaction steps are recorded in the [chapter wiki reference](../wiki/Player-Chapters-Posse-and-Mob-Archetypes.md); the [shared reward table](../wiki/Rival-Rush.md#shared-completion-rewards) records the activity amounts and Rush-return formula. Settlement retains the most recent 128 receipt IDs, and founding moves those IDs with the pending account. Persistence follows normal world saves. The earlier chapter design's approximately five physical residents is a future design example, not the starting roster contract for this slice. Music assets and permissions are separate work; this document does not claim that a soundtrack is bundled.
 
-### Recorded alpha.2 evidence
+### Verified alpha.3 evidence
+
+[Verify JetSetCraft #280](https://github.com/Herbertofury/JetSetCraft/actions/runs/41356358215) and [provider matrix #56](https://github.com/Herbertofury/JetSetCraft/actions/runs/41356358302) passed **28 real GameTests in each of nine runtime configurations**: base plus eight provider selections. Every configuration reached dedicated-server readiness and completed normal shutdown. The base-client audit supplied ten reviewed **1280 × 720** captures; the [receipt](verification/arena-circuit/README.md) records the exact tested/merged tree, binary and assertions.
+
+The new activity tests cover real owner-only objectives, pre-house supplies/XP/reputation, pending training transfer to Riff, receipt transfer and repeated-settlement rejection. Existing crew tests retain physical construction checks, mission deadlines/claims, persistence and the qualifying Rush bridge. The client used the actual Charter, founded a house, showed its two profiles, registered a placed workshop and dispatched a real job. That job remained running in the capture. Crew images 05–07 retain native hover overlays over some secondary information. Mission claims and arena combat/clear are exercised by GameTests; the client arena audit covers its first choices and connected travel.
+
+A concrete early progression example uses the standard Tag, King of the Hill and Showdown rewards: **34 earned Supplies + 24 founding Supplies = 58**, with **77 pending training XP going to Riff only**, raising him to level 2. The first expansion costs 40 and tier-one workshop registration costs 8, leaving **10 Supplies** if nothing else is purchased. The player must still build inside the expanded footprint and place valid facility blocks. This is an exact cost illustration; human progression pacing and long-session balance remain to be tested.
+
+### Historical alpha.2 evidence
 
 [Verify JetSetCraft #274](https://github.com/Herbertofury/JetSetCraft/actions/runs/41350812751) passed the clean Forge build, **19 real GameTests**, dedicated-server readiness and normal RCON shutdown, and an actual **1280 × 720 graphical client audit with eight captures**. [All four optional-provider configurations](https://github.com/Herbertofury/JetSetCraft/actions/runs/41350812645) passed the same 19 tests and server smoke. The [crew-house verification receipt](verification/crew-house/README.md) records the tested source, binary and captures; the [alpha.1 receipt](verification/rival-rush/README.md) remains a separate historical record.
 
@@ -112,7 +120,7 @@ A future movable facility should preserve its identity and unlocks. Repeated pla
 Keep **crew reputation**, **individual skill** and **personal bonds** distinct.
 
 - **Gang reputation** answers whether a gang trusts the player and which chapter privileges it offers. Resolve it once per meaningful event, with the existing reconciliation/naming policy.
-- **Member skill** answers what this permanent character has learned. The alpha.3 candidate awards progress through claimed missions, completed Tag/KOTH/Showdown objectives, arena clears and qualifying Rush returns. Activity training uses the selected idle member; mission XP uses its assigned member. Later add teaching and concrete shared accomplishments; repeatedly opening a menu or moving a facility must not become a training exploit.
+- **Member skill** answers what this permanent character has learned. Alpha.3 awards progress through claimed missions, completed Tag/KOTH/Showdown objectives, arena clears and qualifying Rush returns. Activity training uses the selected idle member; mission XP uses its assigned member. Later add teaching and concrete shared accomplishments; repeatedly opening a menu or moving a facility must not become a training exploit.
 - **Bond memories** answer what the player and member have done together. Use a few memorable unlock conditions instead of another infinite affection bar or a daily chore list.
 
 A small role roster can support many creature types:

@@ -1,6 +1,14 @@
 # Player Chapters, Crew Houses, Posse & Mob Archetypes
 
-**Development status: `0.4.0-alpha.3` shared-progression candidate; new verification pending.** Player-built facilities, a persistent named roster, levels, dispatch jobs and optional Rival Rush preparation were introduced in alpha.2, whose recorded verification remains below. The alpha.3 candidate adds shared street-game/arena rewards and banking before the first house. **Members are saved profiles: visible residents, skating followers and physical posse AI are future work.** Stable `v0.3.0` is unchanged. The [Crew House design study](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/CREW_HOUSE_DESIGN.md) contains eight primary-source inspirations and clearly labelled extensions.
+**Development status: `0.4.0-alpha.3`, merged and machine-verified.** [PR #41](https://github.com/Herbertofury/JetSetCraft/pull/41) adds shared street-game/arena rewards and banking before the first house. Player-built facilities, a persistent named roster, levels, dispatch jobs and optional Rival Rush preparation were introduced in alpha.2, whose historical evidence remains below. **Members are saved profiles: visible residents, skating followers and physical posse AI are future work.** Stable `v0.3.0` is unchanged. The [Crew House design study](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/CREW_HOUSE_DESIGN.md) contains eight primary-source inspirations and clearly labelled extensions.
+
+## Verified alpha.3 checkpoint
+
+[Verify JetSetCraft #280](https://github.com/Herbertofury/JetSetCraft/actions/runs/41356358215) and [all eight provider configurations in #56](https://github.com/Herbertofury/JetSetCraft/actions/runs/41356358302) passed **28 real GameTests per configuration**, dedicated-server readiness and normal shutdown. The base client produced **ten reviewed captures**, including real Charter founding, two saved profiles, an operational placed workshop, a dispatched job, the Boombox activity chooser and the first arena fork. The [alpha.3 receipt and gallery](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/verification/arena-circuit/README.md) ties those results to the exact merged tree and binary.
+
+![Alpha.3 Facilities tab showing a registered, operational tier-one Paint workshop and the native Practice yard hover tooltip](https://raw.githubusercontent.com/Herbertofury/JetSetCraft/main/docs/verification/arena-circuit/07-crew-facilities.png)
+
+The workshop above was registered from a real placed crafting table. The original capture preserves a native hover tooltip over some secondary rows and controls; crew captures 05–07 retain these overlays. The job shown elsewhere in the gallery is **dispatched and still running**. GameTests cover its ready-time boundary and claim, shared activity rewards, pending training transfer and replay rejection. The screenshots do not demonstrate a finished mission or a human progression playtest.
 
 ## Historical alpha.2 crew-house captures
 
@@ -29,6 +37,19 @@ The client used the Charter, founded a home through production actions, displaye
 The book has **Home**, **Crew**, **Facilities** and **Jobs** tabs. You can inspect it away from home; managing members, jobs or facilities requires returning to the same dimension, standing inside the registered plot and having its Boombox naturally loaded and present. Finish or cancel a street activity, or return from Rival Rush, before managing the house. The server can disable this optional feature with `[crewHouse] enabled = false` while retaining saved progression.
 
 Each player has one owned house. **Show boundary** previews its square footprint. This area determines which facilities belong to the house; it does not protect blocks, reserve building permissions, create terrain or force-load chunks. Registered crew plots cannot overlap one another or extend past the world border, but ordinary Minecraft building remains governed by the server's usual rules.
+
+### An early loop: earn, found, build
+
+With crew progression enabled and the standard rewards, complete **one Tag round, one King of the Hill round and one Showdown before founding**. Their genuine completed objectives bank **34 Crew Supplies** and **77 member training XP**. Founding adds its 24 Supplies and gives that pending training to **Riff only**, bringing him to **level 2**; Patches begins at level 1.
+
+| Step | Crew Supplies available |
+|---|---:|
+| Complete Tag, King of the Hill and Showdown before founding | 34 banked |
+| Found the house and receive its 24 starting Supplies | 58 |
+| Buy the first plot expansion for 40 | 18 |
+| Place and register a tier-one Paint workshop for 8 | 10 |
+
+This example assumes no other purchases. Expansion recognizes a **25 × 25** footprint and allows **five roster members**; it does not construct the extension. Place a valid crafting table or smithing table within the loaded plot, then register it through the Charter for the workshop. Supplies pay the registration cost; the physical blocks and the house are still yours to build. [The full activity reward table](Rival-Rush#shared-completion-rewards) shows the crew XP and gang reputation earned alongside this loop.
 
 ## Expand the space you build
 
