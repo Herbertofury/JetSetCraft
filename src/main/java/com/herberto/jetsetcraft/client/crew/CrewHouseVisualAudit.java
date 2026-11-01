@@ -15,6 +15,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.storage.LevelResource;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
+import org.lwjgl.glfw.GLFW;
 
 import java.nio.file.Path;
 import java.util.UUID;
@@ -60,7 +61,7 @@ public final class CrewHouseVisualAudit {
                 require(state.getLong("HomeAnchor") == anchor.asLong() && state.getBoolean("AnchorValid")
                         && state.getBoolean("CanManage") && CrewHouseClient.list("Members").size() == 2, "Invalid real home or apprentice roster");
                 if (!(minecraft.screen instanceof CrewHouseScreen screen) || !screen.isView("HOME")) return false;
-                if (++ticks < 20) return false;
+                if (!captureReady(minecraft)) return false;
                 capture.accept("05-crew-home"); next(4);
             }
             case 4 -> {
@@ -69,7 +70,7 @@ public final class CrewHouseVisualAudit {
             }
             case 5 -> {
                 if (!(minecraft.screen instanceof CrewHouseScreen screen) || !screen.isView("CREW")) return false;
-                if (++ticks < 20) return false;
+                if (!captureReady(minecraft)) return false;
                 capture.accept("06-crew-roster"); next(6);
             }
             case 6 -> {
@@ -92,7 +93,7 @@ public final class CrewHouseVisualAudit {
             }
             case 9 -> {
                 if (!(minecraft.screen instanceof CrewHouseScreen screen) || !screen.isView("FACILITIES")) return false;
-                if (++ticks < 20) return false;
+                if (!captureReady(minecraft)) return false;
                 capture.accept("07-crew-facilities"); next(10);
             }
             case 10 -> {
@@ -114,7 +115,7 @@ public final class CrewHouseVisualAudit {
             }
             case 12 -> {
                 if (!(minecraft.screen instanceof CrewHouseScreen screen) || !screen.isView("JOBS")) return false;
-                if (++ticks < 20) return false;
+                if (!captureReady(minecraft)) return false;
                 capture.accept("08-crew-jobs"); next(13);
             }
             case 13 -> {
@@ -181,6 +182,11 @@ public final class CrewHouseVisualAudit {
     private static CompoundTag workshop() {
         for (var tag : CrewHouseClient.list("Facilities")) if (tag instanceof CompoundTag row && row.getString("Id").equals("workshop")) return row;
         return new CompoundTag();
+    }
+    private static boolean captureReady(Minecraft minecraft) {
+        // Move the actual cursor off buttons, then allow native hover state to settle before capturing.
+        if (ticks++ == 0) GLFW.glfwSetCursorPos(minecraft.getWindow().getWindow(), 4.0, 4.0);
+        return ticks >= 20;
     }
     private static void require(boolean condition, String reason) { if (!condition) throw new IllegalStateException(reason); }
     private static void next(int value) { phase = value; ticks = 0; JetSetCraft.LOGGER.info("JETSETCRAFT_CREW_VISUAL_AUDIT_PHASE {}", value); }

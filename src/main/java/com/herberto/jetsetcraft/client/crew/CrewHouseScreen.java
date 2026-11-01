@@ -109,7 +109,7 @@ final class CrewHouseScreen extends Screen {
             label(s.getString("CandidateLabel"), 116, 2, CYAN);
             action("Found a home", left(), firstActions(), span(), s.getBoolean("CanFound"), s.getString("FoundReason"),
                     () -> { nameDraft = "My crew"; navigate(View.FOUND); });
-            label("The home area tracks crew facilities. Ordinary building permissions stay unchanged.", 141, 1, MUTED);
+            label("Home bounds track facilities without restricting building.", 141, 1, MUTED);
             return;
         }
         label(s.getString("HomeLabel"), 75, 1, WHITE);
@@ -164,8 +164,10 @@ final class CrewHouseScreen extends Screen {
                     click = () -> { memberId = id(entry); navigate(View.MEMBER); };
                 }
                 case FACILITIES -> {
-                    title += "  •  Lv " + entry.getInt("Level") + "  •  " + entry.getString("Status");
-                    hint = entry.getString("Requires");
+                    title += "  •  " + (entry.getBoolean("Registered")
+                            ? "Tier " + entry.getInt("Level") + "  •  " + (entry.getBoolean("Operational") ? "Operational" : "Needs attention")
+                            : "Not registered");
+                    hint = entry.getString("Status") + "\n" + entry.getString("Requires");
                     click = () -> { facilityId = entry.getString("Id"); navigate(View.FACILITY); };
                 }
                 case JOBS -> {
