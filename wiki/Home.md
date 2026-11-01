@@ -19,9 +19,13 @@
 | Pick skates, a board, BMX, hoverboard, or scooter | **[Ride Styles](Ride-Styles)** |
 | Build tricks, combos, transfers, and Flow | **[Tricks, Combos & Flow](Tricks-Combos-and-Flow)** |
 | Paint tags, create custom art, or use Free Paint | **[Graffiti](Graffiti)** |
-| Browse the 173-project inspiration atlas | **[Inspiration & Research](Inspiration-and-Research)** |
+| Browse games, music, art and engineering inspiration | **[Inspiration & Research](Inspiration-and-Research)** |
 | Build a compatible modpack or server | **[Modpack Maker Guide](Modpack-Maker-Guide)** |
 | Inspect architecture and verification evidence | **[Developer Architecture](Developer-Architecture)** · **[Testing](Testing-and-Verification)** |
+
+## 🎧 New research collection
+
+**[Open the visual Inspiration Atlas](https://herbertofury.github.io/JetSetCraft/research.html)** — 196 new entries: 40 games, 100 music tracks, 24 art/culture references, 22 engineering references and 10 choreography papers, alongside the preserved 173-entry catalogue. Search, filter, view official media, save a personal shortlist and export matching entries. The four [research lanes](Inspiration-and-Research) contain detailed JetSetCraft applications and prototype questions.
 
 ## 🎮 The current experience
 

@@ -10,6 +10,55 @@
 
 ---
 
+
+
+## Latest approved rival roster: six crews
+
+The owner selected **[Krumpaz](Krumpaz)** for krump and **[Footworkas](Footworkas)** for Chicago footwork. They join Gabberina's, Cumbias, Phonkistas and Hardtekkas; this six-crew roster supersedes earlier four-rival expansion counts without deleting prior identities or requirements. [Implementation and music-audition backlog #33](https://github.com/Herbertofury/JetSetCraft/issues/33).
+
+The new pages contain six Krumpaz and seven Footworkas researched listening candidates. Current owner-selection and review statuses are maintained on each faction page; reference approval is distinct from production licensing and implemented playback. Shared control/power removal, independent defeats, surprise arbitration, choreography, music/rave, customization and safe-course systems must support all six. Final rosters and new unlock thresholds remain open; no implementation claimed.
+
+## Owner-approved expansion: terrain-aware circuits and flagship night events
+
+Full researched architecture and primary sources: [Terrain-Aware Event Circuits and Boss Arenas](Terrain‐Aware-Event-Circuits-and-Boss-Arenas). Actionable implementation and test backlog: [issue #32](https://github.com/Herbertofury/JetSetCraft/issues/32). This is research/design, not implemented gameplay.
+
+- [ ] Build non-destructive live-world course overlays fitted to real biome/terrain for gang races, tag-area battles, platforms, tricks and branching traversal. Validate actual movement and multi-racer fairness; no source-region replacement/rollback.
+- [ ] Prototype real temporary collision separately from visuals, safe boss-room teleport/return, new opt-in underwater skating and complete cancellation/unload/crash recovery. Preserve source mobs, normal vanilla behavior outside events, no forced chunks and current safety budgets.
+- [ ] Deliver the flagship nighttime quality goal: as fun and goosebump-inducing as the best rave ever on Earth, with coherent music-synced lights/lasers and player/rival combo-reactive crew spectacle; reduced-flash/readability and complete transient cleanup are required.
+- [ ] Integrate stylish title/artist reveals, in-game radio, capability-scoped authorized Spotify support and reputation-unlocked mob music/dance choices through the [shared music specification](Music‐Driven-Dances-and-Mob‐Themed-Bosses) and [issue #30](https://github.com/Herbertofury/JetSetCraft/issues/30). Final API capabilities and new perk thresholds need qualification.
+- [ ] Preserve the extendable [Hardtekkas track register](Hardtekkas#owner-music-reference-register) and its per-entry review status.
+
+## Major requirement: music-driven dances and themed bosses
+
+High-priority owner requirement: every mob needs amazing music-generated/driven dances with meaningful, fun variety and goosebump-level presentation. Cumbias, Phonkistas, Gabberina's and Hardtekkas each need exceptional signature dances. When a major faction owns a mob gang, its boss becomes a music-driven, mob-themed human leader tied to the controller; the explicit example is **Hakken Horse**, a human dressed like a horse for a Gabberina-controlled horse gang. Preserve source mobs and existing takeover/power-removal, surprise-challenge and independent-defeat rules.
+
+**Shared choreography scope:** players and enemies can emote solo, have teammates join synchronized crew routines, and go gang-versus-gang head-to-head both while skating and while dancing on foot. Preserve music-generated variety, player agency, safe moving formations, multiplayer timing and the no-content/no-population-cap performance direction. Join/leave timing, formations and interruption details are proposed design criteria in the linked canonical specification. Gabberina's explicit music/dance blend is jumpstyle, gabber and hardtekk; both newly selected songs are preserved in its reference register.
+
+See the [canonical requirement and extendable reference register](https://github.com/Herbertofury/JetSetCraft/wiki/Music%E2%80%90Driven-Dances-and-Mob%E2%80%90Themed-Bosses) and [shared high-priority issue #30](https://github.com/Herbertofury/JetSetCraft/issues/30). Generation technology, detailed timing/rig criteria and final boss roster remain design work. This is a required quality target and backlog, not an implementation claim.
+
+## Major requirement: reactive fights, trick chains and combo payoffs
+
+**Owner goal:** Killer Instinct-level music integration for fights and chained tricks, including the excitement of the “ULTRAAAAA COMBO” example and music responding to hits. Build JetSetCraft's own reactive musical identity and memorable original announcer-style payoffs. This is a quality/inspiration target, not a claim about Killer Instinct's implementation or a shipped JetSetCraft feature.
+
+Full [reactive-music design and acceptance backlog](Music‐Driven-Dances-and-Mob‐Themed-Bosses#major-requirement-reactive-fight-trick-chain-and-combo-music) is tracked in [shared issue #30](https://github.com/Herbertofury/JetSetCraft/issues/30).
+
+- [ ] Prototype immediate confirmed-hit/trick/landing feedback plus coherent phrase-aware musical escalation, combo peaks, breaks and recovery. Never delay controls, hit registration or physics to quantize music.
+- [ ] Reconcile existing Flow/combat/trick scoring, faction sonic identity, solo/crew choreography, multiplayer authority and significant musical timing.
+- [ ] Create original/commissioned or appropriately licensed musical layers and announcer identity; no copied Killer Instinct recordings or voices.
+- [ ] Verify clean mixing and event arbitration, separate music/effects/announcer controls, muted visual equivalents, interruption cleanup and native single/multiplayer playtests.
+- [ ] Profile audio, event/network cost, memory, startup and loading without capability loss, arbitrary content/participation caps or regressions; attach exact-build evidence before completion claims.
+
+## Owner-approved fourth rival: Hardtekkas
+
+**Hardtekkas** is the separate hardtekk rival alongside Gabberina's, Cumbias and Phonkistas. **Tekkistas** is the owner-approved optional name at the appropriate reputation/good-standing level. Use existing configured Friendly → Crew Naming Rights, stable faction identity, personal aliases by default in multiplayer, authorized shared aliases and canonical reset. Numeric thresholds and any extra unlock/rank-loss semantics remain unresolved. Full [Hardtekkas design, all three music references and acceptance checklist](Hardtekkas) · [Issue #31](https://github.com/Herbertofury/JetSetCraft/issues/31).
+
+- [ ] Resolve reputation/naming UX and permissions without replacing the faction, resetting progress or reviving defeated rivals.
+- [ ] Review Drucktherapie, Wake Up and Break It Down; develop original Hardtekkas art/music, exceptional music-driven choreography, signature challenges and ownership-aware mob-themed human bosses.
+- [ ] Extend control/power removal, surprise-event arbitration and independent persistent defeats to all four rivals; integrate shared solo-to-crew/head-to-head and reactive combo music through #30.
+- [ ] Verify native gameplay, saves, multiplayer, accessibility, rights and performance/startup without feature loss or arbitrary caps. Preserve source mobs and existing temporary-event safety.
+
+Gabberina's retains its jumpstyle/gabber/hardtekk blend and Hardtekk Tutorial reference. This update is design/backlog only.
+
 ## Implemented runtime checkpoint — August 23, 2026
 
 The first production Gang Wars runtime is now implemented on the Forge 1.20.1 line instead of remaining specification-only:
@@ -2048,3 +2097,32 @@ The first curated wave covers **The Aether, Twilight Forest, The Undergarden, an
 Every curated gang must have a real collectible art path tied to the stable `gang_id`: discovery preview -> sticker/palette -> canonical graffiti tag -> full emblem/logo -> alternate throw-up/stencil/character mark -> prestige mural/masterpiece. Earned art is usable through JetSetCraft's normal Graffiti Gallery/selector/placement pipeline and may also feed supported ride, Boombox, Chapter, badge, and sticker surfaces. Rename/alias changes must never invalidate rewards, and provider removal must preserve unlock receipts for automatic restoration after reinstall.
 
 Premium art direction must be genuinely gang-specific: no repeated generic logo template, no default crown motif, no photoreal creature pasted beside generated text, and no recolor-only prestige art.
+
+
+## Owner-requested expansion: Gabberina's campaign (2026-10-10)
+
+**Design/backlog, not an implementation claim.** See the [full Gabberina's and Gang War campaign design and to-do list](https://github.com/Herbertofury/JetSetCraft/wiki/Gabberinas%E2%80%90and%E2%80%90Gang%E2%80%90War%E2%80%90Campaign) and [issue #27](https://github.com/Herbertofury/JetSetCraft/issues/27).
+
+- Elite human female gabber skate-and-dance rival crew, with goosebump-inducing entrance, music intro, choreography and challenge escalation. Every gang should have a distinctive high-impact introduction; Gabberina's are the flagship.
+- Compete against them for control of other mob gangs through capture, defense, recapture and counterattacks until a persistent final defeat.
+- Give the crew a wild but readable mix of mob abilities, with clear tells, counterplay and fair combo limits.
+- **Control-to-ability rule:** fully taking a mob gang away from Gabberina control removes that gang's corresponding ability from their arsenal. Choosing which gang to capture lets the player strategically dismantle dangerous ability combinations. Partial progress alone does not count as full takeover.
+
+### Implementation to-do
+- [ ] Define the gang-to-ability mapping and full-takeover criterion.
+- [ ] Implement ownership-driven ability removal with a clear player-facing payoff and reliable save/load and multiplayer synchronization.
+- [ ] Design and test recapture/restoration rules, contested transitions and final-victory persistence; avoid ambiguous mid-attack state changes.
+- [ ] Deliver the full campaign, presentation and quality checklist on the linked design page, including performance/startup improvements without capability loss or regressions.
+
+### Surprise post-event rival challenge
+Owner addition: after defeating/completing a normal mob event, Gabberina's may appear with an intense entrance and start a new challenge when they still have some control of that mob gang. Partial influence can qualify. See the linked campaign page for the sequence and full acceptance checklist. Preserve the original event win/rewards, honor current gang-control and stripped-ability state, prevent recursive/duplicate triggers and respect persistent final defeat. Design/backlog only.
+
+## Owner-requested rival expansion: the Cumbias (2026-10-11)
+
+**Design/backlog only.** The Cumbias join Gabberina's as another major competing gang, with an amazing Mexican cumbia-themed identity, distinct music, dance/skating, styling, entrances and challenges. Preserve both supplied Spotify references in the [full Cumbias design and implementation checklist](https://github.com/Herbertofury/JetSetCraft/wiki/Cumbias%E2%80%90and%E2%80%90Multi%E2%80%90Rival%E2%80%90Gang%E2%80%90War).
+
+Design the campaign to support multiple rivals coherently: source-gang influence/control, rival-specific borrowed powers and full-takeover removal, surprise challenges after normal events, independent defeat states and a clear overall resolution. Influence sharing, takeover thresholds and arbitration when multiple rivals can appear require explicit design and native tests. Existing original-mob, persistence, accessibility, performance and no-regression guarantees remain in force.
+
+## Owner-selected competing gang: Phonkistas (2026-10-11)
+
+The Phonkistas are the owner-named phonk rival crew alongside Gabberina's and the Cumbias. [Full Phonkistas design, music reference and implementation checklist](https://github.com/Herbertofury/JetSetCraft/wiki/Phonkistas) · [Issue #29](https://github.com/Herbertofury/JetSetCraft/issues/29). Preserve a distinct skating/dance, visual and musical identity; integrate multi-rival control, source-power removal, surprise follow-on events and independent persistent defeat without overlapping event/audio starts. Design/backlog only; exact mechanics and native acceptance remain pending.

@@ -1,11 +1,102 @@
-# 🧰 Frameworks, Java & Bedrock
+# 🧰 Engineering, Frameworks & Performance
 
-> [!NOTE]
-> Architecture and cross-edition references covering animation/data/network foundations plus Bedrock add-ons and Marketplace worlds whose mechanics can be studied without treating locked content as redistributable assets.
+**[← Research hub](Inspiration-and-Research)** · **[Open the visual research browser](https://herbertofury.github.io/JetSetCraft/research.html)** · [Earlier catalogue](#earlier-catalogue)
 
-**[← Inspiration & Research Atlas](Inspiration-and-Research)** · [Canonical 173-row Sheet](https://docs.google.com/spreadsheets/d/1liWhRQL7rmPy8LLgSRVlkrLANqUIJE4UbFX3--KMJjg/edit?gid=1570163195#gid=1570163195)
+This expansion adds **22 implementation and research references** plus **ten source-aware improvement opportunities** for the current Forge baseline. Research checked **31 October 2026**. Priority labels are editorial study order; applications and experiments are proposals unless the existing project status explicitly says otherwise.
 
-## Code & Frameworks · 9
+## Forge-aware engineering opportunities from the research
+
+**Scope:** proposed improvements tied to the inspected JetSetCraft source and existing acceptance goals. No gameplay implementation, performance result or native test pass is claimed by this research pass.
+
+JetSetCraft’s current production target is **Forge 1.20.1 / Java 17**, with PlayerAnimator in the existing client presentation path. Continue the approved order **1.20.1 → 1.21.1 → later explicit targets** and the shared-core/thin-adapter architecture in [Developer Architecture](https://github.com/Herbertofury/JetSetCraft/wiki/Developer-Architecture). Modern Fabric/NeoForge examples are not drop-in code for the present target, and a framework migration is not a prerequisite for the improvements below.
+
+### Primary implementation and research references
+
+#### Forge baseline and UI
+
+| Reference | What it can improve | Small review / prototype | Source and media |
+|---|---|---|---|
+| **Forge 1.20.1 — Screens**<br>ENG01 · High | The existing Screen/widget system supports focus, narration, rendering and teardown. Reuse it for gallery, radio and HUD-layout work. | Keyboard-only and narrator passes for selector, editor and future Radio; verify Escape, focus order, resize and restored selection. | [Primary source](https://docs.minecraftforge.net/en/1.20.1/gui/screens/) |
+| **Forge 1.20.1 — Key Mappings**<br>ENG02 · High | Use ordinary rebindable key mappings and context-aware input rather than hard-coded key combinations. | Rebind every JetSetCraft action, open chat/inventory during held input, and confirm no queued action fires after returning to play. | [Primary source](https://docs.minecraftforge.net/en/1.20.1/misc/keymappings/) |
+| **Forge 1.20.1 — SimpleImpl networking**<br>ENG03 · High | Thread ownership, sender validation and loaded-chunk checks remain essential when adding challenge, route and audio messages. | Exercise stale, duplicate, wrong-dimension and out-of-order event messages; confirm no score authority or chunk loading comes from an untrusted client payload. | [Primary source](https://docs.minecraftforge.net/en/1.20.1/networking/simpleimpl/) |
+| **Forge 1.20.1 — Synchronizing Entities**<br>ENG04 · High | Forge distinguishes spawn data from changing entity data and warns against adding data parameters to other mods’ entities. | Keep source mobs intact and use JetSetCraft-owned data/transport for dance and gear state. Test a tracking client arriving halfway through an event. | [Primary source](https://docs.minecraftforge.net/en/1.20.1/networking/entities/) |
+| **Forge 1.20.1 — Logical and physical sides**<br>ENG05 · High | Single-player contains a logical server, while dedicated servers lack client classes. Audio, renderers and animation stay behind client boundaries. | Verify future music/CPM integration on a real dedicated server with the optional client presentation dependency absent. | [Primary source](https://docs.minecraftforge.net/en/1.20.1/concepts/sides/) |
+| **Forge 1.20.1 — GameTests**<br>ENG06 · High | Structured in-world fixtures are useful for deterministic rail, event-lifecycle and state-restoration checks. | Add focused native fixtures only when implementing a change; pair logic checks with real-client visual/audio evidence for presentation behavior. | [Primary source](https://docs.minecraftforge.net/en/1.20.1/misc/gametest/) |
+
+#### Audio and choreography engineering
+
+| Reference | What it can improve | Small review / prototype | Source and media |
+|---|---|---|---|
+| **Forge 1.20.1 — Sounds**<br>ENG07 · High | The documentation explains sound events, categories, subtitles, side-specific playback and streaming long files. | Stream long tracks, keep important SFX/subtitles legible, and prove a local/shared handoff does not play the same track twice. | [Primary source](https://docs.minecraftforge.net/en/1.20.1/gameeffects/sounds/) |
+| **Forge 1.20.1 — Sound definition generation**<br>ENG08 · High | Generated sound definitions provide a reproducible place to set subtitles, streaming, attenuation and file references. | Generate catalog/sound mappings from one manifest; reject broken IDs and verify every authorized track remains addressable after packaging. | [Primary source](https://docs.minecraftforge.net/en/1.20.1/datagen/client/sounds/) |
+| **CRI Middleware — Interactive music with AISAC and selectors**<br>ENG09 · High | A primary middleware tutorial demonstrates intensity changes and beat-synchronized transitions. Study the scheduling pattern; it is not a Forge dependency recommendation. | Prototype immediate hit/landing accents alongside bar-aligned layer changes; never delay the underlying gameplay action. | [Primary source](https://blog.criware.com/index.php/2024/07/08/adx-beginners-guide-12-interactive-music-with-aisac-and-selectors/) · [Video](https://blog.criware.com/wp-content/uploads/2024/03/Video_01_Music_AISAC.mp4) |
+| **Ableton Link — tempo, phase and quantum concepts**<br>ENG10 · High | Tempo, beat phase and bar/loop alignment are separate concepts. This helps specify shared choreography timelines precisely. | Represent an event epoch, tempo map, phrase position and sequence ID. Test late joins and tempo/section changes without resetting the whole song. | [Primary source](https://ableton.github.io/link/) |
+| **FFmpeg — loudnorm and audio filter documentation**<br>ENG11 · High | The official filter documentation supports reproducible loudness measurement and preparation of authorized source masters. | Measure masters offline, store metadata and compare transitions at equal perceived level. Preserve masters and avoid repeated lossy transcoding; choose mix targets through listening tests. | [Primary source](https://ffmpeg.org/ffmpeg-filters.html#loudnorm) |
+
+#### Performance and simulation
+
+| Reference | What it can improve | Small review / prototype | Source and media |
+|---|---|---|---|
+| **spark — profiler documentation**<br>ENG12 · High | A Minecraft-focused profiling workflow helps separate tick cost, allocation pressure and apparent lag. | Capture matched idle, dense graffiti, active cypher, rail transfer and event-load scenarios before and after an optimization. | [Primary source](https://spark.lucko.me/docs) |
+| **JDK 17 — Flight Recorder**<br>ENG13 · High | Java Flight Recorder provides runtime evidence in the project’s existing Java 17 toolchain. | Compare allocation, GC, I/O and thread activity around startup, resource reload, canvas rendering and long music sessions; retain exact build and workload metadata. | [Primary source](https://docs.oracle.com/en/java/javase/17/jfapi/index.html) |
+| **async-profiler — profiling modes**<br>ENG14 · Explore | CPU, allocation and wall-clock modes can distinguish computation from waits and memory churn. | Use a supported host/runtime combination to test whether suspected render-path decoding or HUD formatting is material before changing it. | [Primary source](https://github.com/async-profiler/async-profiler/blob/master/docs/ProfilingModes.md) |
+| **Glenn Fiedler — Fix Your Timestep**<br>ENG15 · High | Separate fixed simulation steps from presentation, and account for the cost of catch-up work. | Test the same ride/secondary-motion sequence at different render rates and under stalls. Preserve server physics and do not tie movement to visual frame rate. | [Primary source](https://gafferongames.com/post/fix_your_timestep/) |
+| **Gabriel Gambetta — prediction and reconciliation**<br>ENG16 · High | The author explains input sequence history and reconciliation with authoritative state. This is a conceptual reference for responsive presentation. | Measure local input-to-visible response and correction distance under latency/jitter. Any prediction extension must retain server scoring, neutral-stop and fluid ownership. | [Primary source](https://www.gabrielgambetta.com/client-side-prediction-server-reconciliation.html) |
+| **Yuksel, Schaefer and Keyser — Catmull-Rom parameterization**<br>ENG17 · Explore | The paper proves a within-segment cusp/self-intersection property for centripetal cubic Catmull-Rom curves. It does not prove global route safety or constant speed. | For new event-authored curves only, compare curvature, arc-length travel and contact normals; preserve native vanilla rail and Create Bezier geometry. | [Primary source](https://www.cemyuksel.com/research/catmullrom_param/) · [Paper](https://cemyuksel.com/research/catmullrom_param/catmullrom.pdf) |
+| **Macklin, Müller and Chentanez — XPBD**<br>ENG18 · High | The authors address timestep/iteration dependence in compliant constraints. This is useful research for approved skating-responsive hair and loose costume parts. | Compare a small authored hair chain with explicit anchors, damping and collision envelopes. Preserve flat CPM details, expression channels and the existing native-preview evidence. | [Primary source](https://matthias-research.github.io/pages/publications/XPBD.pdf) · [Author demos and videos](https://matthias-research.github.io/pages/tenMinutePhysics/index.html) |
+| **Macklin et al. — Small Steps in Physics Simulation**<br>ENG19 · Explore | The paper compares substeps with solver iterations; its results motivate experiments, not a universal Minecraft speedup claim. | Test acceleration, reversal, braking, landing, teleport/reset and return from hidden state. Measure stability and cost without removing characters or costume detail. | [Primary source](https://matthias-research.github.io/pages/publications/smallsteps.pdf) · [Author interactive demo](https://matthias-research.github.io/pages/challenges/pendulum.html) |
+
+#### Accessibility and readability
+
+| Reference | What it can improve | Small review / prototype | Source and media |
+|---|---|---|---|
+| **Xbox Accessibility Guideline 117 — motion settings**<br>ENG20 · High | Camera movement, scrolling information and unprompted motion need deliberate user controls. | Audit camera/FOV, Boombox ornaments, HUD pulses and future radio backgrounds under reduced motion. Preserve mechanics and all important information. | [Primary source](https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/117) |
+| **Xbox Accessibility Guideline 103 — multiple cue channels**<br>ENG21 · High | Important information should be perceivable through more than one sensory channel. | Test dance invitations, hit confirms, route warnings and music milestones with sound muted and with color discrimination removed. | [Primary source](https://learn.microsoft.com/en-us/gaming/accessibility/xbox-accessibility-guidelines/103) |
+| **Xbox Accessibility Guideline 118 — photosensitivity**<br>ENG22 · High | Use the guideline’s assessment methods when designing reactive stage lighting and high-contrast visual effects. | Review worst-case combined light/particle/announcer sequences, provide reduced-flash controls, and verify event readability without strobing. | [Primary source](https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/118) |
+
+### Concrete source-aware opportunities
+
+These are observations of the checked source, followed by proposed changes and evidence to collect. Existing task IDs refer to [the finish execution contract](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/JETSETCRAFT_CLAUDE_FINISH_EXECUTION.md). They preserve that backlog rather than creating a competing plan.
+
+| Opportunity and priority | Evidence in the inspected source | Proposed implementation and acceptance |
+|---|---|---|
+| **Cache custom-canvas decoding — early measurement** | [`GraffitiRenderer.renderCustom`](https://github.com/Herbertofury/JetSetCraft/blob/main/src/main/java/com/herberto/jetsetcraft/client/render/GraffitiRenderer.java) calls `CustomGraffiti.decode(encoded)` during rendering and emits each nontransparent cell’s quad. | Cache decoded immutable pixels or reusable geometry by the validated encoded pattern; update only on changed content and release entity-owned references on unload. Compare pixel-perfect output, all six faces, repaint, reload and dense-scene allocation/frame time. Preserve all pixels, palette entries, sizing and the 16 × 10 wire format. **T063, T197.** |
+| **One HUD layout owner — high impact** | [`ClientEvents.hud`](https://github.com/Herbertofury/JetSetCraft/blob/main/src/main/java/com/herberto/jetsetcraft/client/ClientEvents.java) places the current display at fixed offsets from the hotbar and trims the mode label to 15 characters. | Implement the already approved measured-bounds modules, Auto-Avoid and per-user Layout Editor. Measure text in pixels, retain understandable labels and use an intentional compact variant. Test GUI scales, long localized strings, armor/air/mount rows, subtitles, chat and real optional overlays. **T013–T027, T221–T236.** |
+| **Change-driven HUD formatting — measure first** | The same HUD path builds labels and formats the multiplier while rendering. | Rebuild display strings on relevant snapshot/config/language changes, retaining frame interpolation only where visible. Profile before/after; do not claim that a small allocation automatically causes player-visible lag. **T197.** |
+| **Close the reduced-motion audit — high value** | [`ClientEvents`](https://github.com/Herbertofury/JetSetCraft/blob/main/src/main/java/com/herberto/jetsetcraft/client/ClientEvents.java) already checks `reducedMotion` for camera/FOV; [`BoomboxRenderer`](https://github.com/Herbertofury/JetSetCraft/blob/main/src/main/java/com/herberto/jetsetcraft/client/render/BoomboxRenderer.java) visibly computes spin and active-event bob without that guard in the inspected file. | Decide and document reduced-motion behavior for each nonessential ornament, HUD pulse, stage effect and future music browser. Retain a static state indicator and all gameplay information. Review the whole scene instead of assuming one camera toggle covers it. **T022, T265, T349–T350.** |
+| **Animation continuity with ownership — high value** | [`RideAnimationController.apply`](https://github.com/Herbertofury/JetSetCraft/blob/main/src/main/java/com/herberto/jetsetcraft/client/animation/RideAnimationController.java) avoids reapplying the same clip and starts a new `KeyframeAnimationPlayer` when the resource changes. The controller already separates ride and action layers. | Inspect the pinned library’s actual blend/modifier APIs before adding short, state-aware transitions or phase continuity. Never blend stale motion across neutral-stop, fluid, weapon or cancellation boundaries. Compare full-speed and slowed recordings, item/weapon combinations and rapid state changes. **T057–T059, T277.** |
+| **Presentation interpolation — evaluate carefully** | [`ClientRideState.accept`](https://github.com/Herbertofury/JetSetCraft/blob/main/src/main/java/com/herberto/jetsetcraft/client/state/ClientRideState.java) installs sanitized snapshots; camera/HUD consume those snapshots. | If recordings show visible stepping, interpolate cosmetic values from consecutive timestamped states. Snap critical state changes immediately and clear history on dimension/identity changes. This is separate from any gameplay prediction work. Test multiple frame rates and packet jitter; do not delay hit, landing, score or input. **T197, existing multiplayer goals.** |
+| **One music/event clock — flagship work** | The source exposes original gang sound events in [`ModSounds`](https://github.com/Herbertofury/JetSetCraft/blob/main/src/main/java/com/herberto/jetsetcraft/registry/ModSounds.java); the live wiki separately requires full Radio, reactive fight/trick music and shared choreography. | Build a shared event/timeline contract consumed by audio, significant choreography, announcer and lights. Keep immediate feedback separate from beat/bar/phrase transitions; deduplicate confirmed event IDs. Verify late join, wrong/stale sequence, handoff, restart, resource reload and muted play. **T281–T296; live music/choreography requirements.** |
+| **Offline media metadata and streaming — high value** | Long-track support is accepted backlog; Forge 1.20.1 already provides streamed sound definitions. | Keep complete catalog coverage while generating duration, source/artist credits, hashes and optional beat/phrase/loudness metadata ahead of playback. Stream long media, reuse decoded/analysis results where appropriate and avoid per-tick full-track analysis. Demonstrate startup, memory, resource-reload and long-session results. **T270–T272, T281, T287–T295.** |
+| **Skating-driven secondary motion — approved quality work** | The live [Honkistas quality page](https://github.com/Herbertofury/JetSetCraft/wiki/Honkistas%E2%80%90NPC%E2%80%90Quality%E2%80%90and%E2%80%90Skating%E2%80%90Physics) records a native CPM reference preview and an unintegrated chain-solver prototype. Neither establishes shipped skating physics. | Integrate only after explicit part/pose ownership. Compare an authored damped-chain/XPBD approach using actual acceleration, turns and landings. Preserve the model’s planes, expressions, detail and source credit. Profile distance/visibility work with smooth state restoration; never meet cost targets by shrinking the roster or deleting costume detail. **Existing issue #38 / live acceptance checklist.** |
+| **Authored event geometry with truthful contact — later slice** | Current architecture already follows vanilla rail shapes and Create’s native Bezier geometry. Live terrain-aware events require real collision and recovery. | Evaluate smooth curves only for newly authored event geometry; use spatial queries, precomputed arc-length data and revision-aware caches when justified. Native rails remain native. Verify swept movement, curvature, junctions, landing/clearance and event cleanup. A pleasant curve drawing does not prove a safe playable route. **Existing terrain-aware event backlog.** |
+
+### A measured experiment sequence
+
+1. **Record one exact baseline build.** Capture the same dense graffiti wall, HUD states, mixed crowd, rail sequence and long-track scenario. Record hardware, Java, loader, optional mods, GUI scale, view distance and asset-pack identities.
+2. **Change one concrete cost or quality problem.** Start with decoded canvas reuse, readable HUD layout, a reduced-motion gap or an animation transition shown to be poor. Avoid simultaneous architectural rewrites that make cause and effect unclear.
+3. **Prove behavior equivalence where expected.** Image comparisons and state traces should establish that an optimization preserves content, movement, scoring, cleanup and compatibility. Cosmetic redesigns need player comparison rather than pretending bit-identical output is the goal.
+4. **Collect the evidence that matches the claim.** Frame/tick percentiles, allocation, I/O, packets, startup time, input-to-visible response and human usability tests answer different questions. A successful compile cannot establish smoothness or musical impact.
+5. **Promote only proven improvements.** Keep successful research connected to the existing task/issue and exact tested revision. Preserve failures and open questions so the next iteration does not repeat them.
+
+Use workload-aware scheduling, caching, sharing, coalescing and locality to support the full approved content and participation ambition. Do not turn a profiling budget into an arbitrary roster, art, track, dance or population cap. Necessary existing hostile-input bounds and safe event lifecycle rules still apply.
+
+### Audio implementation notes worth preserving
+
+Personal Radio remains client-owned. A nearby Boombox or event may supply shared track identity and time, but should use a deliberate arbitration rule to prevent duplicated music. Store queue/favorites/volume/resume preferences locally; restore the previous owner cleanly when an event finishes. Do not reset the song at every trick or start one full track per reacting NPC.
+
+For reactive music, provide two paths: an immediate response to a confirmed gameplay event and a scheduled structural change at a suitable musical boundary. A single-track fallback must still sound coherent if stems or detailed timing metadata are unavailable. Music-generated choreography, crew joins and light cues should share meaningful phrase state without granting audio code authority over movement or score. Tempo changes, pauses, cancellation and late joins need explicit recovery rules.
+
+The full approved track/content set remains the target. This research proposes no downloads, no artist outreach and no change to existing permissions. The new music candidate register and the already authorized production catalog are separate records.
+
+
+---
+
+## Earlier catalogue
+
+The **32 earlier entries** below remain intact for continuity. Their inherited scores and version notes are historical research metadata, not fresh benchmark results or a claim that every external release was rechecked in this pass. The [earlier 173-row sheet](https://docs.google.com/spreadsheets/d/1liWhRQL7rmPy8LLgSRVlkrLANqUIJE4UbFX3--KMJjg/edit?gid=1570163195#gid=1570163195) remains available.
+
+### Code & Frameworks · 9
 
 Reusable architectural lessons for geometry, animation, data, integration, and moving worlds.
 
@@ -21,7 +112,7 @@ Reusable architectural lessons for geometry, animation, data, integration, and m
 | **TACZ**<br><sub>Compatibility / architecture reference · score 6.85</sub> | Java<br>Forge / NeoForge<br>Modern | Highly animated firearms, first-person/third-person item handling and attachment systems. | JetSetCraft already targets TACZ; use as a stress case for hands-free ride equipment and upper-body animation preservation. | [Project](https://www.curseforge.com/minecraft/mc-mods/timeless-and-classics-zero) | Ask author / verify terms |
 | **Sable Tool**<br><sub>Debug / source utility · score 6.75</sub> | Java<br>NeoForge<br>1.21.1-26.1.x | Visualizes sub-level bounds and centers of mass, tracks forces and exposes clone/schematic/teleport/management tooling. | Good model for JetSetCraft debug overlays: make grind paths, moving-frame transforms, velocity sources and bad seams inspectable instead of debugging motion blind. | [Project](https://modrinth.com/mod/sable-tool) | Ask author / verify terms before shipping |
 
-## Bedrock & Marketplace · 23
+### Bedrock & Marketplace · 23
 
 Cross-edition mechanic references; Marketplace packages remain purchase-locked research unless separately licensed.
 
@@ -53,5 +144,5 @@ Cross-edition mechanic references; Marketplace packages remain purchase-locked r
 
 ---
 
-**32 references on this page.** Inclusion records research value, not bundled code/assets or automatic redistribution permission. Return to **[Inspiration & Research](Inspiration-and-Research)**.
+**32 entries preserved from the earlier catalogue.** Inclusion records research value, not bundled code/assets or automatic redistribution permission. Return to **[Inspiration & Research](Inspiration-and-Research)**.
 

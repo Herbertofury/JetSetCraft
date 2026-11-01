@@ -1,11 +1,174 @@
-# 🎞️ Animation, Models & Creators
+# 🎞️ Art, Animation, Models & Creators
 
-> [!NOTE]
-> Animation stacks, emote ecosystems, mocap libraries, Minecraft modeling tools, vehicle/prop models, artist portfolios, and commissioning routes for production-quality presentation.
+**[← Research hub](Inspiration-and-Research)** · **[Open the visual research browser](https://herbertofury.github.io/JetSetCraft/research.html)** · [Earlier catalogue](#earlier-catalogue)
 
-**[← Inspiration & Research Atlas](Inspiration-and-Research)** · [Canonical 173-row Sheet](https://docs.google.com/spreadsheets/d/1liWhRQL7rmPy8LLgSRVlkrLANqUIJE4UbFX3--KMJjg/edit?gid=1570163195#gid=1570163195)
+This expansion adds **24 art, culture and presentation references** plus **10 choreography papers**, with source-linked images and experiments for crew identity, motion and readable worlds. Research checked **31 October 2026**. Priority labels are editorial study order; applications and experiments are proposals unless the existing project status explicitly says otherwise.
 
-## Dance & Animation · 18
+## Art, street culture, readability and presentation research
+
+**Research checked: October 31, 2026.** This expansion connects external references to JetSetCraft’s existing direction. It is research and proposed implementation work, not a claim that the features below are shipped or runtime-verified.
+
+The useful creative target is a world where a rider, their crew, their sound and their art belong together. JetSetCraft already has six ride styles, a substantial trick/dance vocabulary, a bounded custom canvas, gang identities and strong compatibility contracts. The next quality leap comes from making those systems expressive, recognizable and pleasant to use together.
+
+### Start with these six studies
+
+| Study | Why it deserves the first review | Watch / inspect |
+|---|---|---|
+| **Rollerdrome** | Action readability when skating and shooting share attention. | [Developer art interview](https://www.gamedeveloper.com/art/deep-dive-rollerdrome-art-direction-q-a) |
+| **Spider-Verse** | Local graphic effects and readable motion accents. | [Studio FX video](https://www.youtube.com/watch?v=8dRehHtGVOc) |
+| **Splatoon 3** | A coherent relationship between street culture, sound, fashion and identity. | [Nintendo developer interview](https://splatoon.nintendo.com/en/news/ask-the-developer-vol-7-splatoon-3-part-1/) |
+| **Lady Pink + MCNY** | Graffiti with authorship, history and substantial visual variety. | [Artist gallery](https://www.ladypinknyc.com/fine-art-page) · [Museum collection](https://www.mcny.org/exhibition/above-ground-art-martin-wong-graffiti-collection) |
+| **Juste Debout + BC One** | Distinct dance families, phrasing, response and performance context. | [Juste Debout](https://www.juste-debout.com/en/) · [BC One](https://www.redbull.com/us-en/event-series/bc-one) |
+| **Vignelli wayfinding** | Route identity that remains legible across HUD, world signs and maps. | [Museum digital exhibition](https://www.nytransitmuseum.org/vignelli/) |
+
+### Visual reference shelf
+
+The images below are remote reference images linked to the original artist/studio/museum pages. They are not imported JetSetCraft assets.
+
+| Graphic motion | Authored pose and shading |
+|---|---|
+| [![Sony Imageworks Spider-Verse production reference](https://www.imageworks.com/sites/default/files/inline-images/spi_intospiderverse_website_content_001.jpg)](https://www.imageworks.com/node/1371) | [![Arc System Works Guilty Gear Xrd technical-art reference](https://www.arcsystemworks.com/wp-content/uploads/2023/01/GDC-2.jpg)](https://www.arcsystemworks.com/guilty-gear-xrds-art-style-the-x-factor-between-2d-and-3d-talk-from-gdc-2015-is-now-available-online/) |
+| Sony Pictures Imageworks — study where emphasis is placed. | Arc System Works — study a deliberate artistic rule set. |
+
+| Artist identity | Street-art history | Wayfinding |
+|---|---|---|
+| [![Lady Pink, Pink Piece](https://images.squarespace-cdn.com/content/v1/57309af162cd94614020f373/1666019558505-LLTHYJ6Q68UM26EQ5PWJ/1980-pink-piece.jpg)](https://www.ladypinknyc.com/fine-art-page) | [![Lee Quiñones, Breakfast at Baychester, Museum of the City of New York](https://www.mcny.org/sites/default/files/styles/1488x480/public/94.114.176.jpg?h=04f74b3d&itok=X6tYwOt_)](https://www.mcny.org/exhibition/above-ground-art-martin-wong-graffiti-collection) | [![Vignelli map, New York Transit Museum](https://www.nytransitmuseum.org/wp-content/uploads/2025/10/vignelli-hero-1-871x1024.webp)](https://www.nytransitmuseum.org/vignelli/) |
+| Lady Pink — *Pink Piece*, artist’s portfolio. | Lee Quiñones — *Breakfast at Baychester*, 1977; MCNY / Martin Wong Collection, 94.114.176. | New York Transit Museum — map exhibition image. |
+
+### How to use this reference register
+
+“Lesson” and “prototype” are proposed JetSetCraft applications. They are not assertions about an external game’s private implementation. **High** means a close fit to an existing JetSetCraft goal; **Explore** means review only after the main slice is coherent. Dates distinguish historical references from the research date; older work remains valuable when it solves the actual problem.
+
+#### Visual identity and motion
+
+| Reference | What it can improve | Small review / prototype | Source and media |
+|---|---|---|---|
+| **Bomb Rush Cyberfunk — Team Reptile press kit**<br>ART01 · High | Use a common visual language across ride silhouette, crew posture, graffiti and hangout identity. The official kit connects movement, cyphers, crews and city tagging. | Build one representative crew sheet: silhouette, stance, gear motif, tag, arrival and hangout. Test whether players associate the six pieces without a faction label. | [Primary source](https://team-reptile.com/press/sheet.php?p=Bomb_Rush_Cyberfunk) · [Video](https://www.youtube.com/watch?v=r-cE0PK9TeQ) |
+| **Valve — Illustrative Rendering in Team Fortress 2**<br>ART02 · High | The paper joins art and rendering choices around readability. Apply silhouette and value grouping to riders and gear before adding more particles or texture noise. | Review each ride and named recruit in silhouette, grayscale and actual gameplay view distances. Record confusion pairs and fix shape/value separation. | [Primary source](https://steamcdn-a.akamaihd.net/apps/valve/2007/NPAR07_IllustrativeRenderingInTeamFortress2.pdf) · [Slides](https://steamcdn-a.akamaihd.net/apps/valve/2007/NPAR07_IllustrativeRenderingInTeamFortress2_Slides.pdf) |
+| **Arc System Works — Guilty Gear Xrd technical art talk**<br>ART03 · High | Study deliberate pose design and the artistic decisions used to retain a 2D character inside a 3D renderer. Expressiveness need not require dense geometry. | Author anticipation, contact, peak and recovery poses for one trick. Compare readability at full speed while leaving simulation, aim and camera continuous. | [Primary source](https://www.arcsystemworks.com/guilty-gear-xrds-art-style-the-x-factor-between-2d-and-3d-talk-from-gdc-2015-is-now-available-online/) · [Video](https://www.gdcvault.com/play/1022031/GuiltyGearXrd-s-Art-Style-The) |
+| **Sony Imageworks — Into the Spider-Verse production breakdown**<br>ART04 · High | The studio documents line work, stylized FX, selective stepped animation and motion streaks. The useful translation is a small vocabulary of readable accents around important actions. | Compare a clean landing with a brief local line burst, a gear smear and no added effect. Keep the upcoming obstacle visible and provide a reduced-motion equivalent. | [Primary source](https://www.imageworks.com/node/1371) · [Video](https://www.youtube.com/watch?v=8dRehHtGVOc) |
+| **Fortiche — Arcane production portfolio**<br>ART05 · High | Use the studio portfolio to study how costume, material breakup, gesture and environment make individuals recognizable. Choose the parts that survive Minecraft scale. | Give two Honkistas members different silhouette anchors, costume construction and idle behavior; preserve their approved identities and existing CPM detail. | [Primary source](https://forticheprod.com/) |
+| **Nintendo — Splatoon 3 developer interview: Counterculture**<br>ART06 · High | The developers discuss the world through a counterculture lens. Study the connection between sound, fashion, identity and shared social space. | Design a gang identity kit where an emblem, garment accent, dance preference, collectible art and hangout all express the same personality. | [Primary source](https://splatoon.nintendo.com/en/news/ask-the-developer-vol-7-splatoon-3-part-1/) |
+| **Tango Gameworks — Hi-Fi Rush oral history**<br>ART07 · High | Developers explain the art direction and music-led conception. Treat rhythm as an organizing language for presentation, with multiple readable ways to perceive it. | Prototype optional beat/phrase cues on a Boombox and selected crew props. Test muted play and ensure movement and hit confirmation never wait for the music grid. | [Primary source](https://news.xbox.com/en-us/2023/10/04/hi-fi-rush-exclusive-oral-history/) |
+| **Roll7 — Rollerdrome art-direction interview**<br>ART08 · High | Lead artist Antoine Dekerle explains flat colors, controlled lines and distance readability. The transferable lesson is to reserve contrast for action-relevant shapes. | Audit a skating/gunplay arena with explosions active: enemies, rails, escape routes and objective silhouettes must remain distinguishable. | [Primary source](https://www.gamedeveloper.com/art/deep-dive-rollerdrome-art-direction-q-a) · [Official media gallery](https://www.playstation.com/en-us/games/rollerdrome/) |
+| **Paul-Emile Boucher — Sifu art direction**<br>ART09 · High | The art director describes simplified volumes, a speedpainting texture approach and cinematic lighting/color. This is a useful reference for distinct, coherent districts. | Create three biome-native hangout palettes, each with a clear focal stage and quieter surrounding surfaces; preserve local block/material identity. | [Primary source](https://peboucher.artstation.com/projects/OmE5n6) |
+| **Raoul Desmarest — Sifu stylized character lighting**<br>ART10 · Explore | A developer breakdown distinguishes character treatment from environment lighting. Apply the principle through tested asset/material choices before attempting a global shader. | Review one custom NPC in daylight, cave darkness, Nether lighting and a crowded rave. Verify face/gear readability with the ordinary renderer and optional shader combinations. | [Primary source](https://rayoule.artstation.com/projects/nED0aO) |
+
+#### Graffiti and street culture
+
+| Reference | What it can improve | Small review / prototype | Source and media |
+|---|---|---|---|
+| **FUTURA LABORATORIES**<br>ART11 · High | A direct artist-studio reference for a consistent identity expressed across art, apparel, objects and collaborations. | Design one original gang emblem that still works on a small sticker, large wall, ride accessory and Boombox badge. Test silhouette and one-color variants. | [Primary source](https://futuralaboratories.com/pages/about) · [Artist gallery](https://futuralaboratories.com/) |
+| **Felipe Pantone — artist archive**<br>ART12 · High | Study the artist’s transition from lettering toward abstract systems, optical geometry and color. This is fertile ground for a distinct digital/rave district. | Prototype static geometric trim and slowly changing stage panels. Keep the race surface readable and preserve a fully usable reduced-flash presentation. | [Primary source](https://felipepantone.com/) |
+| **Lady Pink — fine-art portfolio**<br>ART13 · High | Study the breadth of a real writer’s practice across letters, figurative paintings and urban narratives. A gang gallery can have a recognizable authorial voice without repeating one logo. | Give one crew a coherent sticker, tag, character piece and prestige mural progression; retain stable reward IDs and identify each creator in metadata. | [Primary source](https://www.ladypinknyc.com/fine-art-page) · [Image](https://images.squarespace-cdn.com/content/v1/57309af162cd94614020f373/1666019558505-LLTHYJ6Q68UM26EQ5PWJ/1980-pink-piece.jpg) |
+| **OSGEMEOS — Segredos at Pinacoteca**<br>ART14 · High | The museum documents paintings, sound installations, sketchbooks and a documentary series rooted in São Paulo hip-hop. Study a shared world built across multiple art forms. | Build an original hangout whose mural, stage objects, character gesture and musical motif tell the same local story; avoid one generic urban palette for every crew. | [Primary source](https://pinacoteca.org.br/programacao/exposicoes/osgemeos-segredos/) |
+| **Keith Haring — Art in Transit**<br>ART15 · High | The artist’s own account links public drawing, quick communication and an audience moving through the city. Study economical line and repeated readable symbols. | Develop original high-contrast pictograms for dance, grind, transfer and tag objectives; test them at speed and on the existing small custom canvas. | [Primary source](https://www.haring.com/%21/selected_writing/haring-art-in-transit) |
+| **Museum of the City of New York — Martin Wong graffiti collection**<br>ART16 · High | The collection links subway writing, works on paper and gallery art, including Lee Quiñones, Lady Pink, Rammellzee and Futura. Use it to broaden the gallery beyond spray-letter presets. | Organize discovery by maker, crew, motif and medium, with one canonical record behind each appearance. A future blackbook should preserve attribution and unlock context. | [Primary source](https://www.mcny.org/exhibition/above-ground-art-martin-wong-graffiti-collection) · [Image](https://www.mcny.org/sites/default/files/styles/1488x480/public/94.114.176.jpg?h=04f74b3d&itok=X6tYwOt_) |
+| **Museum of Graffiti — Origins**<br>ART17 · High | An institutional starting point for tracing graffiti’s development instead of treating it as an interchangeable neon texture. | Create an internal art taxonomy for handstyle, throw-up, piece, stencil, sticker, character and mural; use category differences to shape meaningful collectible progression. | [Primary source](https://museumofgraffiti.com/pages/exhibition/origins) · [Exhibition gallery](https://museumofgraffiti.com/pages/exhibitions) |
+| **STRAAT — Henry Chalfant: Capturing graffiti culture**<br>ART18 · High | The museum’s October 2026 exhibition documents train-scale art, photographs, sketchbooks, flyers, radio and shared viewing places. Study how a scene remembers its artists. | Prototype a writers’ hangout with a wall of earned crew pieces, route photographs and a listening corner; make the rewards represent actual play history. | [Primary source](https://www.straatmuseum.com/en/press/from-new-york-to-amsterdam-straat-museum-shows-graffiti-culture-through-the-eyes-of-henry-chalfant) |
+| **BEYOND THE STREETS — curatorial program**<br>ART19 · Explore | Study the connection among graffiti, street art, publishing, objects and exhibitions through a curator that works directly with artists. | Expand discovery into zines, flyers, event posters and stage objects tied to existing crews. Keep the same stable catalog and progression rather than a separate collectible inventory. | [Primary source](https://beyondthestreets.com/pages/about) · [Curator gallery](https://beyondthestreets.com/) |
+
+#### Place, dance and interface
+
+| Reference | What it can improve | Small review / prototype | Source and media |
+|---|---|---|---|
+| **New York Transit Museum — Vignelli map and wayfinding**<br>ART20 · High | The museum explains how a shared diagram and signage system simplified a confusing network. Route identity should survive changes of scale and medium. | Give event routes consistent symbols, colors and text labels across entry signs, checkpoints, HUD and map previews. Test junction choices without relying on color alone. | [Primary source](https://www.nytransitmuseum.org/vignelli/) · [Image](https://www.nytransitmuseum.org/wp-content/uploads/2025/10/vignelli-hero-1-871x1024.webp) |
+| **Tokyo Metropolitan Government — Design Manhole Digital Rally**<br>ART21 · High | An official example of distinctive local art turning ordinary street infrastructure into exploration destinations. | Use original gang/biome floor medallions and surface art as route discoveries. Preserve the existing six-face paint system and distinguish art discovery from arbitrary grind tasks. | [Primary source](https://www.tokyo-manhole.metro.tokyo.lg.jp/index_en.html) · [Illustrated government source](https://www.tokyoupdates.metro.tokyo.lg.jp/en/post-498/) |
+| **Miyashita Park — official rooftop sports facilities**<br>ART22 · High | A real example of skating sharing a dense urban space with other activities. Study the relationship between a sports area and a social destination. | Build a rooftop hangout with entry/exit lines, spectator edges, a dance space and multiple routes back to ordinary terrain. Validate unobstructed navigation. | [Primary source](https://www.seibu-la.co.jp/park/miyashita-park/facility/sports/) · [Official photo guide](https://www.gotokyo.org/en/spot/1844/index.html) |
+| **Red Bull BC One — official battle archive**<br>ART23 · High | Use organizer footage to study breaking entrances, phrase structure, response, floor contacts and crowd reactions instead of learning dance from isolated looping poses. | Annotate selected performances into anticipation, phrase, accent, recovery and response; map intent to each safe mob anatomy and test contact correctness. | [Primary source](https://www.redbull.com/us-en/event-series/bc-one) |
+| **Juste Debout — official styles and performance references**<br>ART24 · High | Study House, Popping, Locking and Hip-Hop as distinct movement languages. JetSetCraft already has multiple dance families; their timing and weight should remain distinguishable. | Choose a reviewed phrase per family and author lead, answering and supporting roles for solo-to-crew choreography; preserve each crew’s approved music identity. | [Primary source](https://www.juste-debout.com/en/) · [Video](https://www.juste-debout-school.com/wp-content/uploads/2022/04/0320.mp4) |
+
+### Original art-direction proposals for JetSetCraft
+
+#### A coherent identity kit for every crew
+
+Use one shared vocabulary across the existing gang record, art-reward ladder, recruit presentation, radio metadata and event staging. An identity kit can include a silhouette anchor, dominant material family, accent palette, emblem, lettering treatment, preferred motion rhythm, arrival phrase and recurring prop. This is a production checklist, not a cap on the roster or content.
+
+Start with several deliberately different crews from the already approved roster. Preserve **MoccaSins** as the canonical name and its existing selected music. Preserve **Gabberina’s** jumpstyle/gabber/hardtekk blend. Keep **Sav** and **PESTRiCA** recognizable individual Honkistas members rather than making them palette swaps. The detailed owner decisions remain on [Music-Driven Dances and Mob-Themed Bosses](https://github.com/Herbertofury/JetSetCraft/wiki/Music%E2%80%90Driven-Dances-and-Mob%E2%80%90Themed-Bosses).
+
+#### A useful graffiti taxonomy
+
+Expose meaningful differences: quick handstyle, throw-up, stencil, sticker, character, emblem, detailed piece and prestige mural. These categories should organize and explain the full collection; they do not replace its contents. Link unlocked art to the existing stable gang/reward identities and preserve source title/artist/credits for authorized imports. The 16 × 10, 4-bit custom canvas remains a deliberate bounded user-paint format; full authored/licensed gallery art is a different existing content lane.
+
+Treat the player’s collection as a blackbook: reliable search, favorites, recent choices, crew/source filters and clear locked/unlocked status. A large collection should feel generous because it is easy to navigate. Do not require a long chain of page clicks to find an already earned tag.
+
+#### One readable emphasis at a time
+
+At high speed, the important hierarchy is the next landing or obstacle, the rider/enemy action, then the reward accent. Place large spectacle in a predictable area and time window. Avoid letting a reactive light, announcer popup, particle burst and camera roll all compete over the same moment. Give successful transfers, clean landings and major milestones different audiovisual signatures, derived from confirmed existing events.
+
+The owner’s terrain-aware courses should use local biome materials. A warped-forest rail, cave line and rooftop session can share an affordance grammar without sharing the same textures. Color should reinforce shape, labels and placement rather than carry route meaning alone.
+
+#### Choreography needs structure and agency
+
+Develop a reusable phrase vocabulary with entrances, travel phrases, accents, answers, rests and exits. A music-driven system can choose and transform this vocabulary by rhythm, phrase, intensity, crew identity and safe anatomy. Solo, supporting and responding roles make a crew feel coordinated without identical clone motion. This supports the approved music-generated/driven ambition while giving animators and playtesters something concrete to inspect.
+
+Review selected performance footage before recording exact steps or artist attribution. Keep lead/response timing distinct from movement and hit registration. The player must be able to leave, aim, use an item or return to ordinary locomotion through the existing authority rules. Moving formations need terrain/contact validation; a musical phrase is never permission to clip through a wall or teleport a source mob.
+
+#### Presentation acceptance board
+
+| Scene | What the review should establish |
+|---|---|
+| Rooftop sprint into a rail transfer | Upcoming route, departure edge and landing remain visible with normal and reduced effects. |
+| Same trick with empty hands, item use and TaCZ | Lower-body expression survives while the item/weapon owner keeps arms, hands and head. |
+| Large mixed-mob cypher | Crew identities and lead/response roles remain recognizable; every participant remains supported. |
+| Quiet village, cave, warped forest and rave | Palette fits the place, characters remain legible, and important cues survive muted/reduced-flash play. |
+| Graffiti selector with the full collection | Search, favorites, focus and provenance work without dropping entries or creating duplicate catalog records. |
+| Honkistas turn, stop, jump, land and reset | Hair/costume response follows actual motion, respects anchors/contact, and preserves the approved CPM detail. |
+
+Existing owner requirements and runtime evidence take precedence over these new suggestions. In particular, the prior authorized JSR/JSRF/BRC production lane remains intact; these references do not revoke or relabel it.
+
+
+## Music-driven choreography: ten research leads
+
+**Checked 31 October 2026.** These are production-tool and experiment candidates for the existing [music-driven dance specification](Music‐Driven-Dances-and-Mob‐Themed-Bosses), not claims that a neural dance system runs in JetSetCraft. Prioritize editable **3D skeletal motion** when the deliverable is a playable character. A convincing generated video alone does not supply a usable rig, foot contacts, collision, multiplayer timing, or animation ownership.
+
+### Start with a choreography workbench
+
+The most promising direction is a workbench that lets an artist choose meaningful phrases, preserve a crew's vocabulary, repair transitions, and bake approved clips for the existing animation pipeline. Keep every approved move available. Cache and schedule the work; do not make the Minecraft render thread generate a dance.
+
+| Study order | Paper / project | What its primary source establishes | JetSetCraft experiment and evidence required |
+|---|---|---|---|
+| **1 · editable production** | **[CustomDance](https://xulongt.github.io/customdance-project-page/)** · [paper](https://arxiv.org/abs/2608.06722) · 2026, authors' page labels SIGGRAPH Asia 2026 | Music-aware planning, retrieval of concrete dance phrases, and creator-guided completion/repair. | Prototype a phrase timeline with named steps, music anchors and a protected set of artist-selected moves. Ask a choreographer to repair one transition without changing either neighboring phrase; measure revision time and preservation of intent. |
+| **2 · interpretable movement** | **[AtomicDance](https://github.com/oceanflowlab/AtomicDance)** · [paper](https://arxiv.org/abs/2607.13978) · July 2026, author repository labels ECCV 2026 | Separates a symbolic plan of movement types/timing/duration from detailed motion synthesis. | Build a small explicit vocabulary per crew, then compare repetition, phrase coherence and transition quality against random clip selection. Planning vocabulary must remain inspectable and editable. |
+| **3 · controlled revision** | **[DanceEditor](https://lzvsdy.github.io/DanceEditor/)** · [ICCV 2025 paper](https://openaccess.thecvf.com/content/ICCV2025/html/Zhang_DanceEditor_Towards_Iterative_Editable_Music-driven_Dance_Generation_with_Open-Vocabulary_Descriptions_ICCV_2025_paper.html) | Iterative text-guided editing of music-conditioned dances. | Try instructions such as “keep the foot phrase; change the torso accent.” Compare untouched joint curves before/after. An attractive result that changes protected gameplay-owned joints fails. |
+| **4 · distinct crew styles** | **[GCDance](https://github.com/surrey-nlp/GCDance)** · [University of Surrey publication](https://openresearch.surrey.ac.uk/esploro/outputs/journalArticle/GCDance-Genre-Controlled-Music-Driven-3D-Full-Body/991110395402346) · 2026 journal record | Conditions 3D dance on music and descriptive genre information; authors supply code and a checkpoint. | Ask practitioners to assess whether generated phrases retain the selected tradition. Do not label a generic high-tempo motion “krump,” “footwork,” or “cumbia” simply because the prompt requested it. |
+| **5 · usable baseline** | **[EDGE](https://edge-dance.github.io/)** · [CVPR 2023 paper](https://openaccess.thecvf.com/content/CVPR2023/html/Tseng_EDGE_Editable_Dance_Generation_From_Music_CVPR_2023_paper.html) | Supports temporal and joint-wise constraints, continuation and in-betweening, with contact-aware motion objectives. | Use as a comparison baseline for joining approved clips. Check both intended sliding and unwanted skating of planted feet; freeze the weapon-owned upper body during ride tests. |
+| **6 · long-form structure** | **[Lodge++](https://li-ronghui.github.io/lodgepp)** · [TPAMI paper](https://ieeexplore.ieee.org/document/11193731/) · 2025 | Coarse choreography primitives guide detailed long-form motion; includes contact, penetration and genre-consistency mechanisms. | Build a full song-length routine and record repeated phrases, pose discontinuities and foot penetration. Long output is useful only if its sections feel intentional. |
+| **7 · group research frontier** | **[ChoreoStudio](https://arxiv.org/abs/2610.32325)** · submitted **23 October 2026** | The preprint explicitly plans formation geometry, transition timing and which dancers move. | Translate its “what / when / who” separation into a deterministic crew formation plan. Test late joins, exits, uneven terrain and narrow passages. Treat paper metrics as author-reported; code availability and Minecraft suitability were not established here. |
+| **8 · efficient motion tokens** | **[TokenDance](https://openaccess.thecvf.com/content/CVPR2026W/HuMoGen/html/Yang_TokenDance_Token-to-Token_Music-to-Dance_Generation_with_Bidirectional_Mamba_CVPRW_2026_paper.html)** · **CVPR Workshops 2026** | Uses music/motion tokenization and a bidirectional Mamba-based generator; distinguishes upper- and lower-body motion components. | Compare offline generation throughput and retained motion quality on the same clips. Workshop publication is the verified venue; no Java, Forge, or in-game speed claim follows from it. |
+| **9 · group baseline** | **[AIOZ-GDANCE](https://aioz-ai.github.io/AIOZ-GDANCE/)** · [CVPR 2023 paper](https://openaccess.thecvf.com/content/CVPR2023/html/Le_Music-Driven_Group_Choreography_CVPR_2023_paper.html) | Provides music/3D group-motion research and evaluation of coordination rather than treating dancers as independent solos. | Test whether two individually good routines collide, obscure the rival, or lose group structure. Measure crew spacing and contact separately from individual dance quality. |
+| **10 · nonhuman anatomy** | **[AnyTop](https://anytop2025.github.io/Anytop-page/)** · [code](https://github.com/Anytop2025/Anytop) · **SIGGRAPH 2025** | Studies motion generation across different skeletal topologies, using skeleton structure and joint semantics. | Evaluate an offline adaptation path across humanoid, small quadruped and long-bodied rigs. Preserve source-mob AI and render ownership; a topology-general model is not proof of compatibility with every installed creature. |
+
+### Watch the methods
+
+| Artist-directed editing | Iterative motion revision |
+|---|---|
+| [![CustomDance research teaser](https://xulongt.github.io/customdance-project-page/assets/media/hero-teaser.webp)](https://xulongt.github.io/customdance-project-page/) | [![DanceEditor research teaser](https://lzvsdy.github.io/DanceEditor/figure/DanceEditor_teaser.png)](https://lzvsdy.github.io/DanceEditor/) |
+| **CustomDance** — [project and demo](https://xulongt.github.io/customdance-project-page/#video). Image hosted by the authors. | **DanceEditor** — [project and demo](https://lzvsdy.github.io/DanceEditor/). Image hosted by the authors. |
+
+### A useful first experiment
+
+Use one approved music excerpt and one deliberately small **test fixture**, not a content or participation cap: a solo dancer, a three-person crew, and one nonhuman rig. Compare hand-authored clips, constrained generation, and phrase retrieval plus repair under identical camera and timing conditions. Keep the same clips and full visual quality across performance comparisons.
+
+Record:
+
+- **Creative control:** time to replace a phrase; whether protected poses and crew identity survive a revision.
+- **Movement quality:** unwanted foot sliding, intended glide preservation, self-penetration, ground contact, and transition discontinuities.
+- **Group quality:** collisions, readable formations, role changes and whether the leader/rival remains visible.
+- **Gameplay ownership:** immediate cancellation into jump/combat, safe return to source-owned mob behavior, and no generated displacement overriding collision authority.
+- **Delivery cost:** authoring hardware and generation time separately from packaged clip size, startup, client frame time and server tick cost.
+- **Synchronization:** late-join recovery, track changes, pause/mute behavior and long-run phase drift. Never delay a movement or hit to wait for a beat.
+
+The live music specification already asks for varied solo, crew and rival choreography. This research supplies candidate production methods and acceptance measurements for that work. It does not replace its established crew identities, track approvals, provenance records, or implementation backlog.
+
+
+---
+
+## Earlier catalogue
+
+The **78 earlier entries** below remain intact for continuity. Their inherited scores and version notes are historical research metadata, not fresh benchmark results or a claim that every external release was rechecked in this pass. The [earlier 173-row sheet](https://docs.google.com/spreadsheets/d/1liWhRQL7rmPy8LLgSRVlkrLANqUIJE4UbFX3--KMJjg/edit?gid=1570163195#gid=1570163195) remains available.
+
+### Dance & Animation · 18
 
 Emotes, blended locomotion, player rigs, multiplayer synchronization, and authoring formats.
 
@@ -30,7 +193,7 @@ Emotes, blended locomotion, player rigs, multiplayer synchronization, and author
 | **Figura ExtraFight**<br><sub>Compatibility reference · score 7.20</sub> | Java<br>Figura / Epic Fight<br>2026 | Bridges Figura avatars to Epic Fight animation matrices and extra bones. | Specific example of adapting arbitrary custom rigs to another animation owner without replacing either ecosystem. | [Project](https://modrinth.com/mod/figura_extrafight) | Ask author / verify terms |
 | **Emote Tweaks**<br><sub>Addon reference · score 6.70</sub> | Java<br>Emotecraft addon<br>Modern | Play WAV audio with emotes through Simple Voice Chat; crouch-cancel controls. | Direct inspiration for dance-specific stingers, synchronized cyphers and cancel semantics. | [Project](https://modrinth.com/mod/emote-tweaks) | Ask author / verify terms |
 
-## Mocap & Animation Assets · 8
+### Mocap & Animation Assets · 8
 
 Motion libraries and retargeting workflows for expressive, grounded movement.
 
@@ -45,7 +208,7 @@ Motion libraries and retargeting workflows for expressive, grounded movement.
 | **Cascadeur**<br><sub>Animation tool · score 7.15</sub> | Asset/tool<br>Desktop<br>Current | Physics-assisted animation and posing workflow. | Potential polish tool for hand-authoring/cleaning high-energy flips, landings and trick arcs before retargeting to Minecraft rigs. | [Project](https://www.cascadeur.com/) | Tool terms; final animation ownership depends on source motion |
 | **Mixamo**<br><sub>Motion asset source · score 6.75</sub> | Asset<br>Adobe web service<br>Current | Large humanoid animation library and auto-rigging workflow. | Fast generic dance/locomotion prototyping and retarget tests; not a substitute for skate-specific board-contact mocap. | [Project](https://www.mixamo.com/) | Verify Adobe terms for final game use |
 
-## Model & Asset Hubs · 35
+### Model & Asset Hubs · 35
 
 Creation tools and candidate models for skates, boards, BMXs, hoverboards, props, and environments.
 
@@ -87,7 +250,7 @@ Creation tools and candidate models for skates, boards, BMXs, hoverboards, props
 | **Blendkit**<br><sub>3D asset library · score 5.85</sub> | All<br>Web/Blender<br>Current | Large 3D asset library integrated into Blender. | Good generic-model discovery when adapting a complex prop or environment asset through Blender before Blockbench. | [Project](https://www.blendkit.com/) | Check asset license and polycount |
 | **Poly Haven**<br><sub>CC0 asset library · score 5.85</sub> | All<br>Web library<br>Current | High-quality public-domain/CC0 texture/model/HDRI library. | Best used for texture/material reference and environment rendering; convert/downsample intentionally for Minecraft style. | [Project](https://polyhaven.com/) | CC0 library; verify current terms |
 
-## Creator & Commission Sources · 17
+### Creator & Commission Sources · 17
 
 People and marketplaces to contact for bespoke, permission-clean production assets.
 
@@ -113,5 +276,5 @@ People and marketplaces to contact for bespoke, permission-clean production asse
 
 ---
 
-**78 references on this page.** Inclusion records research value, not bundled code/assets or automatic redistribution permission. Return to **[Inspiration & Research](Inspiration-and-Research)**.
+**78 entries preserved from the earlier catalogue.** Inclusion records research value, not bundled code/assets or automatic redistribution permission. Return to **[Inspiration & Research](Inspiration-and-Research)**.
 

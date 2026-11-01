@@ -103,6 +103,19 @@ Clients send bounded input samples; the server owns movement, scoring, equipment
 
 See [Architecture](docs/ARCHITECTURE.md), [Upstream Merge](docs/UPSTREAM-MERGE.md), [Compatibility Covenant](docs/STANDALONE_COMPATIBILITY_COVENANT.md), [Asset Provenance](docs/ASSET_PROVENANCE.md), and [Changelog](CHANGELOG.md).
 
+## Inspiration and research
+
+Explore the **[visual Inspiration Atlas](https://herbertofury.github.io/JetSetCraft/research.html)** or the **[wiki research hub](https://github.com/Herbertofury/JetSetCraft/wiki/Inspiration-and-Research)**. The October 31, 2026 research pass adds **196 entries** to the preserved 173-entry catalogue: 40 games, 100 music tracks, 24 art/culture references, 22 engineering references and 10 choreography papers.
+
+| Explore | What is inside |
+|---|---|
+| [Games, movement and rides](https://github.com/Herbertofury/JetSetCraft/wiki/Research-Street-Movement-and-Rides) | Official images/videos, specific design lessons, ten refinements and six course briefs. |
+| [Music, graffiti and audio](https://github.com/Herbertofury/JetSetCraft/wiki/Research-Graffiti-Music-and-Audio) | A 16-track starting sequence, seven shelves, cover art and crew-specific audition candidates. |
+| [Art, animation and creators](https://github.com/Herbertofury/JetSetCraft/wiki/Research-Animation-Models-and-Creators) | Street culture, readable visual direction and current choreography research. |
+| [Engineering and performance](https://github.com/Herbertofury/JetSetCraft/wiki/Research-Frameworks-Java-and-Bedrock) | Code-aware improvement ideas, primary documentation and meaningful acceptance checks. |
+
+The browser supports search, category/priority filters, a local shortlist and CSV export. Research proposals and new music candidates are clearly distinguished from shipped behavior and earlier owner selections. The [source catalogue and build instructions](docs/research/README.md) keep future updates reproducible.
+
 ## Rights
 
 Project code and original JetSetCraft content are All Rights Reserved unless a file or ledger entry says otherwise. Third-party/reference inputs retain their own permissions and are not relicensed. See [LICENSE](LICENSE), [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md), and the asset ledger before redistributing or adding external material.

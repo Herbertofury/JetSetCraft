@@ -29,3 +29,26 @@ Block-edge grinds receive an intentional corner-steering bias so exposed 90-degr
 - Detector rails still produce redstone behavior.
 - Activator rails can trigger JetSetCraft's action pulse while retaining normal rail semantics.
 - Material profiles change cap, retention, sound, pitch, and particles for metal, copper, glass, wood, stone, and other surfaces.
+
+## Owner requirement: every ride, either rail
+
+**Approved requirement, implementation coverage still to verify.** Every ride the player uses must be able to grind the **left or right physical rail** of vanilla and modded railway tracks. Centerline-only attachment does not satisfy this requirement. Preserve all existing ride identities and make rail entry, balancing, tricks, side-switches and transfers feel as responsive and stylish as the Jet Set Radio / Bomb Rush Cyberfunk quality references.
+
+### Movement and presentation
+- Resolve each rail as a distinct continuous path using the track's real shape, gauge, tangent and surface normal. Keep the chosen rail stable through curves, slopes, diagonals and junctions; no involuntary left/right snapping.
+- Let players deliberately hop between the two rails, transfer to nearby tracks/ledges, choose branches, reverse or exit safely, and chain aerial tricks back into a grind without an arbitrary combo reset.
+- Use ride-specific contact poses: skate frames, board trucks/slides, BMX/bike pegs and appropriate equivalents for every additional ride. Include visible balance/lean, contextual sparks/sound and animation transitions that preserve camera readability and player control.
+- Wingsuit/boostpack combinations can launch from and land into these grind chains. For minecarts/Trick Trains, preserve the separate opt-in vehicle mode and whole-vehicle clearance rather than applying a small rider collision box to a train.
+
+### Compatibility and engineering checklist
+- [ ] Audit the existing solver first; retain its useful vanilla/Create geometry and momentum behavior rather than build a competing movement controller.
+- [ ] Test both rail sides on all vanilla rail types, straight/curved/sloped sections, crossings, junctions, Create Bezier tracks and supported modded gauges/materials.
+- [ ] Cover all six baseline rides plus every approved new ride with actual side-specific visual/contact tests; no silent style exclusions.
+- [ ] Add provider-aware adapters for modded track geometry. Moving tracks and portal transitions need explicit transform/lifecycle validation; unsupported combinations must be reported honestly, not claimed universally tested.
+- [ ] Preserve rail redstone, railway signaling, trains, inventory, ordinary movement and collision safety. If another rail-grinding mod is installed, arbitrate controller ownership to prevent double acceleration or conflicting player attachment.
+- [ ] Verify server authority, multiplayer prediction/correction, chunk unload, removed tracks, reattach/escape, low overhead and no repeated world-wide rail scans.
+
+### Owner reference and reuse lead
+[Create: Train Track Rail Grinding](https://www.curseforge.com/minecraft/mc-mods/create-train-track-rail-grinding) · [author's source repository](https://github.com/JuniKnytt/CreateRailGrinding). The listing checked 2026-10-14 identifies Minecraft 1.21.1 / NeoForge and MIT licensing. Its author describes momentum-preserving Create grinding and additional track integrations; these are upstream claims, not verified JetSetCraft compatibility. JetSetCraft's Forge 1.20.1 target needs a source/version/license review and adapted tests, not a blind binary dependency. Study and contribute reusable fixes upstream where appropriate.
+
+Related: [Ride Styles](Ride-Styles), [Trick Trains & Create](Trick-Trains-and-Create), [train integration backlog #37](https://github.com/Herbertofury/JetSetCraft/issues/37).
