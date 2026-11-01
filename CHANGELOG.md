@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.4.0-alpha.1 — development, 2026-11-01
+
+- Added **Rival Rush**, an optional skating roguelite mode with a reusable flyer, crew selection, thirty-minute runs, voluntary Endless continuation, and an explicit return to Minecraft.
+- Added a separate generated street dimension, temporary ride/paint equipment, Rush XP, mode vitality, score, and server-validated upgrade choices.
+- Added collectible mob cards keyed by creature and crew, seven mastery thresholds, increasing duplicate rewards, and album milestones that unlock starting drafts only inside Rush.
+- Added nine themed crew rosters, skater/tagger/bruiser/captain roles, delayed positional attack warnings, bounded encounter pressure, and rotating five-minute mixes.
+- Connected actual painting, moving tricks/grinds/wall rides, and district Boombox dance stops to mode rewards. Music stops use the existing crew stingers.
+- Added a saved return journal with acknowledged player saves, inventory/XP/ride restoration, ownership checks, and recovery paths for interrupted sessions.
+- Fixed shared ride-capability invalidation across dimension transitions while preserving invalidation of stale handles.
+- Added a paginated album, readable mode menus, independently adjustable Rush HUD, and a server enable/disable setting.
+- Expanded the development gate to fifteen real Forge GameTests, normal dedicated-server shutdown verification, and a graphical-client audit of entry, four screens, and return with a nonempty inventory and vanilla XP.
+- Added an eighteen-game research/design study that separates the implemented alpha from proposed build families, authored districts, musical challenges, and bespoke bosses. This development build does not replace the published v0.3.0 release; human pacing, long Endless sessions, and broader mob compatibility still need playtesting.
+
 ## 0.3.0 — 2026-08-24
 
 - Added six complete ride styles, twenty-four tricks, twenty-eight dance moves, Flow/combo scoring, landing grades, and multiplayer cyphers.

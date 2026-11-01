@@ -65,6 +65,18 @@ Hands-free BMX and scooter handlebar clips may use the arms only while the rider
 - Aether and Twilight Forest surface/grind/wall behavior is expressed through non-required datapack entries.
 - Unknown Forge rails follow `BaseRailBlock` behavior; unusual blocks can opt in through JetSetCraft tags.
 
+## Optional Rival Rush mode
+
+Rival Rush owns a separate session boundary inside the existing mod. `RivalRushManager` is the server authority for entry, encounter ownership, mode vitality, rewards, and exit; `RushRun` holds the temporary clock and build. The normal movement and graffiti systems still supply actual riding and painting actions. The mode does not turn ordinary mob kills into run progression.
+
+`RushReturnState` captures the supported normal player state before entry. `RushPlayerStorage` requires a synchronous individual-player save acknowledgement before the manager lends equipment or changes dimensions. The album is stored separately from that temporary return journal, so collected cards survive a completed return without importing temporary items or Rush XP into survival. Login, logout, clone, respawn, and unexpected dimension changes have explicit recovery paths. This is not a generic snapshot of every capability that another mod might attach.
+
+Every rival, paint projectile, and card pickup belongs to a player/run pair. Reward claims and upgrade choices validate that identity on the server. `RushWorld` decorates already-loaded district chunks incrementally, and `RushRosters` reads named crew casts from datapacks. Players share the dedicated dimension, with separated starting positions and independent encounter ownership; it is not an instance-per-player world or a cooperative party mode.
+
+The shared `JetSetDataProvider` renews its capability handle after invalidation while retaining the same data object. Old handles still invalidate, and the entity's own validity gate remains authoritative. This preserves the physical ride across real dimension transitions without reviving a removed host.
+
+See [Rival Rush implementation and design](RIVAL_RUSH_DESIGN.md) for current behavior, compatibility limits, and proposals that are not yet implemented.
+
 ## Verification architecture
 
 The repository verifies implementation in layers:
@@ -72,9 +84,11 @@ The repository verifies implementation in layers:
 1. deterministic model, animation, and brand generation;
 2. JSON, model, animation, gameplay-contract, and wiki validators;
 3. ForgeGradle production build;
-4. nine real Forge GameTests for hoverboard/scooter persistence and movement, neutral/stop/swim authority, kickoff intent, no-gear dance scoring, combat sovereignty, hostile state/input handling, mob Street Gear/Boombox lifecycle, graffiti support cleanup, and bounded paint-balloon splashes;
-5. unattended real-client ride/HUD/graffiti visual capture;
-6. real dedicated-server startup smoke;
+4. fifteen real Forge GameTests: the nine existing movement, combat, Street Gear, graffiti, and paint-splash cases plus six Rival Rush cases for rules, albums, return journals, real session transitions, ownership, and objectives;
+5. real dedicated-server startup, followed by a normal stop and completed world save;
+6. an unattended real-client Rival Rush audit that captures setup, the district HUD, album, and result while checking an actual inventory/vanilla-XP round trip;
 7. exact tested-source and binary artifact publication.
+
+The historical v0.3.0 release evidence contains nine GameTests and its own ride/HUD/graffiti captures. The fifteen-test gate applies to the Rival Rush development line; it does not rewrite that release's provenance. Automated integration checks do not establish thirty-minute pacing or long Endless performance.
 
 The v0.3.0 release uses dense original item meshes and renderer-agnostic player/mob equipment layers. Any later presentation upgrade must preserve the current gameplay state machine, combat composition, accessibility settings, source-mob identity, and optional-mod isolation.

@@ -9,6 +9,7 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.BackupConfirmScreen;
 import net.minecraft.client.gui.screens.ConfirmScreen;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.tutorial.TutorialSteps;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.contents.TranslatableContents;
@@ -44,6 +45,9 @@ public final class RivalRushVisualAudit {
     private static String failureCaptureLabel;
     private static String lastWaitingScreen = "";
     private static Screen confirmedWorldScreen;
+    private static TutorialSteps originalTutorialStep;
+    private static long fixtureObservedAt;
+    private static int fixtureSettledTicks;
     private static int phase, ticks;
     private static int chosenVersion = Integer.MIN_VALUE;
     private static UUID chosenRun;
@@ -67,7 +71,7 @@ public final class RivalRushVisualAudit {
                     JetSetCraft.LOGGER.error("JETSETCRAFT_RUSH_VISUAL_AUDIT_FAILURE_CAPTURE_UNAVAILABLE {}", captureFailure);
                 }
                 complete = true;
-                minecraft.stop();
+                stopClient(minecraft);
             }
             return;
         }
@@ -78,6 +82,11 @@ public final class RivalRushVisualAudit {
         }
         if (captureFailure != null) { finish(minecraft, false, captureFailure); return; }
         try {
+            if (phase == 0 && originalTutorialStep == null && isDisposableQuickPlayLaunch(minecraft)) {
+                originalTutorialStep = minecraft.options.tutorialStep;
+                minecraft.getTutorial().setStep(TutorialSteps.NONE);
+                JetSetCraft.LOGGER.info("JETSETCRAFT_RUSH_VISUAL_AUDIT_TUTORIAL_OPTION none (restored at shutdown)");
+            }
             if (minecraft.player == null || minecraft.level == null || minecraft.getConnection() == null) {
                 handleWorldLoadScreen(minecraft);
                 return;
@@ -126,9 +135,14 @@ public final class RivalRushVisualAudit {
                         || minecraft.player.getInventory().countItem(Items.BREAD) < 5
                         || minecraft.player.experienceLevel < 23 || minecraft.player.totalExperience < 17
                         || minecraft.player.experienceProgress <= 0.0F) return;
-                JetSetCraft.LOGGER.info("JETSETCRAFT_RUSH_VISUAL_AUDIT_FIXTURE_OBSERVED diamonds={} bread={} level={} totalXp={} progress={}",
-                        minecraft.player.getInventory().countItem(Items.DIAMOND), minecraft.player.getInventory().countItem(Items.BREAD),
-                        minecraft.player.experienceLevel, minecraft.player.totalExperience, minecraft.player.experienceProgress);
+                if (fixtureObservedAt == 0L) {
+                    fixtureObservedAt = System.nanoTime();
+                    JetSetCraft.LOGGER.info("JETSETCRAFT_RUSH_VISUAL_AUDIT_FIXTURE_OBSERVED diamonds={} bread={} level={} totalXp={} progress={}",
+                            minecraft.player.getInventory().countItem(Items.DIAMOND), minecraft.player.getInventory().countItem(Items.BREAD),
+                            minecraft.player.experienceLevel, minecraft.player.totalExperience, minecraft.player.experienceProgress);
+                }
+                // Let the real recipe/advancement toasts and chat fade naturally after vanilla give commands.
+                if (++fixtureSettledTicks < 240 || System.nanoTime() - fixtureObservedAt < 12_000_000_000L) return;
                 request("menu", "", 0);
                 next(1);
             }
@@ -383,6 +397,14 @@ public final class RivalRushVisualAudit {
             }
         }
         complete = true;
+        stopClient(minecraft);
+    }
+
+    private static void stopClient(Minecraft minecraft) {
+        if (originalTutorialStep != null) {
+            minecraft.getTutorial().setStep(originalTutorialStep);
+            originalTutorialStep = null;
+        }
         minecraft.stop();
     }
 

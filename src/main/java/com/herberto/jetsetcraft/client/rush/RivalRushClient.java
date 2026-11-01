@@ -156,7 +156,8 @@ public final class RivalRushClient {
         public static void overlay(RenderGuiOverlayEvent.Post event) {
             Minecraft minecraft = Minecraft.getInstance();
             if (event.getOverlay() != VanillaGuiOverlay.HOTBAR.type() || minecraft.player == null
-                    || minecraft.options.hideGui || minecraft.screen instanceof RivalRushHudScreen) return;
+                    || minecraft.options.hideGui || minecraft.screen instanceof RivalRushScreen
+                    || minecraft.screen instanceof RivalRushHudScreen) return;
             drawHud(event.getGuiGraphics(), minecraft.getWindow().getGuiScaledWidth(),
                     minecraft.getWindow().getGuiScaledHeight(), false);
         }

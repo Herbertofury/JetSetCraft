@@ -3,7 +3,8 @@
 ![Release](https://img.shields.io/badge/release-0.3.0-16d6d1?style=for-the-badge)
 ![Minecraft](https://img.shields.io/badge/Minecraft-Forge%201.20.1-62b347?style=for-the-badge)
 ![Movement](https://img.shields.io/badge/movement-momentum%20first-f4d03f?style=for-the-badge)
-![Verification](https://img.shields.io/badge/verification-9%20GameTests-e84393?style=for-the-badge)
+![Stable verification](https://img.shields.io/badge/stable%200.3.0-9%20GameTests-e84393?style=for-the-badge)
+[![Alpha verification](https://img.shields.io/badge/development%20alpha-15%20GameTests-f4d03f?style=for-the-badge)](https://github.com/Herbertofury/JetSetCraft/actions/runs/41346460726)
 
 > [!IMPORTANT]
 > **JetSetCraft turns ordinary Minecraft worlds into a momentum-first street-sports playground without replacing the player, the world, or vanilla control.** Inline skates, quad skates, a street board, BMX, hoverboard, and scooter share one expressive movement language built around tricks, grinding, flow, dance, graffiti, and emergent Minecraft physics.
@@ -19,10 +20,18 @@
 | Pick skates, a board, BMX, hoverboard, or scooter | **[Ride Styles](Ride-Styles)** |
 | Build tricks, combos, transfers, and Flow | **[Tricks, Combos & Flow](Tricks-Combos-and-Flow)** |
 | Paint tags, create custom art, or use Free Paint | **[Graffiti](Graffiti)** |
-| Choose an isolated skating roguelite session | **[Rival Rush](Rival-Rush)** — optional mode under verification |
+| Choose an isolated skating roguelite session | **[Rival Rush](Rival-Rush)** — optional `0.4.0-alpha.1` candidate |
 | Browse games, music, art and engineering inspiration | **[Inspiration & Research](Inspiration-and-Research)** |
 | Build a compatible modpack or server | **[Modpack Maker Guide](Modpack-Maker-Guide)** |
 | Inspect architecture and verification evidence | **[Developer Architecture](Developer-Architecture)** · **[Testing](Testing-and-Verification)** |
+
+## 🧪 Optional Rival Rush alpha
+
+**[Rival Rush](Rival-Rush)** adds a separate thirty-minute or Endless skating survival session: named rival crews, paint combat, temporary upgrade drafts, independent Rush XP, persistent mob cards, wall rewards and music stops. A reusable paper + cyan-dye flyer opens its menu. Players opt in and can return to their saved Minecraft state; the alpha requires Easy, Normal or Hard.
+
+The target is **`0.4.0-alpha.1`**. Follow **[PR #39](https://github.com/Herbertofury/JetSetCraft/pull/39)** for the current candidate. **Stable `v0.3.0` is unchanged**, with its existing **nine** GameTests. The development suite has **fifteen**: those nine plus six Rival Rush tests.
+
+**Last recorded PR verification:** merge checkpoint [`520591e`](https://github.com/Herbertofury/JetSetCraft/commit/520591e049e38fcd7592679788d97b28cd27d4ba), containing feature commit [`7283dd8`](https://github.com/Herbertofury/JetSetCraft/commit/7283dd8f912c2c6903e156d468fd1326ee8966b7), passed [the main Forge/client gate](https://github.com/Herbertofury/JetSetCraft/actions/runs/41346460726) and [all four optional-provider configurations](https://github.com/Herbertofury/JetSetCraft/actions/runs/41346460787). The main gate includes a real graphical client audit and inventory/XP return check; every provider configuration passed fifteen GameTests and server smoke. This is machine integration evidence. Human thirty-minute/Endless balance and universal modded-mob behavior are not established; [the mode page explains the limits](Rival-Rush#last-recorded-verification).
 
 ## 🎧 New research collection
 
@@ -34,7 +43,7 @@
 |---|---|
 | <img src="https://raw.githubusercontent.com/Herbertofury/JetSetCraft/main/art/screenshots/v0.3.0-ride-hud.png" alt="JetSetCraft ride, world painting, and HUD" width="100%"> | <img src="https://raw.githubusercontent.com/Herbertofury/JetSetCraft/main/art/screenshots/v0.3.0-graffiti-selector.png" alt="JetSetCraft graffiti selector" width="100%"> |
 
-## 🟢 What exists today
+## 🟢 Stable v0.3.0 capabilities
 
 | System | Shipped surface |
 |---|---|
@@ -44,7 +53,7 @@
 | **Graffiti** | 139 persistent aspect-aware tags, custom tag creation, Tag/Free Paint modes, 16 colors, six-face splashes, and throwable paint balloons. |
 | **Minecraft physics** | Ice, slime, honey, Soul Speed, water, bubbles, redstone rails, pistons, explosions, currents, knockback, and optional Create geometry remain useful movement tech. |
 | **Street Gear & gangs** | Reversible gear on compatible source-owned mobs, physical Boombox tuning, data-driven gang identity, bounded actors, anti-farm cleanup, and original entrance stingers. |
-| **Verification** | Deterministic asset generation, nine real Forge GameTests, clean client/server builds, dedicated-server smoke, real-client visual audit, and TestGrid protocol proof. |
+| **Stable verification** | Deterministic asset generation, nine real Forge GameTests, clean client/server builds, dedicated-server smoke, real-client visual audit, and TestGrid protocol proof. The Rival Rush development suite and its fifteen tests are recorded separately above. |
 
 ## 🧭 What makes JetSetCraft different
 
@@ -90,7 +99,7 @@ flowchart LR
 - **Roadmap:** [Roadmap](Roadmap)
 
 > [!NOTE]
-> Territory, reputation, chapters, posse systems, Junior Atlas, and expanded competitive modes are preserved as design lineage unless the **[Release Status](Release-Status)** page marks them shipped.
+> Territory, reputation, story chapters, posse systems, Junior Atlas, and other competitive concepts remain design lineage unless **[Release Status](Release-Status)** marks them shipped. The optional Rival Rush alpha has its own [implementation and evidence page](Rival-Rush).
 
 ---
 

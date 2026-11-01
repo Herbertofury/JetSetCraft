@@ -1,6 +1,6 @@
 # Rival Rush: implementation status and roguelite design research
 
-**Implementation under verification.** The first playable slice is being integrated; this document does not announce a tested release. Forge integration, multiplayer recovery, representative mob behavior, performance, and human playtesting remain release gates. Update this status only with the resulting evidence.
+**Status: optional alpha candidate with recorded machine verification.** Rival Rush targets `0.4.0-alpha.1`; the stable `v0.3.0` release is unchanged. The last recorded PR verification checkpoint is merge commit [`520591e`](https://github.com/Herbertofury/JetSetCraft/commit/520591e049e38fcd7592679788d97b28cd27d4ba), containing feature commit [`7283dd8`](https://github.com/Herbertofury/JetSetCraft/commit/7283dd8f912c2c6903e156d468fd1326ee8966b7), with the evidence below. Follow [PR #39](https://github.com/Herbertofury/JetSetCraft/pull/39) for the current candidate and any newer checks. Full human thirty-minute sessions, Endless balance, sustained performance, and broad mob-provider behavior remain to be evaluated.
 
 **Research checked 1 November 2026. Eighteen game studies; primary developer, publisher, and official store sources.**
 
@@ -10,9 +10,9 @@ Source observations are separated from JetSetCraft recommendations. All locally 
 
 ## 0. What this change implements, and what remains a proposal
 
-The following inventory describes code present in this change, subject to verification. A feature appearing here is not evidence that every lifecycle or optional-mod combination has passed.
+The following inventory describes code present in this alpha. The recorded tests cover the cases stated below; a feature appearing here is not evidence that every lifecycle or optional-mod combination has passed.
 
-| Area | First implementation being verified | Further design, not implemented by this slice |
+| Area | Implemented alpha surface | Further design, not implemented by this slice |
 |---|---|---|
 | **Entry and return** | An opt-in mode menu and command path; a dedicated `jetsetcraft:rival_rush` dimension; temporary loaned ride/paint equipment; a persisted pre-entry return journal and restoration paths. | A polished in-world event host, authored entry sequence, and verified adapters for arbitrary foreign player capabilities. |
 | **Run progression** | Separate run XP, score, vitality, seven ranked stat/reward upgrades, and three repeatable fallback rewards. Server-owned offers carry a run identity and offer version. | The eight interacting build families in section 6; family-aware offer steering, rerolls, evolutions, and run-specific equipment combinations. |
@@ -35,9 +35,20 @@ This alpha refuses entry on Peaceful before saving a return checkpoint or instal
 
 Selection is based on registered mob identities and existing JetSetCraft eligibility. This is a broad selection path, not a claim that every mob works well in a flat district. The existing `street_gear_incompatible` entity tag explicitly excludes the Ender Dragon and Wither, along with player/armor-stand entities. Respect those pre-existing exclusions: a multipart dragon encounter and a scripted, destructive boss lifecycle require deliberate encounter adapters, and this slice provides neither. Other provider ownership rules, aquatic needs, unusual geometry, native AI, and scripted transformations still require representative integration tests. Do not infer universal compatibility from a successful registry lookup.
 
-### Verification boundary
+### Last recorded verification
 
-A separate deterministic harness compiled the actual pure-Java `RushRun` class and checked timer, choice, overflow, and Endless rules. It did not exercise Minecraft world state, networking, rendering, foreign capabilities, native mob AI, or gameplay feel. The acceptance cases later in this document are a verification plan, not a list of tests already passed. No human thirty-minute or Endless playtest is claimed here.
+The following evidence applies to the PR merge checkpoint [`520591e`](https://github.com/Herbertofury/JetSetCraft/commit/520591e049e38fcd7592679788d97b28cd27d4ba), containing feature commit [`7283dd8`](https://github.com/Herbertofury/JetSetCraft/commit/7283dd8f912c2c6903e156d468fd1326ee8966b7). Later candidates and their own checks are linked from [PR #39](https://github.com/Herbertofury/JetSetCraft/pull/39); this record does not automatically verify later edits.
+
+| Evidence | Recorded result | Scope |
+|---|---|---|
+| [Verify JetSetCraft #268](https://github.com/Herbertofury/JetSetCraft/actions/runs/41346460726) | **PASS** | Clean Forge build, all **15 real Forge GameTests**, dedicated-server readiness followed by a normal RCON stop, and an actual **1280 × 720 graphical Minecraft client audit**. |
+| [Optional-provider matrix](https://github.com/Herbertofury/JetSetCraft/actions/runs/41346460787) | **PASS in all four configurations** | Combined providers, Alex's Mobs, Alex's Caves, and Cataclysm each passed the same **15 GameTests** and dedicated-server smoke. This is integration coverage for those configurations, not an audit of every provider mob's AI. |
+
+The client audit used actual packet entry and exit and captured setup, the district HUD, an empty album, and the return result. Its fixture added **7 diamonds, 5 bread, 23 XP levels, and 17 XP points**. It compared the complete pre-entry inventory data and XP level/total on return, checked XP progress within `0.000001`, required the original dimension, and accepted a return position within one block of the saved position. These are real machine integration and visual-capture checks; the empty-album frame does not demonstrate a populated collection.
+
+The fifteen GameTests consist of the nine existing tests plus six Rival Rush tests covering run rules, album rewards, return journals, actual session entry/exit, actor/card ownership, and graffiti/action dispatch. A separate deterministic harness also compiled the pure-Java `RushRun` class and checked timer, choice, overflow, and Endless rules.
+
+**Evidence limits:** no human thirty-minute or Endless playtest is claimed. The recorded smoke checks do not establish long-session pacing, animation quality across every mob, all multiplayer interruption combinations, universal optional-mod compatibility, or measured long-duration performance. The broader acceptance cases later in this document remain a verification plan unless matched to a specific recorded test. The source-study observations likewise remain research, not hands-on playtest evidence.
 
 **Reading guide:** section 2 records reference-game evidence. Sections 1 and 3–13 describe the target experience and proposed next steps unless a subsection explicitly identifies implemented behavior. Section 5 gives the actual first-slice card thresholds and distinguishes them from future presentation rewards.
 

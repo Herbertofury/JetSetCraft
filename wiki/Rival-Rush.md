@@ -1,6 +1,6 @@
 # Rival Rush — optional skating roguelite
 
-**Status: first implementation under verification.** Rival Rush is one optional mode inside JetSetCraft. The normal movement, graffiti, crews, Boombox challenges and Minecraft world continue to work independently. This page describes the implemented first slice and its current limits; the [research and longer design](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/RIVAL_RUSH_DESIGN.md) separates further proposals from current code.
+**Status: optional `0.4.0-alpha.1` candidate with recorded machine verification.** The stable `v0.3.0` release is unchanged and does not include Rival Rush. See [PR #39](https://github.com/Herbertofury/JetSetCraft/pull/39) for the current candidate and checks. Rival Rush is one optional mode inside JetSetCraft; normal movement, graffiti, crews, Boombox challenges and Minecraft continue independently. This page describes the implemented alpha and its limits. The [18-game research and design study](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/RIVAL_RUSH_DESIGN.md) separates further proposals from current code.
 
 ## Start and return
 
@@ -12,7 +12,15 @@ Choose a named rival crew using **Change crew**, review its creature theme, then
 
 **Return to Minecraft** is always available in the run menu. `/jetsetcraft rush leave` is an independent exit. You return to your original dimension and position with the saved normal inventory, physical ride, Minecraft XP, survival state and effects restored. If the original dimension is no longer available, recovery uses the overworld spawn and explains the fallback. Invalid return journals are retained for recovery rather than silently discarded.
 
-Collected cards bank into the separate album immediately when picked up. Uncollected field cards and temporary run upgrades do not accompany the player into Minecraft. Disconnecting ends the run and restores the saved state; an interrupted-session journal is recovered on login.
+Collected cards update the separate album when picked up. Uncollected field cards and temporary run upgrades do not accompany the player into Minecraft. Disconnecting ends the run and restores the saved state; an interrupted-session journal is recovered on login.
+
+### Return and persistence scope
+
+The return journal covers the captured **vanilla player state and JetSetCraft ride state**. It does not snapshot arbitrary capabilities owned by other mods.
+
+Album changes are persisted with **normal player saves**, not a disk flush for every card. An abrupt crash can lose changes since the last completed save. Successful entry and restored exit require their player-save checkpoints to be acknowledged.
+
+If the entry checkpoint cannot be saved, the run stops before lending equipment or teleporting. If the restored exit cannot be saved, the player is disconnected with an explanation; reconnect after the server's storage problem is fixed.
 
 ## The first playable loop
 
@@ -29,7 +37,7 @@ The loan inventory supplies paint balloons, a spray can, and all six existing ri
 
 | Reward | Earned from | What happens after returning |
 |---|---|---|
-| **Rush XP** | Collected cards, eligible new graffiti patches, movement challenges, music stops and captains | Temporary level/build ends; vanilla XP is untouched |
+| **Rush XP** | Collected cards, eligible new graffiti patches, movement style, music stops and captains | Temporary level/build ends; vanilla XP is untouched |
 | **Run score** | Rival defeats, collection mastery, walls, style, cyphers and terminal draft rewards | Shown in the result summary; never converted into vanilla currency |
 | **Mob-card album** | Actually collected mode-owned card pickups | Persists by original mob registry ID and crew ID |
 
@@ -105,10 +113,25 @@ Add a roster at `data/<namespace>/jetsetcraft_rush_rosters/<name>.json`:
 
 The mode filters absent entity IDs without requiring optional mods. A completely unavailable cast cannot start. Use the existing gang data system to define or map additional named crews. The client HUD has independent drag, scale, visibility and reset controls, persisted locally; those preferences cannot award gameplay state.
 
-## Verification and next experiments
+## Last recorded verification
 
-Six new Forge GameTests exercise run rules, album rewards, return journals, actual session entry/exit, actor/card ownership, and real graffiti/action dispatch. They join the nine existing tests; the CI gate requires **all fifteen**, a clean Forge build, dedicated-server readiness, and a real-client audit that captures setup, the district HUD, the album and the return result while checking inventory and vanilla XP restoration. Check the exact commit's workflow before describing a candidate as verified.
+The recorded PR verification checkpoint is merge commit [`520591e`](https://github.com/Herbertofury/JetSetCraft/commit/520591e049e38fcd7592679788d97b28cd27d4ba), containing feature commit [`7283dd8`](https://github.com/Herbertofury/JetSetCraft/commit/7283dd8f912c2c6903e156d468fd1326ee8966b7). That checkpoint passed the following checks. [PR #39](https://github.com/Herbertofury/JetSetCraft/pull/39) identifies the current candidate and newer results; later edits need their own passing checks.
 
-The larger research document covers additional weapon families, encounter directors, musical objectives, co-op, routes, world-space card presentation and more expressive city structure. Those remain experiments until implemented and tested. Client visual review and real thirty-minute playtesting remain essential for pacing, readability, terrain feel and mob-provider compatibility.
+| Check | Evidence and result |
+|---|---|
+| Main Forge/client gate | **[PASS — Verify JetSetCraft #268](https://github.com/Herbertofury/JetSetCraft/actions/runs/41346460726):** clean Forge build, **15 real Forge GameTests**, dedicated-server readiness, normal RCON shutdown, and an actual **1280 × 720 graphical client audit**. |
+| Optional-provider configurations | **[PASS — all four matrix configurations](https://github.com/Herbertofury/JetSetCraft/actions/runs/41346460787):** combined providers, Alex's Mobs, Alex's Caves, and Cataclysm each passed the same 15 GameTests and server smoke. |
+
+The graphical audit captured setup, the district HUD, an **empty** album and the return result. It entered and left through the real packet flow using a fixture of **7 diamonds, 5 bread, 23 XP levels and 17 XP points**, compared the complete saved inventory and XP level/total, accepted an XP-progress difference of at most `0.000001`, and checked return to the original dimension and within one block of the saved position. The workflow artifacts contain the captures and logs.
+
+The six Rival Rush GameTests cover run rules, album rewards, return journals, actual session entry/exit, actor/card ownership, and graffiti/action dispatch; the other nine are the existing suite. These are **machine integration smoke checks**. They do not establish thirty-minute enjoyment, Endless balance, every modded mob's AI behavior, or every multiplayer interruption case. **No human thirty-minute or Endless playtest is claimed.** The stable `v0.3.0` release retains its separate nine-test evidence.
+
+## What remains a design proposal
+
+The implemented seven ranked upgrades and three fallback rewards form the first build system. The eight deeper families in the research study—such as tag chaining, rail-triggered pulses and painted drift trails—still need implementation and playtesting.
+
+Captains currently add tougher priority targets and rewards. Bespoke boss attack patterns, paired bosses, crew-specific final headliners, and the proposed authored thirty-minute sequence remain future work. The current end is the timer boundary with a Return/Encore choice.
+
+Music stops currently measure **four seconds of dancing** and play an existing crew stinger. They do not judge beats, analyze a soundtrack, or implement rhythm-scored combat. Tag relays, carried crates, crew murals, richer procedural neighborhoods, and coordinated co-op are also proposals. Human sessions should now test the existing skating, combat, collection and exit loop before expanding it.
 
 **Continue:** [Controls](Controls) · [Graffiti](Graffiti) · [Mob Gangs](Mob-Gangs) · [Research and design](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/RIVAL_RUSH_DESIGN.md)

@@ -315,11 +315,12 @@ final class RivalRushScreen extends Screen {
     @Override
     public void render(GuiGraphics gui, int mouseX, int mouseY, float partialTick) {
         renderBackground(gui);
+        int left = left();
+        int span = span();
+        gui.fill(left - 6, 4, left + span + 6, height - 4, 0xF2181C20);
         gui.drawCenteredString(font, title, width / 2, 10, 0xFFC5ED55);
         gui.drawCenteredString(font, "An optional skating survival set • your own run XP", width / 2, 26, 0xFFDDDDDD);
         CompoundTag state = RivalRushClient.state();
-        int left = left();
-        int span = span();
         if (view == View.RUN) {
             if (!state.getBoolean("Active")) {
                 gui.drawString(font, "Your rival crew", left, 75, 0xFFDDDDDD);
@@ -351,8 +352,15 @@ final class RivalRushScreen extends Screen {
         } else if (view == View.ROSTER || view == View.ALBUM) {
             boolean cards = view == View.ALBUM;
             ListTag list = cards ? RivalRushClient.album() : RivalRushClient.roster();
-            if (list.isEmpty()) wrap(gui, cards ? "Your album is empty. Defeat rivals in a Rush to collect their mob cards."
-                    : "Choose Rival crews above to request the server's current roster.", left, 81, span, 4, 0xFFDDDDDD);
+            if (list.isEmpty()) {
+                if (cards) {
+                    gui.drawString(font, "No cards collected yet", left, 81, 0xFF87E1EA);
+                    wrap(gui, "Defeat rivals and pick up their dropped cards to fill your album.",
+                            left, 99, Math.min(span, 280), 4, 0xFFDDDDDD);
+                } else {
+                    wrap(gui, "Choose Rival crews above to request the server's current roster.", left, 81, span, 4, 0xFFDDDDDD);
+                }
+            }
             String page = (RivalRushClient.page(cards) + 1) + "/" + RivalRushClient.pages(cards)
                     + " • " + (list.isEmpty() ? "0" : (window * rows() + 1) + "–" + Math.min(list.size(), (window + 1) * rows()));
             gui.drawCenteredString(font, page, width / 2, height - 47, 0xFFDDDDDD);
