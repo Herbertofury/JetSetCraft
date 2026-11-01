@@ -1,6 +1,6 @@
 # Rival Rush — optional skating roguelite
 
-**Status: optional `0.4.0-alpha.3` activity/arena candidate; new verification pending.** The stable `v0.3.0` release is unchanged and does not include Rival Rush. First introduced through [merged PR #39](https://github.com/Herbertofury/JetSetCraft/pull/39). Rival Rush is one optional mode inside JetSetCraft; normal movement, graffiti, crews, Boombox challenges and Minecraft continue independently. This page describes the implemented alpha and its limits. The [18-game research and design study](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/RIVAL_RUSH_DESIGN.md) separates further proposals from current code.
+**Status: optional `0.4.0-alpha.3`, merged and machine-verified.** [PR #41](https://github.com/Herbertofury/JetSetCraft/pull/41) adds the shared activity menu, arena circuit and expanded builds; the [alpha.3 verification receipt](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/verification/arena-circuit/README.md) records all nine passing runtime configurations and ten reviewed client captures. The stable `v0.3.0` release is unchanged and does not include Rival Rush, which first arrived through [PR #39](https://github.com/Herbertofury/JetSetCraft/pull/39). Rival Rush is one optional mode inside JetSetCraft; normal movement, graffiti, crews, Boombox challenges and Minecraft continue independently. The [18-game research and design study](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/RIVAL_RUSH_DESIGN.md) separates further proposals from current code.
 
 ## One activity menu, shared crew progress
 
@@ -12,7 +12,7 @@ Completed **Tag, King of the Hill and Showdown objectives, arena clears, qualify
 
 ### Shared completion rewards
 
-These are the candidate's configured amounts, with crew progression enabled and room below the account caps. They remain tuning choices awaiting human progression playtests.
+These are alpha.3's configured amounts, with crew progression enabled and room below the account caps. Their settlement paths have machine verification; the amounts remain tuning choices awaiting human progression playtests.
 
 | Completed activity | Crew Supplies | Crew XP | Member training XP | Gang reputation |
 |---|---:|---:|---:|---:|
@@ -70,6 +70,15 @@ Runs have **three artifact-family slots**. The ranked catalogue contains **18 ch
 **Critical rhythm** adds critical chance, **Finishing touch** raises critical damage, **Bigger chorus** expands paint/artifact area and **Fast rewind** reduces artifact intervals. These are run statistics. They do not change vanilla weapon damage or carry temporary run equipment home.
 
 The optional Firebolt relay is a focused integration. Native spellbook casting, provider mana/cooldowns, summons and arbitrary third-party capability restoration are outside its scope. See [Compatibility](Compatibility) for the exact tested versions and evidence.
+
+## Alpha.3 activity and arena captures
+
+These actual **1280 × 720** base-client captures show the Boombox activity preview and the first circuit fork. The client then chose a route and entered its connected travel path. Arena combat, clear conditions and settlement were exercised separately by server GameTests with shortened test clocks. [Open all ten captures, checksums and verification details](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/verification/arena-circuit/README.md).
+
+| Choose a mode and review its rewards | Choose the next arena |
+|---|---|
+| ![Boombox activity menu showing Tag selected, its shared rewards and an explicit Start action](https://raw.githubusercontent.com/Herbertofury/JetSetCraft/main/docs/verification/arena-circuit/09-activities.png) | ![First arena fork showing three offered rooms with reward, size and duration details](https://raw.githubusercontent.com/Herbertofury/JetSetCraft/main/docs/verification/arena-circuit/10-arena-route.png) |
+| The preview leaves the choice with the player; opening the menu alone does not start a game. | These are the first three offered rooms. A completed arena or six-room journey is not pictured. |
 
 ## Historical alpha.2 client captures
 
@@ -240,9 +249,22 @@ Limits: radius **16–48**, duration **30–360 seconds**, **3–80** required d
 
 Inventories, entity data, block-entity NBT, fluids, portals and explicitly dangerous vanilla blocks are rejected. The actual ride-in connector has priority over authored blocks so every chosen branch stays passable. This is a bounded block-map format, not an arbitrary structure-NBT importer or in-game arena editor.
 
-## Last recorded verification
+## Verified alpha.3 checkpoint
 
-The recorded **alpha.2** verification covers candidate [`d5ecadd`](https://github.com/Herbertofury/JetSetCraft/commit/d5ecadd0651c35fdffb505fa2790bda718e830db) on tested PR integration [`b9bcec8`](https://github.com/Herbertofury/JetSetCraft/commit/b9bcec8258e164aa41af5838a89df8aac04bd7c7). The [crew-house verification receipt](https://github.com/Herbertofury/JetSetCraft/tree/main/docs/verification/crew-house) records the exact tested source, binary checksum, workflow artifacts and eight captures. Later code changes need their own evidence.
+[PR #41](https://github.com/Herbertofury/JetSetCraft/pull/41) merged the same source tree that passed these gates. The [arena-circuit verification receipt](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/verification/arena-circuit/README.md) records the exact feature, tested integration and merge commits, shared tree identity, binary checksum and original captures.
+
+| Check | Evidence and result |
+|---|---|
+| Base Forge and graphical client | **[PASS — Verify JetSetCraft #280](https://github.com/Herbertofury/JetSetCraft/actions/runs/41356358215):** clean build, **28 real Forge GameTests**, dedicated-server readiness and normal shutdown, plus ten actual **1280 × 720** client captures reviewed against the audit log. |
+| Optional-provider matrix | **[PASS — all eight configurations, #56](https://github.com/Herbertofury/JetSetCraft/actions/runs/41356358302):** Alex's Mobs, Alex's Caves, Cataclysm, their combined lane, Aether, Iron's, AoA and the Aether/Iron's/AoA/Cataclysm combined lane each passed **28 GameTests**, server readiness and normal shutdown. Base plus these eight lanes gives nine tested configurations. |
+
+The real client used the Charter, founded a house, registered a physically placed workshop, dispatched a job, opened the Boombox activity menu, explicitly selected Rival Rush and chose its first circuit route. Both the short Free streets run and the circuit entry/return checked restoration of the saved inventory, Minecraft XP and original dimension/position. The Free streets result recorded **one rival defeat and zero collected cards**; its album was empty. The dispatched job was still running. Crew captures 05–07 preserve their native hover tooltips, which cover some secondary information. These images do not show a completed mission claim, populated album or completed circuit.
+
+Server GameTests cover actual owner-only street objectives, pre-house reward transfer and replay rejection, bounded arena profiles, circuit/Encore rules, real owned-rival combat and arena settlement. The provider lanes also exercise native Aether/Precasia departure and return and the narrowly admitted Iron's Firebolt where installed. See [Testing and Verification](Testing-and-Verification) for individual markers and scope. **No human thirty-minute or Endless playtest is claimed.** These checks establish machine integration behavior; enjoyment, long-session balance and performance still need human sessions.
+
+### Historical alpha.2 verification
+
+The recorded **alpha.2** verification covers candidate [`d5ecadd`](https://github.com/Herbertofury/JetSetCraft/commit/d5ecadd0651c35fdffb505fa2790bda718e830db) on tested PR integration [`b9bcec8`](https://github.com/Herbertofury/JetSetCraft/commit/b9bcec8258e164aa41af5838a89df8aac04bd7c7). The [crew-house verification receipt](https://github.com/Herbertofury/JetSetCraft/tree/main/docs/verification/crew-house) records that checkpoint's exact tested source, binary checksum, workflow artifacts and eight captures. Its historical results remain separate from the alpha.3 evidence above.
 
 | Check | Evidence and result |
 |---|---|
@@ -255,7 +277,7 @@ The nineteen GameTests comprise nine original tests, six Rival Rush tests and fo
 
 ### Historical alpha.1 checkpoint
 
-The [alpha.1 verification receipt](https://github.com/Herbertofury/JetSetCraft/tree/main/docs/verification/rival-rush) preserves the fifteen-test checkpoint containing feature `88b2c75`, tested through PR integration `f2ac0c1`, with its original four captures, CI links and binary checksum. That historical evidence remains distinct from the current alpha.2 checks.
+The [alpha.1 verification receipt](https://github.com/Herbertofury/JetSetCraft/tree/main/docs/verification/rival-rush) preserves the fifteen-test checkpoint containing feature `88b2c75`, tested through PR integration `f2ac0c1`, with its original four captures, CI links and binary checksum. That historical evidence remains distinct from the later alpha.2 and alpha.3 checks.
 
 ## What remains a design proposal
 

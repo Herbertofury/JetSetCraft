@@ -24,8 +24,9 @@ import java.util.function.Predicate;
 
 /** Continues the opt-in real-client audit after the Rush inventory/XP restoration checks have passed. */
 public final class CrewHouseVisualAudit {
-    private static int phase, ticks;
-    private static BlockPos anchor, workshop;
+    private static int phase, ticks, fixtureWaitTicks;
+    private static BlockPos standing, anchor, workshop;
+    private static String fixtureDimension;
     private static UUID assignedMember;
     private static long foundedRevision, registeredRevision;
     private static volatile boolean fixtureApplied;
@@ -40,8 +41,7 @@ public final class CrewHouseVisualAudit {
         switch (phase) {
             case 0 -> { queueFixture(minecraft); next(1); }
             case 1 -> {
-                if (!fixtureApplied || !minecraft.level.getBlockState(anchor).is(ModBlocks.BOOMBOX.get())
-                        || !minecraft.level.getBlockState(workshop).is(Blocks.CRAFTING_TABLE) || charterSlot(minecraft) < 0) return false;
+                if (!fixtureReady(minecraft)) return false;
                 click(minecraft, "Done");
                 useCharter(minecraft, anchor);
                 next(2);
@@ -134,8 +134,6 @@ public final class CrewHouseVisualAudit {
         Path expected = minecraft.gameDirectory.toPath().resolve("saves/RivalRushAudit").toAbsolutePath().normalize();
         require(server != null && server.getWorldPath(LevelResource.ROOT).toAbsolutePath().normalize().equals(expected),
                 "Crew fixture requires the exact disposable RivalRushAudit integrated save");
-        anchor = minecraft.player.blockPosition().offset(2, 0, 0);
-        workshop = anchor.offset(2, 0, 0);
         UUID playerId = minecraft.player.getUUID();
         server.execute(() -> {
             try {
@@ -143,11 +141,22 @@ public final class CrewHouseVisualAudit {
                         && server.getWorldPath(LevelResource.ROOT).toAbsolutePath().normalize().equals(expected), "Crew fixture lost its world guard");
                 var player = server.getPlayerList().getPlayer(playerId);
                 require(player != null, "Crew fixture player disconnected");
-                var source = server.createCommandSourceStack().withPermission(4).withEntity(player).withSuppressedOutput();
-                for (String command : new String[]{setBlock(anchor, "jetsetcraft:boombox"), setBlock(workshop, "minecraft:crafting_table"),
+                standing = player.blockPosition().immutable();
+                anchor = standing.offset(2, 0, 0); workshop = standing.offset(4, 0, 0);
+                fixtureDimension = player.level().dimension().location().toString();
+                var source = player.createCommandSourceStack().withPermission(4).withSuppressedOutput();
+                // The copied smoke-test world has natural, seed-dependent terrain. A real sealed room
+                // prevents water, falling or flowing terrain from moving the player during non-pausing menus.
+                // This happens only after the first Rush return has already passed its restoration checks.
+                for (String command : new String[]{fill(standing.offset(-3, -1, -3), standing.offset(7, 3, 3), "minecraft:glass hollow"),
+                        fill(standing.offset(-3, -1, -3), standing.offset(7, -1, 3), "minecraft:stone"),
+                        setBlock(anchor, "jetsetcraft:boombox"), setBlock(workshop, "minecraft:crafting_table"),
+                        "tp @s " + (standing.getX() + 0.5) + " " + standing.getY() + " " + (standing.getZ() + 0.5),
                         "give @s jetsetcraft:crew_charter 1"}) {
                     require(server.getCommands().performPrefixedCommand(source, command) > 0, "Crew fixture vanilla command failed: " + command);
                 }
+                JetSetCraft.LOGGER.info("JETSETCRAFT_CREW_AUDIT_ROOM_PLACED dimension={} standing={} anchor={} workshop={}",
+                        fixtureDimension, standing.toShortString(), anchor.toShortString(), workshop.toShortString());
                 fixtureApplied = true;
             } catch (RuntimeException error) {
                 fixtureFailure = "Crew fixture failed: " + error.getMessage();
@@ -156,6 +165,52 @@ public final class CrewHouseVisualAudit {
         });
     }
 
+    private static boolean fixtureReady(Minecraft minecraft) {
+        if (!fixtureApplied) return false;
+        fixtureWaitTicks++;
+        double anchorDistance = minecraft.player.getEyePosition().distanceTo(Vec3.atCenterOf(anchor).add(0, 0.5, 0));
+        double workshopDistance = minecraft.player.getEyePosition().distanceTo(Vec3.atCenterOf(workshop).add(0, 0.5, 0));
+        boolean ready = minecraft.level.dimension().location().toString().equals(fixtureDimension)
+                && minecraft.level.getBlockState(anchor).is(ModBlocks.BOOMBOX.get())
+                && minecraft.level.getBlockState(workshop).is(Blocks.CRAFTING_TABLE)
+                && minecraft.level.getBlockState(standing.below()).is(Blocks.STONE)
+                && minecraft.level.getBlockState(standing).isAir() && minecraft.level.getBlockState(standing.above()).isAir()
+                && minecraft.player.onGround() && !minecraft.player.isInWaterOrBubble()
+                && minecraft.player.position().distanceToSqr(Vec3.atBottomCenterOf(standing)) <= 0.04
+                && anchorDistance <= 4.5 && workshopDistance <= 4.5
+                && charterSlot(minecraft) >= 0;
+        if (!ready) {
+            ticks = 0;
+            if (fixtureWaitTicks == 1 || fixtureWaitTicks % 40 == 0) {
+                JetSetCraft.LOGGER.info("JETSETCRAFT_CREW_AUDIT_ROOM_WAIT position={} standing={} grounded={} dry={} floor={} headroom={} anchorDistance={} workshopDistance={}",
+                        minecraft.player.position(), standing.toShortString(), minecraft.player.onGround(), !minecraft.player.isInWaterOrBubble(),
+                        minecraft.level.getBlockState(standing.below()), minecraft.level.getBlockState(standing.above()), anchorDistance, workshopDistance);
+            }
+            return false;
+        }
+        if (++ticks < 20) return false;
+        JetSetCraft.LOGGER.info("JETSETCRAFT_CREW_AUDIT_ROOM_OBSERVED dimension={} position={} grounded={} dry={} anchorDistance={} workshopDistance={}",
+                fixtureDimension, minecraft.player.position(), minecraft.player.onGround(), !minecraft.player.isInWaterOrBubble(), anchorDistance, workshopDistance);
+        return true;
+    }
+
+    /** Hand the following audit the exact real server-observed home, never a new nearby-block search. */
+    public static BlockPos completedHomeAnchor(Minecraft minecraft) {
+        require(Boolean.getBoolean("jetsetcraft.rushVisualAudit") && phase == 14 && fixtureApplied,
+                "Activity audit requires the completed real crew fixture");
+        CompoundTag state = CrewHouseClient.state();
+        require(minecraft.level != null && fixtureDimension.equals(minecraft.level.dimension().location().toString())
+                && state.getString("HomeDimension").equals(fixtureDimension)
+                && state.hasUUID("HomeId") && state.getBoolean("Exists") && state.getBoolean("AnchorLoaded")
+                && state.getBoolean("AnchorValid") && state.contains("HomeAnchor", Tag.TAG_LONG)
+                && state.getLong("HomeAnchor") == anchor.asLong(), "Completed crew fixture lost its actual home identity");
+        return BlockPos.of(state.getLong("HomeAnchor"));
+    }
+
+    private static String fill(BlockPos from, BlockPos to, String block) {
+        return "fill " + from.getX() + " " + from.getY() + " " + from.getZ() + " "
+                + to.getX() + " " + to.getY() + " " + to.getZ() + " " + block;
+    }
     private static String setBlock(BlockPos pos, String block) { return "setblock " + pos.getX() + " " + pos.getY() + " " + pos.getZ() + " " + block; }
     private static int charterSlot(Minecraft minecraft) {
         for (int slot = 0; slot < 9; slot++) if (minecraft.player.getInventory().getItem(slot).is(ModItems.CREW_CHARTER.get())) return slot;
@@ -164,6 +219,11 @@ public final class CrewHouseVisualAudit {
     private static void useCharter(Minecraft minecraft, BlockPos target) {
         int slot = charterSlot(minecraft);
         require(slot >= 0 && minecraft.gameMode != null, "Actual Charter is missing from the client hotbar");
+        require(minecraft.player.onGround() && !minecraft.player.isInWaterOrBubble()
+                && minecraft.player.getEyePosition().distanceToSqr(Vec3.atCenterOf(target).add(0, 0.5, 0)) <= 4.5 * 4.5,
+                "Crew fixture player left the real supported interaction position: player=" + minecraft.player.position()
+                        + ", target=" + target.toShortString() + ", grounded=" + minecraft.player.onGround()
+                        + ", distance=" + minecraft.player.getEyePosition().distanceTo(Vec3.atCenterOf(target).add(0, 0.5, 0)));
         // Select the real given item; useItemOn sends ordinary carried-slot/use packets and invokes the Charter hook.
         minecraft.player.getInventory().selected = slot;
         minecraft.gameMode.useItemOn(minecraft.player, InteractionHand.MAIN_HAND,

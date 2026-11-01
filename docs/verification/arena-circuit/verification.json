@@ -1,0 +1,412 @@
+{
+  "schema": 1,
+  "feature": "Shared activity progression and Rival Rush arena circuits",
+  "version": "0.4.0-alpha.3",
+  "verification_date_utc": "2026-11-01",
+  "feature_commit": "c733852b260ef5dbf2cb54e7d41fc98ac10b8363",
+  "tested_pr_merge_commit": "2626a8d63c7c065a6ca5c241610993a28bdb58ca",
+  "main_merge_commit": "e57e9ab9732a84d90e6ac35a82439e54cd4461ab",
+  "tested_and_merged_tree": "e5e127156d0335a9c6f2e33ba153e8ecfc75e757",
+  "tree_identity_verified_via_github_git_commits": true,
+  "pull_request": "https://github.com/Herbertofury/JetSetCraft/pull/41",
+  "runtime": {
+    "minecraft": "1.20.1",
+    "forge": "47.4.23",
+    "java": 17,
+    "playeranimator_client": "1.0.2-rc1+1.20",
+    "network_protocol": "12"
+  },
+  "workflows": [
+    {
+      "id": 41356358215,
+      "number": 280,
+      "name": "Verify JetSetCraft",
+      "conclusion": "success",
+      "head_sha": "c733852b260ef5dbf2cb54e7d41fc98ac10b8363",
+      "event": "pull_request",
+      "url": "https://github.com/Herbertofury/JetSetCraft/actions/runs/41356358215",
+      "jobs": [
+        {
+          "id": 124997134020,
+          "configuration": "base",
+          "conclusion": "success",
+          "url": "https://github.com/Herbertofury/JetSetCraft/actions/runs/41356358215/job/124997134020",
+          "required_gametests_passed": 28,
+          "dedicated_server_ready": true,
+          "normal_shutdown_dimensions_saved": true,
+          "provider_markers": [
+            "JETSETCRAFT_GAMETEST_PASS rush_spell_relay absent",
+            "JETSETCRAFT_GAMETEST_PASS activity_dimension_return dimensions=absent",
+            "JETSETCRAFT_GAMETEST_PASS graffiti_lifecycle native_support_ticks=40"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 41356358302,
+      "number": 56,
+      "name": "Verify Wave 2 Providers",
+      "conclusion": "success",
+      "head_sha": "c733852b260ef5dbf2cb54e7d41fc98ac10b8363",
+      "event": "pull_request",
+      "url": "https://github.com/Herbertofury/JetSetCraft/actions/runs/41356358302",
+      "jobs": [
+        {
+          "id": 124997134620,
+          "configuration": "alexsmobs",
+          "conclusion": "success",
+          "url": "https://github.com/Herbertofury/JetSetCraft/actions/runs/41356358302/job/124997134620",
+          "required_gametests_passed": 28,
+          "dedicated_server_ready": true,
+          "normal_shutdown_dimensions_saved": true,
+          "provider_markers": [
+            "JETSETCRAFT_GAMETEST_PASS rush_spell_relay absent",
+            "JETSETCRAFT_GAMETEST_PASS activity_dimension_return dimensions=absent",
+            "JETSETCRAFT_GAMETEST_PASS graffiti_lifecycle native_support_ticks=40"
+          ]
+        },
+        {
+          "id": 124997134535,
+          "configuration": "alexscaves",
+          "conclusion": "success",
+          "url": "https://github.com/Herbertofury/JetSetCraft/actions/runs/41356358302/job/124997134535",
+          "required_gametests_passed": 28,
+          "dedicated_server_ready": true,
+          "normal_shutdown_dimensions_saved": true,
+          "provider_markers": [
+            "JETSETCRAFT_GAMETEST_PASS rush_spell_relay absent",
+            "JETSETCRAFT_GAMETEST_PASS activity_dimension_return dimensions=absent",
+            "JETSETCRAFT_GAMETEST_PASS graffiti_lifecycle native_support_ticks=40"
+          ]
+        },
+        {
+          "id": 124997134668,
+          "configuration": "cataclysm",
+          "conclusion": "success",
+          "url": "https://github.com/Herbertofury/JetSetCraft/actions/runs/41356358302/job/124997134668",
+          "required_gametests_passed": 28,
+          "dedicated_server_ready": true,
+          "normal_shutdown_dimensions_saved": true,
+          "provider_markers": [
+            "JETSETCRAFT_GAMETEST_PASS rush_spell_relay absent",
+            "JETSETCRAFT_ADVENTURE_PROVIDER cataclysm version=3.31",
+            "JETSETCRAFT_GAMETEST_PASS activity_dimension_return dimensions=absent",
+            "JETSETCRAFT_GAMETEST_PASS graffiti_lifecycle native_support_ticks=40"
+          ]
+        },
+        {
+          "id": 124997134415,
+          "configuration": "all",
+          "conclusion": "success",
+          "url": "https://github.com/Herbertofury/JetSetCraft/actions/runs/41356358302/job/124997134415",
+          "required_gametests_passed": 28,
+          "dedicated_server_ready": true,
+          "normal_shutdown_dimensions_saved": true,
+          "provider_markers": [
+            "JETSETCRAFT_GAMETEST_PASS rush_spell_relay absent",
+            "JETSETCRAFT_ADVENTURE_PROVIDER cataclysm version=3.31",
+            "JETSETCRAFT_GAMETEST_PASS activity_dimension_return dimensions=absent",
+            "JETSETCRAFT_GAMETEST_PASS graffiti_lifecycle native_support_ticks=40"
+          ]
+        },
+        {
+          "id": 124997134603,
+          "configuration": "aether",
+          "conclusion": "success",
+          "url": "https://github.com/Herbertofury/JetSetCraft/actions/runs/41356358302/job/124997134603",
+          "required_gametests_passed": 28,
+          "dedicated_server_ready": true,
+          "normal_shutdown_dimensions_saved": true,
+          "provider_markers": [
+            "JETSETCRAFT_GAMETEST_PASS rush_spell_relay absent",
+            "JETSETCRAFT_ADVENTURE_PROVIDER aether version=1.20.1-1.5.2-neoforge",
+            "JETSETCRAFT_GAMETEST_PASS activity_dimension_return dimensions=aether:the_aether",
+            "JETSETCRAFT_GAMETEST_PASS graffiti_lifecycle native_support_ticks=40"
+          ]
+        },
+        {
+          "id": 124997134635,
+          "configuration": "irons_spells",
+          "conclusion": "success",
+          "url": "https://github.com/Herbertofury/JetSetCraft/actions/runs/41356358302/job/124997134635",
+          "required_gametests_passed": 28,
+          "dedicated_server_ready": true,
+          "normal_shutdown_dimensions_saved": true,
+          "provider_markers": [
+            "JETSETCRAFT_ADVENTURE_PROVIDER irons_spellbooks version=1.20.1-3.4.0.2",
+            "JETSETCRAFT_GAMETEST_PASS activity_dimension_return dimensions=absent",
+            "JETSETCRAFT_GAMETEST_PASS rush_spell_relay provider=irons_spellbooks",
+            "JETSETCRAFT_GAMETEST_PASS graffiti_lifecycle native_support_ticks=40"
+          ]
+        },
+        {
+          "id": 124997134536,
+          "configuration": "aoa",
+          "conclusion": "success",
+          "url": "https://github.com/Herbertofury/JetSetCraft/actions/runs/41356358302/job/124997134536",
+          "required_gametests_passed": 28,
+          "dedicated_server_ready": true,
+          "normal_shutdown_dimensions_saved": true,
+          "provider_markers": [
+            "JETSETCRAFT_GAMETEST_PASS rush_spell_relay absent",
+            "JETSETCRAFT_ADVENTURE_PROVIDER aoa3 version=3.7.1",
+            "JETSETCRAFT_GAMETEST_PASS activity_dimension_return dimensions=aoa3:precasia",
+            "JETSETCRAFT_GAMETEST_PASS graffiti_lifecycle native_support_ticks=40"
+          ]
+        },
+        {
+          "id": 124997134611,
+          "configuration": "adventure_all",
+          "conclusion": "success",
+          "url": "https://github.com/Herbertofury/JetSetCraft/actions/runs/41356358302/job/124997134611",
+          "required_gametests_passed": 28,
+          "dedicated_server_ready": true,
+          "normal_shutdown_dimensions_saved": true,
+          "provider_markers": [
+            "JETSETCRAFT_ADVENTURE_PROVIDER aether version=1.20.1-1.5.2-neoforge",
+            "JETSETCRAFT_ADVENTURE_PROVIDER aoa3 version=3.7.1",
+            "JETSETCRAFT_ADVENTURE_PROVIDER irons_spellbooks version=1.20.1-3.4.0.2",
+            "JETSETCRAFT_ADVENTURE_PROVIDER cataclysm version=3.31",
+            "JETSETCRAFT_GAMETEST_PASS activity_dimension_return dimensions=aether:the_aether,aoa3:precasia",
+            "JETSETCRAFT_GAMETEST_PASS rush_spell_relay provider=irons_spellbooks",
+            "JETSETCRAFT_GAMETEST_PASS graffiti_lifecycle native_support_ticks=40"
+          ]
+        }
+      ]
+    }
+  ],
+  "gametests_per_configuration": 28,
+  "gametest_markers": [
+    "activity_dimension_return",
+    "activity_hill",
+    "activity_progression",
+    "activity_safety",
+    "activity_tag",
+    "catalogs",
+    "combat_sovereignty",
+    "crew_house",
+    "crew_missions",
+    "crew_persistence",
+    "crew_rush",
+    "dance_flow",
+    "graffiti_lifecycle",
+    "hoverboard",
+    "paint_balloon_splash",
+    "ride_controls",
+    "rush_album",
+    "rush_arena_catalogue",
+    "rush_arena_rules",
+    "rush_arena_session",
+    "rush_objectives",
+    "rush_ownership",
+    "rush_return",
+    "rush_rules",
+    "rush_session",
+    "rush_spell_relay",
+    "scooter",
+    "street_gear"
+  ],
+  "jar": {
+    "file": "jetsetcraft-1.20.1-0.4.0-alpha.3.jar",
+    "bytes": 5569919,
+    "sha256": "61b75c01537037acc65e262d3a5ba3d1ba62e15b4716e279c88a0cbceff0feff"
+  },
+  "artifact": {
+    "id": 13103557170,
+    "name": "jetsetcraft-forge-1.20.1-2626a8d63c7c065a6ca5c241610993a28bdb58ca",
+    "bytes": 6495440,
+    "sha256": "02dd91630c3daaf898e78ecb531fedee53d29cc77111234e6935f6b5a964582e"
+  },
+  "client_fixture": {
+    "diamonds": 7,
+    "bread": 5,
+    "xp_level": 23,
+    "total_xp": 17,
+    "xp_progress_observed": 0.22077923
+  },
+  "client_assertions": {
+    "inventory": "exact NBT equality",
+    "xp_level": "exact equality",
+    "total_xp": "exact equality",
+    "xp_progress_tolerance": 1e-06,
+    "dimension": "original dimension",
+    "position_tolerance_blocks": 1,
+    "entry_and_exit": "actual client-to-server packet flow for street and arena sessions",
+    "crew_house": "actual Charter use and confirmed founding at placed Boombox",
+    "roster": "two actual persisted starter profiles",
+    "facility": "actual placed crafting table registered through the crew packet flow",
+    "job": "real three-minute mission dispatched; completion and claim are not shown by the client capture",
+    "activity": "actual empty-hand Boombox preview and explicit Rival Rush selection",
+    "arena": "genuine first three-room offer, chosen route and connected arena travel; no visual arena completion",
+    "capture_cursor": "observed native cursor settled away from controls before captures 09 and 10"
+  },
+  "client_pass_markers": [
+    "2026-11-01T22:21:17.1271757Z [22:21:17] [Render thread/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_RUSH_VISUAL_AUDIT_FIXTURE_OBSERVED diamonds=7 bread=5 level=23 totalXp=17 progress=0.22077923",
+    "2026-11-01T22:21:46.5269404Z [22:21:46] [Render thread/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_CREW_VISUAL_AUDIT_PASS real charter use; founded home; two profiles; physical workshop; real timed job",
+    "2026-11-01T22:21:48.4276753Z [22:21:48] [Render thread/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_ACTIVITY_AUDIT_CURSOR_SETTLED phase=3 observed=(9.0, 8.0)",
+    "2026-11-01T22:21:51.1273696Z [22:21:51] [Render thread/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_ACTIVITY_AUDIT_CURSOR_SETTLED phase=7 observed=(8.0, 8.0)",
+    "2026-11-01T22:21:53.5305097Z [22:21:53] [Render thread/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_ACTIVITY_VISUAL_AUDIT_PASS real Boombox preview; explicit Rival Rush; genuine first route choice; entered connected arena travel; inventory/XP/dimension restored",
+    "2026-11-01T22:21:53.5390727Z [22:21:53] [Render thread/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_RUSH_VISUAL_AUDIT_PASS ten real-client captures; street and arena inventory/XP/dimension restored; actual Charter, crew facilities, job, Boombox activity and first arena choice verified"
+  ],
+  "captures": [
+    {
+      "file": "01-setup.png",
+      "original_file": "rival-rush-1793571649627-01-setup.png",
+      "sha256": "842f8dc5f1c5d9347cf40e02f7dca53a769809588131f59b74bbed0619c91eea",
+      "bytes": 119322,
+      "width": 1280,
+      "height": 720,
+      "visually_reviewed": true,
+      "unaltered_from_ci": true,
+      "review_note": "Readable Free streets setup, crew selection and 30-minute/Endless launches; this image does not show the selected circuit launch."
+    },
+    {
+      "file": "02-district-hud.png",
+      "original_file": "rival-rush-1793571649627-02-district-hud.png",
+      "sha256": "2fc263e2fc6b3e7b440739b335daa7157d36ec90069f561189f7e75bdc53d0ca",
+      "bytes": 319937,
+      "width": 1280,
+      "height": 720,
+      "visually_reviewed": true,
+      "unaltered_from_ci": true,
+      "review_note": "Early native district view and separate Rush XP/vitality HUD; compact objective text intentionally abbreviates."
+    },
+    {
+      "file": "03-album.png",
+      "original_file": "rival-rush-1793571649627-03-album.png",
+      "sha256": "a5a0a039b0ba1ab95aef742947caf8027f8999051c60b70354968e14d552a1b3",
+      "bytes": 71935,
+      "width": 1280,
+      "height": 720,
+      "visually_reviewed": true,
+      "unaltered_from_ci": true,
+      "review_note": "Actual empty album for the fresh audit player, not a populated collection or mastery ladder."
+    },
+    {
+      "file": "04-return-result.png",
+      "original_file": "rival-rush-1793571649627-04-return-result.png",
+      "sha256": "799a7f1b0fe6d18a3d005095f17664efca137c976b46cfbd6fdee1b0ed488827",
+      "bytes": 69351,
+      "width": 1280,
+      "height": 720,
+      "visually_reviewed": true,
+      "unaltered_from_ci": true,
+      "review_note": "Actual return-result menu: score 20, one rival, zero collected cards. Saved-state restoration is checked with the tolerances recorded in client_assertions."
+    },
+    {
+      "file": "05-crew-home.png",
+      "original_file": "rival-rush-1793571649627-05-crew-home.png",
+      "sha256": "487577178154c690a7c69623d933bc5bfc6479e80c3d4d2a856576e519b4a9d4",
+      "bytes": 123847,
+      "width": 1280,
+      "height": 720,
+      "visually_reviewed": true,
+      "unaltered_from_ci": true,
+      "review_note": "Actual founded house and plot/capacity data. A native preparation tooltip obscures some lower-right actions."
+    },
+    {
+      "file": "06-crew-roster.png",
+      "original_file": "rival-rush-1793571649627-06-crew-roster.png",
+      "sha256": "f92f1c11e269ed9fb70a0fa9f303ff9ae14889cd50df25e8b74477b6b71f7102",
+      "bytes": 113430,
+      "width": 1280,
+      "height": 720,
+      "visually_reviewed": true,
+      "unaltered_from_ci": true,
+      "review_note": "Two actual starter profiles, Riff training focus and Patches idle. Native member tooltip is preserved."
+    },
+    {
+      "file": "07-crew-facilities.png",
+      "original_file": "rival-rush-1793571649627-07-crew-facilities.png",
+      "sha256": "c41d25e246f3ae8971ac1842aef1e7b13702be386d56aa908ef70ce528ec9963",
+      "bytes": 119730,
+      "width": 1280,
+      "height": 720,
+      "visually_reviewed": true,
+      "unaltered_from_ci": true,
+      "review_note": "Actual placed Paint workshop registered and operational at tier 1. Native Practice yard tooltip covers some secondary rows and controls."
+    },
+    {
+      "file": "08-crew-jobs.png",
+      "original_file": "rival-rush-1793571649627-08-crew-jobs.png",
+      "sha256": "fbc6c5229486a537b6dd486870b58a4c96485cf591e3af4152736748fae5cebf",
+      "bytes": 126142,
+      "width": 1280,
+      "height": 720,
+      "visually_reviewed": true,
+      "unaltered_from_ci": true,
+      "review_note": "Real three-minute neighborhood delivery dispatched to Riff; screenshot shows a running mission, not a finished claim."
+    },
+    {
+      "file": "09-activities.png",
+      "original_file": "rival-rush-1793571649627-09-activities.png",
+      "sha256": "42d500aa58d6af3239fc01a0f13e521102e1e799a3e55d38b025c0ad452a52a5",
+      "bytes": 133104,
+      "width": 1280,
+      "height": 720,
+      "visually_reviewed": true,
+      "unaltered_from_ci": true,
+      "review_note": "Actual Boombox chooser with five options, Tag selected, all reward amounts and explicit Start action; native cursor settled away from controls."
+    },
+    {
+      "file": "10-arena-route.png",
+      "original_file": "rival-rush-1793571649627-10-arena-route.png",
+      "sha256": "91548874477fdedc54df120388aad600f0bec2759d1f07a52e513cd0a08f0aef",
+      "bytes": 98051,
+      "width": 1280,
+      "height": 720,
+      "visually_reviewed": true,
+      "unaltered_from_ci": true,
+      "review_note": "Actual first circuit fork: three offered rooms with distinct build rewards, shared reward emphasis, duration and size. Native cursor settled; descriptions intentionally abbreviate. No completed circuit is pictured."
+    }
+  ],
+  "merge_capture": {
+    "file": "11-pr-merge.jpg",
+    "bytes": 79169,
+    "sha256": "121e749b80343d31b0bfa552617939f844fd4ff3ce1f2100615a9ab24dc75d13",
+    "visually_reviewed": true,
+    "description": "Actual GitHub browser state showing PR #41 merged, commit e57e9ab and nine checks passed."
+  },
+  "provider_scope": {
+    "aether": {
+      "version": "1.20.1-1.5.2-neoforge",
+      "tested": "native Aether to Rush and back; optional arena palette"
+    },
+    "irons_spellbooks": {
+      "version": "1.20.1-3.4.0.2",
+      "tested": "real registered Firebolt collision and owned virtual defeat; native health, inventory, XP and mana preserved"
+    },
+    "aoa3": {
+      "version": "3.7.1",
+      "tested": "native Precasia to Rush and back; Minecraft 1.20.1 beta build"
+    },
+    "cataclysm": {
+      "version": "3.31",
+      "tested": "registry baseline, six representative gameplay/challenge round trips and provider-NBT preservation"
+    },
+    "alexsmobs_and_alexscaves": "existing pinned individual and combined lanes, live registry and six representative gameplay checks per provider"
+  },
+  "observed_nonfatal_provider_issues": [
+    {
+      "owner": "aoa3 3.7.1",
+      "issue": "Forge version checker could not parse the remote update-check response; not an arena or world data-pack parse failure."
+    },
+    {
+      "owner": "irons_spellbooks 1.20.1-3.4.0.2",
+      "issue": "Recipe irons_spellbooks:curios/concentration_amulet references unregistered irons_spellbooks:mithril_ingot and is rejected; this does not establish all other acquisition routes are unavailable."
+    }
+  ],
+  "limitations": [
+    "Machine integration and native screenshot inspection, not human 30-minute pacing or long Endless balance/performance evidence.",
+    "Arena combat, clear conditions and reward settlement run in real server GameTests with shortened test clocks; the visual audit covers the first route choice and connected travel.",
+    "No populated album, completed mission claim, Build-tab capture or completed six-room client journey is pictured.",
+    "Captures 05\u201307 preserve native hover overlays; no screenshot pixels were changed.",
+    "Roster and mission profiles are implemented; visible physical residents and follower AI are not.",
+    "The native Iron relay is one narrowly scoped projectile adapter, not a full spellbook, summon or arbitrary capability snapshot system.",
+    "The tested providers and representative mobs do not certify every mob, boss, spell, recipe or cross-mod combination.",
+    "Normal save and shutdown paths are tested; forced crashes and storage failures are not certified.",
+    "Custom data-pack profiles support bounded block maps and rewards, not arbitrary structure/NBT imports or an in-game map editor.",
+    "The Crossfade Yard example is statically validated, not separately human playtested.",
+    "Two exact Sonic recording metadata entries and an audio importer are included; supplied recording masters are not bundled or auditioned."
+  ]
+}
