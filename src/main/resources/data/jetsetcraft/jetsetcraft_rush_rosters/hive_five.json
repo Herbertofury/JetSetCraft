@@ -1,0 +1,9 @@
+{
+  "gang": "jetsetcraft:hive_five",
+  "entities": [
+    "minecraft:bee",
+    "minecraft:allay",
+    "minecraft:bat",
+    "minecraft:parrot"
+  ]
+}

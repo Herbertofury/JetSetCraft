@@ -4,6 +4,7 @@ import com.herberto.jetsetcraft.JetSetCraft;
 import com.herberto.jetsetcraft.item.RideGearItem;
 import com.herberto.jetsetcraft.item.PaintBalloonItem;
 import com.herberto.jetsetcraft.item.SprayCanItem;
+import com.herberto.jetsetcraft.item.RushFlyerItem;
 import com.herberto.jetsetcraft.graffiti.PaintColor;
 import com.herberto.jetsetcraft.movement.RideStyle;
 import com.herberto.jetsetcraft.mob.StreetGearDispenserBehavior;
@@ -45,6 +46,8 @@ public final class ModItems {
             () -> new SprayCanItem(new Item.Properties().stacksTo(1).durability(256)));
     public static final RegistryObject<Item> BOOMBOX = ITEMS.register("boombox",
             () -> new BlockItem(ModBlocks.BOOMBOX.get(), new Item.Properties().stacksTo(1)));
+    public static final RegistryObject<Item> RUSH_FLYER = ITEMS.register("rush_flyer",
+            () -> new RushFlyerItem(new Item.Properties().stacksTo(1)));
 
 
     public static void registerDispenserBehaviors() {

@@ -1,0 +1,9 @@
+{
+  "gang": "jetsetcraft:milk_run",
+  "entities": [
+    "minecraft:cow",
+    "minecraft:mooshroom",
+    "minecraft:goat",
+    "minecraft:sheep"
+  ]
+}

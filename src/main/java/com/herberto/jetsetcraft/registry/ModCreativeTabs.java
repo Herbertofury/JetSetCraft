@@ -23,6 +23,7 @@ public final class ModCreativeTabs {
                 output.accept(ModItems.SPRAY_CAN.get());
                 ModItems.PAINT_BALLOONS.values().forEach(balloon -> output.accept(balloon.get()));
                 output.accept(ModItems.BOOMBOX.get());
+                output.accept(ModItems.RUSH_FLYER.get());
             }).build());
 
     private ModCreativeTabs() {}

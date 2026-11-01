@@ -80,7 +80,7 @@ jobs:
             sleep 20
           done
 
-      - name: Run nine real Forge GameTests
+      - name: Run fifteen real Forge GameTests
         shell: bash
         run: |
           set -euo pipefail
@@ -96,11 +96,17 @@ jobs:
             'JETSETCRAFT_GAMETEST_PASS catalogs' \
             'JETSETCRAFT_GAMETEST_PASS street_gear' \
             'JETSETCRAFT_GAMETEST_PASS graffiti_lifecycle' \
-            'JETSETCRAFT_GAMETEST_PASS paint_balloon_splash'; do
+            'JETSETCRAFT_GAMETEST_PASS paint_balloon_splash' \
+            'JETSETCRAFT_GAMETEST_PASS rush_rules' \
+            'JETSETCRAFT_GAMETEST_PASS rush_album' \
+            'JETSETCRAFT_GAMETEST_PASS rush_return' \
+            'JETSETCRAFT_GAMETEST_PASS rush_session' \
+            'JETSETCRAFT_GAMETEST_PASS rush_ownership' \
+            'JETSETCRAFT_GAMETEST_PASS rush_objectives'; do
             grep -Fq "$marker" "$log" || { echo "::error::Missing GameTest marker: $marker"; exit 1; }
           done
-          grep -Eq 'All 9 required tests passed|9 tests? passed' "$log" || {
-            echo '::error::Forge did not report all nine GameTests passing.'
+          grep -Eq 'All 15 required tests passed|15 tests? passed' "$log" || {
+            echo '::error::Forge did not report all fifteen GameTests passing.'
             exit 1
           }
 
@@ -110,6 +116,9 @@ jobs:
           set -euo pipefail
           mkdir -p run build/verification
           printf 'eula=true\n' > run/eula.txt
+          export JETSETCRAFT_SMOKE_RCON_PASSWORD="$(python -c 'import secrets; print(secrets.token_hex(24))')"
+          printf 'server-ip=127.0.0.1\nenable-rcon=true\nrcon.port=25575\nrcon.password=%s\nbroadcast-rcon-to-ops=false\n' \
+            "$JETSETCRAFT_SMOKE_RCON_PASSWORD" > run/server.properties
           log=build/verification/server-smoke.log
           : > "$log"
           setsid ./gradlew runServer --no-daemon > "$log" 2>&1 &
@@ -146,10 +155,72 @@ jobs:
             echo '::error::A fatal JetSetCraft/mod-loading error occurred.'
             exit 1
           fi
-          kill -TERM -- "-$server_pid" 2>/dev/null || true
-          sleep 2
-          kill -KILL -- "-$server_pid" 2>/dev/null || true
-          wait "$server_pid" 2>/dev/null || true
+          if ! python tools/stop_smoke_server.py; then
+            kill -TERM -- "-$server_pid" 2>/dev/null || true
+            sleep 2
+            kill -KILL -- "-$server_pid" 2>/dev/null || true
+            wait "$server_pid" 2>/dev/null || true
+            tail -n 80 "$log"
+            echo '::error::Could not request a normal Minecraft stop over loopback RCON.'
+            exit 1
+          fi
+          shutdown_complete=0
+          shutdown_deadline=$((SECONDS + 30))
+          while (( SECONDS < shutdown_deadline )); do
+            if ! kill -0 "$server_pid" 2>/dev/null \
+                && grep -Fq 'All dimensions are saved' "$log"; then
+              shutdown_complete=1
+              break
+            fi
+            sleep 1
+          done
+          if [[ "$shutdown_complete" -ne 1 ]]; then
+            kill -KILL -- "-$server_pid" 2>/dev/null || true
+            wait "$server_pid" 2>/dev/null || true
+            tail -n 80 "$log"
+            echo '::error::Forge did not finish a graceful world save and shutdown within 30 seconds.'
+            exit 1
+          fi
+          if ! wait "$server_pid"; then
+            echo '::error::Forge launcher exited unsuccessfully after the normal stop.'
+            exit 1
+          fi
+          test -s run/world/level.dat
+
+      - name: Verify Rival Rush in a real Minecraft client
+        shell: bash
+        env:
+          LIBGL_ALWAYS_SOFTWARE: "true"
+        run: |
+          set -euo pipefail
+          if ! command -v xvfb-run >/dev/null; then
+            sudo apt-get update
+            sudo apt-get install -y xvfb
+          fi
+          mkdir -p run/saves/RivalRushAudit build/verification
+          test -s run/world/level.dat
+          cp -a run/world/. run/saves/RivalRushAudit/
+          test -s run/saves/RivalRushAudit/level.dat
+          collect_client_captures() {
+            shopt -s nullglob
+            captures=(run/screenshots/rival-rush-*.png)
+            if (( ${#captures[@]} )); then
+              cp "${captures[@]}" build/verification/
+            fi
+          }
+          trap collect_client_captures EXIT
+          log=build/verification/rush-client.log
+          timeout 300s xvfb-run -a -s '-screen 0 1280x720x24' ./gradlew runClient -Djetsetcraft.rushVisualAudit=true --no-daemon 2>&1 | tee "$log"
+          grep -Fq 'JETSETCRAFT_RUSH_VISUAL_AUDIT_PASS' "$log"
+          grep -Fq 'JETSETCRAFT_RUSH_VISUAL_AUDIT_FIXTURE_OBSERVED' "$log"
+          if grep -Fq 'JETSETCRAFT_RUSH_VISUAL_AUDIT_FAIL' "$log"; then
+            echo '::error::Rival Rush client audit reported failure.'
+            exit 1
+          fi
+          for capture in 01-setup 02-district-hud 03-album 04-return-result; do
+            grep -Fq "JETSETCRAFT_RUSH_VISUAL_AUDIT_CAPTURE $capture " "$log"
+            compgen -G "run/screenshots/rival-rush-*-$capture.png" >/dev/null
+          done
 
       - name: Seal artifact checksums
         shell: bash
@@ -167,4 +238,5 @@ jobs:
             build/libs/*.jar
             build/libs/SHA256SUMS
             build/verification/*.log
+            build/verification/*.png
           if-no-files-found: warn

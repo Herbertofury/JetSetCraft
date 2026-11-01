@@ -1,0 +1,9 @@
+{
+  "gang": "jetsetcraft:dead_beat",
+  "entities": [
+    "minecraft:zombie",
+    "minecraft:husk",
+    "minecraft:drowned",
+    "minecraft:zombie_villager"
+  ]
+}

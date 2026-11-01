@@ -26,6 +26,16 @@ JetSetCraft turns ordinary Minecraft terrain into a momentum-first street sports
 
 The [wiki](https://github.com/Herbertofury/JetSetCraft/wiki) covers mechanics, configuration, compatibility, modpack tags, and verification in depth.
 
+## Optional Rival Rush mode — alpha candidate
+
+Rival Rush adds opt-in thirty-minute or Endless skating survival sessions in a separate generated street district. Ride against named gang casts, tag rivals with paint, collect persistent mob cards, draft temporary upgrades with separate Rush XP, paint walls and visit musical stops. Return to Minecraft restores the saved normal inventory, physical ride and vanilla XP. The existing Minecraft movement and gang activities remain independent.
+
+Craft a reusable **Rival Rush Flyer** from paper + cyan dye, or use `/jetsetcraft rush`. The alpha supports Easy, Normal and Hard and never changes the world's difficulty. Controls, card rewards and limits are documented in [Rival Rush](wiki/Rival-Rush.md); the [18-game research/design study](docs/RIVAL_RUSH_DESIGN.md) separates deeper build families, bespoke bosses and rhythm-scored challenges from the implemented loop.
+
+The target is **`0.4.0-alpha.1`**, an optional alpha candidate tracked in **[PR #39](https://github.com/Herbertofury/JetSetCraft/pull/39)**. Stable **`v0.3.0` remains unchanged** and does not contain this mode.
+
+**Last recorded PR verification:** merge checkpoint [`520591e`](https://github.com/Herbertofury/JetSetCraft/commit/520591e049e38fcd7592679788d97b28cd27d4ba), containing feature commit [`7283dd8`](https://github.com/Herbertofury/JetSetCraft/commit/7283dd8f912c2c6903e156d468fd1326ee8966b7), passed [Verify JetSetCraft #268](https://github.com/Herbertofury/JetSetCraft/actions/runs/41346460726) with a clean Forge build, **15 real GameTests**, dedicated-server readiness and normal RCON shutdown, plus a real **1280 × 720 client audit** of setup, the district, the empty album and inventory/XP return. [All four optional-provider configurations](https://github.com/Herbertofury/JetSetCraft/actions/runs/41346460787) passed the same 15 tests and server smoke. See the [verification scope](wiki/Rival-Rush.md#last-recorded-verification) for the fixture and limits. These are machine integration checks; **human thirty-minute pacing, Endless balance and broad modded-AI playtesting remain outstanding**. The PR links the current candidate and any newer checks.
+
 ## In game
 
 ![Leg-baked inline skates, painted wall, and compact Boost/Flow HUD](art/screenshots/v0.3.0-ride-hud.png)
@@ -93,7 +103,7 @@ python tools/validate_wiki.py
 ./gradlew runGameTestServer
 ```
 
-On Windows, use `gradlew.bat`. The JAR is written to `build/libs/`. CI regenerates deterministic assets, rejects dirty generator output, performs a clean build, requires all nine Forge GameTests, starts a real dedicated server, and publishes the JAR, checksums, and logs as one workflow artifact.
+On Windows, use `gradlew.bat`. The JAR is written to `build/libs/`. CI regenerates deterministic assets, rejects dirty generator output, performs a clean build, requires all fifteen Forge GameTests (the nine existing tests plus six Rival Rush tests), starts a real dedicated server, and publishes the JAR, checksums, and logs as one workflow artifact.
 
 In a development world, `/jetsetcraft status` reports authoritative movement and style state. Operators can use `/jetsetcraft build_vanilla_lab` to create a compact acceptance course and `/jetsetcraft set_momentum <speed>` as a controlled test aid. Maintainers can run `gradlew.bat -Djetsetcraft.visualAudit=true runClient` for an unattended real-client inline-skate/HUD/painted-wall/Free-Paint-selector/editor capture.
 

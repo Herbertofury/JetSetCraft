@@ -9,6 +9,7 @@
 **[✨ Feature Overview](Feature-Overview)**
 
 ### 🎮 Ride & Flow
+- [🎟️ Rival Rush — Optional Roguelite](Rival-Rush)
 - [🚂 Trick Trains & Create](Trick-Trains-and-Create)
 - [🏁 Terrain-Aware Circuits & Boss Arenas](Terrain‐Aware-Event-Circuits-and-Boss-Arenas)
 - [🎛️ Controls](Controls)

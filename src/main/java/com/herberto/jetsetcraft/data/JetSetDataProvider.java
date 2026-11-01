@@ -16,7 +16,7 @@ public final class JetSetDataProvider implements ICapabilitySerializable<Compoun
     public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(JetSetCraft.MOD_ID, "ride_data");
     public static final Capability<JetSetData> CAPABILITY = CapabilityManager.get(new CapabilityToken<>() {});
     private final JetSetData data = new JetSetData();
-    private final LazyOptional<JetSetData> optional = LazyOptional.of(() -> data);
+    private LazyOptional<JetSetData> optional = LazyOptional.of(() -> data);
 
     @Override
     public <T> @NotNull LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
@@ -24,5 +24,13 @@ public final class JetSetDataProvider implements ICapabilitySerializable<Compoun
     }
     @Override public CompoundTag serializeNBT() { return data.save(); }
     @Override public void deserializeNBT(CompoundTag nbt) { data.load(nbt); }
-    public void invalidate() { optional.invalidate(); }
+    public void invalidate() {
+        // Forge invalidates and then revives the same ServerPlayer during a dimension transfer. Its outer
+        // CapabilityProvider blocks queries while invalid, but reviveCaps() does not recreate attached providers.
+        // Invalidate every previously issued handle and prepare a fresh handle to the SAME durable data. This
+        // does not revive the owning entity: dead/removed hosts still return empty until Forge explicitly revives.
+        LazyOptional<JetSetData> previous = optional;
+        optional = LazyOptional.of(() -> data);
+        previous.invalidate();
+    }
 }

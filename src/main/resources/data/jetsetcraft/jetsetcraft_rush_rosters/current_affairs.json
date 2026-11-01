@@ -1,0 +1,9 @@
+{
+  "gang": "jetsetcraft:current_affairs",
+  "entities": [
+    "minecraft:guardian",
+    "minecraft:drowned",
+    "minecraft:squid",
+    "minecraft:glow_squid"
+  ]
+}

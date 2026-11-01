@@ -69,5 +69,7 @@
   "item.jetsetcraft.green_paint_balloon": "Green Paint Balloon",
   "item.jetsetcraft.red_paint_balloon": "Red Paint Balloon",
   "item.jetsetcraft.black_paint_balloon": "Black Paint Balloon",
-  "entity.jetsetcraft.paint_balloon": "Paint Balloon"
+  "entity.jetsetcraft.paint_balloon": "Paint Balloon",
+  "key.jetsetcraft.rush_menu": "Rival Rush menu",
+  "item.jetsetcraft.rush_flyer": "Rival Rush Flyer"
 }

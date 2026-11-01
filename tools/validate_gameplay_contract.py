@@ -48,6 +48,7 @@ build_workflow = (ROOT / '.github/workflows/build.yml').read_text(encoding='utf-
 style_flow_tests = (ROOT / 'src/main/java/com/herberto/jetsetcraft/gametest/StyleFlowGameTests.java').read_text(encoding='utf-8')
 hoverboard_tests = (ROOT / 'src/main/java/com/herberto/jetsetcraft/gametest/HoverboardGameTests.java').read_text(encoding='utf-8')
 street_gear_tests = (ROOT / 'src/main/java/com/herberto/jetsetcraft/gametest/StreetGearGameTests.java').read_text(encoding='utf-8')
+rush_tests = (ROOT / 'src/main/java/com/herberto/jetsetcraft/gametest/RivalRushGameTests.java').read_text(encoding='utf-8')
 parkour = (ROOT / 'src/main/java/com/herberto/jetsetcraft/movement/ParkourTraversal.java').read_text(encoding='utf-8')
 paint_splash = (ROOT / 'src/main/java/com/herberto/jetsetcraft/graffiti/PaintSplash.java').read_text(encoding='utf-8')
 paint_balloon = (ROOT / 'src/main/java/com/herberto/jetsetcraft/entity/PaintBalloonEntity.java').read_text(encoding='utf-8')
@@ -389,8 +390,8 @@ else:
         for field in record_fields:
             if field != 'entityId' and f'packet.{field}()' not in client_state:
                 errors.append(f'client snapshot does not consume S2C field {field}')
-if 'private static final String PROTOCOL = "9"' not in network:
-    errors.append('network protocol was not bumped for synchronized graffiti mode/color selection')
+if 'private static final String PROTOCOL = "10"' not in network:
+    errors.append('network protocol must be 10 for bounded Rival Rush state/action packets')
 
 required_gametest_markers = {
     'JETSETCRAFT_GAMETEST_PASS hoverboard': hoverboard_tests,
@@ -402,6 +403,13 @@ required_gametest_markers = {
     'JETSETCRAFT_GAMETEST_PASS street_gear': street_gear_tests,
     'JETSETCRAFT_GAMETEST_PASS graffiti_lifecycle': street_gear_tests,
     'JETSETCRAFT_GAMETEST_PASS paint_balloon_splash': street_gear_tests,
+    'JETSETCRAFT_GAMETEST_PASS rush_rules': rush_tests,
+    'JETSETCRAFT_GAMETEST_PASS rush_album': rush_tests,
+    'JETSETCRAFT_GAMETEST_PASS rush_return': rush_tests,
+    'JETSETCRAFT_GAMETEST_PASS rush_session': rush_tests,
+    'JETSETCRAFT_GAMETEST_PASS rush_ownership': rush_tests,
+    'JETSETCRAFT_GAMETEST_PASS rush_objectives': rush_tests,
+
 }
 for pass_marker, source in required_gametest_markers.items():
     if pass_marker not in source:
