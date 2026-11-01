@@ -34,6 +34,8 @@ final class RivalRushScreen extends Screen {
     private boolean pending;
     private Button timedButton, endlessButton, applyButton;
 
+    boolean isAlbumView() { return view == View.ALBUM; }
+
     RivalRushScreen(CompoundTag opening) {
         super(Component.literal("Rival Rush"));
         if (!opening.getString("GangId").isBlank()) gang = opening.getString("GangId");

@@ -6,8 +6,12 @@ import net.minecraft.client.CameraType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Screenshot;
 import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.screens.BackupConfirmScreen;
+import net.minecraft.client.gui.screens.ConfirmScreen;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.Tag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.storage.LevelResource;
 import net.minecraft.world.phys.Vec3;
@@ -36,10 +40,14 @@ public final class RivalRushVisualAudit {
     private static final String STAMP = Long.toString(System.currentTimeMillis());
     private static final Map<String, Path> CAPTURES = new ConcurrentHashMap<>();
     private static long started;
+    private static long failureCaptureStarted;
+    private static String failureCaptureLabel;
+    private static String lastWaitingScreen = "";
+    private static Screen confirmedWorldScreen;
     private static int phase, ticks;
     private static int chosenVersion = Integer.MIN_VALUE;
     private static UUID chosenRun;
-    private static boolean waitingChoice, albumObserved, complete, fixtureQueued;
+    private static boolean waitingChoice, complete, fixtureQueued;
     private static volatile boolean fixtureApplied;
     private static volatile String captureFailure;
     private static String originalDimension;
@@ -52,14 +60,28 @@ public final class RivalRushVisualAudit {
     public static void tick(TickEvent.ClientTickEvent event) {
         if (event.phase != TickEvent.Phase.END || complete || !Boolean.getBoolean("jetsetcraft.rushVisualAudit")) return;
         Minecraft minecraft = Minecraft.getInstance();
+        if (failureCaptureStarted != 0L) {
+            if (CAPTURES.containsKey(failureCaptureLabel) || captureFailure != null
+                    || System.nanoTime() - failureCaptureStarted > 15_000_000_000L) {
+                if (!CAPTURES.containsKey(failureCaptureLabel)) {
+                    JetSetCraft.LOGGER.error("JETSETCRAFT_RUSH_VISUAL_AUDIT_FAILURE_CAPTURE_UNAVAILABLE {}", captureFailure);
+                }
+                complete = true;
+                minecraft.stop();
+            }
+            return;
+        }
         if (started == 0L) started = System.nanoTime();
         if (System.nanoTime() - started > DEADLINE_NANOS) {
             finish(minecraft, false, "180-second deadline exceeded in phase " + phase);
             return;
         }
         if (captureFailure != null) { finish(minecraft, false, captureFailure); return; }
-        if (minecraft.player == null || minecraft.level == null || minecraft.getConnection() == null) return;
         try {
+            if (minecraft.player == null || minecraft.level == null || minecraft.getConnection() == null) {
+                handleWorldLoadScreen(minecraft);
+                return;
+            }
             advance(minecraft);
         } catch (RuntimeException error) {
             JetSetCraft.LOGGER.error("Rival Rush real-client audit failed", error);
@@ -88,7 +110,7 @@ public final class RivalRushVisualAudit {
         if (waitingChoice) {
             waitingChoice = false;
             ticks = 0;
-            if (phase == 6) { albumObserved = false; request("album", "", 0); }
+            if (phase == 6) request("album", "", 0);
         }
         switch (phase) {
             case 0 -> {
@@ -161,9 +183,9 @@ public final class RivalRushVisualAudit {
                 next(6);
             }
             case 6 -> {
-                albumObserved |= state.contains("Album", Tag.TAG_LIST);
                 if (!state.getBoolean("Active") || !isDistrict(minecraft)) { finish(minecraft, false, "run ended before album capture"); return; }
-                if (!albumObserved || !(minecraft.screen instanceof RivalRushScreen)) { ticks = 0; return; }
+                // The view and album cache survive periodic snapshots that no longer contain Album.
+                if (!(minecraft.screen instanceof RivalRushScreen screen) || !screen.isAlbumView()) { ticks = 0; return; }
                 if (++ticks < 20) return;
                 capture(minecraft, "03-album");
                 next(7);
@@ -198,6 +220,82 @@ public final class RivalRushVisualAudit {
                 finish(minecraft, true, "four real-client captures; actual packet entry/exit; dimension, inventory and vanilla XP restored");
             }
             default -> finish(minecraft, false, "unknown audit phase");
+        }
+    }
+
+    private static void handleWorldLoadScreen(Minecraft minecraft) {
+        logWaitingScreen(minecraft);
+        Screen screen = minecraft.screen;
+        if (phase != 0 || screen == null || screen == confirmedWorldScreen || minecraft.getSingleplayerServer() != null) return;
+        String title = translationKey(screen.getTitle());
+        String buttonKey;
+        if (screen.getClass() == ConfirmScreen.class && title.equals("selectWorld.backupQuestion.experimental")) {
+            // ForgeHooksClient.createWorldConfirmationScreen uses precisely this title and Proceed button.
+            buttonKey = "gui.proceed";
+        } else if (screen.getClass() == BackupConfirmScreen.class
+                && (title.equals("selectWorld.backupQuestion.experimental") || title.equals("selectWorld.backupQuestion.customized"))) {
+            buttonKey = "selectWorld.backupJoinSkipButton";
+        } else return;
+        if (!isDisposableQuickPlayLaunch(minecraft)) {
+            finish(minecraft, false, "refused a world confirmation outside the exact RivalRushAudit quick-play launch");
+            return;
+        }
+        for (var child : screen.children()) {
+            if (child instanceof Button button && button.active && button.visible && translationKey(button.getMessage()).equals(buttonKey)) {
+                confirmedWorldScreen = screen;
+                JetSetCraft.LOGGER.info("JETSETCRAFT_RUSH_VISUAL_AUDIT_WORLD_CONFIRMATION {} {}", title, buttonKey);
+                button.onPress();
+                return;
+            }
+        }
+    }
+
+    private static boolean isDisposableQuickPlayLaunch(Minecraft minecraft) {
+        if (!Boolean.getBoolean("jetsetcraft.rushVisualAudit")
+                || !Files.isRegularFile(minecraft.gameDirectory.toPath().resolve("saves/RivalRushAudit/level.dat"))) return false;
+        String[] arguments = ProcessHandle.current().info().arguments().orElse(new String[0]);
+        int processTarget = auditQuickPlayTarget(arguments);
+        // Java @argfiles (or unavailable process metadata) can hide the expanded application arguments.
+        // Java 17 exposes those in sun.java.command; the audit world name contains no whitespace.
+        String command = System.getProperty("sun.java.command", "").trim();
+        int commandTarget = auditQuickPlayTarget(command.isEmpty() ? new String[0] : command.split("\\s+"));
+        if (processTarget < 0 || commandTarget < 0) return false;
+        return processTarget == 1 || processTarget == 0 && commandTarget == 1;
+    }
+
+    private static int auditQuickPlayTarget(String[] arguments) {
+        int targets = 0;
+        for (int i = 0; i < arguments.length; i++) {
+            if (arguments[i].equals("--quickPlaySingleplayer")) {
+                if (++i >= arguments.length || !arguments[i].equals("RivalRushAudit")) return -1;
+                targets++;
+            } else if (arguments[i].startsWith("--quickPlaySingleplayer=")) {
+                if (!arguments[i].equals("--quickPlaySingleplayer=RivalRushAudit")) return -1;
+                targets++;
+            }
+        }
+        return targets > 1 ? -1 : targets;
+    }
+
+    private static String translationKey(Component component) {
+        return component.getContents() instanceof TranslatableContents contents ? contents.getKey() : "";
+    }
+
+    private static void logWaitingScreen(Minecraft minecraft) {
+        Screen screen = minecraft.screen;
+        StringBuilder detail = new StringBuilder(screen == null ? "<none>" : screen.getClass().getName());
+        if (screen != null) {
+            detail.append(" title=").append(translationKey(screen.getTitle())).append(" / ").append(screen.getTitle().getString());
+            for (var child : screen.children()) {
+                if (child instanceof Button button) {
+                    detail.append(" | button=").append(translationKey(button.getMessage())).append(" / ")
+                            .append(button.getMessage().getString()).append(" active=").append(button.active);
+                }
+            }
+        }
+        if (!detail.toString().equals(lastWaitingScreen)) {
+            lastWaitingScreen = detail.toString();
+            JetSetCraft.LOGGER.info("JETSETCRAFT_RUSH_VISUAL_AUDIT_WAITING_SCREEN {}", lastWaitingScreen);
         }
     }
 
@@ -270,9 +368,21 @@ public final class RivalRushVisualAudit {
     }
 
     private static void finish(Minecraft minecraft, boolean passed, String detail) {
-        if (complete) return;
-        complete = true;
+        if (complete || failureCaptureStarted != 0L) return;
         JetSetCraft.LOGGER.info("JETSETCRAFT_RUSH_VISUAL_AUDIT_{} {}", passed ? "PASS" : "FAIL", detail);
+        if (!passed) {
+            logWaitingScreen(minecraft);
+            failureCaptureStarted = System.nanoTime();
+            failureCaptureLabel = "99-failure-phase-" + phase;
+            captureFailure = null;
+            try {
+                capture(minecraft, failureCaptureLabel);
+                return; // Keep the client alive until the real screenshot has been written and verified.
+            } catch (RuntimeException error) {
+                JetSetCraft.LOGGER.error("JETSETCRAFT_RUSH_VISUAL_AUDIT_FAILURE_CAPTURE_UNAVAILABLE", error);
+            }
+        }
+        complete = true;
         minecraft.stop();
     }
 
