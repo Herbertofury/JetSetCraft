@@ -32,7 +32,7 @@ Rooms are generated only inside the registered Rush dimension. Terrain from the 
 
 ## Reward caches and three artifact slots
 
-Glowing personal caches offer **magnet, paint damage, critical chance/power, area, recovery or an artifact**. Three additional owned rival defeats charge the next claim. Skate through a charged cache to collect it. A magnet reaches only owned run-card pickups; it does not attract vanilla items or another player's rewards. Each arena has a fresh set, and Free streets also has distributed caches.
+Glowing personal caches offer **magnet, paint damage, critical chance/power, area, recovery or an artifact**. Three additional owned rival defeats charge the next claim. Skate through a charged cache to collect it. A magnet reaches only owned run-card pickups; it does not attract vanilla items or another player's rewards. Each arena has a fresh set. Free streets continually discovers new nearby caches; previously claimed locations replenish after at least ten active minutes, with a bounded conservative cooldown ledger.
 
 Runs have **three artifact-family slots**. Taking more ranks strengthens an existing family. Full builds still receive useful score/recovery rewards; a stale draft cannot open a fourth slot.
 

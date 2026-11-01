@@ -25,10 +25,12 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.TicketType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.GameType;
+import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.util.FakePlayerFactory;
@@ -37,6 +39,8 @@ import net.minecraftforge.gametest.GameTestHolder;
 import net.minecraftforge.gametest.PrefixGameTestTemplate;
 
 import java.util.HashSet;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 import java.util.function.Consumer;
 
@@ -46,6 +50,9 @@ import java.util.function.Consumer;
 public final class RushArenaGameTests {
     private static final ResourceLocation GANG = id("jetsetcraft:dead_beat");
     private static final ResourceLocation ZOMBIE = id("minecraft:zombie");
+    private static final TicketType<UUID> FIXTURE_TICKET = TicketType.create("jetsetcraft_arena_gametest", UUID::compareTo, 600);
+    private static final Map<UUID, FixtureRegion> FIXTURE_REGIONS = new HashMap<>();
+    private record FixtureRegion(ServerLevel level, ChunkPos center) {}
 
     @GameTest(template = "hoverboard_empty", timeoutTicks = 100)
     public static void arenaCatalogueRejectsUnsafeAndUnboundedMaps(GameTestHelper helper) {
@@ -183,7 +190,12 @@ public final class RushArenaGameTests {
             BlockPos destination = RivalRushManager.arenaDestination(player);
             check(destination != null && Vec3.atCenterOf(destination).distanceToSqr(departure) > 64 * 64,
                     "The offered arena did not create a distinct destination");
-            // A bounded fake-player fixture supplies chunks along the real connection. No production tickets are added.
+            // FakePlayer has no movement packet/tick loop to sustain remote entity-ticking sections.
+            // Hold only this test's destination; the ticket expires at the test deadline as a final backstop.
+            FixtureRegion region = new FixtureRegion(player.serverLevel(), new ChunkPos(destination));
+            FIXTURE_REGIONS.put(player.getUUID(), region);
+            region.level().getChunkSource().addRegionTicket(FIXTURE_TICKET, region.center(), 4, player.getUUID());
+            // Temporary terrain reads cover the real connection. Production builders still add no tickets.
             loadChunks(player.serverLevel(), BlockPos.containing(departure), 2);
             loadChunks(player.serverLevel(), BlockPos.containing(departure.lerp(Vec3.atCenterOf(destination), .5)), 2);
             loadChunks(player.serverLevel(), destination, 2);
@@ -208,6 +220,7 @@ public final class RushArenaGameTests {
                                 && player.serverLevel().getBlockState(floor.above(2)).isAir(),
                         "Generated arena connection has missing floor or obstructed rider headroom at " + floor);
                 player.moveTo(position.x, position.y, position.z, 0, 0); player.setDeltaMovement(Vec3.ZERO);
+                player.serverLevel().getChunkSource().move(player);
                 RivalRushManager.tick(player.getServer());
             }
             check(RivalRushManager.journeySnapshot(player).getString("Phase").equals("arena"),
@@ -235,7 +248,10 @@ public final class RushArenaGameTests {
             CompoundTag journey = RivalRushManager.journeySnapshot(player);
             if (journey.getInt("Completed") != 1) {
                 check(wave < 80, "Arena combat exhausted its bounded fixture: defeats=" + run.defeats()
-                        + ", actors=" + actors.size() + ", phase=" + journey.getString("Phase"));
+                        + ", actors=" + actors.size() + ", phase=" + journey.getString("Phase")
+                        + ", profile=" + profile.id() + ", loaded=" + player.serverLevel().hasChunkAt(player.blockPosition())
+                        + ", entityTicking=" + player.serverLevel().isPositionEntityTicking(player.blockPosition())
+                        + ", ticks=" + run.elapsedTicks() + ", offer=" + run.hasOffer());
                 for (int tick = 0; tick < 36; tick++) run.tickActive();
                 RivalRushManager.tick(player.getServer());
                 helper.runAfterDelay(2, () -> fightRoom(helper, player, profile, inventory, ride, sourcePosition, wave + 1));
@@ -263,6 +279,7 @@ public final class RushArenaGameTests {
                     "Arena return failed to restore exact Minecraft position, inventory, ride data or XP");
             check(data.pendingSupplies(player.getUUID()) >= supplies && data.pendingXp(player.getUUID()) >= xp,
                     "Returning from a run erased already banked arena progress");
+            releaseFixture(player);
             pass(helper, "rush_arena_session");
         } catch (RuntimeException error) { cleanup(player); throw error; }
     }
@@ -289,8 +306,14 @@ public final class RushArenaGameTests {
         check(rejected, scenario + " was accepted by the production arena parser");
     }
     private static void cleanup(ServerPlayer player) {
-        if (RivalRushManager.active(player) || RushReturnState.hasJournal(player))
-            check(RivalRushManager.leave(player, "Arena GameTest cleanup"), "Arena fixture could not restore its player");
+        try {
+            if (RivalRushManager.active(player) || RushReturnState.hasJournal(player))
+                check(RivalRushManager.leave(player, "Arena GameTest cleanup"), "Arena fixture could not restore its player");
+        } finally { releaseFixture(player); }
+    }
+    private static void releaseFixture(ServerPlayer player) {
+        FixtureRegion region = FIXTURE_REGIONS.remove(player.getUUID());
+        if (region != null) region.level().getChunkSource().removeRegionTicket(FIXTURE_TICKET, region.center(), 4, player.getUUID());
     }
     private static ResourceLocation id(String value) { return ResourceLocation.tryParse(value); }
     private static void check(boolean condition, String message) { if (!condition) throw new GameTestAssertException(message); }

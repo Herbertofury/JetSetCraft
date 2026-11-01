@@ -2,9 +2,29 @@
 
 JetSetCraft treats a passing Java compile as intermediate evidence, not final proof. The repository CI regenerates assets, validates contracts, builds the reobfuscated JAR, runs real Forge GameTests, and starts a real dedicated server.
 
+## Alpha.3 activity and arena acceptance
+
+The candidate requires all **28** declared tests and ten real-client screenshots. This section describes the configured gate; the historical alpha.2 pass links below do not certify a new source revision.
+
+| New marker | Scope |
+|---|---|
+| `activity_progression` | Cross-mode pre-house earnings, once-only transfer, training, receipts, account persistence and schema migration |
+| `activity_tag` | Actual Boombox preview and launch, source actors, owner attack hooks, six objectives and bystander/replay denial |
+| `activity_safety` | Stable random invitation, stale context rejection, three-hit Showdown, orphan/missing actor and anchor removal handling |
+| `activity_hill` | Contested capture rejection, physical presence at three hills and 480 real uncontested ticks |
+| `activity_dimension_return` | Selected provider versions and actual Aether/Precasia → circuit → exact source return, with unchanged Minecraft/ride state |
+| `rush_arena_catalogue` | Live profile loading, optional gating, fallback materials, authored map bounds and forbidden payload rejection |
+| `rush_arena_rules` | Six-room completion/Encore, three artifact slots, cache refresh and stale draft denial |
+| `rush_arena_session` | Real manager route choices, generated passable connection, actual owned rivals, shared settlement and exact return |
+| `rush_spell_relay` | Provider-absent behavior, or the real native Iron Firebolt collision, bounded damage, ownership, virtual defeat and cleanup |
+
+The route rules/session tests use explicit fixture-clock compression for long arena durations. They do not speed up the real-client audit. The graphical audit adds a real Boombox activity preview and a genuine three-choice first route, chooses that route and returns normally; it does not fabricate a cleared room or a reward screen.
+
+The provider matrix retains Alex's Mobs, Alex's Caves, Cataclysm and their combination, then adds Aether, Iron's Spells, AoA and a combined Aether/Iron/AoA/Cataclysm configuration. A successful absent-provider branch is never treated as a native-provider pass. The Iron-containing configurations require actual native collision; Aether/AoA configurations require actual original-dimension return. Full native spellbooks, arbitrary foreign capabilities, every modded mob and long human sessions remain separate scopes.
+
 ## Versioned verification evidence
 
-The published **v0.3.0** release has **nine** GameTests, as recorded in its [release evidence](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/RELEASE_EVIDENCE_0.3.0.md). The historical **0.4.0-alpha.1** checkpoint added six Rival Rush tests, for fifteen; its [receipt and original captures](https://github.com/Herbertofury/JetSetCraft/tree/main/docs/verification/rival-rush) are preserved. The current **0.4.0-alpha.2** source adds four crew-house/integration tests, bringing the required total to **nineteen**. Development evidence does not change the published stable release's version or history.
+The published **v0.3.0** release has **nine** GameTests, as recorded in its [release evidence](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/RELEASE_EVIDENCE_0.3.0.md). The historical **0.4.0-alpha.1** checkpoint added six Rival Rush tests, for fifteen; its [receipt and original captures](https://github.com/Herbertofury/JetSetCraft/tree/main/docs/verification/rival-rush) are preserved. The historical **0.4.0-alpha.2** source added four crew-house/integration tests, bringing that checkpoint to **nineteen**. The **alpha.3** activity/arena candidate adds nine tests, bringing the required total to **28**; its current CI result is recorded separately when complete. Development evidence does not change the published stable release's version or history.
 
 The recorded alpha.2 candidate is [`d5ecadd`](https://github.com/Herbertofury/JetSetCraft/commit/d5ecadd0651c35fdffb505fa2790bda718e830db), tested through PR integration [`b9bcec8`](https://github.com/Herbertofury/JetSetCraft/commit/b9bcec8258e164aa41af5838a89df8aac04bd7c7). [PR #40](https://github.com/Herbertofury/JetSetCraft/pull/40) merged as [`b852dfc`](https://github.com/Herbertofury/JetSetCraft/commit/b852dfce9b17eadbb29699ee8d5d50e2c6ab8101), whose Git tree is identical to that tested integration. The [crew-house verification receipt](https://github.com/Herbertofury/JetSetCraft/tree/main/docs/verification/crew-house) records those source identities, the binary, workflow artifacts and captures.
 

@@ -81,8 +81,11 @@ public final class RushPointsOfInterest {
     }
 
     private static int bucket(long key) {
-        long hash = key * 0x9E3779B97F4A7C15L;
-        return (int) ((hash ^ (hash >>> 32)) & 2047);
+        long hash = key ^ (key >>> 33);
+        hash *= 0xFF51AFD7ED558CCDL;
+        hash ^= hash >>> 33;
+        hash *= 0xC4CEB9FE1A85EC53L;
+        return (int) ((hash ^ (hash >>> 33)) & 2047);
     }
 
     public static String grant(RushRun run, RushArenaCatalog.Reward reward, int ranks) {

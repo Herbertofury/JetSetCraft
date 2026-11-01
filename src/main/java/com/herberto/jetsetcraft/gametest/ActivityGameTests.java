@@ -19,12 +19,14 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.TicketType;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.GameType;
+import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
@@ -41,6 +43,7 @@ import java.util.UUID;
 @PrefixGameTestTemplate(false)
 public final class ActivityGameTests {
     private static final ResourceLocation GANG = ResourceLocation.tryParse("jetsetcraft:dead_beat");
+    private static final TicketType<BlockPos> FIXTURE_TICKET = TicketType.create("jetsetcraft_activity_gametest", BlockPos::compareTo, 2);
 
     @GameTest(template = "hoverboard_empty", timeoutTicks = 100)
     public static void pendingRewardsTransferReceiptsAndTrainingExactlyOnce(GameTestHelper helper) {
@@ -115,7 +118,7 @@ public final class ActivityGameTests {
                 "Empty-hand Boombox use did not open an explicit, inactive Tag invitation");
         UUID receipt = preview.getUUID("Context");
         helper.runAfterDelay(5, () -> {
-            action(owner, "launch", ""); check(ActivityManager.active(owner), "The accepted explicit Tag game did not start");
+            action(owner, "launch", ""); check(ActivityManager.active(owner), "The accepted explicit Tag game did not start: " + diagnostics(owner, anchor));
             helper.runAfterDelay(15, () -> tagLoop(helper, owner, outsider, anchor, inventory, forced, receipt, 0));
         });
     }
@@ -178,7 +181,7 @@ public final class ActivityGameTests {
                         check(!ActivityManager.active(owner), "A stale selection launched a different game than the reviewed mode");
                         helper.runAfterDelay(5, () -> {
                             action(owner, "launch", "");
-                            check(ActivityManager.active(owner), "Fresh Showdown confirmation was not accepted");
+                            check(ActivityManager.active(owner), "Fresh Showdown confirmation was not accepted: " + diagnostics(owner, anchor));
                             helper.runAfterDelay(30, () -> showdownFirstHit(helper, owner, anchor));
                         });
                     });
@@ -211,7 +214,7 @@ public final class ActivityGameTests {
                     owner.moveTo(anchor.getX() + .5, anchor.getY() + 1, anchor.getZ() + .5, 0, 0);
                     action(owner, "select", "tag");
                     helper.runAfterDelay(5, () -> {
-                        action(owner, "launch", ""); check(ActivityManager.active(owner), "A cancelled game prevented a later explicit game");
+                        action(owner, "launch", ""); check(ActivityManager.active(owner), "A cancelled game prevented a later explicit game: " + diagnostics(owner, anchor));
                         helper.runAfterDelay(15, () -> {
                             helper.getLevel().setBlockAndUpdate(anchor, Blocks.AIR.defaultBlockState());
                             check(helper.getLevel().getBlockState(anchor).isAir() && !ActivityManager.active(owner)
@@ -234,7 +237,7 @@ public final class ActivityGameTests {
         helper.runAfterDelay(5, () -> {
             action(owner, "select", "king_of_hill");
             helper.runAfterDelay(5, () -> {
-                action(owner, "launch", ""); check(ActivityManager.active(owner), "A clear three-site hill layout was rejected");
+                action(owner, "launch", ""); check(ActivityManager.active(owner), "A clear three-site hill layout was rejected: " + diagnostics(owner, anchor));
                 helper.runAfterDelay(35, () -> {
                     List<Mob> rivals = actors(owner, anchor); check(rivals.size() == 3, "Hill mode did not create its three contenders");
                     Vec3 hill = hill(anchor, 0); owner.moveTo(hill);
@@ -282,6 +285,14 @@ public final class ActivityGameTests {
     }
     private static BlockPos arena(GameTestHelper helper, int x) {
         BlockPos anchor = new BlockPos(x, 100, 16000);
+        // FakePlayer.moveTo does not register a connected player with the chunk distance manager. These
+        // deliberately remote fixtures therefore need their own short-lived native loading/ticking ticket.
+        // The helper stops these renewals when its test ends; timeout2 also cleans up failed/timed-out tests.
+        // Production ActivityManager never acquires a ticket, and the world's persistent forced-chunk set
+        // remains untouched, so its ordinary loaded-area admission/cancellation rules are still exercised.
+        Runnable keepFixtureLoaded = () -> helper.getLevel().getChunkSource()
+                .addRegionTicket(FIXTURE_TICKET, new ChunkPos(anchor), 3, anchor);
+        keepFixtureLoaded.run(); helper.onEachTick(keepFixtureLoaded);
         for (int dx = -12; dx <= 12; dx++) for (int dz = -12; dz <= 12; dz++)
             helper.getLevel().setBlockAndUpdate(anchor.offset(dx, -1, dz), Blocks.STONE.defaultBlockState());
         helper.getLevel().setBlockAndUpdate(anchor, ModBlocks.BOOMBOX.get().defaultBlockState());
@@ -310,6 +321,14 @@ public final class ActivityGameTests {
     private static void action(ServerPlayer player, String action, String mode) {
         CompoundTag state = ActivityManager.snapshot(player);
         ActivityManager.handleAction(player, action, mode, state.getUUID("Context"), state.getInt("Version"));
+    }
+    private static String diagnostics(ServerPlayer player, BlockPos anchor) {
+        CompoundTag state = ActivityManager.snapshot(player);
+        return "summary=" + state.getString("Summary") + ", mode=" + state.getString("Mode")
+                + ", canLaunch=" + state.getBoolean("CanLaunch") + ", version=" + state.getInt("Version")
+                + ", anchorLoaded=" + player.serverLevel().hasChunkAt(anchor)
+                + ", entityTicking=" + player.serverLevel().isPositionEntityTicking(anchor)
+                + ", distanceSquared=" + player.distanceToSqr(Vec3.atCenterOf(anchor));
     }
     private static void checkVanilla(ServerPlayer player) {
         check(player.experienceLevel == 23 && player.totalExperience == 587 && player.experienceProgress == .625F
