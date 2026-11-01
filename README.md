@@ -26,6 +26,12 @@ JetSetCraft turns ordinary Minecraft terrain into a momentum-first street sports
 
 The [wiki](https://github.com/Herbertofury/JetSetCraft/wiki) covers mechanics, configuration, compatibility, modpack tags, and verification in depth.
 
+## Optional Rival Rush mode — development build
+
+Rival Rush adds opt-in thirty-minute or Endless skating survival sessions in a separate generated street district. Ride against named gang casts, tag rivals with paint, collect persistent mob cards, draft temporary upgrades with separate Rush XP, paint walls and visit musical stops. Return to Minecraft restores the saved normal inventory, physical ride and vanilla XP. The existing Minecraft movement and gang activities remain independent.
+
+Craft a reusable **Rival Rush Flyer** from paper + cyan dye, or use `/jetsetcraft rush`. The first implementation, limits and controls are documented in [Rival Rush](wiki/Rival-Rush.md); the [18-game research/design study](docs/RIVAL_RUSH_DESIGN.md) distinguishes further proposals from implemented behavior. This development feature is not part of the existing v0.3.0 release artifact. Its balance and third-party mob compatibility require real playtesting.
+
 ## In game
 
 ![Leg-baked inline skates, painted wall, and compact Boost/Flow HUD](art/screenshots/v0.3.0-ride-hud.png)
@@ -93,7 +99,7 @@ python tools/validate_wiki.py
 ./gradlew runGameTestServer
 ```
 
-On Windows, use `gradlew.bat`. The JAR is written to `build/libs/`. CI regenerates deterministic assets, rejects dirty generator output, performs a clean build, requires all nine Forge GameTests, starts a real dedicated server, and publishes the JAR, checksums, and logs as one workflow artifact.
+On Windows, use `gradlew.bat`. The JAR is written to `build/libs/`. CI regenerates deterministic assets, rejects dirty generator output, performs a clean build, requires all fifteen Forge GameTests (the nine existing tests plus six Rival Rush tests), starts a real dedicated server, and publishes the JAR, checksums, and logs as one workflow artifact.
 
 In a development world, `/jetsetcraft status` reports authoritative movement and style state. Operators can use `/jetsetcraft build_vanilla_lab` to create a compact acceptance course and `/jetsetcraft set_momentum <speed>` as a controlled test aid. Maintainers can run `gradlew.bat -Djetsetcraft.visualAudit=true runClient` for an unattended real-client inline-skate/HUD/painted-wall/Free-Paint-selector/editor capture.
 

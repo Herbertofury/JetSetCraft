@@ -1,0 +1,8 @@
+{
+  "gang": "jetsetcraft:bone_drones",
+  "entities": [
+    "minecraft:skeleton",
+    "minecraft:stray",
+    "minecraft:wither_skeleton"
+  ]
+}

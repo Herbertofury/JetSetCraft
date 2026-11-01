@@ -34,7 +34,11 @@ public final class PaintBalloonItem extends Item {
             level.addFreshEntity(balloon);
         }
         player.awardStat(Stats.ITEM_USED.get(this));
-        if (!player.getAbilities().instabuild) stack.shrink(1);
+        if (com.herberto.jetsetcraft.rush.RivalRushManager.active(player)
+                || (level.isClientSide && com.herberto.jetsetcraft.rush.RushWorld.isRush(level)
+                    && stack.hasTag() && stack.getTag().getBoolean("JetSetCraftRushLoan"))) {
+            player.getCooldowns().addCooldown(this, 6);
+        } else if (!player.getAbilities().instabuild) stack.shrink(1);
         return InteractionResultHolder.sidedSuccess(stack, level.isClientSide);
     }
 }

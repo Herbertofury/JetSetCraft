@@ -46,6 +46,7 @@ public final class JetSetConfig {
         public final ForgeConfigSpec.IntValue boomboxMaxActors;
         public final ForgeConfigSpec.IntValue boomboxChallengeLifetimeTicks;
         public final ForgeConfigSpec.DoubleValue boomboxSpawnRadius;
+        public final ForgeConfigSpec.BooleanValue enableRivalRush;
 
         private Server(ForgeConfigSpec.Builder b) {
             b.push("movement");
@@ -111,6 +112,11 @@ public final class JetSetConfig {
                     .defineInRange("boomboxChallengeLifetimeTicks", 20 * 180, 20 * 30, 20 * 900);
             boomboxSpawnRadius = b.comment("Maximum radius used to search loaded terrain for safe cinematic entrance points.")
                     .defineInRange("boomboxSpawnRadius", 12.0, 4.0, 24.0);
+            b.pop();
+
+            b.push("rivalRush");
+            enableRivalRush = b.comment("Allow explicit entry to the separate Rival Rush dimension. Ordinary Minecraft is unchanged until a player opts in.")
+                    .define("enabled", true);
             b.pop();
         }
     }

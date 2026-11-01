@@ -59,6 +59,9 @@ public final class SprayCanItem extends Item {
                 BlockHitResult hit = new BlockHitResult(context.getClickLocation(), face,
                         context.getClickedPos(), false);
                 int painted = PaintSplash.freeSpray(serverLevel, player, hit, getPaintColor(stack), stack);
+                if (painted > 0 && player instanceof net.minecraft.server.level.ServerPlayer serverPlayer) {
+                    com.herberto.jetsetcraft.rush.RivalRushManager.tagWall(serverPlayer, context.getClickedPos(), face);
+                }
                 if (painted > 0 && !player.getAbilities().instabuild) {
                     stack.hurtAndBreak(1, player, p -> p.broadcastBreakEvent(context.getHand()));
                 }
@@ -97,6 +100,9 @@ public final class SprayCanItem extends Item {
 
             if (!serverLevel.addFreshEntity(graffiti)) return InteractionResult.FAIL;
             replaced.forEach(GraffitiEntity::discard);
+            if (player instanceof net.minecraft.server.level.ServerPlayer serverPlayer) {
+                com.herberto.jetsetcraft.rush.RivalRushManager.tagWall(serverPlayer, context.getClickedPos(), face);
+            }
             if (player != null && !player.getAbilities().instabuild) {
                 stack.hurtAndBreak(1, player, p -> p.broadcastBreakEvent(context.getHand()));
             }

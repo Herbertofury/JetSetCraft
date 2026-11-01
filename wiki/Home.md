@@ -19,6 +19,7 @@
 | Pick skates, a board, BMX, hoverboard, or scooter | **[Ride Styles](Ride-Styles)** |
 | Build tricks, combos, transfers, and Flow | **[Tricks, Combos & Flow](Tricks-Combos-and-Flow)** |
 | Paint tags, create custom art, or use Free Paint | **[Graffiti](Graffiti)** |
+| Choose an isolated skating roguelite session | **[Rival Rush](Rival-Rush)** — optional mode under verification |
 | Browse games, music, art and engineering inspiration | **[Inspiration & Research](Inspiration-and-Research)** |
 | Build a compatible modpack or server | **[Modpack Maker Guide](Modpack-Maker-Guide)** |
 | Inspect architecture and verification evidence | **[Developer Architecture](Developer-Architecture)** · **[Testing](Testing-and-Verification)** |

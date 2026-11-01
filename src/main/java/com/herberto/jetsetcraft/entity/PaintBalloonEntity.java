@@ -53,6 +53,11 @@ public final class PaintBalloonEntity extends ThrowableItemProjectile {
 
     @Override
     protected void onHit(HitResult hit) {
+        if (!level().isClientSide && getOwner() instanceof net.minecraft.server.level.ServerPlayer player
+                && com.herberto.jetsetcraft.rush.RivalRushManager.balloonHit(player, hit)) {
+            discard();
+            return;
+        }
         super.onHit(hit);
         if (level() instanceof ServerLevel server && hit instanceof EntityHitResult entityHit) {
             PaintColor color = getItem().getItem() instanceof PaintBalloonItem balloon

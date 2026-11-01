@@ -2,6 +2,7 @@ package com.herberto.jetsetcraft.network;
 
 import com.herberto.jetsetcraft.JetSetCraft;
 import com.herberto.jetsetcraft.data.JetSetData;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
@@ -11,8 +12,10 @@ import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.network.simple.SimpleChannel;
 
+import java.util.UUID;
+
 public final class JetSetNetwork {
-    private static final String PROTOCOL = "9";
+    private static final String PROTOCOL = "10";
     private static final SimpleChannel CHANNEL = NetworkRegistry.ChannelBuilder
             .named(ResourceLocation.fromNamespaceAndPath(JetSetCraft.MOD_ID, "main"))
             .networkProtocolVersion(() -> PROTOCOL).clientAcceptedVersions(PROTOCOL::equals).serverAcceptedVersions(PROTOCOL::equals)
@@ -30,12 +33,26 @@ public final class JetSetNetwork {
         CHANNEL.messageBuilder(S2CMobGearPacket.class, id++, NetworkDirection.PLAY_TO_CLIENT)
                 .encoder(S2CMobGearPacket::encode).decoder(S2CMobGearPacket::decode)
                 .consumerMainThread(S2CMobGearPacket::handle).add();
-        CHANNEL.messageBuilder(C2SGraffitiSelectionPacket.class, id, NetworkDirection.PLAY_TO_SERVER)
+        CHANNEL.messageBuilder(C2SGraffitiSelectionPacket.class, id++, NetworkDirection.PLAY_TO_SERVER)
                 .encoder(C2SGraffitiSelectionPacket::encode).decoder(C2SGraffitiSelectionPacket::decode)
                 .consumerMainThread(C2SGraffitiSelectionPacket::handle).add();
+        CHANNEL.messageBuilder(C2SRushActionPacket.class, id++, NetworkDirection.PLAY_TO_SERVER)
+                .encoder(C2SRushActionPacket::encode).decoder(C2SRushActionPacket::decode)
+                .consumerMainThread(C2SRushActionPacket::handle).add();
+        CHANNEL.messageBuilder(S2CRushStatePacket.class, id, NetworkDirection.PLAY_TO_CLIENT)
+                .encoder(S2CRushStatePacket::encode).decoder(S2CRushStatePacket::decode)
+                .consumerMainThread(S2CRushStatePacket::handle).add();
     }
     public static void sendInput(int mask, float forward, float strafe) { CHANNEL.sendToServer(new C2SInputPacket(mask, forward, strafe)); }
     public static void sendRideLoadoutAction(boolean unequip) { CHANNEL.sendToServer(new C2SRideLoadoutPacket(unequip)); }
+    public static void sendRushAction(String action, String value, int number, UUID runId, int version) {
+        CHANNEL.sendToServer(new C2SRushActionPacket(action, value, number, runId, version));
+    }
+
+    public static void syncRush(ServerPlayer player, CompoundTag state) {
+        if (player == null || !canSync(player)) return;
+        CHANNEL.send(PacketDistributor.PLAYER.with(() -> player), new S2CRushStatePacket(state));
+    }
     public static void sendGraffitiSelection(InteractionHand hand, int variant, String customPattern,
                                              boolean freePaint, int colorId) {
         CHANNEL.sendToServer(new C2SGraffitiSelectionPacket(hand, variant, customPattern, freePaint, colorId));

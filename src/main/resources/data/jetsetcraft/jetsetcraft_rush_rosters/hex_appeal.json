@@ -1,0 +1,9 @@
+{
+  "gang": "jetsetcraft:hex_appeal",
+  "entities": [
+    "minecraft:witch",
+    "minecraft:evoker",
+    "minecraft:vindicator",
+    "minecraft:pillager"
+  ]
+}
