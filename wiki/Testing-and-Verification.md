@@ -6,12 +6,12 @@ JetSetCraft treats a passing Java compile as intermediate evidence, not final pr
 
 The published **v0.3.0** release has **nine** GameTests, as recorded in its [release evidence](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/RELEASE_EVIDENCE_0.3.0.md). The **0.4.0-alpha.1 development source** adds six Rival Rush tests, for **fifteen** required tests. A development checkpoint passing CI does not change the published release's version or evidence.
 
-The 1 November 2026 checkpoint containing feature commit [`7283dd8`](https://github.com/Herbertofury/JetSetCraft/commit/7283dd8f912c2c6903e156d468fd1326ee8966b7) passed the following gates. GitHub checked out the PR integration commit [`520591e`](https://github.com/Herbertofury/JetSetCraft/commit/520591e049e38fcd7592679788d97b28cd27d4ba), which merges that feature commit into the then-current base.
+The 1 November 2026 checkpoint containing feature commit [`88b2c75`](https://github.com/Herbertofury/JetSetCraft/commit/88b2c75497315e867e53703d60437828ca82e99e) passed the following gates. GitHub checked out the PR integration commit [`f2ac0c1`](https://github.com/Herbertofury/JetSetCraft/commit/f2ac0c1938fb9ec4568492ed4b124a21f96dfe36), which merges that feature commit into the then-current base.
 
 | Configuration | Completed evidence |
 | --- | --- |
-| Base Forge 1.20.1 / Java 17 | [Build, all fifteen GameTests, dedicated-server readiness and clean shutdown, and a real Minecraft client audit](https://github.com/Herbertofury/JetSetCraft/actions/runs/41346460726) |
-| Alex's Mobs, Alex's Caves, Cataclysm, and all three together | [Four separate provider jobs, each passing its build, all fifteen GameTests, and dedicated-server readiness](https://github.com/Herbertofury/JetSetCraft/actions/runs/41346460787) |
+| Base Forge 1.20.1 / Java 17 | [Build, all fifteen GameTests, dedicated-server readiness and clean shutdown, and a real Minecraft client audit](https://github.com/Herbertofury/JetSetCraft/actions/runs/41347299665) |
+| Alex's Mobs, Alex's Caves, Cataclysm, and all three together | [Four separate provider jobs, each passing its build, all fifteen GameTests, and dedicated-server readiness](https://github.com/Herbertofury/JetSetCraft/actions/runs/41347299683) |
 
 These links identify that checkpoint's evidence. Later code changes require their own passing run. Provider jobs establish the documented registry and gameplay regression baseline; they do not prove every optional creature's behavior or every combination of other mods.
 

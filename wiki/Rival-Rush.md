@@ -1,6 +1,14 @@
 # Rival Rush — optional skating roguelite
 
-**Status: optional `0.4.0-alpha.1` candidate with recorded machine verification.** The stable `v0.3.0` release is unchanged and does not include Rival Rush. See [PR #39](https://github.com/Herbertofury/JetSetCraft/pull/39) for the current candidate and checks. Rival Rush is one optional mode inside JetSetCraft; normal movement, graffiti, crews, Boombox challenges and Minecraft continue independently. This page describes the implemented alpha and its limits. The [18-game research and design study](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/RIVAL_RUSH_DESIGN.md) separates further proposals from current code.
+**Status: optional `0.4.0-alpha.1` implementation with recorded machine verification.** The stable `v0.3.0` release is unchanged and does not include Rival Rush. Implemented through [merged PR #39](https://github.com/Herbertofury/JetSetCraft/pull/39). Rival Rush is one optional mode inside JetSetCraft; normal movement, graffiti, crews, Boombox challenges and Minecraft continue independently. This page describes the implemented alpha and its limits. The [18-game research and design study](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/RIVAL_RUSH_DESIGN.md) separates further proposals from current code.
+
+## Actual client captures
+
+These images come from the passing real-client audit and were visually reviewed. The album capture is the fresh audit player's genuine empty state. [Open all four captures and their verification receipt](https://github.com/Herbertofury/JetSetCraft/tree/main/docs/verification/rival-rush).
+
+| Choose a crew and session | Separate district and run HUD |
+|---|---|
+| ![Rival Rush setup](https://raw.githubusercontent.com/Herbertofury/JetSetCraft/main/docs/verification/rival-rush/01-setup.png) | ![Rival Rush district](https://raw.githubusercontent.com/Herbertofury/JetSetCraft/main/docs/verification/rival-rush/02-district-hud.png) |
 
 ## Start and return
 
@@ -115,12 +123,12 @@ The mode filters absent entity IDs without requiring optional mods. A completely
 
 ## Last recorded verification
 
-The recorded PR verification checkpoint is merge commit [`520591e`](https://github.com/Herbertofury/JetSetCraft/commit/520591e049e38fcd7592679788d97b28cd27d4ba), containing feature commit [`7283dd8`](https://github.com/Herbertofury/JetSetCraft/commit/7283dd8f912c2c6903e156d468fd1326ee8966b7). That checkpoint passed the following checks. [PR #39](https://github.com/Herbertofury/JetSetCraft/pull/39) identifies the current candidate and newer results; later edits need their own passing checks.
+The recorded PR verification checkpoint is merge commit [`f2ac0c1`](https://github.com/Herbertofury/JetSetCraft/commit/f2ac0c1938fb9ec4568492ed4b124a21f96dfe36), containing feature commit [`88b2c75`](https://github.com/Herbertofury/JetSetCraft/commit/88b2c75497315e867e53703d60437828ca82e99e). That checkpoint passed the following checks. [The verification receipt](https://github.com/Herbertofury/JetSetCraft/tree/main/docs/verification/rival-rush) records the tested source, JAR checksum and unchanged client captures; later code edits need their own passing checks.
 
 | Check | Evidence and result |
 |---|---|
-| Main Forge/client gate | **[PASS — Verify JetSetCraft #268](https://github.com/Herbertofury/JetSetCraft/actions/runs/41346460726):** clean Forge build, **15 real Forge GameTests**, dedicated-server readiness, normal RCON shutdown, and an actual **1280 × 720 graphical client audit**. |
-| Optional-provider configurations | **[PASS — all four matrix configurations](https://github.com/Herbertofury/JetSetCraft/actions/runs/41346460787):** combined providers, Alex's Mobs, Alex's Caves, and Cataclysm each passed the same 15 GameTests and server smoke. |
+| Main Forge/client gate | **[PASS — Verify JetSetCraft #269](https://github.com/Herbertofury/JetSetCraft/actions/runs/41347299665):** clean Forge build, **15 real Forge GameTests**, dedicated-server readiness, normal RCON shutdown, and an actual **1280 × 720 graphical client audit**. |
+| Optional-provider configurations | **[PASS — all four matrix configurations](https://github.com/Herbertofury/JetSetCraft/actions/runs/41347299683):** combined providers, Alex's Mobs, Alex's Caves, and Cataclysm each passed the same 15 GameTests and server smoke. |
 
 The graphical audit captured setup, the district HUD, an **empty** album and the return result. It entered and left through the real packet flow using a fixture of **7 diamonds, 5 bread, 23 XP levels and 17 XP points**, compared the complete saved inventory and XP level/total, accepted an XP-progress difference of at most `0.000001`, and checked return to the original dimension and within one block of the saved position. The workflow artifacts contain the captures and logs.
 

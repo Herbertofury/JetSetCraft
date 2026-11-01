@@ -1,0 +1,136 @@
+{
+  "schema": 1,
+  "mode": "Rival Rush",
+  "version": "0.4.0-alpha.1",
+  "verification_date_utc": "2026-11-01",
+  "feature_commit": "88b2c75497315e867e53703d60437828ca82e99e",
+  "tested_pr_merge_commit": "f2ac0c1938fb9ec4568492ed4b124a21f96dfe36",
+  "main_merge_commit": "b894bd3460947590cd72edff36df732be450aada",
+  "tested_and_merged_tree": "e46b9886edaa28d31692b8915078bda7aa931e32",
+  "pull_request": "https://github.com/Herbertofury/JetSetCraft/pull/39",
+  "runtime": {
+    "minecraft": "1.20.1",
+    "forge": "47.4.23",
+    "java": 17,
+    "playeranimator_client": "1.0.2-rc1+1.20"
+  },
+  "workflows": [
+    {
+      "id": 41347299665,
+      "number": 269,
+      "name": "Verify JetSetCraft",
+      "conclusion": "success",
+      "url": "https://github.com/Herbertofury/JetSetCraft/actions/runs/41347299665",
+      "jobs": [
+        {
+          "id": 124969761673,
+          "configuration": "base",
+          "conclusion": "success"
+        }
+      ]
+    },
+    {
+      "id": 41347299683,
+      "number": 47,
+      "name": "Verify Wave 2 Providers",
+      "conclusion": "success",
+      "url": "https://github.com/Herbertofury/JetSetCraft/actions/runs/41347299683",
+      "jobs": [
+        {
+          "id": 124969761617,
+          "configuration": "cataclysm",
+          "conclusion": "success"
+        },
+        {
+          "id": 124969761689,
+          "configuration": "all",
+          "conclusion": "success"
+        },
+        {
+          "id": 124969761694,
+          "configuration": "alexsmobs",
+          "conclusion": "success"
+        },
+        {
+          "id": 124969761708,
+          "configuration": "alexscaves",
+          "conclusion": "success"
+        }
+      ]
+    }
+  ],
+  "gametests_per_configuration": 15,
+  "jar": {
+    "file": "jetsetcraft-1.20.1-0.4.0-alpha.1.jar",
+    "bytes": 5296456,
+    "sha256": "1beffeafbe2f0ca5893e31282f9c24ed33c275d1e6d19518faf692652a1e7925"
+  },
+  "artifact": {
+    "id": 13099872462,
+    "name": "jetsetcraft-forge-1.20.1-f2ac0c1938fb9ec4568492ed4b124a21f96dfe36",
+    "bytes": 5575275,
+    "sha256": "7e8f5b628073aea8ed84e6dbda3be855404c7db2bec40c6825d5e7bce811b82e"
+  },
+  "client_fixture": {
+    "diamonds": 7,
+    "bread": 5,
+    "xp_level": 23,
+    "total_xp": 17,
+    "xp_progress_observed": 0.22077923
+  },
+  "client_assertions": {
+    "inventory": "exact NBT equality",
+    "xp_level": "exact equality",
+    "total_xp": "exact equality",
+    "xp_progress_tolerance": 1e-06,
+    "dimension": "original dimension",
+    "position_tolerance_blocks": 1,
+    "entry_and_exit": "actual client-to-server packet flow"
+  },
+  "captures": [
+    {
+      "file": "01-setup.png",
+      "original_file": "rival-rush-1793565285967-01-setup.png",
+      "sha256": "2fd6776ef99135fa3352e0374cd029566a242b801a3fae3238dbd4118c76d016",
+      "bytes": 91328,
+      "width": 1280,
+      "height": 720,
+      "visually_reviewed": true
+    },
+    {
+      "file": "02-district-hud.png",
+      "original_file": "rival-rush-1793565285967-02-district-hud.png",
+      "sha256": "ce8e4007be730211f1a54949d21980fd3ce268163761c5cb710f2a365e603e59",
+      "bytes": 337961,
+      "width": 1280,
+      "height": 720,
+      "visually_reviewed": true
+    },
+    {
+      "file": "03-album.png",
+      "original_file": "rival-rush-1793565285967-03-album.png",
+      "sha256": "a4a36939cef00c59a970c0e7edd0373634b61c57885b068465afed3a4b5e6bc0",
+      "bytes": 73056,
+      "width": 1280,
+      "height": 720,
+      "visually_reviewed": true
+    },
+    {
+      "file": "04-return-result.png",
+      "original_file": "rival-rush-1793565285967-04-return-result.png",
+      "sha256": "79e0e0d245e9b8484498826e4a08a5f915f900721db799ace214b9e5209921e9",
+      "bytes": 59536,
+      "width": 1280,
+      "height": 720,
+      "visually_reviewed": true
+    }
+  ],
+  "scope_limits": [
+    "Short automated client round trip, not a human thirty-minute playtest.",
+    "Album capture is the genuine empty state of the fresh audit player.",
+    "No long Endless performance or balance claim.",
+    "Provider-installed regression tests do not cover every provider mob inside Rush.",
+    "No forced-crash or storage-failure test is claimed.",
+    "The return journal does not snapshot arbitrary third-party player capabilities."
+  ]
+}
