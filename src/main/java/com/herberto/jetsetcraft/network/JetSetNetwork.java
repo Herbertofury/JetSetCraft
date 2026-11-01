@@ -15,7 +15,7 @@ import net.minecraftforge.network.simple.SimpleChannel;
 import java.util.UUID;
 
 public final class JetSetNetwork {
-    private static final String PROTOCOL = "10";
+    private static final String PROTOCOL = "11";
     private static final SimpleChannel CHANNEL = NetworkRegistry.ChannelBuilder
             .named(ResourceLocation.fromNamespaceAndPath(JetSetCraft.MOD_ID, "main"))
             .networkProtocolVersion(() -> PROTOCOL).clientAcceptedVersions(PROTOCOL::equals).serverAcceptedVersions(PROTOCOL::equals)
@@ -39,14 +39,29 @@ public final class JetSetNetwork {
         CHANNEL.messageBuilder(C2SRushActionPacket.class, id++, NetworkDirection.PLAY_TO_SERVER)
                 .encoder(C2SRushActionPacket::encode).decoder(C2SRushActionPacket::decode)
                 .consumerMainThread(C2SRushActionPacket::handle).add();
-        CHANNEL.messageBuilder(S2CRushStatePacket.class, id, NetworkDirection.PLAY_TO_CLIENT)
+        CHANNEL.messageBuilder(S2CRushStatePacket.class, id++, NetworkDirection.PLAY_TO_CLIENT)
                 .encoder(S2CRushStatePacket::encode).decoder(S2CRushStatePacket::decode)
                 .consumerMainThread(S2CRushStatePacket::handle).add();
+        CHANNEL.messageBuilder(C2SCrewActionPacket.class, id++, NetworkDirection.PLAY_TO_SERVER)
+                .encoder(C2SCrewActionPacket::encode).decoder(C2SCrewActionPacket::decode)
+                .consumerMainThread(C2SCrewActionPacket::handle).add();
+        CHANNEL.messageBuilder(S2CCrewStatePacket.class, id, NetworkDirection.PLAY_TO_CLIENT)
+                .encoder(S2CCrewStatePacket::encode).decoder(S2CCrewStatePacket::decode)
+                .consumerMainThread(S2CCrewStatePacket::handle).add();
     }
     public static void sendInput(int mask, float forward, float strafe) { CHANNEL.sendToServer(new C2SInputPacket(mask, forward, strafe)); }
     public static void sendRideLoadoutAction(boolean unequip) { CHANNEL.sendToServer(new C2SRideLoadoutPacket(unequip)); }
     public static void sendRushAction(String action, String value, int number, UUID runId, int version) {
         CHANNEL.sendToServer(new C2SRushActionPacket(action, value, number, runId, version));
+    }
+
+    public static void sendCrewAction(String action, String value, int number, UUID houseId, UUID targetId, long revision) {
+        CHANNEL.sendToServer(new C2SCrewActionPacket(action, value, number, houseId, targetId, revision));
+    }
+
+    public static void syncCrew(ServerPlayer player, CompoundTag state) {
+        if (player == null || !canSync(player)) return;
+        CHANNEL.send(PacketDistributor.PLAYER.with(() -> player), new S2CCrewStatePacket(state));
     }
 
     public static void syncRush(ServerPlayer player, CompoundTag state) {

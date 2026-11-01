@@ -1,6 +1,7 @@
 package com.herberto.jetsetcraft.client.rush;
 
 import com.herberto.jetsetcraft.JetSetCraft;
+import com.herberto.jetsetcraft.client.crew.CrewHouseVisualAudit;
 import com.herberto.jetsetcraft.network.JetSetNetwork;
 import net.minecraft.client.CameraType;
 import net.minecraft.client.Minecraft;
@@ -231,7 +232,12 @@ public final class RivalRushVisualAudit {
             case 9 -> {
                 if (!CAPTURES.containsKey("04-return-result")) return;
                 if (CAPTURES.size() != 4) { finish(minecraft, false, "expected four completed PNG captures"); return; }
-                finish(minecraft, true, "four real-client captures; actual packet entry/exit; dimension, inventory and vanilla XP restored");
+                next(10);
+            }
+            case 10 -> {
+                if (!CrewHouseVisualAudit.advance(minecraft, label -> capture(minecraft, label), CAPTURES::containsKey)) return;
+                if (CAPTURES.size() != 8) { finish(minecraft, false, "expected eight completed Rush and Crew PNG captures"); return; }
+                finish(minecraft, true, "eight real-client captures; Rush inventory/XP/dimension restored; actual charter, crew home, facility and job verified");
             }
             default -> finish(minecraft, false, "unknown audit phase");
         }

@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.4.0-alpha.2 — crew-house development, 2026-11-01
+
+- Added a reusable **Crew Charter** and separate Home, Crew, Jobs and Facilities ledger for a house the player builds around an existing Boombox.
+- Added persistent crew/member identities, two starter apprentices, named roles, member training, per-gang reputation, bounded reputation recruitment discounts and a virtual Crew Supplies wallet. Roster members are mission profiles in this slice; visible residents and followers remain later work.
+- Added four manually managed plot tiers with radii 8/12/16/24 and member capacities 3/5/8/12. The footprint governs facilities and capacity, preserves placed blocks and checks overlap before charging; it is not a general land-protection system.
+- Added courier, tagging, salvage and DJ soundcheck dispatch missions with frozen rewards, saved server-game-time deadlines, bounded concurrency and once-only claims. Ready missions do not expire or auto-repeat.
+- Added physical workshop, practice-yard, mix-studio and recovery-corner facilities. Registration and upgrades inspect actual placed blocks. One selected, working facility can grant one starting Rush rank when entering from the home.
+- Connected genuine Rush participation to crew XP, idle-member training, rival-gang reputation and bounded supplies while preserving normal inventory/XP return. Optional progression failures cannot block the return path.
+- Added contextual client soundtrack support, track credits, fade-in/out, local on/off/next/status controls, two exact recording metadata entries and a local Ogg resource-pack importer. Sonic audio masters are not bundled yet.
+- Expanded the acceptance gate to nineteen Forge GameTests and extended the real-client audit to the house ledger. New source verification is recorded separately from alpha.1 once CI finishes.
+
 ## 0.4.0-alpha.1 — development, 2026-11-01
 
 - Added **Rival Rush**, an optional skating roguelite mode with a reusable flyer, crew selection, thirty-minute runs, voluntary Endless continuation, and an explicit return to Minecraft.

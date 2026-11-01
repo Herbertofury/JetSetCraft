@@ -1,6 +1,6 @@
 # Rival Rush — optional skating roguelite
 
-**Status: optional `0.4.0-alpha.1` implementation with recorded machine verification.** The stable `v0.3.0` release is unchanged and does not include Rival Rush. Implemented through [merged PR #39](https://github.com/Herbertofury/JetSetCraft/pull/39). Rival Rush is one optional mode inside JetSetCraft; normal movement, graffiti, crews, Boombox challenges and Minecraft continue independently. This page describes the implemented alpha and its limits. The [18-game research and design study](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/RIVAL_RUSH_DESIGN.md) separates further proposals from current code.
+**Status: optional `0.4.0-alpha.2` development; the recorded alpha.1 machine verification is below.** The stable `v0.3.0` release is unchanged and does not include Rival Rush. Implemented through [merged PR #39](https://github.com/Herbertofury/JetSetCraft/pull/39). Rival Rush is one optional mode inside JetSetCraft; normal movement, graffiti, crews, Boombox challenges and Minecraft continue independently. This page describes the implemented alpha and its limits. The [18-game research and design study](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/RIVAL_RUSH_DESIGN.md) separates further proposals from current code.
 
 ## Actual client captures
 
@@ -72,6 +72,14 @@ The album shows the creature identity, crew, count, tier and next threshold. It 
 | **Style dividends** | Stronger mode rewards for eligible walls and movement |
 
 Stat ranks have defined ceilings. Once capped, drafts remain useful through **Fresh wheels** healing, **Victory lap** score, and temporary **Overdrive** damage. Choices validate the player, current run UUID, offer version and offered index. Replaying an old request cannot buy an upgrade in a new run.
+
+## Optional crew-house preparation and training
+
+The [player-built crew-house layer](Player-Chapters-Posse-and-Mob-Archetypes) can now support Rush without becoming a prerequisite. Register physical workshop, practice, studio or recovery facilities at home and choose **one** starting rank. Enter from inside your valid, loaded house plot to receive it; higher facility tiers do not stack more starting ranks. Album-earned draft choices remain separate.
+
+A settled run with at least one minute of active time and three genuine rival defeats can earn virtual Crew Supplies, crew XP, reputation with that rival gang and training for one selected idle roster member. Those rewards never become vanilla items or XP. Dispatch missions provide a separate route to house progress while playing ordinary Minecraft. Crew members are currently persistent roster profiles, not physical followers.
+
+Optional local-pack soundtrack playback now supports the home and Rush, with credits and fade-in/out. The two identified Sonic-related recordings have metadata entries; their audio files are not bundled yet. [Music integration and importer](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/MUSIC_INTEGRATION.md) documents the exact recording versions and controls. This adds contextual playback, not beat-scored combat.
 
 ## Crews and enemy variety
 

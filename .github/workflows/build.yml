@@ -80,7 +80,7 @@ jobs:
             sleep 20
           done
 
-      - name: Run fifteen real Forge GameTests
+      - name: Run nineteen real Forge GameTests
         shell: bash
         run: |
           set -euo pipefail
@@ -102,11 +102,15 @@ jobs:
             'JETSETCRAFT_GAMETEST_PASS rush_return' \
             'JETSETCRAFT_GAMETEST_PASS rush_session' \
             'JETSETCRAFT_GAMETEST_PASS rush_ownership' \
-            'JETSETCRAFT_GAMETEST_PASS rush_objectives'; do
+            'JETSETCRAFT_GAMETEST_PASS rush_objectives' \
+            'JETSETCRAFT_GAMETEST_PASS crew_house' \
+            'JETSETCRAFT_GAMETEST_PASS crew_missions' \
+            'JETSETCRAFT_GAMETEST_PASS crew_persistence' \
+            'JETSETCRAFT_GAMETEST_PASS crew_rush'; do
             grep -Fq "$marker" "$log" || { echo "::error::Missing GameTest marker: $marker"; exit 1; }
           done
-          grep -Eq 'All 15 required tests passed|15 tests? passed' "$log" || {
-            echo '::error::Forge did not report all fifteen GameTests passing.'
+          grep -Eq 'All 19 required tests passed|19 tests? passed' "$log" || {
+            echo '::error::Forge did not report all nineteen GameTests passing.'
             exit 1
           }
 
@@ -187,7 +191,7 @@ jobs:
           fi
           test -s run/world/level.dat
 
-      - name: Verify Rival Rush in a real Minecraft client
+      - name: Verify Rival Rush and crew houses in a real Minecraft client
         shell: bash
         env:
           LIBGL_ALWAYS_SOFTWARE: "true"
@@ -212,12 +216,13 @@ jobs:
           log=build/verification/rush-client.log
           timeout 300s xvfb-run -a -s '-screen 0 1280x720x24' ./gradlew runClient -Djetsetcraft.rushVisualAudit=true --no-daemon 2>&1 | tee "$log"
           grep -Fq 'JETSETCRAFT_RUSH_VISUAL_AUDIT_PASS' "$log"
+          grep -Fq 'JETSETCRAFT_CREW_VISUAL_AUDIT_PASS' "$log"
           grep -Fq 'JETSETCRAFT_RUSH_VISUAL_AUDIT_FIXTURE_OBSERVED' "$log"
           if grep -Fq 'JETSETCRAFT_RUSH_VISUAL_AUDIT_FAIL' "$log"; then
             echo '::error::Rival Rush client audit reported failure.'
             exit 1
           fi
-          for capture in 01-setup 02-district-hud 03-album 04-return-result; do
+          for capture in 01-setup 02-district-hud 03-album 04-return-result 05-crew-home 06-crew-roster 07-crew-facilities 08-crew-jobs; do
             grep -Fq "JETSETCRAFT_RUSH_VISUAL_AUDIT_CAPTURE $capture " "$log"
             compgen -G "run/screenshots/rival-rush-*-$capture.png" >/dev/null
           done

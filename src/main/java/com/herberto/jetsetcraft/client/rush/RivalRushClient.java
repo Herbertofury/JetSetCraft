@@ -71,6 +71,14 @@ public final class RivalRushClient {
     static ListTag offers() { return state.getList("Offers", Tag.TAG_COMPOUND); }
     static UUID runId() { return state.hasUUID("Run") ? state.getUUID("Run") : null; }
 
+    /** Presentation gating for optional music; callers do not receive mutable run NBT. */
+    public static boolean active() {
+        Minecraft minecraft = Minecraft.getInstance();
+        return state.getBoolean("Active") && minecraft.player != null && minecraft.level != null
+                && minecraft.getConnection() != null
+                && "jetsetcraft:rival_rush".equals(minecraft.level.dimension().location().toString());
+    }
+
     static void request(String action, String value, int number) {
         if (Minecraft.getInstance().getConnection() == null) return;
         JetSetNetwork.sendRushAction(action, value, number, runId(), state.getInt("Version"));
