@@ -1,6 +1,6 @@
 # Rival Rush: implementation status and roguelite design research
 
-**Status: optional alpha implementation with recorded machine verification.** Rival Rush is implemented as development version `0.4.0-alpha.1`; the stable `v0.3.0` release is unchanged. The last recorded PR verification checkpoint is merge commit [`f2ac0c1`](https://github.com/Herbertofury/JetSetCraft/commit/f2ac0c1938fb9ec4568492ed4b124a21f96dfe36), containing feature commit [`88b2c75`](https://github.com/Herbertofury/JetSetCraft/commit/88b2c75497315e867e53703d60437828ca82e99e), with the evidence below. The implementation was merged through [PR #39](https://github.com/Herbertofury/JetSetCraft/pull/39). [Real-client captures and the verification receipt](verification/rival-rush/README.md) record the tested source and binary. Full human thirty-minute sessions, Endless balance, sustained performance, and broad mob-provider behavior remain to be evaluated.
+**Status: optional `0.4.0-alpha.2` implementation with recorded machine verification.** Stable `v0.3.0` is unchanged. Rival Rush first arrived through [PR #39](https://github.com/Herbertofury/JetSetCraft/pull/39); alpha.2 adds the optional crew-house connection. The [current verification receipt](verification/crew-house/README.md) records the tested candidate, PR integration, binary and eight client captures. The [alpha.1 receipt](verification/rival-rush/README.md) preserves the original fifteen-test checkpoint. Full human thirty-minute sessions, Endless/house progression balance, sustained performance and broad mob-provider behavior remain to be evaluated.
 
 **Research checked 1 November 2026. Eighteen game studies; primary developer, publisher, and official store sources.**
 
@@ -10,7 +10,7 @@ Source observations are separated from JetSetCraft recommendations. All locally 
 
 ## 0. What this change implements, and what remains a proposal
 
-The following inventory describes code present in this alpha. The recorded tests cover the cases stated below; a feature appearing here is not evidence that every lifecycle or optional-mod combination has passed.
+The following inventory retains the core Rush mechanics introduced in alpha.1 and adds the alpha.2 crew-house bridge. The recorded tests cover the cases stated below; a feature appearing here is not evidence that every lifecycle or optional-mod combination has passed.
 
 | Area | Implemented alpha surface | Further design, not implemented by this slice |
 |---|---|---|
@@ -22,6 +22,7 @@ The following inventory describes code present in this alpha. The recorded tests
 | **Persistent album benefit** | At **20 / 60 / 150 total collected cards**, subsequent runs receive **one / two / three** queued starting upgrade drafts. Album progress remains outside the temporary return journal. | A broad hub economy or permanent stat tree. No vanilla XP, item loot, or vanilla damage reward is intended. |
 | **Movement and music** | Rewards for fresh wall patches, validated moving grind/wall-ride/trick states, and a four-second dance at a nearby generated Boombox. | Tag relays, carried crates, crew murals, beat-judged challenges, and the complete POI catalogue in section 8. |
 | **World and Endless** | Generated local wall/rail/ramp/Boombox patterns; five-minute chapter labels with composition changes and a six-chapter rotation; bounded enemy movement speed and counters. | A rich procedural neighborhood graph, distinct authored route forks, boss duets, the full modifier catalogue, and measured long-duration performance guarantees. |
+| **Optional crew-house bridge — alpha.2** | A player-built house can prepare one selected mode-only starting rank. Qualifying Rush results bank bounded crew supplies, XP, gang reputation and idle-profile training; dispatch jobs provide a non-Rush progression route. See the [Crew House design](CREW_HOUSE_DESIGN.md) and [runtime guide](../wiki/Player-Chapters-Posse-and-Mob-Archetypes.md). | Physical companions, playable expeditions, deep bonds, inhabited-room activities and music-timed house games. Current members are persistent profiles. |
 
 ### First-slice upgrade vocabulary
 
@@ -37,16 +38,16 @@ Selection is based on registered mob identities and existing JetSetCraft eligibi
 
 ### Last recorded verification
 
-The following evidence applies to the PR merge checkpoint [`f2ac0c1`](https://github.com/Herbertofury/JetSetCraft/commit/f2ac0c1938fb9ec4568492ed4b124a21f96dfe36), containing feature commit [`88b2c75`](https://github.com/Herbertofury/JetSetCraft/commit/88b2c75497315e867e53703d60437828ca82e99e). The [verification receipt](verification/rival-rush/README.md) records the identical tested and merged trees; this record does not automatically verify later code edits.
+The following alpha.2 evidence covers candidate [`d5ecadd`](https://github.com/Herbertofury/JetSetCraft/commit/d5ecadd0651c35fdffb505fa2790bda718e830db) on tested PR integration [`b9bcec8`](https://github.com/Herbertofury/JetSetCraft/commit/b9bcec8258e164aa41af5838a89df8aac04bd7c7). The [crew-house verification receipt](verification/crew-house/README.md) records the exact source, binary and eight captures. The [historical alpha.1 receipt](verification/rival-rush/README.md) remains separate; neither checkpoint automatically verifies later code edits.
 
 | Evidence | Recorded result | Scope |
 |---|---|---|
-| [Verify JetSetCraft #269](https://github.com/Herbertofury/JetSetCraft/actions/runs/41347299665) | **PASS** | Clean Forge build, all **15 real Forge GameTests**, dedicated-server readiness followed by a normal RCON stop, and an actual **1280 × 720 graphical Minecraft client audit**. |
-| [Optional-provider matrix](https://github.com/Herbertofury/JetSetCraft/actions/runs/41347299683) | **PASS in all four configurations** | Combined providers, Alex's Mobs, Alex's Caves, and Cataclysm each passed the same **15 GameTests** and dedicated-server smoke. This is integration coverage for those configurations, not an audit of every provider mob's AI. |
+| [Verify JetSetCraft #274](https://github.com/Herbertofury/JetSetCraft/actions/runs/41350812751) | **PASS** | Clean Forge build, all **19 real Forge GameTests**, dedicated-server readiness followed by a normal RCON stop, and an actual **1280 × 720 graphical Minecraft client audit with eight captures**. |
+| [Optional-provider matrix #51](https://github.com/Herbertofury/JetSetCraft/actions/runs/41350812645) | **PASS in all four configurations** | Combined providers, Alex's Mobs, Alex's Caves, and Cataclysm each passed the same **19 GameTests** and dedicated-server smoke. This is configuration integration coverage, not an audit of every provider mob's AI. |
 
-The client audit used actual packet entry and exit and captured setup, the district HUD, an empty album, and the return result. Its fixture added **7 diamonds, 5 bread, 23 XP levels, and 17 XP points**. It compared the complete pre-entry inventory data and XP level/total on return, checked XP progress within `0.000001`, required the original dimension, and accepted a return position within one block of the saved position. These are real machine integration and visual-capture checks; the empty-album frame does not demonstrate a populated collection.
+The client audit used actual packet entry and exit and captured setup, the district HUD, an empty album and the return result. Its fixture added **7 diamonds, 5 bread, 23 XP levels and 17 XP points**. It compared the complete pre-entry inventory data and XP level/total on return, checked XP progress within `0.000001`, required the original dimension, and accepted a return position within one block of the saved position. It then used the Charter, founded a home, displayed two crew profiles, registered an operational workshop and dispatched a still-running timed assignment, capturing the four crew tabs. The empty-album frame does not demonstrate a populated collection.
 
-The fifteen GameTests consist of the nine existing tests plus six Rival Rush tests covering run rules, album rewards, return journals, actual session entry/exit, actor/card ownership, and graffiti/action dispatch. A separate deterministic harness also compiled the pure-Java `RushRun` class and checked timer, choice, overflow, and Endless rules.
+The nineteen GameTests comprise nine original tests, six Rival Rush tests and four crew-house/integration tests. The latter cover actual construction requirements, frozen mission rewards and claim boundaries, saved roster/job/receipt identity, and the production house-to-Rush-to-return reward path. [Testing and Verification](../wiki/Testing-and-Verification.md) lists the exact markers and fixture limits. A separate deterministic harness previously compiled the pure-Java `RushRun` class and checked timer, choice, overflow and Endless rules.
 
 **Evidence limits:** no human thirty-minute or Endless playtest is claimed. The recorded smoke checks do not establish long-session pacing, animation quality across every mob, all multiplayer interruption combinations, universal optional-mod compatibility, or measured long-duration performance. The broader acceptance cases later in this document remain a verification plan unless matched to a specific recorded test. The source-study observations likewise remain research, not hands-on playtest evidence.
 

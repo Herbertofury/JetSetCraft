@@ -1,0 +1,217 @@
+{
+  "schema": 1,
+  "feature": "Crew houses and Rival Rush integration",
+  "version": "0.4.0-alpha.2",
+  "verification_date_utc": "2026-11-01",
+  "feature_commit": "d5ecadd0651c35fdffb505fa2790bda718e830db",
+  "tested_pr_merge_commit": "b9bcec8258e164aa41af5838a89df8aac04bd7c7",
+  "main_merge_commit": "b852dfce9b17eadbb29699ee8d5d50e2c6ab8101",
+  "tested_and_merged_tree": "ae09822741b04f96cd4631e54a3f286277afb8ab",
+  "pull_request": "https://github.com/Herbertofury/JetSetCraft/pull/40",
+  "runtime": {
+    "minecraft": "1.20.1",
+    "forge": "47.4.23",
+    "java": 17,
+    "playeranimator_client": "1.0.2-rc1+1.20",
+    "network_protocol": "11"
+  },
+  "workflows": [
+    {
+      "id": 41350812751,
+      "number": 274,
+      "name": "Verify JetSetCraft",
+      "conclusion": "success",
+      "url": "https://github.com/Herbertofury/JetSetCraft/actions/runs/41350812751",
+      "jobs": [
+        {
+          "id": 124980345998,
+          "configuration": "base",
+          "conclusion": "success"
+        }
+      ]
+    },
+    {
+      "id": 41350812645,
+      "number": 51,
+      "name": "Verify Wave 2 Providers",
+      "conclusion": "success",
+      "url": "https://github.com/Herbertofury/JetSetCraft/actions/runs/41350812645",
+      "jobs": [
+        {
+          "id": 124980345823,
+          "configuration": "alexsmobs",
+          "conclusion": "success"
+        },
+        {
+          "id": 124980345865,
+          "configuration": "cataclysm",
+          "conclusion": "success"
+        },
+        {
+          "id": 124980345868,
+          "configuration": "all",
+          "conclusion": "success"
+        },
+        {
+          "id": 124980345904,
+          "configuration": "alexscaves",
+          "conclusion": "success"
+        }
+      ]
+    }
+  ],
+  "gametests_per_configuration": 19,
+  "gametest_markers": [
+    "catalogs",
+    "combat_sovereignty",
+    "crew_house",
+    "crew_missions",
+    "crew_persistence",
+    "crew_rush",
+    "dance_flow",
+    "graffiti_lifecycle",
+    "hoverboard",
+    "paint_balloon_splash",
+    "ride_controls",
+    "rush_album",
+    "rush_objectives",
+    "rush_ownership",
+    "rush_return",
+    "rush_rules",
+    "rush_session",
+    "scooter",
+    "street_gear"
+  ],
+  "jar": {
+    "file": "jetsetcraft-1.20.1-0.4.0-alpha.2.jar",
+    "bytes": 5409832,
+    "sha256": "226729453ede7d386251c1744bf5a4e2c4ed453459399b9ddf01bde13d4f9831"
+  },
+  "artifact": {
+    "id": 13101203337,
+    "name": "jetsetcraft-forge-1.20.1-b9bcec8258e164aa41af5838a89df8aac04bd7c7",
+    "bytes": 6058200,
+    "sha256": "259b1781bf9f8dd58e60f17e74d72abab1355a72ad0418d6da6705c437964d0a"
+  },
+  "client_fixture": {
+    "diamonds": 7,
+    "bread": 5,
+    "xp_level": 23,
+    "total_xp": 17,
+    "xp_progress_observed": 0.22077923
+  },
+  "client_assertions": {
+    "inventory": "exact NBT equality",
+    "xp_level": "exact equality",
+    "total_xp": "exact equality",
+    "xp_progress_tolerance": 0.000001,
+    "dimension": "original dimension",
+    "position_tolerance_blocks": 1,
+    "entry_and_exit": "actual client-to-server packet flow",
+    "crew_house": "actual Charter item use and confirmed founding at placed Boombox",
+    "roster": "two actual persisted starter profiles",
+    "facility": "actual placed crafting table registered through crew packet flow",
+    "job": "real three-minute assignment dispatched; screenshot shows active job, not a completed claim",
+    "revision": "initial revision zero accepted; later mutations must increase it"
+  },
+  "captures": [
+    {
+      "file": "01-setup.png",
+      "original_file": "rival-rush-1793567741089-01-setup.png",
+      "sha256": "933d5372c008b83e53fd591ccf8f64a852ef39c83c8130a06e2ebea397498b2c",
+      "bytes": 105856,
+      "width": 1280,
+      "height": 720,
+      "visually_reviewed": true,
+      "hover_help_visible": false
+    },
+    {
+      "file": "02-district-hud.png",
+      "original_file": "rival-rush-1793567741089-02-district-hud.png",
+      "sha256": "f4664e6000d1b3894bc46afcdb171d4232043c36a145da203074a8f81f1ddc05",
+      "bytes": 317508,
+      "width": 1280,
+      "height": 720,
+      "visually_reviewed": true,
+      "hover_help_visible": false
+    },
+    {
+      "file": "03-album.png",
+      "original_file": "rival-rush-1793567741089-03-album.png",
+      "sha256": "51d849db141a8dcdea82a8712b2d476b21137e13af287f07027978599ad8661c",
+      "bytes": 73152,
+      "width": 1280,
+      "height": 720,
+      "visually_reviewed": true,
+      "hover_help_visible": false
+    },
+    {
+      "file": "04-return-result.png",
+      "original_file": "rival-rush-1793567741089-04-return-result.png",
+      "sha256": "b00ad4fbd5d9ae7a326d2b39a0a47bd934f10a016e3e818f8162f4a635e7132c",
+      "bytes": 70539,
+      "width": 1280,
+      "height": 720,
+      "visually_reviewed": true,
+      "hover_help_visible": false
+    },
+    {
+      "file": "05-crew-home.png",
+      "original_file": "rival-rush-1793567741089-05-crew-home.png",
+      "sha256": "a4f0537186633802fba990cf2ed858e9b855263dbd985debfef168cbbcd8a57b",
+      "bytes": 112875,
+      "width": 1280,
+      "height": 720,
+      "visually_reviewed": true,
+      "hover_help_visible": true
+    },
+    {
+      "file": "06-crew-roster.png",
+      "original_file": "rival-rush-1793567741089-06-crew-roster.png",
+      "sha256": "e7737a6687c9c5e3797ee4d57d8269a71b391491d758ebef52674083052329c1",
+      "bytes": 96894,
+      "width": 1280,
+      "height": 720,
+      "visually_reviewed": true,
+      "hover_help_visible": true
+    },
+    {
+      "file": "07-crew-facilities.png",
+      "original_file": "rival-rush-1793567741089-07-crew-facilities.png",
+      "sha256": "ded17fec343dc91a8509002fc6b9451a79e768681c9a66b6ba430a172500ca5a",
+      "bytes": 105459,
+      "width": 1280,
+      "height": 720,
+      "visually_reviewed": true,
+      "hover_help_visible": true
+    },
+    {
+      "file": "08-crew-jobs.png",
+      "original_file": "rival-rush-1793567741089-08-crew-jobs.png",
+      "sha256": "469187ed8802461816c0b704c0da0cce59459636f28e14484075acb1f4db415f",
+      "bytes": 104407,
+      "width": 1280,
+      "height": 720,
+      "visually_reviewed": true,
+      "hover_help_visible": false
+    }
+  ],
+  "music": {
+    "catalogue_entries_loaded": 2,
+    "supplied_sonic_recordings": 0,
+    "live_sonic_playback_auditioned": false,
+    "original_jetsetcraft_stinger_import_smoke": "passed: streaming Vorbis, stereo audio, valid duration, receipt hashes, overwrite refusal and path rejection"
+  },
+  "scope_limits": [
+    "Short automated real-client round trip, not a human thirty-minute playtest.",
+    "Album capture is the genuine empty state of the fresh audit player; this short audit defeated one rival but collected no card.",
+    "The client audit shows dispatch, not elapsed mission completion; completion/claim/replay behavior is covered by GameTests.",
+    "Home, Crew and Facilities captures retain normal Minecraft hover help; the source pixels are unchanged.",
+    "Crew members are saved roster/mission profiles; physical resident and follower AI are not implemented by this slice.",
+    "No long Endless performance or balance claim.",
+    "Provider-installed regression tests do not cover every provider mob inside Rush.",
+    "No forced-crash or storage-failure test is claimed; saved progression follows ordinary world-save durability.",
+    "The return journal does not snapshot arbitrary third-party player capabilities.",
+    "No Sonic audio master was supplied, bundled or auditioned."
+  ]
+}

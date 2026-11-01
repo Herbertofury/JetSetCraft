@@ -9,7 +9,7 @@
 - Added physical workshop, practice-yard, mix-studio and recovery-corner facilities. Registration and upgrades inspect actual placed blocks. One selected, working facility can grant one starting Rush rank when entering from the home.
 - Connected genuine Rush participation to crew XP, idle-member training, rival-gang reputation and bounded supplies while preserving normal inventory/XP return. Optional progression failures cannot block the return path.
 - Added contextual client soundtrack support, track credits, fade-in/out, local on/off/next/status controls, two exact recording metadata entries and a local Ogg resource-pack importer. Sonic audio masters are not bundled yet.
-- Expanded the acceptance gate to nineteen Forge GameTests and extended the real-client audit to the house ledger. New source verification is recorded separately from alpha.1 once CI finishes.
+- Passed the nineteen-GameTest acceptance gate, dedicated-server smoke and an eight-screen real-client audit in [Verify JetSetCraft #274](https://github.com/Herbertofury/JetSetCraft/actions/runs/41350812751); [all four optional-provider configurations](https://github.com/Herbertofury/JetSetCraft/actions/runs/41350812645) passed the same nineteen tests and server smoke. The [alpha.2 verification receipt](docs/verification/crew-house/README.md) records the tested source and binary separately from [historical alpha.1 evidence](docs/verification/rival-rush/README.md). These checks establish machine integration, not human pacing or progression balance.
 
 ## 0.4.0-alpha.1 — development, 2026-11-01
 

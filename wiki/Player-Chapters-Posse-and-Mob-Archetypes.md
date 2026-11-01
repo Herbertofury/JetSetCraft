@@ -1,6 +1,22 @@
 # Player Chapters, Crew Houses, Posse & Mob Archetypes
 
-**Development status: crew-house implementation under verification.** The current slice adds player-built house facilities, a persistent named roster, levels, dispatch jobs and optional Rival Rush preparation. **Members are saved profiles: visible residents, skating followers and physical posse AI are future work.** Stable `v0.3.0` is unchanged. The [Crew House design study](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/CREW_HOUSE_DESIGN.md) contains eight primary-source inspirations and clearly labelled extensions.
+**Development status: `0.4.0-alpha.2` implementation with recorded machine verification.** The current slice adds player-built house facilities, a persistent named roster, levels, dispatch jobs and optional Rival Rush preparation. **Members are saved profiles: visible residents, skating followers and physical posse AI are future work.** Stable `v0.3.0` is unchanged. The [Crew House design study](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/CREW_HOUSE_DESIGN.md) contains eight primary-source inspirations and clearly labelled extensions.
+
+## Actual crew-house captures
+
+These four **1280 × 720** images come from the alpha.2 real-client audit. They show the actual profile-based implementation and its placed-workshop fixture. [Open all eight captures and the source/binary verification receipt](https://github.com/Herbertofury/JetSetCraft/tree/main/docs/verification/crew-house).
+
+| Home and expandable footprint | Named crew profiles |
+|---|---|
+| ![Actual crew-house Home tab](https://raw.githubusercontent.com/Herbertofury/JetSetCraft/main/docs/verification/crew-house/05-crew-home.png) | ![Actual crew roster](https://raw.githubusercontent.com/Herbertofury/JetSetCraft/main/docs/verification/crew-house/06-crew-roster.png) |
+| **Registered physical facilities** | **Dispatch jobs** |
+| ![Actual registered workshop and facilities tab](https://raw.githubusercontent.com/Herbertofury/JetSetCraft/main/docs/verification/crew-house/07-crew-facilities.png) | ![Actual courier job in progress](https://raw.githubusercontent.com/Herbertofury/JetSetCraft/main/docs/verification/crew-house/08-crew-jobs.png) |
+
+### Recorded verification
+
+[Verify JetSetCraft #274](https://github.com/Herbertofury/JetSetCraft/actions/runs/41350812751) passed the clean Forge build, **19 real GameTests**, dedicated-server readiness and normal RCON shutdown, and the eight-screen graphical client audit. [All four optional-provider configurations](https://github.com/Herbertofury/JetSetCraft/actions/runs/41350812645) passed the same 19 tests and server smoke. The [receipt](https://github.com/Herbertofury/JetSetCraft/tree/main/docs/verification/crew-house) identifies the tested source, binary and [PR #40 publication](https://github.com/Herbertofury/JetSetCraft/pull/40).
+
+The client used the Charter, founded a home through production actions, displayed its two apprentices, registered an operational placed workshop and dispatched a real timed job. That job was still running in the capture; deterministic Forge checks cover its saved ready-time boundary, claim and replay rejection. These are machine integration checks, not a human house-progression playtest or proof of physical NPC behavior. [Testing and Verification](Testing-and-Verification) lists the four crew test markers and their scope.
 
 ## Start a crew house
 
@@ -44,7 +60,7 @@ Each operational tier above 1 adds **5 percentage points** to mission supply rew
 
 ## Name, recruit and develop members
 
-Members have a permanent profile ID, name, creature identity, gang, role and member XP. Rename them in the crew book. Recruiting costs **20 + 5 × the current member count** Crew Supplies, so adding the first extra member to the two apprentices costs **30**. Choose **Courier**, **Tagger**, **Technician** or **DJ** at recruitment.
+Members have a permanent profile ID, name, creature identity, gang, role and member XP. Rename them in the crew book. Recruiting costs **max(20, 20 + 5 × current member count − home-gang reputation discount)** Crew Supplies. A newly founded house has no discount, so adding the first extra member to its two apprentices costs **30**. Choose **Courier**, **Tagger**, **Technician** or **DJ** at recruitment.
 
 The available species pool includes a representative of the house's gang plus eligible installed species already discovered in your mob-card album, up to 64 choices. Recruiting creates a roster profile; it does not capture, replace or remove a world mob. The starting gang representative remains recruitable without playing Rush, so house expansion and role development have a non-Rush route.
 

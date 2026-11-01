@@ -4,14 +4,14 @@ JetSetCraft treats a passing Java compile as intermediate evidence, not final pr
 
 ## Versioned verification evidence
 
-The published **v0.3.0** release has **nine** GameTests, as recorded in its [release evidence](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/RELEASE_EVIDENCE_0.3.0.md). The **0.4.0-alpha.1 development source** adds six Rival Rush tests, for **fifteen** required tests. A development checkpoint passing CI does not change the published release's version or evidence.
+The published **v0.3.0** release has **nine** GameTests, as recorded in its [release evidence](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/RELEASE_EVIDENCE_0.3.0.md). The historical **0.4.0-alpha.1** checkpoint added six Rival Rush tests, for fifteen; its [receipt and original captures](https://github.com/Herbertofury/JetSetCraft/tree/main/docs/verification/rival-rush) are preserved. The current **0.4.0-alpha.2** source adds four crew-house/integration tests, bringing the required total to **nineteen**. Development evidence does not change the published stable release's version or history.
 
-The 1 November 2026 checkpoint containing feature commit [`88b2c75`](https://github.com/Herbertofury/JetSetCraft/commit/88b2c75497315e867e53703d60437828ca82e99e) passed the following gates. GitHub checked out the PR integration commit [`f2ac0c1`](https://github.com/Herbertofury/JetSetCraft/commit/f2ac0c1938fb9ec4568492ed4b124a21f96dfe36), which merges that feature commit into the then-current base.
+The recorded alpha.2 candidate is [`d5ecadd`](https://github.com/Herbertofury/JetSetCraft/commit/d5ecadd0651c35fdffb505fa2790bda718e830db), tested through PR integration [`b9bcec8`](https://github.com/Herbertofury/JetSetCraft/commit/b9bcec8258e164aa41af5838a89df8aac04bd7c7). [PR #40](https://github.com/Herbertofury/JetSetCraft/pull/40) merged as [`b852dfc`](https://github.com/Herbertofury/JetSetCraft/commit/b852dfce9b17eadbb29699ee8d5d50e2c6ab8101), whose Git tree is identical to that tested integration. The [crew-house verification receipt](https://github.com/Herbertofury/JetSetCraft/tree/main/docs/verification/crew-house) records those source identities, the binary, workflow artifacts and captures.
 
 | Configuration | Completed evidence |
 | --- | --- |
-| Base Forge 1.20.1 / Java 17 | [Build, all fifteen GameTests, dedicated-server readiness and clean shutdown, and a real Minecraft client audit](https://github.com/Herbertofury/JetSetCraft/actions/runs/41347299665) |
-| Alex's Mobs, Alex's Caves, Cataclysm, and all three together | [Four separate provider jobs, each passing its build, all fifteen GameTests, and dedicated-server readiness](https://github.com/Herbertofury/JetSetCraft/actions/runs/41347299683) |
+| Base Forge 1.20.1 / Java 17 | [Verify JetSetCraft #274: clean build, all nineteen GameTests, dedicated-server readiness and normal RCON shutdown, and the eight-screen real Minecraft client audit](https://github.com/Herbertofury/JetSetCraft/actions/runs/41350812751) |
+| Alex's Mobs, Alex's Caves, Cataclysm, and all three together | [Provider matrix #51: four separate jobs, each passing its build, all nineteen GameTests and dedicated-server smoke](https://github.com/Herbertofury/JetSetCraft/actions/runs/41350812645) |
 
 These links identify that checkpoint's evidence. Later code changes require their own passing run. Provider jobs establish the documented registry and gameplay regression baseline; they do not prove every optional creature's behavior or every combination of other mods.
 
@@ -47,7 +47,7 @@ The nine original tests verify:
 8. All sixteen registered/craftable paint-balloon colors, deterministic bounded splat encoding, Tag/Free Paint item state, real 1,000-ray surface placement, exact decal materialization, and persistent six-face sizing.
 9. Built-in and custom graffiti NBT persistence plus automatic removal after the supporting wall is broken.
 
-The six additional development tests exercise production Rival Rush paths:
+The six Rival Rush tests introduced in alpha.1 remain part of the current suite:
 
 10. Deterministic three-choice upgrades, rejection of stale or repeated choices, bounded ranks and counters, the thirty-minute decision pause, and explicit Endless continuation.
 11. All seven mob-card mastery thresholds, increasing milestone rewards, three starting-draft unlocks, distinct gang/species identities, saved album data, and unchanged Minecraft XP.
@@ -55,6 +55,17 @@ The six additional development tests exercise production Rival Rush paths:
 13. Actual session entry and exit across dimensions, loan equipment, exact original position/items/ride/XP restoration, and Forge capability invalidation/revival with the same durable ride data.
 14. Real director-created actors and card pickups, independent player ownership, rejection of cross-session damage and duplicate claims, and suppression of event XP without changing unrelated Minecraft mob XP.
 15. The real spray-can placement hook and points for a fresh wall, rejection of repaint farming, and authoritative upgrade actions that reject stale run IDs, stale offer versions, and replays.
+
+The four alpha.2 crew-house/integration tests require these exact CI pass-marker IDs:
+
+| Test marker | Production behavior exercised |
+|---|---|
+| **`crew_house`** | A real placed Boombox founds one house; physical facility registration and support-dependent upgrades charge the correct supplies; expansion preserves placed blocks, checks overlap before spending and acquires no forced chunks. |
+| **`crew_missions`** | Dispatch freezes role-adjusted rewards and a saved deadline; stale, early, repeated and cross-player claims are rejected; the exact ready-time boundary settles supplies, member/crew XP and reputation once; cancellation grants no reward. |
+| **`crew_persistence`** | World SavedData round-trips member/job identity, facilities, progress and run receipts; unknown schemas remain read-only; missing anchors retain the crew; relocation clears physical bindings while keeping purchased tiers; duplicate Rush settlement and training of busy members are rejected. |
+| **`crew_rush`** | Actual house-to-Rush entry grants one chosen preparation alongside an independent earned album draft; the director creates real owned rivals, production tagging defeats them, and the real return path awards bounded crew progress once while preserving ordinary inventory/XP. |
+
+Mission deadline checks use the persisted ready-time boundary deterministically. The integration test advances only its run's active clock before exercising actual actors and return; it does not claim a one-minute human play session or alter the shared world clock.
 
 The player tests use uniquely identified Forge fake players and a real `ServerLevel` rather than mocked movement classes. Unique profiles prevent parallel GameTests from moving or mutating the same automation player.
 
@@ -72,7 +83,11 @@ CI launches Forge with `eula=true`, waits for the real ready line, and fails on 
 
 Run `gradlew.bat -Djetsetcraft.visualAudit=true runClient --no-daemon` on Windows (or the wrapper equivalent elsewhere). The opt-in harness quick-loads its development world, creates a controlled inline-skate/HUD/painted-wall scene, captures the selector in persistent Free Paint mode and the custom painter, prints `JETSETCRAFT_VISUAL_AUDIT_PASS`, and exits cleanly. It is inert in ordinary launches.
 
-The development CI also runs `./gradlew runClient -Djetsetcraft.rushVisualAudit=true --no-daemon` with a disposable `RivalRushAudit` world prepared by the [build workflow](https://github.com/Herbertofury/JetSetCraft/blob/main/.github/workflows/build.yml). It captures the setup menu, district HUD, album, and return result; enters and leaves through real network actions; and compares the returned dimension, inventory and vanilla XP with the observed pre-entry fixture. The gate requires all four written screenshots and `JETSETCRAFT_RUSH_VISUAL_AUDIT_PASS`. Screenshots and logs accompany the workflow artifact. This short automated run does not measure pacing, sustained performance, or how a complete session feels to play.
+The development CI also runs `./gradlew runClient -Djetsetcraft.rushVisualAudit=true --no-daemon` with a disposable `RivalRushAudit` world prepared by the [build workflow](https://github.com/Herbertofury/JetSetCraft/blob/main/.github/workflows/build.yml). It enters and leaves Rush through real network actions, compares the returned dimension, inventory and vanilla XP with its observed pre-entry fixture, and writes the setup, district HUD, empty-album and return-result captures.
+
+After return, the crew audit uses an actual Charter on placed fixture blocks, founds a home through production actions, checks two real roster profiles, registers an operational workshop and dispatches a real timed job. It captures **Home, Crew, Facilities and Jobs**, bringing the required total to **eight written 1280 × 720 screenshots**. The gate requires both `JETSETCRAFT_RUSH_VISUAL_AUDIT_PASS` and `JETSETCRAFT_CREW_VISUAL_AUDIT_PASS`, the observed Rush fixture marker and all eight capture markers/files. [The receipt and gallery](https://github.com/Herbertofury/JetSetCraft/tree/main/docs/verification/crew-house) preserve this evidence.
+
+The job is still running when photographed. Forge tests cover its deadline/claim behavior; the visual audit does not wait through every mission duration. This short automated run does not measure house progression balance, thirty-minute/Endless enjoyment, sustained performance, physical follower behavior or a complete human session.
 
 ## Runtime acceptance world
 

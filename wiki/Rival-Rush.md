@@ -1,14 +1,14 @@
 # Rival Rush — optional skating roguelite
 
-**Status: optional `0.4.0-alpha.2` development; the recorded alpha.1 machine verification is below.** The stable `v0.3.0` release is unchanged and does not include Rival Rush. Implemented through [merged PR #39](https://github.com/Herbertofury/JetSetCraft/pull/39). Rival Rush is one optional mode inside JetSetCraft; normal movement, graffiti, crews, Boombox challenges and Minecraft continue independently. This page describes the implemented alpha and its limits. The [18-game research and design study](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/RIVAL_RUSH_DESIGN.md) separates further proposals from current code.
+**Status: optional `0.4.0-alpha.2` implementation with recorded machine verification.** The stable `v0.3.0` release is unchanged and does not include Rival Rush. First introduced through [merged PR #39](https://github.com/Herbertofury/JetSetCraft/pull/39). Rival Rush is one optional mode inside JetSetCraft; normal movement, graffiti, crews, Boombox challenges and Minecraft continue independently. This page describes the implemented alpha and its limits. The [18-game research and design study](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/RIVAL_RUSH_DESIGN.md) separates further proposals from current code.
 
 ## Actual client captures
 
-These images come from the passing real-client audit and were visually reviewed. The album capture is the fresh audit player's genuine empty state. [Open all four captures and their verification receipt](https://github.com/Herbertofury/JetSetCraft/tree/main/docs/verification/rival-rush).
+These images come from the passing alpha.2 real-client audit. The album capture remains the fresh audit player's genuine empty state. [Open all eight Rush/crew-house captures and their verification receipt](https://github.com/Herbertofury/JetSetCraft/tree/main/docs/verification/crew-house). The [alpha.1 captures and receipt](https://github.com/Herbertofury/JetSetCraft/tree/main/docs/verification/rival-rush) remain historical evidence.
 
 | Choose a crew and session | Separate district and run HUD |
 |---|---|
-| ![Rival Rush setup](https://raw.githubusercontent.com/Herbertofury/JetSetCraft/main/docs/verification/rival-rush/01-setup.png) | ![Rival Rush district](https://raw.githubusercontent.com/Herbertofury/JetSetCraft/main/docs/verification/rival-rush/02-district-hud.png) |
+| ![Rival Rush setup](https://raw.githubusercontent.com/Herbertofury/JetSetCraft/main/docs/verification/crew-house/01-setup.png) | ![Rival Rush district](https://raw.githubusercontent.com/Herbertofury/JetSetCraft/main/docs/verification/crew-house/02-district-hud.png) |
 
 ## Start and return
 
@@ -58,6 +58,10 @@ Every eligible rival defeat creates a collectible card pickup. Nearby cards of t
 Duplicate collection reaches mastery milestones at **1, 5, 15, 40, 100, 250 and 600 cards** for that mob-and-crew identity. Higher milestones grant increasing one-time Rush XP and score bonuses; per-card rewards remain bounded. At **20, 60 and 150 total album cards**, future sessions begin with **one, two and three earned draft choices**, respectively. These advantages exist only inside Rival Rush.
 
 The album shows the creature identity, crew, count, tier and next threshold. It uses pages rather than truncating the collection. Thresholds and combat numbers are initial tuning, not measured proof of a balanced thirty-minute session.
+
+## Optional crew-house connection
+
+A [player-built crew house](Player-Chapters-Posse-and-Mob-Archetypes) can prepare **one selected starting rank** when a run begins from its valid loaded plot. The album's earned starting drafts remain separate. Qualifying run results can also bank bounded Crew Supplies, crew XP, gang reputation and training for a selected idle roster member. House dispatch jobs provide a non-Rush progression route, and Rush remains playable without a house. These are persistent profiles; physical companions do not enter the run.
 
 ## Build choices
 
@@ -131,16 +135,20 @@ The mode filters absent entity IDs without requiring optional mods. A completely
 
 ## Last recorded verification
 
-The recorded PR verification checkpoint is merge commit [`f2ac0c1`](https://github.com/Herbertofury/JetSetCraft/commit/f2ac0c1938fb9ec4568492ed4b124a21f96dfe36), containing feature commit [`88b2c75`](https://github.com/Herbertofury/JetSetCraft/commit/88b2c75497315e867e53703d60437828ca82e99e). That checkpoint passed the following checks. [The verification receipt](https://github.com/Herbertofury/JetSetCraft/tree/main/docs/verification/rival-rush) records the tested source, JAR checksum and unchanged client captures; later code edits need their own passing checks.
+The recorded **alpha.2** verification covers candidate [`d5ecadd`](https://github.com/Herbertofury/JetSetCraft/commit/d5ecadd0651c35fdffb505fa2790bda718e830db) on tested PR integration [`b9bcec8`](https://github.com/Herbertofury/JetSetCraft/commit/b9bcec8258e164aa41af5838a89df8aac04bd7c7). The [crew-house verification receipt](https://github.com/Herbertofury/JetSetCraft/tree/main/docs/verification/crew-house) records the exact tested source, binary checksum, workflow artifacts and eight captures. Later code changes need their own evidence.
 
 | Check | Evidence and result |
 |---|---|
-| Main Forge/client gate | **[PASS — Verify JetSetCraft #269](https://github.com/Herbertofury/JetSetCraft/actions/runs/41347299665):** clean Forge build, **15 real Forge GameTests**, dedicated-server readiness, normal RCON shutdown, and an actual **1280 × 720 graphical client audit**. |
-| Optional-provider configurations | **[PASS — all four matrix configurations](https://github.com/Herbertofury/JetSetCraft/actions/runs/41347299683):** combined providers, Alex's Mobs, Alex's Caves, and Cataclysm each passed the same 15 GameTests and server smoke. |
+| Main Forge/client gate | **[PASS — Verify JetSetCraft #274](https://github.com/Herbertofury/JetSetCraft/actions/runs/41350812751):** clean Forge build, **19 real Forge GameTests**, dedicated-server readiness, normal RCON shutdown, and an actual **1280 × 720 graphical client audit with eight captures**. |
+| Optional-provider configurations | **[PASS — all four matrix configurations](https://github.com/Herbertofury/JetSetCraft/actions/runs/41350812645):** combined providers, Alex's Mobs, Alex's Caves, and Cataclysm each passed the same 19 GameTests and server smoke. |
 
-The graphical audit captured setup, the district HUD, an **empty** album and the return result. It entered and left through the real packet flow using a fixture of **7 diamonds, 5 bread, 23 XP levels and 17 XP points**, compared the complete saved inventory and XP level/total, accepted an XP-progress difference of at most `0.000001`, and checked return to the original dimension and within one block of the saved position. The workflow artifacts contain the captures and logs.
+The graphical audit captured setup, the district HUD, an **empty** album, the return result, crew home, roster, facilities and jobs. Its Rush fixture entered and left through the real packet flow with **7 diamonds, 5 bread, 23 XP levels and 17 XP points**. It compared the complete saved inventory and XP level/total, accepted an XP-progress difference of at most `0.000001`, and checked return to the original dimension and within one block of the saved position. The subsequent crew audit used the actual Charter, founded a home, registered an operational workshop and dispatched a still-running timed job.
 
-The six Rival Rush GameTests cover run rules, album rewards, return journals, actual session entry/exit, actor/card ownership, and graffiti/action dispatch; the other nine are the existing suite. These are **machine integration smoke checks**. They do not establish thirty-minute enjoyment, Endless balance, every modded mob's AI behavior, or every multiplayer interruption case. **No human thirty-minute or Endless playtest is claimed.** The stable `v0.3.0` release retains its separate nine-test evidence.
+The nineteen GameTests comprise nine original tests, six Rival Rush tests and four crew-house/integration tests. [Testing and Verification](Testing-and-Verification) records their scopes and the distinction between deterministic deadline checks and the short graphical audit. These are **machine integration smoke checks**. They do not establish thirty-minute enjoyment, Endless or house-economy balance, every modded mob's AI behavior, or every multiplayer interruption case. **No human thirty-minute or Endless playtest is claimed.** Stable `v0.3.0` retains its separate nine-test evidence.
+
+### Historical alpha.1 checkpoint
+
+The [alpha.1 verification receipt](https://github.com/Herbertofury/JetSetCraft/tree/main/docs/verification/rival-rush) preserves the fifteen-test checkpoint containing feature `88b2c75`, tested through PR integration `f2ac0c1`, with its original four captures, CI links and binary checksum. That historical evidence remains distinct from the current alpha.2 checks.
 
 ## What remains a design proposal
 
