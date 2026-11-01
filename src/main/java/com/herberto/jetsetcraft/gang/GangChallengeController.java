@@ -135,7 +135,7 @@ public final class GangChallengeController {
         }
     }
 
-    private static Optional<HeadGangTargetResolver.Target> chooseContextTarget(ServerLevel level, BlockPos pos,
+    public static Optional<HeadGangTargetResolver.Target> chooseContextTarget(ServerLevel level, BlockPos pos,
                                                                                ServerPlayer player) {
         // Nearby source mobs are the strongest context signal and are only scanned when the player explicitly activates.
         List<ResourceLocation> candidates = new ArrayList<>();

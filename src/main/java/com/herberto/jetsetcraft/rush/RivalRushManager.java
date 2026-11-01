@@ -1,6 +1,8 @@
 package com.herberto.jetsetcraft.rush;
 
 import com.herberto.jetsetcraft.JetSetCraft;
+import com.herberto.jetsetcraft.activity.ActivityManager;
+import com.herberto.jetsetcraft.compat.RushSpellCompat;
 import com.herberto.jetsetcraft.config.JetSetConfig;
 import com.herberto.jetsetcraft.crew.CrewHouseManager;
 import com.herberto.jetsetcraft.data.JetSetData;
@@ -81,6 +83,7 @@ public final class RivalRushManager {
         final double maximum;
         long lastAttack;
         long paintDue;
+        long staggerUntil;
         Vec3 paintMark;
         boolean claimed;
 
@@ -110,9 +113,12 @@ public final class RivalRushManager {
         final Map<UUID, Projectile> projectiles = new LinkedHashMap<>();
         final Map<String, Long> walls = new HashMap<>();
         final Map<Long, Long> musicStops = new HashMap<>();
+        final RushPointsOfInterest points = new RushPointsOfInterest();
+        RushCircuit circuit;
         long lastSpawn, lastShot, lastHurt, lastCaptain = -1, lastStyle;
+        long lastHorn, lastSoul, lastShockwave, lastSpell;
         long cards;
-        int sequence, announcedOffer, musicCharge;
+        int sequence, announcedOffer, announcedJourney, musicCharge;
         boolean exiting, finaleSent;
         String objective = "Ride, tag rivals, collect cards. Find a lit Boombox or a new wall.";
         BlockPos musicStop;
@@ -133,6 +139,12 @@ public final class RivalRushManager {
 
     public static boolean active(Player player) { return session(player) != null; }
     public static RushRun run(ServerPlayer player) { Session s = session(player); return s == null ? null : s.run; }
+    public static CompoundTag journeySnapshot(ServerPlayer player) {
+        Session s = session(player); return s == null || s.circuit == null ? new CompoundTag() : s.circuit.snapshot(s.run, player.position());
+    }
+    public static BlockPos arenaDestination(ServerPlayer player) {
+        Session s = session(player); return s == null || s.circuit == null ? null : s.circuit.center();
+    }
     public static boolean owned(Entity entity) { return entity != null && entity.getPersistentData().contains(OWNED); }
 
     public static boolean belongsTo(Entity entity, ServerPlayer player) {
@@ -153,7 +165,7 @@ public final class RivalRushManager {
     /** Called by the actual packet/command boundary, never accepts score, XP, health or arbitrary entity NBT. */
     public static void handleAction(ServerPlayer player, String action, String value, int number, UUID runId, int version) {
         Session s = session(player);
-        if (action == null || value == null || value.length() > 128) return;
+        if (action == null || value == null || value.length() > 256) return;
         switch (action) {
             case "leave" -> { if (s != null && (runId == null || s.run.id().equals(runId))) leave(player, "Session banked. Your collected cards stay in the Rush album.");
                               else recover(player); }
@@ -164,16 +176,33 @@ public final class RivalRushManager {
             }
             case "encore" -> {
                 if (s != null && s.run.id().equals(runId) && s.run.offerVersion() == version && s.run.continueEndless()) {
+                    if (s.circuit != null && s.circuit.encore()) {
+                        s.points.reset();
+                        BlockPos origin = s.circuit.origin();
+                        player.teleportTo(player.serverLevel(), origin.getX() + 0.5, RushWorld.FLOOR_Y + 1,
+                                origin.getZ() + 0.5, 0, 0);
+                        player.setDeltaMovement(Vec3.ZERO);
+                    }
                     s.finaleSent = false; send(player, true, "", -1, -1);
                 }
             }
-            case "start" -> {
-                if (s != null || (number != 0 && number != 1)) return;
-                String[] selection = value.split("\\|", -1);
-                if (selection.length != 2) return;
-                start(player, ResourceLocation.tryParse(selection[0]), ResourceLocation.tryParse(selection[1]), number == 1);
+            case "journey_choose" -> {
+                if (s != null && s.circuit != null && s.run.id().equals(runId) && !s.run.hasOffer()
+                        && s.circuit.choose(ResourceLocation.tryParse(value), version)) {
+                    s.points.reset(); s.objective = s.circuit.objective(s.run);
+                    send(player, false, "", -1, -1);
+                }
             }
-            case "menu", "album", "roster" -> {
+            case "start" -> {
+                if (s != null || number < 0 || number > 3) return;
+                String[] selection = value.split("\\|", -1);
+                if (selection.length < 2 || selection.length > 3) return;
+                ResourceLocation profile = selection.length == 3 && !selection[2].isEmpty() ? ResourceLocation.tryParse(selection[2]) : null;
+                if (selection.length == 3 && !selection[2].isEmpty() && profile == null) return;
+                if (number >= 2) startCircuit(player, ResourceLocation.tryParse(selection[0]), ResourceLocation.tryParse(selection[1]), number == 3, profile);
+                else start(player, ResourceLocation.tryParse(selection[0]), ResourceLocation.tryParse(selection[1]), number == 1);
+            }
+            case "menu", "album", "roster", "arena_catalogue" -> {
                 long now = player.serverLevel().getGameTime();
                 if (now - LAST_MENU.getOrDefault(player.getUUID(), now - 10) < 4) return;
                 LAST_MENU.put(player.getUUID(), now);
@@ -185,11 +214,26 @@ public final class RivalRushManager {
     }
 
     public static boolean start(ServerPlayer player, ResourceLocation gangId, ResourceLocation species, boolean endless) {
+        return startInternal(player, gangId, species, endless, false, null);
+    }
+
+    public static boolean startCircuit(ServerPlayer player, ResourceLocation gangId, ResourceLocation species,
+                                       boolean endless, ResourceLocation arenaProfile) {
+        return startInternal(player, gangId, species, endless, true, arenaProfile);
+    }
+
+    private static boolean startInternal(ServerPlayer player, ResourceLocation gangId, ResourceLocation species,
+                                         boolean endless, boolean circuit, ResourceLocation arenaProfile) {
         long now = player.getServer().overworld().getGameTime();
         if (now - LAST_START.getOrDefault(player.getUUID(), now - 20) < 20) return false;
         LAST_START.put(player.getUUID(), now);
         if (!JetSetConfig.SERVER.enableRivalRush.get()) return fail(player, "Rival Rush is disabled by this server.");
         if (active(player)) return fail(player, "Finish or leave your current Rush first.");
+        if (ActivityManager.active(player)) return fail(player, "Finish or cancel your street activity before starting Rival Rush.");
+        RushArenaCatalog.Profile firstArena = arenaProfile == null ? null : RushArenaCatalog.find(arenaProfile).orElse(null);
+        if (arenaProfile != null && firstArena == null) return fail(player, "That arena is unavailable. Refresh the arena catalogue.");
+        int slot = circuit ? freeCircuitSlot(player.getServer()) : -1;
+        if (circuit && slot < 0) return fail(player, "All arena circuits are occupied. Try again after another rider returns.");
         if (RushReturnState.hasJournal(player)) { recover(player); return fail(player, "Recovered your previous session. Open Rival Rush again."); }
         if (player.serverLevel().getDifficulty() == Difficulty.PEACEFUL)
             return fail(player, "This Rival Rush alpha requires Easy, Normal or Hard because Peaceful removes hostile rivals. Your world difficulty is unchanged.");
@@ -240,8 +284,15 @@ public final class RivalRushManager {
             return false;
         }
         RushRun run = new RushRun(UUID.randomUUID(), player.getUUID(), district.getRandom().nextLong(), endless, gangId.toString());
+        run.enableSpellRelay(RushSpellCompat.fireboltAvailable());
+        if (circuit) run.configureCircuit();
         preparation.ifPresent(run::grantStartingPerk);
         Session s = new Session(player, run, gang, roster);
+        if (circuit) {
+            BlockPos origin = new BlockPos(2_000_000 + (slot % 32) * 4096, RushWorld.FLOOR_Y, (slot / 32) * 4096);
+            s.circuit = new RushCircuit(run.id(), run.seed(), origin, slot);
+            if (firstArena != null) s.circuit.firstArena(firstArena);
+        }
         sessions(player.getServer()).put(player.getUUID(), s);
         try {
             ItemStack ride = player.getCapability(JetSetDataProvider.CAPABILITY)
@@ -273,9 +324,10 @@ public final class RivalRushManager {
             player.clearFire(); player.fallDistance = 0;
             int x = Math.floorMod(player.getUUID().hashCode(), 4096) * 512 - 1_048_576;
             int z = Math.floorMod(Long.hashCode(player.getUUID().getMostSignificantBits()), 4096) * 512 - 1_048_576;
+            if (s.circuit != null) { x = s.circuit.origin().getX(); z = s.circuit.origin().getZ(); }
             player.teleportTo(district, x + 0.5, RushWorld.FLOOR_Y + 1.0, z + 0.5, 0, 0);
             player.setDeltaMovement(Vec3.ZERO);
-            RushWorld.decorateNear(district, player.blockPosition());
+            if (s.circuit == null) RushWorld.decorateNear(district, player.blockPosition());
             int drafts = RushAlbum.startingPerkChoices(player);
             if (drafts > 0) run.gainXp(drafts * 24 + drafts * (drafts - 1) * 6);
             syncRide(player);
@@ -287,6 +339,13 @@ public final class RivalRushManager {
             leave(player, "Entry interrupted. Your Minecraft state has been restored.");
             return false;
         }
+    }
+
+    private static int freeCircuitSlot(MinecraftServer server) {
+        java.util.Set<Integer> occupied = new java.util.HashSet<>();
+        for (Session existing : sessions(server).values()) if (existing.circuit != null) occupied.add(existing.circuit.slot());
+        for (int slot = 0; slot < 2048; slot++) if (!occupied.contains(slot)) return slot;
+        return -1;
     }
 
     public static boolean leave(ServerPlayer player, String reason) {
@@ -372,9 +431,19 @@ public final class RivalRushManager {
         if (!JetSetConfig.SERVER.enableRivalRush.get()) { leave(player, "Rival Rush was disabled by the server."); return; }
         if (s.run.isFinished()) { leave(player, "Run finished. Your collected cards were kept."); return; }
         ServerLevel level = player.serverLevel();
-        RushWorld.decorateNear(level, player.blockPosition());
+        if (s.circuit == null) RushWorld.decorateNear(level, player.blockPosition());
+        else if (s.circuit.builder() != null) s.circuit.builder().step(level);
         // Removed shots must not accumulate while an offer or Encore pauses the run clock.
-        s.projectiles.values().removeIf(Entity::isRemoved);
+        s.projectiles.values().removeIf(projectile -> {
+            boolean remove = projectile.isRemoved() || projectile.tickCount > 200 || !RushSpellCompat.allowed(projectile)
+                    || (s.circuit != null && !s.circuit.inArena(projectile.position(), 8));
+            if (remove) projectile.discard();
+            return remove;
+        });
+        if (player.getY() < 50 || !level.getWorldBorder().isWithinBounds(player.blockPosition())
+                || (s.circuit != null && !s.circuit.inCell(player.position()))) {
+            leave(player, "You left the playable district. Your collected cards were kept."); return;
+        }
         if (s.run.hasOffer() || s.run.awaitingEncore()) {
             freeze(s);
             if (s.announcedOffer != s.run.offerVersion() || (s.run.awaitingEncore() && !s.finaleSent)) {
@@ -383,14 +452,45 @@ public final class RivalRushManager {
             }
             return;
         }
+        if (s.circuit != null) {
+            s.objective = s.circuit.objective(s.run);
+            if (s.circuit.phase() == RushCircuit.Phase.CHOOSING || s.circuit.phase() == RushCircuit.Phase.COMPLETE) {
+                freeze(s);
+                if (s.announcedJourney != s.circuit.version()) {
+                    s.announcedJourney = s.circuit.version(); send(player, true, "", -1, -1);
+                }
+                return;
+            }
+            if (s.circuit.phase() == RushCircuit.Phase.TRAVEL) {
+                s.run.tickActive(); freeze(s);
+                if (s.circuit.arrive(s.run, player.position())) {
+                    s.lastSpawn = s.run.elapsedTicks(); s.lastHurt = s.run.elapsedTicks();
+                    s.musicStop = s.circuit.center().offset(0, 1, s.circuit.current().radius() - 6);
+                    if (level.getChunkSource().getChunkNow(s.musicStop.getX() >> 4, s.musicStop.getZ() >> 4) != null) {
+                        level.setBlock(s.musicStop.below(), net.minecraft.world.level.block.Blocks.SEA_LANTERN.defaultBlockState(), 2);
+                        level.setBlock(s.musicStop, ModBlocks.BOOMBOX.get().defaultBlockState(), 2);
+                    }
+                    level.playSound(null, player.blockPosition(), SoundEvents.NOTE_BLOCK_BELL.value(), SoundSource.PLAYERS, .8f, 1);
+                    send(player, false, "Arena entered: " + s.circuit.current().name(), -1, -1);
+                } else if (s.run.elapsedTicks() % 10 == 0) {
+                    Vec3 direction = Vec3.atCenterOf(s.circuit.center()).subtract(player.position()).normalize();
+                    Vec3 beacon = player.position().add(direction.scale(5)).add(0, 1, 0);
+                    level.sendParticles(ParticleTypes.END_ROD, beacon.x, beacon.y, beacon.z, 5, .2, .4, .2, .01);
+                    send(player, false, "", -1, -1);
+                }
+                return;
+            }
+            if (!s.circuit.inArena(player.position(), 4)) {
+                freeze(s); s.objective = "Return to " + s.circuit.current().name() + " — arena time is paused.";
+                if (level.getGameTime() % 10 == 0) send(player, false, "", -1, -1);
+                return;
+            }
+        }
         s.run.tickActive();
         if (s.run.awaitingEncore()) {
             freeze(s); s.finaleSent = true; send(player, true, "", -1, -1); return;
         }
         long time = s.run.elapsedTicks();
-        if (player.getY() < 50 || !level.getWorldBorder().isWithinBounds(player.blockPosition())) {
-            leave(player, "You left the playable district. Your collected cards were kept."); return;
-        }
         if (time % 20 == 0) {
             player.getFoodData().setFoodLevel(20); player.getFoodData().setSaturation(5);
             player.clearFire(); player.setAirSupply(player.getMaxAirSupply());
@@ -405,7 +505,13 @@ public final class RivalRushManager {
         tickActors(s);
         if (s.run.isFinished()) return;
         autoFire(s);
+        tickArtifacts(s);
         tickObjectives(s);
+        String cache = s.points.tick(player, s.run, s.circuit);
+        if (!cache.isEmpty()) s.objective = cache;
+        if (s.circuit != null && s.circuit.objectiveMet(s.run) && !s.run.hasOffer()) {
+            finishArena(s); return;
+        }
         if (time - s.lastSpawn >= Math.max(8, 36 - Math.min(20, (int) (time / 1800)))) {
             s.lastSpawn = time;
             int desiredPressure = 16 + (int) Math.min(64, time / 900);
@@ -419,6 +525,36 @@ public final class RivalRushManager {
             if (spawnActor(s, Role.CAPTAIN, true)) s.lastCaptain = captainChapter;
         }
         if (time % 10 == 0) send(player, false, "", -1, -1);
+    }
+
+    private static void finishArena(Session s) {
+        RushArenaCatalog.Profile profile = s.circuit.current();
+        long activeTicks = s.circuit.activeTicks(s.run);
+        int defeats = (int) Math.min(Integer.MAX_VALUE, s.circuit.defeats(s.run));
+        UUID receipt = s.circuit.rewardId();
+        String reward = RushPointsOfInterest.grant(s.run, profile.reward(), profile.rewardRanks());
+        s.run.magnet(200); collectPickups(s);
+        for (Actor actor : s.actors.values()) actor.mob.discard();
+        for (Projectile projectile : s.projectiles.values()) projectile.discard();
+        s.actors.clear(); s.projectiles.clear();
+        if (!s.circuit.complete(s.run)) return;
+        String mode = profile.sharedReward().equals("balanced") ? "rush_arena" : "rush_arena_" + profile.sharedReward();
+        String settlement = "";
+        try {
+            var earned = CrewHouseManager.bankActivity(s.player, receipt, s.gang.id(), mode, activeTicks, defeats, s.run.score());
+            if (earned.accepted()) settlement = " · supplies +" + earned.supplies() + " · crew XP +" + earned.crewXp()
+                    + " · member XP +" + earned.memberXp() + " · reputation +" + earned.reputation();
+        } catch (RuntimeException error) {
+            JetSetCraft.LOGGER.error("Could not settle completed Rush arena {} for {}", receipt, s.player.getUUID(), error);
+        }
+        s.player.sendSystemMessage(Component.literal(profile.name() + " cleared! " + reward + settlement).withStyle(ChatFormatting.GOLD));
+        s.player.serverLevel().playSound(null, s.player.blockPosition(), SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS, .5f, 1.1f);
+        s.objective = s.circuit.objective(s.run); send(s.player, true, reward + settlement, -1, -1);
+    }
+
+    private static boolean combatPaused(Session s) {
+        return s.exiting || s.run.isFinished() || s.run.hasOffer() || s.run.awaitingEncore()
+                || (s.circuit != null && (s.circuit.phase() != RushCircuit.Phase.ARENA || !s.circuit.inArena(s.player.position(), 4)));
     }
 
     private static Role nextRole(Session s) {
@@ -448,6 +584,7 @@ public final class RivalRushManager {
             double distance = 18 + attempt % 3 * 4 + mob.getBbWidth();
             double x = s.player.getX() + Math.cos(angle) * distance;
             double z = s.player.getZ() + Math.sin(angle) * distance;
+            if (s.circuit != null && !s.circuit.inArena(new Vec3(x, RushWorld.FLOOR_Y + 1, z), -4)) continue;
             if (!level.getChunkSource().hasChunk(Mth.floor(x) >> 4, Mth.floor(z) >> 4)) continue;
             mob.moveTo(x, RushWorld.FLOOR_Y + 1, z, 0, 0);
             if (!level.getWorldBorder().isWithinBounds(mob.getBoundingBox()) || !level.noCollision(mob)) continue;
@@ -486,8 +623,10 @@ public final class RivalRushManager {
                 mob.discard(); iterator.remove(); continue;
             }
             mob.clearFire(); mob.setAirSupply(mob.getMaxAirSupply());
+            if (s.circuit != null && !s.circuit.inArena(mob.position(), 6)) { mob.discard(); iterator.remove(); continue; }
             // Preserve the original mob/AI; stop this run-owned creeper's native fuse from destroying its card actor.
             if (mob instanceof net.minecraft.world.entity.monster.Creeper creeper) creeper.setSwellDir(-1);
+            if (time < actor.staggerUntil) { mob.setTarget(null); mob.getNavigation().stop(); continue; }
             mob.setTarget(s.player);
             Vec3 toward = s.player.position().subtract(mob.position());
             double distance = toward.horizontalDistance();
@@ -549,13 +688,13 @@ public final class RivalRushManager {
     public static boolean balloonHit(ServerPlayer player, HitResult hit) {
         Session s = session(player);
         if (s == null) return false;
-        if (s.exiting || s.run.hasOffer() || s.run.awaitingEncore()) return true;
+        if (combatPaused(s)) return true;
         if (hit instanceof EntityHitResult entityHit) {
             tagEnemy(player, entityHit.getEntity(), 7.0);
             Vec3 impact = hit.getLocation();
             for (Actor actor : List.copyOf(s.actors.values())) {
                 if (actor.mob != entityHit.getEntity() && actor.mob.position().distanceToSqr(impact) < s.run.splashRadius() * s.run.splashRadius())
-                    tagEnemy(player, actor.mob, 3.5);
+                    damageActor(s, actor.mob, 3.5, false);
             }
         } else if (hit instanceof BlockHitResult blockHit && blockHit.getDirection().getAxis().isHorizontal()) {
             int painted = PaintSplash.throwBalloon(player.serverLevel(), player, player,
@@ -567,20 +706,105 @@ public final class RivalRushManager {
 
     public static boolean tagEnemy(ServerPlayer player, Entity target, double baseDamage) {
         Session s = session(player);
-        if (s == null || s.exiting || s.run.hasOffer() || s.run.awaitingEncore() || !belongsTo(target, player)) return false;
+        if (s == null) return false;
+        return damageActor(s, target, baseDamage, true);
+    }
+
+    /** Read-only diagnostic used by provider acceptance tests and overlay integrations. */
+    public static double actorVitality(ServerPlayer player, Entity target) {
+        Session s = session(player); Actor actor = s == null || target == null ? null : s.actors.get(target.getUUID());
+        return actor == null ? -1 : actor.vitality;
+    }
+
+    private static boolean damageActor(Session s, Entity target, double baseDamage, boolean primary) {
+        ServerPlayer player = s.player;
+        if (target == null || combatPaused(s) || !belongsTo(target, player)) return false;
         Actor actor = s.actors.get(target.getUUID());
         if (actor == null || actor.claimed || target.isRemoved() || !Double.isFinite(baseDamage) || baseDamage <= 0) return false;
-        actor.vitality -= Math.min(40, baseDamage) * s.run.damageMultiplier();
+        if (s.circuit != null && !s.circuit.inArena(target.position(), 6)) return false;
+        boolean critical = primary && s.run.recordHitAndRollCritical();
+        actor.vitality -= Math.min(40, baseDamage) * s.run.damageMultiplier() * (critical ? s.run.criticalMultiplier() : 1);
         player.serverLevel().sendParticles(ParticleTypes.WAX_OFF, target.getX(), target.getY() + target.getBbHeight() * 0.5,
                 target.getZ(), 5, 0.3, 0.5, 0.3, 0.01);
-        if (actor.vitality > 0) { updateName(s, actor); return true; }
-        actor.claimed = true;
-        s.actors.remove(target.getUUID());
-        s.run.recordDefeat(); s.run.addScore(actor.role == Role.CAPTAIN ? 500 : 20);
-        spawnCard(s, actor);
-        if (actor.role == Role.CAPTAIN) { s.run.gainXp(36); s.run.heal(18); }
-        target.discard();
+        if (critical) player.serverLevel().sendParticles(ParticleTypes.CRIT, target.getX(), target.getY() + 1, target.getZ(), 12, .4, .4, .4, .05);
+        Vec3 impact = target.position();
+        if (actor.vitality > 0) updateName(s, actor);
+        else {
+            actor.claimed = true;
+            s.actors.remove(target.getUUID());
+            s.run.recordDefeat(); s.run.addScore(actor.role == Role.CAPTAIN ? 500 : 20);
+            spawnCard(s, actor);
+            if (actor.role == Role.CAPTAIN) { s.run.gainXp(36); s.run.heal(18); }
+            target.discard();
+        }
+        if (primary) onPaintHit(s, target, impact);
         return true;
+    }
+
+    private static void onPaintHit(Session s, Entity original, Vec3 impact) {
+        int chain = s.run.rank(RushRun.Upgrade.CHAIN);
+        if (chain > 0) {
+            double radius = (4 + chain) * s.run.areaMultiplier();
+            List<Actor> targets = s.actors.values().stream().filter(a -> a.mob != original && !a.claimed
+                            && a.mob.position().distanceToSqr(impact) < radius * radius && s.player.hasLineOfSight(a.mob))
+                    .sorted(Comparator.comparingDouble(a -> a.mob.position().distanceToSqr(impact))).limit(Math.min(4, chain)).toList();
+            for (Actor actor : targets) {
+                s.player.serverLevel().sendParticles(ParticleTypes.ELECTRIC_SPARK, actor.mob.getX(), actor.mob.getY() + .7,
+                        actor.mob.getZ(), 6, .3, .4, .3, .03);
+                damageActor(s, actor.mob, 2 + chain, false);
+            }
+        }
+        int firework = s.run.rank(RushRun.Upgrade.FIREWORK);
+        if (firework > 0 && s.run.hits() % 6 == 0) {
+            double radius = (3 + firework * .5) * s.run.areaMultiplier();
+            s.player.serverLevel().sendParticles(ParticleTypes.FIREWORK, impact.x, impact.y + 1, impact.z, 25, radius / 3, .5, radius / 3, .07);
+            for (Actor actor : List.copyOf(s.actors.values())) if (actor.mob.position().distanceToSqr(impact) < radius * radius)
+                damageActor(s, actor.mob, 5 + firework * 2, false);
+        }
+    }
+
+    private static void tickArtifacts(Session s) {
+        if (combatPaused(s)) return;
+        long time = s.run.elapsedTicks();
+        double interval = s.run.artifactIntervalMultiplier();
+        int wind = s.run.rank(RushRun.Upgrade.WIND);
+        if (wind > 0 && time - s.lastHorn >= Math.round(180 * interval)) {
+            s.lastHorn = time;
+            double range = (4 + wind) * s.run.areaMultiplier();
+            for (Actor actor : s.actors.values()) if (actor.mob.distanceToSqr(s.player) < range * range) {
+                Vec3 outward = actor.mob.position().subtract(s.player.position()).multiply(1, 0, 1).normalize();
+                actor.mob.setDeltaMovement(outward.scale(.7 + .1 * wind).add(0, .2, 0));
+                actor.staggerUntil = time + 15 + wind * 5;
+            }
+            s.player.serverLevel().sendParticles(ParticleTypes.CLOUD, s.player.getX(), s.player.getY() + .3, s.player.getZ(), 24, range / 3, .1, range / 3, .08);
+            s.player.serverLevel().playSound(null, s.player.blockPosition(), SoundEvents.NOTE_BLOCK_DIDGERIDOO.value(), SoundSource.PLAYERS, .5f, .7f);
+        }
+        int soul = s.run.rank(RushRun.Upgrade.SOUL);
+        if (soul > 0 && time - s.lastSoul >= Math.round(100 * interval) && s.run.vitality() < s.run.maxVitality() && s.run.spendSouls()) {
+            s.lastSoul = time; s.run.heal(6 + soul * 3);
+            s.player.serverLevel().sendParticles(ParticleTypes.SOUL, s.player.getX(), s.player.getY() + 1, s.player.getZ(), 10, .4, .6, .4, .02);
+        }
+        int wave = s.run.rank(RushRun.Upgrade.SHOCKWAVE);
+        JetSetData ride = s.player.getCapability(JetSetDataProvider.CAPABILITY).resolve().orElse(null);
+        if (wave > 0 && ride != null && time - s.lastShockwave >= Math.round(70 * interval)
+                && s.player.getDeltaMovement().horizontalDistanceSqr() > .025 && (ride.grinding() || ride.wallRiding() || ride.trickTicks() > 0)) {
+            s.lastShockwave = time;
+            Vec3 direction = s.player.getDeltaMovement().multiply(1, 0, 1).normalize();
+            double range = (6 + wave) * s.run.areaMultiplier();
+            for (Actor actor : List.copyOf(s.actors.values())) {
+                Vec3 delta = actor.mob.position().subtract(s.player.position());
+                if (delta.lengthSqr() < range * range && delta.normalize().dot(direction) > .45)
+                    damageActor(s, actor.mob, 6 + wave * 3, false);
+            }
+            Vec3 end = s.player.position().add(direction.scale(range * .5));
+            s.player.serverLevel().sendParticles(ParticleTypes.SWEEP_ATTACK, end.x, end.y + .5, end.z, 5, 1, .2, 1, 0);
+        }
+        int spell = s.run.rank(RushRun.Upgrade.SPELL_RELAY);
+        if (spell > 0 && time - s.lastSpell >= Math.round(Math.max(40, 150 - spell * 20) * interval)) {
+            Actor target = s.actors.values().stream().filter(a -> a.mob.distanceToSqr(s.player) < 28 * 28 && s.player.hasLineOfSight(a.mob))
+                    .min(Comparator.comparingDouble(a -> a.mob.distanceToSqr(s.player))).orElse(null);
+            if (target != null) { s.lastSpell = time; RushSpellCompat.firebolt(s.player, target.mob.getBoundingBox().getCenter(), 6 + spell * 3); }
+        }
     }
 
     private static void updateName(Session s, Actor actor) {
@@ -634,7 +858,7 @@ public final class RivalRushManager {
 
     public static boolean tagWall(ServerPlayer player, BlockPos support, Direction face) {
         Session s = session(player);
-        if (s == null || s.exiting || s.run.hasOffer() || s.run.awaitingEncore() || !face.getAxis().isHorizontal()
+        if (s == null || combatPaused(s) || !face.getAxis().isHorizontal()
                 || player.distanceToSqr(Vec3.atCenterOf(support)) > 36 || player.serverLevel().getBlockState(support).isAir()) return false;
         String patch = Math.floorDiv(support.getX(), 4) + ":" + Math.floorDiv(support.getY(), 4) + ":"
                 + Math.floorDiv(support.getZ(), 4) + ":" + face.getName();
@@ -655,7 +879,7 @@ public final class RivalRushManager {
             s.lastStyle = time; s.run.addScore(Math.round(30 * s.run.flowMultiplier()));
             s.run.gainXp((int) Math.round(4 * s.run.flowMultiplier()));
         }
-        if (time % 20 == 0) s.musicStop = RushWorld.nearestBoombox(s.player.serverLevel(), s.player.blockPosition());
+        if (s.circuit == null && time % 20 == 0) s.musicStop = RushWorld.nearestBoombox(s.player.serverLevel(), s.player.blockPosition());
         if (s.musicStop == null) { s.musicCharge = 0; return; }
         double distance = s.player.distanceToSqr(Vec3.atCenterOf(s.musicStop));
         boolean eligible = time - s.musicStops.getOrDefault(s.musicStop.asLong(), time - 12001) > 12000;
@@ -688,7 +912,7 @@ public final class RivalRushManager {
 
     public static void hurt(ServerPlayer player, double amount) {
         Session s = session(player);
-        if (s == null || s.exiting || s.run.hasOffer() || s.run.awaitingEncore()) return;
+        if (s == null || combatPaused(s)) return;
         long time = s.run.elapsedTicks();
         if (time - s.lastHurt < 12) return;
         s.lastHurt = time;
@@ -714,7 +938,8 @@ public final class RivalRushManager {
             pickup.entity = item;
             return true;
         }
-        if (entity instanceof PaintBalloonEntity projectile && projectile.getOwner() == s.player) {
+        if (entity instanceof Projectile projectile && projectile.getOwner() == s.player && RushSpellCompat.allowed(projectile)
+                && s.projectiles.size() < 256) {
             s.projectiles.put(projectile.getUUID(), projectile);
             return true;
         }
@@ -723,7 +948,8 @@ public final class RivalRushManager {
 
     public static void markPlayerProjectile(Projectile projectile) {
         if (projectile.getOwner() instanceof ServerPlayer player) {
-            Session s = session(player); if (s != null && !s.exiting) mark(projectile, s);
+            Session s = session(player);
+            if (s != null && !combatPaused(s) && s.projectiles.size() < 256 && RushSpellCompat.allowed(projectile)) mark(projectile, s);
         }
     }
 
@@ -734,7 +960,7 @@ public final class RivalRushManager {
         CompoundTag tag = entity.getPersistentData().getCompound(OWNED);
         if (!tag.hasUUID("Owner")) return false;
         Session s = sessions(level.getServer()).get(tag.getUUID("Owner"));
-        return s != null && (s.exiting || s.run.hasOffer() || s.run.awaitingEncore());
+        return s != null && combatPaused(s);
     }
 
     /** Cloning replaces the ServerPlayer object. Recover through the new player's persisted return journal. */
@@ -753,6 +979,7 @@ public final class RivalRushManager {
         Session s = session(player); state.putBoolean("Active", s != null);
         state.putLong("Cards", s == null ? RushAlbum.total(player) : s.cards);
         state.putLong("AlbumTotal", RushAlbum.total(player));
+        if (s == null) state.put("ArenaCatalogue", RushArenaCatalog.summaries());
         if (s != null) {
             RushRun run = s.run;
             state.putUUID("Run", run.id()); state.putInt("Version", run.offerVersion());
@@ -763,6 +990,16 @@ public final class RivalRushManager {
             state.putDouble("Vitality", run.vitality()); state.putDouble("MaxVitality", run.maxVitality());
             state.putLong("Score", run.score()); state.putInt("Kills", (int) Math.min(Integer.MAX_VALUE, run.defeats()));
             state.putString("Objective", s.objective); state.putBoolean("Finale", run.awaitingEncore());
+            if (s.circuit != null) state.put("Journey", s.circuit.snapshot(run, player.position()));
+            CompoundTag build = new CompoundTag();
+            build.putDouble("DamageMultiplier", run.damageMultiplier()); build.putDouble("CritChance", run.criticalChance());
+            build.putDouble("CritMultiplier", run.criticalMultiplier()); build.putDouble("AreaMultiplier", run.areaMultiplier());
+            build.putInt("ArtifactSlots", 3); ListTag artifacts = new ListTag();
+            for (RushRun.Upgrade upgrade : RushRun.Upgrade.values()) if (upgrade.artifact() && run.rank(upgrade) > 0) {
+                CompoundTag artifact = new CompoundTag(); artifact.putString("Id", upgrade.name());
+                artifact.putString("Name", upgrade.label()); artifact.putInt("Rank", run.rank(upgrade)); artifacts.add(artifact);
+            }
+            build.put("Artifacts", artifacts); state.put("Build", build);
             ListTag offers = new ListTag();
             for (RushRun.Upgrade upgrade : run.offers()) {
                 CompoundTag offer = new CompoundTag(); offer.putString("id", upgrade.name());

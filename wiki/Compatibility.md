@@ -105,3 +105,30 @@ For creatures, namespaced registry IDs and optional adapters are preferred over 
 ## Visual model mods
 
 The lower-body animation contract improves composition with player-model and action systems, but extreme skeleton replacements may still need a dedicated adapter. JetSetCraft keeps gameplay state independent from PlayerAnimator, Epic Fight, TACZ, or YSM internals so adapters can be added without replacing movement.
+
+## Rival Rush: dimensions, rivals, and the Firebolt relay
+
+Rival Rush uses a separate session world and a temporary mode loadout. Compatibility is reported as several distinct results: a provider can load beside JetSetCraft; its source dimension can be a safe departure/return point; its materials can support skating; selected source mobs can retain their registered identity; and a particular combat effect can pass an explicit adapter. Passing one of these checks does not establish the others.
+
+### Exact provider targets
+
+| Provider | Target used for this integration work | Contract and evidence limit |
+|---|---|---|
+| **The Aether** | [1.20.1-1.5.2-neoforge](https://modrinth.com/mod/aether/version/2411kUqF), listed for both Forge and NeoForge | Existing optional quicksoil/aercloud/grind/wall tags remain additive. Aether dimension return, accessories, mounts, and bosses require separate runtime proofs; the source mod remains authoritative. |
+| **Iron's Spells 'n Spellbooks** | [1.20.1-3.4.0.2](https://www.curseforge.com/minecraft/mc-mods/irons-spells-n-spellbooks/files/5765121) | An optional Rush artifact can relay the provider's real `irons_spellbooks:firebolt` entity through a narrow owner/damage/cleanup adapter. This is a native projectile integration, not native spellbook casting. |
+| **Advent of Ascension** | [1.20.1-3.7.1 Beta](https://modrinth.com/mod/adventofascension/version/3.7.1) | Resolve the installed registry and keep absent source IDs dormant. This version does not establish the old complete dimension/mob roster. Its current upstream source branch is not a substitute for the exact runtime archive. |
+| **L_Ender's Cataclysm** | Existing **3.31** Wave 2 lane | The live registry baseline above remains the evidence. Boss phases, multipart entities, source arenas, and owner-controlled pets retain their existing gates. A curated gang record does not authorize recreating its boss encounter in Rush. |
+
+The exact dependency inventory and primary source links are in [Rival Rush design research, section 16](../docs/RIVAL_RUSH_DESIGN.md#16-provider-compatibility-concrete-seams-and-exact-test-targets). Aether's version suffix does not make its 1.20.1 release NeoForge-only. AoA 3.7.15 targets a different Minecraft version and is not the Forge 1.20.1 test artifact. These are deliberate reproducible compatibility targets, not a claim that they are every provider's newest release.
+
+The expanded provider workflow has individual Aether, Iron's, and AoA lanes plus an `adventure_all` lane combining them with Cataclysm. `ActivityDimensionGameTests` checks actual loaded versions and uses the native Aether/Precasia levels as departure and return worlds, preserving the tested location, inventory, vanilla XP, and ride state through a Rush circuit entry/exit. The workflow requires those specific provider/dimension markers and the full required GameTest count. A configured gate or written test must be distinguished from the passing run evidence recorded in the implementation status.
+
+### What the Firebolt adapter does
+
+`RushSpellCompat` checks the registered provider entity and its public API without making Iron's a required dependency. It creates a real Firebolt, assigns the participating player before adding it to the world, caps base damage at 40, and uses the provider's own aiming method. The mode admits only its own relay-created Firebolts and existing paint balloons. Ordinary arrows, unmarked native spell casts, area clouds, and summons do not become admitted merely because a magic mod is installed.
+
+The relay permits at most eight nearby tracked shots per player, rejects non-finite or out-of-range targets, and limits its authority to the current player, world, session, lifetime, and range. The Rush manager owns room validation and cleanup. The adapter never edits a spellbook, native mana, native cooldowns, foreign equipment, or arbitrary capabilities. When the provider or matching API is absent, the relay is unavailable rather than substituted with a mislabeled copy.
+
+The optional `rush_spell_relay` GameTest has two explicit paths. Without Iron's it checks that availability and spawning fail cleanly without changing a live session's loadout. With Iron's it checks actual provider projectile admission and collision, owner attribution, bounded damage converted to mode combat, rejection of a foreign owner, preserved native health/XP/inventory/mana, and removal of an in-flight projectile on exit. A test's existence is not a passing result: the current recorded build and provider-present evidence belong in [the Rival Rush implementation status](../docs/RIVAL_RUSH_DESIGN.md#0-what-this-change-implements-and-what-remains-a-proposal).
+
+Native spellbook casting, status conversion, healing, shields, summons, teleportation, and capability restoration remain separate adapter work. In particular, converting a spell's damage event does not reproduce a separately applied poison effect, and restoring vanilla inventory does not restore another mod's mana/recast state. Source-world mobs, pets, boss arenas, inventories, and machines are not copied into Rush to imply broad compatibility.

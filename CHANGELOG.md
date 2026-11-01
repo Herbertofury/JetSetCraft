@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.4.0-alpha.3 — activities and arena circuits, 2026-11-01
+
+- Added one activity catalogue for Random, Tag, King of the Hill, Showdown and Rival Rush. Empty-hand Boombox interaction opens the chooser; random invitations are reviewed before acceptance.
+- Implemented actual owner-scoped street objectives, bounded event casts and cleanup. Unloads, removed anchors, bystander attacks and abandoned games cannot create completion rewards.
+- Connected completed activities, Rush arenas, settled Rush runs and house dispatch jobs to the same Crew Supplies, crew XP, member training and gang-reputation account. Earnings before founding a house are retained and transferred once.
+- Added a six-arena Rush circuit with three reward-led route choices, physical skating connections, visible route progress, a Return/Encore ending and preserved builds across circuit sets. Free streets retain their thirty-minute or Endless options.
+- Added six vanilla arena recipes plus an optional Aether palette recipe. Data packs can set room radius, layout, authored block positions, objective duration, defeat target and bounded reward emphasis.
+- Added charged reward caches for magnet, damage, critical chance/power, ability area, recovery and artifacts. Cache claims require genuine owned rival defeats; victory gathers nearby owned cards.
+- Added critical-hit calculations, area scaling, cooldown upgrades and three artifact slots: Arc paint, Firework cap, Bass horn, Rail shockwave, Tempo drive, Soul mixtape and an optional native Iron's Firebolt relay.
+- Extended provider CI to Aether, Iron's Spells, AoA and a combined adventure configuration alongside the existing Wave 2 configurations. Added real objective, circuit, provider-collision and dimension-return tests; the new client audit exercises the actual Boombox menu and first route choice.
+- Verification for this candidate is pending. Historical alpha.2 results below are not evidence for these changes. Human pacing and long-session progression balance remain to be evaluated.
+
 ## 0.4.0-alpha.2 — crew-house development, 2026-11-01
 
 - Added a reusable **Crew Charter** and separate Home, Crew, Jobs and Facilities ledger for a house the player builds around an existing Boombox.

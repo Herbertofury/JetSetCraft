@@ -10,10 +10,16 @@ on:
       - "src/main/java/com/herberto/jetsetcraft/gang/**"
       - "src/main/java/com/herberto/jetsetcraft/crew/**"
       - "src/main/java/com/herberto/jetsetcraft/rush/**"
-      - "src/main/java/com/herberto/jetsetcraft/gametest/Crew*"
-      - "src/main/java/com/herberto/jetsetcraft/gametest/RivalRushGameTests.java"
-      - "src/main/java/com/herberto/jetsetcraft/gametest/StreetGearGameTests.java"
+      - "src/main/java/com/herberto/jetsetcraft/activity/**"
+      - "src/main/java/com/herberto/jetsetcraft/compat/**"
+      - "src/main/java/com/herberto/jetsetcraft/network/**"
+      - "src/main/java/com/herberto/jetsetcraft/gametest/**"
       - "src/main/resources/data/jetsetcraft/jetsetcraft_gangs/wave2_*.json"
+      - "src/main/resources/data/jetsetcraft/jetsetcraft_rush_rosters/**"
+      - "src/main/resources/data/jetsetcraft/rush_arenas/**"
+      - "src/main/resources/data/jetsetcraft/dimension/**"
+      - "src/main/resources/data/jetsetcraft/dimension_type/**"
+      - "src/main/resources/data/jetsetcraft/tags/**"
       - "tools/validate_wave2_compat.py"
       - ".github/workflows/wave2-provider-compat.yml"
   pull_request:
@@ -24,10 +30,16 @@ on:
       - "src/main/java/com/herberto/jetsetcraft/gang/**"
       - "src/main/java/com/herberto/jetsetcraft/crew/**"
       - "src/main/java/com/herberto/jetsetcraft/rush/**"
-      - "src/main/java/com/herberto/jetsetcraft/gametest/Crew*"
-      - "src/main/java/com/herberto/jetsetcraft/gametest/RivalRushGameTests.java"
-      - "src/main/java/com/herberto/jetsetcraft/gametest/StreetGearGameTests.java"
+      - "src/main/java/com/herberto/jetsetcraft/activity/**"
+      - "src/main/java/com/herberto/jetsetcraft/compat/**"
+      - "src/main/java/com/herberto/jetsetcraft/network/**"
+      - "src/main/java/com/herberto/jetsetcraft/gametest/**"
       - "src/main/resources/data/jetsetcraft/jetsetcraft_gangs/wave2_*.json"
+      - "src/main/resources/data/jetsetcraft/jetsetcraft_rush_rosters/**"
+      - "src/main/resources/data/jetsetcraft/rush_arenas/**"
+      - "src/main/resources/data/jetsetcraft/dimension/**"
+      - "src/main/resources/data/jetsetcraft/dimension_type/**"
+      - "src/main/resources/data/jetsetcraft/tags/**"
       - "tools/validate_wave2_compat.py"
       - ".github/workflows/wave2-provider-compat.yml"
   workflow_dispatch:
@@ -47,7 +59,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        provider: [alexsmobs, alexscaves, cataclysm, all]
+        provider: [alexsmobs, alexscaves, cataclysm, all, aether, irons_spells, aoa, adventure_all]
 
     steps:
       - name: Check out sources
@@ -108,48 +120,98 @@ jobs:
             sleep 20
           done
 
+      - name: Record resolved provider dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p build/verification
+          ./gradlew dependencies --configuration runtimeClasspath -Pwave2Provider=${{ matrix.provider }} --no-daemon \
+            | tee "build/verification/wave2-${{ matrix.provider }}-dependencies.log"
+
       - name: Run real Forge GameTests with provider present
         shell: bash
         run: |
           set -euo pipefail
           mkdir -p build/verification
           log="build/verification/wave2-${{ matrix.provider }}-gametest.log"
-          timeout 360s ./gradlew runGameTestServer -Pwave2Provider=${{ matrix.provider }} --no-daemon | tee "$log"
-          grep -Fq 'JETSETCRAFT_GAMETEST_PASS street_gear' "$log" || {
-            echo "::error::Wave 2 Street Gear/compatibility GameTest did not pass for ${{ matrix.provider }}."
-            exit 1
-          }
-          for marker in rush_rules rush_album rush_return rush_session rush_ownership rush_objectives crew_house crew_missions crew_persistence crew_rush; do
+          timeout 600s ./gradlew runGameTestServer -Pwave2Provider=${{ matrix.provider }} --no-daemon 2>&1 | tee "$log"
+          for marker in hoverboard ride_controls scooter dance_flow combat_sovereignty catalogs \
+              street_gear graffiti_lifecycle paint_balloon_splash rush_rules rush_album rush_return \
+              rush_session rush_ownership rush_objectives crew_house crew_missions crew_persistence \
+              crew_rush activity_progression activity_tag activity_safety activity_hill \
+              activity_dimension_return rush_spell_relay rush_arena_catalogue rush_arena_rules rush_arena_session; do
             grep -Fq "JETSETCRAFT_GAMETEST_PASS $marker" "$log" || {
-              echo "::error::Rush/crew GameTest $marker did not pass with ${{ matrix.provider }} installed."
+              echo "::error::JetSetCraft GameTest $marker did not pass with ${{ matrix.provider }} installed."
               exit 1
             }
           done
-          grep -Eq 'All 19 required tests passed|19 tests? passed' "$log" || {
-            echo "::error::Forge did not report all nineteen JetSetCraft GameTests passing for ${{ matrix.provider }}."
+          expected_tests=$(python - <<'PY'
+          from pathlib import Path
+          import re
+          annotations = [annotation for path in Path('src/main/java/com/herberto/jetsetcraft/gametest').glob('*.java')
+                         for annotation in re.findall(r'@GameTest\s*\((.*?)\)', path.read_text(), flags=re.S)
+                         if not re.search(r'\brequired\s*=\s*false\b', annotation)]
+          if not annotations:
+              raise SystemExit('No required GameTest annotations found')
+          print(len(annotations))
+          PY
+          )
+          grep -Eq "All $expected_tests required tests passed|(^|[^0-9])$expected_tests tests? passed" "$log" || {
+            echo "::error::Forge did not report all $expected_tests required JetSetCraft GameTests passing for ${{ matrix.provider }}."
             exit 1
           }
-          if [[ "${{ matrix.provider }}" == "all" ]]; then
-            for provider in alexsmobs alexscaves cataclysm; do
-              grep -Eq "JETSETCRAFT_WAVE2_LIVE_ROSTER $provider .*unexpected_mobs=0" "$log" || {
-                echo "::error::Combined live Mob roster proof was missing or incomplete for $provider."
-                exit 1
-              }
-              grep -Eq "JETSETCRAFT_WAVE2_GAMEPLAY $provider representative_mobs=6 challenge_roundtrips=6 .*provider_nbt_mutations=0" "$log" || {
-                echo "::error::Combined provider gameplay/NBT proof was missing or incomplete for $provider."
-                exit 1
-              }
-            done
-          else
-            grep -Eq "JETSETCRAFT_WAVE2_LIVE_ROSTER ${{ matrix.provider }} .*unexpected_mobs=0" "$log" || {
-              echo "::error::Live provider Mob roster proof was missing or incomplete for ${{ matrix.provider }}."
+          case "${{ matrix.provider }}" in
+            all) roster_providers="alexsmobs alexscaves cataclysm" ;;
+            adventure_all) roster_providers="cataclysm" ;;
+            alexsmobs|alexscaves|cataclysm) roster_providers="${{ matrix.provider }}" ;;
+            *) roster_providers="" ;;
+          esac
+          for provider in $roster_providers; do
+            grep -Eq "JETSETCRAFT_WAVE2_LIVE_ROSTER $provider .*unexpected_mobs=0" "$log" || {
+              echo "::error::Live Mob roster proof was missing or incomplete for $provider."
               exit 1
             }
-            grep -Eq "JETSETCRAFT_WAVE2_GAMEPLAY ${{ matrix.provider }} representative_mobs=6 challenge_roundtrips=6 .*provider_nbt_mutations=0" "$log" || {
-              echo "::error::Provider gameplay/NBT proof was missing or incomplete for ${{ matrix.provider }}."
+            grep -Eq "JETSETCRAFT_WAVE2_GAMEPLAY $provider representative_mobs=6 challenge_roundtrips=6 .*provider_nbt_mutations=0" "$log" || {
+              echo "::error::Provider gameplay/NBT proof was missing or incomplete for $provider."
               exit 1
             }
-          fi
+          done
+          case "${{ matrix.provider }}" in
+            irons_spells|adventure_all)
+              grep -Fq 'JETSETCRAFT_GAMETEST_PASS rush_spell_relay provider=irons_spellbooks' "$log" || {
+                echo "::error::The actual Iron Firebolt collision/ownership proof did not run."
+                exit 1
+              }
+              ;;
+            *) grep -Fq 'JETSETCRAFT_GAMETEST_PASS rush_spell_relay absent' "$log" ;;
+          esac
+          expected_providers=()
+          case "${{ matrix.provider }}" in
+            aether) expected_providers=("aether version=1.20.1-1.5.2-neoforge") ;;
+            irons_spells) expected_providers=("irons_spellbooks version=1.20.1-3.4.0.2") ;;
+            aoa) expected_providers=("aoa3 version=3.7.1") ;;
+            cataclysm|all) expected_providers=("cataclysm version=3.31") ;;
+            adventure_all)
+              expected_providers=("aether version=1.20.1-1.5.2-neoforge" \
+                "irons_spellbooks version=1.20.1-3.4.0.2" "aoa3 version=3.7.1" "cataclysm version=3.31")
+              ;;
+          esac
+          for provider_record in "${expected_providers[@]}"; do
+            grep -Fq "JETSETCRAFT_ADVENTURE_PROVIDER $provider_record" "$log" || {
+              echo "::error::Actual loaded provider/version proof missing: $provider_record."
+              exit 1
+            }
+          done
+          case "${{ matrix.provider }}" in
+            aether) expected_dimensions="aether:the_aether" ;;
+            aoa) expected_dimensions="aoa3:precasia" ;;
+            adventure_all) expected_dimensions="aether:the_aether,aoa3:precasia" ;;
+            *) expected_dimensions="absent" ;;
+          esac
+          grep -Fq "JETSETCRAFT_GAMETEST_PASS activity_dimension_return dimensions=$expected_dimensions" "$log" || {
+            echo "::error::Native provider dimension entry/return proof missing: $expected_dimensions."
+            exit 1
+          }
           case "${{ matrix.provider }}" in
             alexsmobs)
               grep -Fq 'JetSetCraft compatibility alexsmobs -> EXACT (90/90 known safe ids, 7 hidden technical ids)' "$log"
@@ -157,7 +219,7 @@ jobs:
             alexscaves)
               grep -Fq 'JetSetCraft compatibility alexscaves -> EXACT (43/43 known safe ids, 2 hidden technical ids)' "$log"
               ;;
-            cataclysm)
+            cataclysm|adventure_all)
               grep -Fq 'JetSetCraft compatibility cataclysm -> EXACT (39/39 known safe ids, 0 hidden technical ids)' "$log"
               ;;
             all)
@@ -178,7 +240,7 @@ jobs:
           setsid ./gradlew runServer -Pwave2Provider=${{ matrix.provider }} --no-daemon > "$log" 2>&1 &
           server_pid=$!
           ready=0
-          deadline=$((SECONDS + 150))
+          deadline=$((SECONDS + 240))
           while kill -0 "$server_pid" 2>/dev/null; do
             if grep -Eq 'Done \([0-9.]+s\)!' "$log"; then
               ready=1
@@ -227,6 +289,7 @@ jobs:
           name: jetsetcraft-wave2-${{ matrix.provider }}-${{ github.sha }}
           path: |
             build/libs/*.jar
+            build/verification/provider-build-${{ matrix.provider }}-attempt-*.log
             build/verification/wave2-${{ matrix.provider }}-*.log
             build/verification/wave2-${{ matrix.provider }}-SHA256SUMS.txt
           if-no-files-found: warn

@@ -32,9 +32,18 @@ Rival Rush adds opt-in thirty-minute or Endless skating survival sessions in a s
 
 Craft a reusable **Rival Rush Flyer** from paper + cyan dye, or use `/jetsetcraft rush`. The alpha supports Easy, Normal and Hard and never changes the world's difficulty. Controls, card rewards and limits are documented in [Rival Rush](wiki/Rival-Rush.md); the [18-game research/design study](docs/RIVAL_RUSH_DESIGN.md) separates deeper build families, bespoke bosses and rhythm-scored challenges from the implemented loop.
 
-The current development version is **`0.4.0-alpha.2`**. Rival Rush first arrived through **[merged PR #39](https://github.com/Herbertofury/JetSetCraft/pull/39)**; **[merged PR #40](https://github.com/Herbertofury/JetSetCraft/pull/40)** adds the crew-house layer described below. Stable **`v0.3.0` remains unchanged** and does not contain this mode.
+The current development version is **`0.4.0-alpha.3`** (arena/activity candidate; its verification is being recorded separately). Rival Rush first arrived through **[merged PR #39](https://github.com/Herbertofury/JetSetCraft/pull/39)**; **[merged PR #40](https://github.com/Herbertofury/JetSetCraft/pull/40)** adds the crew-house layer described below. Stable **`v0.3.0` remains unchanged** and does not contain this mode.
 
 **Recorded alpha.2 machine verification:** [Verify JetSetCraft #274](https://github.com/Herbertofury/JetSetCraft/actions/runs/41350812751) passed a clean Forge build, **19 real GameTests**, dedicated-server readiness and normal RCON shutdown, plus a real **1280 × 720 client audit with eight captures** covering Rival Rush and the crew-house ledger. [All four optional-provider configurations](https://github.com/Herbertofury/JetSetCraft/actions/runs/41350812645) passed the same 19 tests and server smoke. The [crew-house verification receipt](docs/verification/crew-house/README.md) records the tested candidate, PR integration, binary and captures. The [historical alpha.1 receipt](docs/verification/rival-rush/README.md) preserves its separate fifteen-test checkpoint. These are machine integration checks; **human thirty-minute pacing, Endless balance, house progression balance and broad modded-AI playtesting remain outstanding**. [Read the verification scope](wiki/Testing-and-Verification.md).
+
+
+### Connected activities and arena circuits
+
+Use a tuned Boombox with an empty hand, or `/jetsetcraft activity`, to choose **Random, Tag, King of the Hill, Showdown or Rival Rush**. A random invitation shows its selected game before you accept. Completed objectives contribute to the same crew supplies, house XP, member training and gang reputation; earnings are retained even before your first house is founded.
+
+Rival Rush now offers **Free streets** and a **six-arena circuit**. Pick one of three arena rewards, skate along the generated connection, complete its timed combat objective, and take the next route. The circuit has six vanilla arena profiles and an additional Aether palette profile when that mod is installed. Arena sizes, layouts, authored block maps and bounded rewards are editable through data packs. See [Rival Rush](wiki/Rival-Rush.md) for the exact format.
+
+Three artifact slots give a run a recognizable build: paint chaining, firework bursts, a bass horn, rail-triggered shockwaves, tempo boosts and soul recovery. The optional Iron's Spells relay launches a real provider Firebolt through an ownership-checked integration; ordinary spellbooks, mana, summons and foreign capability snapshots are outside this adapter's scope. Shared progression remains separate from Minecraft XP and ordinary loot.
 
 ## Build a crew house — development alpha
 
@@ -113,7 +122,7 @@ python tools/validate_wiki.py
 ./gradlew runGameTestServer
 ```
 
-On Windows, use `gradlew.bat`. The JAR is written to `build/libs/`. CI regenerates deterministic assets, rejects dirty generator output, performs a clean build, requires all nineteen Forge GameTests (nine existing tests, six Rival Rush tests and four crew-house/integration tests), starts a real dedicated server, and publishes the JAR, checksums, and logs as one workflow artifact.
+On Windows, use `gradlew.bat`. The JAR is written to `build/libs/`. CI regenerates deterministic assets, rejects dirty generator output, performs a clean build, requires every declared Forge GameTest, including activities, arena circuits, shared settlement and optional-provider boundaries, starts a real dedicated server, and publishes the JAR, checksums, and logs as one workflow artifact.
 
 In a development world, `/jetsetcraft status` reports authoritative movement and style state. Operators can use `/jetsetcraft build_vanilla_lab` to create a compact acceptance course and `/jetsetcraft set_momentum <speed>` as a controlled test aid. Maintainers can run `gradlew.bat -Djetsetcraft.visualAudit=true runClient` for an unattended real-client inline-skate/HUD/painted-wall/Free-Paint-selector/editor capture.
 

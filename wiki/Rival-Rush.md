@@ -1,8 +1,56 @@
 # Rival Rush — optional skating roguelite
 
-**Status: optional `0.4.0-alpha.2` implementation with recorded machine verification.** The stable `v0.3.0` release is unchanged and does not include Rival Rush. First introduced through [merged PR #39](https://github.com/Herbertofury/JetSetCraft/pull/39). Rival Rush is one optional mode inside JetSetCraft; normal movement, graffiti, crews, Boombox challenges and Minecraft continue independently. This page describes the implemented alpha and its limits. The [18-game research and design study](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/RIVAL_RUSH_DESIGN.md) separates further proposals from current code.
+**Status: optional `0.4.0-alpha.3` activity/arena candidate; new verification pending.** The stable `v0.3.0` release is unchanged and does not include Rival Rush. First introduced through [merged PR #39](https://github.com/Herbertofury/JetSetCraft/pull/39). Rival Rush is one optional mode inside JetSetCraft; normal movement, graffiti, crews, Boombox challenges and Minecraft continue independently. This page describes the implemented alpha and its limits. The [18-game research and design study](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/RIVAL_RUSH_DESIGN.md) separates further proposals from current code.
 
-## Actual client captures
+## One activity menu, shared crew progress
+
+Use a tuned Boombox with an empty hand, or `/jetsetcraft activity`. The activity catalogue contains **Random, Tag, King of the Hill, Showdown and Rival Rush**. Random rolls a preview; you explicitly accept before actors appear or Rush moves you into its separate district. Selecting an explicit mode at the Boombox keeps that selection.
+
+Tag, King of the Hill and Showdown now have real server-owned objectives on nearby loaded terrain. Only the accepting player's valid actions advance those objectives. Actor removal, chunk unload, missing anchors and cancellation do not award a victory. The activity menu displays the current objective and reward.
+
+All completed activities use the same **Crew Supplies, crew XP, member training and gang reputation** as house development and dispatch missions. Before a first house exists, the account retains those earnings. Founding the house transfers them once, including training to its starter roster. This progression is virtual and never replaces Minecraft XP, item drops or the ordinary inventory.
+
+## Arena circuit: choose, ride, clear, collect
+
+Rush setup has two play styles. **Free streets** retains the thirty-minute/Endless district. **Arena circuit** gives a six-stop journey; a Boombox Rival Rush invitation starts this circuit. At each fork, choose one of up to three profiles showing the reward, size and duration, then skate along the generated nine-block-wide connection to the next room. The HUD shows route progress, distance and the current combat objective.
+
+An arena clears only after **both** its active combat duration and owned-rival defeat target are met. Leaving its boundary pauses its objective. Upgrade and route choices pause the participant's simulation. Arena timers range from 30 to 360 seconds by data pack; the supplied rooms use 120–240 seconds. Six rooms therefore have 12–24 minutes of configured combat plus travel and decisions, rather than an enforced thirty-minute circuit timer.
+
+Each clear gives its stated build reward and a distinct shared crew reward. A victory magnet collects nearby owned cards before the next route, so the player need not abandon earned pickups to continue. After six clears choose **Return to Minecraft** or **Encore**. Encore preserves the build and begins another six-room set from the circuit lobby.
+
+| Arena | Layout / radius | Combat time / rivals | Build reward | Shared emphasis |
+|---|---|---|---|---|
+| Signal Yard | Plaza / 24 | 120 s / 8 | Paint damage | Balanced |
+| Needlepoint Crossing | Crossing / 28 | 150 s / 10 | Critical chance and power | Reputation |
+| Widewave Terraces | Terraces / 32 | 180 s / 12 | Ability area | Training |
+| Relic Relay | Loop / 36 | 210 s / 16 | Artifact | Balanced |
+| Copper Current | Loop / 30 | 150 s / 10 | Magnet and pickup reach | Supplies |
+| Greenroom Steps | Terraces / 40 | 240 s / 20 | Recovery | Training |
+| Cloudline Circuit, with Aether | Loop / 32 | 180 s / 12 | Magnet and pickup reach | Training |
+
+Rooms are generated only inside the registered Rush dimension. Terrain from the original world, player builds, mobs and inventories are not imported. Connectors preserve passable lanes through walls and authored blocks. Generation advances in bounded batches using loaded chunks; it adds no persistent chunk tickets.
+
+## Reward caches and three artifact slots
+
+Glowing personal caches offer **magnet, paint damage, critical chance/power, area, recovery or an artifact**. Three additional owned rival defeats charge the next claim. Skate through a charged cache to collect it. A magnet reaches only owned run-card pickups; it does not attract vanilla items or another player's rewards. Each arena has a fresh set, and Free streets also has distributed caches.
+
+Runs have **three artifact-family slots**. Taking more ranks strengthens an existing family. Full builds still receive useful score/recovery rewards; a stale draft cannot open a fourth slot.
+
+| Artifact | Implemented behavior |
+|---|---|
+| Arc paint | Accepted paint hits chain to a bounded number of nearby rivals |
+| Firework cap | Every sixth primary hit makes a damaging area burst |
+| Bass horn | Periodically pushes nearby rivals away and briefly staggers their directed attacks |
+| Rail shockwave | Moving grinds, wall rides and tricks trigger a forward damage pulse on a cooldown |
+| Tempo drive | Every eighth defeat grants a brief faster-firing window |
+| Soul mixtape | Defeats charge a bounded recovery pool; five charges fuel a healing pulse |
+| Firebolt relay | When the pinned Iron's provider/API is present, periodically launches its real native Firebolt |
+
+**Critical rhythm** adds critical chance, **Finishing touch** raises critical damage, **Bigger chorus** expands paint/artifact area and **Fast rewind** reduces artifact intervals. These are run statistics. They do not change vanilla weapon damage or carry temporary run equipment home.
+
+The optional Firebolt relay is a focused integration. Native spellbook casting, provider mana/cooldowns, summons and arbitrary third-party capability restoration are outside its scope. See [Compatibility](Compatibility) for the exact tested versions and evidence.
+
+## Historical alpha.2 client captures
 
 These images come from the passing alpha.2 real-client audit. The album capture remains the fresh audit player's genuine empty state. [Open all eight Rush/crew-house captures and their verification receipt](https://github.com/Herbertofury/JetSetCraft/tree/main/docs/verification/crew-house). The [alpha.1 captures and receipt](https://github.com/Herbertofury/JetSetCraft/tree/main/docs/verification/rival-rush) remain historical evidence.
 
@@ -133,6 +181,37 @@ Add a roster at `data/<namespace>/jetsetcraft_rush_rosters/<name>.json`:
 
 The mode filters absent entity IDs without requiring optional mods. A completely unavailable cast cannot start. Use the existing gang data system to define or map additional named crews. The client HUD has independent drag, scale, visibility and reset controls, persisted locally; those preferences cannot award gameplay state.
 
+### Custom arena data packs
+
+Add `data/<namespace>/rush_arenas/<name>.json`. The server loads at most 32 profiles. The optional `requires_mod` key hides a provider-specific profile when that provider is absent. Palette entries may be one block ID or an ordered array of up to eight fallback IDs.
+
+```json
+{
+  "name": "My paint park",
+  "description": "Broad lines, a critical reward and extra gang reputation.",
+  "radius": 28,
+  "seconds": 150,
+  "defeats": 10,
+  "layout": "cross",
+  "reward": "critical",
+  "reward_ranks": 1,
+  "shared_reward": "reputation",
+  "palette": {
+    "floor": "minecraft:smooth_stone",
+    "accent": "minecraft:magenta_concrete",
+    "wall": "minecraft:light_gray_concrete",
+    "rail": "minecraft:iron_bars"
+  },
+  "blocks": [
+    {"x": 10, "y": 1, "z": 10, "block": "minecraft:quartz_block"}
+  ]
+}
+```
+
+Limits: radius **16–48**, duration **30–360 seconds**, **3–80** required defeats, **1–2** reward ranks, at most **4096 authored blocks**. Layouts are `plaza`, `cross`, `loop`, `terraces`; rewards are `damage`, `critical`, `area`, `relic`, `magnet`, `recovery`; shared emphasis is `balanced`, `supplies`, `training`, `reputation`. Blocks use offsets from the floor center, `y=1..8`, and must leave the central crossing clear (`abs(x)>4` and `abs(z)>4`, inside radius minus four). An optional `properties` object sets valid block-state properties.
+
+Inventories, entity data, block-entity NBT, fluids, portals and explicitly dangerous vanilla blocks are rejected. The actual ride-in connector has priority over authored blocks so every chosen branch stays passable. This is a bounded block-map format, not an arbitrary structure-NBT importer or in-game arena editor.
+
 ## Last recorded verification
 
 The recorded **alpha.2** verification covers candidate [`d5ecadd`](https://github.com/Herbertofury/JetSetCraft/commit/d5ecadd0651c35fdffb505fa2790bda718e830db) on tested PR integration [`b9bcec8`](https://github.com/Herbertofury/JetSetCraft/commit/b9bcec8258e164aa41af5838a89df8aac04bd7c7). The [crew-house verification receipt](https://github.com/Herbertofury/JetSetCraft/tree/main/docs/verification/crew-house) records the exact tested source, binary checksum, workflow artifacts and eight captures. Later code changes need their own evidence.
@@ -152,9 +231,9 @@ The [alpha.1 verification receipt](https://github.com/Herbertofury/JetSetCraft/t
 
 ## What remains a design proposal
 
-The implemented seven ranked upgrades and three fallback rewards form the first build system. The eight deeper families in the research study—such as tag chaining, rail-triggered pulses and painted drift trails—still need implementation and playtesting.
+The alpha.3 build implements chaining, rail-triggered pulses and the other artifact families listed above. Painted drift trails, evolutions, reusable enchantment libraries, equipment rerolls and the full Dungeons item catalogues remain design work. Human playtesting is still needed for the implemented families.
 
-Captains currently add tougher priority targets and rewards. Bespoke boss attack patterns, paired bosses, crew-specific final headliners, and the proposed authored thirty-minute sequence remain future work. The current end is the timer boundary with a Return/Encore choice.
+Captains currently add tougher priority targets and rewards. Bespoke boss attack patterns, paired bosses, crew-specific final headliners, and the proposed authored thirty-minute sequence remain future work. Free streets ends at its timer boundary; the circuit ends after six arena clears. Both offer Return/Encore without a bespoke final boss.
 
 Music stops currently measure **four seconds of dancing** and play an existing crew stinger. They do not judge beats, analyze a soundtrack, or implement rhythm-scored combat. Tag relays, carried crates, crew murals, richer procedural neighborhoods, and coordinated co-op are also proposals. Human sessions should now test the existing skating, combat, collection and exit loop before expanding it.
 

@@ -1,5 +1,6 @@
 package com.herberto.jetsetcraft.block;
 
+import com.herberto.jetsetcraft.activity.ActivityManager;
 import com.herberto.jetsetcraft.blockentity.BoomboxBlockEntity;
 import com.herberto.jetsetcraft.gang.HeadGangTargetResolver;
 import com.herberto.jetsetcraft.registry.ModBlockEntities;
@@ -74,6 +75,12 @@ public final class BoomboxBlock extends BaseEntityBlock {
         if (!(raw instanceof BoomboxBlockEntity boombox)) return InteractionResult.PASS;
         ItemStack held = player.getItemInHand(hand);
 
+        if (!level.isClientSide && level instanceof net.minecraft.server.level.ServerLevel server
+                && ActivityManager.anchorActive(server, pos)) {
+            if (player instanceof ServerPlayer owner) ActivityManager.openAt(owner, pos);
+            return InteractionResult.CONSUME;
+        }
+
         if (player.isShiftKeyDown() && held.isEmpty()) {
             if (level.isClientSide) return InteractionResult.SUCCESS;
             ItemStack removed = boombox.removeTarget();
@@ -109,7 +116,7 @@ public final class BoomboxBlock extends BaseEntityBlock {
         if (held.isEmpty()) {
             if (level.isClientSide) return InteractionResult.SUCCESS;
             if (!(player instanceof ServerPlayer serverPlayer)) return InteractionResult.PASS;
-            boombox.toggleChallenge(serverPlayer);
+            ActivityManager.openAt(serverPlayer, pos);
             return InteractionResult.CONSUME;
         }
         return InteractionResult.PASS;
@@ -120,6 +127,7 @@ public final class BoomboxBlock extends BaseEntityBlock {
         if (!state.is(newState.getBlock())) {
             BlockEntity raw = level.getBlockEntity(pos);
             if (raw instanceof BoomboxBlockEntity boombox && !level.isClientSide) {
+                if (level instanceof net.minecraft.server.level.ServerLevel server) ActivityManager.anchorRemoved(server, pos);
                 boombox.cancelChallengeForRemoval();
                 ItemStack target = boombox.removeTargetForRemoval();
                 if (!target.isEmpty()) net.minecraft.world.Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), target);
@@ -137,6 +145,7 @@ public final class BoomboxBlock extends BaseEntityBlock {
     public int getAnalogOutputSignal(BlockState state, Level level, BlockPos pos) {
         BlockEntity raw = level.getBlockEntity(pos);
         if (!(raw instanceof BoomboxBlockEntity boombox)) return 0;
+        if (level instanceof net.minecraft.server.level.ServerLevel server && ActivityManager.anchorActive(server, pos)) return 15;
         if (boombox.isChallengeActive()) return 15;
         return boombox.targetStack().isEmpty() ? 0 : 7;
     }

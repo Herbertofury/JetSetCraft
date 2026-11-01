@@ -1,6 +1,7 @@
 package com.herberto.jetsetcraft.rush;
 
 import com.herberto.jetsetcraft.JetSetCraft;
+import com.herberto.jetsetcraft.compat.RushSpellCompat;
 import com.herberto.jetsetcraft.entity.PaintBalloonEntity;
 import com.herberto.jetsetcraft.registry.ModBlocks;
 import net.minecraft.nbt.CompoundTag;
@@ -43,7 +44,7 @@ public final class RivalRushEvents {
     public static void commands(RegisterCommandsEvent event) { RivalRushCommands.register(event.getDispatcher()); }
 
     @SubscribeEvent
-    public static void reload(AddReloadListenerEvent event) { event.addListener(new RushRosters()); }
+    public static void reload(AddReloadListenerEvent event) { event.addListener(new RushRosters()); event.addListener(new RushArenaCatalog()); }
 
     @SubscribeEvent
     public static void tick(TickEvent.ServerTickEvent event) {
@@ -60,8 +61,12 @@ public final class RivalRushEvents {
         }
         if (RivalRushManager.owned(event.getEntity())) {
             event.setCanceled(true);
-            if (event.getSource().getEntity() instanceof ServerPlayer player)
-                RivalRushManager.tagEnemy(player, event.getEntity(), event.getAmount());
+            if (event.getSource().getEntity() instanceof ServerPlayer player) {
+                var direct = event.getSource().getDirectEntity();
+                if (direct == player || (direct instanceof Projectile shot && RushSpellCompat.allowed(shot)
+                        && RivalRushManager.belongsTo(shot, player)))
+                    RivalRushManager.tagEnemy(player, event.getEntity(), event.getAmount());
+            }
         } else if (RivalRushManager.owned(event.getSource().getEntity())
                 || RivalRushManager.owned(event.getSource().getDirectEntity())) event.setCanceled(true);
     }
@@ -104,9 +109,11 @@ public final class RivalRushEvents {
             return;
         }
         if (!RushWorld.isRush(event.getLevel())) return;
-        if (entity instanceof PaintBalloonEntity projectile && projectile.getOwner() instanceof ServerPlayer player
-                && RivalRushManager.active(player)) {
-            RivalRushManager.markPlayerProjectile(projectile); return;
+        if (entity instanceof Projectile projectile && projectile.getOwner() instanceof ServerPlayer player
+                && RushSpellCompat.allowed(projectile)) {
+            RivalRushManager.markPlayerProjectile(projectile);
+            if (!RivalRushManager.belongsTo(projectile, player)) event.setCanceled(true);
+            return;
         }
         // Natural spawns, summoned children, dropped loan items, XP and native hostile projectiles are not run actors.
         if (entity instanceof Mob || entity instanceof ItemEntity || entity instanceof ExperienceOrb

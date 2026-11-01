@@ -11,11 +11,12 @@ import java.util.function.Supplier;
 
 /** Bounded intent only. Run identity, offers, rewards and elapsed time remain server-owned. */
 public record C2SRushActionPacket(String action, String value, int number, UUID runId, int version) {
-    private static final Set<String> ACTIONS = Set.of("menu", "start", "leave", "choose", "encore", "album", "roster");
+    private static final Set<String> ACTIONS = Set.of("menu", "start", "leave", "choose", "encore", "album", "roster",
+            "journey_choose", "arena_catalogue");
 
     public static void encode(C2SRushActionPacket packet, FriendlyByteBuf buffer) {
         buffer.writeUtf(packet.action, 32);
-        buffer.writeUtf(packet.value, 128);
+        buffer.writeUtf(packet.value, 256);
         buffer.writeVarInt(packet.number);
         buffer.writeBoolean(packet.runId != null);
         if (packet.runId != null) buffer.writeUUID(packet.runId);
@@ -24,7 +25,7 @@ public record C2SRushActionPacket(String action, String value, int number, UUID 
 
     public static C2SRushActionPacket decode(FriendlyByteBuf buffer) {
         String action = buffer.readUtf(32);
-        String value = buffer.readUtf(128);
+        String value = buffer.readUtf(256);
         int number = buffer.readVarInt();
         UUID runId = buffer.readBoolean() ? buffer.readUUID() : null;
         return new C2SRushActionPacket(action, value, number, runId, buffer.readVarInt());
