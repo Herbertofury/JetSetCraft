@@ -1,10 +1,244 @@
 # 🛹 Games, Movement & Ride Inspiration
 
-**[← Research hub](Inspiration-and-Research)** · **[Open the visual research browser](https://herbertofury.github.io/JetSetCraft/research.html)** · [Earlier catalogue](#earlier-catalogue)
+**[← Research hub](Inspiration-and-Research)** · **[Open the visual research browser](https://herbertofury.github.io/JetSetCraft/research.html)** · [Latest expansion](#november-1-expansion) · [First expansion](#october-31-expansion) · [Earlier catalogue](#earlier-catalogue)
 
-This expansion adds **40 game references**, a visual watchboard, **six route studies**, and ten practical refinements to the existing Minecraft movement catalogue. Research checked **31 October 2026**. Priority labels are editorial study order; applications and experiments are proposals unless the existing project status explicitly says otherwise.
+**76 curated game references across two passes**, followed by the preserved earlier catalogue. The **November 1 expansion adds 36 references**, twelve image cards, eight official videos and eight briefs for creation, replays and community. The October 31 expansion retains its 40 games, six course studies and ten movement refinements. Applications and experiments are proposals unless the existing project status explicitly says otherwise.
 
-## Cross-game inspiration atlas · 40 references
+## November 1 expansion
+
+### Second game atlas · creation, replay and community
+
+**36 additional references · checked November 1, 2026.** This pass was deduplicated against all **369 entries** in the published research catalogue. It adds creator workflows, replay learning, spectators, social sessions, recovery and world atmosphere. The first pass's six course studies remain useful; the eight briefs below instead describe ways to **make, share, watch and inhabit** those courses.
+
+These are research observations and proposed experiments. The existing ride roster, approved expansion, boostpack/flight combinations, crews, trick combat and train goals remain authoritative. No gameplay implementation or installed-game measurement is claimed.
+
+**Priority key:** P1 directly informs an existing or near-term workflow; P2 is a focused experiment; P3 is a selective supporting reference. These labels describe project fit, not an objective ranking of game quality.
+
+#### The strongest new opportunities
+
+| Opportunity | Primary references | Why it matters for JetSetCraft |
+|---|---|---|
+| A crew can build a spot and ride it immediately | [skate.](https://www.ea.com/games/skate/skate), [Make Way](https://store.steampowered.com/app/1445790/), [Zeepkist](https://store.steampowered.com/app/1440670/) | Turn the approved temporary-course system into a small social authoring loop, using the same validated geometry as curated events. |
+| A record teaches the next attempt | [N++](https://nplusplus.org/presskit/sheet.php?p=nplusplus), [Dustforce DX](https://store.steampowered.com/app/65300/), [Ring Racers manual](https://www.kartkrew.org/rr-manual/manual/timeattack/) | A useful ghost, replay and reset can make existing movement easier to learn without weakening its skill ceiling. |
+| Reusable modules make good courses easier to create | [Forza EventLab 2.0](https://forza.net/news/forza-horizon-5-horizon-creatives), [Trackmania](https://store.steampowered.com/app/2225070/), [Super Mario Maker 2](https://supermariomaker.nintendo.com/make/) | Grouping, previews, examples and explicit completion rules can remove repetitive work from authoring. |
+| Existing dances become asynchronous collaborations | [Sky update 35.0](https://thatgamecompany.helpshift.com/hc/en/17-sky-children-of-the-light/faq/1470-update-35-0---october-13th-2026/) | The newly documented Shared Memory Duets suggest a concrete use for the existing dance vocabulary: record, respond, credit both performers. |
+| A hangout has value between competitions | [WEBFISHING](https://store.steampowered.com/app/3146520/), [SkateBIRD](https://store.steampowered.com/app/971030/), [NFS Linkups](https://www.ea.com/en/games/need-for-speed/need-for-speed-unbound/features/volume-3) | Give a Boombox gathering small things to do, then let willing participants turn it into a shared objective. |
+| New creators can find their first audience | [Levelhead](https://store.steampowered.com/app/792710/), [Dreams developer update](https://docs.indreams.me/en/whats-happening/news/dreams-live-support) | Course discovery needs maker credit, useful feedback and space for fresh work, alongside established favorites. |
+
+#### Visual reference shelf
+
+The following twelve images are credited official store artwork. Every image URL was fetched with **HTTP GET**, returned **200 / image/jpeg**, and passed a JPEG-signature check. Images link to the corresponding official video or source page.
+
+| Create and practice | Watch, cooperate and inhabit |
+|---|---|
+| [![skate. official artwork](https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3354750/79c5a87b61a396cc6e6b69e3a083727f175dea83/header.jpg?t=1788891347)](https://www.youtube.com/watch?v=v7krdLF0hiQ)<br>**[skate.](https://www.ea.com/games/skate/skate)**<br>Full Circle, Electronic Arts — official Steam store artwork | [![Trackmania official artwork](https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2225070/7f7b095f71d8e3b54612927c0bb4b9f0713eac21/header.jpg?t=1790944433)](https://store.steampowered.com/app/2225070/)<br>**[Trackmania](https://store.steampowered.com/app/2225070/)**<br>Nadeo, Ubisoft — official Steam store artwork |
+| [![Zeepkist official artwork](https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1440670/header.jpg?t=1787064845)](https://store.steampowered.com/app/1440670/)<br>**[Zeepkist](https://store.steampowered.com/app/1440670/)**<br>Steelpan Interactive — official Steam store artwork | [![Make Way official artwork](https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1445790/cbfd31257e15facf96de7d47424cd3e07f1c4ab4/header.jpg?t=1790865580)](https://www.youtube.com/watch?v=O3ms-INT2T8)<br>**[Make Way](https://store.steampowered.com/app/1445790/)**<br>Ice BEAM, Secret Mode — official Steam store artwork |
+| [![Levelhead official artwork](https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/792710/d10dda70426f73a7c67e2c86311ac3c2bf896818/header.jpg?t=1776446467)](https://www.youtube.com/watch?v=A0WrHrDnNwE)<br>**[Levelhead](https://store.steampowered.com/app/792710/)**<br>Butterscotch Shenanigans — official Steam store artwork | [![N++ official artwork](https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/230270/4ac1afbdcbfe0f72fc528ebedf28c0016924b6b0/header.jpg?t=1762366272)](https://www.youtube.com/watch?v=CxCcuq0P7MM)<br>**[N++](https://nplusplus.org/presskit/sheet.php?p=nplusplus)**<br>Metanet Software Inc. — official Steam store artwork |
+| [![Distance official artwork](https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/233610/header.jpg?t=1688091852)](https://www.youtube.com/watch?v=P1-xXN7ILns)<br>**[Distance](https://refractstudios.com/press/distance/index.html)**<br>Refract — official Steam store artwork | [![PEAK official artwork](https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3527290/31bac6b2eccf09b368f5e95ce510bae2baf3cfcd/header.jpg?t=1792684718)](https://store.steampowered.com/app/3527290/)<br>**[PEAK](https://store.steampowered.com/app/3527290/)**<br>Team PEAK — official developer/publisher Steam artwork |
+| [![Demon Turf: Queens Edition official artwork](https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1325900/header.jpg?t=1734281591)](https://store.steampowered.com/app/1325900/)<br>**[Demon Turf: Queens Edition](https://store.steampowered.com/app/1325900/)**<br>Fabraz, Playtonic Friends — official Steam store artwork | [![Tiny Glade official artwork](https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2198150/b3a0326cc6d63ca88973fdee61d09052433abf94/header_alt_assets_0.jpg?t=1790175461)](https://store.steampowered.com/app/2198150/)<br>**[Tiny Glade](https://store.steampowered.com/app/2198150/)**<br>Pounce Light — official Steam store artwork |
+| [![WEBFISHING official artwork](https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3146520/header.jpg?t=1728673229)](https://store.steampowered.com/app/3146520/)<br>**[WEBFISHING](https://store.steampowered.com/app/3146520/)**<br>lamedeveloper — official Steam store artwork | [![Sky: Children of the Light official artwork](https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2325290/758dff11b25ce6163bbcce01b49d3f550218ddc8/header.jpg?t=1791580167)](https://www.youtube.com/watch?v=mTSYNbRnUSc)<br>**[Sky: Children of the Light](https://thatgamecompany.helpshift.com/hc/en/17-sky-children-of-the-light/faq/1470-update-35-0---october-13th-2026/)**<br>thatgamecompany — official Steam store artwork |
+
+#### Eight direct official videos
+
+These links were extracted from developer/publisher pages and checked through YouTube's public metadata endpoint. The channels and titles matched the expected creators.
+
+| Video | Official channel | What to watch for |
+|---|---|---|
+| [skate. — Early Access Development Update](https://www.youtube.com/watch?v=v7krdLF0hiQ) | skate. / EA | Quick Drop, off-board exploration, creation and the relationship between a social city and individual lines. |
+| [Make Way — How to Make Way](https://www.youtube.com/watch?v=O3ms-INT2T8) | Secret Mode | The rhythm of selecting a piece, building, racing and extending the course. |
+| [Levelhead — Release Trailer](https://www.youtube.com/watch?v=A0WrHrDnNwE) | Butterscotch Shenanigans | Creator tools presented as an approachable part of the game, including cooperative making. |
+| [N++ — Steam release trailer](https://www.youtube.com/watch?v=CxCcuq0P7MM) | metanetsoftware | How a small vocabulary remains legible across compact, varied challenges. |
+| [Distance — Console Edition launch-date trailer](https://www.youtube.com/watch?v=P1-xXN7ILns) | Refract | Camera framing, vehicle orientation and fast transitions. Written PC sources separately establish the editor/ghost features. |
+| [Sky — October 2026 update 35.0](https://www.youtube.com/watch?v=mTSYNbRnUSc) | thatgamecompany | The current Shared Memory Duets addition and how social features are explained to players. |
+| [A Hat in Time — Nyakuza Metro + Online Party](https://www.youtube.com/watch?v=pp-DYRP2q1s) | Gears for Breakfast | A vivid district, emotes, group identity and the distinction between friends and public guests. |
+| [Dr. Robotnik's Ring Racers — Promo (2024)](https://www.youtube.com/watch?v=KvAJCrdhrrQ) | Kart Krew Dev | Visible racing states and presentation; use the linked manual for exact ghost/restart rules. |
+
+#### Freshness and scope notes
+
+| Reference | Verified status or qualification |
+|---|---|
+| **skate.** | EA and current Steam metadata still identify **Early Access**. The public Early Access launch was September 16, 2025; an EA purchase-page metadata date refers to the earlier insider period, so it is not used as the public launch date here. |
+| **Zeepkist** | Current official store metadata and description identify **Early Access**. |
+| **STORROR Parkour PRO** | The official store identifies **Early Access**, beginning March 31, 2025. Its marketing language is not a measured guarantee of animation or collision quality. |
+| **Sky: Children of the Light** | The **Steam version remains Early Access**. Shared Memory Duets are documented in the released **October 13, 2026 / 35.0** update. |
+| **Skater XL** | Released game. The specifically cited **April 5, 2024 DIY-editor announcement targets the PC beta branch**. An old community paragraph in its store copy still says Early Access; the current release metadata and feature flags do not. |
+| **Make Way** | The current official description advertises **six-player** sessions. Older launch materials describe four; this research does not use the old limit as current. |
+| **Dreams** | Historical creation-workflow reference. Media Molecule ended live development support on **September 1, 2023**. The research does not promise new development or current online-service availability. |
+| **Heave Ho** | The cited game is the original **Heave Ho**. Its store describes couch play and **Steam Remote Play**, which should not be presented as a native online multiplayer implementation. |
+| **Superflight** | Its official description explicitly distinguishes seed sharing/leaderboards from online multiplayer. A shareable JetSetCraft course is our proposed adaptation. |
+| **A Hat in Time** | The cited Online Party feature belongs to **Nyakuza Metro + Online Party**; the developer's support page specifies Steam. Public guests and named party participants have different interactions. |
+| **Lonely Mountains: Snow Riders** | A distinct game from first-pass **Lonely Mountains: Downhill**. The new contribution is cooperative descent and a shared checkpoint budget, rather than another generic downhill reference. |
+
+#### The 36 references
+
+The source observation states what the developer, publisher or official store documents. The application and experiment columns are original JetSetCraft proposals. Empty media slots in the JSON intentionally fall back to the source page; only verified images and direct official videos are presented as such.
+
+##### Creator tools and discovery
+
+| Reference | Source-backed observation | JetSetCraft application | Concrete experiment |
+|---|---|---|---|
+| **[skate.](https://www.ea.com/games/skate/skate)**<br>[Official video](https://www.youtube.com/watch?v=v7krdLF0hiQ)<br>P1 · Early Access — checked November 1, 2026 | EA describes real-time Quick Drop objects, player-created Throwdowns, Community Parks and a Replay Editor inside an online skating city. | Give a crew a compact event-owned prop palette and a direct path from assembling a spot to skating and filming it. Extend the approved temporary-course system rather than introduce a second world-editing authority. | Let two builders place a rail, ramp and landing marker, then launch a shared trick challenge. Measure time to first playable line and whether leaving the event restores the site. |
+| **[Trackmania](https://store.steampowered.com/app/2225070/)**<br>P1 · Released | Nadeo's store description lists simple and advanced track editors, replay editing, player-made tracks, clubs and hosted activities. | Offer a small beginner palette that can expand into the same advanced course representation. A route card should carry creator, version, declared equipment and rules so replays remain comparable. | Have a first-time builder publish a three-checkpoint line, revise one module and replay the old version. Check whether the UI preserves both route identity and a clear revision history. |
+| **[Zeepkist](https://store.steampowered.com/app/1440670/)**<br>P1 · Early Access — checked November 1, 2026 | The developer describes downhill soapbox racing, local and online play, Workshop sharing and an editor using the same tools as official courses. | Use one validated module library for developer-made and player-made JetSetCraft circuits. Include surface, clearance and landing metadata with each module, so authoring teaches useful course design. | Give a builder six modules and one biome palette; ask them to make a beginner route and a shortcut. Test both with the same collision and checkpoint validation used for curated events. |
+| **[Make Way](https://store.steampowered.com/app/1445790/)**<br>[Official video](https://www.youtube.com/watch?v=O3ms-INT2T8)<br>P1 · Released | Ice Beam's current store describes players assembling track pieces, racing, extending the course between rounds and adjusting hazards or safety barriers. | Prototype an opt-in build-and-ride party mode: each round gives participants a bounded module choice before everyone rides the resulting line. Make the edit phase and active phase unmistakable. | Run three rounds with four participants, one module choice each and one shared reset. Record how much time is spent building, riding and waiting, and whether every addition remains completable. |
+| **[Levelhead](https://store.steampowered.com/app/792710/)**<br>[Official video](https://www.youtube.com/watch?v=A0WrHrDnNwE)<br>P1 · Released | Butterscotch describes cooperative building, published levels, following and curation, plus a Marketing Department that helps creators obtain plays. | Give new course makers a fair route into discovery: a small fresh-creations shelf, useful playtest feedback and creator credit. Avoid making total lifetime popularity the only route to visibility. | Seed a test browser with twelve fictional courses from new and established creators. Compare popularity-only ordering with a mixed discovery shelf and measure which courses receive a first meaningful playtest. |
+| **[Forza Horizon 5 — EventLab 2.0](https://forza.net/news/forza-horizon-5-horizon-creatives)**<br>P1 · Released | Playground Games documents multi-selection, reusable shared prefabs, favorite props and custom event presentation in EventLab 2.0. | Let course authors group a small rail-and-landing assembly, save it as a reusable module and retain the original creator's credit when remixing. Show its footprint before placement. | Ask an author to build three related sections individually, then with a saved group. Compare edit count, placement errors and the ability to undo the entire group as one action. |
+| **[Dreams](https://docs.indreams.me/en/whats-happening/news/dreams-live-support)**<br>P2 · Released; live development support ended September 1, 2023 — historical workflow reference | Media Molecule documents player-created experiences, curated collections and continuing access to creation after live development support ended in September 2023. | Treat discovery and creator documentation as part of a course's lifecycle. Publish a tiny remixable example, its controls, intended audience and dependencies alongside a showcase collection. | Package one example line with an editable copy and a short maker note. Ask another builder to produce a variation without contacting the author; record every missing piece of guidance. |
+| **[Super Mario Maker 2](https://supermariomaker.nintendo.com/make/)**<br>P1 · Released | Nintendo documents cooperative course editing, a broad parts palette, creator tutorials and configurable completion objectives. | Put teachable examples and visible goal rules inside course authoring. Start with the approved race, trick, paint and collection vocabulary instead of exposing unrelated scripting concepts to novice builders. | Give two builders an empty practice plot and a 'paint two panels, then finish' goal. Check whether each can explain the objective and test it directly from the editor. |
+
+##### Replays, ghosts and spectators
+
+| Reference | Source-backed observation | JetSetCraft application | Concrete experiment |
+|---|---|---|---|
+| **[Skater XL](https://store.steampowered.com/app/962730/)**<br>P1 · Released; the cited April 2024 DIY-editor notice specifically targets the PC beta branch | Easy Day's current store describes community maps, multiplayer free skate and recording replays together; a dated developer notice describes a PC-beta DIY editor. | Make filming a crew activity with bookmarks, subject selection and shared credit. Keep experimental authoring tools explicitly labeled instead of implying identical availability across every client. | Record the same group line from a rider camera and a fixed side camera. Ask someone who did not perform the line to produce a useful ten-second clip and identify every rider. |
+| **[Trials Rising](https://www.ubisoft.com/en-us/games/trials-rising)**<br>P1 · Released | Ubisoft describes visible opponent ghosts, local/online competition, a shared Tandem Bike and Track Central course creation. | Make benchmark rides readable and optional: show one chosen ghost, its conditions and a quick practice reset. Keep assisted attempts distinct from any validated competitive result. | Offer a learner their best ghost, a slightly faster crew ghost or no ghost on the same short line. Record improvement, visual obstruction and whether they can identify one useful difference. |
+| **[N++](https://nplusplus.org/presskit/sheet.php?p=nplusplus)**<br>[Official video](https://www.youtube.com/watch?v=CxCcuq0P7MM)<br>P1 · Released | Metanet documents a built-in editor, global level sharing, local cooperative/competitive play and replays for every level, including user-made ones. | Treat replay support as a first-class property of a published course. Attach the run to an immutable course/rules version so a later edit cannot silently invalidate the comparison. | Publish a short course, save two runs, then move one obstacle. Confirm the old runs remain tied to the old version and the new leaderboard does not inherit incompatible results. |
+| **[Dustforce DX](https://store.steampowered.com/app/65300/)**<br>P1 · Released | Hitbox's store emphasizes graceful movement, community levels and the ability to watch leaderboard players' best-attempt replays. | Turn a record list into a learning tool: jump from a result to the relevant transfer or landing, with a few readable action markers. Preserve a clean viewing mode for people who only want the performance. | Show one difficult landing with and without three event markers: takeoff, contact and recovered speed. Ask observers to name the correction before attempting the section again. |
+| **[Distance](https://refractstudios.com/press/distance/index.html)**<br>[Official video](https://www.youtube.com/watch?v=P1-xXN7ILns)<br>P1 · Released | Refract documents racing ghosts, online and split-screen modes, a level editor and generated tracks with seed modifiers. | Build spectator and practice views around a course's known geometry. A creator-selected camera should frame the next maneuver while retaining an immediate return to the player's normal view. | Film a ground-to-air transfer with chase, side and authored stationary cameras. Compare whether observers can predict the landing and understand the final result without motion-heavy cuts. |
+| **[SpeedRunners](https://store.steampowered.com/app/207140/)**<br>P2 · Released | The developers describe a competitive platformer where falling off the shared screen eliminates a runner, with local/online matches and a level editor. | Study how spectators track the leaders and danger boundary in a fast race. For JetSetCraft, use explicit event markers and camera options rather than silently making a camera edge a global elimination rule. | Show spectators two race clips: names-only versus names plus a compact course-progress strip. Ask who is leading, who can recover and where the next checkpoint lies. |
+| **[Lethal League Blaze](https://store.steampowered.com/app/553310/)**<br>P2 · Released | Team Reptile describes a ball that accelerates with successive strikes, local/online play and several scoring modes. | Use its extreme-speed premise to test readable ownership, threat and result cues during trick battles. Combine shape, position and short audio cues so a bright effect is never the only explanation. | Mock up one fast exchange with full effects, reduced effects and muted audio. Ask players and observers to identify the scorer and next threat; improve cues that fail any view. |
+| **[Dr. Robotnik's Ring Racers](https://www.kartkrew.org/rr-manual/manual/timeattack/)**<br>[Official video](https://www.youtube.com/watch?v=KvAJCrdhrrQ)<br>P1 · Released fan game — official manual reference | Kart Krew's manual documents optional ghosts, staff-run replays, instant time-attack restart and timing that begins when movement starts. | Make practice start conditions transparent and let players choose their benchmark. Separate a relaxed solo rehearsal from timed competition without changing the underlying movement rules. | Compare countdown-start and first-movement-start practice attempts, with a single restart button. Check accidental starts, score validity and how quickly a learner begins a meaningful retry. |
+
+##### Shared play and hangouts
+
+| Reference | Source-backed observation | JetSetCraft application | Concrete experiment |
+|---|---|---|---|
+| **[Ultimate Chicken Horse](https://store.steampowered.com/app/386940/)**<br>P1 · Released | Clever Endeavour describes players alternating between adding course obstacles and attempting the route, with custom rules and shared custom levels. | Make cooperative authoring itself a social activity. An approved event can expose a bounded build phase in which additions are previewed and tested before they become active. | Give each participant one placement turn and one test run. Record whether failures are understandable and whether the group can repair an impossible addition without restarting the entire session. |
+| **[Heave Ho](https://store.steampowered.com/app/905340/)**<br>P2 · Released | Le Cartel's store describes players grabbing one another and platforms to cross obstacles, with couch co-op/versus and Steam Remote Play. | Create moments where a helper's timing is visibly useful without requiring a new tether-physics system. Use an event switch, route cue or synchronized existing action to express cooperation. | Build a paper prototype of a two-role relay: one rider opens a timed event gate while another completes a line. Swap roles and check that both players can explain their contribution. |
+| **[Fling to the Finish](https://store.steampowered.com/app/1054430/)**<br>P2 · Released | The developer describes paired racers linked by an elastic rope, courses built around cooperation and an optional shared-controller scheme. | Study readable role coordination for duo challenges: one action prepares an opening and the partner completes it. Prototype the coordination rule with existing movement before considering physical tethers. | Run a two-person alternating-checkpoint challenge with a visible handoff cue. Compare a generous and a tight handoff window, including two players with unequal skill. |
+| **[Human Fall Flat](https://store.steampowered.com/app/477160/)**<br>P2 · Released | No Brakes Games describes multiple-route physics puzzles, online cooperation and a Steam-specific Unity Workshop for community levels, lobbies and skins. | Let authored crew activities admit several valid solutions and include simple recovery. Distinguish a decorative hangout submission from a competitive course with stricter route validation. | Give a small group one objective and two legal approaches; watch whether players invent a third. Classify the new approach as intended, acceptable or exploit using declared event rules. |
+| **[PEAK](https://store.steampowered.com/app/3527290/)**<br>P1 · Released | The official store describes friends helping one another up ledges, placing climbing aids and retrying an island that changes every 24 hours. | Recognize assistance as a visible event contribution, alongside speed or trick score. Shared route rotations can create conversation while keeping a completed route available for later practice. | Run a crew ascent with a leader, a route scout and a recovery helper. Log meaningful assists once per event and check that idling or repeating a trivial action cannot dominate the reward. |
+| **[A Hat in Time — Nyakuza Metro + Online Party](https://store.steampowered.com/app/940220/)**<br>[Official video](https://www.youtube.com/watch?v=pp-DYRP2q1s)<br>P1 · Released DLC; the developer specifies Steam for Online Party | Gears for Breakfast documents named party lobbies, non-interacting public guests, sticker emotes and some deliberately unsynchronized features in Online Party. | Clearly distinguish active participants, spectators and hangout guests inside JetSetCraft events. Joining a social scene should not accidentally enroll someone in a race or award them another rider's progress. | Invite two racers and one guest into a test session. Have the guest cross checkpoints and use an emote; confirm the scene stays social while only enrolled actions affect event results. |
+| **[WEBFISHING](https://store.steampowered.com/app/3146520/)**<br>P1 · Released | The developer describes a social camp with fishing, cosmetics, hidden spots and expressive toys including a playable guitar and chalk. | Give the Boombox hangout things to do between scored events: a practice rail, a shared paint surface, music selection and small expressive interactions that are enjoyable without a leaderboard. | Observe a twenty-minute mixed-skill hangout with optional activities and no compulsory competition. Record voluntary return visits and which activities spark interaction without lengthy menus. |
+| **[Sky: Children of the Light](https://thatgamecompany.helpshift.com/hc/en/17-sky-children-of-the-light/faq/1470-update-35-0---october-13th-2026/)**<br>[Official video](https://www.youtube.com/watch?v=mTSYNbRnUSc)<br>P1 · Steam version remains Early Access; Shared Memory Duets documented October 13, 2026 | thatgamecompany's October 13, 2026 notes introduce Shared Memory Duets: recording a response alongside an existing player's memory. | Prototype opt-in dance and line duets with both creators credited. Use the existing dance/trick vocabulary and bounded recorded presentation; a duet is a creative response, not a new source of repeated progression rewards. | Record a short existing dance phrase, let a second player respond beside its playback, and export a combined preview. Check timing, attribution, cancellation and absence of duplicated score. |
+| **[Need for Speed Unbound — Linkups](https://www.ea.com/en/games/need-for-speed/need-for-speed-unbound/features/volume-3)**<br>P1 · Released | EA describes Linkups as free-roam community stunt challenges with collective goals that escalate across four timed rounds. | Let a crew gathering grow into a short shared objective without a long lobby interruption. Give different movement styles useful roles in the same event while keeping joining and leaving explicit. | Run four short collaborative rounds using distinct actions: clean landings, legal transfers, designated tags and a group finish. Track contribution once per participant/action and test a mid-event arrival. |
+
+##### Movement, recovery and progression
+
+| Reference | Source-backed observation | JetSetCraft application | Concrete experiment |
+|---|---|---|---|
+| **[Demon Turf: Queens Edition](https://store.steampowered.com/app/1325900/)**<br>P1 · Released | Fabraz's store describes player-placed checkpoints, optional checkpoint-free perfect runs, changed post-victory levels and a level creator. | Give practice sessions deliberate reset markers and distinguish a clean competitive attempt from an assisted rehearsal. Let course makers explain the intended recovery rather than making every miss a full restart. | Offer a creator-authored reset, a player practice marker and a full-run attempt on one existing line. Compare recovery time and whether result labels make assistance unambiguous. |
+| **[Penny’s Big Breakaway](https://store.steampowered.com/app/1955230/)**<br>P2 · Released | Evening Star's store describes chainable yo-yo movement, combo multipliers in Story Mode and a separate Time Attack challenge. | Present style and speed as compatible but distinct goals. The same approved movement can support a stylish clear, a fast clear and a beginner completion without one opaque score pretending to measure everything. | Show results from three contrasting runs using separate completion, time and style summaries. Ask players which run suits each goal and whether the feedback suggests a clear next attempt. |
+| **[Superflight](https://store.steampowered.com/app/732430/)**<br>P1 · Released | GrizzlyGames describes proximity-scored wingsuit flying through procedural landscapes, with seed sharing and online leaderboards rather than online multiplayer. | Support shareable, reproducible flight challenges for the already-approved wingsuit/pack combinations. Include the generated-course version and declared loadout in the share card; free-roam flight remains available. | Give two testers the same bounded course seed and loadout card. Check that geometry and valid scoring surfaces match and that a regeneration update cannot silently change an old challenge. |
+| **[Exo One](https://store.steampowered.com/app/773370/)**<br>P2 · Released | Exbleative describes gravity-driven momentum, thermal updrafts and traversal toward a visible blue beam on the horizon. | Use a distant landmark and intermediate landing cues to support fast flight without constant HUD directions. Treat downhill, launch and glide transitions as one readable route through existing approved movement states. | Show the same approach with a horizon landmark alone, with an intermediate landing cue, and with full guidance. Record route recognition and camera corrections before adding more HUD elements. |
+| **[STORROR Parkour PRO](https://store.steampowered.com/app/3125250/)**<br>P2 · Early Access — checked November 1, 2026 | The developers describe physics-driven parkour, motion-captured actions, preset Line and Speed Challenges, and shared Chase and Escape play in Early Access. | Study how a move's target and consequence are communicated before commitment. Use repeatable line challenges to compare vault, wall-kick and recovery presentation without assuming reference animations solve Minecraft collision. | Capture three approaches to the same ledge at different entry angles. Ask players to predict the resulting action, then compare the prediction with the existing movement state and camera. |
+| **[Lonely Mountains: Snow Riders](https://store.steampowered.com/app/2545360/)**<br>P2 · Released | Megagon's store describes cooperative descents with shared limited checkpoints, versus racing, hidden shortcuts and unlockable equipment/tricks. | Explore a disclosed team recovery budget for optional events, while leaving normal free-roam recovery intact. Make the cost and beneficiary of a shared retry visible to every participant. | Prototype a cooperative line with a shared reset pool and a generous unlimited-practice version. Check whether the budget creates planning or merely makes the least experienced rider feel responsible for every failure. |
+
+##### World atmosphere and small stories
+
+| Reference | Source-backed observation | JetSetCraft application | Concrete experiment |
+|---|---|---|---|
+| **[SkateBIRD](https://store.steampowered.com/app/971030/)**<br>P2 · Released | Glass Bottom Games describes miniature parks made from everyday objects, friendly skating goals, clothing and hidden music discoveries. | Give a small practice space a recognizable story through playful objects and music finds. Reward curiosity and helpful interactions alongside the existing skating vocabulary. | Reskin a familiar safe obstacle course with three memorable prop clusters and one optional music discovery. Ask players to navigate back using the props' names rather than coordinates. |
+| **[Cloud Gardens](https://store.steampowered.com/app/1372320/)**<br>P2 · Released | Noio describes reclaiming discarded urban objects with plants, a free sandbox and exportable looping videos of completed dioramas. | Offer a small noncompetitive scene-making activity beside street events: arrange event-owned props, paint and plants, then capture a short loop for a crew showcase. | Let a builder decorate one fixed camera frame using a bounded prop palette. Compare a still postcard and a short loop for showing the scene without obscuring nearby playable routes. |
+| **[Tiny Glade](https://store.steampowered.com/app/2198150/)**<br>P2 · Released | Pounce Light describes free-form building that reacts to edits, such as paths creating doors and raised buildings gaining supports. | Use context-aware previews to reduce repetitive course dressing: show compatible rail ends, supports or palette variants while preserving Minecraft's actual block and collision rules. | Mock up a placement preview for one rail module that offers three compatible endings. Ask builders to finish a short assembly and count manual corrections versus a plain block picker. |
+| **[TOEM: A Photo Adventure](https://store.steampowered.com/app/1307580/)**<br>P2 · Released | Something We Made describes solving characters' problems through photography, exploration and observation in a hand-drawn world. | Let course authors make a compact visual guidebook with a few landmark photos and clear clues. An optional sightseeing task can help players learn a district before racing through it. | Create three route postcards showing a start, a useful transfer and a meeting spot. Ask newcomers to find all three without a minimap; check which captions prevent wrong turns. |
+| **[Paradise Killer](https://store.steampowered.com/app/1160220/)**<br>P3 · Released | Kaizen's store describes an explorable island of relics and character secrets, player-built interpretations of evidence and a HUDless presentation option. | Give crew districts optional discoveries that connect places, characters and rivalries. Keep the visual scene legible enough for exploration with minimal guidance, then let clues enrich familiar movement routes. | Place three short, optional story fragments near an existing line's landmarks. Test whether players remember their relationship and can still read the next landing with guidance reduced. |
+
+#### Eight new design briefs
+
+These briefs focus on **creator, social and replay improvements**, complementing the first atlas's six courses. Each can begin as a small interface or authored-content experiment. Full runtime recording, networking or editor work should follow the existing execution contract and measured delivery gates.
+
+##### 1. A course card that can actually be shared
+
+**References:** Trackmania, Super Mario Maker 2, N++, Superflight.
+
+A creator should be able to turn a playable route into a clear invitation. The card needs a title, creator and collaborators, preview image, approximate duration, intended skill level, declared equipment, objective and course version. The technical representation also needs stable rule and geometry identity, so a changed obstacle does not silently invalidate a saved replay.
+
+Start with a locally authored course and a reviewable card mock-up. Have a second player load it, explain the goal, complete it and identify whether an optional shortcut is legal. Then revise the route and check that the old result still points to the old version. For generated routes, save enough bounded generation data and version information to reproduce the challenge; a seed alone is not sufficient when the generator changes.
+
+**Decision:** which information prevents a failed invitation? Measure questions asked before the first attempt, time to a valid start and ambiguity about equipment or finish conditions.
+
+##### 2. A build–ride–revise crew jam
+
+**References:** Make Way, Ultimate Chicken Horse, Zeepkist, Forza EventLab.
+
+Use a small event-owned palette of familiar rails, ramps, landing platforms and designated paint panels. A round alternates between a visible construction phase and a ride phase. Builders can preview a piece, rotate it, undo it and test the route before committing. A reusable group makes common assemblies faster to place.
+
+Begin with four participants, one addition each and three short rounds. Log the time spent choosing, editing, testing and riding. If the course becomes impossible, let the group repair the last addition without discarding earlier work. The authoring representation should reuse the approved terrain/event collision and cleanup rules.
+
+**Decision:** can a novice contribute something meaningful while the group keeps moving? A good result is a clearly understood edit that produces a fun line; raw placement speed alone does not establish quality.
+
+##### 3. A compact crew film studio
+
+**References:** skate., Skater XL, Cloud Gardens.
+
+Give a rider a short recent-performance buffer and simple bookmarks for interesting moments. The first useful editor can be tiny: choose a start/end, select a subject, pick rider-follow or fixed course camera, adjust playback speed, and preview. Keep the clip's rider, course-maker and collaborator credit visible.
+
+Start with a single bounded scene and one ten-second clip. Compare a camera chosen by the rider with one chosen by a friend. Include a miss and a recovery, because those often communicate the line better than a contextless trick. Only after this workflow proves useful should it grow into elaborate keyframes or effects.
+
+**Decision:** can someone make a readable clip quickly, without losing their place in the social session? Record edit actions, camera corrections and whether viewers understand the takeoff, maneuver and landing. A visual replay is presentation evidence; competitive results still come from the authoritative event.
+
+##### 4. A ghost that teaches one improvement
+
+**References:** Dustforce DX, N++, Trials Rising, Ring Racers.
+
+Let a player choose a personal best, a nearby crew benchmark or no ghost. Start with one ghost and a few optional markers: takeoff, contact, landing grade and recovered speed. A replay should be directly reachable from the result that prompted curiosity.
+
+Try this on one existing difficult transfer. Before replay, ask the learner what went wrong. After replay, ask what they intend to change, then give them a quick reset to the same start. Compare learning with a clean performance view versus a marker-assisted view. Preserve the existing movement rules and distinguish practice resets from a validated uninterrupted run.
+
+**Decision:** does the ghost change the player's next decision? Avoid treating a replay file as automatically deterministic: equipment, event rules, course version and the recorded representation all need explicit handling.
+
+##### 5. A spectator can understand the contest
+
+**References:** Distance, SpeedRunners, Lethal League Blaze, A Hat in Time.
+
+An observer needs to know who is participating, what the objective is, who is currently ahead and what a successful next action would look like. Begin with a stable view, a compact course-progress indicator and a deliberate choice of rider. Camera cuts and effects can be added after those basics work.
+
+Use two prerecorded race examples or a small controlled session. Give observers three views: rider-follow, a fixed transfer camera and a wider objective view. Test reduced effects and muted audio as well. Participants, spectators and casual guests should have visibly distinct event roles; watching should not accidentally enroll someone or credit them with another player's action.
+
+**Decision:** can a newcomer explain the contest after twenty seconds? Compare correct identification of the leader, next checkpoint and recovery opportunity. Keep spectator scene work bounded to the active event rather than treating free camera travel as an unlimited world-loading feature.
+
+##### 6. A dance duet that carries both names
+
+**Reference:** Sky's October 2026 Shared Memory Duets, applied to JetSetCraft's existing dance and trick vocabulary.
+
+Let a player record a short phrase, then allow a second player to perform beside its playback. The resulting preview identifies the original performer, responder and selected phrase. The creative gesture is a response to someone else's performance, so preserve the original link and attribution.
+
+Start with existing dance IDs and a short fixed-duration scene. Test a synchronized entrance, a delayed response and cancellation halfway through. A later version can add a third contributor or a brief trick response, after the simple timing and presentation are dependable. Recorded playback must not repeatedly produce progression, ammo or event-completion rewards.
+
+**Decision:** does the combined performance look intentional, and can both creators understand how it was assembled? This is a bounded presentation and collaboration experiment, not a new requirement for generated choreography.
+
+##### 7. A discovery shelf for the next good creator
+
+**References:** Levelhead, Dreams, Forza EventLab.
+
+A community catalogue should make new work discoverable without burying reliable favorites. Prototype separate views for fresh creations, followed creators, curated recommendations and personally suitable challenges. A course card can explain why it is being shown: new, recently tested, suited to a ride, or selected for a specific lesson.
+
+Start with twelve fictional submissions of deliberately different quality and difficulty. Compare a popularity-only list with a mixed shelf. Ask reviewers to leave actionable feedback using a few simple categories such as unclear start, unreadable landing, enjoyable shortcut or broken objective. Retain creator credit on reusable modules and point remixes back to the original.
+
+**Decision:** do unfamiliar authors obtain useful playtests, and do players find an appropriate course? Track first meaningful plays and helpful feedback separately from raw clicks; repeated empty visits are a weak signal.
+
+##### 8. A hangout can become a shared event
+
+**References:** WEBFISHING, NFS Linkups, PEAK, SkateBIRD, TOEM.
+
+Make a Boombox gathering useful before anyone chooses competition. Put an easy practice line, designated art surface, a route-postcard board and a few expressive interactions within a readable shared space. A willing group can then start a short collaborative objective from that same place.
+
+Prototype four short rounds using familiar actions: clean landings, valid transfers, designated tags and a group finish. Let an observer join between rounds, make participant status clear, and show each player's meaningful contribution. A scout, helper or beginner should have a useful role without fabricated score authority or repeated trivial actions dominating progression.
+
+**Decision:** does the transition feel inviting and clear? Observe a mixed-skill group, including someone who prefers to watch. Record voluntary participation, understandable contributions and the ease of returning to the hangout after completion.
+
+#### How this strengthens the existing work
+
+The nearest practical combination is **a clear course card + a fast practice reset + a tiny replay view**. Those pieces make the existing movement easier to test, teach and share. The next layer is cooperative authoring and a useful discovery shelf. Dance duets and hangout-to-event transitions give the existing music, art and crew systems more life between formal competitions.
+
+These proposals should be attached to the existing movement, event lifecycle, progression and presentation work rather than becoming a parallel roadmap. In particular:
+
+- Existing source-owned movement, combat animation and equipment authority continue to determine the actual run.
+- Temporary creator modules use the already-approved course representation and cleanup rules.
+- Approved flight remains usable in free roam; individual event cards disclose their own equipment and scoring conditions.
+- Performance capture, ghosts and spectators have bounded scene/data costs and are measured against the same gameplay baseline.
+- Contributor credit and progression rewards are separate: a credited creative response does not imply another gameplay reward transaction.
+
+#### Source checks
+
+Primary developer/publisher sources and current store metadata support the observations. Twelve game images passed HTTP GET and JPEG-signature checks; eight direct video destinations passed official-channel metadata checks. This verifies source identity and media endpoints, without claiming full video playback or installed-game measurements. All structured records are included in the [repository catalogue](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/research/catalogue.json).
+
+---
+
+## October 31 expansion
+
+### Cross-game inspiration atlas · 40 references
 
 **Research checked October 31, 2026.** This catalogue adds a wider game-design view to the Minecraft references below. Each entry links a developer, publisher, official store, original manual or direct developer interview, then separates the source's design from a proposed JetSetCraft application and a small playtest.
 
@@ -14,7 +248,7 @@ The existing six rides, 24 tricks, 28 dances, Flow, landing grades, wall kicks, 
 
 **How to use the research:** select one concrete question, watch the linked material, reproduce a small comparable situation, and record what changed. “Study first” is an editorial fit judgment for JetSetCraft's current goals; it is not an objective ranking of the games.
 
-### Start with these design questions
+#### Start with these design questions
 
 | Question | Best starting references | The practical decision |
 |---|---|---|
@@ -25,7 +259,7 @@ The existing six rides, 24 tricks, 28 dances, Flow, landing grades, wall kicks, 
 | What makes a district memorable between events? | [SLUDGE LIFE](https://store.steampowered.com/app/1144770/SLUDGE_LIFE/), [Umurangi Generation](https://playism.com/en/game/umurangi-generation/), [A Short Hike](https://ashorthike.com/press/) | Attach a landmark, character, view or small story to each useful line and tag spot. |
 | How can the approved train expansion keep its spectacle readable? | [Denshattack!](https://store.steampowered.com/app/2524850/Denshattack/), [Solar Ash](https://store.steampowered.com/app/1867530/Solar_Ash/) | Separate maneuver readability from scale. Prove the minecart slice and Create identity preservation, then add full-consist spectacle. |
 
-### Visual watchboard
+#### Visual watchboard
 
 Official store artwork below links to the corresponding source or official trailer. These images are research thumbnails; the gallery does not add them to the mod's assets. Every catalogue source page also provides its own media or explanatory material.
 
@@ -39,7 +273,7 @@ Official store artwork below links to the corresponding source or official trail
 
 **More official viewing links:** [Bomb Rush Cyberfunk release trailer](https://www.youtube.com/watch?v=VgCxJFMh1h8) · [Umurangi Generation trailer](https://www.youtube.com/watch?v=TPzqJMExAho) · [Sable trailer](https://www.youtube.com/watch?v=cqQ2sV0Jf3w) · [A Short Hike trailer](https://www.youtube.com/watch?v=qsA5p0MKdoM) · [Lil Gator Game trailer](https://www.youtube.com/watch?v=WB02q9IJCi4) · [Riders Republic official deep dive](https://www.youtube.com/watch?v=9Uu6Ca2EcN4).
 
-#### Freshness notes that change the research
+##### Freshness notes that change the research
 
 | Reference | Current primary-source status | How to use it |
 |---|---|---|
@@ -50,11 +284,11 @@ Official store artwork below links to the corresponding source or official trail
 | [Skate Story](https://store.steampowered.com/app/1263240/Skate_Story/) | Released **December 8, 2025**. | Study how strong atmosphere coexists with readable skating surfaces. |
 | [White Knuckle](https://store.steampowered.com/app/3195790/White_Knuckle/) | The checked page still identifies it as **Early Access**. | Use its advertised pressure/climbing premise; recheck evolving details before precise comparisons. |
 
-### The catalogue
+#### The catalogue
 
 The **source-backed observation** column describes the reference. **JetSetCraft application** and **playtest** are original design proposals or refinements of already-approved goals. None of the playtests below is reported as completed.
 
-#### 1. Street culture and core flow
+##### 1. Street culture and core flow
 
 | Reference & media | Source-backed observation | JetSetCraft application | Smallest useful playtest |
 |---|---|---|---|
@@ -67,7 +301,7 @@ The **source-backed observation** column describes the reference. **JetSetCraft 
 | **07 · [Rollerdrome](https://blog.playstation.com/2022/08/11/prepare-for-rollerdrome-with-dev-combat-tips-out-august-16/)**<br>Study first · Approved-goal reference | Roll7 explains that varied trick chains replenish ammunition; wallrides, grinds and grabs keep offense and movement interacting. | Directly support the approved trick-ammo/TaCZ loop. Tune the opportunity to resupply around safe-but-not-free traversal windows and weapon-specific accounting. | In one arena compare direct-magazine and reserve replenishment. Measure dry-fire time, reload interruptions, trick variety and duplicate reward attempts. |
 | **08 · [Sunset Overdrive](https://store.steampowered.com/app/847370/Sunset_Overdrive/)**<br>Study first · Research refinement | The official store describes combat across a city using grinding, vaulting and wallrunning. | Make combat routes circulate around cover and escape options. Preserve weapon control while lower-body movement remains expressive. | Create a three-height combat loop with two escape paths per pressure point. Check aiming/reload ownership during every movement transition. |
 
-#### 2. Ride identity and expressive sessions
+##### 2. Ride identity and expressive sessions
 
 | Reference & media | Source-backed observation | JetSetCraft application | Smallest useful playtest |
 |---|---|---|---|
@@ -80,7 +314,7 @@ The **source-backed observation** column describes the reference. **JetSetCraft 
 | **15 · [BMX Streets](https://store.steampowered.com/app/871540/BMX_Streets/)**<br>Deepen · Research refinement | The developer emphasizes control on ground, in the air and on handrails, plus meaningful bike customization. | Give the existing BMX a distinctive transfer, peg and landing vocabulary. Tie parts to understandable handling tradeoffs, not only bigger speed numbers. | Compare a ledge line and a gap line with two BMX setups. Assess silhouette, landing feedback, steering commitment and item-use compatibility. |
 | **16 · [ScooterFlow](https://store.steampowered.com/app/1648390/ScooterFlow/)**<br>Study first · Research refinement | The current store lists physical scooter tricks, customization, multiplayer sessions, real parks and replay editing. | Deepen the existing scooter with readable tailwhip/barspin combinations and compact transfers. Preserve keyboard play despite this reference requiring a controller. | Film the same short quarter-to-ledge line in first and third person. Can testers identify the scooter move and landing grade without reading HUD labels? |
 
-#### 3. Movement readability and mastery
+##### 3. Movement readability and mastery
 
 | Reference & media | Source-backed observation | JetSetCraft application | Smallest useful playtest |
 |---|---|---|---|
@@ -93,7 +327,7 @@ The **source-backed observation** column describes the reference. **JetSetCraft 
 | **23 · [Refunct](https://store.steampowered.com/app/406150/Refunct/)**<br>Deepen · Research refinement | The creator describes a short, peaceful first-person platformer about restoring a vibrant world. | Use a pressure-free micro-course to teach one existing action at a time before combining them. Let completion visibly change the practice space. | Create a five-station skate tutorial using safe returns and optional repeated practice. Count first-session failures and requests for a controls menu. |
 | **24 · [Yellow Taxi Goes Vroom](https://store.steampowered.com/app/2011780/Yellow_Taxi_Goes_Vroom/)**<br>Deepen · Approved-mode refinement | Its developer describes a collectathon whose movement combinations reach unusual places without a jump button. | Use the approved crate/coin platforming modes to reward creative combinations of existing actions. Collectibles should advertise reachable lines, not arbitrary detours. | Place optional event coins along two legal approach arcs to one rooftop. Check that a clever route earns recognition and required quotas remain achievable. |
 
-#### 4. World, graffiti and atmosphere
+##### 4. World, graffiti and atmosphere
 
 | Reference & media | Source-backed observation | JetSetCraft application | Smallest useful playtest |
 |---|---|---|---|
@@ -106,7 +340,7 @@ The **source-backed observation** column describes the reference. **JetSetCraft 
 | **31 · [BETON BRUTAL](https://store.steampowered.com/app/2330500/BETON_BRUTAL/)**<br>Study first · Research refinement | The creator explicitly cites Minecraft parkour, an overgrown concrete tower, increasing difficulty and discoverable shortcuts. | Study block-readable obstacle composition and vertical landmarks. Keep a forgiving main mode and reserve long progress loss for clearly disclosed expert variants. | Build a vertical course with visible landing shelves and an optional shortcut. Compare checkpointed practice with an opt-in endurance run using identical geometry. |
 | **32 · [White Knuckle](https://store.steampowered.com/app/3195790/White_Knuckle/)**<br>Deepen · Approved-mode refinement | Its current store describes a first-person roguelite speed-climbing game with precision movement and resource management. | Study escalating pursuit and pressured route choice for the already-approved survival mode. Use event pace and telegraphs before inflating enemy counts. | Prototype one pursuing hazard and two escape routes. Measure reaction time, recoverability and whether failure is attributable to a visible choice. |
 
-#### 5. Community, replay and unusual scale
+##### 5. Community, replay and unusual scale
 
 | Reference & media | Source-backed observation | JetSetCraft application | Smallest useful playtest |
 |---|---|---|---|
@@ -119,7 +353,7 @@ The **source-backed observation** column describes the reference. **JetSetCraft 
 | **39 · [Denshattack!](https://store.steampowered.com/app/2524850/Denshattack/)**<br>Study first · Approved-goal reference | The current official store describes train flips, tricks, grinding, customization, rival gangs and varied Japanese environments. | Research input-to-response and visual readability for the existing Trick Trains/Create goal and issue #37. The catalogue does not reopen approval or claim an adapter is finished. | Record reference maneuvers from the owner-authorized installed build, then compare a bounded JetSetCraft train prototype: response, rotation, landing and rider handoff. |
 | **40 · [Zineth](https://www.gamedeveloper.com/design/road-to-the-igf-arcane-kids-i-zineth-i-)**<br>Adjacent · Research refinement | In a direct developer interview, Arcane Kids describes movement experimentation with few restrictions, backwards skating and hidden discoveries. | Keep space for player-discovered techniques outside formal event routes. Secrets can reward mechanical curiosity without changing canonical physics per location. | Make a visible distant landmark with several legal approaches. Watch skilled players attempt unexpected lines; classify genuine exploits separately from useful emergent play. |
 
-### Where this research should influence the existing plan
+#### Where this research should influence the existing plan
 
 These are **refinement priorities**, not a replacement roadmap. The task references belong to the [existing execution contract](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/JETSETCRAFT_CLAUDE_FINISH_EXECUTION.md). Larger approved systems keep their existing wiki specifications and delivery gates.
 
@@ -136,11 +370,11 @@ These are **refinement priorities**, not a replacement roadmap. The task referen
 | 9 | **Big spaces with readable local decisions.** Use architecture, silhouettes, cover and safe landing zones to convey scale. | [Terrain-aware circuits and boss arenas](Terrain‐Aware-Event-Circuits-and-Boss-Arenas) | Solar Ash, Lorn's Lure, MOTORSLICE and BETON BRUTAL. Validate the next few seconds of movement from the active camera before adding effects or enemies. |
 | 10 | **Train spectacle grounded in the actual vehicle.** Carry the connected-line approach into the already-approved minecart/Create expansion. | [Trick Trains & Create](Trick-Trains-and-Create), issue #37; T046 where applicable | Denshattack! is the primary train-feel reference. First prove reversible state and source identity, then full-consist motion, roof riding and wingsuit transfer. |
 
-### Six route studies worth building
+#### Six route studies worth building
 
 These are **authoring briefs**, with illustrative starting footprints rather than promised movement limits. Measure actual jump, braking, boost and collision behavior in the target build before setting gaps. The terrain-aware system's existing source-world preservation and event-cleanup rules apply to temporary versions of every course.
 
-#### A. The depot loop — make the core movement feel inevitable
+##### A. The depot loop — make the core movement feel inevitable
 
 **Starting brief:** a roughly 64 × 64 block practice district around a Boombox, paint wall and clearly visible meeting point. A broad ground loop passes a low rail, a wall-kick corner and a small roof before returning to the start. The flat route stays useful while the technical route adds expressive options.
 
@@ -148,7 +382,7 @@ Put three designated tag surfaces on this loop: an easy approach, an approach wi
 
 **Research pairing:** JSR/JSRF for the social garage and tag destination; BRC for connected traversal; Refunct for low-pressure learning. **Decision:** which single transition most improves the whole loop? Compare one change at a time. **Existing home:** T037, T045, T055, T067, T153.
 
-#### B. Three-level rooftop relay — make teams choose routes
+##### B. Three-level rooftop relay — make teams choose routes
 
 **Starting brief:** a roughly 96 × 96 block district with an accessible street route, a middle rail route and a roof route. Each objective has two legal approaches for the event's advertised equipment. Clear crossings let pursuers read movement without turning every route into a dead corridor.
 
@@ -156,7 +390,7 @@ Replay the same district as a timed line, Tag and the already-approved CTF/relay
 
 **Research pairing:** Rooftops & Alleys, Hover and Splatoon 3. **Decision:** do both starts have comparable access and comeback opportunities? Measure actual arrival and escape routes; a visually symmetrical map is insufficient evidence. **Existing home:** T151–T162, terrain-aware event circuits, approved team modes.
 
-#### C. Timberline descent — distinguish carving from generic speed
+##### C. Timberline descent — distinguish carving from generic speed
 
 **Starting brief:** an approximately 128 × 48 block descending corridor with three broad turns, two optional inside shortcuts and flat recovery pockets. Build a compact fixture first; extend only when it answers a handling question. Include visible braking approaches and lateral escape space before severe turns.
 
@@ -164,7 +398,7 @@ Use controlled surface variations to compare existing rides, then the approved m
 
 **Research pairing:** Driftwood, Descenders, Lonely Mountains and Riders Republic. **Decision:** can players anticipate a turn and choose a recoverable line? Record entry speed, braking distance, apex position and exit speed. **Existing home:** T030, T037, T041–T042, approved ride expansion.
 
-#### D. Signal tower — vertical scale without unreadable jumps
+##### D. Signal tower — vertical scale without unreadable jumps
 
 **Starting brief:** an industrial courtyard with a clearly silhouetted tower, three resting terraces and a visible return path. A short legal wall-kick sequence opens one shortcut. A later route can use approved wingsuit/pack combinations without invalidating the original approach.
 
@@ -172,7 +406,7 @@ Build the major shapes before decorative machinery. From each takeoff, the next 
 
 **Research pairing:** Lorn's Lure, MOTORSLICE, Pseudoregalia and Umurangi Generation. **Decision:** do players read the route because of architecture, or only because a marker tells them? **Existing home:** T043–T045, T153, terrain-aware courses and approved flight.
 
-#### E. Recharge rink — prove the approved combat loop
+##### E. Recharge rink — prove the approved combat loop
 
 **Starting brief:** a compact oval arena around two cover islands, with an outside rail and a lower escape lane. Begin with a small, controlled threat setup; add pressure only after attack, dodge, trick completion and refill feedback are legible. Ensure there is room to aim without forced camera turns.
 
@@ -180,7 +414,7 @@ Use the same encounter to compare magazine refill and reserve refill through the
 
 **Research pairing:** Rollerdrome, Sunset Overdrive and Helskate. **Decision:** does resupply encourage a useful movement choice, and can players explain when it happens? **Existing home:** approved trick-combat specification, T051, T058–T059, T151, T159. A successful visual mock-up is not proof of ammo compatibility.
 
-#### F. Crew freight — extend the existing train goal in stages
+##### F. Crew freight — extend the existing train goal in stages
 
 **Starting brief:** a station, a short ordinary rail segment and a separate opt-in trick segment, with enough visible clearance for the tested vehicle. Start with the approved minecart entry point. Create train testing follows proof that identity, cargo, passengers and normal railway behavior survive transitions.
 
@@ -188,7 +422,7 @@ The eventual authored route connects station departure, a train maneuver, carria
 
 **Research pairing:** Denshattack! for the owner-selected movement/presentation study, Solar Ash for large-scale target readability. **Decision:** can a player understand and recover from a maneuver while the original custom train remains authoritative and intact? **Existing home:** [Trick Trains & Create](Trick-Trains-and-Create), issue #37. This brief supplements that approved goal.
 
-### A repeatable comparison sheet
+#### A repeatable comparison sheet
 
 For each reference study, record **source/build/date**, the maneuver or route examined, observed input, the JetSetCraft question, the proposed change, and the resulting evidence. A public trailer can establish advertised presentation or a visible sequence; it cannot establish an exact acceleration constant, input latency or multiplayer behavior.
 
@@ -203,7 +437,7 @@ For actual JetSetCraft prototypes, keep a shared baseline and record:
 
 Keep neutral stopping, legitimate vanilla/environmental impulses, source-owned combat animations and vanilla swimming outside intentional aquatic mode in the regression set. New flight and aquatic work belongs to its approved explicit states. Repeated new tests are justified when a change creates a concrete risk; a small visual or documentation refinement does not require rebuilding the entire game.
 
-### Source and status notes
+#### Source and status notes
 
 All forty records, including source URLs, media links, checked dates and prototype ideas, are also provided in the [machine-readable research catalogue](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/research/catalogue.json) for a searchable gallery. Most references use developer/publisher pages or official storefronts. **Jet Set Radio Future** uses an original SEGA manual on a mirror; **Zineth** uses a direct developer interview because the original game's old web presence is less dependable. No installed-game measurements or JetSetCraft gameplay verification were performed for this catalogue.
 
@@ -211,11 +445,11 @@ All forty records, including source URLs, media links, checked dates and prototy
 
 ---
 
-## Earlier catalogue
+### Earlier catalogue
 
 The **44 earlier entries** below remain intact for continuity. Their inherited scores and version notes are historical research metadata, not fresh benchmark results or a claim that every external release was rechecked in this pass. The [earlier 173-row sheet](https://docs.google.com/spreadsheets/d/1liWhRQL7rmPy8LLgSRVlkrLANqUIJE4UbFX3--KMJjg/edit?gid=1570163195#gid=1570163195) remains available.
 
-### Core Street Sports · 12
+#### Core Street Sports · 12
 
 Skating, boards, tricks, grinds, and the culture surrounding them.
 
@@ -234,7 +468,7 @@ Skating, boards, tricks, grinds, and the culture surrounding them.
 | **Skate Boards**<br><sub>Historic mod reference · score 3.20</sub> | Java<br>Forge<br>1.14.4 | Color board variants, themed boss, music disc, food and skate gear. | Mostly useful as a content/checklist reference for culture/gear around skating rather than physics. | [Project](https://www.curseforge.com/minecraft/mc-mods/skate-boards) | Ask author / verify terms |
 | **Skateboard Mod (2014)**<br><sub>Historic mod reference · score 2.65</sub> | Java<br>Legacy Forge<br>1.6.4 | Skateboard content, armor/food/technology theme; creator also made Unique Movement. | Archaeology/reference only; useful for seeing old assumptions to avoid. | [Project](https://www.curseforge.com/minecraft/mc-mods/skateboard-mod) | Ask author / verify terms |
 
-### Movement & Parkour · 20
+#### Movement & Parkour · 20
 
 Input responsiveness, momentum, vaulting, sliding, wall interaction, and swimming boundaries.
 
@@ -261,7 +495,7 @@ Input responsiveness, momentum, vaulting, sliding, wall interaction, and swimmin
 | **More Actions**<br><sub>Bedrock add-on reference · score 6.20</sub> | Bedrock<br>Add-On<br>Updated Aug 2026 | Double jump, grappling hook, air dash and dynamic movement actions. | Useful for Bedrock-side control vocabulary and low-friction activation patterns. | [Project](https://www.curseforge.com/minecraft-bedrock/addons/more-actions) | Ask author / verify terms |
 | **Roll and Stamina**<br><sub>Bedrock add-on reference · score 6.00</sub> | Bedrock<br>Add-On<br>2025+ | Roll system, stamina, speed consequences after damage. | Useful Bedrock control/UI reference for concise movement feedback and resource gating. | [Project](https://www.curseforge.com/minecraft-bedrock/addons/roll-and-stamina) | Ask author / verify terms |
 
-### Rides & Vehicle Physics · 12
+#### Rides & Vehicle Physics · 12
 
 Ride models, modular vehicle architecture, steering, tricks, and tactile feedback.
 
@@ -283,4 +517,3 @@ Ride models, modular vehicle architecture, steering, tricks, and tactile feedbac
 ---
 
 **44 entries preserved from the earlier catalogue.** Inclusion records research value, not bundled code/assets or automatic redistribution permission. Return to **[Inspiration & Research](Inspiration-and-Research)**.
-

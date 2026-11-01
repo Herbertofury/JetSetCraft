@@ -105,7 +105,7 @@ See [Architecture](docs/ARCHITECTURE.md), [Upstream Merge](docs/UPSTREAM-MERGE.m
 
 ## Inspiration and research
 
-Explore the **[visual Inspiration Atlas](https://herbertofury.github.io/JetSetCraft/research.html)** or the **[wiki research hub](https://github.com/Herbertofury/JetSetCraft/wiki/Inspiration-and-Research)**. The October 31, 2026 research pass adds **196 entries** to the preserved 173-entry catalogue: 40 games, 100 music tracks, 24 art/culture references, 22 engineering references and 10 choreography papers.
+Explore the **[visual Inspiration Atlas](https://herbertofury.github.io/JetSetCraft/research.html)** or the **[wiki research hub](https://github.com/Herbertofury/JetSetCraft/wiki/Inspiration-and-Research)**. The November 1, 2026 expansion adds **136 references**, bringing the collection to **505 entries**: **76 games, 160 music candidates, 40 art/culture references, 38 engineering references, 18 research papers**, and the preserved **173-entry earlier atlas**.
 
 | Explore | What is inside |
 |---|---|
@@ -114,7 +114,7 @@ Explore the **[visual Inspiration Atlas](https://herbertofury.github.io/JetSetCr
 | [Art, animation and creators](https://github.com/Herbertofury/JetSetCraft/wiki/Research-Animation-Models-and-Creators) | Street culture, readable visual direction and current choreography research. |
 | [Engineering and performance](https://github.com/Herbertofury/JetSetCraft/wiki/Research-Frameworks-Java-and-Bedrock) | Code-aware improvement ideas, primary documentation and meaningful acceptance checks. |
 
-The browser supports search, category/priority filters, a local shortlist and CSV export. Research proposals and new music candidates are clearly distinguished from shipped behavior and earlier owner selections. The [source catalogue and build instructions](docs/research/README.md) keep future updates reproducible.
+Start with **[the latest additions](https://herbertofury.github.io/JetSetCraft/research.html?batch=2026-11-01)** or **[the new 12-track listening route](https://herbertofury.github.io/JetSetCraft/research.html?path=city-after-hours)**. The browser supports search, dated research passes, image/direct-video filters, two ordered listening paths, a local shortlist and CSV export. The wiki adds eight briefs for creator tools, replays and social play alongside the original six course studies. Research proposals and music candidates retain their evidence and audition status. The [source catalogue, validation and build instructions](docs/research/README.md) keep future updates reproducible.
 
 ## Rights
 

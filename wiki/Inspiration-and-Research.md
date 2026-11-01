@@ -6,7 +6,11 @@
 
 ## A bigger world of ideas, organized around JetSetCraft
 
-The **31 October 2026 research pass adds 196 entries**: **40 games, 100 music tracks, 24 art/culture/presentation references, 22 engineering references and 10 choreography papers**. The earlier **173-entry atlas** remains in the same four research lanes. The visual browser now holds **369 catalogue entries**, with search, filters, source media, a personal shortlist and CSV export. These are research records; different entries may study different aspects of the same creator or project.
+The **1 November 2026 expansion adds 136 entries**: **36 games, 60 music tracks, 16 art/culture references, 16 engineering references and eight papers**. Together with the first expansion's 196 records and the preserved **173-entry earlier atlas**, the collection now holds **505 entries**, including **332 curated research records**. Different entries may study different aspects of the same creator or project.
+
+**[Explore the 136 latest additions →](https://herbertofury.github.io/JetSetCraft/research.html?batch=2026-11-01)** · **[Follow the new 12-track listening route →](https://herbertofury.github.io/JetSetCraft/research.html?path=city-after-hours)**
+
+The visual browser supports search, dated research passes, image/direct-video filters, ordered listening paths, a personal shortlist and full-result CSV export. Each entry retains its own checked date; earlier research is not relabeled as newly verified.
 
 The creative goal is a coherent street-sports world: satisfying movement, places worth learning, recognizable crews, expressive graffiti, great music and responsive presentation. Every new game/reference entry explains the JetSetCraft connection and a useful experiment. The music collection supplies exact artist/track links, scene ideas, crew palettes and a starting sequence.
 
@@ -14,16 +18,69 @@ The creative goal is a coherent street-sports world: satisfying movement, places
 
 ## Four canonical research lanes
 
-| Lane | New in this pass | Earlier entries | What you will find |
-|---|---:|---:|---|
-| **[Games, Movement & Rides](Research-Street-Movement-and-Rides)** | **40 games** | 44 | Skating, parkour, combat, world design, ride identity, co-op, ten refinements and six course briefs; official images and video links. |
-| **[Music, Graffiti & Audio](Research-Graffiti-Music-and-Audio)** | **100 tracks** | 19 | A 16-track starting sequence, seven listening shelves, 12 cover cards, scene palettes, 25 crew-specific candidates and artist/label routes. |
-| **[Art, Animation & Creators](Research-Animation-Models-and-Creators)** | **24 references + 10 papers** | 78 | Street-art history, individual artists, readable motion, crew identity, wayfinding and editable choreography methods. |
-| **[Engineering & Performance](Research-Frameworks-Java-and-Bedrock)** | **22 references** | 32 | Ten code-specific opportunities with acceptance checks; audio, networking, animation, HUD, secondary motion and profiling. |
+| Lane | Added November 1 | Curated total | Earlier entries | What you will find |
+|---|---:|---:|---:|---|
+| **[Games, Movement & Rides](Research-Street-Movement-and-Rides)** | **36 games** | **76** | 44 | Creator tools, replay learning, spectators and social play; eight new design briefs beside the original six course studies and movement refinements. |
+| **[Music, Graffiti & Audio](Research-Graffiti-Music-and-Audio)** | **60 tracks** | **160** | 19 | Two ordered listening routes, 28 featured cover cards across both passes, official videos, exact edition notes, scene palettes and creator/label links. |
+| **[Art, Animation & Creators](Research-Animation-Models-and-Creators)** | **16 references + 8 papers** | **40 references + 18 papers** | 78 | Skateable public spaces, collaborative blackbooks, dance authorship, visual identity, motion editing and procedural design. |
+| **[Engineering & Performance](Research-Frameworks-Java-and-Bedrock)** | **16 references** | **38** | 32 | Code-specific opportunities and acceptance checks for creator UX, replays, input ownership, audio, assets, accessibility and profiling. |
 
 The [earlier 173-row research sheet](https://docs.google.com/spreadsheets/d/1liWhRQL7rmPy8LLgSRVlkrLANqUIJE4UbFX3--KMJjg/edit?gid=1570163195#gid=1570163195) remains available. The new source catalogue is maintained in the repository. Earlier scores and version notes remain historical metadata; they are not relabeled as freshly measured results.
 
-## The strongest creative directions
+## November expansion: make the city creative together
+
+### Let a crew make a line, ride it and share it
+
+**[Trackmania](https://store.steampowered.com/app/2225070/)** connects course creation with replay tools and community activity. **[Forza EventLab 2.0](https://forza.net/news/forza-horizon-5-horizon-creatives)** documents multi-selection, shareable prop groups and bookmarks. Pair those creator workflows with **[Make Way](https://store.steampowered.com/app/1445790/)** and **[Zeepkist](https://store.steampowered.com/app/1440670/)**.
+
+The JetSetCraft proposal is a short **build → ride → revise → share** loop using the approved terrain-aware event system. A course card should communicate the maker, collaborators, preview, equipment, objective and version. Start by letting two builders assemble one rail-and-landing sequence, test it immediately, undo a group and produce a useful invitation. The existing world-restoration and collision rules govern the result.
+
+### Make a replay teach the next attempt
+
+Use **[N++](https://nplusplus.org/presskit/sheet.php?p=nplusplus)**, **[Dustforce DX](https://store.steampowered.com/app/65300/)** and **[Trials Rising](https://www.ubisoft.com/en-us/games/trials-rising)** to study the relationship between a result, a replay and another try. A proposed JetSetCraft learning view can show one chosen ghost and optional takeoff/contact/landing markers on a difficult transfer.
+
+The decisive question is whether the learner can name one change for the next attempt. Keep the course and rules version attached to the run; distinguish practice resets from an uninterrupted competitive result. **[ReplayMod](https://www.replaymod.com/docs/)** and **[Flashback](https://github.com/Moulberry/Flashback)** add useful camera/editor comparisons in the engineering lane, with their loader and version boundaries explicitly retained.
+
+### Turn existing dances into credited responses
+
+**[Sky's October 13, 2026 update](https://thatgamecompany.helpshift.com/hc/en/17-sky-children-of-the-light/faq/1470-update-35-0---october-13th-2026/)** documents Shared Memory Duets: a player records a response alongside someone else's recorded memory. This is a particularly direct inspiration for JetSetCraft's existing dance vocabulary.
+
+Prototype an opt-in phrase recording, a second performer's response and a combined preview carrying both names. Begin with existing dance IDs and deliberate start timing. Check cancellation and late joins, and ensure recorded presentation cannot repeat progression or trick-ammo rewards. This adds a social use for authored movement before requiring more elaborate choreography generation.
+
+### Design the places between competitions
+
+The **[Public Skatepark Development Guide](https://publicskateparkguide.org/design-and-construction/factors-of-skatepark-design/)** treats a skatepark as both connected lines and a public place. **[Superkilen](https://superflex.net/works/superkilen)** shows how residents' chosen objects can give a shared space a specific identity. Combine those studies with the quiet social activity in **[WEBFISHING](https://store.steampowered.com/app/3146520/)**, the observation-led exploration of **[TOEM](https://store.steampowered.com/app/1307580/)** and **[Cloud Gardens](https://store.steampowered.com/app/1372320/)**' scene-making.
+
+For a Boombox hangout, draw the skating line, landing/recovery space, art surface, meeting edge and spectator route separately. Give ordinary props a local story and let newcomers learn landmarks through route postcards. Then offer a clearly optional shared event from the same place. The test is voluntary participation and return visits, including people who prefer watching or making things.
+
+### Make the graffiti blackbook feel like a creative tool
+
+The **[Getty Graffiti Black Book](https://www.getty.edu/research/special_collections/notable/la_liber_amicorum/index.html)** provides a cultural reference for authored work shared between artists. The engineering study connects this to existing **T065–T066**: a navigable selection grid, full names, search/favorites, stable focus and draft continuity.
+
+Source inspection found that `GraffitiSelectorScreen` draws its art cards and palette manually, while `GraffitiEditorScreen.init()` decodes the held item's selection whenever initialized. That makes keyboard/narrator navigation and preserving an unsaved draft across resize/reinitialization concrete prototype questions. These are code observations and test targets; a native runtime defect or improvement has not been demonstrated. Preserve the existing validated canvas and wire format.
+
+### Give each district several musical occasions
+
+The **[new 12-track listening route](https://herbertofury.github.io/JetSetCraft/research.html?path=city-after-hours)** starts with **[C2C — Down The Road](https://www.youtube.com/watch?v=gpc3cCxWNkU)** and moves through RJD2, Chinese Man, The Avalanches, Takuya Kuroda, Nujabes, Cornelius, Overmono, Machinedrum, The Egyptian Lover, CoLD SToRAGE and Kid Koala. The full addition contains 60 tracks, six shelves and eight artist/label-dated 2026 releases.
+
+Try a district's first discovery, crew event and quiet return with different candidates. **[DJ KRUSH's TOKYØHUM](https://djkrush.jp/jp/1850/)** is a useful bridge into visual research: its announced city-pulse concept and TAKU OBATA artwork suggest a study of music, infrastructure and sculptural character silhouettes. Exact recording editions are documented throughout, so an audition can be revisited without confusing a video edit, remaster, remix or reconstruction.
+
+### Eight new design briefs
+
+| Brief | First useful experiment |
+|---|---|
+| **Shareable course card** | Another player loads it, explains the objective, completes it and identifies its version. |
+| **Build–ride–revise crew jam** | Participants add one module, test the line and repair an impossible addition without losing earlier work. |
+| **Compact crew film studio** | A rider or friend makes a readable short clip with clear performer and course-maker credit. |
+| **Ghost that teaches** | A learner identifies one correction and applies it on the next attempt. |
+| **Readable spectator view** | A newcomer identifies the participants, leader, next objective and recovery opportunity. |
+| **Credited dance duet** | Two existing phrases form an intentional response with timing, cancellation and reward behavior checked. |
+| **Discovery for new creators** | An unfamiliar author receives useful playtest feedback through a clearly explained discovery shelf. |
+| **Hangout into shared event** | A mixed-skill group joins voluntarily and returns smoothly to social play. |
+
+The full briefs and individual comparisons are in [Games, Movement & Rides](Research-Street-Movement-and-Rides#november-1-expansion). They supplement the existing roadmap and first-pass course layouts.
+
+## Continuing creative directions from the first expansion
 
 ### Make the whole movement line satisfying
 
@@ -39,7 +96,7 @@ For industrial scale, study **[MOTORSLICE](https://store.steampowered.com/app/28
 
 ### Give each crew a recognizable musical and visual identity
 
-Start with the [16-track listening path](Research-Graffiti-Music-and-Audio), then explore the seven shelves. The collection spans Naganuma/BRC lineage, funk, house, breaks, jungle, bass music and the established crews' own traditions. It includes current discoveries from 2 Mello, GRRL, wev, Bteck and the Denshattack soundtrack alongside enduring references.
+Start with the [original 16-track listening path](https://herbertofury.github.io/JetSetCraft/research.html?path=first-listen), then explore its seven shelves alongside the new additions. The first selection spans Naganuma/BRC lineage, funk, house, breaks, jungle, bass music and the established crews' own traditions. Its October 31 research includes discoveries from 2 Mello, GRRL, wev, Bteck and the Denshattack soundtrack alongside enduring references.
 
 Build a shared identity kit across silhouette, emblem, art vocabulary, movement phrasing, musical palette and arrival. Study [Lady Pink](https://www.ladypinknyc.com/fine-art-page), [FUTURA LABORATORIES](https://futuralaboratories.com/pages/about), [OSGEMEOS](https://pinacoteca.org.br/programacao/exposicoes/osgemeos-segredos/) and [Henry Chalfant at STRAAT](https://www.straatmuseum.com/en/press/from-new-york-to-amsterdam-straat-museum-shows-graffiti-culture-through-the-eyes-of-henry-chalfant) for broader authored street culture.
 

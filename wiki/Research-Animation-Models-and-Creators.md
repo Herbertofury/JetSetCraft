@@ -1,16 +1,444 @@
 # 🎞️ Art, Animation, Models & Creators
 
-**[← Research hub](Inspiration-and-Research)** · **[Open the visual research browser](https://herbertofury.github.io/JetSetCraft/research.html)** · [Earlier catalogue](#earlier-catalogue)
+**[← Research hub](Inspiration-and-Research)** · **[Open the visual research browser](https://herbertofury.github.io/JetSetCraft/research.html)** · [Latest expansion](#november-1-expansion) · [First expansion](#october-31-expansion) · [Earlier catalogue](#earlier-catalogue)
 
-This expansion adds **24 art, culture and presentation references** plus **10 choreography papers**, with source-linked images and experiments for crew identity, motion and readable worlds. Research checked **31 October 2026**. Priority labels are editorial study order; applications and experiments are proposals unless the existing project status explicitly says otherwise.
+**40 curated art/culture references and 18 research papers across two passes**, followed by the preserved earlier catalogue. The **November 1 expansion adds 16 cultural and visual references plus eight papers**, connecting public-space design, collaborative graffiti, dance authorship, contact-aware motion and route generation to concrete JetSetCraft experiments. The October 31 studies remain intact below.
 
-## Art, street culture, readability and presentation research
+## November 1 expansion
+
+**Checked 1 November 2026 · 16 additional primary references · Six verified source images · One direct film video and three original performance/production pages.**
+
+The first research pass established a broad visual and game reference base. This pass adds the people, public places and working practices that can make JetSetCraft's streets feel inhabited: skate spaces with social edges, dance communities with recognizable voices, blackbooks with history, and graphic identities that carry through posters, gear and interface elements.
+
+These are additions to the current plans for terrain-aware events, music-driven dances, gang art rewards and distinctive Honkistas presentation. They are design proposals. They do not replace the approved CPM hair and cloth direction, the full authorized content catalogue, source-mob preservation, or the existing movement and combat ownership rules.
+
+### Start with these connections
+
+| JetSetCraft question | Strongest starting references | Design direction |
+|---|---|---|
+| How does a hangout support skating and a community at the same time? | [Skatepark Development Guide](https://publicskateparkguide.org/design-and-construction/factors-of-skatepark-design/), [Superkilen](https://superflex.net/works/superkilen), [Stapelbäddsparken](https://malmo.se/Uppleva-och-gora/Natur-och-parker/Parker-i-Malmo/Stapelbaddsparken.html) | Connected lines, social edges, a reason to return and different uses across a session. |
+| How can existing terrain become a memorable place? | [Southbank](https://llsb.netlify.app/theproject/), [Underpass Park](https://www.waterfrontoronto.ca/our-projects/underpass-park) | Work with a recognizable structure, preserve its history and make changes reversible. |
+| How does a crew dance feel like a conversation? | [Ladies of Hip-Hop](https://www.ladiesofhiphop.com/the-collective), [Breakin’ Convention](https://www.breakinconvention.com/we-break), [Brian Green](https://www.peridance.com/faculty/brian-green) | Groove, invitation, response, individual phrasing and a clear transfer of attention. |
+| What makes an art collection worth exploring? | [Getty's LA Liber Amicorum](https://www.getty.edu/research/special_collections/notable/la_liber_amicorum/index.html), [Cornell Hip Hop Collection](https://hiphop.library.cornell.edu/digital-collections/) | Named artists, linked works, full titles, provenance and discoveries that accumulate. |
+| How can expressive art remain readable during movement? | [AIGA/DOT symbols](https://segd.org/resources/aiga-dot-symbols-for-transportation/), [Riot's environment-art process](https://playvalorant.com/en-gb/news/dev/the-art-of-valorant-map-environments/), [Whitney identity](https://www.jetset.nl/archive/whitney-museum-identity) | Clear functional signs, visible contact geometry and layouts that respect each artwork's proportions. |
+| How does a crew acquire a complete visual personality? | [WipEout: Futurism](https://readonlymemory.com/products/wipeout-futurism-studio-build), [THE LINE / Humility](https://thelinestudio.com/work/gorillaz) | Carry authored identity through graphic materials and through a character's skating attitude. |
+
+### Visual field notes
+
+These are images linked from the original project or archive. Each destination returned a successful response and passed an image-byte decode check on 1 November 2026. Captions identify the image's owner or credited photographer. They are study material, not newly created JetSetCraft assets.
+
+| Public space and movement | Art, memory and graphic systems |
+|---|---|
+| ![Superkilen Red Square, showing a bold public-space identity](https://superflex.net/pressimages/th_superkilen-2688.jpg.jpg)<br>**Superkilen:** differentiated public space. Photo Torben Eskerod; SUPERFLEX / BIG / Topotek 1. [Project and credits](https://superflex.net/press/label/superkilen). | ![Axis artwork from the LA Liber Amicorum blackbook](https://www.getty.edu/research/special_collections/notable/la_liber_amicorum/images/mosaic/gri_2013_m_8_001_Axis.jpg)<br>**LA Liber Amicorum:** an authored blackbook page by Axis. Getty Research Institute. [Archive](https://www.getty.edu/research/special_collections/notable/la_liber_amicorum/index.html). |
+| ![Southbank restoration image from 2019](https://llsb.netlify.app/img/timeline/2019.jpg)<br>**Southbank:** a community's relationship with an existing skate space. Long Live Southbank archive; individual photographer unlisted. [Project](https://llsb.netlify.app/theproject/). | ![Experimental Jetset sketches for the responsive Whitney identity](https://www.jetset.nl/images/2013/thumbnails/responsive-w-1-small.jpg)<br>**Responsive W:** a graphic system that responds to art and space. Experimental Jetset, preliminary sketches, 2012. [Process](https://www.jetset.nl/archive/whitney-museum-identity). |
+| ![Stapelbäddsparken skatepark in Malmö](https://malmo.se/images/18.35f28b8a1706703719d69c0/1583422101857/STAPELB%C3%84DDSPARKEN-hero.jpg)<br>**Stapelbäddsparken:** skating as one part of a wider public program. Malmö stad. [Project](https://malmo.se/Uppleva-och-gora/Natur-och-parker/Parker-i-Malmo/Stapelbaddsparken.html). | ![Basketball and painted pillars at Toronto's Underpass Park](https://www.waterfrontoronto.ca/sites/default/files/styles/carousel_with_bleeding_image_sm/public/2022-05/Underpass%20Park%20-%20basketball.JPG?h=bfa41935&itok=NnNWia2B)<br>**Underpass Park:** existing infrastructure becomes a social landmark. Waterfront Toronto. [Project](https://www.waterfrontoronto.ca/our-projects/underpass-park). |
+
+### How to use the culture references
+
+Study movement through its context as well as its poses. A cypher has relationships between the person entering, the person answering and the people watching. A house phrase has a groove and weight changes underneath the visible step. A blackbook connects a mark to its maker and to other pages. Those relationships can inform existing clips and screens before a large new animation library exists.
+
+Attribution should travel with the research and later commissioned or imported work. Invite relevant practitioners to review movement names and descriptions. ILL-ABILITIES is a reference for human creativity and inclusive participation; it should never be used to equate disabled dancers with nonhuman Minecraft rigs.
+
+The useful scope distinction for the two crossover references is deliberate: **WipEout: Futurism contributes graphic production and fictional branding; THE LINE's Humility page contributes skating animation and performance.** A separate games or music entry can serve another role without making these references redundant.
+
+### Public space & skatepark design
+
+#### Public Skatepark Development Guide — Factors of Skatepark Design
+
+[Primary source](https://publicskateparkguide.org/design-and-construction/factors-of-skatepark-design/) · [Supporting source](https://publicskateparkguide.org/)
+
+**Evidence:** Practice guide supported by The Skatepark Project.
+
+**What to study.** The guide treats flow, traffic, speed, difficulty, visibility and skate style as design questions, alongside seating, access and other functions of a public place. Its linked-room analogy is useful for understanding lines and conflicts.
+
+**JetSetCraft application.** Give a hangout connected skating areas, recognizable approach directions, recovery space and social edges. Evaluate where players and source mobs can enter, stop and watch without occupying the landing zone.
+
+**Prototype check.** Sketch three linked lines and trace arrivals, landings, bailouts and spectator movement separately. Try all six ride styles and representative source-mob envelopes; reject geometry that requires an impossible merge or unsafe recovery.
+
+**Priority:** P1 · **Atlas ID:** r2-art-skatepark-flow
+
+#### SUPERFLEX — Superkilen
+
+[Primary source](https://superflex.net/works/superkilen) · [Supporting source](https://superflex.net/press/label/superkilen)
+
+**Evidence:** Built public-space project, 2012.
+
+**What to study.** Superkilen organizes different public activities across the Red Square, Black Square and Green Park. Objects nominated by residents give the project specific cultural associations. The collaborators were SUPERFLEX, BIG and Topotek 1.
+
+**JetSetCraft application.** Develop hangout districts with different social functions and meaningful props: a music court, conversation area and relaxed practice space. Let crew history and the surrounding biome inform each object, rather than merely changing the same prop's color.
+
+**Prototype check.** Build a three-zone concept using existing terrain and materials. Check whether a newcomer can identify each area's purpose through shape, placement, sound and signage with color differences removed.
+
+**Priority:** P1 · **Atlas ID:** r2-art-superkilen
+
+#### Long Live Southbank — restoration of the Undercroft
+
+[Primary source](https://llsb.netlify.app/theproject/)
+
+**Evidence:** Community campaign and restoration archive.
+
+**What to study.** The campaign documents the protection and restoration of Southbank's skate space, including the return of the little banks and timber ledge in 2019. The archive records a place shaped by sustained community use.
+
+**JetSetCraft application.** Make a hangout accumulate stories, art, familiar lines and returning visitors. A restoration event could reopen a route or repair an event prop while leaving player construction and the source world intact.
+
+**Prototype check.** Design a reversible restoration sequence around a recognizable existing feature. After the event, players should still identify the original place and recover their previous routes; any temporary construction must respect later player edits.
+
+**Priority:** P1 · **Atlas ID:** r2-art-southbank
+
+#### Malmö / Bryggeriet — Stapelbäddsparken
+
+[Primary source](https://malmo.se/Uppleva-och-gora/Natur-och-parker/Parker-i-Malmo/Stapelbaddsparken.html) · [Supporting source](https://www.bryggeriet.org/skate-malmo/stapelbaddsparken/)
+
+**Evidence:** Municipal park and skate-community project.
+
+**What to study.** Malmö describes a place that combines skating with climbing, roller derby, a skate café and public events. The park was developed with the skate organization Bryggeriet.
+
+**JetSetCraft application.** Program hangouts across an entire play session: practice, watching, music, a gathering, then a challenge. Use different parts of the space for these activities instead of making every visit begin with an opponent spawn.
+
+**Prototype check.** Write a short daily program for one hangout. Verify that a player can practice, watch, paint and join a challenge without mandatory combat or the disappearance of unrelated visitors.
+
+**Priority:** P2 · **Atlas ID:** r2-art-stapelbaddsparken
+
+#### Waterfront Toronto — Underpass Park
+
+[Primary source](https://www.waterfrontoronto.ca/our-projects/underpass-park) · [Supporting source](https://pfsstudio.com/portfolio/underpass-park/)
+
+**Evidence:** Built public-space project.
+
+**What to study.** Underpass Park uses existing overhead infrastructure as the setting for skating, basketball and gathering. The project incorporates columns, covered space, lighting and Paul Raff's reflective artwork Mirage.
+
+**JetSetCraft application.** Turn suitable bridges, sheltered terrain and existing structures into recognizable event settings. Columns can frame entrances and landmarks while actual collision, overhead clearance and fluid behavior remain authoritative.
+
+**Prototype check.** Author an underpass event without flattening terrain. Test the tallest supported rider or participating mob, approach visibility, light landmarks, recovery and weather transitions before admitting a route.
+
+**Priority:** P2 · **Atlas ID:** r2-art-underpass-park
+
+
+### Street dance communities
+
+#### Ladies of Hip-Hop Dance Collective — community and performance
+
+[Primary source](https://www.ladiesofhiphop.com/the-collective) · [Supporting source](https://www.ladiesofhiphop.com/programs) · [Film / performance page](https://danceinteractive.jacobspillow.org/d-sabela-grimes-featuring-ladies-of-hip-hop-dance-collective/parable-of-passage/)
+
+**Evidence:** Active dance collective; venue performance archive.
+
+**What to study.** The collective emphasizes women in hip-hop and intergenerational practice. Jacob's Pillow preserves a performance of Parable of PassAge, choreographed by d. Sabela grimes with the collective, offering a concrete reference for relationships within a group.
+
+**JetSetCraft application.** Study invitation, response, spacing and individual expression when building crew dance phrases. Preserve performer and choreographer attribution in the research and any later commissioned material.
+
+**Prototype check.** Storyboard a phrase as solo, duet and crew versions. Make the leader's cue, the response and the handoff readable without forcing every participant into the same pose at the same moment.
+
+**Priority:** P1 · **Atlas ID:** r2-art-ladies-of-hiphop
+
+#### Breakin’ Convention — WE BREAK and BCTV
+
+[Primary source](https://www.breakinconvention.com/we-break) · [Supporting source](https://www.breakinconvention.com/bctv) · [Film / performance page](https://www.breakinconvention.com/we-break)
+
+**Evidence:** Original film and hip-hop theatre video archive.
+
+**What to study.** WE BREAK is an original spoken-word and breaking film written, directed and produced by Emmanuel Adelekun, with camera and editing by Owen Ling and executive production by Jonzi D. BCTV also documents performances, people and practice.
+
+**JetSetCraft application.** Give a cypher a social sequence: invitation, entrance, a phrase, response and an exit that returns the performer to the group. These transitions can make even existing dance clips feel situated in a community.
+
+**Prototype check.** Assemble a short cypher using current clips and authored transitional cues. Check that observers can identify who has the floor and when another player is invited to respond, with optional camera movement disabled.
+
+**Priority:** P1 · **Atlas ID:** r2-art-breakin-convention
+
+#### Brian “Footwork” Green — dance vocabulary and teaching lineage
+
+[Primary source](https://www.peridance.com/faculty/brian-green) · [Supporting source](https://brianfootworkgreen.squarespace.com/teaching-resume)
+
+**Evidence:** Artist and dance-school biographies.
+
+**What to study.** Green's teaching biography connects New York club practice with house, lofting, freestyle, fast footwork, grooves and isolations. It offers a named practitioner's vocabulary and lineage rather than a generic list of dance poses.
+
+**JetSetCraft application.** Describe authored phrases through their groove, weight transfer, footwork and performance intention. Use specific community and practitioner credits when researching movements, while avoiding claims that one biography defines an entire culture.
+
+**Prototype check.** Give six planned phrases clear notes on grounding, weight shifts, footwork, torso rhythm and source attribution. Ask an appropriate dance practitioner to review the descriptions before treating them as authoritative movement labels.
+
+**Priority:** P2 · **Atlas ID:** r2-art-brian-green
+
+#### ILL-ABILITIES — expressive approaches to breaking
+
+[Primary source](https://www.illabilities.com/)
+
+**Evidence:** International breaking crew and inclusive workshops.
+
+**What to study.** ILL-ABILITIES presents a crew whose work foregrounds individual approaches to breaking and inclusive participation. Their performances and workshops are useful references for expressive variety and authorship.
+
+**JetSetCraft application.** Let players express rhythm and style through different input patterns and visual options. A challenge can reward timing, phrase structure and intention without demanding one rigid physical or control pattern from everyone.
+
+**Prototype check.** Offer alternative accessible input methods for the same phrase objective. Evaluate agency, readability and scoring equivalence with players; do not equate a disabled person's movement with a nonhuman mob rig.
+
+**Priority:** P1 · **Atlas ID:** r2-art-ill-abilities
+
+
+### Blackbooks & visual archives
+
+#### Cornell Hip Hop Collection — digital flyers and photographs
+
+[Primary source](https://hiphop.library.cornell.edu/digital-collections/) · [Supporting source](https://hiphop.library.cornell.edu/)
+
+**Evidence:** Institutional archive; selected collections digitized.
+
+**What to study.** Cornell's digital collection portal provides access to hip-hop flyers and photographs, including work associated with Joe Conzo and Ernie Paniccioli. Some listed collections are marked as forthcoming, so the portal's individual availability labels matter.
+
+**JetSetCraft application.** Treat event posters as part of the world: recognizable performers, crews, location, occasion and visual authorship. Let a blackbook preserve discovered posters and their provenance alongside graffiti rewards.
+
+**Prototype check.** Design three fictional event posters with different hand styles and compositions. At a glance, the player should find the crew, activity and location; the detailed view should reveal the artist, event and discovery history.
+
+**Priority:** P1 · **Atlas ID:** r2-art-cornell-hiphop
+
+#### Getty Research Institute — LA Liber Amicorum
+
+[Primary source](https://www.getty.edu/research/special_collections/notable/la_liber_amicorum/index.html) · [Watch original / author-linked video](https://www.youtube.com/watch?v=BoWUOIWXPr0)
+
+**Evidence:** Collaborative blackbook and institutional archive.
+
+**What to study.** Getty invited Los Angeles graffiti and tattoo artists to respond to historical lettering and emblem books through a shared blackbook. The online project preserves individual works and the relationship between artists, lettering and a collective volume.
+
+**JetSetCraft application.** Give the graffiti collection the feel of an accumulating blackbook: works have artists, related marks, sketches, discovery history and space to be appreciated at their native proportions. Connect that structure to the existing per-gang art ladder.
+
+**Prototype check.** Mock up one crew's sticker, tag, emblem and prestige mural as linked pages. Preserve original art dimensions, complete titles and credits; let a player favorite a work without hiding the rest of the catalogue.
+
+**Priority:** P1 · **Atlas ID:** r2-art-getty-blackbook
+
+
+### Signage & graphic identity
+
+#### AIGA / DOT — Symbols for Transportation
+
+[Primary source](https://segd.org/resources/aiga-dot-symbols-for-transportation/) · [Supporting source](https://cdn.segd.org/wp-content/uploads/2025/04/14_SEGD_AIGADOT_Symbols-for-Transportation.pdf)
+
+**Evidence:** Original transportation symbol set preserved by SEGD.
+
+**What to study.** The AIGA/DOT transportation symbols provide a coordinated vocabulary for identifying functions and destinations in public settings. SEGD supplies the original set as a vector reference.
+
+**JetSetCraft application.** Separate functional wayfinding from expressive crew marks. Entrances, exits, recovery points, music, repair and route risk should remain understandable when surrounded by highly individual graffiti and posters.
+
+**Prototype check.** Create a small functional symbol family and test it at HUD size, on a wall at movement speed and in grayscale. Pair unfamiliar symbols with concise labels; keep the crew's artistic mark visible in its own role.
+
+**Priority:** P1 · **Atlas ID:** r2-art-aiga-dot
+
+#### Experimental Jetset — Whitney Museum graphic identity
+
+[Primary source](https://www.jetset.nl/archive/whitney-museum-identity)
+
+**Evidence:** Designers’ original process archive, 2013.
+
+**What to study.** Experimental Jetset describes the Responsive W as a graphic tool that adapts to different content and proportions. The process material shows a system that provides continuity while allowing the artwork to retain its own dimensions and character.
+
+**JetSetCraft application.** Use a consistent gallery frame that accommodates wide pieces, tall lettering and small stickers without forcing the work into one crop. Carry the same identity through inventory cards, blackbook pages and event signage.
+
+**Prototype check.** Lay out a portrait tag, panoramic mural, square emblem and long title in the same interface. Require the full artwork to remain available and the title to be readable through focus or detail view.
+
+**Priority:** P2 · **Atlas ID:** r2-art-whitney-identity
+
+#### WipEout: Futurism — graphic identity and production archive
+
+[Primary source](https://readonlymemory.com/products/wipeout-futurism-studio-build) · [Supporting source](https://www.thedesignersrepublic.com/)
+
+**Evidence:** Publisher archive of original game design material.
+
+**What to study.** Read-Only Memory's WipEout: Futurism assembles original design material and development testimony. Its Studio.Build edition foregrounds Michael C. Place's graphic direction and the series' team, vehicle and interface identity.
+
+**JetSetCraft application.** Study how a crew's logo, equipment branding, event card, results strip and environmental signage can belong to the same fictional organization. The relevant role here is graphic production, distinct from studying WipEout's racing mechanics.
+
+**Prototype check.** Build a single crew identity sheet covering tag, emblem, gear decal, event poster and results banner. Each should be recognizable at its actual display size without relying on the same color swap or generic crown.
+
+**Priority:** P2 · **Atlas ID:** r2-art-wipeout-futurism
+
+#### Riot Games — The Art of VALORANT Map Environments
+
+[Primary source](https://playvalorant.com/en-gb/news/dev/the-art-of-valorant-map-environments/)
+
+**Evidence:** Original environment-art development article, 2020.
+
+**What to study.** Environment artist Lydia Zanotti explains a progression from graybox to art blockout and production, including readability, collision, visual noise and recognizable location callouts. Detail placement is considered in relation to the space players need to read.
+
+**JetSetCraft application.** Protect the visibility of approach edges, rails, wall contacts and landing shapes while preserving environmental richness. Put distinctive landmarks where players can use them to describe a line to someone else.
+
+**Prototype check.** Compare graybox and dressed versions of one route at skating speed. Check missed contacts, mistaken edges and players' spoken descriptions; move distracting detail or improve the landmark only where an observed ambiguity warrants it.
+
+**Priority:** P1 · **Atlas ID:** r2-art-valorant-environments
+
+
+### Skating animation & performance
+
+#### THE LINE — Gorillaz, Humility
+
+[Primary source](https://thelinestudio.com/work/gorillaz) · [Film / performance page](https://thelinestudio.com/work/gorillaz)
+
+**Evidence:** Original animation-production case study, 2018.
+
+**What to study.** THE LINE's production page documents the hand-drawn animation integrated with live action for Gorillaz's Humility, including 2-D's skating performance at Venice Beach. It identifies the production's creative collaborators.
+
+**JetSetCraft application.** Study how a relaxed skating character communicates groove through body attitude, held poses, upper-body sway and recoveries while the skates continue rolling. This source is an animation reference; the track itself belongs in the music research lane.
+
+**Prototype check.** Produce a short quad-skate coast-to-push-to-recovery animatic using the existing rig. Check wheel contact, silhouette and personality at gameplay distance, then verify that combat-arm ownership and neutral-input stopping remain unchanged.
+
+**Priority:** P1 · **Atlas ID:** r2-art-humility-animation
+
+**Checked 1 November 2026 · Eight additional original research sources · Five author-linked demonstration videos · Two author-project figures.**
+
+These papers fill gaps in contact-aware animation, transitions, rig compatibility and procedural authoring. Their publication years are stated explicitly. They are useful foundational work, not announcements of new 2026 releases, and none is presented as a drop-in Forge dependency.
+
+### Read in this order
+
+| Current JetSetCraft question | Read first | Lowest-risk experiment |
+|---|---|---|
+| Which foot or wheel motion is intentional? | [UnderPressure](https://github.com/InterDigitalInc/UnderPressure) | Label contacts in a small existing clip set before attempting cleanup. |
+| Can entry and exit poses connect more convincingly? | [Robust Motion In-betweening](https://www.ubisoft.com/en-us/studio/laforge/news/1ERUZiYmmtUBYZ4KvVvmFP/robust-motion-inbetweening) | Author or bake a short transition and compare it with a simple blend. |
+| Can one animation family fit a different rig? | [Skeleton-Aware Networks](https://deepmotionediting.github.io/retargeting) | Write a rig compatibility manifest and reject incompatible topology clearly. |
+| Can the clip library choose more continuous poses? | [Learned Motion Matching](https://theorangeduck.com/page/learned-motion-matching), [Phase-Functioned Networks](https://theorangeduck.com/page/phase-functioned-neural-networks-character-control) | Test explicit phase/contact features in an offline preview before adding learned models. |
+| Can a participant use a bench or Boombox naturally? | [Neural State Machine](https://github.com/sebastianstarke/AI4Animation#siggraph-asia-2019) | Author a safe approach, contact anchor and interruptible exit for one compatible rig. |
+| Can creators propose more interesting routes? | [Interactive Procedural Street Modeling](https://www2.cs.uh.edu/~chengu/Publications/streetModeling/street_modeling.html), [Model Synthesis](https://paulmerrell.org/model-synthesis/) | Generate candidates with reproducible guidance, then run a separate physical and global route validator. |
+
+### Research figures
+
+| Skeleton compatibility | Authored procedural structure |
+|---|---|
+| ![Skeleton pooling diagram from Skeleton-Aware Networks](https://deepmotionediting.github.io/images/pool_to_primal.png)<br>**Skeleton-Aware Networks:** the graph relationship is part of the method's assumptions. Figure from the authors' project. [Paper and demonstration](https://deepmotionediting.github.io/retargeting). | ![City model generated in Paul Merrell's Model Synthesis project](https://paulmerrell.org/wp-content/uploads/2021/07/city_simple9f.jpg)<br>**Model Synthesis:** local compatibility can produce a candidate structure. Image from Paul Merrell's project. [Paper and demonstrations](https://paulmerrell.org/model-synthesis/). |
+
+Both figure URLs returned a successful response and passed an image-byte decode check on 1 November 2026. Video links below were observed on the authors' or original projects' pages; they are watch destinations, not a claim that every video was played end to end during research.
+
+### Transfer the useful idea before the whole technique
+
+A strong research result answers a defined question under particular data, rig, topology or environment assumptions. JetSetCraft adds constraints those papers do not establish: server-authoritative movement, exact cancel behavior, Minecraft collision, other mods' arm ownership, source mobs with distinct bodies and AI, and vanilla fluids. Preserve those constraints when turning a paper into an experiment.
+
+In practice, the most useful first contribution may be a contact annotation, a rig manifest, a better authoring preview or a clear route-validation failure. Those are concrete improvements even if the final game never runs a neural network. A locomotion paper's benchmark is not evidence of JetSetCraft's performance, and a paper's demonstration is not an automatically reusable animation or runtime integration.
+
+### Locomotion & transitions
+
+#### Learned Motion Matching
+
+[Primary source](https://theorangeduck.com/page/learned-motion-matching) · [Paper / supporting author material](https://www.ubisoft.com/en-us/studio/laforge/news/3NWqwcMU9lMfumgfPAEfka/learned-motion-matching) · [Watch original / author-linked video](https://www.youtube.com/watch?v=16CHDQK4W5k)
+
+**Evidence:** SIGGRAPH 2020 research paper and author project. Daniel Holden, Oussama Kanoun, Maksym Perepichka and Tiberiu Popa.
+
+**What to study.** The paper replaces components of a motion-matching pipeline with learned models, investigating how a responsive animation controller can use a motion database more compactly.
+
+**JetSetCraft application.** First study the features used to select a suitable clip: direction, speed, trajectory and pose or contact continuity. An offline matching preview for the existing clip library may be useful without introducing a learned model into every client.
+
+**Prototype check.** Compare an explicit rule-based clip selector with a contact/heading-aware nearest-neighbor preview on the same transitions. Record visible discontinuities and cancellation behavior before considering any learned replacement.
+
+**Priority:** P2 · **Atlas ID:** r2-paper-learned-motion-matching
+
+#### Robust Motion In-betweening
+
+[Primary source](https://www.ubisoft.com/en-us/studio/laforge/news/1ERUZiYmmtUBYZ4KvVvmFP/robust-motion-inbetweening) · [Paper / supporting author material](https://staticctf.ubisoft.com/J3yJr34U2pZ2Ieem48Dwy9uqj5PNUQTn/1txNTAqAGya2sjQVWQUsKE/d317e852512cbc9fec6dafc8b61f4a4e/RobustMotionInbetweening.pdf)
+
+**Evidence:** SIGGRAPH 2020 research paper. Félix G. Harvey, Mike Yurick, Derek Nowrouzezahrai and Christopher Pal.
+
+**What to study.** The authors study learned motion transitions constrained by starting and target motion, introducing time-to-arrival conditioning and the LaFAN1 benchmark for evaluating in-betweening.
+
+**JetSetCraft application.** Explore offline generation or assisted authoring of short bridges between approved animation poses. Export reviewed, deterministic clips with clear entry, exit and contact annotations rather than letting a model improvise gameplay authority at runtime.
+
+**Prototype check.** Author bridges from coast to trick preparation, trick to landing and dance to neutral. Compare with a simple blend, and reject transitions that slide planted feet, delay a cancel or take ownership of combat arms.
+
+**Priority:** P1 · **Atlas ID:** r2-paper-robust-inbetweening
+
+#### Phase-Functioned Neural Networks for Character Control
+
+[Primary source](https://theorangeduck.com/page/phase-functioned-neural-networks-character-control) · [Paper / supporting author material](https://www.pure.ed.ac.uk/ws/portalfiles/portal/35467734/phasefunction.pdf) · [Watch original / author-linked video](https://www.youtube.com/watch?v=Ul0Gilv5wvY)
+
+**Evidence:** SIGGRAPH 2017 research paper and author project. Daniel Holden, Taku Komura and Jun Saito.
+
+**What to study.** The paper uses phase-dependent neural control to relate character animation to user commands and terrain geometry. The author project demonstrates the role of locomotion phase in terrain-aware character motion.
+
+**JetSetCraft application.** Treat push phase, foot-contact phase and slope as useful animation metadata even if no neural runtime is adopted. Use them to improve pose alignment while the existing movement system continues to determine speed, stopping and fluid behavior.
+
+**Prototype check.** Compare the same authored push cycle on flat ground and a slope with phase-aware presentation enabled and disabled. Keep the trajectory identical, verify wheel or foot contact, and confirm that neutral input and water immediately restore their existing behavior.
+
+**Priority:** P2 · **Atlas ID:** r2-paper-phase-functioned
+
+
+### Contact & retargeting
+
+#### Neural State Machine for Character-Scene Interactions
+
+[Primary source](https://github.com/sebastianstarke/AI4Animation#siggraph-asia-2019) · [Paper / supporting author material](https://github.com/sebastianstarke/AI4Animation/blob/master/Media/SIGGRAPH_Asia_2019/Paper.pdf) · [Watch original / author-linked video](https://www.youtube.com/watch?v=7c6oQP1u2eQ)
+
+**Evidence:** SIGGRAPH Asia 2019 research paper and author repository. Sebastian Starke, He Zhang, Taku Komura and Jun Saito.
+
+**What to study.** The research models character interaction with scene geometry, including actions involving chairs, boxes and doors. It provides a concrete study of animation conditioned on an intended interaction and its surroundings.
+
+**JetSetCraft application.** For a hangout, author interaction anchors for sitting, leaning or approaching a Boombox, with valid entry and exit space. Keep participation a bounded activity lease that preserves the source mob, its AI state and its ordinary responsibilities.
+
+**Prototype check.** Try one sit or lean interaction with a compatible rig, then obstruct the approach or interrupt the activity. The participant must decline or leave safely, retaining source identity, inventory and AI ownership; incompatible bodies need a suitable authored alternative.
+
+**Priority:** P2 · **Atlas ID:** r2-paper-neural-state-machine
+
+#### UnderPressure: Deep Learning for Foot Contact Detection, Ground Reaction Force Estimation and Footskate Cleanup
+
+[Primary source](https://github.com/InterDigitalInc/UnderPressure) · [Paper / supporting author material](https://arxiv.org/abs/2208.04598)
+
+**Evidence:** SCA 2022 / Computer Graphics Forum 41(8) research and original code. Lucas Mourot, Ludovic Hoyet, François Le Clerc and Pierre Hellier.
+
+**What to study.** UnderPressure combines motion with measured foot-pressure information to study contact detection and footskate cleanup. Its repository supplies the paper's associated code and data references.
+
+**JetSetCraft application.** Introduce explicit contact labels such as planted, rolling, sliding and airborne in the animation review process. Human foot-skate cleanup must not remove intentional wheel travel, grinds, powerslides or dance glides.
+
+**Prototype check.** Review one planted dance step, one skate push, one grind and one intentional slide. Correct only erroneous movement under the authored contact definition; validate the result against the rig and preserve the server's trajectory.
+
+**Priority:** P1 · **Atlas ID:** r2-paper-underpressure
+
+#### Skeleton-Aware Networks for Deep Motion Retargeting
+
+[Primary source](https://deepmotionediting.github.io/retargeting) · [Paper / supporting author material](https://arxiv.org/abs/2005.05732) · [Watch original / author-linked video](https://www.youtube.com/watch?v=ym8Tnmiz5N8)
+
+**Evidence:** SIGGRAPH 2020 research paper and author project. Kfir Aberman, Peizhuo Li, Dani Lischinski, Olga Sorkine-Hornung, Daniel Cohen-Or and Baoquan Chen.
+
+**What to study.** The authors study retargeting across skeletons using skeleton-aware operators and pooling toward a common primal skeleton. The topology assumptions are part of the method; the paper does not establish that any arbitrary creature can share any human animation.
+
+**JetSetCraft application.** Define rig compatibility and available degrees of freedom explicitly. Humanoid-compatible rigs may share an offline retargeting path, while quadrupeds, flyers and unusual source mobs retain appropriate authored motion and recognizable anatomy.
+
+**Prototype check.** Document hips, roots, contacts and optional bones for two compatible rigs and one incompatible rig. The pipeline should retarget the compatible pair and explain why the third needs another authoring path, without distorting it into a human silhouette.
+
+**Priority:** P1 · **Atlas ID:** r2-paper-skeleton-aware
+
+
+### Procedural routes & environment authoring
+
+#### Interactive Procedural Street Modeling
+
+[Primary source](https://www2.cs.uh.edu/~chengu/Publications/streetModeling/street_modeling.html) · [Paper / supporting author material](https://www2.cs.uh.edu/~chengu/Publications/streetModeling/street_sig08.pdf)
+
+**Evidence:** SIGGRAPH 2008 research paper and author project. Guoning Chen, Gregory Esch, Peter Wonka, Pascal Müller and Eugene Zhang.
+
+**What to study.** The paper uses tensor fields to guide street-network generation while allowing direct editing of the resulting graph. Its author page and paper describe the relationship between high-level guidance, terrain constraints and network layout.
+
+**JetSetCraft application.** Use a player sketch, terrain feature or chosen landmark as guidance for proposing an event route. The result still requires actual Minecraft clearance, contact, recovery and participant-safety validation before use.
+
+**Prototype check.** Propose routes around a ridge, water and an existing player build with the same seed and guidance. Require reproducible suggestions, visible rejection reasons and no terrain flattening, fluid rerouting or silent edits to protected geometry.
+
+**Priority:** P2 · **Atlas ID:** r2-paper-street-modeling
+
+#### Example-Based Model Synthesis
+
+[Primary source](https://paulmerrell.org/model-synthesis/) · [Paper / supporting author material](https://paulmerrell.org/wp-content/uploads/2022/03/model_synthesis.pdf) · [Watch original / author-linked video](https://www.youtube.com/watch?v=-N_TTAsdXgg)
+
+**Evidence:** I3D 2007 research paper, author project and demonstrations. Paul Merrell.
+
+**What to study.** Model synthesis builds new arrangements from compatibility patterns learned from an example. The author's project provides the original paper, results and demonstrations of the technique.
+
+**JetSetCraft application.** Explore event-piece templates with explicit entry and exit ports, material context, support and clearance requirements. Local compatibility can generate candidates; global route validation must still prove that the result is playable.
+
+**Prototype check.** Generate a small set of candidate event layouts from a deterministic seed. Deliberately include a locally compatible dead end and unreachable landing; reject them through a separate global validator before placing any reversible props.
+
+**Priority:** P2 · **Atlas ID:** r2-paper-model-synthesis
+
+---
+
+## October 31 expansion
+
+### Art, street culture, readability and presentation research
 
 **Research checked: October 31, 2026.** This expansion connects external references to JetSetCraft’s existing direction. It is research and proposed implementation work, not a claim that the features below are shipped or runtime-verified.
 
 The useful creative target is a world where a rider, their crew, their sound and their art belong together. JetSetCraft already has six ride styles, a substantial trick/dance vocabulary, a bounded custom canvas, gang identities and strong compatibility contracts. The next quality leap comes from making those systems expressive, recognizable and pleasant to use together.
 
-### Start with these six studies
+#### Start with these six studies
 
 | Study | Why it deserves the first review | Watch / inspect |
 |---|---|---|
@@ -21,7 +449,7 @@ The useful creative target is a world where a rider, their crew, their sound and
 | **Juste Debout + BC One** | Distinct dance families, phrasing, response and performance context. | [Juste Debout](https://www.juste-debout.com/en/) · [BC One](https://www.redbull.com/us-en/event-series/bc-one) |
 | **Vignelli wayfinding** | Route identity that remains legible across HUD, world signs and maps. | [Museum digital exhibition](https://www.nytransitmuseum.org/vignelli/) |
 
-### Visual reference shelf
+#### Visual reference shelf
 
 The images below are remote reference images linked to the original artist/studio/museum pages. They are not imported JetSetCraft assets.
 
@@ -35,11 +463,11 @@ The images below are remote reference images linked to the original artist/studi
 | [![Lady Pink, Pink Piece](https://images.squarespace-cdn.com/content/v1/57309af162cd94614020f373/1666019558505-LLTHYJ6Q68UM26EQ5PWJ/1980-pink-piece.jpg)](https://www.ladypinknyc.com/fine-art-page) | [![Lee Quiñones, Breakfast at Baychester, Museum of the City of New York](https://www.mcny.org/sites/default/files/styles/1488x480/public/94.114.176.jpg?h=04f74b3d&itok=X6tYwOt_)](https://www.mcny.org/exhibition/above-ground-art-martin-wong-graffiti-collection) | [![Vignelli map, New York Transit Museum](https://www.nytransitmuseum.org/wp-content/uploads/2025/10/vignelli-hero-1-871x1024.webp)](https://www.nytransitmuseum.org/vignelli/) |
 | Lady Pink — *Pink Piece*, artist’s portfolio. | Lee Quiñones — *Breakfast at Baychester*, 1977; MCNY / Martin Wong Collection, 94.114.176. | New York Transit Museum — map exhibition image. |
 
-### How to use this reference register
+#### How to use this reference register
 
 “Lesson” and “prototype” are proposed JetSetCraft applications. They are not assertions about an external game’s private implementation. **High** means a close fit to an existing JetSetCraft goal; **Explore** means review only after the main slice is coherent. Dates distinguish historical references from the research date; older work remains valuable when it solves the actual problem.
 
-#### Visual identity and motion
+##### Visual identity and motion
 
 | Reference | What it can improve | Small review / prototype | Source and media |
 |---|---|---|---|
@@ -54,7 +482,7 @@ The images below are remote reference images linked to the original artist/studi
 | **Paul-Emile Boucher — Sifu art direction**<br>ART09 · High | The art director describes simplified volumes, a speedpainting texture approach and cinematic lighting/color. This is a useful reference for distinct, coherent districts. | Create three biome-native hangout palettes, each with a clear focal stage and quieter surrounding surfaces; preserve local block/material identity. | [Primary source](https://peboucher.artstation.com/projects/OmE5n6) |
 | **Raoul Desmarest — Sifu stylized character lighting**<br>ART10 · Explore | A developer breakdown distinguishes character treatment from environment lighting. Apply the principle through tested asset/material choices before attempting a global shader. | Review one custom NPC in daylight, cave darkness, Nether lighting and a crowded rave. Verify face/gear readability with the ordinary renderer and optional shader combinations. | [Primary source](https://rayoule.artstation.com/projects/nED0aO) |
 
-#### Graffiti and street culture
+##### Graffiti and street culture
 
 | Reference | What it can improve | Small review / prototype | Source and media |
 |---|---|---|---|
@@ -68,7 +496,7 @@ The images below are remote reference images linked to the original artist/studi
 | **STRAAT — Henry Chalfant: Capturing graffiti culture**<br>ART18 · High | The museum’s October 2026 exhibition documents train-scale art, photographs, sketchbooks, flyers, radio and shared viewing places. Study how a scene remembers its artists. | Prototype a writers’ hangout with a wall of earned crew pieces, route photographs and a listening corner; make the rewards represent actual play history. | [Primary source](https://www.straatmuseum.com/en/press/from-new-york-to-amsterdam-straat-museum-shows-graffiti-culture-through-the-eyes-of-henry-chalfant) |
 | **BEYOND THE STREETS — curatorial program**<br>ART19 · Explore | Study the connection among graffiti, street art, publishing, objects and exhibitions through a curator that works directly with artists. | Expand discovery into zines, flyers, event posters and stage objects tied to existing crews. Keep the same stable catalog and progression rather than a separate collectible inventory. | [Primary source](https://beyondthestreets.com/pages/about) · [Curator gallery](https://beyondthestreets.com/) |
 
-#### Place, dance and interface
+##### Place, dance and interface
 
 | Reference | What it can improve | Small review / prototype | Source and media |
 |---|---|---|---|
@@ -78,33 +506,33 @@ The images below are remote reference images linked to the original artist/studi
 | **Red Bull BC One — official battle archive**<br>ART23 · High | Use organizer footage to study breaking entrances, phrase structure, response, floor contacts and crowd reactions instead of learning dance from isolated looping poses. | Annotate selected performances into anticipation, phrase, accent, recovery and response; map intent to each safe mob anatomy and test contact correctness. | [Primary source](https://www.redbull.com/us-en/event-series/bc-one) |
 | **Juste Debout — official styles and performance references**<br>ART24 · High | Study House, Popping, Locking and Hip-Hop as distinct movement languages. JetSetCraft already has multiple dance families; their timing and weight should remain distinguishable. | Choose a reviewed phrase per family and author lead, answering and supporting roles for solo-to-crew choreography; preserve each crew’s approved music identity. | [Primary source](https://www.juste-debout.com/en/) · [Video](https://www.juste-debout-school.com/wp-content/uploads/2022/04/0320.mp4) |
 
-### Original art-direction proposals for JetSetCraft
+#### Original art-direction proposals for JetSetCraft
 
-#### A coherent identity kit for every crew
+##### A coherent identity kit for every crew
 
 Use one shared vocabulary across the existing gang record, art-reward ladder, recruit presentation, radio metadata and event staging. An identity kit can include a silhouette anchor, dominant material family, accent palette, emblem, lettering treatment, preferred motion rhythm, arrival phrase and recurring prop. This is a production checklist, not a cap on the roster or content.
 
 Start with several deliberately different crews from the already approved roster. Preserve **MoccaSins** as the canonical name and its existing selected music. Preserve **Gabberina’s** jumpstyle/gabber/hardtekk blend. Keep **Sav** and **PESTRiCA** recognizable individual Honkistas members rather than making them palette swaps. The detailed owner decisions remain on [Music-Driven Dances and Mob-Themed Bosses](https://github.com/Herbertofury/JetSetCraft/wiki/Music%E2%80%90Driven-Dances-and-Mob%E2%80%90Themed-Bosses).
 
-#### A useful graffiti taxonomy
+##### A useful graffiti taxonomy
 
 Expose meaningful differences: quick handstyle, throw-up, stencil, sticker, character, emblem, detailed piece and prestige mural. These categories should organize and explain the full collection; they do not replace its contents. Link unlocked art to the existing stable gang/reward identities and preserve source title/artist/credits for authorized imports. The 16 × 10, 4-bit custom canvas remains a deliberate bounded user-paint format; full authored/licensed gallery art is a different existing content lane.
 
 Treat the player’s collection as a blackbook: reliable search, favorites, recent choices, crew/source filters and clear locked/unlocked status. A large collection should feel generous because it is easy to navigate. Do not require a long chain of page clicks to find an already earned tag.
 
-#### One readable emphasis at a time
+##### One readable emphasis at a time
 
 At high speed, the important hierarchy is the next landing or obstacle, the rider/enemy action, then the reward accent. Place large spectacle in a predictable area and time window. Avoid letting a reactive light, announcer popup, particle burst and camera roll all compete over the same moment. Give successful transfers, clean landings and major milestones different audiovisual signatures, derived from confirmed existing events.
 
 The owner’s terrain-aware courses should use local biome materials. A warped-forest rail, cave line and rooftop session can share an affordance grammar without sharing the same textures. Color should reinforce shape, labels and placement rather than carry route meaning alone.
 
-#### Choreography needs structure and agency
+##### Choreography needs structure and agency
 
 Develop a reusable phrase vocabulary with entrances, travel phrases, accents, answers, rests and exits. A music-driven system can choose and transform this vocabulary by rhythm, phrase, intensity, crew identity and safe anatomy. Solo, supporting and responding roles make a crew feel coordinated without identical clone motion. This supports the approved music-generated/driven ambition while giving animators and playtesters something concrete to inspect.
 
 Review selected performance footage before recording exact steps or artist attribution. Keep lead/response timing distinct from movement and hit registration. The player must be able to leave, aim, use an item or return to ordinary locomotion through the existing authority rules. Moving formations need terrain/contact validation; a musical phrase is never permission to clip through a wall or teleport a source mob.
 
-#### Presentation acceptance board
+##### Presentation acceptance board
 
 | Scene | What the review should establish |
 |---|---|
@@ -118,11 +546,11 @@ Review selected performance footage before recording exact steps or artist attri
 Existing owner requirements and runtime evidence take precedence over these new suggestions. In particular, the prior authorized JSR/JSRF/BRC production lane remains intact; these references do not revoke or relabel it.
 
 
-## Music-driven choreography: ten research leads
+### Music-driven choreography: ten research leads
 
 **Checked 31 October 2026.** These are production-tool and experiment candidates for the existing [music-driven dance specification](Music‐Driven-Dances-and-Mob‐Themed-Bosses), not claims that a neural dance system runs in JetSetCraft. Prioritize editable **3D skeletal motion** when the deliverable is a playable character. A convincing generated video alone does not supply a usable rig, foot contacts, collision, multiplayer timing, or animation ownership.
 
-### Start with a choreography workbench
+#### Start with a choreography workbench
 
 The most promising direction is a workbench that lets an artist choose meaningful phrases, preserve a crew's vocabulary, repair transitions, and bake approved clips for the existing animation pipeline. Keep every approved move available. Cache and schedule the work; do not make the Minecraft render thread generate a dance.
 
@@ -139,14 +567,14 @@ The most promising direction is a workbench that lets an artist choose meaningfu
 | **9 · group baseline** | **[AIOZ-GDANCE](https://aioz-ai.github.io/AIOZ-GDANCE/)** · [CVPR 2023 paper](https://openaccess.thecvf.com/content/CVPR2023/html/Le_Music-Driven_Group_Choreography_CVPR_2023_paper.html) | Provides music/3D group-motion research and evaluation of coordination rather than treating dancers as independent solos. | Test whether two individually good routines collide, obscure the rival, or lose group structure. Measure crew spacing and contact separately from individual dance quality. |
 | **10 · nonhuman anatomy** | **[AnyTop](https://anytop2025.github.io/Anytop-page/)** · [code](https://github.com/Anytop2025/Anytop) · **SIGGRAPH 2025** | Studies motion generation across different skeletal topologies, using skeleton structure and joint semantics. | Evaluate an offline adaptation path across humanoid, small quadruped and long-bodied rigs. Preserve source-mob AI and render ownership; a topology-general model is not proof of compatibility with every installed creature. |
 
-### Watch the methods
+#### Watch the methods
 
 | Artist-directed editing | Iterative motion revision |
 |---|---|
 | [![CustomDance research teaser](https://xulongt.github.io/customdance-project-page/assets/media/hero-teaser.webp)](https://xulongt.github.io/customdance-project-page/) | [![DanceEditor research teaser](https://lzvsdy.github.io/DanceEditor/figure/DanceEditor_teaser.png)](https://lzvsdy.github.io/DanceEditor/) |
 | **CustomDance** — [project and demo](https://xulongt.github.io/customdance-project-page/#video). Image hosted by the authors. | **DanceEditor** — [project and demo](https://lzvsdy.github.io/DanceEditor/). Image hosted by the authors. |
 
-### A useful first experiment
+#### A useful first experiment
 
 Use one approved music excerpt and one deliberately small **test fixture**, not a content or participation cap: a solo dancer, a three-person crew, and one nonhuman rig. Compare hand-authored clips, constrained generation, and phrase retrieval plus repair under identical camera and timing conditions. Keep the same clips and full visual quality across performance comparisons.
 
@@ -164,11 +592,11 @@ The live music specification already asks for varied solo, crew and rival choreo
 
 ---
 
-## Earlier catalogue
+### Earlier catalogue
 
 The **78 earlier entries** below remain intact for continuity. Their inherited scores and version notes are historical research metadata, not fresh benchmark results or a claim that every external release was rechecked in this pass. The [earlier 173-row sheet](https://docs.google.com/spreadsheets/d/1liWhRQL7rmPy8LLgSRVlkrLANqUIJE4UbFX3--KMJjg/edit?gid=1570163195#gid=1570163195) remains available.
 
-### Dance & Animation · 18
+#### Dance & Animation · 18
 
 Emotes, blended locomotion, player rigs, multiplayer synchronization, and authoring formats.
 
@@ -193,7 +621,7 @@ Emotes, blended locomotion, player rigs, multiplayer synchronization, and author
 | **Figura ExtraFight**<br><sub>Compatibility reference · score 7.20</sub> | Java<br>Figura / Epic Fight<br>2026 | Bridges Figura avatars to Epic Fight animation matrices and extra bones. | Specific example of adapting arbitrary custom rigs to another animation owner without replacing either ecosystem. | [Project](https://modrinth.com/mod/figura_extrafight) | Ask author / verify terms |
 | **Emote Tweaks**<br><sub>Addon reference · score 6.70</sub> | Java<br>Emotecraft addon<br>Modern | Play WAV audio with emotes through Simple Voice Chat; crouch-cancel controls. | Direct inspiration for dance-specific stingers, synchronized cyphers and cancel semantics. | [Project](https://modrinth.com/mod/emote-tweaks) | Ask author / verify terms |
 
-### Mocap & Animation Assets · 8
+#### Mocap & Animation Assets · 8
 
 Motion libraries and retargeting workflows for expressive, grounded movement.
 
@@ -208,7 +636,7 @@ Motion libraries and retargeting workflows for expressive, grounded movement.
 | **Cascadeur**<br><sub>Animation tool · score 7.15</sub> | Asset/tool<br>Desktop<br>Current | Physics-assisted animation and posing workflow. | Potential polish tool for hand-authoring/cleaning high-energy flips, landings and trick arcs before retargeting to Minecraft rigs. | [Project](https://www.cascadeur.com/) | Tool terms; final animation ownership depends on source motion |
 | **Mixamo**<br><sub>Motion asset source · score 6.75</sub> | Asset<br>Adobe web service<br>Current | Large humanoid animation library and auto-rigging workflow. | Fast generic dance/locomotion prototyping and retarget tests; not a substitute for skate-specific board-contact mocap. | [Project](https://www.mixamo.com/) | Verify Adobe terms for final game use |
 
-### Model & Asset Hubs · 35
+#### Model & Asset Hubs · 35
 
 Creation tools and candidate models for skates, boards, BMXs, hoverboards, props, and environments.
 
@@ -250,7 +678,7 @@ Creation tools and candidate models for skates, boards, BMXs, hoverboards, props
 | **Blendkit**<br><sub>3D asset library · score 5.85</sub> | All<br>Web/Blender<br>Current | Large 3D asset library integrated into Blender. | Good generic-model discovery when adapting a complex prop or environment asset through Blender before Blockbench. | [Project](https://www.blendkit.com/) | Check asset license and polycount |
 | **Poly Haven**<br><sub>CC0 asset library · score 5.85</sub> | All<br>Web library<br>Current | High-quality public-domain/CC0 texture/model/HDRI library. | Best used for texture/material reference and environment rendering; convert/downsample intentionally for Minecraft style. | [Project](https://polyhaven.com/) | CC0 library; verify current terms |
 
-### Creator & Commission Sources · 17
+#### Creator & Commission Sources · 17
 
 People and marketplaces to contact for bespoke, permission-clean production assets.
 
@@ -277,4 +705,3 @@ People and marketplaces to contact for bespoke, permission-clean production asse
 ---
 
 **78 entries preserved from the earlier catalogue.** Inclusion records research value, not bundled code/assets or automatic redistribution permission. Return to **[Inspiration & Research](Inspiration-and-Research)**.
-

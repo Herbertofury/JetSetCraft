@@ -49,6 +49,8 @@ jobs:
           python tools/validate_premium_polish.py
           python tools/validate_wave2_compat.py
           python tools/validate_wiki.py
+          python tools/build_research_browser.py --check
+          node tools/test_research_browser.js
           python -m compileall -q tools
           git diff --check
           git diff --exit-code

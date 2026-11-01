@@ -25,7 +25,7 @@
 
 ## 🎧 New research collection
 
-**[Open the visual Inspiration Atlas](https://herbertofury.github.io/JetSetCraft/research.html)** — 196 new entries: 40 games, 100 music tracks, 24 art/culture references, 22 engineering references and 10 choreography papers, alongside the preserved 173-entry catalogue. Search, filter, view official media, save a personal shortlist and export matching entries. The four [research lanes](Inspiration-and-Research) contain detailed JetSetCraft applications and prototype questions.
+**[Open the visual Inspiration Atlas](https://herbertofury.github.io/JetSetCraft/research.html)** — **505 entries**, including **76 games, 160 music candidates, 40 art/culture references, 38 engineering references and 18 research papers**, alongside the preserved 173-entry earlier catalogue. The **[November 1 expansion adds 136 references](https://herbertofury.github.io/JetSetCraft/research.html?batch=2026-11-01)**, eight creator/replay/social briefs and a **[new 12-track listening route](https://herbertofury.github.io/JetSetCraft/research.html?path=city-after-hours)**. Search by topic or research pass, filter images and direct videos, follow either listening sequence, save a shortlist and export matching entries. The four [research lanes](Inspiration-and-Research) contain the detailed applications, credited media and prototype questions.
 
 ## 🎮 The current experience
 
