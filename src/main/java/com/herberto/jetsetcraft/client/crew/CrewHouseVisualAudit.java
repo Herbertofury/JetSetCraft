@@ -9,6 +9,7 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.storage.LevelResource;
@@ -25,6 +26,7 @@ public final class CrewHouseVisualAudit {
     private static int phase, ticks;
     private static BlockPos anchor, workshop;
     private static UUID assignedMember;
+    private static long foundedRevision, registeredRevision;
     private static volatile boolean fixtureApplied;
     private static volatile String fixtureFailure;
 
@@ -52,7 +54,9 @@ public final class CrewHouseVisualAudit {
             }
             case 3 -> {
                 if (!state.getBoolean("Exists")) return false;
-                require(state.hasUUID("HomeId") && state.getLong("Revision") > 0 && state.getString("Name").equals("Audit Crew"), "Missing founded crew identity");
+                require(state.hasUUID("HomeId") && state.contains("Revision", Tag.TAG_LONG) && state.getLong("Revision") >= 0
+                        && state.getString("Name").equals("Audit Crew"), "Missing founded crew identity");
+                foundedRevision = state.getLong("Revision");
                 require(state.getLong("HomeAnchor") == anchor.asLong() && state.getBoolean("AnchorValid")
                         && state.getBoolean("CanManage") && CrewHouseClient.list("Members").size() == 2, "Invalid real home or apprentice roster");
                 if (!(minecraft.screen instanceof CrewHouseScreen screen) || !screen.isView("HOME")) return false;
@@ -82,6 +86,8 @@ public final class CrewHouseVisualAudit {
                 CompoundTag facility = workshop();
                 if (!facility.getBoolean("Registered")) return false;
                 require(facility.getBoolean("Operational") && facility.getInt("Level") == 1, "Physical workshop did not become operational");
+                require(state.getLong("Revision") > foundedRevision, "Workshop registration did not advance the crew revision");
+                registeredRevision = state.getLong("Revision");
                 click(minecraft, "Facilities"); next(9);
             }
             case 9 -> {
@@ -100,6 +106,7 @@ public final class CrewHouseVisualAudit {
                 if (CrewHouseClient.list("Jobs").isEmpty()) return false;
                 CompoundTag job = CrewHouseClient.list("Jobs").getCompound(0);
                 require(CrewHouseClient.list("Jobs").size() == 1 && state.getInt("ActiveJobs") == 1
+                        && state.getLong("Revision") > registeredRevision
                         && job.hasUUID("Id") && job.hasUUID("MemberId") && job.getUUID("MemberId").equals(assignedMember)
                         && job.getInt("Supplies") > 0 && job.getLong("RemainingTicks") > 0 && !job.getBoolean("Ready"),
                         "Production crew dispatch did not create one real timed assignment");

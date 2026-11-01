@@ -73,38 +73,48 @@ public final class CrewRushGameTests {
             // Advance only this run's active clock, without changing the shared world/mission clock.
             // The director and tag handler below still create and defeat actual owned mobs.
             for (int tick = 0; tick < 1200; tick++) run.tickActive();
-            for (int spawn = 0; spawn < 4; spawn++) {
+        } catch (RuntimeException error) { cleanup(player); throw error; }
+        helper.runAfterDelay(2, () -> fightAndReturn(helper, player, home, inventory, gang, 0));
+    }
+
+    private static void fightAndReturn(GameTestHelper helper, ServerPlayer player, CrewProfile home,
+                                      ListTag inventory, ResourceLocation gang, int wave) {
+        try {
+            RushRun run = RivalRushManager.run(player);
+            check(run != null, "Fixture session ended before its actual rival combat");
+            // Other concurrently running tests can advance the director. Respect any genuinely earned draft
+            // instead of trying to tag opponents while the production mode has correctly paused combat.
+            for (int choice = 0; choice < 20 && run.hasOffer(); choice++)
+                RivalRushManager.handleAction(player, "choose", run.offers().get(0).name(), 0, run.id(), run.offerVersion());
+            var actors = player.serverLevel().getEntitiesOfClass(Mob.class, player.getBoundingBox().inflate(80),
+                    target -> RivalRushManager.belongsTo(target, player));
+            for (Mob mob : actors) for (int hit = 0; hit < 6 && !mob.isRemoved(); hit++)
+                RivalRushManager.tagEnemy(player, mob, 40);
+            if (run.defeats() < 3) {
+                check(wave < 24, "Genuine rival fixture exhausted: defeats=" + run.defeats() + ", indexed actors="
+                        + actors.size() + ", offer=" + run.hasOffer() + ", active ticks=" + run.elapsedTicks());
                 for (int tick = 0; tick < 36; tick++) run.tickActive();
                 RivalRushManager.tick(player.getServer());
+                // Chunk readiness and entity section indexing need actual server ticks between spawn attempts.
+                helper.runAfterDelay(2, () -> fightAndReturn(helper, player, home, inventory, gang, wave + 1));
+                return;
             }
+            int before = home.supplies();
+            UUID receipt = run.id();
+            check(RivalRushManager.leave(player, "Crew integration return"), "Crew progression blocked safe Rush return");
+            check(!RivalRushManager.active(player) && !RushReturnState.hasJournal(player)
+                            && player.serverLevel() == helper.getLevel(), "Crew integration retained active Rush state");
+            check(home.supplies() > before && home.xp() > 0 && home.members().get(0).xp() > 0
+                            && home.reputation(gang.toString()) > 0,
+                    "Actual return failed to award crew supplies, XP, focused member training and reputation");
+            int paid = home.supplies(); long xp = home.xp();
+            CrewHouseManager.bankRush(player, receipt, gang, run.elapsedTicks(), 0, run.defeats(), run.score());
+            check(home.supplies() == paid && home.xp() == xp, "The settled run UUID paid twice");
+            check(inventory.equals(player.getInventory().save(new ListTag())) && player.experienceLevel == 23
+                            && player.totalExperience == 587 && player.experienceProgress == .625F,
+                    "House/Rush integration changed normal inventory or vanilla XP");
+            System.out.println("JETSETCRAFT_GAMETEST_PASS crew_rush"); helper.succeed();
         } catch (RuntimeException error) { cleanup(player); throw error; }
-        helper.runAfterDelay(2, () -> {
-            try {
-                RushRun run = RivalRushManager.run(player);
-                check(run != null, "Fixture session ended before its actual rival combat");
-                for (Mob mob : player.serverLevel().getEntitiesOfClass(Mob.class, player.getBoundingBox().inflate(80),
-                        target -> RivalRushManager.belongsTo(target, player))) {
-                    for (int hit = 0; hit < 6 && !mob.isRemoved(); hit++)
-                        RivalRushManager.tagEnemy(player, mob, 40);
-                }
-                check(run.defeats() >= 3, "Fewer than three genuine director-created rivals were defeated");
-                int before = home.supplies();
-                UUID receipt = run.id();
-                check(RivalRushManager.leave(player, "Crew integration return"), "Crew progression blocked safe Rush return");
-                check(!RivalRushManager.active(player) && !RushReturnState.hasJournal(player)
-                                && player.serverLevel() == helper.getLevel(), "Crew integration retained active Rush state");
-                check(home.supplies() > before && home.xp() > 0 && home.members().get(0).xp() > 0
-                                && home.reputation(gang.toString()) > 0,
-                        "Actual return failed to award crew supplies, XP, focused member training and reputation");
-                int paid = home.supplies(); long xp = home.xp();
-                CrewHouseManager.bankRush(player, receipt, gang, run.elapsedTicks(), 0, run.defeats(), run.score());
-                check(home.supplies() == paid && home.xp() == xp, "The settled run UUID paid twice");
-                check(inventory.equals(player.getInventory().save(new ListTag())) && player.experienceLevel == 23
-                                && player.totalExperience == 587 && player.experienceProgress == .625F,
-                        "House/Rush integration changed normal inventory or vanilla XP");
-                System.out.println("JETSETCRAFT_GAMETEST_PASS crew_rush"); helper.succeed();
-            } finally { cleanup(player); }
-        });
     }
 
     private static void action(ServerPlayer player, CrewProfile home, String action, String value, UUID target) {
