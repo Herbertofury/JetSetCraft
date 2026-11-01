@@ -8,6 +8,8 @@ import net.minecraft.client.Screenshot;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.storage.LevelResource;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.TickEvent;
@@ -37,7 +39,8 @@ public final class RivalRushVisualAudit {
     private static int phase, ticks;
     private static int chosenVersion = Integer.MIN_VALUE;
     private static UUID chosenRun;
-    private static boolean waitingChoice, albumObserved, complete;
+    private static boolean waitingChoice, albumObserved, complete, fixtureQueued;
+    private static volatile boolean fixtureApplied;
     private static volatile String captureFailure;
     private static String originalDimension;
     private static Vec3 originalPosition;
@@ -92,6 +95,18 @@ public final class RivalRushVisualAudit {
                 if (++ticks < 60) return; // Let ordinary spawn/connection/inventory synchronization settle.
                 originalDimension = minecraft.level.dimension().location().toString();
                 if (isDistrict(minecraft)) { finish(minecraft, false, "audit must start in normal Minecraft"); return; }
+                if (!fixtureQueued) {
+                    fixtureQueued = true;
+                    queueVanillaFixture(minecraft);
+                    return;
+                }
+                if (!fixtureApplied || minecraft.player.getInventory().countItem(Items.DIAMOND) < 7
+                        || minecraft.player.getInventory().countItem(Items.BREAD) < 5
+                        || minecraft.player.experienceLevel < 23 || minecraft.player.totalExperience < 17
+                        || minecraft.player.experienceProgress <= 0.0F) return;
+                JetSetCraft.LOGGER.info("JETSETCRAFT_RUSH_VISUAL_AUDIT_FIXTURE_OBSERVED diamonds={} bread={} level={} totalXp={} progress={}",
+                        minecraft.player.getInventory().countItem(Items.DIAMOND), minecraft.player.getInventory().countItem(Items.BREAD),
+                        minecraft.player.experienceLevel, minecraft.player.totalExperience, minecraft.player.experienceProgress);
                 request("menu", "", 0);
                 next(1);
             }
@@ -184,6 +199,41 @@ public final class RivalRushVisualAudit {
             }
             default -> finish(minecraft, false, "unknown audit phase");
         }
+    }
+
+    private static void queueVanillaFixture(Minecraft minecraft) {
+        var server = minecraft.getSingleplayerServer();
+        Path expected = minecraft.gameDirectory.toPath().resolve("saves").resolve("RivalRushAudit").toAbsolutePath().normalize();
+        if (server == null || !server.getWorldPath(LevelResource.ROOT).toAbsolutePath().normalize().equals(expected)) {
+            finish(minecraft, false, "vanilla fixture requires the disposable saves/RivalRushAudit integrated world");
+            return;
+        }
+        UUID playerId = minecraft.player.getUUID();
+        server.execute(() -> {
+            try {
+                // Ordinary vanilla commands run on the actual server thread and target only this client.
+                // Recheck both opt-in and the exact save before adding anything to the disposable world.
+                if (!Boolean.getBoolean("jetsetcraft.rushVisualAudit")
+                        || !server.getWorldPath(LevelResource.ROOT).toAbsolutePath().normalize().equals(expected)) {
+                    captureFailure = "vanilla fixture lost its audit-world guard";
+                    return;
+                }
+                var player = server.getPlayerList().getPlayer(playerId);
+                if (player == null) { captureFailure = "vanilla fixture player disconnected"; return; }
+                var source = server.createCommandSourceStack().withPermission(4).withEntity(player).withSuppressedOutput();
+                for (String command : new String[]{"give @s minecraft:diamond 7", "give @s minecraft:bread 5",
+                        "experience add @s 23 levels", "experience add @s 17 points"}) {
+                    if (server.getCommands().performPrefixedCommand(source, command) <= 0) {
+                        captureFailure = "vanilla fixture command failed: " + command;
+                        return;
+                    }
+                }
+                fixtureApplied = true;
+            } catch (RuntimeException error) {
+                JetSetCraft.LOGGER.error("Rival Rush vanilla audit fixture failed", error);
+                captureFailure = "vanilla fixture exception: " + error.getClass().getSimpleName();
+            }
+        });
     }
 
     private static boolean isDistrict(Minecraft minecraft) {
