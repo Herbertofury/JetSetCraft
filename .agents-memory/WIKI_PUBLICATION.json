@@ -1,9 +1,9 @@
 {
   "schema": 1,
-  "source_commit": "a77d766700fdbeee11fde642deb47bc060574771",
-  "wiki_commit": "67828f5e40f6abaa70e9a94ac438fe6317ff30ae",
+  "source_commit": "b894bd3460947590cd72edff36df732be450aada",
+  "wiki_commit": "a81eecc1ae6222cd084e78703778d0d5e57fb990",
   "wiki_branch": "master",
-  "page_count": 51,
+  "page_count": 52,
   "pages": [
     "Approved-Ride-Expansion-and-Trick-Combat.md",
     "Breakdance-and-Cyphers.md",
@@ -45,6 +45,7 @@
     "Ride-Research-and-New-Styles.md",
     "Ride-Styles.md",
     "Ride-Workshop,-Parts-and-Enchantments.md",
+    "Rival-Rush.md",
     "Roadmap.md",
     "Standalone-Compatibility-Covenant.md",
     "Terrain\u2010Aware-Event-Circuits-and-Boss-Arenas.md",
@@ -58,6 +59,6 @@
     "_Sidebar.md"
   ],
   "validated": true,
-  "published_at_utc": "2026-11-01T19:17:03.580669+00:00",
+  "published_at_utc": "2026-11-01T20:36:58.813410+00:00",
   "url": "https://github.com/Herbertofury/JetSetCraft/wiki"
 }
