@@ -1,5 +1,6 @@
 package com.herberto.jetsetcraft.client.rush;
 
+import com.herberto.jetsetcraft.gang.GangRegistry;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
@@ -9,30 +10,35 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /** Native focusable controls for explicit entry, choices, card collection and immediate extraction. */
 final class RivalRushScreen extends Screen {
-    private enum View { RUN, ROSTER, ALBUM, CARD, UPGRADES, RESULT }
+    private enum View { RUN, ADVANCED, ROSTER, ALBUM, CARD, UPGRADES, RESULT }
     private View view = View.RUN;
     private EditBox gangField, mobField;
     private String gang = "jetsetcraft:dead_beat";
     private String mob = "minecraft:zombie";
+    private String draftGang = gang, draftMob = mob;
+    private String gangLabel = "Dead Beat", gangLabelId = gang;
     private CompoundTag selectedCard;
     private int window;
     private int responseWindow;
     private int cardScroll;
     private String resultSummary = "";
     private boolean pending;
-    private Button timedButton, endlessButton;
+    private Button timedButton, endlessButton, applyButton;
 
     RivalRushScreen(CompoundTag opening) {
         super(Component.literal("Rival Rush"));
         if (!opening.getString("GangId").isBlank()) gang = opening.getString("GangId");
         if (!opening.getString("Mob").isBlank()) mob = opening.getString("Mob");
+        if (!opening.getString("Gang").isBlank()) { gangLabel = opening.getString("Gang"); gangLabelId = gang; }
         selectView(opening);
     }
 
@@ -74,12 +80,13 @@ final class RivalRushScreen extends Screen {
     }
 
     private void rememberFields() {
-        if (gangField != null) gang = gangField.getValue();
-        if (mobField != null) mob = mobField.getValue();
+        if (gangField != null) draftGang = gangField.getValue();
+        if (mobField != null) draftMob = mobField.getValue();
     }
 
     private void navigate(View target) {
         rememberFields();
+        if (target == View.ADVANCED && view != View.ADVANCED) { draftGang = gang; draftMob = mob; }
         view = target;
         window = 0;
         if (target == View.CARD) cardScroll = 0;
@@ -90,7 +97,7 @@ final class RivalRushScreen extends Screen {
     protected void init() {
         rememberFields();
         gangField = mobField = null;
-        timedButton = endlessButton = null;
+        timedButton = endlessButton = applyButton = null;
         int left = left();
         int span = span();
         int third = (span - 8) / 3;
@@ -108,6 +115,7 @@ final class RivalRushScreen extends Screen {
 
         switch (view) {
             case RUN -> buildRun(left, span);
+            case ADVANCED -> buildAdvanced(left, span);
             case ROSTER, ALBUM -> buildList(left, span);
             case UPGRADES -> buildOffers(left, span);
             case CARD -> addRenderableWidget(Button.builder(Component.literal("Back to cards"),
@@ -150,16 +158,13 @@ final class RivalRushScreen extends Screen {
             }
             return;
         }
-        gangField = new EditBox(font, left, 87, span, 18, Component.literal("Rival gang registry ID"));
-        gangField.setMaxLength(128);
-        gangField.setValue(gang);
-        gangField.setResponder(value -> updateStartButtons());
-        addRenderableWidget(gangField);
-        mobField = new EditBox(font, left, 122, span, 18, Component.literal("Rival mob registry ID"));
-        mobField.setMaxLength(128);
-        mobField.setValue(mob);
-        mobField.setResponder(value -> updateStartButtons());
-        addRenderableWidget(mobField);
+        Button crew = addRenderableWidget(Button.builder(Component.literal(RivalRushClient.clipped(
+                crewName() + "  •  Change crew", span - 12)), button -> {
+            navigate(View.ROSTER);
+            RivalRushClient.request("roster", "", 0);
+        }).bounds(left, 88, span, 20).build());
+        crew.setTooltip(Tooltip.create(Component.literal(crewName() + "\nTheme: " + mobName(mob)
+                + "\nChoose a named rival crew and its themed cast.")));
         int half = (span - 4) / 2;
         timedButton = addRenderableWidget(Button.builder(Component.literal("Start 30-minute run"), button -> start(false))
                 .bounds(left, 153, half, 20).build());
@@ -167,19 +172,49 @@ final class RivalRushScreen extends Screen {
                 .bounds(left + half + 4, 153, span - half - 4, 20).build());
         timedButton.setTooltip(Tooltip.create(Component.literal("A timed session with an explicit Encore choice after the finale.")));
         endlessButton.setTooltip(Tooltip.create(Component.literal("Keep the run going through escalating sets. Return at any time.")));
+        addRenderableWidget(Button.builder(Component.literal("Advanced: custom crew or mob"), button -> navigate(View.ADVANCED))
+                .bounds(left, 183, span, 20).build());
+        updateStartButtons();
+    }
+
+    private void buildAdvanced(int left, int span) {
+        gangField = new EditBox(font, left, 87, span, 18, Component.literal("Rival gang registry ID"));
+        gangField.setMaxLength(128);
+        gangField.setValue(draftGang);
+        gangField.setResponder(value -> updateStartButtons());
+        addRenderableWidget(gangField);
+        mobField = new EditBox(font, left, 122, span, 18, Component.literal("Rival mob registry ID"));
+        mobField.setMaxLength(128);
+        mobField.setValue(draftMob);
+        mobField.setResponder(value -> updateStartButtons());
+        addRenderableWidget(mobField);
+        int half = (span - 4) / 2;
+        applyButton = addRenderableWidget(Button.builder(Component.literal("Apply selection"), button -> {
+            rememberFields();
+            if (!validIds(draftGang, draftMob)) return;
+            gang = draftGang.trim(); mob = draftMob.trim();
+            navigate(View.RUN);
+        }).bounds(left, 153, half, 20).build());
+        addRenderableWidget(Button.builder(Component.literal("Back"), button -> navigate(View.RUN))
+                .bounds(left + half + 4, 153, span - half - 4, 20).build());
         updateStartButtons();
     }
 
     private void updateStartButtons() {
-        if (timedButton == null || endlessButton == null || gangField == null || mobField == null) return;
-        boolean valid = !pending && !gangField.getValue().isBlank() && !mobField.getValue().isBlank()
-                && gangField.getValue().length() + mobField.getValue().length() + 1 <= 128;
-        timedButton.active = endlessButton.active = valid;
+        if (timedButton != null && endlessButton != null)
+            timedButton.active = endlessButton.active = !pending && validIds(gang, mob);
+        if (applyButton != null && gangField != null && mobField != null)
+            applyButton.active = validIds(gangField.getValue(), mobField.getValue());
+    }
+
+    private static boolean validIds(String gangId, String mobId) {
+        return gangId != null && mobId != null && gangId.trim().length() + mobId.trim().length() + 1 <= 128
+                && ResourceLocation.tryParse(gangId.trim()) != null && ResourceLocation.tryParse(mobId.trim()) != null;
     }
 
     private void start(boolean endless) {
         rememberFields();
-        if (gang.length() + mob.length() + 1 > 128) return;
+        if (!validIds(gang, mob)) return;
         pending = true;
         updateStartButtons();
         RivalRushClient.request("start", gang.trim() + "|" + mob.trim(), endless ? 1 : 0);
@@ -213,7 +248,7 @@ final class RivalRushScreen extends Screen {
         for (int i = 0; i < visible && start + i < list.size(); i++) {
             CompoundTag entry = list.getCompound(start + i);
             String label = cards ? cardName(entry) + "  •  " + entry.getLong("count") + " cards  •  T" + entry.getInt("tier")
-                    : entry.getString("name") + "  —  " + entry.getString("mob");
+                    : entry.getString("name") + "  —  " + mobName(entry.getString("mob"));
             Button row = addRenderableWidget(Button.builder(Component.literal(RivalRushClient.clipped(label, span - 12)), button -> {
                 if (cards) {
                     selectedCard = entry.copy();
@@ -221,6 +256,7 @@ final class RivalRushScreen extends Screen {
                 } else {
                     gang = entry.getString("id");
                     mob = entry.getString("mob");
+                    gangLabel = entry.getString("name"); gangLabelId = gang;
                     navigate(View.RUN);
                 }
             }).bounds(left, 77 + i * 23, span, 20).build());
@@ -254,6 +290,26 @@ final class RivalRushScreen extends Screen {
     private int left() { return (width - span()) / 2; }
     private int rows() { return Math.max(1, Math.min(20, (height - 137) / 23)); }
 
+    private String crewName() {
+        if (gang.equals(gangLabelId) && !gangLabel.isBlank()) return gangLabel;
+        ListTag roster = RivalRushClient.roster();
+        for (int i = 0; i < roster.size(); i++) {
+            CompoundTag entry = roster.getCompound(i);
+            if (gang.equals(entry.getString("id")) && !entry.getString("name").isBlank()) return entry.getString("name");
+        }
+        ResourceLocation id = ResourceLocation.tryParse(gang);
+        return GangRegistry.builtInById(id).map(definition -> definition.canonicalName()).orElse("Custom crew");
+    }
+
+    private static String mobName(String entityId) {
+        ResourceLocation id = ResourceLocation.tryParse(entityId);
+        if (id == null || !ForgeRegistries.ENTITY_TYPES.containsKey(id)) return "Unavailable creature";
+        var type = ForgeRegistries.ENTITY_TYPES.getValue(id);
+        if (type == null) return "Unavailable creature";
+        String name = type.getDescription().getString();
+        return name.equals(type.getDescriptionId()) ? "Custom creature" : name;
+    }
+
     @Override
     public void render(GuiGraphics gui, int mouseX, int mouseY, float partialTick) {
         renderBackground(gui);
@@ -264,11 +320,9 @@ final class RivalRushScreen extends Screen {
         int span = span();
         if (view == View.RUN) {
             if (!state.getBoolean("Active")) {
-                gui.drawString(font, "Rival gang ID — choose a crew above or enter its ID", left, 75, 0xFFDDDDDD);
-                gui.drawString(font, "Source mob ID — Minecraft or an installed mob", left, 110, 0xFFDDDDDD);
-                String summary = state.getString("Summary");
-                wrap(gui, summary.isBlank() ? "Skate, tag rivals, paint walls and collect mob cards. Run rewards stay in this mode."
-                        : summary, left, 181, span, Math.max(1, (height - 215) / 10), 0xFFDDDDDD);
+                gui.drawString(font, "Your rival crew", left, 75, 0xFFDDDDDD);
+                gui.drawString(font, RivalRushClient.clipped("Theme: " + mobName(mob), span), left, 116, 0xFF87E1EA);
+                wrap(gui, "Skate, tag, collect cards. Return at any time.", left, 131, span, 1, 0xFFDDDDDD);
             } else {
                 gui.drawString(font, RivalRushClient.clipped(state.getString("Gang"), span), left, 78, 0xFFE7E7E7);
                 gui.drawString(font, (state.getBoolean("Endless") ? "Endless • " : "30-minute set • ")
@@ -280,6 +334,11 @@ final class RivalRushScreen extends Screen {
                 wrap(gui, "Return ends the session. Your normal Minecraft state is restored.", left,
                         Math.min(height - 48, 187), span, 2, 0xFFB8B8B8);
             }
+        } else if (view == View.ADVANCED) {
+            gui.drawString(font, "Crew registry ID", left, 75, 0xFFDDDDDD);
+            gui.drawString(font, "Mob registry ID", left, 110, 0xFFDDDDDD);
+            wrap(gui, "A different mob overrides the crew's themed cast. Use this for a specific Minecraft or installed mod creature.",
+                    left, 181, span, Math.max(2, (height - 214) / 10), 0xFFB8B8B8);
         } else if (view == View.UPGRADES) {
             int cardHeight = Math.min(60, Math.max(72, height - 112) / 3);
             ListTag offers = RivalRushClient.offers();

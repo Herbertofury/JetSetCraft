@@ -34,6 +34,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.Difficulty;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobSpawnType;
@@ -88,10 +89,13 @@ public final class RivalRushManager {
     }
 
     private static final class Pickup {
-        final ItemEntity entity;
+        ItemEntity entity;
         final ResourceLocation species;
         int count = 1;
-        Pickup(ItemEntity entity, ResourceLocation species) { this.entity = entity; this.species = species; }
+        long lastAddedActiveTick;
+        Pickup(ItemEntity entity, ResourceLocation species, long activeTick) {
+            this.entity = entity; this.species = species; this.lastAddedActiveTick = activeTick;
+        }
     }
 
     private static final class Session {
@@ -185,6 +189,8 @@ public final class RivalRushManager {
         if (!JetSetConfig.SERVER.enableRivalRush.get()) return fail(player, "Rival Rush is disabled by this server.");
         if (active(player)) return fail(player, "Finish or leave your current Rush first.");
         if (RushReturnState.hasJournal(player)) { recover(player); return fail(player, "Recovered your previous session. Open Rival Rush again."); }
+        if (player.serverLevel().getDifficulty() == Difficulty.PEACEFUL)
+            return fail(player, "This Rival Rush alpha requires Easy, Normal or Hard because Peaceful removes hostile rivals. Your world difficulty is unchanged.");
         if (!player.isAlive() || player.isPassenger() || player.isSleeping())
             return fail(player, "Stand safely on your own before starting Rival Rush.");
         if (!player.containerMenu.getCarried().isEmpty())
@@ -349,6 +355,8 @@ public final class RivalRushManager {
         if (s.run.isFinished()) { leave(player, "Run finished. Your collected cards were kept."); return; }
         ServerLevel level = player.serverLevel();
         RushWorld.decorateNear(level, player.blockPosition());
+        // Removed shots must not accumulate while an offer or Encore pauses the run clock.
+        s.projectiles.values().removeIf(Entity::isRemoved);
         if (s.run.hasOffer() || s.run.awaitingEncore()) {
             freeze(s);
             if (s.announcedOffer != s.run.offerVersion() || (s.run.awaitingEncore() && !s.finaleSent)) {
@@ -371,7 +379,6 @@ public final class RivalRushManager {
             if (time - s.lastHurt > 100) s.run.heal(s.run.recoveryPerSecond());
             s.walls.entrySet().removeIf(entry -> time - entry.getValue() > 6000);
             s.musicStops.entrySet().removeIf(entry -> time - entry.getValue() > 12000);
-            s.projectiles.values().removeIf(Entity::isRemoved);
         }
         collectPickups(s);
         if (s.run.hasOffer()) {
@@ -389,7 +396,8 @@ public final class RivalRushManager {
             if (pressure < desiredPressure) spawnActor(s, nextRole(s), false);
         }
         long captainChapter = time / 6000;
-        if (time >= 3000 && captainChapter != s.lastCaptain) {
+        if (time >= 3000 && captainChapter != s.lastCaptain
+                && s.actors.values().stream().noneMatch(actor -> actor.role == Role.CAPTAIN)) {
             if (spawnActor(s, Role.CAPTAIN, true)) s.lastCaptain = captainChapter;
         }
         if (time % 10 == 0) send(player, false, "", -1, -1);
@@ -565,26 +573,34 @@ public final class RivalRushManager {
     }
 
     private static void spawnCard(Session s, Actor actor) {
+        long time = s.run.elapsedTicks();
         for (Pickup pickup : s.pickups.values()) {
             if (!pickup.entity.isRemoved() && pickup.species.equals(actor.species) && pickup.count < 64
                     && pickup.entity.distanceToSqr(actor.mob) < 16) {
-                pickup.count++; pickup.entity.getItem().setCount(pickup.count); return;
+                pickup.count++; pickup.entity.getItem().setCount(pickup.count);
+                pickup.lastAddedActiveTick = time; return;
             }
         }
         ItemStack card = new ItemStack(Items.PAPER);
+        // Only this director may merge cards. Native item merging cannot reconcile virtual counts or run owners.
+        card.getOrCreateTag().putUUID("JetSetCraftRushPickup", actor.mob.getUUID());
         card.setHoverName(Component.literal(actor.species.getPath().replace('_', ' ') + " · Rush card"));
         ItemEntity drop = new ItemEntity(s.player.serverLevel(), actor.mob.getX(), actor.mob.getY() + 0.3, actor.mob.getZ(), card);
         drop.setPickUpDelay(32767); drop.setInvulnerable(true);
+        // The director expires cards in active run time, so decision pauses cannot age them away.
+        drop.setUnlimitedLifetime();
         mark(drop, s);
-        s.pickups.put(drop.getUUID(), new Pickup(drop, actor.species));
+        s.pickups.put(drop.getUUID(), new Pickup(drop, actor.species, time));
         if (!s.player.serverLevel().addFreshEntity(drop)) s.pickups.remove(drop.getUUID());
     }
 
     private static void collectPickups(Session s) {
+        long time = s.run.elapsedTicks();
         Iterator<Pickup> iterator = s.pickups.values().iterator();
         while (iterator.hasNext()) {
             Pickup pickup = iterator.next();
-            if (pickup.entity.isRemoved() || pickup.entity.distanceToSqr(s.player) > 160 * 160) {
+            if (pickup.entity.isRemoved() || pickup.entity.distanceToSqr(s.player) > 160 * 160
+                    || time - pickup.lastAddedActiveTick >= 6000L) {
                 pickup.entity.discard(); iterator.remove(); continue;
             }
             if (pickup.entity.distanceToSqr(s.player) > s.run.pickupRadius() * s.run.pickupRadius()) continue;
@@ -674,8 +690,17 @@ public final class RivalRushManager {
             if (a == null || a.claimed) return false;
             a.mob = mob; return true;
         }
-        if (entity instanceof ItemEntity item) return s.pickups.containsKey(item.getUUID());
-        return entity instanceof PaintBalloonEntity projectile && projectile.getOwner() == s.player;
+        if (entity instanceof ItemEntity item) {
+            Pickup pickup = s.pickups.get(item.getUUID());
+            if (pickup == null) return false;
+            pickup.entity = item;
+            return true;
+        }
+        if (entity instanceof PaintBalloonEntity projectile && projectile.getOwner() == s.player) {
+            s.projectiles.put(projectile.getUUID(), projectile);
+            return true;
+        }
+        return false;
     }
 
     public static void markPlayerProjectile(Projectile projectile) {

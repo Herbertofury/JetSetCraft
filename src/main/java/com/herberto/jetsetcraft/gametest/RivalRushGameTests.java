@@ -38,6 +38,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.FakePlayerFactory;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.entity.living.LivingExperienceDropEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.gametest.GameTestHolder;
@@ -197,12 +198,21 @@ public final class RivalRushGameTests {
         prepareBelongings(player);
         ListTag inventory = player.getInventory().save(new ListTag());
         CompoundTag savedRide = ride(player).save();
+        JetSetData originalData = ride(player);
+        LazyOptional<JetSetData> sourceHandle = player.getCapability(JetSetDataProvider.CAPABILITY);
+        int[] invalidations = {0};
+        sourceHandle.addListener(ignored -> invalidations[0]++);
         Vec3 origin = player.position();
         check(player.getServer().getLevel(RushWorld.DIMENSION) != null, "Bundled Rival Rush dimension was not loaded by Forge");
         try {
             check(RivalRushManager.start(player, DEAD_BEAT, ZOMBIE, false), "Production session entry failed");
             check(RivalRushManager.active(player) && RushWorld.isRush(player.level()) && RushReturnState.hasJournal(player),
                     "Entry did not establish a recoverable session in the separate dimension");
+            LazyOptional<JetSetData> runHandle = player.getCapability(JetSetDataProvider.CAPABILITY);
+            check(!sourceHandle.isPresent() && invalidations[0] == 1 && runHandle.isPresent()
+                    && runHandle.resolve().orElse(null) == originalData,
+                    "Cross-dimension entry did not invalidate the old capability handle and revive the same physical ride data");
+            runHandle.addListener(ignored -> invalidations[0]++);
             check(player.getInventory().getItem(0).getItem() != Items.DIAMOND
                     && player.getInventory().getItem(1).getItem() == ModItems.SPRAY_CAN.get(),
                     "The isolated loan loadout was not installed");
@@ -213,11 +223,22 @@ public final class RivalRushGameTests {
             check(RivalRushManager.leave(player, "GameTest return"), "Production session exit failed");
             check(!RivalRushManager.active(player) && !RushReturnState.hasJournal(player) && player.serverLevel() == helper.getLevel(),
                     "Exit left run ownership, a journal, or the wrong world behind");
+            LazyOptional<JetSetData> returnedHandle = player.getCapability(JetSetDataProvider.CAPABILITY);
+            check(!runHandle.isPresent() && invalidations[0] == 2 && returnedHandle.isPresent()
+                    && returnedHandle.resolve().orElse(null) == originalData,
+                    "Cross-dimension return lost the ride capability or kept an invalid listener handle alive");
             check(player.position().distanceToSqr(origin) < 0.0001D
                     && inventory.equals(player.getInventory().save(new ListTag())) && savedRide.equals(ride(player).save()),
                     "Entry/exit did not restore position, physical items and original ride state");
             check(player.experienceLevel == 23 && player.totalExperience == 587 && player.experienceProgress == 0.625F,
                     "Mode XP escaped into Minecraft XP at exit");
+            // The wrapper renewal must never reopen a removed/dead host's authority by itself.
+            player.invalidateCaps();
+            check(!returnedHandle.isPresent() && !player.getCapability(JetSetDataProvider.CAPABILITY).isPresent(),
+                    "Invalidating the host still exposed its ride capability");
+            player.reviveCaps();
+            check(ride(player) == originalData && savedRide.equals(ride(player).save()),
+                    "Explicit Forge revival failed to preserve the original physical ride data");
         } finally { cleanup(player); }
         pass(helper, "JETSETCRAFT_GAMETEST_PASS rush_session");
     }
@@ -363,7 +384,10 @@ public final class RivalRushGameTests {
     }
 
     private static void cleanup(ServerPlayer player) {
-        if (RivalRushManager.active(player) || RushReturnState.hasJournal(player)) RivalRushManager.leave(player, "GameTest cleanup");
+        if (RivalRushManager.active(player) || RushReturnState.hasJournal(player)) {
+            check(RivalRushManager.leave(player, "GameTest cleanup"), "Production GameTest cleanup could not restore the original player state");
+            check(!RivalRushManager.active(player) && !RushReturnState.hasJournal(player), "Completed cleanup retained session ownership or its journal");
+        }
     }
 
     private static ResourceLocation id(String id) { return ResourceLocation.tryParse(id); }

@@ -31,6 +31,8 @@ The chapter rotation currently changes tagger/bruiser frequency, lowers pressure
 
 ### Compatibility boundary
 
+This alpha refuses entry on Peaceful before saving a return checkpoint or installing loan equipment. Native hostile mobs are removed by Minecraft's Peaceful despawn path even when persistent. The mode does not change the world's difficulty; Easy, Normal and Hard are the supported entry settings for this slice. A future per-mode solution must preserve the ordinary world's setting and be verified across real mob lifecycles.
+
 Selection is based on registered mob identities and existing JetSetCraft eligibility. This is a broad selection path, not a claim that every mob works well in a flat district. The existing `street_gear_incompatible` entity tag explicitly excludes the Ender Dragon and Wither, along with player/armor-stand entities. Respect those pre-existing exclusions: a multipart dragon encounter and a scripted, destructive boss lifecycle require deliberate encounter adapters, and this slice provides neither. Other provider ownership rules, aquatic needs, unusual geometry, native AI, and scripted transformations still require representative integration tests. Do not infer universal compatibility from a successful registry lookup.
 
 ### Verification boundary
