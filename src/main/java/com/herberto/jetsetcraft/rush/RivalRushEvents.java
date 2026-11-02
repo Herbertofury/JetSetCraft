@@ -210,6 +210,7 @@ public final class RivalRushEvents {
         CompoundTag persisted = event.getOriginal().getPersistentData().getCompound(Player.PERSISTED_NBT_TAG);
         CompoundTag destination = event.getEntity().getPersistentData().getCompound(Player.PERSISTED_NBT_TAG);
         if (persisted.contains(RushAlbum.KEY)) destination.put(RushAlbum.KEY, persisted.get(RushAlbum.KEY).copy());
+        if (persisted.contains(RushDebrief.KEY)) destination.put(RushDebrief.KEY, persisted.get(RushDebrief.KEY).copy());
         if (persisted.contains(RushReturnState.KEY)) destination.put(RushReturnState.KEY, persisted.get(RushReturnState.KEY).copy());
         event.getEntity().getPersistentData().put(Player.PERSISTED_NBT_TAG, destination);
         if (event.getOriginal() instanceof ServerPlayer original) RivalRushManager.playerCloned(original);

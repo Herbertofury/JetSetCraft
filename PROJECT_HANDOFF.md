@@ -18,7 +18,11 @@ Neutral directional input means neutral: stale momentum cannot manufacture camer
 
 The custom graffiti format is deliberately bounded to a 16 × 10, 4-bit palette payload. Do not replace it with arbitrary client texture/file uploads. Paid Marketplace and research-only references remain non-redistributable even when present in the private Desktop/Drive source-assets area.
 
-## Current development checkpoint — 0.4.0-alpha.5
+## Active continuation — 0.4.0-alpha.6
+
+The `feature/rush-headliners-0.4.0-alpha.6` candidate adds bounded elite/headliner encounters, three rank-three build evolutions, versioned rerolls/banishes, exact next-rank previews, a movable threat/resource HUD and a persistent optional run debrief. Protocol is 14. Runtime validation, native visual review and publication are in progress; do not apply the prior checkpoint's results to this source. Headliners gate circuit rooms three and six, while Free streets preserves its thirty-minute extraction and Encore. Evolution opportunities are earned once per actual owned victory and selected only at an existing decision stop.
+
+## Verified predecessor — 0.4.0-alpha.5
 
 [PR #44](https://github.com/Herbertofury/JetSetCraft/pull/44) merged as `5bad45891b6fe7a5c7c133ed0a19ac0556dd5af8`, with the exact tested tree `878476f60413bfe47c18864a99674c363432ce87`. The [Style Library receipt](docs/verification/style-library/README.md) identifies the nine successful CI configurations, 44 GameTests per configuration, normal dedicated-server save/shutdown gates, and the independently reproduced fifteen-screen local gallery. CI archive metadata and local evidence are explicitly distinguished.
 

@@ -21,6 +21,8 @@ import net.minecraftforge.fml.common.Mod;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.Locale;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 /** Client presentation only: no local XP, reward, damage or elapsed-time authority. */
@@ -33,6 +35,8 @@ public final class RivalRushClient {
     private static ListTag album = new ListTag();
     private static ListTag roster = new ListTag();
     private static ListTag arenaCatalogue = new ListTag();
+    private static CompoundTag debrief = new CompoundTag();
+    private static List<String> buildResources = List.of();
     private static int albumPage, rosterPage;
     private static int albumPages = 1, rosterPages = 1;
 
@@ -40,6 +44,31 @@ public final class RivalRushClient {
         Minecraft minecraft = Minecraft.getInstance();
         CompoundTag previous = state;
         state = incoming.copy();
+        state.put("Offers", boundedList(state.getList("Offers", Tag.TAG_COMPOUND), 3));
+        if (state.contains("Draft", Tag.TAG_COMPOUND)) {
+            CompoundTag draft = state.getCompound("Draft");
+            draft.put("Banished", boundedList(draft.getList("Banished", Tag.TAG_COMPOUND), 2));
+        }
+        if (state.contains("Build", Tag.TAG_COMPOUND)) {
+            CompoundTag build = state.getCompound("Build");
+            build.put("Artifacts", boundedList(build.getList("Artifacts", Tag.TAG_COMPOUND), 3));
+            CompoundTag paths = build.getCompound("Paths");
+            ListTag recipes = boundedList(paths.getList("Recipes", Tag.TAG_COMPOUND), 3);
+            for (var raw : recipes) {
+                CompoundTag recipe = (CompoundTag) raw;
+                recipe.put("Requirements", boundedList(recipe.getList("Requirements", Tag.TAG_COMPOUND), 2));
+            }
+            paths.put("Recipes", recipes);
+        }
+        if (state.contains("Debrief", Tag.TAG_COMPOUND)) {
+            CompoundTag saved = state.getCompound("Debrief");
+            debrief = saved.getInt("Schema") == 1 && saved.hasUUID("Run") ? saved.copy() : new CompoundTag();
+            if (!debrief.isEmpty()) {
+                debrief.put("Artifacts", boundedList(debrief.getList("Artifacts", Tag.TAG_COMPOUND), 3));
+                debrief.put("Stats", boundedList(debrief.getList("Stats", Tag.TAG_COMPOUND), 11));
+            }
+        }
+        buildResources = buildResourceLines();
         if (state.contains("Caches", Tag.TAG_COMPOUND)) {
             CompoundTag caches = state.getCompound("Caches");
             caches.put("Caches", boundedList(caches.getList("Caches", Tag.TAG_COMPOUND), 6));
@@ -68,7 +97,7 @@ public final class RivalRushClient {
         if (minecraft.screen instanceof RivalRushScreen screen) {
             screen.onSnapshot(incoming, previous);
         } else if (incoming.getBoolean("Open")) {
-            minecraft.setScreen(new RivalRushScreen(incoming));
+            minecraft.setScreen(new RivalRushScreen(incoming, endedRun(incoming, previous)));
         }
     }
 
@@ -86,6 +115,7 @@ public final class RivalRushClient {
     static ListTag album() { return album; }
     static ListTag roster() { return roster; }
     static ListTag arenaCatalogue() { return arenaCatalogue; }
+    static CompoundTag debrief() { return debrief; }
     static CompoundTag journey() { return state.getCompound("Journey"); }
     static boolean choosingRoute() { return state.getBoolean("Active") && "choosing".equals(journey().getString("Phase")); }
     public static CompoundTag stateSnapshot() { return state.copy(); }
@@ -101,10 +131,26 @@ public final class RivalRushClient {
     public static boolean isCacheScreenOpen() {
         return Minecraft.getInstance().screen instanceof RivalRushScreen screen && screen.isCachesView();
     }
+    public static boolean isBuildPathsScreenOpen() {
+        return Minecraft.getInstance().screen instanceof RivalRushScreen screen && screen.isPathsView();
+    }
+    public static boolean isUpgradeScreenOpen() {
+        return Minecraft.getInstance().screen instanceof RivalRushScreen screen && screen.isUpgradeView();
+    }
+    public static boolean isDebriefScreenOpen() {
+        return Minecraft.getInstance().screen instanceof RivalRushScreen screen && screen.isDebriefView();
+    }
     static int page(boolean cards) { return cards ? albumPage : rosterPage; }
     static int pages(boolean cards) { return cards ? albumPages : rosterPages; }
     static ListTag offers() { return state.getList("Offers", Tag.TAG_COMPOUND); }
     static UUID runId() { return state.hasUUID("Run") ? state.getUUID("Run") : null; }
+
+    static boolean endedRun(CompoundTag incoming, CompoundTag previous) {
+        CompoundTag result = incoming.getCompound("Debrief");
+        return previous.getBoolean("Active") && !incoming.getBoolean("Active")
+                && previous.hasUUID("Run") && result.getInt("Schema") == 1 && result.hasUUID("Run")
+                && previous.getUUID("Run").equals(result.getUUID("Run"));
+    }
 
     /** Presentation gating for optional music; callers do not receive mutable run NBT. */
     public static boolean active() {
@@ -134,18 +180,71 @@ public final class RivalRushClient {
         return font.width(value) <= pixels ? value : font.plainSubstrByWidth(value, Math.max(0, pixels - font.width("…"))) + "…";
     }
 
+    private static List<String> buildResourceLines() {
+        CompoundTag build = state.getCompound("Build");
+        List<String> lines = new ArrayList<>(3);
+        for (var raw : build.getList("Artifacts", Tag.TAG_COMPOUND)) {
+            CompoundTag artifact = (CompoundTag) raw;
+            switch (artifact.getString("Id")) {
+                case "WARD" -> lines.add("Ward " + (int) Math.ceil(finite(build.getDouble("Ward")))
+                        + "/" + (int) Math.ceil(finite(build.getDouble("WardMax"))));
+                case "SOUL_BURST" -> lines.add("Souls " + Math.max(0, build.getInt("SoulBurstCharge"))
+                        + "/" + Math.max(1, build.getInt("SoulBurstChargeMax")));
+                case "BATTERY" -> lines.add("Line charge " + Math.max(0, build.getInt("LineCharge"))
+                        + "/" + Math.max(1, build.getInt("LineChargeMax")));
+                case "AIR_BREAK" -> lines.add(build.getBoolean("AirborneReady")
+                        ? "Landing pulse ready" : "Landing pulse: build airtime");
+                default -> { }
+            }
+        }
+        CompoundTag paths = build.getCompound("Paths");
+        String selected = paths.getString("Selected");
+        if (!selected.isBlank() && !selected.equals("NONE")) {
+            for (var raw : paths.getList("Recipes", Tag.TAG_COMPOUND)) {
+                CompoundTag recipe = (CompoundTag) raw;
+                if (selected.equals(recipe.getString("Id"))) {
+                    lines.add(recipe.getString("Name") + (paths.getBoolean("Active") ? " · active" : " · dormant"));
+                    break;
+                }
+            }
+        }
+        return List.copyOf(lines.subList(0, Math.min(3, lines.size())));
+    }
+
+    private static boolean threatVisible(boolean preview) {
+        CompoundTag encounter = state.getCompound("Encounter");
+        return preview || encounter.getBoolean("Active") && "active".equals(encounter.getString("State"));
+    }
+
+    private static List<String> hudResources(boolean preview) {
+        return preview && buildResources.isEmpty()
+                ? List.of("Artifact charge and ward", "Your active evolution") : buildResources;
+    }
+
+    static int hudHeight(boolean preview) {
+        return HUD_HEIGHT + (threatVisible(preview) ? 47 : 0)
+                + (hudResources(preview).isEmpty() ? 0 : hudResources(preview).size() * 11 + 4);
+    }
+
+    static float hudScale(int screenWidth, int screenHeight, boolean preview) {
+        return Math.max(0.1F, Math.min(RivalRushHudPreferences.get().scale,
+                Math.min(Math.max(1, screenWidth - 4) / (float) HUD_WIDTH,
+                        Math.max(1, screenHeight - 4) / (float) hudHeight(preview))));
+    }
+
     static void drawHud(GuiGraphics gui, int screenWidth, int screenHeight, boolean preview) {
         if (!preview && (!state.getBoolean("Active") || !RivalRushHudPreferences.get().visible)) return;
         var preferences = RivalRushHudPreferences.get();
-        float scale = preferences.scale;
+        float scale = hudScale(screenWidth, screenHeight, preview);
+        int panelHeight = hudHeight(preview);
         int x = Math.round(preferences.x * Math.max(0, screenWidth - Math.round(HUD_WIDTH * scale)));
-        int y = Math.round(preferences.y * Math.max(0, screenHeight - Math.round(HUD_HEIGHT * scale)));
+        int y = Math.round(preferences.y * Math.max(0, screenHeight - Math.round(panelHeight * scale)));
         var font = Minecraft.getInstance().font;
         gui.pose().pushPose();
         gui.pose().translate(x, y, 0);
         gui.pose().scale(scale, scale, 1.0F);
-        gui.fill(0, 0, HUD_WIDTH, HUD_HEIGHT, 0xB0181C20);
-        gui.fill(0, 0, 2, HUD_HEIGHT, 0xFFC5ED55);
+        gui.fill(0, 0, HUD_WIDTH, panelHeight, 0xB0181C20);
+        gui.fill(0, 0, 2, panelHeight, 0xFFC5ED55);
         gui.drawString(font, "RIVAL RUSH", 7, 6, 0xFFC5ED55, true);
         boolean active = state.getBoolean("Active");
         boolean circuit = active && state.contains("Journey", Tag.TAG_COMPOUND);
@@ -183,6 +282,36 @@ public final class RivalRushClient {
                 : choosingRoute() ? "Choose the next arena — open Rush menu"
                 : state.getBoolean("Finale") ? "Set complete — extract or play Encore" : state.getString("Objective");
         gui.drawString(font, clipped(objective, HUD_WIDTH - 14), 7, 86, 0xFFE6DBA6, true);
+        int detailY = HUD_HEIGHT;
+        if (threatVisible(preview)) {
+            CompoundTag encounter = state.getCompound("Encounter");
+            boolean actual = encounter.getBoolean("Active") && "active".equals(encounter.getString("State"));
+            gui.fill(7, detailY, HUD_WIDTH - 7, detailY + 1, 0xFF67584D);
+            String healthText = actual ? (int) Math.ceil(finite(encounter.getDouble("Health"))) + "/"
+                    + (int) Math.ceil(finite(encounter.getDouble("MaxHealth"))) : "HP";
+            int healthWidth = font.width(healthText);
+            gui.drawString(font, clipped(actual ? encounter.getString("Name") : "Encounter preview",
+                    HUD_WIDTH - 25 - healthWidth), 7, detailY + 4, 0xFFF1BB79, true);
+            gui.drawString(font, healthText, HUD_WIDTH - 7 - healthWidth, detailY + 4, 0xFFF1BB79, true);
+            bar(gui, 7, detailY + 16, HUD_WIDTH - 14, actual ? ratio(encounter.getDouble("Health"),
+                    encounter.getDouble("MaxHealth")) : 1, 0xFFEAA16D);
+            String attack = actual ? encounter.getString("Attack") : "Attack · phase · time";
+            int phase = Math.max(0, Math.min(3, encounter.getInt("Phase")));
+            String tell = actual ? (phase > 0 ? "Phase " + phase + " · " : "")
+                    + (attack.isBlank() ? "Watch for the next tell" : attack) : attack;
+            int ticks = Math.max(0, encounter.getInt("TicksUntilImpact"));
+            String countdown = actual && !attack.isBlank() && ticks > 0
+                    ? String.format(Locale.ROOT, "%.1fs", ticks / 20.0D) : "";
+            gui.drawString(font, clipped(tell, HUD_WIDTH - 21 - font.width(countdown)), 7, detailY + 23, 0xFFF1BB79, true);
+            gui.drawString(font, countdown, HUD_WIDTH - 7 - font.width(countdown), detailY + 23, 0xFFFFFFFF, true);
+            String counterplay = actual ? encounter.getString("Counterplay") : "Read the marked ground";
+            gui.drawString(font, clipped(counterplay, HUD_WIDTH - 14), 7, detailY + 35, 0xFFFFFFFF, true);
+            detailY += 47;
+        }
+        for (String resource : hudResources(preview)) {
+            gui.drawString(font, clipped(resource, HUD_WIDTH - 14), 7, detailY + 2, 0xFF87E1EA, true);
+            detailY += 11;
+        }
         gui.pose().popPose();
     }
 
@@ -228,6 +357,8 @@ public final class RivalRushClient {
             album = new ListTag();
             roster = new ListTag();
             arenaCatalogue = new ListTag();
+            debrief = new CompoundTag();
+            buildResources = List.of();
             albumPage = rosterPage = 0;
             albumPages = rosterPages = 1;
         }

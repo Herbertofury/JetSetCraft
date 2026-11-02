@@ -4,6 +4,8 @@
 
 [Base verification](https://github.com/Herbertofury/JetSetCraft/actions/runs/41388639847) and the [provider matrix](https://github.com/Herbertofury/JetSetCraft/actions/runs/41388639856) passed **44 real Forge GameTests in each of nine configurations**, every build and normal dedicated-server save/shutdown. The base passed its **fifteen-screen native audit gate**. Merge [`5bad458`](https://github.com/Herbertofury/JetSetCraft/commit/5bad45891b6fe7a5c7c133ed0a19ac0556dd5af8) has the identical tested source tree. CI archive downloads were blocked by browser URL policy, so independent CI binary hashing and pixel inspection are not claimed. The [alpha.5 receipt and gallery](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/verification/style-library/README.md) instead identify fifteen independently reproduced local captures from that exact source, with passing native audit markers and normal save/shutdown.
 
+**Alpha.6 candidate:** this branch adds telegraphed elites/headliners, three discoverable build paths, finite reroll/banish choices and a persistent **Last run** report. Sections labeled alpha.6 describe the current implementation awaiting its own runtime, provider and native-client verification. Alpha.5's passing receipts remain evidence for alpha.5.
+
 **Historical alpha.4 checkpoint: [PR #43](https://github.com/Herbertofury/JetSetCraft/pull/43).** **Journey** shows the rooms actually visited and offered, **Build** explains current artifacts and statistics, and **Crew Charter → Progress** records the rewards actually credited across modes. Line battery, Air break and Breakbeat mark reward riding, landings and focused attacks; an optional artifact remix after each genuine arena clear preserves the replaced family's rank. Their exact rules are described below.
 
 [Base #286](https://github.com/Herbertofury/JetSetCraft/actions/runs/41379581968) and [provider matrix #59](https://github.com/Herbertofury/JetSetCraft/actions/runs/41379581891) passed **35 real Forge GameTests in each of nine configurations**, every build, dedicated-server readiness, RCON stop and normal saved-dimensions shutdown. The base produced **thirteen reviewed 1280 × 720 client captures**. Merge [`e826694`](https://github.com/Herbertofury/JetSetCraft/commit/e826694c3429394b2b264f153cd9ea34b1fb9051) has the identical tested tree recorded in the [reward/journey receipt and gallery](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/verification/reward-journeys/README.md). These checks establish the specified mechanics; human thirty-minute pacing and Endless balance remain to be evaluated.
@@ -88,6 +90,22 @@ The supplied alpha.5 catalogue has **six base profiles**, or **ten with Aether, 
 
 Rooms are generated only inside the registered Rush dimension. Terrain from the original world, player builds, mobs and inventories are not imported. Connectors preserve passable lanes through walls and authored blocks. Generation advances in bounded batches using loaded chunks; it adds no persistent chunk tickets.
 
+### Read the threat — alpha.6 candidate
+
+Headliners arrive in **rooms three and six** of each circuit set, and every **five active minutes in Free streets**. There is at most one alive; missed windows do not accumulate. Circuit rooms three and six need their headliner defeated as well as the ordinary time and rival quota. At two-thirds and one-third virtual health the boss changes phase: circle/lane warnings expand to rings and then a delayed second circle. A phase change cancels the previous warnings and gives a short break.
+
+Three elite patterns appear after thirty active seconds, on every fifth eligible ordinary spawn, with at most four elites alive:
+
+| Elite | Warning | Counterplay |
+|---|---|---|
+| **Linebreaker** | A fixed ten-block lane, one block to either side; 30 active ticks | Move sideways out of the lane. |
+| **Bombardier** | A fixed circle with a 2.5-block radius; 32 active ticks | Leave the marked circle. |
+| **Basswarden** | A ring from 2.25 to seven blocks from its center; 36 active ticks | Move inside the inner edge or outside the outer edge. |
+
+The marked areas stay fixed during their warning. A vertical dodge beyond 1.65 blocks also avoids impact; walls and unloaded terrain prevent a hit. After a special attack, a 28-tick recovery window takes **25% extra virtual damage**. These are session-owned patterns on the chosen crew's source mob, not native boss AI or health replacements.
+
+A real headliner defeat earns its ordinary captain reward and **one evolution opportunity plus one reroll, up to three**. The opportunity does not stack and waits if the build is not ready. A missing body, invalid ownership or exhausted bounded spawn retries safely ends the encounter without a victory award. The thirty-minute Free streets Return/Encore choice still appears even if a headliner is unfinished; withdrawing that boss grants no boss victory. Values remain initial tuning pending the alpha.6 checks and human playtests.
+
 ## Reward caches and three artifact slots
 
 Glowing personal caches offer **magnet, paint damage, critical chance/power, area, recovery or an artifact**. In alpha.5 each has a distinct colored floor pattern as well as a readable name. Open **Build → Scout reward caches** for up to six nearby caches, their compass direction, distance, current benefit, recharge time and the defeats still needed. Inspecting the list does not claim a reward.
@@ -167,6 +185,18 @@ Open **Build** to see the current run statistics and artifact descriptions. When
 
 These original mechanics draw from Dungeons I's [movement-triggered build effects](https://www.minecraft.net/en-us/article/dungeons-september-dev-blog), its [Light Feather and Gong of Weakening](https://www.minecraft.net/en-us/article/minecraft-dungeons--9-essential-artifacts), and Dungeons II's [gear refinement and connected effects](https://news.xbox.com/en-us/2026/08/26/minecraft-dungeons-ii-new-features-gamescom-2026/amp/). They do not import either game's complete item catalogue, assets or native equipment. The [focused design notes](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/RIVAL_RUSH_DESIGN.md#144-focused-alpha4-adaptation-four-useful-decisions) distinguish the reference mechanisms from JetSetCraft's own numbers and rules.
 
+### Discover a build path — alpha.6 candidate
+
+Open **Build paths** to see every recipe, its two required families, your current ranks and its actual proc count. Each recipe needs **rank three in both families** and an earned headliner opportunity. Select it during an XP draft, between arenas or at Encore. In Free streets, an opportunity earned during combat waits for the next genuine XP draft or Encore; opening the menu alone does not pause combat for forging.
+
+| Evolution | Rank-three ingredients | Payoff |
+|---|---|---|
+| **Cryo shatter** | Venom ink + Chill paint | Tag a rival that is already inked and chilled to consume both effects and deal 10 base damage to at most four visible owned rivals, including that target if it survives. Radius is six blocks scaled by area, capped at twelve; at most once per three active seconds. |
+| **Railstorm** | Line battery + Rail shockwave | Spend a genuinely charged 24-block battery on a primary tag to hit at most five other visible owned rivals for 8 base damage. The forward lane starts fourteen blocks long and two blocks to either side; area scales those to caps of 24 and four. |
+| **Radiant barrier** | Radiant groove + Beat ward | Every sixth primary tag, unused Radiant groove healing restores up to six ward, including during its quiet delay. Ward capacity still applies; unused overheal is never stored. |
+
+You keep **three artifact slots, four ranks per family and one selected evolution**. Selecting a different evolution requires another earned opportunity. Remixing away an ingredient makes the selected path dormant; rebuilding both required ranks reactivates it automatically. Secondary hits cannot spend Line battery, critically hit or recursively trigger these primary-tag effects. Healing from another source does not trigger Radiant barrier. The names and numbers above are original Rush rules, with no native poison, slowness, hearts or armor changes.
+
 ## Historical alpha.4 Journey, Build and Progress captures
 
 These are unchanged **1280 × 720** captures from the passing native client audit. They show actual early states: the first offered routes and a Build page with zero artifacts. [All thirteen captures and the exact verification receipt](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/verification/reward-journeys/README.md) include Progress with empty reward history and **16/40 Supplies** toward a **25 × 25** house goal.
@@ -213,6 +243,12 @@ The return journal covers the captured **vanilla player state and JetSetCraft ri
 Album changes are persisted with **normal player saves**, not a disk flush for every card. An abrupt crash can lose changes since the last completed save. Successful entry and restored exit require their player-save checkpoints to be acknowledged.
 
 If the entry checkpoint cannot be saved, the run stops before lending equipment or teleporting. If the restored exit cannot be saved, the player is disconnected with an explanation; reconnect after the server's storage problem is fixed.
+
+### Review the last run — alpha.6 candidate
+
+After returning, **Last run** preserves one report with the result, active time, room/headliner clears, cards, final artifact/stat ranks, selected evolution and proc count, and rerolls/banishes used. Its combat totals count **actual** primary and secondary virtual damage, vitality lost/restored and ward absorbed/restored. Overkill, unused healing and newly added shield capacity do not inflate those totals.
+
+**Accepted return award** shows the matching saved settlement's actual contribution. It covers the return only; earlier arena awards are already separate entries in crew Progress. Banking normally, running out of vitality, completing the qualified six-room headliner ending and an interrupted restoration have distinct result labels. Viewing the report never pays a reward again. It follows ordinary player saving, replaces the preceding report and cannot resume a finished build. Recovery without the original live run data does not invent a new result.
 
 ## The first playable loop
 
@@ -265,6 +301,14 @@ A [player-built crew house](Player-Chapters-Posse-and-Mob-Archetypes) can prepar
 | **Fast rewind** | Shorter artifact intervals, with bounded minimums | 6 |
 
 These eleven stat upgrades join alpha.5's sixteen artifact families, or fifteen without the optional relay. Alpha.4 had ten families, alpha.3 had seven, and the original alpha.2 pool had seven stat upgrades. All artifacts cap at rank four. Once capped, drafts remain useful through **Fresh wheels** healing, **Victory lap** score, and temporary **Overdrive** damage. Style Library unlocks do not restrict ordinary drafts. Choices validate the player, current run UUID, offer version and offered index. Replaying an old request cannot buy an upgrade in a new run.
+
+### Shape the draft — alpha.6 candidate
+
+Each run starts with **three rerolls and two banishes**. **Reroll** changes the three choices without spending another level or XP, avoiding the old options when alternatives are available. If only the same three terminal rewards can be offered, it is disabled and spends nothing. Each real headliner victory restores one reroll, up to three; Encore itself does not refill it.
+
+**Banish** replaces one offered ranked upgrade and keeps the other two choices. That upgrade stays out of later XP drafts for this run. Existing ranks remain, and physical caches or artifact remix can still grant that family. Banishes do not refill; repeatable healing, score and Overdrive rewards cannot be banished. The excluded list and remaining budgets are visible, and each offer shows the server-calculated next-rank change.
+
+Ordinary drafts favor an available rank-up for an owned artifact, while rerolls prioritize genuinely different options. Three-slot limits, maximum ranks and the optional relay's availability still apply. An unavailable or stale request spends no control budget.
 
 ## Optional crew-house preparation and training
 
@@ -397,9 +441,9 @@ The [alpha.1 verification receipt](https://github.com/Herbertofury/JetSetCraft/t
 
 ## What remains a design proposal
 
-Alpha.3 implements chaining, rail-triggered pulses and its seven earlier artifact families. Alpha.4 adds the three verified families and rank-preserving artifact remix described above. Alpha.5 adds six more families and the **limited sixteen-lesson permanent Style Library**, with all nine CI configurations passing. Painted drift trails, evolutions, full equipment/enchantment collections, native equipment rerolls and the comprehensive Dungeons item catalogues remain design work. The Style Library preserves a starting choice, not native Dungeons gear or a complete enchantment system. Human playtesting is still needed for the implemented families.
+Alpha.3 implements chaining, rail-triggered pulses and its seven earlier artifact families. Alpha.4 adds the three verified families and rank-preserving artifact remix described above. Alpha.5 adds six more families and the **limited sixteen-lesson permanent Style Library**, with all nine CI configurations passing. The alpha.6 candidate adds the three specific evolutions and bounded XP-draft controls above, awaiting its own acceptance. Painted drift trails, full equipment/enchantment collections, native equipment rerolls and the comprehensive Dungeons item catalogues remain design work. The Style Library preserves one starting choice. Human playtesting is still needed for the implemented families.
 
-Captains currently add tougher priority targets and rewards. Bespoke boss attack patterns, paired bosses, crew-specific final headliners, and the proposed authored thirty-minute sequence remain future work. Free streets ends at its timer boundary; the circuit ends after six arena clears. Both offer Return/Encore without a bespoke final boss.
+The alpha.5 baseline's captains supply tougher priority targets and rewards. Alpha.6's candidate adds the bounded elite patterns and phased headliners described above. Paired bosses, distinct authored finales for every crew/species and the proposed full thirty-minute narrative remain future work. Free streets retains its timer decision; the candidate circuit additionally requires the scheduled room-three and room-six headliner victories. Both retain Return/Encore.
 
 Music stops currently measure **four seconds of dancing** and play an existing crew stinger. They do not judge beats, analyze a soundtrack, or implement rhythm-scored combat. Tag relays, carried crates, crew murals, richer procedural neighborhoods, and coordinated co-op are also proposals. Human sessions should now test the existing skating, combat, collection and exit loop before expanding it.
 

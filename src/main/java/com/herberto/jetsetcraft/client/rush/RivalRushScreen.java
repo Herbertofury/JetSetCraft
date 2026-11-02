@@ -18,10 +18,11 @@ import net.minecraftforge.registries.ForgeRegistries;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.UUID;
 
 /** Native focusable controls for explicit entry, choices, card collection and immediate extraction. */
 final class RivalRushScreen extends Screen {
-    private enum View { RUN, ADVANCED, ROSTER, ALBUM, CARD, UPGRADES, RESULT, ARENAS, ROUTE, JOURNEY, BUILD, REMIX, CACHES }
+    private enum View { RUN, ADVANCED, ROSTER, ALBUM, CARD, UPGRADES, RESULT, ARENAS, ROUTE, JOURNEY, BUILD, REMIX, CACHES, PATHS, DRAFT_DETAILS, DEBRIEF }
     private View view = View.RUN;
     private EditBox gangField, mobField;
     private String gang = "jetsetcraft:dead_beat";
@@ -33,10 +34,13 @@ final class RivalRushScreen extends Screen {
     private int responseWindow;
     private int cardScroll;
     private int detailScroll;
+    private int recipePage;
     private String selectedJourney = "", remixFrom = "", remixTo = "";
     private String remixFeedback = "";
     private boolean debriefPending;
     private String resultSummary = "";
+    private String debriefNotice = "";
+    private UUID debriefNoticeRun;
     private boolean pending;
     private int pendingTicks;
     private boolean circuit;
@@ -48,13 +52,24 @@ final class RivalRushScreen extends Screen {
     boolean isJourneyView() { return view == View.JOURNEY; }
     boolean isBuildView() { return view == View.BUILD; }
     boolean isCachesView() { return view == View.CACHES; }
+    boolean isPathsView() { return view == View.PATHS; }
+    boolean isUpgradeView() { return view == View.UPGRADES; }
+    boolean isDebriefView() { return view == View.DEBRIEF; }
 
     RivalRushScreen(CompoundTag opening) {
+        this(opening, false);
+    }
+
+    RivalRushScreen(CompoundTag opening, boolean endedRun) {
         super(Component.literal("Rival Rush"));
         if (!opening.getString("GangId").isBlank()) gang = opening.getString("GangId");
         if (!opening.getString("Mob").isBlank()) mob = opening.getString("Mob");
         if (!opening.getString("Gang").isBlank()) { gangLabel = opening.getString("Gang"); gangLabelId = gang; }
         selectView(opening);
+        if (endedRun) {
+            view = View.DEBRIEF;
+            rememberDebriefNotice(opening);
+        }
     }
 
     void onSnapshot(CompoundTag incoming, CompoundTag previous) {
@@ -99,7 +114,10 @@ final class RivalRushScreen extends Screen {
                     && !incoming.getCompound("Build").getBoolean("RemixReady")) {
                 view = View.BUILD; remixFrom = remixTo = ""; detailScroll = 0;
             }
-            if (incoming.getBoolean("Open")) selectView(incoming);
+            if (RivalRushClient.endedRun(incoming, previous)) {
+                view = View.DEBRIEF; detailScroll = 0; rememberDebriefNotice(incoming);
+            }
+            else if (incoming.getBoolean("Open")) selectView(incoming);
             pending = false;
             pendingTicks = 0;
             rebuildWidgets();
@@ -107,17 +125,22 @@ final class RivalRushScreen extends Screen {
     }
 
     private void selectView(CompoundTag incoming) {
-        if (incoming.getBoolean("Active") && !RivalRushClient.offers().isEmpty()) view = View.UPGRADES;
+        if (incoming.getBoolean("Active") && !RivalRushClient.offers().isEmpty()) {
+            if (view != View.PATHS && view != View.DRAFT_DETAILS) view = View.UPGRADES;
+        }
         else if (incoming.getBoolean("Active") && debriefPending) { view = View.JOURNEY; debriefPending = false; }
         else if (RivalRushClient.choosingRoute()) {
             // A requested collection page remains usable while the next route waits for a decision.
             if (incoming.contains("Album", Tag.TAG_LIST)) { view = View.ALBUM; window = responseWindow; responseWindow = 0; }
             else if (incoming.contains("Roster", Tag.TAG_LIST)) { view = View.ROSTER; window = responseWindow; responseWindow = 0; }
             else if (view != View.ALBUM && view != View.CARD && view != View.ROSTER
-                    && view != View.JOURNEY && view != View.BUILD && view != View.REMIX) view = View.ROUTE;
+                    && view != View.JOURNEY && view != View.BUILD && view != View.REMIX
+                    && view != View.PATHS && view != View.DRAFT_DETAILS) view = View.ROUTE;
         }
         else if (!incoming.getString("Summary").isBlank()) { resultSummary = incoming.getString("Summary"); view = View.RESULT; }
-        else if (incoming.getBoolean("Finale")) view = incoming.contains("Journey", Tag.TAG_COMPOUND) ? View.JOURNEY : View.RUN;
+        else if (incoming.getBoolean("Finale")) {
+            if (view != View.PATHS) view = incoming.contains("Journey", Tag.TAG_COMPOUND) ? View.JOURNEY : View.RUN;
+        }
         else if (incoming.contains("Album", Tag.TAG_LIST)) { view = View.ALBUM; window = responseWindow; responseWindow = 0; }
         else if (incoming.contains("Roster", Tag.TAG_LIST)) { view = View.ROSTER; window = responseWindow; responseWindow = 0; }
         else if (!incoming.getBoolean("Active") && view != View.ARENAS) view = View.RUN;
@@ -129,6 +152,12 @@ final class RivalRushScreen extends Screen {
         if (mobField != null) draftMob = mobField.getValue();
     }
 
+    private void rememberDebriefNotice(CompoundTag incoming) {
+        CompoundTag result = incoming.getCompound("Debrief");
+        debriefNoticeRun = result.hasUUID("Run") ? result.getUUID("Run") : null;
+        debriefNotice = incoming.getString("Summary");
+    }
+
     private void navigate(View target) {
         rememberFields();
         if (target == View.ADVANCED && view != View.ADVANCED) { draftGang = gang; draftMob = mob; }
@@ -136,6 +165,7 @@ final class RivalRushScreen extends Screen {
         window = 0;
         if (target == View.CARD) cardScroll = 0;
         detailScroll = 0;
+        if (target == View.PATHS) recipePage = 0;
         if (target == View.REMIX) { remixFrom = ""; remixTo = ""; remixFeedback = ""; }
         rebuildWidgets();
     }
@@ -148,7 +178,8 @@ final class RivalRushScreen extends Screen {
         int left = left();
         int span = span();
         boolean active = RivalRushClient.state().getBoolean("Active");
-        int third = active ? (span - 12) / 4 : (span - 8) / 3;
+        boolean lastRun = !active && !RivalRushClient.debrief().isEmpty();
+        int third = active || lastRun ? (span - 12) / 4 : (span - 8) / 3;
         boolean journey = active && RivalRushClient.state().contains("Journey", Tag.TAG_COMPOUND);
         addRenderableWidget(Button.builder(Component.literal(journey ? "Journey" : "Run"), button -> navigate(
                 !RivalRushClient.offers().isEmpty() ? View.UPGRADES : journey ? View.JOURNEY : View.RUN))
@@ -160,8 +191,10 @@ final class RivalRushScreen extends Screen {
         addRenderableWidget(Button.builder(Component.literal("Mob cards"), button -> {
             navigate(View.ALBUM);
             RivalRushClient.request("album", "", 0);
-        }).bounds(left + (third + 4) * 2, 45, active ? third : span - (third + 4) * 2, 20).build());
+        }).bounds(left + (third + 4) * 2, 45, active || lastRun ? third : span - (third + 4) * 2, 20).build());
         if (active) addRenderableWidget(Button.builder(Component.literal("Build"), button -> navigate(View.BUILD))
+                .bounds(left + (third + 4) * 3, 45, span - (third + 4) * 3, 20).build());
+        else if (lastRun) addRenderableWidget(Button.builder(Component.literal("Last run"), button -> navigate(View.DEBRIEF))
                 .bounds(left + (third + 4) * 3, 45, span - (third + 4) * 3, 20).build());
 
         switch (view) {
@@ -173,6 +206,12 @@ final class RivalRushScreen extends Screen {
             case ROUTE -> buildRoute(left, span);
             case JOURNEY -> buildJourney(left, span);
             case BUILD -> buildBuild(left, span);
+            case PATHS -> buildPaths(left, span);
+            case DRAFT_DETAILS -> addRenderableWidget(Button.builder(Component.literal(RivalRushClient.offers().isEmpty()
+                            ? "Back to build" : "Back to choices"), button -> navigate(RivalRushClient.offers().isEmpty() ? View.BUILD : View.UPGRADES))
+                    .bounds(left, height - 53, span, 20).build());
+            case DEBRIEF -> addRenderableWidget(Button.builder(Component.literal("Set up another run"), button -> navigate(View.RUN))
+                    .bounds(left, height - 53, span, 20).build());
             case CACHES -> addRenderableWidget(Button.builder(Component.literal("Back to build"), button -> navigate(View.BUILD))
                     .bounds(left, height - 53, span, 20).build());
             case REMIX -> buildRemix(left, span);
@@ -312,6 +351,7 @@ final class RivalRushScreen extends Screen {
             choice.active = !pending;
             choice.setTooltip(Tooltip.create(Component.literal(arena.getString("Name") + "\n" + arenaDetails(arena)
                     + "\nRun: " + arena.getString("RunReward") + "\n" + sharedInline(arena.getCompound("SharedReward"), true)
+                    + (arena.getBoolean("Headliner") ? "\nHeadliner stage: victory required.\n" + arena.getString("HeadlinerReward") : "")
                     + "\n" + arena.getString("Description") + "\nSelecting opens a connected route. Ride into the next arena.")));
         }
     }
@@ -426,6 +466,10 @@ final class RivalRushScreen extends Screen {
                 if (shared.getBoolean("PendingHouse")) detail(lines, "Saved until you found a crew house.", availableWidth, 0xFFE6DBA6);
             }
             if (!node.kind().equals("done")) {
+                if (room.getBoolean("Headliner")) {
+                    detail(lines, "Headliner stage · victory required", availableWidth, 0xFFF1BB79);
+                    detail(lines, room.getString("HeadlinerReward"), availableWidth, 0xFFE7E7E7);
+                }
                 detail(lines, RivalRushClient.clock(room.getInt("Seconds") * 20L) + " + " + room.getInt("Defeats")
                         + " owned rivals · " + (room.getInt("Radius") * 2 + 1) + " × " + (room.getInt("Radius") * 2 + 1), availableWidth, 0xFFB8B8B8);
                 detail(lines, "Full run ranks pay score and recovery instead.", availableWidth, 0xFFB8B8B8);
@@ -458,14 +502,143 @@ final class RivalRushScreen extends Screen {
     private void buildBuild(int left, int span) {
         CompoundTag build = RivalRushClient.state().getCompound("Build");
         boolean ready = build.getBoolean("RemixReady") && !build.getList("Artifacts", Tag.TAG_COMPOUND).isEmpty();
-        Button remix = addRenderableWidget(Button.builder(Component.literal(ready ? "Remix an artifact"
-                        : "Artifact remix · earned between arenas"), button -> navigate(View.REMIX))
+        Button remix = addRenderableWidget(Button.builder(Component.literal("Remix artifact"), button -> navigate(View.REMIX))
                 .bounds(left, height - 53, (span - 4) / 2, 20).build());
         remix.active = ready;
         remix.setTooltip(Tooltip.create(Component.literal("A completed arena offers one optional replacement. Keep the replaced artifact's rank."
                 + "\nThe opportunity does not stack; it is usable only between rooms, outside upgrade drafts.")));
+        addRenderableWidget(Button.builder(Component.literal("Build paths"), button -> navigate(View.PATHS))
+                .bounds(left, 77, span, 20).build());
         addRenderableWidget(Button.builder(Component.literal("Scout reward caches"), button -> navigate(View.CACHES))
                 .bounds(left + (span - 4) / 2 + 4, height - 53, span - (span - 4) / 2 - 4, 20).build());
+    }
+
+    private CompoundTag paths() { return RivalRushClient.state().getCompound("Build").getCompound("Paths"); }
+
+    private CompoundTag recipe() {
+        ListTag recipes = paths().getList("Recipes", Tag.TAG_COMPOUND);
+        recipePage = Math.max(0, Math.min(recipePage, Math.max(0, recipes.size() - 1)));
+        return recipes.isEmpty() ? new CompoundTag() : recipes.getCompound(recipePage);
+    }
+
+    private void buildPaths(int left, int span) {
+        ListTag recipes = paths().getList("Recipes", Tag.TAG_COMPOUND);
+        CompoundTag recipe = recipe();
+        Button previous = addRenderableWidget(Button.builder(Component.literal("‹"), button -> {
+            recipePage--; detailScroll = 0; rebuildWidgets();
+        }).bounds(left, 77, 30, 20).build());
+        previous.setTooltip(Tooltip.create(Component.literal("Previous evolution recipe")));
+        previous.active = recipePage > 0;
+        Button next = addRenderableWidget(Button.builder(Component.literal("›"), button -> {
+            recipePage++; detailScroll = 0; rebuildWidgets();
+        }).bounds(left + span - 30, 77, 30, 20).build());
+        next.setTooltip(Tooltip.create(Component.literal("Next evolution recipe")));
+        next.active = recipePage + 1 < recipes.size();
+        int half = (span - 4) / 2;
+        addRenderableWidget(Button.builder(Component.literal(RivalRushClient.offers().isEmpty()
+                        ? "Back to build" : "Back to choices"), button -> navigate(RivalRushClient.offers().isEmpty() ? View.BUILD : View.UPGRADES))
+                .bounds(left, height - 53, half, 20).build());
+        String label = recipe.getBoolean("Selected") ? recipe.getBoolean("Active") ? "Evolution active" : "Evolution dormant"
+                : !paths().getBoolean("Opportunity") ? "Defeat a headliner"
+                : !recipe.getBoolean("Ready") ? "Need both rank 3" : "Forge evolution";
+        Button forge = addRenderableWidget(Button.builder(Component.literal(label), button -> {
+            pending = true; pendingTicks = 0;
+            RivalRushClient.request("evolve", recipe.getString("Id"), 0); rebuildWidgets();
+        }).bounds(left + half + 4, height - 53, span - half - 4, 20).build());
+        forge.active = !pending && !recipe.isEmpty() && !recipe.getBoolean("Selected")
+                && recipe.getBoolean("Ready") && paths().getBoolean("Opportunity") && paths().getBoolean("CanEvolve");
+        forge.setTooltip(Tooltip.create(Component.literal(recipe.getBoolean("Selected")
+                ? "The selected evolution activates whenever both required artifacts have rank 3."
+                : paths().getBoolean("CanEvolve") ? "Spend your earned forge opportunity. Only one evolution can be selected at once."
+                : paths().getString("BlockedReason"))));
+    }
+
+    private List<CardLine> pathLines() {
+        List<CardLine> lines = new ArrayList<>();
+        CompoundTag recipe = recipe(), paths = paths();
+        if (recipe.isEmpty()) {
+            detail(lines, "Waiting for the server's evolution recipes.", span(), 0xFFDDDDDD); return lines;
+        }
+        for (var raw : recipe.getList("Requirements", Tag.TAG_COMPOUND)) {
+            CompoundTag requirement = (CompoundTag) raw;
+            int rank = Math.max(0, requirement.getInt("Rank")), needed = Math.max(1, requirement.getInt("RequiredRank"));
+            detail(lines, (rank >= needed ? "Ready · " : "Need · ") + requirement.getString("Name") + " " + rank + "/" + needed,
+                    span(), rank >= needed ? 0xFFC5ED55 : 0xFFE6DBA6);
+        }
+        detail(lines, paths.getBoolean("Opportunity") ? "Forge opportunity earned · one available"
+                : "A defeated headliner earns one forge opportunity.", span(), 0xFF87E1EA);
+        if (recipe.getBoolean("Selected")) detail(lines, recipe.getBoolean("Active")
+                ? "Selected and active · " + Math.max(0, recipe.getLong("ProcCount")) + " triggers"
+                : "Selected, dormant · restore the two required ranks to reactivate.", span(), 0xFFC5ED55);
+        else if (recipe.getBoolean("Ready")) detail(lines, "Both required ranks are ready.", span(), 0xFFC5ED55);
+        detail(lines, recipe.getString("Description"), span(), 0xFFE7E7E7);
+        detail(lines, "Keeps your artifacts and their ranks. A new forge replaces your selected evolution; opportunities do not stack.", span(), 0xFFB8B8B8);
+        if (paths.getBoolean("Opportunity") && !paths.getBoolean("CanEvolve"))
+            detail(lines, paths.getString("BlockedReason"), span(), 0xFFE6DBA6);
+        return lines;
+    }
+
+    private List<CardLine> draftLines() {
+        List<CardLine> lines = new ArrayList<>();
+        CompoundTag draft = RivalRushClient.state().getCompound("Draft");
+        detail(lines, "Rerolls left: " + Math.max(0, draft.getInt("Rerolls")) + "/" + Math.max(0, draft.getInt("RerollMax")), span(), 0xFF87E1EA);
+        detail(lines, "Banishes left: " + Math.max(0, draft.getInt("Banishes")) + "/" + Math.max(0, draft.getInt("BanishMax")), span(), 0xFF87E1EA);
+        detail(lines, "Reroll replaces the current offers. Banish removes that upgrade from future drafts for this run.", span(), 0xFFE7E7E7);
+        detail(lines, "Both actions keep your pending upgrade choice. Budgets belong to this run.", span(), 0xFFB8B8B8);
+        detail(lines, "Excluded from this run's drafts", span(), 0xFFC5ED55);
+        ListTag banished = draft.getList("Banished", Tag.TAG_COMPOUND);
+        if (banished.isEmpty()) detail(lines, "None. All eligible upgrades remain in the pool.", span(), 0xFFE7E7E7);
+        for (var raw : banished) detail(lines, ((CompoundTag) raw).getString("Name"), span(), 0xFFE6DBA6);
+        return lines;
+    }
+
+    private List<CardLine> debriefLines() {
+        List<CardLine> lines = new ArrayList<>();
+        CompoundTag result = RivalRushClient.debrief();
+        if (result.isEmpty()) {
+            detail(lines, "No last-run report is saved yet.", span(), 0xFFDDDDDD); return lines;
+        }
+        detail(lines, result.getString("OutcomeLabel"), span(), 0xFFC5ED55);
+        if (!result.getString("Reason").isBlank()) detail(lines, result.getString("Reason"), span(), 0xFFE6DBA6);
+        else if (result.getString("Outcome").equals("INTERRUPTED") && result.hasUUID("Run")
+                && result.getUUID("Run").equals(debriefNoticeRun)) detail(lines, debriefNotice, span(), 0xFFE6DBA6);
+        detail(lines, (result.getBoolean("Circuit") ? "Arena circuit" : result.getBoolean("Endless") ? "Endless streets" : "Free streets")
+                + " · " + RivalRushClient.clock(result.getLong("Ticks")) + " active time · level " + result.getInt("Level"), span(), 0xFF87E1EA);
+        detail(lines, "Score " + result.getLong("Score") + " · " + result.getLong("Defeats") + " rivals · " + result.getLong("Cards") + " cards", span(), 0xFFE7E7E7);
+        detail(lines, result.getLong("ArenaClears") + " arenas cleared · " + result.getLong("Headliners") + " headliners defeated", span(), 0xFFE7E7E7);
+        detail(lines, "Run damage: primary " + decimal(result.getDouble("PrimaryDamage")) + " · effects " + decimal(result.getDouble("SecondaryDamage")), span(), 0xFFE7E7E7);
+        detail(lines, "Vitality lost " + decimal(result.getDouble("DamageTaken")) + " · restored " + decimal(result.getDouble("VitalityRestored")), span(), 0xFFE7E7E7);
+        detail(lines, "Ward absorbed " + decimal(result.getDouble("WardAbsorbed")) + " · restored " + decimal(result.getDouble("WardRestored")), span(), 0xFFE7E7E7);
+        detail(lines, "Drafts: " + result.getLong("RerollsUsed") + " rerolls · " + result.getLong("BanishesUsed") + " banishes used", span(), 0xFFB8B8B8);
+        detail(lines, "Accepted return award", span(), 0xFFC5ED55);
+        if ("accepted".equals(result.getString("ReturnRewardStatus"))) {
+            CompoundTag reward = result.getCompound("ReturnReward");
+            rewardLines(lines, reward, span());
+            if (reward.getBoolean("Pending")) detail(lines, "Saved until you found a crew house.", span(), 0xFFE6DBA6);
+            detail(lines, reward.getString("TrainingSummary"), span(), 0xFFB8B8B8);
+            detail(lines, reward.getString("LevelSummary"), span(), 0xFFB8B8B8);
+        } else detail(lines, "No return award recorded.", span(), 0xFFB8B8B8);
+        detail(lines, "Arena payouts were banked separately. This return award is not the total from every arena.", span(), 0xFFB8B8B8);
+        detail(lines, "Final artifact build", span(), 0xFFC5ED55);
+        ListTag artifacts = result.getList("Artifacts", Tag.TAG_COMPOUND);
+        if (artifacts.isEmpty()) detail(lines, "No artifacts held at the end of this run.", span(), 0xFFB8B8B8);
+        for (var raw : artifacts) {
+            CompoundTag artifact = (CompoundTag) raw;
+            detail(lines, artifact.getString("Name") + " · rank " + artifact.getInt("Rank"), span(), 0xFFE7E7E7);
+        }
+        CompoundTag evolution = result.getCompound("Evolution");
+        if (!evolution.getString("Id").equals("NONE") && !evolution.getString("Name").isBlank()) {
+            detail(lines, evolution.getString("Name") + (evolution.getBoolean("Active") ? " · active" : " · dormant")
+                    + " · " + evolution.getLong("Procs") + " triggers", span(), 0xFF87E1EA);
+            detail(lines, evolution.getString("Description"), span(), 0xFFB8B8B8);
+        } else detail(lines, "No evolution selected.", span(), 0xFFB8B8B8);
+        ListTag stats = result.getList("Stats", Tag.TAG_COMPOUND);
+        if (!stats.isEmpty()) detail(lines, "Final stat ranks", span(), 0xFFC5ED55);
+        for (var raw : stats) {
+            CompoundTag stat = (CompoundTag) raw;
+            detail(lines, stat.getString("Name") + " " + stat.getInt("Rank") + "/" + stat.getInt("MaxRank"), span(), 0xFFE7E7E7);
+        }
+        return lines;
     }
 
     private List<CardLine> cacheLines() {
@@ -667,21 +840,50 @@ final class RivalRushScreen extends Screen {
 
     private void buildOffers(int left, int span) {
         ListTag offers = RivalRushClient.offers();
-        int available = Math.max(72, height - 112);
-        int cardHeight = Math.min(60, available / 3);
+        CompoundTag draft = RivalRushClient.state().getCompound("Draft");
+        int cardHeight = draftCardHeight();
+        int banishWidth = 54;
         for (int i = 0; i < Math.min(3, offers.size()); i++) {
             CompoundTag offer = offers.getCompound(i);
             int index = i;
             String label = (i + 1) + ". " + offer.getString("name")
                     + (offer.getInt("rank") > 0 ? "  •  current rank " + offer.getInt("rank") : "");
-            Button choice = addRenderableWidget(Button.builder(Component.literal(RivalRushClient.clipped(label, span - 12)), button -> {
-                pending = true;
+            Button choice = addRenderableWidget(Button.builder(Component.literal(RivalRushClient.clipped(label, span - banishWidth - 16)), button -> {
+                pending = true; pendingTicks = 0;
                 RivalRushClient.request("choose", offer.getString("id"), index);
                 rebuildWidgets();
-            }).bounds(left, 77 + i * cardHeight, span, 20).build());
-            choice.setTooltip(Tooltip.create(Component.literal(offer.getString("name") + "\n" + offer.getString("description"))));
+            }).bounds(left, 75 + i * cardHeight, span - banishWidth - 4, 20).build());
+            choice.setTooltip(Tooltip.create(Component.literal(offer.getString("name") + "\n" + offer.getString("description")
+                    + "\nNext: " + nextDescription(offer))));
             choice.active = !pending;
+            Button banish = addRenderableWidget(Button.builder(Component.literal("Banish"), button -> {
+                pending = true; pendingTicks = 0;
+                RivalRushClient.request("banish", offer.getString("id"), index); rebuildWidgets();
+            }).bounds(left + span - banishWidth, 75 + i * cardHeight, banishWidth, 20).build());
+            banish.active = !pending && offer.getBoolean("banishable") && draft.getInt("Banishes") > 0;
+            banish.setTooltip(Tooltip.create(Component.literal("Banish " + offer.getString("name")
+                    + "\nRemove this upgrade from future drafts in this run. Uses one banish and keeps your upgrade choice."
+                    + "\nBanishes left: " + Math.max(0, draft.getInt("Banishes")) + "/" + Math.max(0, draft.getInt("BanishMax")))));
         }
+        int third = (span - 8) / 3;
+        Button reroll = addRenderableWidget(Button.builder(Component.literal("Reroll " + Math.max(0, draft.getInt("Rerolls"))
+                        + "/" + Math.max(0, draft.getInt("RerollMax"))), button -> {
+            pending = true; pendingTicks = 0;
+            RivalRushClient.request("reroll", "", 0); rebuildWidgets();
+        }).bounds(left, height - 53, third, 20).build());
+        reroll.active = !pending && draft.getBoolean("CanReroll");
+        reroll.setTooltip(Tooltip.create(Component.literal("Spend one reroll to replace these offers. Keeps this pending upgrade choice.")));
+        addRenderableWidget(Button.builder(Component.literal("Build paths"), button -> navigate(View.PATHS))
+                .bounds(left + third + 4, height - 53, third, 20).build());
+        addRenderableWidget(Button.builder(Component.literal("Excluded " + draft.getList("Banished", Tag.TAG_COMPOUND).size()),
+                        button -> navigate(View.DRAFT_DETAILS))
+                .bounds(left + (third + 4) * 2, height - 53, span - (third + 4) * 2, 20).build());
+    }
+
+    private int draftCardHeight() { return Math.min(64, Math.max(32, (height - 143) / 3)); }
+
+    private static String nextDescription(CompoundTag offer) {
+        return offer.getString("nextDescription").isBlank() ? offer.getString("description") : offer.getString("nextDescription");
     }
 
     private void buildList(int left, int span) {
@@ -764,11 +966,16 @@ final class RivalRushScreen extends Screen {
         gui.drawCenteredString(font, title, width / 2, 10, 0xFFC5ED55);
         String subtitle = view == View.JOURNEY ? "Set " + RivalRushClient.journey().getInt("Set") + " · "
                 + RivalRushClient.journey().getInt("Completed") + "/6 cleared · select a known room"
-                : view == View.ROUTE ? "Compare rewards · Journey opens the map"
+                : view == View.ROUTE ? RivalRushClient.journey().getBoolean("HeadlinerStage")
+                        ? "Headliner stage · victory required" : "Compare rewards · Journey opens the map"
                 : view == View.ARENAS ? "Choose the first arena • later routes branch"
                 : view == View.BUILD ? "Your current run effects • three artifact families"
                 : view == View.CACHES ? "Scout caches • choose where to ride"
                 : view == View.REMIX ? "Replace one artifact family · keep its rank"
+                : view == View.PATHS ? "Evolution recipes · headliners earn a forge"
+                : view == View.DRAFT_DETAILS ? "Your remaining choices and excluded upgrades"
+                : view == View.DEBRIEF ? "Last run · saved results and accepted rewards"
+                : view == View.UPGRADES ? "Choose a rank · or steer this draft"
                 : "An optional skating survival set • your own run XP";
         gui.drawCenteredString(font, subtitle, width / 2, 26, 0xFFDDDDDD);
         CompoundTag state = RivalRushClient.state();
@@ -797,12 +1004,16 @@ final class RivalRushScreen extends Screen {
             wrap(gui, "A different mob overrides the crew's themed cast. Use this for a specific Minecraft or installed mod creature.",
                     left, 181, span, Math.max(2, (height - 214) / 10), 0xFFB8B8B8);
         } else if (view == View.UPGRADES) {
-            int cardHeight = Math.min(60, Math.max(72, height - 112) / 3);
+            int cardHeight = draftCardHeight();
             ListTag offers = RivalRushClient.offers();
             for (int i = 0; i < Math.min(3, offers.size()); i++) {
-                wrap(gui, offers.getCompound(i).getString("description"), left + 4, 100 + i * cardHeight,
-                        span - 8, Math.max(0, (cardHeight - 25) / 10), 0xFFDDDDDD);
+                wrap(gui, nextDescription(offers.getCompound(i)), left + 4, 97 + i * cardHeight,
+                        span - 8, Math.max(1, Math.min(3, (cardHeight - 22) / 10)), 0xFFDDDDDD);
             }
+            CompoundTag draft = state.getCompound("Draft");
+            gui.drawString(font, RivalRushClient.clipped("Banishes left " + Math.max(0, draft.getInt("Banishes"))
+                    + "/" + Math.max(0, draft.getInt("BanishMax")) + (pending ? " · waiting for the server" : " · inspect a choice for full details"), span),
+                    left, height - 66, 0xFFB8B8B8);
         } else if (view == View.ARENAS) {
             int pages = Math.max(1, (RivalRushClient.arenaCatalogue().size() + 1 + rows() - 1) / rows());
             gui.drawCenteredString(font, "Presets " + (window + 1) + "/" + pages, width / 2, height - 47, 0xFFDDDDDD);
@@ -840,6 +1051,15 @@ final class RivalRushScreen extends Screen {
             drawJourney(gui, left, span);
         } else if (view == View.BUILD) {
             drawDetails(gui, buildLines(), left, span);
+        } else if (view == View.PATHS) {
+            ListTag recipes = paths().getList("Recipes", Tag.TAG_COMPOUND);
+            String label = recipe().getString("Name") + " · " + (recipes.isEmpty() ? "0/0" : (recipePage + 1) + "/" + recipes.size());
+            gui.drawCenteredString(font, RivalRushClient.clipped(label, span - 76), width / 2, 83, 0xFFC5ED55);
+            drawDetails(gui, pathLines(), left, span);
+        } else if (view == View.DRAFT_DETAILS) {
+            drawDetails(gui, draftLines(), left, span);
+        } else if (view == View.DEBRIEF) {
+            drawDetails(gui, debriefLines(), left, span);
         } else if (view == View.CACHES) {
             drawDetails(gui, cacheLines(), left, span);
         } else if (view == View.REMIX) {
@@ -921,19 +1141,24 @@ final class RivalRushScreen extends Screen {
         }
     }
 
-    private int maxDetailScroll(List<CardLine> lines) { return Math.max(0, lines.size() * 11 - Math.max(22, height - 145)); }
+    private int detailsTop() { return view == View.PATHS || view == View.BUILD ? 103 : 75; }
+
+    private int maxDetailScroll(List<CardLine> lines) {
+        return Math.max(0, lines.size() * 11 - Math.max(11, height - 71 - detailsTop()));
+    }
 
     private List<CardLine> currentDetails() {
         return view == View.JOURNEY ? journeyLines(span() - mapWidth() - 12) : view == View.BUILD ? buildLines()
-                : view == View.CACHES ? cacheLines() : remixLines();
+                : view == View.CACHES ? cacheLines() : view == View.PATHS ? pathLines()
+                : view == View.DRAFT_DETAILS ? draftLines() : view == View.DEBRIEF ? debriefLines() : remixLines();
     }
 
     private void drawDetails(GuiGraphics gui, List<CardLine> lines, int left, int availableWidth) {
         detailScroll = Math.max(0, Math.min(detailScroll, maxDetailScroll(lines)));
-        gui.enableScissor(left, 75, left + availableWidth, height - 69);
+        gui.enableScissor(left, detailsTop(), left + availableWidth, height - 69);
         for (int i = 0; i < lines.size(); i++) {
             CardLine value = lines.get(i);
-            gui.drawString(font, value.text(), left, 77 + i * 11 - detailScroll, value.color(), true);
+            gui.drawString(font, value.text(), left, detailsTop() + 2 + i * 11 - detailScroll, value.color(), true);
         }
         gui.disableScissor();
         if (maxDetailScroll(lines) > 0) gui.drawString(font, RivalRushClient.clipped("Scroll / Page Up–Down", availableWidth), left, height - 64, 0xFFB8B8B8);
@@ -954,6 +1179,7 @@ final class RivalRushScreen extends Screen {
 
     private static double finite(double value) { return Double.isFinite(value) ? Math.max(0.0D, value) : 0.0D; }
     private static String multiplier(double value) { return String.format(Locale.ROOT, "%.2f×", finite(value)); }
+    private static String decimal(double value) { return String.format(Locale.ROOT, "%.1f", finite(value)); }
 
     private static String cardName(CompoundTag card) {
         return card.getString("name").isBlank() ? card.getString("mob") : card.getString("name");
@@ -1001,7 +1227,7 @@ final class RivalRushScreen extends Screen {
             cardScroll = Math.max(0, Math.min(maxCardScroll(cardLines()), cardScroll - (int) (amount * 22)));
             return true;
         }
-        if (view == View.JOURNEY || view == View.BUILD || view == View.CACHES || view == View.REMIX && !remixTo.isBlank()) {
+        if (scrollsDetails()) {
             detailScroll = Math.max(0, Math.min(maxDetailScroll(currentDetails()), detailScroll - (int) (amount * 22)));
             return true;
         }
@@ -1014,11 +1240,16 @@ final class RivalRushScreen extends Screen {
             cardScroll = Math.max(0, Math.min(maxCardScroll(cardLines()), cardScroll + (keyCode == 266 ? -66 : 66)));
             return true;
         }
-        if ((view == View.JOURNEY || view == View.BUILD || view == View.CACHES || view == View.REMIX && !remixTo.isBlank()) && (keyCode == 266 || keyCode == 267)) {
+        if (scrollsDetails() && (keyCode == 266 || keyCode == 267)) {
             detailScroll = Math.max(0, Math.min(maxDetailScroll(currentDetails()), detailScroll + (keyCode == 266 ? -66 : 66)));
             return true;
         }
         return super.keyPressed(keyCode, scanCode, modifiers);
+    }
+
+    private boolean scrollsDetails() {
+        return view == View.JOURNEY || view == View.BUILD || view == View.CACHES || view == View.PATHS
+                || view == View.DRAFT_DETAILS || view == View.DEBRIEF || view == View.REMIX && !remixTo.isBlank();
     }
 
     @Override

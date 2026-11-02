@@ -34,11 +34,12 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * Opt-in acceptance through the real client, production network and integrated server.
  * Enable only with -Djetsetcraft.rushVisualAudit=true against the disposable RivalRushAudit save.
- * This never creates offers, cards, run state, entities or rewards through a test-only shortcut.
+ * Screens use actual production state. The appended progression audit explicitly logs its guarded
+ * owned-hit and active-clock fixtures; no offer, evolution, boss victory or receipt is assigned.
  */
 @Mod.EventBusSubscriber(modid = JetSetCraft.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
 public final class RivalRushVisualAudit {
-    private static final long DEADLINE_NANOS = 180_000_000_000L;
+    private static final long DEADLINE_NANOS = 240_000_000_000L;
     private static final byte[] PNG = {(byte) 137, 80, 78, 71, 13, 10, 26, 10};
     private static final String STAMP = Long.toString(System.currentTimeMillis());
     private static final Map<String, Path> CAPTURES = new ConcurrentHashMap<>();
@@ -79,7 +80,7 @@ public final class RivalRushVisualAudit {
         }
         if (started == 0L) started = System.nanoTime();
         if (System.nanoTime() - started > DEADLINE_NANOS) {
-            finish(minecraft, false, "180-second deadline exceeded in phase " + phase);
+            finish(minecraft, false, "240-second deadline exceeded in phase " + phase);
             return;
         }
         if (captureFailure != null) { finish(minecraft, false, captureFailure); return; }
@@ -243,7 +244,12 @@ public final class RivalRushVisualAudit {
             case 11 -> {
                 if (!ActivityJourneyVisualAudit.advance(minecraft, label -> capture(minecraft, label), CAPTURES::containsKey)) return;
                 if (CAPTURES.size() != 15) { finish(minecraft, false, "expected fifteen completed Rush, Crew and Activity PNG captures"); return; }
-                finish(minecraft, true, "fifteen real-client captures; street and arena inventory/XP/dimension restored; actual Charter, facilities, job, Boombox activity, first arena choice, Journey, Build, cache scouting, crew Progress and Style Library verified; arena inspection uses a logged disposable-world arrival fixture, not a human traversal or completed room");
+                next(12);
+            }
+            case 12 -> {
+                if (!RushProgressionVisualAudit.advance(minecraft, label -> capture(minecraft, label), CAPTURES::containsKey)) return;
+                if (CAPTURES.size() != 19) { finish(minecraft, false, "expected nineteen completed Rush, Crew, Activity and Progression PNG captures"); return; }
+                finish(minecraft, true, "nineteen real-client captures; original fifteen preserved; actual recipe requirements, earned draft steering, live headliner tell and reopened saved debrief; inventory/XP/dimension restored; arena arrival and progression owned-hit/clock fixtures are explicitly logged, not human traversal/duration or boss-clear proof");
             }
             default -> finish(minecraft, false, "unknown audit phase");
         }

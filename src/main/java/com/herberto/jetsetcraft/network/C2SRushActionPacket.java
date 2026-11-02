@@ -12,7 +12,7 @@ import java.util.function.Supplier;
 /** Bounded intent only. Run identity, offers, rewards and elapsed time remain server-owned. */
 public record C2SRushActionPacket(String action, String value, int number, UUID runId, int version) {
     private static final Set<String> ACTIONS = Set.of("menu", "start", "leave", "choose", "encore", "album", "roster",
-            "journey_choose", "arena_catalogue", "remix");
+            "journey_choose", "arena_catalogue", "remix", "reroll", "banish", "evolve");
 
     public static void encode(C2SRushActionPacket packet, FriendlyByteBuf buffer) {
         buffer.writeUtf(packet.action, 32);
@@ -33,11 +33,14 @@ public record C2SRushActionPacket(String action, String value, int number, UUID 
 
     public static void handle(C2SRushActionPacket packet, Supplier<NetworkEvent.Context> supplier) {
         NetworkEvent.Context context = supplier.get();
-        context.enqueueWork(() -> {
-            ServerPlayer player = context.getSender();
-            if (player == null || !ACTIONS.contains(packet.action)) return;
-            RivalRushManager.handleAction(player, packet.action, packet.value, packet.number, packet.runId, packet.version);
-        });
+        context.enqueueWork(() -> handleForPlayer(packet, context.getSender()));
         context.setPacketHandled(true);
+    }
+
+    /** Production intent boundary, also exercised directly by the dedicated-server regression tests. */
+    public static void handleForPlayer(C2SRushActionPacket packet, ServerPlayer player) {
+        if (player == null || packet == null || packet.action == null || !ACTIONS.contains(packet.action)
+                || packet.value == null || packet.value.length() > 256 || packet.version < 0) return;
+        RivalRushManager.handleAction(player, packet.action, packet.value, packet.number, packet.runId, packet.version);
     }
 }
