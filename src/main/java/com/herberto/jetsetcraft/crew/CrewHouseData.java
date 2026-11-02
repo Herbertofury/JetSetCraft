@@ -18,6 +18,8 @@ public final class CrewHouseData extends SavedData {
     private static final String NAME = "jetsetcraft_crew_houses";
     private final Map<UUID, CrewProfile> profiles = new LinkedHashMap<>();
     private final Map<UUID, PendingCrewProgress> pending = new LinkedHashMap<>();
+    private record StyleChoice(String id, long revision) {}
+    private final Map<UUID, StyleChoice> styleChoices = new LinkedHashMap<>();
     private final ListTag quarantined = new ListTag();
     private CompoundTag newerSchema;
 
@@ -44,6 +46,21 @@ public final class CrewHouseData extends SavedData {
     public int pendingSupplies(UUID owner) { PendingCrewProgress p = pending.get(owner); return p == null ? 0 : p.supplies; }
     public long pendingXp(UUID owner) { PendingCrewProgress p = pending.get(owner); return p == null ? 0 : p.xp; }
     public long pendingTraining(UUID owner) { PendingCrewProgress p = pending.get(owner); return p == null ? 0 : p.training; }
+    public long styleXp(UUID owner) {
+        CrewProfile profile = profiles.get(owner);
+        return profile == null ? pendingXp(owner) : profile.xp();
+    }
+    public String selectedStyle(UUID owner) {
+        StyleChoice choice = styleChoices.get(owner); return choice == null ? CrewStyleLibrary.HOME : choice.id();
+    }
+    public long styleRevision(UUID owner) {
+        StyleChoice choice = styleChoices.get(owner); return choice == null ? 0 : choice.revision();
+    }
+    public boolean selectStyle(UUID owner, String id, long expectedRevision) {
+        if (owner == null || expectedRevision != styleRevision(owner) || expectedRevision == Long.MAX_VALUE
+                || !CrewStyleLibrary.canSelect(this, owner, id)) return false;
+        styleChoices.put(owner, new StyleChoice(id, expectedRevision + 1)); setDirty(); return true;
+    }
     public int pendingReputation(UUID owner, String gang) {
         PendingCrewProgress p = pending.get(owner); return p == null ? 0 : p.reputations.getOrDefault(gang, 0);
     }
@@ -95,7 +112,7 @@ public final class CrewHouseData extends SavedData {
     }
     public static CrewHouseData load(CompoundTag tag) {
         CrewHouseData data = new CrewHouseData();
-        if (tag.getInt("Schema") != 1 && tag.getInt("Schema") != 2) { data.newerSchema = tag.copy(); return data; }
+        if (tag.getInt("Schema") < 1 || tag.getInt("Schema") > 3) { data.newerSchema = tag.copy(); return data; }
         ListTag rows = tag.getList("Profiles", Tag.TAG_COMPOUND);
         for (int i = 0; i < rows.size(); i++) {
             CompoundTag row = rows.getCompound(i);
@@ -113,15 +130,29 @@ public final class CrewHouseData extends SavedData {
                 data.quarantined.add(row.copy());
             else data.pending.put(progress.owner, progress);
         }
+        ListTag choices = tag.getList("StyleChoices", Tag.TAG_COMPOUND);
+        for (int i = 0; i < choices.size(); i++) {
+            CompoundTag row = choices.getCompound(i);
+            if (!row.hasUUID("Owner") || !row.contains("Revision", Tag.TAG_LONG) || row.getLong("Revision") < 1
+                    || !CrewStyleLibrary.known(row.getString("Style")) || data.styleChoices.containsKey(row.getUUID("Owner"))) {
+                data.quarantined.add(row.copy());
+            } else data.styleChoices.put(row.getUUID("Owner"), new StyleChoice(row.getString("Style"), row.getLong("Revision")));
+        }
         return data;
     }
     @Override public CompoundTag save(CompoundTag tag) {
         if (newerSchema != null) return newerSchema.copy();
-        tag.putInt("Schema", 2);
+        tag.putInt("Schema", 3);
         ListTag rows = new ListTag(); for (CrewProfile profile : profiles.values()) rows.add(profile.save());
         tag.put("Profiles", rows); tag.put("Quarantined", quarantined.copy());
         ListTag unclaimed = new ListTag(); for (PendingCrewProgress progress : pending.values()) unclaimed.add(progress.save());
         tag.put("PendingProgress", unclaimed);
+        ListTag choices = new ListTag();
+        styleChoices.forEach((owner, choice) -> {
+            CompoundTag row = new CompoundTag(); row.putUUID("Owner", owner); row.putString("Style", choice.id());
+            row.putLong("Revision", choice.revision()); choices.add(row);
+        });
+        tag.put("StyleChoices", choices);
         return tag;
     }
 }
