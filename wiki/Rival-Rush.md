@@ -1,10 +1,14 @@
 # Rival Rush — optional skating roguelite
 
-**Current version: optional `0.4.0-alpha.5`, merged and CI-verified through [PR #44](https://github.com/Herbertofury/JetSetCraft/pull/44).** Shared crew XP now learns sixteen starting styles. Six additional artifact families bring the pool to **27 ranked choices**, or 26 without the optional relay. Colored reward caches, actual build-reward debriefs and three more provider-themed arenas add deliberate choices to the journey.
+**Current development alpha: `0.4.0-alpha.6`, merged and verified through [PR #45](https://github.com/Herbertofury/JetSetCraft/pull/45).** Merge [`6e85fb3`](https://github.com/Herbertofury/JetSetCraft/commit/6e85fb3015620a19a6bd4a69b0154cbe8d248527) has the identical locally and CI-tested source tree. Telegraphed elites/headliners, three discoverable build paths, finite reroll/banish choices and a persistent **Last run** report are implemented. [Base verification](https://github.com/Herbertofury/JetSetCraft/actions/runs/41392665091) and the [provider matrix](https://github.com/Herbertofury/JetSetCraft/actions/runs/41392665154) passed **55 real Forge GameTests in each of nine configurations — 495 executions**, all builds and normal dedicated-server save/shutdown. The base also passed its **nineteen-capture native gate**. A separate fresh local replay passed five validators and the same base gates, with all nineteen local images visually reviewed.
+
+**Verified alpha.5 predecessor: [PR #44](https://github.com/Herbertofury/JetSetCraft/pull/44).** Shared crew XP learns sixteen starting styles. Its six additional artifact families bring the pool to **27 ranked choices**, or 26 without the optional relay. Colored reward caches, actual build-reward debriefs and provider-themed arenas remain part of alpha.6.
 
 [Base verification](https://github.com/Herbertofury/JetSetCraft/actions/runs/41388639847) and the [provider matrix](https://github.com/Herbertofury/JetSetCraft/actions/runs/41388639856) passed **44 real Forge GameTests in each of nine configurations**, every build and normal dedicated-server save/shutdown. The base passed its **fifteen-screen native audit gate**. Merge [`5bad458`](https://github.com/Herbertofury/JetSetCraft/commit/5bad45891b6fe7a5c7c133ed0a19ac0556dd5af8) has the identical tested source tree. CI archive downloads were blocked by browser URL policy, so independent CI binary hashing and pixel inspection are not claimed. The [alpha.5 receipt and gallery](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/verification/style-library/README.md) instead identify fifteen independently reproduced local captures from that exact source, with passing native audit markers and normal save/shutdown.
 
-**Alpha.6 candidate:** this branch adds telegraphed elites/headliners, three discoverable build paths, finite reroll/banish choices and a persistent **Last run** report. Sections labeled alpha.6 describe the current implementation awaiting its own runtime, provider and native-client verification. Alpha.5's passing receipts remain evidence for alpha.5.
+The four additional local captures show initial recipe requirements, a genuine XP draft after a reroll/banish, a live headliner tell and a reopened report. Logged owned-rival hit/placement and active-clock fixtures shorten the setup; the final run records **two defeats, two cards, no arena/headliner clears and no qualifying return award**. These frames do not show a completed evolved build, boss victory or human session. Alpha.5's passing receipts below remain evidence for alpha.5.
+
+The [alpha.6 receipt and gallery](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/verification/headliners/README.md) records the exact scope. CI results are verified from workflow metadata; CI archives, binary hashes and screenshot pixels were not independently inspected. Native ForgeGradle checks execute the source set, with the distributable JAR built separately; an installed reobfuscated-JAR runtime is not claimed. New encounter/evolution fixtures use the Dead Beat zombie-family cast. Pinned-provider lanes establish the tested coexistence and integration paths, not every provider mob's encounter phases or every native spell.
 
 **Historical alpha.4 checkpoint: [PR #43](https://github.com/Herbertofury/JetSetCraft/pull/43).** **Journey** shows the rooms actually visited and offered, **Build** explains current artifacts and statistics, and **Crew Charter → Progress** records the rewards actually credited across modes. Line battery, Air break and Breakbeat mark reward riding, landings and focused attacks; an optional artifact remix after each genuine arena clear preserves the replaced family's rank. Their exact rules are described below.
 
@@ -61,7 +65,7 @@ You can change your choice away from home, including before founding, after fini
 
 Rush setup has two play styles. **Free streets** retains the thirty-minute/Endless district. **Arena circuit** gives a six-stop journey; a Boombox Rival Rush invitation starts this circuit. At each fork, choose one of up to three profiles showing the reward, size and duration, then skate along the generated nine-block-wide connection to the next room. The HUD shows route progress, distance and the current combat objective.
 
-An arena clears only after **both** its active combat duration and owned-rival defeat target are met. Leaving its boundary pauses its objective. Upgrade and route choices pause the participant's simulation. Arena timers range from 30 to 360 seconds by data pack; the supplied rooms use 120–240 seconds. Six rooms therefore have 12–24 minutes of configured combat plus travel and decisions, rather than an enforced thirty-minute circuit timer.
+Every arena requires its active combat duration and owned-rival defeat target. In alpha.6, **rooms three and six additionally require their actual headliner victory**. Leaving the boundary pauses the objective. Upgrade and route choices pause the participant's simulation. Arena timers range from 30 to 360 seconds by data pack; the supplied rooms use 120–240 seconds. Six rooms therefore have 12–24 minutes of configured combat plus travel, decisions and any unfinished headliner, rather than an enforced thirty-minute circuit timer.
 
 Each clear gives its stated build reward and a distinct shared crew reward. A victory magnet collects nearby owned cards before the next route, so the player need not abandon earned pickups to continue. After six clears choose **Return to Minecraft** or **Encore**. Encore preserves the build and begins another six-room set from the circuit lobby.
 
@@ -90,7 +94,7 @@ The supplied alpha.5 catalogue has **six base profiles**, or **ten with Aether, 
 
 Rooms are generated only inside the registered Rush dimension. Terrain from the original world, player builds, mobs and inventories are not imported. Connectors preserve passable lanes through walls and authored blocks. Generation advances in bounded batches using loaded chunks; it adds no persistent chunk tickets.
 
-### Read the threat — alpha.6 candidate
+### Read the threat — alpha.6
 
 Headliners arrive in **rooms three and six** of each circuit set, and every **five active minutes in Free streets**. There is at most one alive; missed windows do not accumulate. Circuit rooms three and six need their headliner defeated as well as the ordinary time and rival quota. At two-thirds and one-third virtual health the boss changes phase: circle/lane warnings expand to rings and then a delayed second circle. A phase change cancels the previous warnings and gives a short break.
 
@@ -104,7 +108,7 @@ Three elite patterns appear after thirty active seconds, on every fifth eligible
 
 The marked areas stay fixed during their warning. A vertical dodge beyond 1.65 blocks also avoids impact; walls and unloaded terrain prevent a hit. After a special attack, a 28-tick recovery window takes **25% extra virtual damage**. These are session-owned patterns on the chosen crew's source mob, not native boss AI or health replacements.
 
-A real headliner defeat earns its ordinary captain reward and **one evolution opportunity plus one reroll, up to three**. The opportunity does not stack and waits if the build is not ready. A missing body, invalid ownership or exhausted bounded spawn retries safely ends the encounter without a victory award. The thirty-minute Free streets Return/Encore choice still appears even if a headliner is unfinished; withdrawing that boss grants no boss victory. Values remain initial tuning pending the alpha.6 checks and human playtests.
+A real headliner defeat earns its ordinary captain reward and **one evolution opportunity plus one reroll, up to three**. The opportunity does not stack and waits if the build is not ready. A missing body, invalid ownership or exhausted bounded spawn retries safely ends the encounter without a victory award. The thirty-minute Free streets Return/Encore choice still appears even if a headliner is unfinished; withdrawing that boss grants no boss victory. Controlled functional checks passed locally and in all nine CI configurations; these tuning values still need human playtests.
 
 ## Reward caches and three artifact slots
 
@@ -185,7 +189,7 @@ Open **Build** to see the current run statistics and artifact descriptions. When
 
 These original mechanics draw from Dungeons I's [movement-triggered build effects](https://www.minecraft.net/en-us/article/dungeons-september-dev-blog), its [Light Feather and Gong of Weakening](https://www.minecraft.net/en-us/article/minecraft-dungeons--9-essential-artifacts), and Dungeons II's [gear refinement and connected effects](https://news.xbox.com/en-us/2026/08/26/minecraft-dungeons-ii-new-features-gamescom-2026/amp/). They do not import either game's complete item catalogue, assets or native equipment. The [focused design notes](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/RIVAL_RUSH_DESIGN.md#144-focused-alpha4-adaptation-four-useful-decisions) distinguish the reference mechanisms from JetSetCraft's own numbers and rules.
 
-### Discover a build path — alpha.6 candidate
+### Discover a build path — alpha.6
 
 Open **Build paths** to see every recipe, its two required families, your current ranks and its actual proc count. Each recipe needs **rank three in both families** and an earned headliner opportunity. Select it during an XP draft, between arenas or at Encore. In Free streets, an opportunity earned during combat waits for the next genuine XP draft or Encore; opening the menu alone does not pause combat for forging.
 
@@ -244,9 +248,9 @@ Album changes are persisted with **normal player saves**, not a disk flush for e
 
 If the entry checkpoint cannot be saved, the run stops before lending equipment or teleporting. If the restored exit cannot be saved, the player is disconnected with an explanation; reconnect after the server's storage problem is fixed.
 
-### Review the last run — alpha.6 candidate
+### Review the last run — alpha.6
 
-After returning, **Last run** preserves one report with the result, active time, room/headliner clears, cards, final artifact/stat ranks, selected evolution and proc count, and rerolls/banishes used. Its combat totals count **actual** primary and secondary virtual damage, vitality lost/restored and ward absorbed/restored. Overkill, unused healing and newly added shield capacity do not inflate those totals.
+After returning, **Last run** preserves one report with the result and saved exit reason, active time, room/headliner clears, cards, final artifact/stat ranks, selected evolution and proc count, and rerolls/banishes used. Its combat totals count **actual** primary and secondary virtual damage, vitality lost/restored and ward absorbed/restored. Overkill, unused healing and newly added shield capacity do not inflate those totals. Scroll or use Page Up/Down to inspect the reward and final-build sections below the initial combat summary.
 
 **Accepted return award** shows the matching saved settlement's actual contribution. It covers the return only; earlier arena awards are already separate entries in crew Progress. Banking normally, running out of vitality, completing the qualified six-room headliner ending and an interrupted restoration have distinct result labels. Viewing the report never pays a reward again. It follows ordinary player saving, replaces the preceding report and cannot resume a finished build. Recovery without the original live run data does not invent a new result.
 
@@ -255,9 +259,9 @@ After returning, **Last run** preserves one report with the result, active time,
 1. Enter a separate generated street district with a temporary loadout.
 2. Skate around crew-themed rivals. Automatic paint shots let movement remain the main task; manually aim and throw the loan paint balloons for deliberate splash attacks.
 3. Ride over the paper mob-card pickups. They add to the album and grant **Rush XP** and mode score.
-4. Choose one of three upgrades when the Rush level rises.
+4. Choose one of three upgrades when the Rush level rises; inspect its next effect, or spend a bounded reroll/banish to steer the draft.
 5. Tag fresh wall patches, use rails and tricks, and seek music stops for extra rewards.
-6. Survive crew captains and changing five-minute encounter mixes. Bank the session whenever you want.
+6. Read elite/headliner tells and build toward one of the three evolution recipes. Earn its forge from a real headliner victory, then select it at a decision stop. Bank the session whenever you want.
 
 The loan inventory supplies paint balloons, a spray can, and all six existing ride styles. The equipped physical ride is preserved across the return snapshot. Run paint is supplied by the session; it is not a way to manufacture normal-world items.
 
@@ -302,7 +306,7 @@ A [player-built crew house](Player-Chapters-Posse-and-Mob-Archetypes) can prepar
 
 These eleven stat upgrades join alpha.5's sixteen artifact families, or fifteen without the optional relay. Alpha.4 had ten families, alpha.3 had seven, and the original alpha.2 pool had seven stat upgrades. All artifacts cap at rank four. Once capped, drafts remain useful through **Fresh wheels** healing, **Victory lap** score, and temporary **Overdrive** damage. Style Library unlocks do not restrict ordinary drafts. Choices validate the player, current run UUID, offer version and offered index. Replaying an old request cannot buy an upgrade in a new run.
 
-### Shape the draft — alpha.6 candidate
+### Shape the draft — alpha.6
 
 Each run starts with **three rerolls and two banishes**. **Reroll** changes the three choices without spending another level or XP, avoiding the old options when alternatives are available. If only the same three terminal rewards can be offered, it is disabled and spends nothing. Each real headliner victory restores one reroll, up to three; Encore itself does not refill it.
 
@@ -441,9 +445,9 @@ The [alpha.1 verification receipt](https://github.com/Herbertofury/JetSetCraft/t
 
 ## What remains a design proposal
 
-Alpha.3 implements chaining, rail-triggered pulses and its seven earlier artifact families. Alpha.4 adds the three verified families and rank-preserving artifact remix described above. Alpha.5 adds six more families and the **limited sixteen-lesson permanent Style Library**, with all nine CI configurations passing. The alpha.6 candidate adds the three specific evolutions and bounded XP-draft controls above, awaiting its own acceptance. Painted drift trails, full equipment/enchantment collections, native equipment rerolls and the comprehensive Dungeons item catalogues remain design work. The Style Library preserves one starting choice. Human playtesting is still needed for the implemented families.
+Alpha.3 implements chaining, rail-triggered pulses and its seven earlier artifact families. Alpha.4 adds the three verified families and rank-preserving artifact remix described above. Alpha.5 adds six more families and the **limited sixteen-lesson permanent Style Library**. Alpha.6 adds the three specific evolutions and bounded XP-draft controls above, with all nine CI configurations passing the controlled acceptance cases. Painted drift trails, full equipment/enchantment collections, native equipment rerolls and the comprehensive Dungeons item catalogues remain design work. The Style Library preserves one starting choice. Human playtesting is still needed for the implemented families.
 
-The alpha.5 baseline's captains supply tougher priority targets and rewards. Alpha.6's candidate adds the bounded elite patterns and phased headliners described above. Paired bosses, distinct authored finales for every crew/species and the proposed full thirty-minute narrative remain future work. Free streets retains its timer decision; the candidate circuit additionally requires the scheduled room-three and room-six headliner victories. Both retain Return/Encore.
+The alpha.5 baseline's captains supply tougher priority targets and rewards. Alpha.6 adds the bounded elite patterns and phased headliners described above. Paired bosses, distinct authored finales for every crew/species and the proposed full thirty-minute narrative remain future work. Free streets retains its timer decision; the circuit additionally requires the scheduled room-three and room-six headliner victories. Both retain Return/Encore.
 
 Music stops currently measure **four seconds of dancing** and play an existing crew stinger. They do not judge beats, analyze a soundtrack, or implement rhythm-scored combat. Tag relays, carried crates, crew murals, richer procedural neighborhoods, and coordinated co-op are also proposals. Human sessions should now test the existing skating, combat, collection and exit loop before expanding it.
 
