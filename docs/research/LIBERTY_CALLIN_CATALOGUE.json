@@ -1,0 +1,768 @@
+{
+  "as_of": "2026-11-02",
+  "patch_observed": "1.007.202 (2026-10-29)",
+  "coverage": "Broad current catalogue assembled from current secondary wiki category indices and availability pages. Names are verified catalogue entries; exact status of every mission-specific event was not individually exhaustively verified. Do not treat the raw 130-page category count as 130 playable stratagems: it includes disambiguations, missions, traits, and an April Fools page.",
+  "selectable_count": 94,
+  "category_counts": {
+    "orbital": 12,
+    "eagle": 8,
+    "support_weapon": 35,
+    "backpack": 13,
+    "vehicle": 8,
+    "sentry": 10,
+    "emplacement": 8,
+    "mission_shared": 4,
+    "mission_objective": 16,
+    "other": 5
+  },
+  "excluded_non_gameplay": [
+    "April Fools/Budget Helldiver",
+    "Exosuit (disambiguation)",
+    "FRV (disambiguation)",
+    "Guard Dog (disambiguation)",
+    "Equipment Traits",
+    "mission pages that are categorized alongside stratagems"
+  ],
+  "primary_sources": [
+    "https://blog.playstation.com/2026/10/13/helldivers-2-scope-of-authority-premium-warbond-launches-oct-20/",
+    "https://blog.playstation.com/2026/04/21/helldivers-2-the-exo-experts-warbond-drops-april-28/",
+    "https://blog.playstation.com/2026/10/26/celebrate-helldivers-2-liberty-day-2026-with-in-game-gifts-today",
+    "https://store.steampowered.com/news/app/553850/view/708913061799395773?l=english"
+  ],
+  "entries": [
+    {
+      "name": "Orbital Precision Strike",
+      "category": "orbital",
+      "availability": "selectable_after_unlock",
+      "source": "https://helldivers.wiki.gg/wiki/All_Stratagems"
+    },
+    {
+      "name": "Orbital Gatling Barrage",
+      "category": "orbital",
+      "availability": "selectable_after_unlock",
+      "source": "https://helldivers.wiki.gg/wiki/All_Stratagems"
+    },
+    {
+      "name": "Orbital Gas Strike",
+      "category": "orbital",
+      "availability": "selectable_after_unlock",
+      "source": "https://helldivers.wiki.gg/wiki/All_Stratagems"
+    },
+    {
+      "name": "Orbital 120mm HE Barrage",
+      "category": "orbital",
+      "availability": "selectable_after_unlock",
+      "source": "https://helldivers.wiki.gg/wiki/All_Stratagems"
+    },
+    {
+      "name": "Orbital Airburst Strike",
+      "category": "orbital",
+      "availability": "selectable_after_unlock",
+      "source": "https://helldivers.wiki.gg/wiki/All_Stratagems"
+    },
+    {
+      "name": "Orbital Smoke Strike",
+      "category": "orbital",
+      "availability": "selectable_after_unlock",
+      "source": "https://helldivers.wiki.gg/wiki/All_Stratagems"
+    },
+    {
+      "name": "Orbital EMS Strike",
+      "category": "orbital",
+      "availability": "selectable_after_unlock",
+      "source": "https://helldivers.wiki.gg/wiki/All_Stratagems"
+    },
+    {
+      "name": "Orbital 380mm HE Barrage",
+      "category": "orbital",
+      "availability": "selectable_after_unlock",
+      "source": "https://helldivers.wiki.gg/wiki/All_Stratagems"
+    },
+    {
+      "name": "Orbital Walking Barrage",
+      "category": "orbital",
+      "availability": "selectable_after_unlock",
+      "source": "https://helldivers.wiki.gg/wiki/All_Stratagems"
+    },
+    {
+      "name": "Orbital Laser",
+      "category": "orbital",
+      "availability": "selectable_after_unlock",
+      "source": "https://helldivers.wiki.gg/wiki/All_Stratagems"
+    },
+    {
+      "name": "Orbital Napalm Barrage",
+      "category": "orbital",
+      "availability": "selectable_after_unlock",
+      "source": "https://helldivers.wiki.gg/wiki/All_Stratagems"
+    },
+    {
+      "name": "Orbital Railcannon Strike",
+      "category": "orbital",
+      "availability": "selectable_after_unlock",
+      "source": "https://helldivers.wiki.gg/wiki/All_Stratagems"
+    },
+    {
+      "name": "Eagle Strafing Run",
+      "category": "eagle",
+      "availability": "selectable_after_unlock",
+      "source": "https://helldivers.wiki.gg/wiki/All_Stratagems"
+    },
+    {
+      "name": "Eagle Airstrike",
+      "category": "eagle",
+      "availability": "selectable_after_unlock",
+      "source": "https://helldivers.wiki.gg/wiki/All_Stratagems"
+    },
+    {
+      "name": "Eagle Cluster Bomb",
+      "category": "eagle",
+      "availability": "selectable_after_unlock",
+      "source": "https://helldivers.wiki.gg/wiki/All_Stratagems"
+    },
+    {
+      "name": "Eagle Smoke Strike",
+      "category": "eagle",
+      "availability": "selectable_after_unlock",
+      "source": "https://helldivers.wiki.gg/wiki/All_Stratagems"
+    },
+    {
+      "name": "Eagle Napalm Airstrike",
+      "category": "eagle",
+      "availability": "selectable_after_unlock",
+      "source": "https://helldivers.wiki.gg/wiki/All_Stratagems"
+    },
+    {
+      "name": "Eagle 110mm Rocket Pods",
+      "category": "eagle",
+      "availability": "selectable_after_unlock",
+      "source": "https://helldivers.wiki.gg/wiki/All_Stratagems"
+    },
+    {
+      "name": "Eagle 500kg Bomb",
+      "category": "eagle",
+      "availability": "selectable_after_unlock",
+      "source": "https://helldivers.wiki.gg/wiki/All_Stratagems"
+    },
+    {
+      "name": "Eagle Gas Airstrike",
+      "category": "eagle",
+      "availability": "permanent_campaign_reward_for_eligible_participants",
+      "source": "https://helldivers.wiki.gg/wiki/Eagle_Gas_Airstrike",
+      "note": "Initial 72-hour trial; page change history says permanent on 2026-09-07; Counterdissident Hammer participation reward."
+    },
+    {
+      "name": "40-K Meltagun",
+      "category": "support_weapon",
+      "availability": "selectable_after_unlock",
+      "source": "https://helldivers.wiki.gg/wiki/Category:Support_Weapon_Stratagems"
+    },
+    {
+      "name": "AC-8 Autocannon",
+      "category": "support_weapon",
+      "availability": "selectable_after_unlock",
+      "source": "https://helldivers.wiki.gg/wiki/Category:Support_Weapon_Stratagems"
+    },
+    {
+      "name": "AMW-20 Apex",
+      "category": "support_weapon",
+      "availability": "selectable_after_unlock",
+      "source": "https://blog.playstation.com/2026/10/13/helldivers-2-scope-of-authority-premium-warbond-launches-oct-20/",
+      "note": "Scope of Authority, released 2026-10-20; Apex subsequently adjusted in 1.007.202 on 2026-10-29."
+    },
+    {
+      "name": "APW-1 Anti-Materiel Rifle",
+      "category": "support_weapon",
+      "availability": "selectable_after_unlock",
+      "source": "https://helldivers.wiki.gg/wiki/Category:Support_Weapon_Stratagems"
+    },
+    {
+      "name": "ARC-3 Arc Thrower",
+      "category": "support_weapon",
+      "availability": "selectable_after_unlock",
+      "source": "https://helldivers.wiki.gg/wiki/Equipment_Traits",
+      "note": "Present in support-weapon traits even when category search snippet omits its row."
+    },
+    {
+      "name": "B/FLAM-80 Cremator",
+      "category": "support_weapon",
+      "availability": "selectable_after_unlock",
+      "source": "https://helldivers.wiki.gg/wiki/Category:Support_Weapon_Stratagems"
+    },
+    {
+      "name": "B/MD C4 Pack",
+      "category": "support_weapon",
+      "availability": "selectable_after_unlock",
+      "source": "https://helldivers.wiki.gg/wiki/Category:Support_Weapon_Stratagems"
+    },
+    {
+      "name": "CQC-1 One True Flag",
+      "category": "support_weapon",
+      "availability": "selectable_after_unlock",
+      "source": "https://helldivers.wiki.gg/wiki/Category:Support_Weapon_Stratagems"
+    },
+    {
+      "name": "CQC-20 Breaching Hammer",
+      "category": "support_weapon",
+      "availability": "selectable_after_unlock",
+      "source": "https://helldivers.wiki.gg/wiki/Category:Support_Weapon_Stratagems"
+    },
+    {
+      "name": "CQC-9 Defoliation Tool",
+      "category": "support_weapon",
+      "availability": "selectable_after_unlock",
+      "source": "https://helldivers.wiki.gg/wiki/Category:Support_Weapon_Stratagems"
+    },
+    {
+      "name": "EAT-17 Expendable Anti-Tank",
+      "category": "support_weapon",
+      "availability": "selectable_after_unlock",
+      "source": "https://helldivers.wiki.gg/wiki/Category:Support_Weapon_Stratagems"
+    },
+    {
+      "name": "EAT-411 Leveller",
+      "category": "support_weapon",
+      "availability": "selectable_after_unlock",
+      "source": "https://helldivers.wiki.gg/wiki/Category:Support_Weapon_Stratagems"
+    },
+    {
+      "name": "EAT-700 Expendable Napalm",
+      "category": "support_weapon",
+      "availability": "selectable_after_unlock",
+      "source": "https://helldivers.wiki.gg/wiki/Category:Support_Weapon_Stratagems"
+    },
+    {
+      "name": "FAF-14 Spear",
+      "category": "support_weapon",
+      "availability": "selectable_after_unlock",
+      "source": "https://helldivers.wiki.gg/wiki/Category:Support_Weapon_Stratagems"
+    },
+    {
+      "name": "FLAM-40 Flamethrower",
+      "category": "support_weapon",
+      "availability": "selectable_after_unlock",
+      "source": "https://helldivers.wiki.gg/wiki/Category:Support_Weapon_Stratagems"
+    },
+    {
+      "name": "GL-21 Grenade Launcher",
+      "category": "support_weapon",
+      "availability": "selectable_after_unlock",
+      "source": "https://helldivers.wiki.gg/wiki/Category:Support_Weapon_Stratagems"
+    },
+    {
+      "name": "GL-28 Belt-Fed Grenade Launcher",
+      "category": "support_weapon",
+      "availability": "selectable_after_unlock",
+      "source": "https://helldivers.wiki.gg/wiki/Category:Support_Weapon_Stratagems"
+    },
+    {
+      "name": "GL-52 De-Escalator",
+      "category": "support_weapon",
+      "availability": "selectable_after_unlock",
+      "source": "https://helldivers.wiki.gg/wiki/Category:Support_Weapon_Stratagems"
+    },
+    {
+      "name": "GR-8 Recoilless Rifle",
+      "category": "support_weapon",
+      "availability": "selectable_after_unlock",
+      "source": "https://helldivers.wiki.gg/wiki/Category:Support_Weapon_Stratagems"
+    },
+    {
+      "name": "LAS-44 Nova",
+      "category": "support_weapon",
+      "availability": "selectable_after_unlock",
+      "source": "https://blog.playstation.com/2026/10/13/helldivers-2-scope-of-authority-premium-warbond-launches-oct-20/",
+      "note": "Scope of Authority, released 2026-10-20; Apex subsequently adjusted in 1.007.202 on 2026-10-29."
+    },
+    {
+      "name": "LAS-98 Laser Cannon",
+      "category": "support_weapon",
+      "availability": "selectable_after_unlock",
+      "source": "https://helldivers.wiki.gg/wiki/Category:Support_Weapon_Stratagems"
+    },
+    {
+      "name": "LAS-99 Quasar Cannon",
+      "category": "support_weapon",
+      "availability": "selectable_after_unlock",
+      "source": "https://helldivers.wiki.gg/wiki/Category:Support_Weapon_Stratagems"
+    },
+    {
+      "name": "M-1000 Maxigun",
+      "category": "support_weapon",
+      "availability": "selectable_after_unlock",
+      "source": "https://helldivers.wiki.gg/wiki/Category:Support_Weapon_Stratagems"
+    },
+    {
+      "name": "M-105 Stalwart",
+      "category": "support_weapon",
+      "availability": "selectable_after_unlock",
+      "source": "https://helldivers.wiki.gg/wiki/Category:Support_Weapon_Stratagems"
+    },
+    {
+      "name": "MG-206 Heavy Machine Gun",
+      "category": "support_weapon",
+      "availability": "selectable_after_unlock",
+      "source": "https://helldivers.wiki.gg/wiki/Category:Support_Weapon_Stratagems"
+    },
+    {
+      "name": "MG-43 Machine Gun",
+      "category": "support_weapon",
+      "availability": "selectable_after_unlock",
+      "source": "https://helldivers.wiki.gg/wiki/Category:Support_Weapon_Stratagems"
+    },
+    {
+      "name": "MGX-42 Bullet Storm",
+      "category": "support_weapon",
+      "availability": "selectable_after_unlock",
+      "source": "https://helldivers.wiki.gg/wiki/Category:Support_Weapon_Stratagems"
+    },
+    {
+      "name": "MLS-4X Commando",
+      "category": "support_weapon",
+      "availability": "selectable_after_unlock",
+      "source": "https://helldivers.wiki.gg/wiki/Category:Support_Weapon_Stratagems"
+    },
+    {
+      "name": "MS-11 Solo Silo",
+      "category": "support_weapon",
+      "availability": "selectable_after_unlock",
+      "source": "https://helldivers.wiki.gg/wiki/Category:Support_Weapon_Stratagems"
+    },
+    {
+      "name": "PLAS-45 Epoch",
+      "category": "support_weapon",
+      "availability": "selectable_after_unlock",
+      "source": "https://helldivers.wiki.gg/wiki/Category:Support_Weapon_Stratagems"
+    },
+    {
+      "name": "RL-77 Airburst Rocket Launcher",
+      "category": "support_weapon",
+      "availability": "selectable_after_unlock",
+      "source": "https://helldivers.wiki.gg/wiki/Category:Support_Weapon_Stratagems"
+    },
+    {
+      "name": "RS-422 Railgun",
+      "category": "support_weapon",
+      "availability": "selectable_after_unlock",
+      "source": "https://helldivers.wiki.gg/wiki/Category:Support_Weapon_Stratagems"
+    },
+    {
+      "name": "S-11 Speargun",
+      "category": "support_weapon",
+      "availability": "selectable_after_unlock",
+      "source": "https://helldivers.wiki.gg/wiki/Category:Support_Weapon_Stratagems"
+    },
+    {
+      "name": "StA-X3 W.A.S.P. Launcher",
+      "category": "support_weapon",
+      "availability": "selectable_after_unlock",
+      "source": "https://helldivers.wiki.gg/wiki/Category:Support_Weapon_Stratagems"
+    },
+    {
+      "name": "TX-41 Sterilizer",
+      "category": "support_weapon",
+      "availability": "selectable_after_unlock",
+      "source": "https://helldivers.wiki.gg/wiki/Category:Support_Weapon_Stratagems"
+    },
+    {
+      "name": "AX/AR-23 Guard Dog",
+      "category": "backpack",
+      "availability": "selectable_after_unlock",
+      "source": "https://helldivers.wiki.gg/wiki/Category:Backpack_Stratagems"
+    },
+    {
+      "name": "AX/ARC-3 K-9",
+      "category": "backpack",
+      "availability": "selectable_after_unlock",
+      "source": "https://helldivers.wiki.gg/wiki/Category:Backpack_Stratagems"
+    },
+    {
+      "name": "AX/FLAM-75 Hot Dog",
+      "category": "backpack",
+      "availability": "selectable_after_unlock",
+      "source": "https://helldivers.wiki.gg/wiki/Category:Backpack_Stratagems"
+    },
+    {
+      "name": "AX/LAS-5 Rover",
+      "category": "backpack",
+      "availability": "selectable_after_unlock",
+      "source": "https://helldivers.wiki.gg/wiki/Category:Backpack_Stratagems"
+    },
+    {
+      "name": "AX/TX-13 Dog Breath",
+      "category": "backpack",
+      "availability": "selectable_after_unlock",
+      "source": "https://helldivers.wiki.gg/wiki/Category:Backpack_Stratagems"
+    },
+    {
+      "name": "B-1 Supply Pack",
+      "category": "backpack",
+      "availability": "selectable_after_unlock",
+      "source": "https://helldivers.wiki.gg/wiki/Category:Backpack_Stratagems"
+    },
+    {
+      "name": "B-100 Portable Hellbomb",
+      "category": "backpack",
+      "availability": "selectable_after_unlock",
+      "source": "https://helldivers.wiki.gg/wiki/Category:Backpack_Stratagems"
+    },
+    {
+      "name": "LIFT-182 Warp Pack",
+      "category": "backpack",
+      "availability": "selectable_after_unlock",
+      "source": "https://helldivers.wiki.gg/wiki/Category:Backpack_Stratagems"
+    },
+    {
+      "name": "LIFT-850 Jump Pack",
+      "category": "backpack",
+      "availability": "selectable_after_unlock",
+      "source": "https://helldivers.wiki.gg/wiki/Category:Backpack_Stratagems"
+    },
+    {
+      "name": "LIFT-860 Hover Pack",
+      "category": "backpack",
+      "availability": "selectable_after_unlock",
+      "source": "https://helldivers.wiki.gg/wiki/Category:Backpack_Stratagems"
+    },
+    {
+      "name": "SH-20 Ballistic Shield Backpack",
+      "category": "backpack",
+      "availability": "selectable_after_unlock",
+      "source": "https://helldivers.wiki.gg/wiki/Category:Backpack_Stratagems"
+    },
+    {
+      "name": "SH-32 Shield Generator Pack",
+      "category": "backpack",
+      "availability": "selectable_after_unlock",
+      "source": "https://helldivers.wiki.gg/wiki/Category:Backpack_Stratagems"
+    },
+    {
+      "name": "SH-51 Directional Shield",
+      "category": "backpack",
+      "availability": "selectable_after_unlock",
+      "source": "https://helldivers.wiki.gg/wiki/Category:Backpack_Stratagems"
+    },
+    {
+      "name": "EXO-45 Patriot Exosuit",
+      "category": "vehicle",
+      "availability": "selectable_after_unlock",
+      "source": "https://helldivers.wiki.gg/wiki/Category:Vehicle_Stratagems"
+    },
+    {
+      "name": "EXO-49 Emancipator Exosuit",
+      "category": "vehicle",
+      "availability": "selectable_after_unlock",
+      "source": "https://helldivers.wiki.gg/wiki/Category:Vehicle_Stratagems"
+    },
+    {
+      "name": "EXO-51 Lumberer Exosuit",
+      "category": "vehicle",
+      "availability": "selectable_after_unlock",
+      "source": "https://helldivers.wiki.gg/wiki/Category:Vehicle_Stratagems"
+    },
+    {
+      "name": "EXO-55 Breakthrough Exosuit",
+      "category": "vehicle",
+      "availability": "selectable_after_unlock",
+      "source": "https://helldivers.wiki.gg/wiki/Category:Vehicle_Stratagems"
+    },
+    {
+      "name": "M-102 Gunner FRV",
+      "category": "vehicle",
+      "availability": "selectable_after_unlock",
+      "source": "https://helldivers.wiki.gg/wiki/Category:Vehicle_Stratagems",
+      "aliases": [
+        "M-102 Fast Recon Vehicle"
+      ],
+      "note": "Current wiki vehicle name; other catalogues retain Fast Recon Vehicle display name."
+    },
+    {
+      "name": "M-103 Supply FRV",
+      "category": "vehicle",
+      "availability": "permanent_campaign_reward_for_eligible_participants",
+      "source": "https://helldivers.wiki.gg/wiki/M-103_Supply_FRV",
+      "note": "Census Thunder rewarded Supply FRV after Basquine VIII won the campaign choice; Incinerator alternative was not unlocked."
+    },
+    {
+      "name": "TD-110 Maelstrom",
+      "category": "vehicle",
+      "availability": "permanent_campaign_reward_for_eligible_participants",
+      "source": "https://helldivers.wiki.gg/wiki/TD-110_Maelstrom",
+      "note": "Armored Eagle participant reward awarded 2026-10-04; initial planetary trial was not its final availability."
+    },
+    {
+      "name": "TD-220 Bastion MK XVI",
+      "category": "vehicle",
+      "availability": "selectable_after_unlock",
+      "source": "https://helldivers.wiki.gg/wiki/Category:Vehicle_Stratagems"
+    },
+    {
+      "name": "A/MG-43 Machine Gun Sentry",
+      "category": "sentry",
+      "availability": "selectable_after_unlock",
+      "source": "https://helldivers.wiki.gg/wiki/All_Stratagems"
+    },
+    {
+      "name": "A/G-16 Gatling Sentry",
+      "category": "sentry",
+      "availability": "selectable_after_unlock",
+      "source": "https://helldivers.wiki.gg/wiki/All_Stratagems"
+    },
+    {
+      "name": "A/AC-8 Autocannon Sentry",
+      "category": "sentry",
+      "availability": "selectable_after_unlock",
+      "source": "https://helldivers.wiki.gg/wiki/All_Stratagems"
+    },
+    {
+      "name": "A/M-12 Mortar Sentry",
+      "category": "sentry",
+      "availability": "selectable_after_unlock",
+      "source": "https://helldivers.wiki.gg/wiki/All_Stratagems"
+    },
+    {
+      "name": "A/MLS-4X Rocket Sentry",
+      "category": "sentry",
+      "availability": "selectable_after_unlock",
+      "source": "https://helldivers.wiki.gg/wiki/All_Stratagems"
+    },
+    {
+      "name": "A/ARC-3 Tesla Tower",
+      "category": "sentry",
+      "availability": "selectable_after_unlock",
+      "source": "https://helldivers.wiki.gg/wiki/All_Stratagems"
+    },
+    {
+      "name": "A/M-23 EMS Mortar Sentry",
+      "category": "sentry",
+      "availability": "selectable_after_unlock",
+      "source": "https://helldivers.wiki.gg/wiki/All_Stratagems"
+    },
+    {
+      "name": "A/LAS-98 Laser Sentry",
+      "category": "sentry",
+      "availability": "selectable_after_unlock",
+      "source": "https://helldivers.wiki.gg/wiki/All_Stratagems"
+    },
+    {
+      "name": "A/FLAM-40 Flame Sentry",
+      "category": "sentry",
+      "availability": "selectable_after_unlock",
+      "source": "https://helldivers.wiki.gg/wiki/All_Stratagems"
+    },
+    {
+      "name": "A/GM-17 Gas Mortar Sentry",
+      "category": "sentry",
+      "availability": "selectable_after_unlock",
+      "source": "https://helldivers.wiki.gg/wiki/All_Stratagems"
+    },
+    {
+      "name": "MD-6 Anti-Personnel Minefield",
+      "category": "emplacement",
+      "availability": "selectable_after_unlock",
+      "source": "https://helldivers.wiki.gg/wiki/Category:Emplacement_Stratagems"
+    },
+    {
+      "name": "MD-I4 Incendiary Mines",
+      "category": "emplacement",
+      "availability": "selectable_after_unlock",
+      "source": "https://helldivers.wiki.gg/wiki/Category:Emplacement_Stratagems"
+    },
+    {
+      "name": "MD-17 Anti-Tank Mines",
+      "category": "emplacement",
+      "availability": "selectable_after_unlock",
+      "source": "https://helldivers.wiki.gg/wiki/Category:Emplacement_Stratagems"
+    },
+    {
+      "name": "FX-12 Shield Generator Relay",
+      "category": "emplacement",
+      "availability": "selectable_after_unlock",
+      "source": "https://helldivers.wiki.gg/wiki/Category:Emplacement_Stratagems"
+    },
+    {
+      "name": "E/MG-101 HMG Emplacement",
+      "category": "emplacement",
+      "availability": "selectable_after_unlock",
+      "source": "https://helldivers.wiki.gg/wiki/Category:Emplacement_Stratagems"
+    },
+    {
+      "name": "E/GL-21 Grenadier Battlement",
+      "category": "emplacement",
+      "availability": "selectable_after_unlock",
+      "source": "https://helldivers.wiki.gg/wiki/Category:Emplacement_Stratagems"
+    },
+    {
+      "name": "MD-8 Gas Mines",
+      "category": "emplacement",
+      "availability": "selectable_after_unlock",
+      "source": "https://helldivers.wiki.gg/wiki/Category:Emplacement_Stratagems"
+    },
+    {
+      "name": "E/AT-12 Anti-Tank Emplacement",
+      "category": "emplacement",
+      "availability": "selectable_after_unlock",
+      "source": "https://helldivers.wiki.gg/wiki/Category:Emplacement_Stratagems"
+    },
+    {
+      "name": "Reinforce",
+      "category": "mission_shared",
+      "availability": "shared_conditional",
+      "source": "https://helldivers.wiki.gg/wiki/Stratagem"
+    },
+    {
+      "name": "Resupply",
+      "category": "mission_shared",
+      "availability": "shared_conditional",
+      "source": "https://helldivers.wiki.gg/wiki/Stratagem"
+    },
+    {
+      "name": "SoS Beacon",
+      "category": "mission_shared",
+      "availability": "shared_conditional",
+      "source": "https://helldivers.wiki.gg/wiki/Stratagem"
+    },
+    {
+      "name": "Eagle Rearm",
+      "category": "mission_shared",
+      "availability": "shared_conditional",
+      "source": "https://helldivers.wiki.gg/wiki/Stratagem"
+    },
+    {
+      "name": "Activate E-711 Extraction Drill",
+      "category": "mission_objective",
+      "availability": "objective_or_operation_specific",
+      "source": "https://helldivers.wiki.gg/wiki/Category:Mission_Stratagems"
+    },
+    {
+      "name": "Aquifer Drill",
+      "category": "mission_objective",
+      "availability": "objective_or_operation_specific",
+      "source": "https://helldivers.wiki.gg/wiki/Category:Mission_Stratagems"
+    },
+    {
+      "name": "Cargo Container",
+      "category": "mission_objective",
+      "availability": "objective_or_operation_specific",
+      "source": "https://helldivers.wiki.gg/wiki/Category:Mission_Stratagems"
+    },
+    {
+      "name": "Dark Fluid Vessel",
+      "category": "mission_objective",
+      "availability": "objective_or_operation_specific",
+      "source": "https://helldivers.wiki.gg/wiki/Galactic_War",
+      "note": "Historical Meridia objective equipment has also returned as temporary 2026 operational augmentation; do not mark permanently unobtainable or permanent loadout equipment."
+    },
+    {
+      "name": "Hive Breaker Drill",
+      "category": "mission_objective",
+      "availability": "objective_or_operation_specific",
+      "source": "https://helldivers.wiki.gg/wiki/Category:Mission_Stratagems"
+    },
+    {
+      "name": "NUX-223 Hellbomb",
+      "category": "mission_objective",
+      "availability": "objective_or_operation_specific",
+      "source": "https://helldivers.wiki.gg/wiki/Category:Mission_Stratagems"
+    },
+    {
+      "name": "Portable Comms Relay",
+      "category": "mission_objective",
+      "availability": "objective_or_operation_specific",
+      "source": "https://helldivers.wiki.gg/wiki/Infiltrate_Illuminate_Lair",
+      "note": "Actual current objective equipment for recording and uploading evidence; not generic support slots."
+    },
+    {
+      "name": "Prospecting Drill",
+      "category": "mission_objective",
+      "availability": "objective_or_operation_specific",
+      "source": "https://helldivers.wiki.gg/wiki/Category:Mission_Stratagems"
+    },
+    {
+      "name": "Reinforcement Pods",
+      "category": "mission_objective",
+      "availability": "objective_or_operation_specific",
+      "source": "https://helldivers.wiki.gg/wiki/Category:Mission_Stratagems"
+    },
+    {
+      "name": "SEAF Artillery",
+      "category": "mission_objective",
+      "availability": "objective_or_operation_specific",
+      "source": "https://helldivers.wiki.gg/wiki/Category:Mission_Stratagems",
+      "note": "Conditional on completed artillery objective and loaded shells; ammunition payload variants are not separate loadout stratagems."
+    },
+    {
+      "name": "Seismic Probe",
+      "category": "mission_objective",
+      "availability": "objective_or_operation_specific",
+      "source": "https://helldivers.wiki.gg/wiki/Category:Mission_Stratagems"
+    },
+    {
+      "name": "SSSD Delivery",
+      "category": "mission_objective",
+      "availability": "objective_or_operation_specific",
+      "source": "https://helldivers.wiki.gg/wiki/Category:Mission_Stratagems",
+      "note": "Two input-code variants appear in current catalogue, representing the same named objective equipment rather than two distinct selectable stratagems."
+    },
+    {
+      "name": "Super Earth Flag",
+      "category": "mission_objective",
+      "availability": "objective_or_operation_specific",
+      "source": "https://helldivers.wiki.gg/wiki/Category:Mission_Stratagems"
+    },
+    {
+      "name": "Tactical Video Camera",
+      "category": "mission_objective",
+      "availability": "objective_or_operation_specific",
+      "source": "https://helldivers.wiki.gg/wiki/Infiltrate_Illuminate_Lair",
+      "note": "Actual current objective equipment for recording and uploading evidence; not generic support slots."
+    },
+    {
+      "name": "Tectonic Drill",
+      "category": "mission_objective",
+      "availability": "objective_or_operation_specific",
+      "source": "https://helldivers.wiki.gg/wiki/Category:Mission_Stratagems"
+    },
+    {
+      "name": "Upload Data",
+      "category": "mission_objective",
+      "availability": "objective_or_operation_specific",
+      "source": "https://helldivers.wiki.gg/wiki/Category:Mission_Stratagems"
+    },
+    {
+      "name": "Call In Super Destroyer",
+      "category": "other",
+      "availability": "tutorial_or_scripted_only",
+      "source": "https://helldivers.wiki.gg/wiki/Category:Stratagem",
+      "note": "Listed among ship mission commands; not an ordinary four-slot loadout option. Verify exact tutorial trigger before implementation."
+    },
+    {
+      "name": "Orbital Illumination Flare",
+      "category": "other",
+      "availability": "unavailable",
+      "source": "https://helldivers.wiki.gg/wiki/Stratagem",
+      "note": "Explicitly under Unavailable in the current catalogue."
+    },
+    {
+      "name": "M-104 Incinerator FRV",
+      "category": "other",
+      "availability": "unavailable_campaign_alternative",
+      "source": "https://helldivers.wiki.gg/wiki/Incinerator_FRV",
+      "note": "Previously available only as Sangis operational variation; Basquine VIII won Census Thunder, awarding Supply FRV instead; page explicitly says currently unavailable."
+    },
+    {
+      "name": "Orbital Confetti",
+      "category": "other",
+      "availability": "historical_temporary_celebration",
+      "source": "https://helldivers.wiki.gg/wiki/Orbital_Confetti",
+      "note": "Temporary Liberty Day 2026 provision on certain planets; not a permanent damage stratagem."
+    },
+    {
+      "name": "Eagle Fly By",
+      "category": "other",
+      "availability": "historical_temporary_celebration",
+      "source": "https://helldivers.wiki.gg/wiki/Eagle_Fly_By",
+      "note": "Temporary Liberty Day 2026 provision on certain planets; not a permanent damage stratagem."
+    }
+  ]
+}
