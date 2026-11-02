@@ -65,7 +65,7 @@ The [historical alpha.3 receipt](docs/verification/arena-circuit/README.md) pres
 
 ### Connected activities and arena circuits
 
-Use a tuned Boombox with an empty hand, or `/jetsetcraft activity`, to choose **Random, Tag, King of the Hill, Showdown, Rival Rush or Liberty Grind**. A random invitation shows its selected game before you accept; Liberty Grind remains an explicit choice because its gun pack is optional. Completed objectives contribute to the same crew supplies, house XP, member training and gang reputation; earnings are retained even before your first house is founded.
+Use a tuned Boombox with an empty hand, or `/jetsetcraft activity`, to choose **Random, Tag, King of the Hill, Showdown, Rival Rush or Liberty Grind**. A random invitation shows its selected game before you accept; it considers Liberty Grind only when the optional loadout and current deployment requirements are available. Completed objectives contribute to the same crew supplies, house XP, member training and gang reputation; earnings are retained even before your first house is founded.
 
 Rival Rush offers **Free streets** and a **six-arena circuit**. Pick one of three arena rewards, skate along the generated connection, complete its timed combat objective, and take the next route. Choices favor rooms you have not visited in the current set. The catalogue has six base profiles and four optional profiles for Aether, Iron's Spells, Cataclysm and AoA, enabled only when their providers are installed. Arena sizes, layouts, authored block maps and bounded rewards are editable through data packs, and a run keeps its chosen catalogue through reloads. See [Rival Rush](wiki/Rival-Rush.md) for the exact format.
 
