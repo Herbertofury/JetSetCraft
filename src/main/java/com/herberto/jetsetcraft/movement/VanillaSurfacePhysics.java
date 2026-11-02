@@ -177,6 +177,15 @@ final class VanillaSurfacePhysics {
         double cruise = profile.cruiseCapMultiplier();
         double boost = profile.boostCapMultiplier();
 
+        var fieldChest=player.getItemBySlot(net.minecraft.world.entity.EquipmentSlot.CHEST);
+        if(com.herberto.jetsetcraft.compat.LibertyTaczCompat.isLoan(fieldChest,player.getUUID())) {
+            java.util.UUID kit=java.util.UUID.nameUUIDFromBytes("jetsetcraft:liberty_armor_speed".getBytes(java.nio.charset.StandardCharsets.UTF_8));
+            double factor=fieldChest.getAttributeModifiers(net.minecraft.world.entity.EquipmentSlot.CHEST)
+                    .get(net.minecraft.world.entity.ai.attributes.Attributes.MOVEMENT_SPEED).stream().filter(modifier->modifier.getId().equals(kit))
+                    .findFirst().map(modifier->Math.max(.9,Math.min(1.1,1+modifier.getAmount()))).orElse(1.0);
+            accel*=factor;cruise*=factor;boost*=factor;
+        }
+
         MobEffectInstance speed = player.getEffect(MobEffects.MOVEMENT_SPEED);
         if (speed != null) {
             int amp = speed.getAmplifier() + 1;
