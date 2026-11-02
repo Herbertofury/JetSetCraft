@@ -7,6 +7,8 @@ import com.herberto.jetsetcraft.client.crew.CrewHouseClient;
 import com.herberto.jetsetcraft.client.rush.RivalRushClient;
 import com.herberto.jetsetcraft.network.JetSetNetwork;
 import com.herberto.jetsetcraft.registry.ModBlocks;
+import com.herberto.jetsetcraft.rush.RivalRushManager;
+import com.herberto.jetsetcraft.rush.RushWorld;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.core.BlockPos;
@@ -26,11 +28,12 @@ import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
-/** Actual Boombox selection and a short arena-journey round trip in the guarded disposable audit world. */
+/** Actual mode/UI round trip; cache inspection uses an explicitly logged disposable-world arrival fixture. */
 public final class ActivityJourneyVisualAudit {
     private static int phase, ticks, captureStableTicks;
     private static BlockPos anchor;
     private static volatile boolean fixtureApplied;
+    private static volatile boolean arenaFixtureApplied;
     private static volatile String fixtureFailure;
     private static String fixtureDimension, originalDimension;
     private static String previousRushSummary = "";
@@ -51,7 +54,7 @@ public final class ActivityJourneyVisualAudit {
         CompoundTag rush = RivalRushClient.stateSnapshot();
         // Resolve only genuine pending upgrade offers through the normal action packet.
         ListTag offers = rush.getList("Offers", Tag.TAG_COMPOUND);
-        if (phase >= 7 && phase <= 10 && rush.getBoolean("Active") && !offers.isEmpty()) {
+        if (phase >= 7 && rush.getBoolean("Active") && !offers.isEmpty()) {
             UUID currentRun = rush.hasUUID("Run") ? rush.getUUID("Run") : null;
             int version = rush.getInt("Version");
             if (!java.util.Objects.equals(currentRun, chosenRun) || chosenVersion != version) {
@@ -173,7 +176,52 @@ public final class ActivityJourneyVisualAudit {
                         && journey.getCompound("Current").getString("Id").equals(selectedRoute),
                         "Selecting a route lost the live run or the actual chosen arena");
                 if (++ticks < 20) return false;
-                // No room completion is fabricated: this verifies choosing a real connected arena and the normal exit.
+                // Arrival is an explicit disposable-world fixture, not evidence of human traversal or a clear.
+                // The normal arena builder, entry rules and cache loop still create the actual captured state.
+                queueArenaArrival(minecraft, runId, selectedRoute); next(21);
+            }
+            case 21 -> {
+                if (!arenaFixtureApplied) return false;
+                require(rush.getBoolean("Active") && rush.hasUUID("Run") && rush.getUUID("Run").equals(runId),
+                        "Cache audit ended or changed its live run");
+                if (!rush.getCompound("Journey").getString("Phase").equals("arena")
+                        || rush.getCompound("Caches").getList("Caches", Tag.TAG_COMPOUND).size() != 6) return false;
+                require(rush.getCompound("Journey").getInt("Completed") == 0,
+                        "The cache inspection unexpectedly cleared a room before its capture");
+                JetSetNetwork.sendRushAction("menu", "", 0, runId, rush.getInt("Version")); next(22);
+            }
+            case 22 -> {
+                require(rush.getBoolean("Active") && rush.hasUUID("Run") && rush.getUUID("Run").equals(runId),
+                        "The run ended before cache scouting could open");
+                if (RivalRushClient.isBuildScreenOpen() || tryClick(minecraft, "Build")) { next(23); return false; }
+                // A genuine upgrade choice can close its menu. Reopen the ordinary UI after that response.
+                if (++ticks % 20 == 0) JetSetNetwork.sendRushAction("menu", "", 0, runId, rush.getInt("Version"));
+            }
+            case 23 -> {
+                if (!RivalRushClient.isBuildScreenOpen()) { next(22); return false; }
+                click(minecraft, "Scout reward caches"); next(24);
+            }
+            case 24 -> {
+                if (!RivalRushClient.isCacheScreenOpen()) { next(22); return false; }
+                CompoundTag scouting = rush.getCompound("Caches");
+                ListTag caches = scouting.getList("Caches", Tag.TAG_COMPOUND);
+                require(rush.getBoolean("Active") && rush.hasUUID("Run") && rush.getUUID("Run").equals(runId)
+                                && rush.getCompound("Journey").getString("Phase").equals("arena") && caches.size() == 6,
+                        "The scout screen lost its real arena or six placed caches");
+                for (var raw : caches) {
+                    CompoundTag cache = (CompoundTag) raw;
+                    require(!cache.getString("Label").isBlank() && !cache.getString("Benefit").isBlank()
+                                    && cache.contains("X") && cache.contains("Y") && cache.contains("Z")
+                                    && cache.getInt("Color") != 0 && cache.getInt("Distance") >= 0,
+                            "A captured cache lacks a real destination, reward or marker identity");
+                }
+                if (!captureReady(minecraft)) return false;
+                JetSetCraft.LOGGER.info("JETSETCRAFT_ACTIVITY_AUDIT_CACHE_SCOUT_OBSERVED run={} caches={} defeatsNeeded={} completed={}",
+                        runId, caches.size(), scouting.getInt("DefeatsNeeded"), rush.getCompound("Journey").getInt("Completed"));
+                capture.accept("14-cache-scout"); next(25);
+            }
+            case 25 -> {
+                if (!captured.test("14-cache-scout")) return false;
                 JetSetNetwork.sendRushAction("leave", "", 0, runId, rush.getInt("Version")); next(10);
             }
             case 10 -> {
@@ -202,13 +250,76 @@ public final class ActivityJourneyVisualAudit {
             }
             case 19 -> {
                 if (!captured.test("13-crew-progress")) return false;
-                JetSetCraft.LOGGER.info("JETSETCRAFT_ACTIVITY_VISUAL_AUDIT_PASS real Boombox preview; explicit Rival Rush; genuine journey map and Build; first route choice; connected arena travel; inventory/XP/dimension restored; actual crew Progress view");
+                click(minecraft, "Style Library"); next(26);
+            }
+            case 26 -> {
+                if (!CrewHouseClient.isStyleLibraryOpen()) return false;
+                CompoundTag crew = CrewHouseClient.stateSnapshot();
+                CompoundTag library = crew.getCompound("StyleLibrary");
+                ListTag lessons = library.getList("Lessons", Tag.TAG_COMPOUND);
+                require(crew.hasUUID("HomeId") && library.getInt("Total") == 16 && lessons.size() == 16
+                                && library.getLong("Xp") >= 0 && library.getLong("Revision") >= 0
+                                && !library.getString("Selected").isBlank(),
+                        "Style Library screen lacks actual saved progression and server-owned choices");
+                for (var raw : lessons) {
+                    CompoundTag lesson = (CompoundTag) raw;
+                    require(!lesson.getString("Id").isBlank() && !lesson.getString("Name").isBlank()
+                                    && lesson.getBoolean("Unlocked") == (library.getLong("Xp") >= lesson.getInt("RequiredXp")),
+                            "A photographed lesson disagrees with the real shared crew XP");
+                }
+                if (!captureReady(minecraft)) return false;
+                JetSetCraft.LOGGER.info("JETSETCRAFT_ACTIVITY_AUDIT_STYLE_LIBRARY_OBSERVED xp={} learned={} selected={} revision={}",
+                        library.getLong("Xp"), library.getInt("Unlocked"), library.getString("Selected"), library.getLong("Revision"));
+                capture.accept("15-style-library"); next(27);
+            }
+            case 27 -> {
+                if (!captured.test("15-style-library")) return false;
+                JetSetCraft.LOGGER.info("JETSETCRAFT_ACTIVITY_VISUAL_AUDIT_PASS real Boombox preview; explicit Rival Rush; genuine Journey and Build; actual first route; logged fixture arrival (not human traversal); six live cache previews; inventory/XP/dimension restored; actual Progress and Style Library with no fabricated rewards");
                 next(20); return true;
             }
             case 20 -> { return true; }
             default -> throw new IllegalStateException("Unknown activity audit phase " + phase);
         }
         return false;
+    }
+
+    private static void queueArenaArrival(Minecraft minecraft, UUID expectedRun, String expectedArena) {
+        var server = minecraft.getSingleplayerServer();
+        Path expected = minecraft.gameDirectory.toPath().resolve("saves/RivalRushAudit").toAbsolutePath().normalize();
+        require(Boolean.getBoolean("jetsetcraft.rushVisualAudit") && server != null
+                        && server.getWorldPath(LevelResource.ROOT).toAbsolutePath().normalize().equals(expected),
+                "Arena arrival fixture requires the exact disposable RivalRushAudit save");
+        UUID playerId = minecraft.player.getUUID();
+        server.execute(() -> {
+            try {
+                require(Boolean.getBoolean("jetsetcraft.rushVisualAudit")
+                                && server.getWorldPath(LevelResource.ROOT).toAbsolutePath().normalize().equals(expected),
+                        "Arena arrival fixture lost its disposable-world guard");
+                var player = server.getPlayerList().getPlayer(playerId);
+                require(player != null && RushWorld.isRush(player.level()), "Arena fixture lost its player or Rush dimension");
+                var run = RivalRushManager.run(player);
+                CompoundTag journey = RivalRushManager.journeySnapshot(player);
+                BlockPos destination = RivalRushManager.arenaDestination(player);
+                require(run != null && run.id().equals(expectedRun) && destination != null
+                                && (journey.getString("Phase").equals("travel") || journey.getString("Phase").equals("arena"))
+                                && journey.getCompound("Current").getString("Id").equals(expectedArena)
+                                && journey.getInt("Completed") == 0,
+                        "Arena arrival fixture no longer matches the selected live run and destination");
+                // Fixture-only chunk access. Production arena construction never adds tickets or force-loads.
+                for (int x = -3; x <= 3; x++) for (int z = -3; z <= 3; z++)
+                    player.serverLevel().getChunk((destination.getX() >> 4) + x, (destination.getZ() >> 4) + z);
+                Vec3 from = player.position();
+                player.teleportTo(player.serverLevel(), destination.getX() + .5, RushWorld.FLOOR_Y + 1,
+                        destination.getZ() + .5, player.getYRot(), player.getXRot());
+                player.setDeltaMovement(Vec3.ZERO); player.fallDistance = 0;
+                JetSetCraft.LOGGER.info("JETSETCRAFT_ACTIVITY_AUDIT_ARENA_ARRIVAL_FIXTURE run={} arena={} from={} to={} (teleport and nearby chunk loading only; no clock, defeats, rewards or clear fabricated)",
+                        expectedRun, expectedArena, from, player.position());
+                arenaFixtureApplied = true;
+            } catch (RuntimeException error) {
+                fixtureFailure = "Arena arrival fixture failed: " + error.getMessage();
+                JetSetCraft.LOGGER.error("Activity arena arrival fixture failed", error);
+            }
+        });
     }
 
     private static void queueFixture(Minecraft minecraft) {
@@ -278,12 +389,18 @@ public final class ActivityJourneyVisualAudit {
 
     private static void click(Minecraft minecraft, String label) {
         require(minecraft.screen != null && !label.isBlank(), "Missing screen or label for an activity button");
+        if (tryClick(minecraft, label)) return;
+        throw new IllegalStateException("Missing real activity button: " + label);
+    }
+
+    private static boolean tryClick(Minecraft minecraft, String label) {
+        if (minecraft.screen == null || label.isBlank()) return false;
         for (var child : minecraft.screen.children()) {
             if (child instanceof Button button && button.active && button.visible && button.getMessage().getString().equals(label)) {
-                button.onPress(); return;
+                button.onPress(); return true;
             }
         }
-        throw new IllegalStateException("Missing real activity button: " + label);
+        return false;
     }
 
     private static void clickContaining(Minecraft minecraft, String label) {
