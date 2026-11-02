@@ -39,6 +39,7 @@ public final class RushDebrief {
         result.putLong("Ticks", run.elapsedTicks()); result.putInt("Level", run.level());
         result.putLong("Score", run.score()); result.putLong("Defeats", run.defeats()); result.putLong("Cards", cards);
         result.putLong("ArenaClears", run.arenaClears()); result.putLong("Headliners", run.headliners());
+        result.putLong("ContractsBanked", run.contractClears()); result.putLong("ServicesUsed", run.pitStopServicesUsed());
         result.putBoolean("Circuit", run.circuit()); result.putBoolean("Endless", run.endless());
         result.putDouble("PrimaryDamage", run.primaryDamage()); result.putDouble("SecondaryDamage", run.secondaryDamage());
         result.putDouble("DamageTaken", run.damageTaken()); result.putDouble("VitalityRestored", run.vitalityRestored());
@@ -76,7 +77,7 @@ public final class RushDebrief {
         result.putInt("Schema", 1); result.putUUID("Run", source.getUUID("Run")); result.putUUID("Owner", source.getUUID("Owner"));
         result.putString("GangId", gang); result.putString("Outcome", outcome.name()); result.putString("OutcomeLabel", outcome.label());
         result.putString("Reason", boundedReason(source.getString("Reason")));
-        for (String key : new String[]{"Ticks", "Score", "Defeats", "Cards", "ArenaClears", "Headliners", "RerollsUsed", "BanishesUsed"})
+        for (String key : new String[]{"Ticks", "Score", "Defeats", "Cards", "ArenaClears", "Headliners", "RerollsUsed", "BanishesUsed", "ContractsBanked", "ServicesUsed"})
             result.putLong(key, Math.max(0, Math.min(COUNTER_LIMIT, source.getLong(key))));
         result.putInt("Level", Math.max(1, source.getInt("Level")));
         result.putBoolean("Circuit", source.getBoolean("Circuit")); result.putBoolean("Endless", source.getBoolean("Endless"));

@@ -27,6 +27,38 @@ import java.util.Optional;
 
 /** Bounded, server-owned arena recipes. A map contains blocks, never entities, inventories or block-entity NBT. */
 public final class RushArenaCatalog extends SimpleJsonResourceReloadListener {
+    public enum ContractType { NONE, RELAY, PAINT, HUNT }
+    public record ContractSpec(ContractType type, int target) {
+        public static final ContractSpec NONE = new ContractSpec(ContractType.NONE, 0);
+        public ContractSpec {
+            if (type == null || type == ContractType.NONE && target != 0
+                    || type == ContractType.RELAY && (target < 2 || target > 4)
+                    || type == ContractType.PAINT && (target < 1 || target > 8)
+                    || type == ContractType.HUNT && (target < 1 || target > 4))
+                throw new IllegalArgumentException("Invalid arena contract target");
+        }
+        public String name() { return switch (type) {
+            case NONE -> "No side contract";
+            case RELAY -> "Relay run";
+            case PAINT -> "Fresh walls";
+            case HUNT -> "Crew hunt";
+        }; }
+        public String description() { return switch (type) {
+            case NONE -> "";
+            case RELAY -> "Ride through " + target + " ordered beacons during this arena.";
+            case PAINT -> "Tag " + target + " fresh, distinct wall patches inside this arena.";
+            case HUNT -> "Defeat " + target + " owned elites or captains in this arena.";
+        }; }
+        public CompoundTag summary() {
+            CompoundTag tag = new CompoundTag();
+            tag.putString("Type", type.name().toLowerCase(Locale.ROOT)); tag.putString("Name", name());
+            tag.putString("Description", description()); tag.putInt("Progress", 0); tag.putInt("Target", target);
+            tag.putString("State", type == ContractType.NONE ? "none" : "preview");
+            tag.putString("Reason", ""); tag.putBoolean("Completed", false);
+            tag.putString("Reward", type == ContractType.NONE ? "" : "On room clear: +1 pit-stop service");
+            return tag;
+        }
+    }
     public enum Reward {
         DAMAGE("Paint damage", RushRun.Upgrade.FORCE),
         CRITICAL("Critical chance and power", RushRun.Upgrade.PRECISION),
@@ -65,21 +97,22 @@ public final class RushArenaCatalog extends SimpleJsonResourceReloadListener {
     public record Profile(ResourceLocation id, String name, String description, int radius, int seconds,
                           int defeats, String layout, Reward reward, int rewardRanks, String sharedReward,
                           BlockState floor, BlockState accent, BlockState wall, BlockState rail,
-                          List<MapBlock> blocks) {
-        public Profile { blocks = List.copyOf(blocks); }
+                          List<MapBlock> blocks, ContractSpec contract) {
+        public Profile { blocks = List.copyOf(blocks); if (contract == null) contract = ContractSpec.NONE; }
         public CompoundTag summary() {
             CompoundTag tag = new CompoundTag();
             tag.putString("Id", id.toString()); tag.putString("Name", name); tag.putString("Description", description);
             tag.putInt("Radius", radius); tag.putInt("Seconds", seconds);
             tag.putString("RewardLabel", reward.label() + " + " + sharedReward + " crew progress");
             tag.putString("RewardFamily", reward.name().toLowerCase(Locale.ROOT)); tag.putInt("RewardColor", reward.color());
+            tag.put("Contract", contract.summary());
             return tag;
         }
     }
     private static final Profile FALLBACK = new Profile(id("jetsetcraft:street_plaza"), "Street plaza",
             "Open skating lanes, a clear circuit and a stronger paint build.", 24, 120, 8, "plaza",
             Reward.DAMAGE, 1, "balanced", Blocks.STONE.defaultBlockState(), Blocks.CYAN_CONCRETE.defaultBlockState(),
-            Blocks.LIGHT_GRAY_CONCRETE.defaultBlockState(), Blocks.IRON_BARS.defaultBlockState(), List.of());
+            Blocks.LIGHT_GRAY_CONCRETE.defaultBlockState(), Blocks.IRON_BARS.defaultBlockState(), List.of(), ContractSpec.NONE);
     private static Map<ResourceLocation, Profile> profiles = Map.of(FALLBACK.id(), FALLBACK);
 
     public RushArenaCatalog() { super(new Gson(), "rush_arenas"); }
@@ -136,7 +169,22 @@ public final class RushArenaCatalog extends SimpleJsonResourceReloadListener {
                 text(json, "description", "A custom skating arena.", 200), radius, seconds, defeats, layout, reward,
                 integer(json, "reward_ranks", 1, 1, 2), shared,
                 blockState(palette.get("floor"), FALLBACK.floor()), blockState(palette.get("accent"), FALLBACK.accent()),
-                blockState(palette.get("wall"), FALLBACK.wall()), blockState(palette.get("rail"), FALLBACK.rail()), blocks);
+                blockState(palette.get("wall"), FALLBACK.wall()), blockState(palette.get("rail"), FALLBACK.rail()), blocks,
+                contract(json));
+    }
+
+    private static ContractSpec contract(JsonObject json) {
+        if (!json.has("contract")) return ContractSpec.NONE;
+        JsonObject contract = json.getAsJsonObject("contract");
+        for (String key : contract.keySet()) if (!List.of("type", "target").contains(key))
+            throw new IllegalArgumentException("Unknown contract field: " + key);
+        ContractType type = ContractType.valueOf(text(contract, "type", "none", 16).toUpperCase(Locale.ROOT));
+        return switch (type) {
+            case NONE -> new ContractSpec(type, integer(contract, "target", 0, 0, 0));
+            case RELAY -> new ContractSpec(type, integer(contract, "target", 3, 2, 4));
+            case PAINT -> new ContractSpec(type, integer(contract, "target", 3, 1, 8));
+            case HUNT -> new ContractSpec(type, integer(contract, "target", 2, 1, 4));
+        };
     }
 
     private static BlockState blockState(JsonElement raw, BlockState fallback) {

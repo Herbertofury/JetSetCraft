@@ -24,6 +24,7 @@ import java.util.Map;
 
 /** Personal reward caches, paid only after owned defeats. No loot, vanilla XP or block entities. */
 public final class RushPointsOfInterest {
+    public record Claim(RushArenaCatalog.Reward reward, String result) { }
     private static final int COOLDOWN_TICKS = 12000;
     private static final int[][] SAFE_OFFSETS = {{0,0},{2,0},{-2,0},{0,2},{0,-2},{2,2},{2,-2},{-2,2},{-2,-2}};
     private record Cache(long key, BlockPos position, RushArenaCatalog.Reward reward) {}
@@ -35,11 +36,20 @@ public final class RushPointsOfInterest {
     private long processedTick = -1;
     private boolean roomPlaced;
     private boolean baselinePending = true;
+    private Claim latestClaim;
 
     public RushPointsOfInterest() { java.util.Arrays.fill(claimTimes, -COOLDOWN_TICKS - 1L); }
     public void reset() {
         caches.clear(); java.util.Arrays.fill(claimTimes, -COOLDOWN_TICKS - 1L);
         lastClaimDefeats = 0; roomPlaced = false; baselinePending = true; processedTick = -1;
+        latestClaim = null;
+    }
+
+    /** Only the owning session drains an actually accepted cache claim; nearby hints are not rewards. */
+    public Claim pollClaim() {
+        Claim claim = latestClaim;
+        latestClaim = null;
+        return claim;
     }
 
     public String tick(ServerPlayer player, RushRun run, RushCircuit circuit) {
@@ -84,6 +94,7 @@ public final class RushPointsOfInterest {
         if (player.distanceToSqr(Vec3.atCenterOf(pos)) <= 6.25 && needed == 0 && clearApproach(player, pos)) {
             claimTimes[bucket(nearest.key)] = run.elapsedTicks(); lastClaimDefeats = run.defeats();
             String result = grant(run, nearest.reward, 1);
+            latestClaim = new Claim(nearest.reward, result);
             player.serverLevel().playSound(null, pos, SoundEvents.NOTE_BLOCK_CHIME.value(), SoundSource.PLAYERS, .7f, 1.2f);
             if (JetSetNetwork.canSync(player)) player.serverLevel().sendParticles(player, ParticleTypes.FIREWORK, false,
                     pos.getX() + .5, pos.getY() + 1, pos.getZ() + .5, 12, .6, .6, .6, .03);

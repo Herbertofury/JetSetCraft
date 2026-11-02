@@ -18,6 +18,7 @@ import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.EntityMobGriefingEvent;
+import net.minecraftforge.event.entity.EntityTeleportEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
@@ -49,6 +50,12 @@ public final class RivalRushEvents {
     @SubscribeEvent
     public static void tick(TickEvent.ServerTickEvent event) {
         if (event.phase == TickEvent.Phase.END) RivalRushManager.tick(event.getServer());
+    }
+
+    /** Forge 47.4.23 dispatches command, spread, pearl and chorus teleports through this parent event. */
+    @SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = true)
+    public static void teleport(EntityTeleportEvent event) {
+        if (event.getEntity() instanceof ServerPlayer player) RivalRushManager.movementDiscontinuity(player);
     }
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
