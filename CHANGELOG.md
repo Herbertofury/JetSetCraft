@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.4.0-alpha.4 — rewarding journeys, 2026-11-02
+
+- Added persistent, readable receipts for the last sixteen activity, arena, Rush-return and mission rewards. Receipts show the actual credited amounts after caps, the training recipient and level changes, including progress earned before founding a crew home. The once-only settlement guard remains separate from display history.
+- Added nonblocking reward feedback and a Crew Charter **Progress** tab with reward details and an actionable next home goal. Supply affordability and physical building requirements are shown separately; the player still places the house and facility blocks.
+- Added a circuit **Journey** map of visited rooms, the current destination and the three real next offers, with honest maximum reward previews and completed-room settlement details. Added a **Build** view showing the current stat effects and artifact ranks.
+- Added one optional **Remix** per actual arena clear: explicitly choose an owned artifact and an available unowned replacement, then retain the exact earned rank. It uses the existing three artifact slots and rejects stale or repeated requests.
+- Added three four-rank movement/combat artifacts: **Line battery** charges over actual riding distance for the next primary paint/contact tag; **Air break** pulses and staggers owned rivals after a qualifying moving landing; **Breakbeat mark** exposes a visible priority rival to temporary virtual damage amplification. Their charge, cooldowns and effects stay inside the Rush session.
+- Kept native Iron's Firebolt collision as a secondary artifact hit, so it cannot consume the primary-tag battery or trigger primary paint effects recursively.
+- Expanded the acceptance gate from 28 to 35 real Forge GameTests and from ten to thirteen native client captures. New cases cover actual capped rewards and mission recipients, pending progress persistence, honest journey history, exact-rank remixes, movement observations and native-body isolation. Runtime acceptance for this candidate is pending until its new CI receipt is recorded.
+
 ## 0.4.0-alpha.3 — activities and arena circuits, 2026-11-01
 
 - Added one activity catalogue for Random, Tag, King of the Hill, Showdown and Rival Rush. Empty-hand Boombox interaction opens the chooser; random invitations are reviewed before acceptance.

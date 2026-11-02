@@ -1,8 +1,10 @@
 # Player Chapters, Crew Houses, Posse & Mob Archetypes
 
-**Development status: `0.4.0-alpha.3`, merged and machine-verified.** [PR #41](https://github.com/Herbertofury/JetSetCraft/pull/41) adds shared street-game/arena rewards and banking before the first house. Player-built facilities, a persistent named roster, levels, dispatch jobs and optional Rival Rush preparation were introduced in alpha.2, whose historical evidence remains below. **Members are saved profiles: visible residents, skating followers and physical posse AI are future work.** Stable `v0.3.0` is unchanged. The [Crew House design study](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/CREW_HOUSE_DESIGN.md) contains eight primary-source inspirations and clearly labelled extensions.
+**Development status: `0.4.0-alpha.4` candidate; new runtime acceptance is pending.** The new **Progress** tab, actual credited reward history, nonblocking reward feedback and practical home goals are described below. These additions do not change the existing reward amounts or activity eligibility.
 
-## Verified alpha.3 checkpoint
+The verified **alpha.3 baseline** in [PR #41](https://github.com/Herbertofury/JetSetCraft/pull/41) added shared street-game/arena rewards and banking before the first house. Player-built facilities, a persistent named roster, levels, dispatch jobs and optional Rival Rush preparation were introduced in alpha.2, whose historical evidence remains below. **Members are saved profiles: visible residents, skating followers and physical posse AI are future work.** Stable `v0.3.0` is unchanged. The [Crew House design study](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/CREW_HOUSE_DESIGN.md) contains eight primary-source inspirations and clearly labelled extensions. The older receipts do not verify alpha.4's new feedback or Progress tab.
+
+## Historical verified alpha.3 checkpoint
 
 [Verify JetSetCraft #280](https://github.com/Herbertofury/JetSetCraft/actions/runs/41356358215) and [all eight provider configurations in #56](https://github.com/Herbertofury/JetSetCraft/actions/runs/41356358302) passed **28 real GameTests per configuration**, dedicated-server readiness and normal shutdown. The base client produced **ten reviewed captures**, including real Charter founding, two saved profiles, an operational placed workshop, a dispatched job, the Boombox activity chooser and the first arena fork. The [alpha.3 receipt and gallery](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/verification/arena-circuit/README.md) ties those results to the exact merged tree and binary.
 
@@ -34,9 +36,19 @@ The client used the Charter, founded a home through production actions, displaye
 4. Build your own house and facilities. Founding grants **24 starting Crew Supplies, plus any previously banked activity earnings**, and creates two named profiles: **Riff** (Courier) and **Patches** (Tagger). Pending crew XP and reputation transfer too; all pending member training goes to **Riff, the initially focused member**, so he can begin above level one. No structure or resident mob is generated.
 5. In **Crew**, choose a member and a job; in **Jobs**, claim its result when ready. You can keep building, skating or playing ordinary Minecraft while the assignment advances.
 
-The book has **Home**, **Crew**, **Facilities** and **Jobs** tabs. You can inspect it away from home; managing members, jobs or facilities requires returning to the same dimension, standing inside the registered plot and having its Boombox naturally loaded and present. Finish or cancel a street activity, or return from Rival Rush, before managing the house. The server can disable this optional feature with `[crewHouse] enabled = false` while retaining saved progression.
+The alpha.4 book has **Home**, **Crew**, **Facilities**, **Jobs** and **Progress** tabs. You can inspect it away from home; managing members, jobs or facilities requires returning to the same dimension, standing inside the registered plot and having its Boombox naturally loaded and present. Finish or cancel a street activity, or return from Rival Rush, before managing the house. The server can disable this optional feature with `[crewHouse] enabled = false` while retaining saved progression.
 
 Each player has one owned house. **Show boundary** previews its square footprint. This area determines which facilities belong to the house; it does not protect blocks, reserve building permissions, create terrain or force-load chunks. Registered crew plots cannot overlap one another or extend past the world border, but ordinary Minecraft building remains governed by the server's usual rules.
+
+### Progress: see what you earned and what to build next
+
+Open **Crew Charter → Progress**, or `/jetsetcraft crew` and select **Progress**. It works before founding a home. The alpha.4 candidate shows your **latest sixteen reward receipts**, newest first, across completed street activities, arena clears, qualifying Rush returns and claimed missions. Each receipt records the Supplies, crew XP, training XP and gang reputation **actually credited**, including reductions at account caps, the recipient and any crew/member level change.
+
+Activity training goes to the selected idle member. A busy member or missing focus produces an explicit **zero training XP** result. A claimed mission trains **its assigned member**, regardless of the current activity focus. Before founding, training is banked; founding transfers that balance to Riff and moves the original receipt rows and IDs once. It creates no second payout or invented reward-history entry. Older saves begin with an empty display history; past earnings are not reconstructed as fabricated receipts.
+
+Accepted rewards show a **seven-second native toast** without opening a menu. Reduced motion uses a static text notification instead. The persistent sixteen-row display history is separate from the existing 128-entry settlement replay guard; both follow normal world-save durability.
+
+**Next goal** shows a practical step such as founding, registering a workshop or expanding the plot, with available Supplies, cost and shortfall. Its review action opens the relevant page without spending anything. **Affordable** and **physically ready** are different: you still place the required blocks, keep the home valid and loaded, and explicitly confirm an eligible purchase. No goal automatically builds your house.
 
 ### An early loop: earn, found, build
 

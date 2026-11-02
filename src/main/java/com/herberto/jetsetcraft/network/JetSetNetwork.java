@@ -15,7 +15,7 @@ import net.minecraftforge.network.simple.SimpleChannel;
 import java.util.UUID;
 
 public final class JetSetNetwork {
-    private static final String PROTOCOL = "12";
+    private static final String PROTOCOL = "13";
     private static final SimpleChannel CHANNEL = NetworkRegistry.ChannelBuilder
             .named(ResourceLocation.fromNamespaceAndPath(JetSetCraft.MOD_ID, "main"))
             .networkProtocolVersion(() -> PROTOCOL).clientAcceptedVersions(PROTOCOL::equals).serverAcceptedVersions(PROTOCOL::equals)
@@ -51,9 +51,12 @@ public final class JetSetNetwork {
         CHANNEL.messageBuilder(C2SActivityActionPacket.class, id++, NetworkDirection.PLAY_TO_SERVER)
                 .encoder(C2SActivityActionPacket::encode).decoder(C2SActivityActionPacket::decode)
                 .consumerMainThread(C2SActivityActionPacket::handle).add();
-        CHANNEL.messageBuilder(S2CActivityStatePacket.class, id, NetworkDirection.PLAY_TO_CLIENT)
+        CHANNEL.messageBuilder(S2CActivityStatePacket.class, id++, NetworkDirection.PLAY_TO_CLIENT)
                 .encoder(S2CActivityStatePacket::encode).decoder(S2CActivityStatePacket::decode)
                 .consumerMainThread(S2CActivityStatePacket::handle).add();
+        CHANNEL.messageBuilder(S2CCrewRewardPacket.class, id, NetworkDirection.PLAY_TO_CLIENT)
+                .encoder(S2CCrewRewardPacket::encode).decoder(S2CCrewRewardPacket::decode)
+                .consumerMainThread(S2CCrewRewardPacket::handle).add();
     }
     public static void sendInput(int mask, float forward, float strafe) { CHANNEL.sendToServer(new C2SInputPacket(mask, forward, strafe)); }
     public static void sendRideLoadoutAction(boolean unequip) { CHANNEL.sendToServer(new C2SRideLoadoutPacket(unequip)); }
@@ -77,6 +80,11 @@ public final class JetSetNetwork {
     public static void syncCrew(ServerPlayer player, CompoundTag state) {
         if (player == null || !canSync(player)) return;
         CHANNEL.send(PacketDistributor.PLAYER.with(() -> player), new S2CCrewStatePacket(state));
+    }
+
+    public static void syncCrewReward(ServerPlayer player, CompoundTag receipt) {
+        if (player == null || !canSync(player)) return;
+        CHANNEL.send(PacketDistributor.PLAYER.with(() -> player), new S2CCrewRewardPacket(receipt));
     }
 
     public static void syncRush(ServerPlayer player, CompoundTag state) {

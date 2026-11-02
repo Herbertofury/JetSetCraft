@@ -7,6 +7,8 @@ import net.minecraft.resources.ResourceLocation;
 
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 /** Earned before founding a home; moved into the first house in the same world-saved transaction. */
@@ -16,6 +18,7 @@ final class PendingCrewProgress {
     long xp, training;
     final LinkedHashMap<String, Integer> reputations = new LinkedHashMap<>();
     final LinkedHashSet<UUID> receipts = new LinkedHashSet<>();
+    final List<CrewRewardReceipt> rewards = new ArrayList<>();
     PendingCrewProgress(UUID owner) { this.owner = owner; }
     boolean award(UUID receipt, String gang, int supplies, int xp, int training, int reputation) {
         if (receipt == null || receipts.contains(receipt) || ResourceLocation.tryParse(gang) == null) return false;
@@ -25,7 +28,7 @@ final class PendingCrewProgress {
         this.xp = CrewProfile.clampXp(this.xp + Math.max(0, xp));
         this.training = CrewProfile.clampXp(this.training + Math.max(0, training));
         if (reputations.containsKey(gang) || reputations.size() < 512)
-            reputations.put(gang, Math.min(10_000, reputations.getOrDefault(gang, 0) + Math.max(0, reputation)));
+            reputations.put(gang, (int) Math.min(10_000L, (long) reputations.getOrDefault(gang, 0) + Math.max(0, reputation)));
         return true;
     }
     void transfer(CrewProfile profile) {
@@ -35,6 +38,7 @@ final class PendingCrewProgress {
         while (profile.settledRuns.size() > 128) profile.settledRuns.remove(profile.settledRuns.iterator().next());
         CrewProfile.Member member = profile.members.get(profile.focus);
         if (member != null) member.xp = CrewProfile.clampXp(member.xp + training);
+        rewards.forEach(receipt -> CrewRewardHistory.add(profile.rewards, receipt));
         profile.changed();
     }
     CompoundTag save() {
@@ -43,7 +47,7 @@ final class PendingCrewProgress {
         tag.putLong("Xp", xp); tag.putLong("Training", training);
         CompoundTag relations = new CompoundTag(); reputations.forEach(relations::putInt); tag.put("Reputations", relations);
         ListTag list = new ListTag(); for (UUID id : receipts) { CompoundTag row = new CompoundTag(); row.putUUID("Id", id); list.add(row); }
-        tag.put("Receipts", list); return tag;
+        tag.put("Receipts", list); tag.put("Rewards", CrewRewardHistory.save(rewards)); return tag;
     }
     static PendingCrewProgress load(CompoundTag tag) {
         if (tag.getInt("Schema") != 1 || !tag.hasUUID("Owner")) return null;
@@ -59,6 +63,7 @@ final class PendingCrewProgress {
         ListTag receipts = tag.getList("Receipts", Tag.TAG_COMPOUND);
         for (int i = Math.max(0, receipts.size() - 128); i < receipts.size(); i++)
             if (receipts.getCompound(i).hasUUID("Id")) progress.receipts.add(receipts.getCompound(i).getUUID("Id"));
+        CrewRewardHistory.load(progress.rewards, tag.getList("Rewards", Tag.TAG_COMPOUND));
         return progress;
     }
 }

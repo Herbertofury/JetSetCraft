@@ -12,7 +12,7 @@ import java.util.function.Supplier;
 /** Bounded intent only. Run identity, offers, rewards and elapsed time remain server-owned. */
 public record C2SRushActionPacket(String action, String value, int number, UUID runId, int version) {
     private static final Set<String> ACTIONS = Set.of("menu", "start", "leave", "choose", "encore", "album", "roster",
-            "journey_choose", "arena_catalogue");
+            "journey_choose", "arena_catalogue", "remix");
 
     public static void encode(C2SRushActionPacket packet, FriendlyByteBuf buffer) {
         buffer.writeUtf(packet.action, 32);

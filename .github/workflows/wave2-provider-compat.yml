@@ -139,7 +139,9 @@ jobs:
               street_gear graffiti_lifecycle paint_balloon_splash rush_rules rush_album rush_return \
               rush_session rush_ownership rush_objectives crew_house crew_missions crew_persistence \
               crew_rush activity_progression activity_tag activity_safety activity_hill \
-              activity_dimension_return rush_spell_relay rush_arena_catalogue rush_arena_rules rush_arena_session; do
+              activity_dimension_return rush_spell_relay rush_arena_catalogue rush_arena_rules rush_arena_session \
+              rush_build_rules rush_build_runtime rush_journey_preview rush_journey_history \
+              crew_progress_history crew_progress_caps crew_progress_mission; do
             grep -Fq "JETSETCRAFT_GAMETEST_PASS $marker" "$log" || {
               echo "::error::JetSetCraft GameTest $marker did not pass with ${{ matrix.provider }} installed."
               exit 1

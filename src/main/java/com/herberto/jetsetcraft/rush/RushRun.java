@@ -31,6 +31,9 @@ public final class RushRun {
         TEMPO("Tempo drive", "Every eighth defeat gives a short firing-rate burst. One of three artifact slots.", 4),
         SOUL("Soul mixtape", "Defeats charge a small automatic recovery pulse. One of three artifact slots.", 4),
         SPELL_RELAY("Firebolt relay", "Launch a real Iron's Spells Firebolt at intervals. Optional provider; one artifact slot.", 4),
+        BATTERY("Line battery", "Ride 24 actual blocks to empower your next primary tag, by paint or contact. One artifact slot.", 4),
+        AIR_BREAK("Air break", "A moving jump or drop followed by a real landing pulses nearby rivals. One artifact slot.", 4),
+        EXPOSE("Breakbeat mark", "Briefly expose a visible priority rival to increased run damage. One artifact slot.", 4),
         REPAIR("Fresh wheels", "Recover half your maximum run vitality now.", 0),
         CACHE("Victory lap", "Bank a chapter-scaled score bonus; no vanilla reward.", 0),
         SURGE("Overdrive", "Refresh a 15-second, 25% tag-damage surge.", 0);
@@ -51,7 +54,7 @@ public final class RushRun {
         public boolean repeatable() { return maxRank == 0; }
         public boolean artifact() {
             return switch (this) {
-                case CHAIN, FIREWORK, WIND, SHOCKWAVE, TEMPO, SOUL, SPELL_RELAY -> true;
+                case CHAIN, FIREWORK, WIND, SHOCKWAVE, TEMPO, SOUL, SPELL_RELAY, BATTERY, AIR_BREAK, EXPOSE -> true;
                 default -> false;
             };
         }
@@ -68,6 +71,8 @@ public final class RushRun {
     private boolean startingPerkGranted;
     private boolean circuit;
     private boolean spellRelayAvailable;
+    private boolean remixReady;
+    private double lineCharge;
     private long elapsedTicks;
     private long xp;
     private long score;
@@ -125,12 +130,57 @@ public final class RushRun {
     public long hits() { return hits; }
     public boolean circuit() { return circuit; }
     public int artifactCount() { return (int) ranks.keySet().stream().filter(u -> u.artifact() && rank(u) > 0).count(); }
+    public double lineCharge() { return lineCharge; }
+    public double lineChargeMax() { return 24.0D; }
+    public boolean remixReady() { return remixReady && !finished; }
+    public boolean artifactAvailable(Upgrade upgrade) {
+        return upgrade != null && upgrade.artifact() && (upgrade != Upgrade.SPELL_RELAY || spellRelayAvailable);
+    }
     public void configureCircuit() { if (elapsedTicks == 0L) circuit = true; }
     public void enableSpellRelay(boolean available) { spellRelayAvailable = available; }
     public boolean canAdvance(Upgrade upgrade) {
         return upgrade != null && !upgrade.repeatable() && rank(upgrade) < upgrade.maxRank()
                 && (upgrade != Upgrade.SPELL_RELAY || spellRelayAvailable)
                 && (!upgrade.artifact() || rank(upgrade) > 0 || artifactCount() < 3);
+    }
+
+    /** The manager supplies observed, continuous movement while actually riding; no input-button charge. */
+    public boolean chargeLine(double distance) {
+        if (finished || awaitingEncore || rank(Upgrade.BATTERY) == 0 || !Double.isFinite(distance)
+                || distance <= 0 || distance > 4) return false;
+        boolean before = lineCharge >= lineChargeMax();
+        lineCharge = Math.min(lineChargeMax(), lineCharge + distance);
+        return !before && lineCharge >= lineChargeMax();
+    }
+
+    /** Called only after validating an owned primary tag. Splash, relays and chained hits never spend it. */
+    public double consumeLineMultiplier() {
+        if (finished || awaitingEncore || hasOffer() || rank(Upgrade.BATTERY) == 0 || lineCharge < lineChargeMax()) return 1;
+        lineCharge = 0;
+        return 1.35D + rank(Upgrade.BATTERY) * .15D;
+    }
+
+    /** A completed circuit room supplies one optional replacement, never a stockpile of future rerolls. */
+    public void grantRemix() {
+        if (circuit && !finished) {
+            remixReady = true;
+            // Also invalidates a queued remix from an earlier room, even if no XP draft intervened.
+            offerVersion = offerVersion == Integer.MAX_VALUE ? 1 : offerVersion + 1;
+        }
+    }
+
+    public boolean remix(Upgrade source, Upgrade replacement, int version) {
+        if (!remixReady() || hasOffer() || version != offerVersion || source == null || !source.artifact()
+                || rank(source) <= 0 || !artifactAvailable(replacement) || source == replacement || rank(replacement) > 0
+                || rank(source) > replacement.maxRank()) return false;
+        int preserved = rank(source);
+        ranks.remove(source); ranks.put(replacement, preserved);
+        if (source == Upgrade.BATTERY) lineCharge = 0;
+        if (source == Upgrade.SOUL) soulCharge = 0;
+        if (source == Upgrade.TEMPO) tempoTicks = 0;
+        remixReady = false;
+        offerVersion = offerVersion == Integer.MAX_VALUE ? 1 : offerVersion + 1;
+        return true;
     }
 
     /** Server-earned arena/POI reward. Full builds receive useful score instead of an unusable rank. */
@@ -212,6 +262,7 @@ public final class RushRun {
 
     public void finish() {
         finished = true;
+        remixReady = false;
         awaitingEncore = false;
         offers = List.of();
     }

@@ -3,12 +3,14 @@ package com.herberto.jetsetcraft.crew;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.level.saveddata.SavedData;
 
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.List;
 import java.util.UUID;
 
 /** One world-owned progression store; temporary Rush journals never serialize or restore it. */
@@ -45,23 +47,51 @@ public final class CrewHouseData extends SavedData {
     public int pendingReputation(UUID owner, String gang) {
         PendingCrewProgress p = pending.get(owner); return p == null ? 0 : p.reputations.getOrDefault(gang, 0);
     }
+    public List<CrewRewardReceipt> recentRewards(UUID owner) {
+        CrewProfile profile = profiles.get(owner);
+        if (profile != null) return profile.recentRewards();
+        PendingCrewProgress progress = pending.get(owner);
+        return progress == null ? List.of() : CrewRewardHistory.recent(progress.rewards);
+    }
     /** Same save record owns receipt and reward; a first house absorbs its pending account exactly once. */
     boolean award(UUID owner, UUID receipt, String gang, int supplies, int xp, int training, int reputation) {
-        if (owner == null || receipt == null || blocked(owner)) return false;
+        return award(owner, receipt, gang, supplies, xp, training, reputation, "activity", 0) != null;
+    }
+    CrewRewardReceipt award(UUID owner, UUID receipt, String gang, int supplies, int xp, int training, int reputation,
+                            String source, long earnedAt) {
+        if (owner == null || receipt == null || blocked(owner) || gang == null || ResourceLocation.tryParse(gang) == null) return null;
+        supplies = Math.max(0, supplies); xp = Math.max(0, xp); training = Math.max(0, training); reputation = Math.max(0, reputation);
         CrewProfile profile = profiles.get(owner);
         if (profile == null) {
-            boolean awarded = pending.computeIfAbsent(owner, PendingCrewProgress::new)
-                    .award(receipt, gang, supplies, xp, training, reputation);
-            if (awarded) setDirty();
-            return awarded;
+            PendingCrewProgress progress = pending.computeIfAbsent(owner, PendingCrewProgress::new);
+            int beforeSupplies = progress.supplies, beforeReputation = progress.reputations.getOrDefault(gang, 0);
+            long beforeXp = progress.xp, beforeTraining = progress.training;
+            if (!progress.award(receipt, gang, supplies, xp, training, reputation)) return null;
+            CrewRewardReceipt awarded = new CrewRewardReceipt(receipt, source, gang, Math.max(0, earnedAt),
+                    progress.supplies - beforeSupplies, (int) (progress.xp - beforeXp), (int) (progress.training - beforeTraining),
+                    progress.reputations.getOrDefault(gang, 0) - beforeReputation, null, "", 0, 0, 1, 1, CrewRewardReceipt.Training.BANKED,
+                    progress.supplies - beforeSupplies < supplies || progress.xp - beforeXp < xp
+                            || progress.training - beforeTraining < training || progress.reputations.getOrDefault(gang, 0) - beforeReputation < reputation);
+            CrewRewardHistory.add(progress.rewards, awarded); setDirty(); return awarded;
         }
-        if (profile.settledRuns.contains(receipt)) return false;
+        if (profile.settledRuns.contains(receipt)) return null;
+        CrewProfile.Member member = profile.members.get(profile.focus);
+        boolean busy = member != null && profile.busy(member.id);
+        int beforeSupplies = profile.supplies, beforeReputation = profile.reputation(gang), beforeMemberLevel = member == null ? 0 : member.level();
+        long beforeXp = profile.xp, beforeTraining = member == null ? 0 : member.xp;
         profile.settledRuns.add(receipt);
         while (profile.settledRuns.size() > 128) profile.settledRuns.remove(profile.settledRuns.iterator().next());
         profile.addSupplies(supplies); profile.addXp(xp); profile.addReputation(gang, reputation);
-        CrewProfile.Member member = profile.members.get(profile.focus);
-        if (member != null && !profile.busy(member.id)) member.xp = CrewProfile.clampXp(member.xp + training);
-        profile.changed(); setDirty(); return true;
+        if (member != null && !busy) member.xp = CrewProfile.clampXp(member.xp + training);
+        int awardedTraining = member == null ? 0 : (int) (member.xp - beforeTraining);
+        CrewRewardReceipt awarded = new CrewRewardReceipt(receipt, source, gang, Math.max(0, earnedAt),
+                profile.supplies - beforeSupplies, (int) (profile.xp - beforeXp), awardedTraining, profile.reputation(gang) - beforeReputation,
+                member == null ? null : member.id, member == null ? "" : member.name, beforeMemberLevel, member == null ? 0 : member.level(),
+                CrewProfile.crewLevel(beforeXp), CrewProfile.crewLevel(profile.xp), member == null ? CrewRewardReceipt.Training.NO_FOCUS
+                    : busy ? CrewRewardReceipt.Training.BUSY : CrewRewardReceipt.Training.APPLIED,
+                profile.supplies - beforeSupplies < supplies || profile.xp - beforeXp < xp || profile.reputation(gang) - beforeReputation < reputation
+                        || (member != null && !busy && awardedTraining < training));
+        CrewRewardHistory.add(profile.rewards, awarded); profile.changed(); setDirty(); return awarded;
     }
     public static CrewHouseData load(CompoundTag tag) {
         CrewHouseData data = new CrewHouseData();

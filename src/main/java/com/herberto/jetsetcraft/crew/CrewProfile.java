@@ -36,6 +36,7 @@ public final class CrewProfile {
     final LinkedHashMap<String, Facility> facilities = new LinkedHashMap<>();
     final LinkedHashMap<String, Integer> reputations = new LinkedHashMap<>();
     final LinkedHashSet<UUID> settledRuns = new LinkedHashSet<>();
+    final List<CrewRewardReceipt> rewards = new ArrayList<>();
 
     public static final class Member {
         final UUID id;
@@ -79,6 +80,7 @@ public final class CrewProfile {
     public int missionSlots() { return tier >= 2 ? 3 : 2; }
     public List<Member> members() { return List.copyOf(members.values()); }
     public List<Job> jobs() { return List.copyOf(jobs.values()); }
+    public List<CrewRewardReceipt> recentRewards() { return CrewRewardHistory.recent(rewards); }
     public int reputation(String gangId) { return reputations.getOrDefault(gangId, 0); }
     public boolean contains(BlockPos pos) {
         return Math.abs((long) pos.getX() - anchor.getX()) <= radius()
@@ -116,14 +118,27 @@ public final class CrewProfile {
 
     /** One same-record settlement; caller validates the owner and the expected revision before invoking it. */
     public boolean claimMission(UUID jobId, long now) {
+        return claimMissionReward(jobId, now) != null;
+    }
+
+    /** Claims once and records the actual capped deltas for the assigned member, regardless of training focus. */
+    public CrewRewardReceipt claimMissionReward(UUID jobId, long now) {
         Job job = jobs.get(jobId);
-        if (job == null || !job.ready(now) || !members.containsKey(job.memberId)) return false;
+        if (job == null || !job.ready(now) || !members.containsKey(job.memberId)) return null;
+        Member member = members.get(job.memberId);
+        int beforeSupplies = supplies, beforeReputation = reputation(job.gang), beforeMemberLevel = member.level();
+        long beforeXp = xp, beforeTraining = member.xp;
         jobs.remove(jobId);
         addSupplies(job.supplies); addXp(job.crewXp); addReputation(job.gang, job.reputation);
-        Member member = members.get(job.memberId);
         member.xp = clampXp(member.xp + job.memberXp);
+        CrewRewardReceipt receipt = new CrewRewardReceipt(job.id, "mission:" + job.missionId, job.gang, Math.max(0, now),
+                supplies - beforeSupplies, (int) (xp - beforeXp), (int) (member.xp - beforeTraining), reputation(job.gang) - beforeReputation,
+                member.id, member.name, beforeMemberLevel, member.level(), crewLevel(beforeXp), crewLevel(xp), CrewRewardReceipt.Training.APPLIED,
+                supplies - beforeSupplies < job.supplies || xp - beforeXp < job.crewXp
+                        || member.xp - beforeTraining < job.memberXp || reputation(job.gang) - beforeReputation < job.reputation);
+        CrewRewardHistory.add(rewards, receipt);
         changed();
-        return true;
+        return receipt;
     }
     public boolean cancelMission(UUID jobId) {
         if (jobs.remove(jobId) == null) return false;
@@ -163,6 +178,7 @@ public final class CrewProfile {
         ListTag receipts = new ListTag();
         for (UUID run : settledRuns) { CompoundTag row = new CompoundTag(); row.putUUID("Id", run); receipts.add(row); }
         tag.put("SettledRuns", receipts);
+        tag.put("Rewards", CrewRewardHistory.save(rewards));
         return tag;
     }
 
@@ -220,6 +236,7 @@ public final class CrewProfile {
         for (int i = Math.max(0, receipts.size() - 128); i < receipts.size(); i++) {
             if (receipts.getCompound(i).hasUUID("Id")) profile.settledRuns.add(receipts.getCompound(i).getUUID("Id"));
         }
+        CrewRewardHistory.load(profile.rewards, tag.getList("Rewards", Tag.TAG_COMPOUND));
         return profile;
     }
     private static int boundedReward(CompoundTag tag, String key, int max) {
