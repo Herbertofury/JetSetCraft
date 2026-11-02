@@ -1,0 +1,17 @@
+{
+  "name": "Collector's Loop",
+  "description": "A small copper circuit with clear inner lanes. Collect farther during this run and bring extra crew supplies home.",
+  "radius": 24,
+  "seconds": 120,
+  "defeats": 8,
+  "layout": "loop",
+  "reward": "magnet",
+  "reward_ranks": 1,
+  "shared_reward": "supplies",
+  "palette": {
+    "floor": "minecraft:waxed_cut_copper",
+    "accent": "minecraft:yellow_concrete",
+    "wall": "minecraft:light_gray_terracotta",
+    "rail": "minecraft:iron_bars"
+  }
+}

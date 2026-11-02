@@ -1,0 +1,17 @@
+{
+  "name": "Chorus Terrace",
+  "description": "A broader blue terrace for a wide-area build. Take the longer room for two area ranks and shared member training.",
+  "radius": 32,
+  "seconds": 180,
+  "defeats": 14,
+  "layout": "terraces",
+  "reward": "area",
+  "reward_ranks": 2,
+  "shared_reward": "training",
+  "palette": {
+    "floor": "minecraft:smooth_quartz",
+    "accent": "minecraft:cyan_concrete",
+    "wall": "minecraft:blue_terracotta",
+    "rail": "minecraft:polished_andesite"
+  }
+}
