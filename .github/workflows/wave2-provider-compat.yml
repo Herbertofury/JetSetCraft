@@ -149,7 +149,9 @@ jobs:
               crew_style_shared_rewards crew_style_persistence crew_style_entry \
               rush_draft_controls rush_evolution_rules rush_debrief_rules \
               rush_evolution_cryo rush_evolution_railstorm rush_evolution_return \
-              rush_elite_tells rush_tagger_cover rush_headliner_victory rush_headliner_arena_gate rush_headliner_recovery; do
+              rush_elite_tells rush_tagger_cover rush_headliner_victory rush_headliner_arena_gate rush_headliner_recovery \
+              rush_contract_catalogue rush_contract_relay rush_contract_paint rush_contract_hunt rush_pit_stop_runtime \
+              rush_pit_stop_rules rush_pit_stop_effects rush_pit_stop_snapshots; do
             grep -Fq "JETSETCRAFT_GAMETEST_PASS $marker" "$log" || {
               echo "::error::JetSetCraft GameTest $marker did not pass with ${{ matrix.provider }} installed."
               exit 1
