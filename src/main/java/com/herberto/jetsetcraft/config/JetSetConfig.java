@@ -47,6 +47,7 @@ public final class JetSetConfig {
         public final ForgeConfigSpec.IntValue boomboxChallengeLifetimeTicks;
         public final ForgeConfigSpec.DoubleValue boomboxSpawnRadius;
         public final ForgeConfigSpec.BooleanValue enableRivalRush;
+        public final ForgeConfigSpec.BooleanValue enableLibertyGrind;
         public final ForgeConfigSpec.BooleanValue enableCrewHouse;
         public final ForgeConfigSpec.BooleanValue enableStreetActivities;
         public final ForgeConfigSpec.IntValue maxStreetActivities;
@@ -119,6 +120,10 @@ public final class JetSetConfig {
 
             b.push("rivalRush");
             enableRivalRush = b.comment("Allow explicit entry to the separate Rival Rush dimension. Ordinary Minecraft is unchanged until a player opts in.")
+                    .define("enabled", true);
+            b.pop();
+            b.push("libertyGrind");
+            enableLibertyGrind = b.comment("Allow the opt-in Liberty Grind expedition mode. Deployment requires the supported TaCZ Helldivers pack.")
                     .define("enabled", true);
             b.pop();
             b.push("crewHouse");
