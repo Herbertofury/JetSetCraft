@@ -3,6 +3,7 @@ package com.herberto.jetsetcraft.gametest;
 import com.herberto.jetsetcraft.JetSetCraft;
 import com.herberto.jetsetcraft.data.JetSetDataProvider;
 import com.herberto.jetsetcraft.rush.RivalRushManager;
+import com.herberto.jetsetcraft.rush.RushAlbum;
 import com.herberto.jetsetcraft.rush.RushDirector;
 import com.herberto.jetsetcraft.rush.RushReturnState;
 import com.herberto.jetsetcraft.rush.RushRun;
@@ -21,6 +22,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.level.TicketType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ChunkPos;
@@ -229,20 +231,48 @@ public final class RushEncounterGameTests {
                     if (run.defeats() - start >= quota) break;
                 }
             }
-            chooseDrafts(player); RivalRushManager.tick(player.getServer());
             if (stage < 3) {
-                check(RivalRushManager.journeySnapshot(player).getInt("Completed") == stage,
-                        "Actual native rival defeats did not settle an ordinary room");
+                settleCircuitRoom(player, stage, "Actual native rival defeats did not settle an ordinary room");
                 prepareCircuitRoom(helper, fixture, stage + 1); return;
             }
+            chooseDrafts(player); RivalRushManager.tick(player.getServer());
             CompoundTag blocked = RivalRushManager.journeySnapshot(player);
             check(blocked.getString("Phase").equals("arena") && blocked.getInt("Completed") == 2
                             && blocked.getLong("TicksLeft") == 0 && run.defeats() - start >= quota
                             && RivalRushManager.encounterSnapshot(player).getBoolean("RoomVictoryRequired") && run.headliners() == 0,
                     "Time and ordinary defeats cleared room three while its headliner was alive");
-            Mob boss = headliner(player); defeat(player, boss); chooseDrafts(player); RivalRushManager.tick(player.getServer());
+            Mob boss = headliner(player);
+            // The protected north lane is built by readyForEntry in every profile. Keep the boss's
+            // actual card separate from ordinary fixture drops at center + (5, 0), without deleting
+            // or pre-collecting those piles. Even maximum ordinary pickup reach is only 12 blocks.
+            Vec3 dropPosition = Vec3.atBottomCenterOf(RivalRushManager.arenaDestination(player).offset(0, 1, -12));
+            defeat(player, boss, dropPosition); chooseDrafts(player);
+            ItemEntity bossCard = fixture.district.getEntitiesOfClass(ItemEntity.class, player.getBoundingBox().inflate(32),
+                    item -> RivalRushManager.belongsTo(item, player) && item.position().distanceToSqr(dropPosition) < 1
+                            && item.getItem().hasTag() && item.getItem().getTag().hasUUID("JetSetCraftRushPickup")
+                            && item.getItem().getTag().getUUID("JetSetCraftRushPickup").equals(boss.getUUID()))
+                    .stream().findFirst().orElseThrow(() -> new GameTestAssertException("The actual owned headliner card was not present at its isolated drop point"));
+            check(bossCard.getItem().getCount() == 1 && run.headliners() == 1 && run.hasBuildOpportunity()
+                            && RivalRushManager.encounterSnapshot(player).getString("HeadlinerState").equals("victory"),
+                    "The actual headliner defeat failed to settle its owned card and forge before pickup: " + circuitState(player));
+            // Explicit XP-threshold fixture only. The next level must be earned by the real boss
+            // card's production pickup, after its separate synchronous defeat XP has been resolved.
+            long xpGap = run.xpToNextLevel() - run.xp() - 1;
+            check(xpGap >= 0 && xpGap <= Integer.MAX_VALUE, "The fixture did not finish its genuine defeat-XP drafts: " + circuitState(player));
+            run.gainXp((int) xpGap);
+            check(!run.hasOffer() && run.xp() == run.xpToNextLevel() - 1,
+                    "XP prerequisite setup itself opened a draft: " + circuitState(player));
+            long cardsBefore = RushAlbum.total(player);
+            player.moveTo(dropPosition.x, dropPosition.y, dropPosition.z, 0, 0); player.setDeltaMovement(Vec3.ZERO);
+            RivalRushManager.tick(player.getServer());
+            check(bossCard.isRemoved() && RushAlbum.total(player) > cardsBefore && run.hasOffer()
+                            && RivalRushManager.journeySnapshot(player).getInt("Completed") == 2
+                            && run.headliners() == 1 && run.hasBuildOpportunity()
+                            && RivalRushManager.encounterSnapshot(player).getString("HeadlinerState").equals("victory"),
+                    "An actual boss-card XP draft failed to pause room settlement while retaining victory: " + circuitState(player));
+            settleCircuitRoom(player, stage, "A real midpoint headliner victory did not settle after its earned pickup draft");
             check(RivalRushManager.journeySnapshot(player).getInt("Completed") == 3 && run.headliners() == 1 && run.hasBuildOpportunity(),
-                    "A real midpoint headliner victory failed to release exactly one room settlement and forge opportunity");
+                    "A real midpoint headliner victory failed to release exactly one room settlement and forge opportunity: " + circuitState(player));
             RushDirector finalGate = new RushDirector(); finalGate.schedule(100, true, 1, 6);
             check(!finalGate.permitsRoomCompletion(1, 6), "The final-room gate permitted an unspawned headliner");
             UUID finalId = UUID.randomUUID(); check(finalGate.spawned(finalId), "Final gate could not register its actor");
@@ -251,6 +281,26 @@ public final class RushEncounterGameTests {
             returnNormally(fixture); pass(helper, "rush_headliner_arena_gate");
         } catch (RuntimeException error) { cleanup(fixture); throw error; }
         if (stage == 3) cleanup(fixture);
+    }
+
+    /** A tick may legitimately collect cards and open a fresh draft before the room-clear check. */
+    private static void settleCircuitRoom(ServerPlayer player, int stage, String failure) {
+        RushRun run = RivalRushManager.run(player);
+        for (int attempt = 0; attempt < 8 && RivalRushManager.journeySnapshot(player).getInt("Completed") < stage; attempt++) {
+            chooseDrafts(player);
+            RivalRushManager.tick(player.getServer());
+        }
+        check(RivalRushManager.journeySnapshot(player).getInt("Completed") == stage && run != null && run.arenaClears() == stage,
+                failure + ": " + circuitState(player));
+    }
+
+    private static String circuitState(ServerPlayer player) {
+        RushRun run = RivalRushManager.run(player); CompoundTag journey = RivalRushManager.journeySnapshot(player);
+        return "phase=" + journey.getString("Phase") + ", completed=" + journey.getInt("Completed")
+                + ", offer=" + (run != null && run.hasOffer()) + ", cards=" + RushAlbum.total(player)
+                + ", headliners=" + (run == null ? -1 : run.headliners())
+                + ", opportunity=" + (run != null && run.hasBuildOpportunity())
+                + ", headlinerState=" + RivalRushManager.encounterSnapshot(player).getString("HeadlinerState");
     }
 
     private static void verifyGeometryBounds() {
@@ -347,9 +397,12 @@ public final class RushEncounterGameTests {
             check(RivalRushManager.artifactHit(player, mob, 20), "A valid owned virtual hit was refused");
     }
     private static void defeat(ServerPlayer player, Mob mob) {
+        defeat(player, mob, player.position().add(5, 0, 0));
+    }
+    private static void defeat(ServerPlayer player, Mob mob, Vec3 position) {
         chooseDrafts(player);
         if (mob.isRemoved() || RivalRushManager.actorVitality(player, mob) < 0) return;
-        place(mob, player.position(), 5, 0);
+        mob.moveTo(position.x, position.y, position.z, 0, 0); mob.setDeltaMovement(Vec3.ZERO);
         for (int hit = 0; hit < 200 && RivalRushManager.actorVitality(player, mob) > 0; hit++) {
             chooseDrafts(player); check(RivalRushManager.artifactHit(player, mob, 40), "An actual owned fixture rival could not be defeated");
         }
