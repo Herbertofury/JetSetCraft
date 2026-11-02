@@ -61,8 +61,9 @@ public final class SprayCanItem extends Item {
                 int painted = PaintSplash.freeSpray(serverLevel, player, hit, getPaintColor(stack), stack);
                 if (painted > 0 && player instanceof net.minecraft.server.level.ServerPlayer serverPlayer) {
                     com.herberto.jetsetcraft.rush.RivalRushManager.tagWall(serverPlayer, context.getClickedPos(), face);
+                    com.herberto.jetsetcraft.liberty.LibertyManager.tagWall(serverPlayer, context.getClickedPos(), face);
                 }
-                if (painted > 0 && !player.getAbilities().instabuild) {
+                if (painted > 0 && !player.getAbilities().instabuild && consumesPaint(player)) {
                     stack.hurtAndBreak(1, player, p -> p.broadcastBreakEvent(context.getHand()));
                 }
             }
@@ -102,8 +103,9 @@ public final class SprayCanItem extends Item {
             replaced.forEach(GraffitiEntity::discard);
             if (player instanceof net.minecraft.server.level.ServerPlayer serverPlayer) {
                 com.herberto.jetsetcraft.rush.RivalRushManager.tagWall(serverPlayer, context.getClickedPos(), face);
+                com.herberto.jetsetcraft.liberty.LibertyManager.tagWall(serverPlayer, context.getClickedPos(), face);
             }
-            if (player != null && !player.getAbilities().instabuild) {
+            if (player != null && !player.getAbilities().instabuild && consumesPaint(player)) {
                 stack.hurtAndBreak(1, player, p -> p.broadcastBreakEvent(context.getHand()));
             }
         }
@@ -112,6 +114,11 @@ public final class SprayCanItem extends Item {
 
     public static int getCatalogSelection(ItemStack stack) {
         return Math.floorMod(stack.getOrCreateTag().getInt(VARIANT_TAG), GraffitiCatalog.size());
+    }
+
+    private static boolean consumesPaint(Player player) {
+        return !(player instanceof net.minecraft.server.level.ServerPlayer server)
+                || com.herberto.jetsetcraft.liberty.LibertyResearch.shouldConsumePaint(server);
     }
 
     public static String getCustomSelection(ItemStack stack) {

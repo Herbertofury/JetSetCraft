@@ -76,6 +76,7 @@ public final class ClientEvents {
         public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
             event.registerEntityRenderer(ModEntities.GRAFFITI.get(), GraffitiRenderer::new);
             event.registerEntityRenderer(ModEntities.PAINT_BALLOON.get(), ThrownItemRenderer::new);
+            event.registerEntityRenderer(ModEntities.LIBERTY_TRANSPORT.get(), com.herberto.jetsetcraft.client.render.LibertyTransportRenderer::new);
             event.registerBlockEntityRenderer(ModBlockEntities.BOOMBOX.get(), BoomboxRenderer::new);
         }
 
@@ -215,6 +216,8 @@ public final class ClientEvents {
             Minecraft mc = Minecraft.getInstance();
             if (event.getOverlay() != VanillaGuiOverlay.HOTBAR.type() || mc.player == null || mc.options.hideGui
                     || !hudVisible || !JetSetConfig.CLIENT.showStyleHud.get()) return;
+            // Transit has no skating input; leave room for vanilla's passenger instructions.
+            if (mc.player.getVehicle() instanceof com.herberto.jetsetcraft.entity.LibertyTransportEntity) return;
             ClientRideState.Snapshot state = ClientRideState.get(mc.player.getId());
             if (!state.active() && !state.dancing() && state.comboScore() == 0 && state.landingTicks() == 0) return;
 

@@ -21,10 +21,15 @@
 | Build tricks, combos, transfers, and Flow | **[Tricks, Combos & Flow](Tricks-Combos-and-Flow)** |
 | Paint tags, create custom art, or use Free Paint | **[Graffiti](Graffiti)** |
 | Choose an isolated skating roguelite session or an arena circuit | **[Rival Rush](Rival-Rush)** — merged and verified `0.4.0-alpha.7` |
+| Pod-drop into a rival district, recover research and extract on skates | **[Liberty Grind](Liberty-Grind)** — current development implementation |
 | Build a house, develop crew profiles and send dispatch jobs | **[Player Chapters and Crew Houses](Player-Chapters-Posse-and-Mob-Archetypes)** |
 | Browse games, music, art and engineering inspiration | **[Inspiration & Research](Inspiration-and-Research)** |
 | Build a compatible modpack or server | **[Modpack Maker Guide](Modpack-Maker-Guide)** |
 | Inspect architecture and verification evidence | **[Developer Architecture](Developer-Architecture)** · **[Testing](Testing-and-Verification)** |
+
+## 🛸 Liberty Grind: drop, tag, extract
+
+**[Liberty Grind](Liberty-Grind)** adds a selectable war-map expedition with pod insertion, actual TaCZ Helldivers weapons, rival-held graffiti objectives, pirate radio, courier routes and ship extraction back to your original world. Recover super credits and samples for six research projects that improve graffiti and unlock Rival Rush preparations. Objectives also grow the same crew account and Style Library. Read the guide for exact optional-pack installation, controls and current individual-mission scope. Its new verification is separate from the historical alpha.7 checkpoint below.
 
 ## 🧪 Verified alpha.7: room contracts and earned Pit stops
 

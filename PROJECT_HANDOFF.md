@@ -10,7 +10,7 @@
 
 ## Continuation-safe state
 
-Tag `v0.3.0` remains the stable release baseline. `main` now also contains the optional **0.4.0-alpha.6** development mode and shared progression described below. The stable release reconciles the valuable historical branch work in `docs/RECONCILIATION_0.3.0.md`. Do not revive an archive/export branch as a new base; compare its actual feature content against `main` first.
+Tag `v0.3.0` remains the stable release baseline. The development source advances through Rival Rush **alpha.7** to the **0.4.0-alpha.8 Liberty Grind** continuation described below. The stable release reconciles the valuable historical branch work in `docs/RECONCILIATION_0.3.0.md`. Do not revive an archive/export branch as a new base; compare its actual feature content against `main` first.
 
 The physical ride item in `JetSetData` is the source of truth. The server owns movement, scoring, graffiti selection/custom payloads, Street Gear, gangs, and persistence. Clients send bounded input and render sanitized snapshots. PlayerAnimator is client-only; optional integrations remain isolated and optional.
 
@@ -18,7 +18,17 @@ Neutral directional input means neutral: stale momentum cannot manufacture camer
 
 The custom graffiti format is deliberately bounded to a 16 × 10, 4-bit palette payload. Do not replace it with arbitrary client texture/file uploads. Paid Marketplace and research-only references remain non-redistributable even when present in the private Desktop/Drive source-assets area.
 
-## Verified continuation — 0.4.0-alpha.6
+## Liberty Grind continuation — 0.4.0-alpha.8
+
+Liberty Grind adds a sixth selectable activity: a server-owned war map, three isolated expedition districts, passenger pod arrival, native TaCZ Helldivers gun combat, rival-clearing/graffiti/skating objectives, field research and a passenger extraction ship. The shared return journal restores the player's source dimension, location, inventory, physical ride, vanilla XP and other captured state. Earned super credits survive an interrupted expedition; field samples require successful extraction. Reward intent and settlement IDs protect recovery from duplicate payouts.
+
+The six projects connect expeditions to ordinary graffiti, Liberty operations and the existing single Rival Rush preparation slot. Completed objectives also bank shared crew supplies, XP, training and gang reputation, including before founding a house. Preserve that single preparation and the three Rush artifact slots. Protocol is **16**; client/server versions must match.
+
+Read [the mode guide](docs/LIBERTY_GRIND.md), [the exact pack and verification guide](docs/LIBERTY_GRIND_PACK.md), [the player wiki](wiki/Liberty-Grind.md), and [the Liberty verification receipt with native gallery](docs/verification/liberty-grind/README.md). The optional native lane pins TaCZ **1.1.8-hotfix2** and verifies the creator's merged Helldivers ZIP by hash; upstream binaries are not committed or redistributed. Missing TaCZ or gun-pack content produces a deployment reason while ordinary JetSetCraft remains usable.
+
+Initial scope is individual operations, with a bounded director and original block-built districts/transports. Shared squads, a persistent galactic campaign, a full stratagem/weapon catalogue and human session/economy balance remain future work. Historical alpha.6/alpha.7 receipts below describe their original source, not verification of this continuation.
+
+## Verified predecessor — 0.4.0-alpha.6
 
 [PR #45](https://github.com/Herbertofury/JetSetCraft/pull/45) merged as `6e85fb3015620a19a6bd4a69b0154cbe8d248527`, with tree `b2618bbabd94649a88039eefdd2625f9f0839127` identical to local checkpoint `f438241e32f8d753cab095ff8f70a03c1302116c`, feature `1e8da0f47b2a9622a9ed454cbe8ac10fafdbad0a` and tested integration `988362f3dc4159df2ded4889059f67c8ed9406b0`. It adds bounded elite/headliner encounters, three rank-three build evolutions, versioned rerolls/banishes, exact next-rank previews, a movable threat/resource HUD and a persistent optional run debrief including its saved exit reason. Protocol is 14. Headliners gate circuit rooms three and six, while Free streets preserves its thirty-minute extraction and Encore. Evolution opportunities are earned once per actual owned victory and selected only at an existing decision stop.
 
@@ -45,6 +55,9 @@ Human pacing, full-session economy/Endless balance, multiplayer scale, visible c
 - `gradlew.bat runGameTestServer --no-daemon`
 - `gradlew.bat -Djetsetcraft.visualAudit=true runClient --no-daemon`
 - `gradlew.bat -Djetsetcraft.rushVisualAudit=true runClient --no-daemon` — Rush/crew/activity/progression audit, only with the workflow's disposable `saves/RivalRushAudit` setup.
+- `python tools/prepare_liberty_pack.py` — hash-checked optional Helldivers pack setup; see the pack guide before running.
+- `gradlew.bat -PlibertyTacz=true runGameTestServer --no-daemon` — real guns, native mission lifecycle and all base regressions.
+- `gradlew.bat -PlibertyTacz=true -Djetsetcraft.libertyVisualAudit=true runClient --no-daemon` — Liberty audit with the workflow's disposable `saves/LibertyGrindAudit` setup.
 
 Release evidence and the exact artifact checksum are recorded in `docs/RELEASE_EVIDENCE_0.3.0.md`.
 

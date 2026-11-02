@@ -26,6 +26,16 @@ JetSetCraft turns ordinary Minecraft terrain into a momentum-first street sports
 
 The [wiki](https://github.com/Herbertofury/JetSetCraft/wiki) covers mechanics, configuration, compatibility, modpack tags, and verification in depth.
 
+## Liberty Grind — 0.4.0-alpha.8 expedition mode
+
+**Drop hard. Paint loud. Skate home.** [Liberty Grind](wiki/Liberty-Grind.md) adds a selectable war-map expedition: pod-drop into one of three large rival districts, fight with the actual TaCZ Helldivers Liberator/Peacemaker loadout, reclaim murals, broadcast pirate radio while skating, complete a courier route and board the extraction ship back to your normal world.
+
+Recover super credits and three tiers of samples for six research projects. **Pressure Saver** improves ordinary graffiti; **Magnetic Pigment, Blast Stencil and Prism Ink** unlock selectable preparations for the existing single Rival Rush starting slot. Completed objectives and extraction also contribute to the same crew supplies, XP, training, reputation and Style Library. [Read the implemented scope and progression loop](docs/LIBERTY_GRIND.md).
+
+The [exact pack guide](docs/LIBERTY_GRIND_PACK.md) covers the current merged Helldivers release, installation and the optional native verification lane. JetSetCraft remains standalone; missing optional content blocks this deployment with a reason. Current missions are individual isolated deployments. Shared squads, galactic liberation and broader stratagem/weapon collections remain expansion work.
+
+The [Liberty Grind verification receipt and native gallery](docs/verification/liberty-grind/README.md) identify the actual tests, installed-package check, reviewed client captures and their source/artifact identities. The historical alpha evidence below describes its original versions separately.
+
 ## Optional Rival Rush mode — development alpha
 
 **Alpha.7 adds optional arena contracts and earned Pit stops.** Ride a checkpoint relay, paint fresh patches or hunt dangerous rivals while clearing a room. Every actual clear earns one service; completing its contract earns a second. Choose **Tune, Patch, Rewind or Remix**, with exact previews and accepted results. The next route carries the build you shaped at that stop.
@@ -38,7 +48,7 @@ Rival Rush remains an opt-in skating, paint-combat and mob-card mode with separa
 
 Craft a reusable **Rival Rush Flyer** from paper + cyan dye, or use `/jetsetcraft rush`. The alpha supports Easy, Normal and Hard and never changes the world's difficulty. Controls, card rewards and limits are documented in [Rival Rush](wiki/Rival-Rush.md); the [18-game research/design study](docs/RIVAL_RUSH_DESIGN.md) separates the implemented headliners and three build paths from proposed companions, broader equipment collections and rhythm-scored challenges.
 
-The current development alpha remains **`0.4.0-alpha.7`**. Its original gameplay checkpoint merged through [PR #46](https://github.com/Herbertofury/JetSetCraft/pull/46) as [`af8e7f1b7a41b0e491f04d3f3f8ca4288ac5eed7`](https://github.com/Herbertofury/JetSetCraft/commit/af8e7f1b7a41b0e491f04d3f3f8ca4288ac5eed7), with network protocol **15**. That original checkpoint has tested and merged source tree `e33c221bb02df4c949c28766007893215d7ca2ed`. [Base verification](https://github.com/Herbertofury/JetSetCraft/actions/runs/41397720888) and the [provider matrix](https://github.com/Herbertofury/JetSetCraft/actions/runs/41397720946) passed **63 required Forge GameTests in each of nine configurations — 567 executions of 63 distinct tests**, all builds and normal dedicated-server save/shutdown. Base also passed its **23-capture native-client gate**.
+The preceding **`0.4.0-alpha.7`** gameplay checkpoint merged through [PR #46](https://github.com/Herbertofury/JetSetCraft/pull/46) as [`af8e7f1b7a41b0e491f04d3f3f8ca4288ac5eed7`](https://github.com/Herbertofury/JetSetCraft/commit/af8e7f1b7a41b0e491f04d3f3f8ca4288ac5eed7), with network protocol **15**. That original checkpoint has tested and merged source tree `e33c221bb02df4c949c28766007893215d7ca2ed`. [Base verification](https://github.com/Herbertofury/JetSetCraft/actions/runs/41397720888) and the [provider matrix](https://github.com/Herbertofury/JetSetCraft/actions/runs/41397720946) passed **63 required Forge GameTests in each of nine configurations — 567 executions of 63 distinct tests**, all builds and normal dedicated-server save/shutdown. Base also passed its **23-capture native-client gate**. The Liberty Grind source advances to **alpha.8 / protocol 16**; clients and servers must update together.
 
 **Verification follow-up:** [PR #47](https://github.com/Herbertofury/JetSetCraft/pull/47) merged as [`1fcb78852f893f083749aac2e566addc3acca78b`](https://github.com/Herbertofury/JetSetCraft/commit/1fcb78852f893f083749aac2e566addc3acca78b) after correcting the retained midpoint fixture to resolve actual pickup-earned XP drafts before asserting settlement. Production gameplay is unchanged. The [addendum](docs/verification/contracts/README.md#post-merge-verification-follow-up) preserves the failed push and records the separate corrected checks; the 23-image gallery remains evidence for the original PR #46 source.
 
@@ -55,7 +65,7 @@ The [historical alpha.3 receipt](docs/verification/arena-circuit/README.md) pres
 
 ### Connected activities and arena circuits
 
-Use a tuned Boombox with an empty hand, or `/jetsetcraft activity`, to choose **Random, Tag, King of the Hill, Showdown or Rival Rush**. A random invitation shows its selected game before you accept. Completed objectives contribute to the same crew supplies, house XP, member training and gang reputation; earnings are retained even before your first house is founded.
+Use a tuned Boombox with an empty hand, or `/jetsetcraft activity`, to choose **Random, Tag, King of the Hill, Showdown, Rival Rush or Liberty Grind**. A random invitation shows its selected game before you accept; it considers Liberty Grind only when the optional loadout and current deployment requirements are available. Completed objectives contribute to the same crew supplies, house XP, member training and gang reputation; earnings are retained even before your first house is founded.
 
 Rival Rush offers **Free streets** and a **six-arena circuit**. Pick one of three arena rewards, skate along the generated connection, complete its timed combat objective, and take the next route. Choices favor rooms you have not visited in the current set. The catalogue has six base profiles and four optional profiles for Aether, Iron's Spells, Cataclysm and AoA, enabled only when their providers are installed. Arena sizes, layouts, authored block maps and bounded rewards are editable through data packs, and a run keeps its chosen catalogue through reloads. See [Rival Rush](wiki/Rival-Rush.md) for the exact format.
 

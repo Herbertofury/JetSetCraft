@@ -1,5 +1,15 @@
 # Changelog
 
+## Unreleased — Liberty Grind
+
+- Added selectable **Liberty Grind**, a Helldivers-inspired expedition mode on skates, with Boombox/activity-menu handoff, a native war map and three operation profiles: Neon Docks, Overpass Uprising and Blackout Borough.
+- Added original pod insertion and ship extraction transports, large isolated districts, rival crew combat, distinct mural tagging, movement-driven pirate radio, ordered courier beacons and exploration caches.
+- Integrated the real optional TaCZ Helldivers Liberator/Peacemaker loadout through verified public APIs, with correct whole-magazine fuel reloads, temporary equipment ownership and bounded resupply. Missing optional content blocks deployment without breaking standalone JetSetCraft.
+- Added earned super credits, three sample tiers and six persistent research projects. Graffiti efficiency carries into ordinary worlds; three unlocks feed the existing single Rival Rush preparation slot; objective/extraction earnings use shared crew supplies, XP, training, reputation and reward receipts.
+- Added mission/research views, local HUD layout controls, safe return snapshots, staged reward settlement and session-scoped combat/drop boundaries. The initial release scope is individual missions; shared squads, a global liberation campaign and larger stratagem collections remain future work.
+- Added focused operation, research, native loadout/reload and real bullet-combat tests, plus pinned optional-provider preparation. Runtime results belong to the new release evidence; predecessor test counts are not evidence for these changes.
+- Added the [player guide](wiki/Liberty-Grind.md), [implementation notes](docs/LIBERTY_GRIND.md) and [exact upstream pack guide](docs/LIBERTY_GRIND_PACK.md).
+
 ## 0.4.0-alpha.7 — arena contracts and Pit stops, 2026-11-02
 
 - Added optional **Relay, Paint and Hunt** contracts to supplied arenas and the editable example pack. Real riding through ordered checkpoints, accepted distinct wall patches and actual owned elite/captain defeats advance separate room goals. The normal timer, rival quota and room-three/six headliner gates remain authoritative; a missed contract never blocks exit.

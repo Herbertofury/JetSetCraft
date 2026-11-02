@@ -1,0 +1,310 @@
+name: Verify Liberty Grind Provider
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "build.gradle"
+      - "gradle.properties"
+      - "gradle/wrapper/**"
+      - "src/main/**"
+      - "tools/prepare_liberty_pack.py"
+      - "tools/stop_smoke_server.py"
+      - ".github/workflows/liberty-provider-compat.yml"
+  pull_request:
+    paths:
+      - "build.gradle"
+      - "gradle.properties"
+      - "gradle/wrapper/**"
+      - "src/main/**"
+      - "tools/prepare_liberty_pack.py"
+      - "tools/stop_smoke_server.py"
+      - ".github/workflows/liberty-provider-compat.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: jetsetcraft-liberty-provider-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  liberty:
+    name: ${{ matrix.lane }} / TaCZ 1.1.8-hotfix2
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - lane: full-provider
+            pack: "true"
+          - lane: missing-pack
+            pack: "false"
+    env:
+      LIBERTY_PACK_EXPECTED: ${{ matrix.pack }}
+
+    steps:
+      - name: Check out sources into a fresh test workspace
+        uses: actions/checkout@v6
+
+      - name: Set up Temurin 17
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Set up Gradle wrapper cache
+        uses: gradle/actions/setup-gradle@v6
+
+      - name: Generate authored assets
+        run: |
+          python -m pip install --requirement tools/requirements.txt
+          python tools/generate_models.py
+          python tools/generate_animations.py
+          python tools/generate_brand.py
+          git diff --check
+          git diff --exit-code
+
+      - name: Prepare the exact official Helldivers pack
+        if: matrix.pack == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          python tools/prepare_liberty_pack.py 2>&1 | tee "$RUNNER_TEMP/liberty-pack.log"
+          python tools/prepare_liberty_pack.py --verify-only 2>&1 | tee -a "$RUNNER_TEMP/liberty-pack.log"
+
+      - name: Verify intentional absence of the Helldivers pack
+        if: matrix.pack == 'false'
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          folder = Path('run/tacz')
+          if folder.exists() and any(folder.iterdir()):
+              raise SystemExit('The missing-pack fixture requires an empty gun-pack directory before startup')
+          folder.mkdir(parents=True, exist_ok=True)
+          print('LIBERTY_FIXTURE tacz=true helldivers_pack=false; the TaCZ default pack may initialize normally')
+          PY
+
+      - name: Build with the exact optional provider
+        shell: bash
+        run: |
+          set -euo pipefail
+          ./gradlew clean build -PlibertyTacz=true -PlibertyPackExpected="$LIBERTY_PACK_EXPECTED" --no-daemon \
+            2>&1 | tee "$RUNNER_TEMP/liberty-build.log"
+
+      - name: Record resolved runtime dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          ./gradlew dependencies --configuration runtimeClasspath -PlibertyTacz=true \
+            -PlibertyPackExpected="$LIBERTY_PACK_EXPECTED" --no-daemon \
+            2>&1 | tee "$RUNNER_TEMP/liberty-dependencies.log"
+
+      - name: Run native GameTests with the selected pack state
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 600s ./gradlew runGameTestServer -PlibertyTacz=true \
+            -PlibertyPackExpected="$LIBERTY_PACK_EXPECTED" --no-daemon \
+            2>&1 | tee "$RUNNER_TEMP/liberty-gametest.log"
+          python - <<'PY'
+          from pathlib import Path
+          import os
+          import re
+
+          log = (Path(os.environ['RUNNER_TEMP']) / 'liberty-gametest.log').read_text(errors='replace')
+          expected = os.environ['LIBERTY_PACK_EXPECTED']
+          required = sum(
+              not re.search(r'\brequired\s*=\s*false\b', annotation)
+              for source in Path('src/main/java/com/herberto/jetsetcraft/gametest').glob('*.java')
+              for annotation in re.findall(r'@GameTest\s*\((.*?)\)', source.read_text(), flags=re.S)
+          )
+          if not required or not re.search(rf'All {required} required tests passed|(?<!\d){required} tests? passed', log):
+              raise SystemExit(f'Forge did not report all {required} required tests passing')
+
+          markers = [f'JETSETCRAFT_GAMETEST_PASS liberty_tacz_admission provider=true pack={expected}']
+          markers += [f'JETSETCRAFT_LIBERTY_OPERATION_PASS liberty_{name}_rules'
+                      for name in ('mural', 'radio', 'courier', 'cache_supply', 'extraction', 'war_map')]
+          markers += [f'JETSETCRAFT_LIBERTY_RESEARCH_PASS liberty_research_{name}'
+                      for name in ('settlement', 'purchase', 'rush', 'schema', 'caps')]
+          if expected == 'true':
+              markers += [f'JETSETCRAFT_GAMETEST_PASS liberty_tacz_{name}'
+                          for name in ('loadout', 'resupply', 'reload', 'combat')]
+              markers += [f'JETSETCRAFT_LIBERTY_RUNTIME_PASS liberty_runtime_{name}'
+                          for name in ('abort_death_disconnect', 'action_identity', 'future_research_recovery',
+                                       'serialized_rejoin', 'full_extraction')]
+              if 'JETSETCRAFT_GAMETEST_SKIP liberty_tacz_' in log or 'JETSETCRAFT_LIBERTY_RUNTIME_SKIP' in log:
+                  raise SystemExit('The full-provider lane must execute its required native tests without skipping')
+          else:
+              markers += [f'JETSETCRAFT_GAMETEST_SKIP liberty_tacz_{name} optional-provider-or-pack-absent'
+                          for name in ('loadout', 'resupply', 'reload', 'combat')]
+              for name in ('lifecycle', 'action_identity', 'future_research_recovery', 'serialized_rejoin', 'extraction'):
+                  if not re.search(rf'JETSETCRAFT_LIBERTY_RUNTIME_SKIP {name} .*expectedPack=false', log):
+                      raise SystemExit(f'The intentional missing-pack lane did not record native skip: {name}')
+              if re.search(r'JETSETCRAFT_GAMETEST_PASS liberty_tacz_(?:loadout|resupply|reload|combat)', log):
+                  raise SystemExit('The missing-pack lane unexpectedly admitted native Helldivers content')
+          missing = [marker for marker in markers if marker not in log]
+          if missing:
+              raise SystemExit('Missing Liberty verification markers:\n' + '\n'.join(missing))
+          print(f'LIBERTY_CI_PASS pack={expected} required_tests={required}')
+          PY
+
+      - name: Verify full-provider dedicated startup and graceful world save
+        if: matrix.pack == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p run
+          printf 'eula=true\n' > run/eula.txt
+          export JETSETCRAFT_SMOKE_RCON_PASSWORD="$(python -c 'import secrets; print(secrets.token_hex(24))')"
+          printf 'server-ip=127.0.0.1\nenable-rcon=true\nrcon.port=25575\nrcon.password=%s\nbroadcast-rcon-to-ops=false\n' \
+            "$JETSETCRAFT_SMOKE_RCON_PASSWORD" > run/server.properties
+          log="$RUNNER_TEMP/liberty-server-smoke.log"
+          setsid ./gradlew runServer -PlibertyTacz=true -PlibertyPackExpected=true --no-daemon > "$log" 2>&1 &
+          server_pid=$!
+          cleanup_failed_server() {
+            if kill -0 "$server_pid" 2>/dev/null; then
+              kill -TERM -- "-$server_pid" 2>/dev/null || true
+              sleep 2
+              kill -KILL -- "-$server_pid" 2>/dev/null || true
+            fi
+            wait "$server_pid" 2>/dev/null || true
+          }
+          trap cleanup_failed_server EXIT
+          ready=0
+          deadline=$((SECONDS + 240))
+          while kill -0 "$server_pid" 2>/dev/null && (( SECONDS < deadline )); do
+            if grep -Eiq 'ModLoadingException|Failed to complete lifecycle event|Exception in thread "main"|FATAL.*jetsetcraft|Encountered an unexpected exception' "$log"; then
+              break
+            fi
+            if grep -Eq 'Done \([0-9.]+s\)!' "$log"; then
+              ready=1
+              break
+            fi
+            sleep 2
+          done
+          if [[ "$ready" -ne 1 ]]; then
+            tail -n 100 "$log"
+            echo '::error::Full-provider dedicated server did not reach a healthy ready state.'
+            exit 1
+          fi
+          python tools/stop_smoke_server.py 2>&1 | tee "$RUNNER_TEMP/liberty-rcon-stop.log"
+          shutdown_complete=0
+          shutdown_deadline=$((SECONDS + 60))
+          while (( SECONDS < shutdown_deadline )); do
+            if ! kill -0 "$server_pid" 2>/dev/null && grep -Fq 'All dimensions are saved' "$log"; then
+              shutdown_complete=1
+              break
+            fi
+            sleep 1
+          done
+          if [[ "$shutdown_complete" -ne 1 ]]; then
+            tail -n 100 "$log"
+            echo '::error::Full-provider server did not complete a graceful save and shutdown.'
+            exit 1
+          fi
+          if ! wait "$server_pid"; then
+            echo '::error::Full-provider launcher exited unsuccessfully after the normal stop.'
+            exit 1
+          fi
+          trap - EXIT
+          test -s run/world/level.dat
+          echo 'JETSETCRAFT_LIBERTY_SERVER_SMOKE_PASS ready authenticated_stop all_dimensions_saved exit_zero'
+
+      - name: Verify Liberty Grind in a real Minecraft client
+        if: matrix.pack == 'true'
+        shell: bash
+        env:
+          LIBGL_ALWAYS_SOFTWARE: "true"
+        run: |
+          set -euo pipefail
+          if ! command -v xvfb-run >/dev/null; then
+            sudo apt-get update
+            sudo apt-get install -y xvfb
+          fi
+          test -s run/world/level.dat
+          mkdir -p run/saves/LibertyGrindAudit
+          cp -a run/world/. run/saves/LibertyGrindAudit/
+          test -s run/saves/LibertyGrindAudit/level.dat
+          log="$RUNNER_TEMP/liberty-client.log"
+          timeout 450s xvfb-run -a -s '-screen 0 1280x720x24' ./gradlew runClient \
+            -PlibertyTacz=true -PlibertyPackExpected=true -Djetsetcraft.libertyVisualAudit=true --no-daemon \
+            2>&1 | tee "$log"
+          grep -Fq 'JETSETCRAFT_LIBERTY_VISUAL_AUDIT_PASS' "$log"
+          grep -Fq 'JETSETCRAFT_LIBERTY_VISUAL_AUDIT_FIXTURE' "$log"
+          if grep -Fq 'JETSETCRAFT_LIBERTY_VISUAL_AUDIT_FAIL' "$log"; then
+            echo '::error::The native Liberty client audit reported a failure.'
+            exit 1
+          fi
+          for capture in 01-war-map-default 02-district-default 03-research-default 04-project-default \
+              05-hud-default 06-war-map-minimum 07-research-minimum 08-project-minimum \
+              09-project-scroll-minimum 10-hud-minimum 11-district-minimum 12-live-pod \
+              13-live-gun-hud 14-live-mission-minimum 15-returned-war-map; do
+            grep -Fq "JETSETCRAFT_LIBERTY_VISUAL_AUDIT_CAPTURE $capture " "$log"
+            compgen -G "run/screenshots/liberty-grind-*-$capture.png" >/dev/null
+          done
+
+      - name: Record native PNG metadata
+        if: always() && matrix.pack == 'true'
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import hashlib
+          import json
+          import os
+          import re
+          from PIL import Image
+
+          log_path = Path(os.environ['RUNNER_TEMP']) / 'liberty-client.log'
+          log = log_path.read_text(errors='replace') if log_path.exists() else ''
+          observed = set(re.findall(r'JETSETCRAFT_LIBERTY_VISUAL_AUDIT_CAPTURE ([a-z0-9-]+) ', log))
+          captures = []
+          for path in sorted(Path('run/screenshots').glob('liberty-grind-*.png')):
+              with Image.open(path) as picture:
+                  if picture.format != 'PNG':
+                      raise SystemExit(f'Native capture is not a PNG: {path}')
+                  width, height = picture.size
+                  picture.verify()
+              label = re.search(r'-(\d{2}-[^.]+)\.png$', path.name).group(1)
+              captures.append({'file': path.name, 'label': label, 'width': width, 'height': height,
+                               'bytes': path.stat().st_size, 'sha256': hashlib.sha256(path.read_bytes()).hexdigest(),
+                               'capture_marker_observed': label in observed})
+          output = Path('build/verification/liberty-capture-metadata.json')
+          output.parent.mkdir(parents=True, exist_ok=True)
+          output.write_text(json.dumps({
+              'source_commit': os.environ.get('GITHUB_SHA', ''),
+              'world': 'LibertyGrindAudit', 'tacz': '1.1.8-hotfix2', 'helldivers_file': 9341504,
+              'audit_pass_marker': 'JETSETCRAFT_LIBERTY_VISUAL_AUDIT_PASS' in log,
+              'audit_failure_marker': 'JETSETCRAFT_LIBERTY_VISUAL_AUDIT_FAIL' in log,
+              'capture_count': len(captures), 'captures': captures,
+              'scope': 'Native activity handoff, default/minimum UI, live pod and loan weapon, early return. '
+                       'The client audit does not simulate objective, research reward or ship extraction completion.'
+          }, indent=2) + '\n')
+          print(f'Recorded {len(captures)} native PNGs in {output}')
+          PY
+
+      - name: Upload native Liberty client captures and metadata
+        if: always() && matrix.pack == 'true'
+        uses: actions/upload-artifact@v7
+        with:
+          name: jetsetcraft-liberty-native-client-${{ github.sha }}
+          path: |
+            run/screenshots/liberty-grind-*.png
+            build/verification/liberty-capture-metadata.json
+          if-no-files-found: warn
+
+      - name: Upload logs and JetSetCraft build only
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: jetsetcraft-liberty-${{ matrix.lane }}-${{ github.sha }}
+          path: |
+            ${{ runner.temp }}/liberty-*.log
+            build/libs/*.jar
+            run/crash-reports/*.txt
+          if-no-files-found: warn

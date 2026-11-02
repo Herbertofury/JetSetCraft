@@ -1,5 +1,9 @@
 package com.herberto.jetsetcraft.crew;
 
+import com.herberto.jetsetcraft.liberty.LibertyManager;
+import com.herberto.jetsetcraft.liberty.LibertyResearch;
+import com.herberto.jetsetcraft.liberty.LibertyWorld;
+
 import com.herberto.jetsetcraft.JetSetCraft;
 import com.herberto.jetsetcraft.activity.ActivityManager;
 import com.herberto.jetsetcraft.blockentity.BoomboxBlockEntity;
@@ -109,6 +113,8 @@ public final class CrewHouseManager {
         if (data.blocked(player.getUUID())) { send(player, "This crew record needs recovery or a newer compatible mod version; existing data was retained."); return; }
         if (action.equals("style")) {
             boolean selected = data.selectStyle(player.getUUID(), value, revision);
+            if (selected && LibertyResearch.preparation(player).isPresent()) LibertyResearch.selectPreparation(player, LibertyResearch.NONE,
+                    LibertyResearch.snapshot(player).getLong("Revision"));
             send(player, !selected ? "That style is locked, unavailable or the page is stale. Refresh the Style Library."
                     : CrewStyleLibrary.HOME.equals(value) ? "Your next Rush uses the selected operational house preparation, if available."
                     : "Starting style selected. Your next Rush begins with one rank of "
@@ -264,7 +270,7 @@ public final class CrewHouseManager {
         if (player == null || !normalModeReason(player).isEmpty()) return Optional.empty();
         CrewHouseData data = CrewHouseData.get(player.getServer());
         if (data.blocked(player.getUUID())) return Optional.empty();
-        Optional<RushRun.Upgrade> style = CrewStyleLibrary.preparation(data, player.getUUID());
+        Optional<RushRun.Upgrade> style = CrewStyleLibrary.preparation(data, player);
         if (style.isPresent()) return style;
         CrewProfile profile = data.profile(player.getUUID());
         if (profile == null || !managementReason(player, profile).isEmpty()) return Optional.empty();
@@ -322,6 +328,16 @@ public final class CrewHouseManager {
                 Math.min(40, 2 + minutes), "rush_return");
     }
 
+    /** Expedition objectives train the same crew and Style Library, with an extra award for actual extraction. */
+    public static ActivityReward bankLiberty(ServerPlayer player, UUID runId, ResourceLocation rivalGang,
+                                             int completedObjectives, boolean extracted) {
+        if (completedObjectives < 1 || completedObjectives > 16) return ActivityReward.NONE;
+        int objectives = Math.min(6, completedObjectives);
+        return settle(player, runId, rivalGang, objectives * 4 + (extracted ? 8 : 0),
+                objectives * 25 + (extracted ? 50 : 0), objectives * 10 + (extracted ? 25 : 0),
+                objectives * 3 + (extracted ? 5 : 0), "liberty_grind");
+    }
+
     private static ActivityReward settle(ServerPlayer player, UUID receipt, ResourceLocation gang,
                                          int supplies, int xp, int training, int reputation, String source) {
         if (player == null || player.getServer() == null || receipt == null || gang == null
@@ -357,7 +373,8 @@ public final class CrewHouseManager {
 
     public static CompoundTag snapshot(ServerPlayer player) {
         CompoundTag out = new CompoundTag(); out.putBoolean("Open", true); out.putString("Message", "");
-        boolean inRush = RivalRushManager.active(player) || RushWorld.isRush(player.level()); out.putBoolean("InRush", inRush);
+        boolean inRush = RivalRushManager.active(player) || RushWorld.isRush(player.level())
+                || LibertyManager.active(player) || LibertyWorld.isLiberty(player.level()); out.putBoolean("InRush", inRush);
         CrewHouseData data = CrewHouseData.get(player.getServer());
         CrewProfile profile = data.profile(player.getUUID());
         Candidate candidate = candidate(player);
@@ -463,7 +480,9 @@ public final class CrewHouseManager {
 
     private static String normalModeReason(ServerPlayer player) {
         if (!JetSetConfig.SERVER.enableCrewHouse.get()) return "Crew homes are disabled by this server; saved progression is retained.";
-        if (RivalRushManager.active(player) || RushWorld.isRush(player.level())) return "Return to Minecraft before managing your home.";
+        if (RivalRushManager.active(player) || RushWorld.isRush(player.level()) || LibertyManager.active(player)
+                || LibertyManager.hasReturn(player) || LibertyWorld.isLiberty(player.level()))
+            return "Return to Minecraft before managing your home.";
         if (ActivityManager.active(player)) return "Finish or cancel your street activity before managing your home.";
         if (!player.isAlive() || player.isSpectator()) return "Manage your crew while alive and outside Spectator mode.";
         return "";

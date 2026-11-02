@@ -39,6 +39,7 @@ public record CrewRewardReceipt(UUID id, String source, String gang, long earned
             case "rush_arena_training" -> "Training arena cleared";
             case "rush_arena_reputation" -> "Reputation arena cleared";
             case "rush_return" -> "Rival Rush banked";
+            case "liberty_grind" -> "Liberty Grind debrief";
             default -> "Crew progress earned";
         };
     }

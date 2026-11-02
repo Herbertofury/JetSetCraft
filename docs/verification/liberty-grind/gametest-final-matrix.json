@@ -1,0 +1,121 @@
+{
+  "schema": 1,
+  "status": "PASS",
+  "kind": "local native Forge GameTest matrix; not a hosted CI result",
+  "code_checkpoint": "238e6458fd74cc1698dd6178c719de0b9b23ee56",
+  "input_digest_algorithm": "SHA-256 of UTF-8 records FILE_SHA256 + two spaces + relative POSIX path + LF, sorted by path",
+  "source_input_sha256": "c8715cd200a09416a7690a5f78edccfa785c4b0c0b240505a7853ac90c7de780",
+  "source_input_count": 654,
+  "built_artifacts": {
+    "build/libs/jetsetcraft-1.20.1-0.4.0-alpha.8.jar": "a550f590cbcd8d80797d8c06a1970f285237295f2ba49fe918568a63aae15a47"
+  },
+  "native_gallery_source_input_sha256": "a102469ffdeb48ccf5e7b8e1cf296d9e9597e6583593bf3fb31153c4dc978970",
+  "source_changes_since_native_gallery": [
+    {
+      "path": "src/main/java/com/herberto/jetsetcraft/gametest/ActivityGameTests.java",
+      "native_sha256": "df5394e01d87ff53486701ac2e49a50ce224d67fecb5965899ea971871d41145",
+      "final_sha256": "2867a5ed20070a07143bb59697a21804aab199b586e8880f19628bf1a83c28eb"
+    }
+  ],
+  "minecraft": "1.20.1",
+  "forge": "47.4.23",
+  "java": "17.0.20",
+  "optional_provider": {
+    "name": "TaCZ",
+    "version": "1.1.8-hotfix2",
+    "file": 9037989
+  },
+  "optional_pack": {
+    "name": "Helldivers:Liberty Day",
+    "file": 9341504,
+    "sha256": "fe4e01693cf3957d971e556a1d2fcd9ae0c98cb973cf47aa6d52e157c187378a"
+  },
+  "started_utc": "2026-11-02T08:29:06+00:00",
+  "finished_utc": "2026-11-02T08:35:42+00:00",
+  "timestamps": "UTC from process epoch timestamps; raw JVM log labels are preserved in their original local timezone.",
+  "world_isolation": "Each lane started with an absent GameTest world. Previous worlds were retained separately; the original world and exact official pack were restored afterward.",
+  "source_and_artifact_identity": "All listed source inputs and built JAR hashes were compared after every passing lane and remained identical. Compilation and resource processing were explicitly excluded.",
+  "lanes": [
+    {
+      "name": "base",
+      "status": "PASS",
+      "required_tests_passed": 84,
+      "provider_present": false,
+      "pack_present": false,
+      "explicit_native_optional_skips": 9,
+      "command": [
+        "timeout",
+        "600s",
+        "./gradlew",
+        "runGameTestServer",
+        "-PlibertyTacz=false",
+        "-PlibertyPackExpected=false",
+        "-x",
+        "compileJava",
+        "-x",
+        "processResources",
+        "--no-daemon"
+      ],
+      "exit_code": 0,
+      "started_utc": "2026-11-02T08:29:06+00:00",
+      "finished_utc": "2026-11-02T08:31:24+00:00",
+      "duration_seconds": 138.57,
+      "log": "gametest-final-base.log",
+      "log_sha256": "858c48c85a2b1faa9a6aa123d98121d333df3f593738f5f2596daf82f8b45a3c"
+    },
+    {
+      "name": "missing-pack",
+      "status": "PASS",
+      "required_tests_passed": 84,
+      "provider_present": true,
+      "pack_present": false,
+      "explicit_native_optional_skips": 9,
+      "command": [
+        "timeout",
+        "600s",
+        "./gradlew",
+        "runGameTestServer",
+        "-PlibertyTacz=true",
+        "-PlibertyPackExpected=false",
+        "-x",
+        "compileJava",
+        "-x",
+        "processResources",
+        "--no-daemon"
+      ],
+      "exit_code": 0,
+      "started_utc": "2026-11-02T08:31:24+00:00",
+      "finished_utc": "2026-11-02T08:33:30+00:00",
+      "duration_seconds": 125.88,
+      "log": "gametest-final-missing-pack.log",
+      "log_sha256": "14831acab6fdbe77e11cd5451d2c79734a9e648d3ee45b013a0097971410bf09"
+    },
+    {
+      "name": "full-provider",
+      "status": "PASS",
+      "required_tests_passed": 84,
+      "provider_present": true,
+      "pack_present": true,
+      "explicit_native_optional_skips": 0,
+      "command": [
+        "timeout",
+        "600s",
+        "./gradlew",
+        "runGameTestServer",
+        "-PlibertyTacz=true",
+        "-PlibertyPackExpected=true",
+        "-x",
+        "compileJava",
+        "-x",
+        "processResources",
+        "--no-daemon"
+      ],
+      "exit_code": 0,
+      "started_utc": "2026-11-02T08:33:30+00:00",
+      "finished_utc": "2026-11-02T08:35:42+00:00",
+      "duration_seconds": 131.94,
+      "log": "gametest-final-full-provider.log",
+      "log_sha256": "f66f987e342b5140f0ff4ab6bae47f4b30f3c291096889c8f9835b62df9deb06"
+    }
+  ]
+}

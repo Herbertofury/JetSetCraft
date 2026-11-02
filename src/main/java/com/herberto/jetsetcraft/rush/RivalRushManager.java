@@ -353,6 +353,10 @@ public final class RivalRushManager {
         LAST_START.put(player.getUUID(), now);
         if (!JetSetConfig.SERVER.enableRivalRush.get()) return fail(player, "Rival Rush is disabled by this server.");
         if (active(player)) return fail(player, "Finish or leave your current Rush first.");
+        if (com.herberto.jetsetcraft.liberty.LibertyManager.active(player)
+                || com.herberto.jetsetcraft.liberty.LibertyManager.hasReturn(player)
+                || com.herberto.jetsetcraft.liberty.LibertyWorld.isLiberty(player.level()))
+            return fail(player, "Return from Liberty Grind before beginning Rival Rush.");
         if (ActivityManager.active(player)) return fail(player, "Finish or cancel your street activity before starting Rival Rush.");
         RushArenaCatalog.Profile firstArena = arenaProfile == null ? null : RushArenaCatalog.find(arenaProfile).orElse(null);
         if (arenaProfile != null && firstArena == null) return fail(player, "That arena is unavailable. Refresh the arena catalogue.");

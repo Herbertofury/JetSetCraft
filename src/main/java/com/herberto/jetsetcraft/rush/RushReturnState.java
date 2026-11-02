@@ -32,7 +32,13 @@ public final class RushReturnState {
 
     /** Refuses to overwrite a pending recovery. The caller must recover first instead of nesting sessions. */
     public static boolean capture(ServerPlayer player) {
-        if (player == null || !player.isAlive() || hasJournal(player)) return false;
+        return capture(player, KEY);
+    }
+
+    /** Shared serialization with distinct mode ownership; the existing Rush key remains unchanged. */
+    public static boolean capture(ServerPlayer player, String key) {
+        if (!allowedKey(key) || player == null || !player.isAlive() || hasJournal(player)
+                || hasJournal(player, "jetsetcraft:LibertyReturn")) return false;
         JetSetData ride = player.getCapability(JetSetDataProvider.CAPABILITY).resolve().orElse(null);
         if (ride == null || !finite(player.getX(), player.getY(), player.getZ())) return false;
         // Vanilla returns a container's carried stack before the snapshot. External container contents stay owned
@@ -70,7 +76,7 @@ public final class RushReturnState {
         snapshot.putInt("Fire", player.getRemainingFireTicks());
         snapshot.putInt("Air", player.getAirSupply());
         CompoundTag persisted = persisted(player, true);
-        persisted.put(KEY, snapshot);
+        persisted.put(key, snapshot);
         player.getPersistentData().put(Player.PERSISTED_NBT_TAG, persisted);
         return true;
     }
@@ -80,8 +86,12 @@ public final class RushReturnState {
      * The journal is removed last, so an exception leaves an idempotent recovery source available on login.
      */
     public static boolean restore(ServerPlayer player) {
-        if (player == null || !hasJournal(player)) return false;
-        CompoundTag snapshot = journal(player);
+        return restore(player, KEY);
+    }
+
+    public static boolean restore(ServerPlayer player, String key) {
+        if (!allowedKey(key) || player == null || !hasJournal(player, key)) return false;
+        CompoundTag snapshot = journal(player, key);
         if (!validJournal(snapshot, player)) {
             JetSetCraft.LOGGER.error("Retaining invalid Rival Rush return journal for {}", player.getUUID());
             return false;
@@ -144,9 +154,9 @@ public final class RushReturnState {
                 player.inventoryMenu.broadcastChanges();
                 JetSetNetwork.sync(player, ride);
                 if (fallback) player.sendSystemMessage(Component.literal(
-                        "Rival Rush restored your belongings at the world spawn because your original return location was unavailable."));
+                        "Your belongings were restored at the world spawn because your original return location was unavailable."));
             }
-            persisted(player, false).remove(KEY);
+            persisted(player, false).remove(key);
             return true;
         } catch (RuntimeException error) {
             JetSetCraft.LOGGER.error("Rival Rush could not restore {} yet; retaining the return journal",
@@ -156,13 +166,21 @@ public final class RushReturnState {
     }
 
     public static boolean hasJournal(ServerPlayer player) {
-        return player != null && persisted(player, false).contains(KEY, Tag.TAG_COMPOUND);
+        return hasJournal(player, KEY);
+    }
+    public static boolean hasJournal(ServerPlayer player, String key) {
+        return allowedKey(key) && player != null && persisted(player, false).contains(key);
     }
 
     /** Defensive copy for recovery inspection and regression tests. */
     public static CompoundTag journal(ServerPlayer player) {
-        return player == null ? new CompoundTag() : persisted(player, false).getCompound(KEY).copy();
+        return journal(player, KEY);
     }
+    public static CompoundTag journal(ServerPlayer player, String key) {
+        return !allowedKey(key) || player == null ? new CompoundTag() : persisted(player, false).getCompound(key).copy();
+    }
+
+    private static boolean allowedKey(String key) { return KEY.equals(key) || "jetsetcraft:LibertyReturn".equals(key); }
 
     private static CompoundTag persisted(ServerPlayer player, boolean create) {
         CompoundTag data = player.getPersistentData();

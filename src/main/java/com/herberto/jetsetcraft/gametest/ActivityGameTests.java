@@ -48,7 +48,7 @@ public final class ActivityGameTests {
 
     @GameTest(template = "hoverboard_empty", timeoutTicks = 100)
     public static void pendingRewardsTransferReceiptsAndTrainingExactlyOnce(GameTestHelper helper) {
-        BlockPos anchor = new BlockPos(24000, 100, 16000);
+        BlockPos anchor = freeHomeAnchor(helper);
         ServerPlayer owner = player(helper, "wallet", anchor);
         CrewHouseData store = CrewHouseData.get(owner.getServer());
         UUID tag = UUID.randomUUID(), rush = UUID.randomUUID();
@@ -73,12 +73,16 @@ public final class ActivityGameTests {
         helper.getLevel().setBlockAndUpdate(anchor.below(), Blocks.STONE.defaultBlockState());
         helper.getLevel().setBlockAndUpdate(anchor, ModBlocks.BOOMBOX.get().defaultBlockState());
         CrewHouseManager.openAt(owner, anchor);
+        CompoundTag founding = CrewHouseManager.snapshot(owner);
+        check(founding.getBoolean("CanFound"), "The real Boombox founding fixture was unavailable at " + anchor
+                + ": " + founding.getString("FoundReason"));
         CrewHouseManager.handleAction(owner, "found", "Every mode crew", 0, null, null, 0);
         CrewProfile home = store.profile(owner.getUUID());
         check(home != null && home.supplies() == 80 && home.xp() == 277 && home.members().get(0).xp() == 110
                         && home.reputation(GANG.toString()) == 28 && store.pendingSupplies(owner.getUUID()) == 0
                         && store.pendingTraining(owner.getUUID()) == 0 && store.pendingXp(owner.getUUID()) == 0,
-                "Founding failed to transfer pending supplies, crew/member XP and reputation exactly once");
+                "Founding failed to transfer pending supplies, crew/member XP and reputation exactly once: "
+                        + (home == null ? CrewHouseManager.snapshot(owner) : home.save()));
         check(!CrewHouseManager.bankActivity(owner, tag, GANG, "tag", 400, 6, 600).accepted(),
                 "A pre-house receipt became payable again after transfer");
         CrewHouseManager.bankRush(owner, rush, GANG, 1200, 3, 3, 1000);
@@ -164,8 +168,9 @@ public final class ActivityGameTests {
         ActivityManager.open(owner);
         CompoundTag random = ActivityManager.snapshot(owner);
         check(random.getString("SelectedMode").equals("random") && !ActivityManager.active(owner)
-                        && random.getList("Activities", 10).size() == 5,
-                "The generic invitation did not put random and four actual modes in one optional catalogue");
+                        && random.getList("Activities", 10).size() == 6
+                        && random.getList("Activities", 10).stream().anyMatch(value -> value instanceof CompoundTag row && row.getString("Id").equals("liberty_grind")),
+                "The generic invitation did not put random and all five actual modes, including Liberty Grind, in one optional catalogue");
         helper.runAfterDelay(5, () -> {
             action(owner, "refresh", "");
             check(ActivityManager.snapshot(owner).getString("Mode").equals(random.getString("Mode"))
@@ -235,36 +240,58 @@ public final class ActivityGameTests {
         BlockPos anchor = arena(helper, 30000);
         ServerPlayer owner = player(helper, "hill", anchor);
         ActivityManager.openAt(owner, anchor);
-        helper.runAfterDelay(5, () -> {
-            action(owner, "select", "king_of_hill");
-            helper.runAfterDelay(5, () -> {
-                action(owner, "launch", ""); check(ActivityManager.active(owner), "A clear three-site hill layout was rejected: " + diagnostics(owner, anchor));
-                helper.runAfterDelay(35, () -> {
-                    List<Mob> rivals = actors(owner, anchor); check(rivals.size() == 3, "Hill mode did not create its three contenders");
-                    Vec3 hill = hill(anchor, 0); owner.moveTo(hill);
-                    for (Mob mob : rivals) mob.moveTo(hill.add(1, 0, 0));
-                    int before = ActivityManager.snapshot(owner).getInt("Progress");
-                    helper.runAfterDelay(5, () -> {
-                        check(ActivityManager.snapshot(owner).getInt("Progress") == before,
-                                "Contested hill presence incorrectly advanced capture time");
-                        for (Mob mob : actors(owner, anchor)) owner.attack(mob);
-                        helper.runAfterDelay(20, () -> {
-                            int held = ActivityManager.snapshot(owner).getInt("Progress");
-                            check(held > before, "Tagging contenders did not open a real capture window");
-                            owner.moveTo(Vec3.atBottomCenterOf(anchor));
-                            helper.runAfterDelay(20, () -> {
-                                check(ActivityManager.snapshot(owner).getInt("Progress") == held,
-                                        "Being outside the hill still earned capture time");
-                                hillLoop(helper, owner, anchor, 0);
-                            });
-                        });
-                    });
+        NativeClock clock = new NativeClock(helper, () -> ActivityManager.forget(owner));
+        clock.later(5, () -> prepareHill(clock, helper, owner, anchor, 80));
+    }
+
+    private static void prepareHill(NativeClock clock, GameTestHelper helper, ServerPlayer owner, BlockPos anchor, int remaining) {
+        boolean ticking = true;
+        for (int x : new int[]{-12, 12}) for (int z : new int[]{-12, 12})
+            ticking &= owner.serverLevel().isPositionEntityTicking(anchor.offset(x, 0, z));
+        if (!ticking) {
+            check(remaining > 0, "The hill fixture never obtained native entity-ticking residency: " + diagnostics(owner, anchor));
+            clock.later(1, () -> prepareHill(clock, helper, owner, anchor, remaining - 1)); return;
+        }
+        action(owner, "select", "king_of_hill");
+        clock.later(5, () -> {
+            action(owner, "launch", "");
+            check(ActivityManager.active(owner), "A clear three-site hill layout was rejected: " + diagnostics(owner, anchor));
+            // Production retries safe native spawns every ten ticks, up to twelve attempts for three
+            // contenders. Observe that bounded real window instead of assuming three first-try spawns.
+            clock.later(1, () -> awaitHillContenders(clock, helper, owner, anchor, 120));
+        });
+    }
+
+    private static void awaitHillContenders(NativeClock clock, GameTestHelper helper, ServerPlayer owner, BlockPos anchor, int remaining) {
+        List<Mob> rivals = actors(owner, anchor);
+        check(ActivityManager.active(owner), "The hill round ended before its three contenders arrived: " + diagnostics(owner, anchor));
+        check(rivals.size() <= 3, "Hill mode exceeded its three real contenders: " + diagnostics(owner, anchor));
+        if (rivals.size() < 3) {
+            check(remaining > 0, "Hill mode did not create its three contenders within the native spawn window: " + diagnostics(owner, anchor));
+            clock.later(1, () -> awaitHillContenders(clock, helper, owner, anchor, remaining - 1)); return;
+        }
+        check(rivals.size() == 3, "Hill mode did not create exactly three native contenders");
+        Vec3 hill = hill(anchor, 0); owner.moveTo(hill);
+        for (Mob mob : rivals) mob.moveTo(hill.add(1, 0, 0));
+        int before = ActivityManager.snapshot(owner).getInt("Progress");
+        clock.later(5, () -> {
+            check(ActivityManager.snapshot(owner).getInt("Progress") == before,
+                    "Contested hill presence incorrectly advanced capture time");
+            for (Mob mob : actors(owner, anchor)) owner.attack(mob);
+            clock.later(20, () -> {
+                int held = ActivityManager.snapshot(owner).getInt("Progress");
+                check(held > before, "Tagging contenders did not open a real capture window");
+                owner.moveTo(Vec3.atBottomCenterOf(anchor));
+                clock.later(20, () -> {
+                    check(ActivityManager.snapshot(owner).getInt("Progress") == held,
+                            "Being outside the hill still earned capture time");
+                    hillLoop(clock, helper, owner, anchor, 0);
                 });
             });
         });
     }
 
-    private static void hillLoop(GameTestHelper helper, ServerPlayer owner, BlockPos anchor, int attempt) {
+    private static void hillLoop(NativeClock clock, GameTestHelper helper, ServerPlayer owner, BlockPos anchor, int attempt) {
         try {
             check(attempt < 75, "Three real hill captures failed to complete within the bounded session");
             CompoundTag state = ActivityManager.snapshot(owner);
@@ -276,8 +303,27 @@ public final class ActivityGameTests {
             }
             Vec3 hill = hill(anchor, Math.min(2, state.getInt("Progress") / 160)); owner.moveTo(hill);
             for (Mob mob : actors(owner, anchor)) { mob.moveTo(hill.add(1, 0, 0)); owner.attack(mob); }
-            helper.runAfterDelay(10, () -> hillLoop(helper, owner, anchor, attempt + 1));
+            clock.later(10, () -> hillLoop(clock, helper, owner, anchor, attempt + 1));
         } catch (RuntimeException error) { ActivityManager.forget(owner); throw error; }
+    }
+
+    /** One initial native tick registration; continuations never mutate GameTest's scheduled-task map. */
+    private static final class NativeClock {
+        private int ticks, due;
+        private Runnable pending;
+        NativeClock(GameTestHelper helper, Runnable cleanup) {
+            helper.onEachTick(() -> {
+                ticks++;
+                if (pending == null || ticks < due) return;
+                Runnable action = pending; pending = null;
+                try { action.run(); }
+                catch (RuntimeException error) { cleanup.run(); throw error; }
+            });
+        }
+        void later(int delay, Runnable action) {
+            check(pending == null && delay > 0, "The native activity fixture overwrote a scheduled continuation");
+            due = ticks + delay; pending = action;
+        }
     }
 
     private static Vec3 hill(BlockPos anchor, int index) {
@@ -320,6 +366,20 @@ public final class ActivityGameTests {
         check(box.setTarget(head), "The real test Boombox rejected an explicit source-mob adapter head");
         return anchor;
     }
+    private static BlockPos freeHomeAnchor(GameTestHelper helper) {
+        CrewHouseData data = CrewHouseData.get(helper.getLevel().getServer());
+        for (int attempt = 0; attempt < 128; attempt++) {
+            BlockPos anchor = new BlockPos(24000 + attempt * 128, 100, 16000);
+            boolean occupied = data.profiles().stream().anyMatch(profile -> {
+                BlockPos existing = BlockPos.of(profile.save().getLong("Anchor"));
+                return Math.abs((long) existing.getX() - anchor.getX()) < 100
+                        && Math.abs((long) existing.getZ() - anchor.getZ()) < 100;
+            });
+            if (!occupied) return anchor;
+        }
+        throw new GameTestAssertException("Could not reserve an isolated plot for the earned-reward founding fixture");
+    }
+
     private static ServerPlayer player(GameTestHelper helper, String name, BlockPos anchor) {
         ServerPlayer player = FakePlayerFactory.get(helper.getLevel(), new GameProfile(UUID.randomUUID(), "JSC_activity_" + name));
         player.setGameMode(GameType.SURVIVAL); player.setHealth(player.getMaxHealth());
@@ -343,6 +403,8 @@ public final class ActivityGameTests {
         CompoundTag state = ActivityManager.snapshot(player);
         return "summary=" + state.getString("Summary") + ", mode=" + state.getString("Mode")
                 + ", canLaunch=" + state.getBoolean("CanLaunch") + ", version=" + state.getInt("Version")
+                + ", active=" + state.getBoolean("Active") + ", remainingTicks=" + state.getLong("RemainingTicks")
+                + ", actors=" + actors(player, anchor).stream().map(mob -> mob.getType() + "@" + mob.position()).toList()
                 + ", anchorLoaded=" + player.serverLevel().hasChunkAt(anchor)
                 + ", entityTicking=" + player.serverLevel().isPositionEntityTicking(anchor)
                 + ", distanceSquared=" + player.distanceToSqr(Vec3.atCenterOf(anchor))
