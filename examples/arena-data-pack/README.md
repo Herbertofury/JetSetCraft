@@ -1,6 +1,6 @@
-# Your first custom Rival Rush arena
+# Your custom Rival Rush arena trio
 
-This is an editable **Minecraft 1.20.1 data pack for JetSetCraft 0.4.0-alpha.4 (introduced in alpha.3)**. It adds **Crossfade Yard** to the server's arena catalogue. It requires no optional dimension or magic mod.
+This is an editable **Minecraft 1.20.1 data pack for JetSetCraft 0.4.0-alpha.5 (introduced in alpha.3)**. It adds **Crossfade Yard**, **Collector's Loop** and **Chorus Terrace** to the server's arena catalogue. It requires no optional dimension or magic mod.
 
 ## Install and select
 
@@ -8,7 +8,17 @@ This is an editable **Minecraft 1.20.1 data pack for JetSetCraft 0.4.0-alpha.4 (
 2. Reload data packs with `/reload`, or restart the world/server. Operators can inspect `/datapack list` to confirm it is enabled.
 3. Open `/jetsetcraft rush`, select **Arena circuit**, then use the starting-arena selector to choose **Crossfade Yard**. Start the six-arena journey. That first profile is deliberate; subsequent route forks use the server catalogue.
 
-A run keeps the arena definitions it started with. Leave and begin another run after editing/reloading to use the updated definitions. This pack adds an arena; it does not replace existing arenas, make a dimension, or construct anything in ordinary Minecraft.
+A run keeps the arena definitions it started with. Leave and begin another run after editing/reloading to use the updated definitions. This pack adds three arenas; it does not replace existing arenas, make a dimension, or construct anything in ordinary Minecraft.
+
+## Three different reasons to take a route
+
+| Arena | Geometry and objective | Reward for this run | Shared crew emphasis |
+|---|---|---|---|
+| Crossfade Yard | Radius 28 crossing, 150 seconds and 10 defeats | One critical chance and critical power rank | Reputation |
+| Collector's Loop | Radius 24 loop, 120 seconds and 8 defeats | Pickup reach plus a temporary owned-card magnet | Supplies |
+| Chorus Terrace | Radius 32 terraces, 180 seconds and 14 defeats | Two ability-area ranks | Member training |
+
+All three join the existing route pool; installing this pack does not force a fixed three-room order. Choose the starting profile deliberately, then compare the actual offered forks. Routes prioritize unvisited profiles and keep different reward families available when the installed catalogue allows it. The six colored cache patterns inside each arena provide another deliberate choice: orange damage, magenta critical power, cyan area, purple artifact, yellow magnet or lime recovery. The cache list includes names as well as colors.
 
 ## Make it yours
 
