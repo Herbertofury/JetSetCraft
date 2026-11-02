@@ -131,7 +131,18 @@ jobs:
             'JETSETCRAFT_GAMETEST_PASS rush_route_exploration' \
             'JETSETCRAFT_GAMETEST_PASS crew_style_shared_rewards' \
             'JETSETCRAFT_GAMETEST_PASS crew_style_persistence' \
-            'JETSETCRAFT_GAMETEST_PASS crew_style_entry'; do
+            'JETSETCRAFT_GAMETEST_PASS crew_style_entry' \
+            'JETSETCRAFT_GAMETEST_PASS rush_draft_controls' \
+            'JETSETCRAFT_GAMETEST_PASS rush_evolution_rules' \
+            'JETSETCRAFT_GAMETEST_PASS rush_debrief_rules' \
+            'JETSETCRAFT_GAMETEST_PASS rush_evolution_cryo' \
+            'JETSETCRAFT_GAMETEST_PASS rush_evolution_railstorm' \
+            'JETSETCRAFT_GAMETEST_PASS rush_evolution_return' \
+            'JETSETCRAFT_GAMETEST_PASS rush_elite_tells' \
+            'JETSETCRAFT_GAMETEST_PASS rush_tagger_cover' \
+            'JETSETCRAFT_GAMETEST_PASS rush_headliner_victory' \
+            'JETSETCRAFT_GAMETEST_PASS rush_headliner_arena_gate' \
+            'JETSETCRAFT_GAMETEST_PASS rush_headliner_recovery'; do
             grep -Fq "$marker" "$log" || { echo "::error::Missing GameTest marker: $marker"; exit 1; }
           done
           expected_tests=$(python -c "import pathlib,re; print(sum(len(re.findall(r'@GameTest\\s*\\(', p.read_text()) ) for p in pathlib.Path('src/main/java/com/herberto/jetsetcraft/gametest').glob('*.java')))")
@@ -246,11 +257,14 @@ jobs:
           grep -Fq 'JETSETCRAFT_CREW_VISUAL_AUDIT_PASS' "$log"
           grep -Fq 'JETSETCRAFT_ACTIVITY_VISUAL_AUDIT_PASS' "$log"
           grep -Fq 'JETSETCRAFT_RUSH_VISUAL_AUDIT_FIXTURE_OBSERVED' "$log"
+          grep -Fq 'JETSETCRAFT_PROGRESSION_VISUAL_AUDIT_PASS' "$log"
+          grep -Fq 'JETSETCRAFT_PROGRESSION_AUDIT_CLOCK_FIXTURE' "$log"
+          grep -Fq 'JETSETCRAFT_PROGRESSION_AUDIT_DEBRIEF_OBSERVED' "$log"
           if grep -Fq 'JETSETCRAFT_RUSH_VISUAL_AUDIT_FAIL' "$log"; then
             echo '::error::Rival Rush client audit reported failure.'
             exit 1
           fi
-          for capture in 01-setup 02-district-hud 03-album 04-return-result 05-crew-home 06-crew-roster 07-crew-facilities 08-crew-jobs 09-activities 10-arena-route 11-journey-map 12-run-build 13-crew-progress 14-cache-scout 15-style-library; do
+          for capture in 01-setup 02-district-hud 03-album 04-return-result 05-crew-home 06-crew-roster 07-crew-facilities 08-crew-jobs 09-activities 10-arena-route 11-journey-map 12-run-build 13-crew-progress 14-cache-scout 15-style-library 16-build-paths 17-draft-agency 18-headliner-tell 19-run-debrief; do
             grep -Fq "JETSETCRAFT_RUSH_VISUAL_AUDIT_CAPTURE $capture " "$log"
             compgen -G "run/screenshots/rival-rush-*-$capture.png" >/dev/null
           done
