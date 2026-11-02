@@ -1,5 +1,6 @@
 package com.herberto.jetsetcraft.crew;
 
+import com.herberto.jetsetcraft.data.SavedDataCheckpoint;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -25,6 +26,9 @@ public final class CrewHouseData extends SavedData {
 
     public static CrewHouseData get(MinecraftServer server) {
         return server.overworld().getDataStorage().computeIfAbsent(CrewHouseData::load, CrewHouseData::new, NAME);
+    }
+    public static boolean saveAcknowledged(MinecraftServer server) {
+        return server != null && SavedDataCheckpoint.saveAndAcknowledge(server, NAME, get(server));
     }
     public CrewProfile profile(UUID owner) { return profiles.get(owner); }
     public Collection<CrewProfile> profiles() { return java.util.List.copyOf(profiles.values()); }

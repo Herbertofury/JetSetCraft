@@ -1,9 +1,11 @@
 package com.herberto.jetsetcraft.crew;
 
 import com.herberto.jetsetcraft.compat.RushSpellCompat;
+import com.herberto.jetsetcraft.liberty.LibertyResearch;
 import com.herberto.jetsetcraft.rush.RushRun;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.server.level.ServerPlayer;
 
 import java.util.List;
 import java.util.Optional;
@@ -42,6 +44,13 @@ public final class CrewStyleLibrary {
         String chosen = data.selectedStyle(owner);
         if (HOME.equals(chosen) || !canSelect(data, owner, chosen)) return Optional.empty();
         return LESSONS.stream().filter(lesson -> lesson.upgrade().name().equals(chosen)).map(Lesson::upgrade).findFirst();
+    }
+
+    /** A researched preparation replaces the learned style in the same single starting-rank slot. */
+    public static Optional<RushRun.Upgrade> preparation(CrewHouseData data, ServerPlayer player) {
+        if (player == null || data.blocked(player.getUUID())) return Optional.empty();
+        Optional<RushRun.Upgrade> research = LibertyResearch.preparation(player);
+        return research.isPresent() ? research : preparation(data, player.getUUID());
     }
 
     public static CompoundTag snapshot(CrewHouseData data, UUID owner, boolean canManage) {
