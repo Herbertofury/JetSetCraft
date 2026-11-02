@@ -1,0 +1,521 @@
+{
+  "schema": 1,
+  "version": "0.4.0-alpha.6",
+  "scope": "Local isolated base build, GameTests, dedicated-server smoke and native client captures; remote CI publication has a separate receipt.",
+  "recorded_at_utc": "2026-11-02T05:17:32+00:00",
+  "source_identity": {
+    "commit": "f438241e32f8d753cab095ff8f70a03c1302116c",
+    "tree": "b2618bbabd94649a88039eefdd2625f9f0839127",
+    "replay_directory": "/workspace/scratch/5c41974df12d/JetSetCraft-alpha6-replay",
+    "tracked_worktree_clean_at_packaging": true,
+    "identity_check": "git show -s --format=%H %T HEAD; git status --porcelain --untracked-files=no",
+    "uploaded_pr_integration": {
+      "commit": "988362f3dc4159df2ded4889059f67c8ed9406b0",
+      "tree": "b2618bbabd94649a88039eefdd2625f9f0839127",
+      "equivalence": "Root reported fetched identical tree and empty diff; local commit/tree and tracked cleanliness were independently read during packaging."
+    }
+  },
+  "environment": {
+    "minecraft": "1.20.1",
+    "forge": "47.4.23",
+    "java": "17.0.21",
+    "java_vendor": "Eclipse Adoptium",
+    "gradle": "8.8",
+    "os": "Linux amd64",
+    "provider_configuration": "base; optional adventure/spell providers absent"
+  },
+  "asset_generation": {
+    "commands": [
+      "python tools/generate_models.py",
+      "python tools/generate_animations.py",
+      "python tools/generate_brand.py"
+    ],
+    "provenance": "Root directly reported observing all three commands run in the isolated replay before the clean build. No separate retained generator transcript exists.",
+    "brand_note": "Brand source was absent; tracked existing brand assets were used.",
+    "retained_transcript": false
+  },
+  "local_jar": {
+    "filename": "jetsetcraft-1.20.1-0.4.0-alpha.6.jar",
+    "bytes": 5803146,
+    "sha256": "b74c11fb5b3130157e020e9252806abdf92d680795299c33220af10d0560bdbf",
+    "copied_into_evidence": false,
+    "ci_binary_equality_claimed": false
+  },
+  "logs": [
+    {
+      "kind": "build_and_gametest",
+      "path": "evidence/local-build-gametest.log",
+      "source_path": "/tmp/jetsetcraft-alpha6-isolated-runtime.log",
+      "bytes": 47463,
+      "sha256": "8a631bbe9eda844c18b165d491b417802f43142b9fdfc27b8eda15f821f3ef4c",
+      "line_count": 459,
+      "preservation": "Original complete file copied byte-for-byte; no redaction, concatenation, reconstructed lines or transcript substitution.",
+      "completeness": "complete",
+      "ordinary_and_escalated_reads_match": true,
+      "observed_view_sha256": {
+        "ordinary": "8a631bbe9eda844c18b165d491b417802f43142b9fdfc27b8eda15f821f3ef4c",
+        "escalated_read_only": "8a631bbe9eda844c18b165d491b417802f43142b9fdfc27b8eda15f821f3ef4c"
+      },
+      "normal_shutdown": true,
+      "all_dimensions_saved": true,
+      "build_success_line": "BUILD SUCCESSFUL in 2m 8s"
+    },
+    {
+      "kind": "dedicated_server_smoke",
+      "path": "evidence/local-dedicated-server.log",
+      "source_path": "/tmp/jetsetcraft-alpha6-server-smoke.log",
+      "bytes": 20440,
+      "sha256": "dd031ebea5863afb5b18f0fa187cc5275d1c9c5b7cb48f0e7a2c3eaca7e4b84d",
+      "line_count": 202,
+      "preservation": "Original complete file copied byte-for-byte; no redaction, concatenation, reconstructed lines or transcript substitution.",
+      "completeness": "complete",
+      "ordinary_and_escalated_reads_match": true,
+      "observed_view_sha256": {
+        "ordinary": "dd031ebea5863afb5b18f0fa187cc5275d1c9c5b7cb48f0e7a2c3eaca7e4b84d",
+        "escalated_read_only": "dd031ebea5863afb5b18f0fa187cc5275d1c9c5b7cb48f0e7a2c3eaca7e4b84d"
+      },
+      "normal_shutdown": true,
+      "all_dimensions_saved": true,
+      "build_success_line": "BUILD SUCCESSFUL in 31s"
+    },
+    {
+      "kind": "native_client_audit",
+      "path": "evidence/local-native-client.log",
+      "source_path": "/tmp/jetsetcraft-alpha6-native-client.log",
+      "bytes": 57013,
+      "sha256": "af54c5cc4d71aeba854a2dacdaddf1f59d6aa13456a1c52543fa155d445879c5",
+      "line_count": 460,
+      "preservation": "Original complete file copied byte-for-byte; no redaction, concatenation, reconstructed lines or transcript substitution.",
+      "completeness": "complete",
+      "ordinary_and_escalated_reads_match": true,
+      "observed_view_sha256": {
+        "ordinary": "af54c5cc4d71aeba854a2dacdaddf1f59d6aa13456a1c52543fa155d445879c5",
+        "escalated_read_only": "af54c5cc4d71aeba854a2dacdaddf1f59d6aa13456a1c52543fa155d445879c5"
+      },
+      "normal_shutdown": true,
+      "all_dimensions_saved": true,
+      "build_success_line": "BUILD SUCCESSFUL in 1m 20s"
+    }
+  ],
+  "build_and_gametest": {
+    "status": "pass",
+    "observed_tasks": [
+      "clean",
+      "build",
+      "runGameTestServer"
+    ],
+    "required_tests": 55,
+    "pass_marker_count": 55,
+    "unique_pass_markers": [
+      "activity_dimension_return",
+      "activity_hill",
+      "activity_progression",
+      "activity_safety",
+      "activity_tag",
+      "catalogs",
+      "combat_sovereignty",
+      "crew_house",
+      "crew_missions",
+      "crew_persistence",
+      "crew_progress_caps",
+      "crew_progress_history",
+      "crew_progress_mission",
+      "crew_rush",
+      "crew_style_entry",
+      "crew_style_persistence",
+      "crew_style_shared_rewards",
+      "dance_flow",
+      "graffiti_lifecycle",
+      "hoverboard",
+      "paint_balloon_splash",
+      "ride_controls",
+      "rush_album",
+      "rush_arena_catalogue",
+      "rush_arena_rules",
+      "rush_arena_session",
+      "rush_build_rules",
+      "rush_build_runtime",
+      "rush_cache_boundaries",
+      "rush_cache_options",
+      "rush_debrief_rules",
+      "rush_draft_controls",
+      "rush_elite_tells",
+      "rush_evolution_cryo",
+      "rush_evolution_railstorm",
+      "rush_evolution_return",
+      "rush_evolution_rules",
+      "rush_headliner_arena_gate",
+      "rush_headliner_recovery",
+      "rush_headliner_victory",
+      "rush_journey_history",
+      "rush_journey_preview",
+      "rush_objectives",
+      "rush_ownership",
+      "rush_return",
+      "rush_route_exploration",
+      "rush_rules",
+      "rush_session",
+      "rush_spell_relay",
+      "rush_synergy_control",
+      "rush_synergy_recovery",
+      "rush_synergy_rules",
+      "rush_tagger_cover",
+      "scooter",
+      "street_gear"
+    ],
+    "terminal_test_summary": "All 55 required tests passed :)",
+    "style_relay_gate": "provider_absent",
+    "normal_shutdown": true,
+    "world_scope": "Fresh isolated replay world. Earlier failures from reused fixed founding plots are not used as acceptance evidence."
+  },
+  "dedicated_server": {
+    "status": "pass",
+    "task": "runServer",
+    "ready_line": "[12:10:28] [Server thread/INFO] [minecraft/DedicatedServer]: Done (10.763s)! For help, type \"help\"",
+    "loopback_rcon_started": true,
+    "rcon_connection_and_subsequent_normal_shutdown_logged": true,
+    "normal_saved_dimensions_shutdown": true,
+    "secret_configuration_retained": false
+  },
+  "native_client": {
+    "status": "pass",
+    "task": "runClient",
+    "capture_count": 19,
+    "resolution": [
+      1280,
+      720
+    ],
+    "audit_pass_lines": [
+      "[12:11:46] [Render thread/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_CREW_VISUAL_AUDIT_PASS real charter use; founded home; two profiles; physical workshop; real timed job",
+      "[12:11:59] [Render thread/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_ACTIVITY_VISUAL_AUDIT_PASS real Boombox preview; explicit Rival Rush; genuine Journey and Build; actual first route; logged fixture arrival (not human traversal); six live cache previews; inventory/XP/dimension restored; actual Progress and Style Library with no fabricated rewards",
+      "[12:12:09] [Render thread/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_PROGRESSION_VISUAL_AUDIT_PASS four real-client views; genuine recipe requirements; production owned-hit/pickup XP; actual reroll/banish packets; clock-compressed live headliner tell without victory; persisted report reopened; ordinary inventory/XP/position restored",
+      "[12:12:09] [Render thread/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_RUSH_VISUAL_AUDIT_PASS nineteen real-client captures; original fifteen preserved; actual recipe requirements, earned draft steering, live headliner tell and reopened saved debrief; inventory/XP/dimension restored; arena arrival and progression owned-hit/clock fixtures are explicitly logged, not human traversal/duration or boss-clear proof"
+    ],
+    "normal_saved_dimensions_shutdown": true,
+    "all_captures_pixel_reviewed": true,
+    "visual_review_scope": "Visible pixels only. Long status notices are intentionally ellipsized. Ordinary hover tooltips in frames 05-07 temporarily cover underlying rows while their text stays on screen. Frame 19 content below the visible fold was not pixel-reviewed.",
+    "fixture_lines_from_preserved_log": [
+      "[12:11:53] [Server thread/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_ACTIVITY_AUDIT_ARENA_ARRIVAL_FIXTURE run=82ab0502-d991-4116-a2f9-d4397ab63437 arena=jetsetcraft:widewave_terraces from=(2000000.5, 64.0, 0.5) to=(1999872.5, 64.0, 128.5) (teleport and nearby chunk loading only; no clock, defeats, rewards or clear fabricated)",
+      "[12:12:01] [Server thread/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_PROGRESSION_AUDIT_OWNED_HIT_FIXTURE run=abda6092-a4c6-433d-9846-6c39f4f3bd54 actor=ed7935dc-4165-47df-aa61-96f10ed953db from=(137203.76678621257, 64.0, 768524.1646668769) to=(137218.5, 64.0, 768513.5) hits=3 baseDamage=7 defeats=1 (scene placement and normal damage handler only; pickup/XP earned by normal server loop)",
+      "[12:12:02] [Server thread/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_PROGRESSION_AUDIT_OWNED_HIT_FIXTURE run=abda6092-a4c6-433d-9846-6c39f4f3bd54 actor=30b6f495-c7c3-4fda-a295-80bc885fa5ab from=(137218.09282534002, 64.0, 768494.3505767952) to=(137218.5, 64.0, 768513.5) hits=3 baseDamage=7 defeats=2 (scene placement and normal damage handler only; pickup/XP earned by normal server loop)",
+      "[12:12:03] [Server thread/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_PROGRESSION_AUDIT_CLOCK_FIXTURE run=abda6092-a4c6-433d-9846-6c39f4f3bd54 activeTicks=77 -> 6000 (model clock only; normal manager schedules/spawns headliner, no health/XP/defeats/forge/receipt assignment)",
+      "[12:12:04] [Server thread/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_PROGRESSION_AUDIT_CAMERA_FIXTURE run=abda6092-a4c6-433d-9846-6c39f4f3bd54 actor=e6fe84a1-95b9-4cb4-a065-6e0b99494110 yaw=-37.476707 (orientation only; player position and threat unchanged)"
+    ],
+    "fixtures": [
+      "The arena-arrival fixture teleports to the actual first selected room and loads nearby chunks. It does not manufacture clock time, defeats, rewards or a clear, and is not human connector traversal.",
+      "The progression fixture places two actual owned rivals near the player and applies the normal owned-hit handler; pickup and XP are earned through the normal server loop. The actual reroll and banish packets produce the displayed budgets.",
+      "The progression clock is explicitly compressed from 77 to 6000 active ticks. The normal manager schedules and spawns the headliner; the fixture does not assign boss health, XP, defeats, an evolution opportunity or a reward receipt.",
+      "The camera fixture changes orientation only. The visible headliner is alive at full virtual health; the capture is not a victory or a human five-minute survival claim.",
+      "The saved debrief is reopened after ordinary inventory, XP, dimension and position restoration. Its 5:02 duration includes the recorded clock compression."
+    ]
+  },
+  "gametest_fixture_limits": [
+    "Draft controls, evolution dormancy and report sanitization tests call the production model and serialization code; they are not physical combat playthroughs.",
+    "Evolution runtime tests use real session-owned mobs, action boundaries and return settlement, with supplied recipe ranks/opportunities and six bounded four-block Line battery samples. The existing movement observer has separate runtime coverage.",
+    "Encounter tests use real native bodies and production manager settlement with compressed active clocks, test-region chunk tickets and controlled placement. Midpoint room-three gating is exercised in a generated room; the final-room abort gate, ring geometry and missed-window checks are direct production-model cases.",
+    "The 55 base tests establish their controlled assertions. This local evidence does not establish a complete human six-room or thirty-minute session, enjoyment/balance, sustained performance, every provider mob or broad native spell compatibility."
+  ],
+  "captures": [
+    {
+      "number": 1,
+      "path": "01-setup.png",
+      "source_filename": "rival-rush-1793596265335-01-setup.png",
+      "bytes": 110691,
+      "sha256": "bc46912528414fe54ba509fdfa8f56c7f3d3193d2508d674d3ef8e265e12a5d7",
+      "width": 1280,
+      "height": 720,
+      "pixel_review": {
+        "status": "pass",
+        "reviewer": "root",
+        "method": "Actual image opened with view_image; review reported directly by the named collaborating reviewer.",
+        "note": "Setup controls readable; native setup view."
+      }
+    },
+    {
+      "number": 2,
+      "path": "02-district-hud.png",
+      "source_filename": "rival-rush-1793596265335-02-district-hud.png",
+      "bytes": 331971,
+      "sha256": "a85800ed981ed918f6471dfb8cc79b682fe144a2fbd9b0308fdf0cf2a08961cf",
+      "width": 1280,
+      "height": 720,
+      "pixel_review": {
+        "status": "pass",
+        "reviewer": "root",
+        "method": "Actual image opened with view_image; review reported directly by the named collaborating reviewer.",
+        "note": "Baseline HUD shows 0 XP, 0 score and 0 cards; native resources remain clear."
+      }
+    },
+    {
+      "number": 3,
+      "path": "03-album.png",
+      "source_filename": "rival-rush-1793596265335-03-album.png",
+      "bytes": 70893,
+      "sha256": "c1d3fe7bf1efe17537e3932ecaaba8fd26a4256f2b7888b1627f088651279a1c",
+      "width": 1280,
+      "height": 720,
+      "pixel_review": {
+        "status": "pass",
+        "reviewer": "root",
+        "method": "Actual image opened with view_image; review reported directly by the named collaborating reviewer.",
+        "note": "Album is honestly empty; no invented collected cards."
+      }
+    },
+    {
+      "number": 4,
+      "path": "04-return-result.png",
+      "source_filename": "rival-rush-1793596265335-04-return-result.png",
+      "bytes": 66120,
+      "sha256": "a4b706736437821812da801cb11523be610f8d736b5eb4578247e54a4b950d40",
+      "width": 1280,
+      "height": 720,
+      "pixel_review": {
+        "status": "pass",
+        "reviewer": "root",
+        "method": "Actual image opened with view_image; review reported directly by the named collaborating reviewer.",
+        "note": "Brief returned result shows 0:05, one rival, zero cards and 21 primary damage."
+      }
+    },
+    {
+      "number": 5,
+      "path": "05-crew-home.png",
+      "source_filename": "rival-rush-1793596265335-05-crew-home.png",
+      "bytes": 93865,
+      "sha256": "31a7893c95a85551338dc8fc0a23fbd048907f907195c36f0cdb2249acacaabb",
+      "width": 1280,
+      "height": 720,
+      "pixel_review": {
+        "status": "pass",
+        "reviewer": "artifact_builds",
+        "method": "Actual image opened with view_image; review reported directly by the named collaborating reviewer.",
+        "note": "Home shows level 1, 24 supplies, 0 crew XP, 2/3 roster and no house preparation; all navigation/footer controls fit."
+      }
+    },
+    {
+      "number": 6,
+      "path": "06-crew-roster.png",
+      "source_filename": "rival-rush-1793596265335-06-crew-roster.png",
+      "bytes": 94698,
+      "sha256": "eaa6233bc8916057f3a05936d6463553b235a997da9491db6b383cc0ecd64069",
+      "width": 1280,
+      "height": 720,
+      "pixel_review": {
+        "status": "pass",
+        "reviewer": "artifact_builds",
+        "method": "Actual image opened with view_image; review reported directly by the named collaborating reviewer.",
+        "note": "Riff and Patches are both level 1 with training-focus/idle labels; short-roster pagination is disabled."
+      }
+    },
+    {
+      "number": 7,
+      "path": "07-crew-facilities.png",
+      "source_filename": "rival-rush-1793596265335-07-crew-facilities.png",
+      "bytes": 106468,
+      "sha256": "87db14c96f246b18994c5973f08d19976be4ed3c05f5077ab0ab5711a4335afe",
+      "width": 1280,
+      "height": 720,
+      "pixel_review": {
+        "status": "pass",
+        "reviewer": "artifact_builds",
+        "method": "Actual image opened with view_image; review reported directly by the named collaborating reviewer.",
+        "note": "Tier-one Paint workshop is operational; remaining facilities are unregistered; balance is 16 supplies; requirements tooltip stays inside screen."
+      }
+    },
+    {
+      "number": 8,
+      "path": "08-crew-jobs.png",
+      "source_filename": "rival-rush-1793596265335-08-crew-jobs.png",
+      "bytes": 91563,
+      "sha256": "ef6ad2524f597b60aa734de7e71bce4b414566af7f6b4c33508827c63412c484",
+      "width": 1280,
+      "height": 720,
+      "pixel_review": {
+        "status": "pass",
+        "reviewer": "artifact_builds",
+        "method": "Actual image opened with view_image; review reported directly by the named collaborating reviewer.",
+        "note": "One three-minute Riff delivery occupies 1/2 job slots; no completed or claimed reward is invented."
+      }
+    },
+    {
+      "number": 9,
+      "path": "09-activities.png",
+      "source_filename": "rival-rush-1793596265335-09-activities.png",
+      "bytes": 95668,
+      "sha256": "147deb06eac523e21eff8160828573113d4bbc2d7aca000edff9df50c8659b44",
+      "width": 1280,
+      "height": 720,
+      "pixel_review": {
+        "status": "pass",
+        "reviewer": "artifact_builds",
+        "method": "Actual image opened with view_image; review reported directly by the named collaborating reviewer.",
+        "note": "Tag is selected but not started; Rival Rush appears alongside Tag, King of the Hill, Crew Showdown and Surprise me; rewards say up to."
+      }
+    },
+    {
+      "number": 10,
+      "path": "10-arena-route.png",
+      "source_filename": "rival-rush-1793596265335-10-arena-route.png",
+      "bytes": 89079,
+      "sha256": "d93121d21a3273c7df807b33e256eca7563504c52b13336355af758510ba2ff4",
+      "width": 1280,
+      "height": 720,
+      "pixel_review": {
+        "status": "pass",
+        "reviewer": "artifact_builds",
+        "method": "Actual image opened with view_image; review reported directly by the named collaborating reviewer.",
+        "note": "Three distinct early route offers show time, run reward and prospective shared rewards; artifact reward states the three-family constraint; footer fits."
+      }
+    },
+    {
+      "number": 11,
+      "path": "11-journey-map.png",
+      "source_filename": "rival-rush-1793596265335-11-journey-map.png",
+      "bytes": 76700,
+      "sha256": "a8862e001d199c4123291c014c8e6c2be8f90ae1059a0d3b38159eebe2584508",
+      "width": 1280,
+      "height": 720,
+      "pixel_review": {
+        "status": "pass",
+        "reviewer": "arena_experience",
+        "method": "Actual image opened with view_image; review reported directly by the named collaborating reviewer.",
+        "note": "Widewave Terraces Route A/room 1, 0/6 cleared, area +1 rank/12%, 3:00 and 12-rival objective, 65x65 footprint; prospective training reward is 4 supplies/45 crew XP/35 member XP/3 reputation."
+      }
+    },
+    {
+      "number": 12,
+      "path": "12-run-build.png",
+      "source_filename": "rival-rush-1793596265335-12-run-build.png",
+      "bytes": 83007,
+      "sha256": "0c4fb915d8ff2e8ebdb37c6c99e03ae7bb1002348b729334a17399ab9c907455",
+      "width": 1280,
+      "height": 720,
+      "pixel_review": {
+        "status": "pass",
+        "reviewer": "arena_experience",
+        "method": "Actual image opened with view_image; review reported directly by the named collaborating reviewer.",
+        "note": "Baseline build shows 0/3 artifact families, disabled Remix, and readable Build paths/Scout controls."
+      }
+    },
+    {
+      "number": 13,
+      "path": "13-crew-progress.png",
+      "source_filename": "rival-rush-1793596265335-13-crew-progress.png",
+      "bytes": 98212,
+      "sha256": "e94fb2c9cdfb001f205ab6c4c98df2588d665b6ab5f091f3ae5e64d7c0460c1d",
+      "width": 1280,
+      "height": 720,
+      "pixel_review": {
+        "status": "pass",
+        "reviewer": "arena_experience",
+        "method": "Actual image opened with view_image; review reported directly by the named collaborating reviewer.",
+        "note": "Progress shows 16 starter supplies and empty earned reward history; no fabricated shared award."
+      }
+    },
+    {
+      "number": 14,
+      "path": "14-cache-scout.png",
+      "source_filename": "rival-rush-1793596265335-14-cache-scout.png",
+      "bytes": 85419,
+      "sha256": "59acd57512e1304862e89a2ed99576e4ce457d33dfb61afeee2cd3b26a2de219",
+      "width": 1280,
+      "height": 720,
+      "pixel_review": {
+        "status": "pass",
+        "reviewer": "arena_experience",
+        "method": "Actual image opened with view_image; review reported directly by the named collaborating reviewer.",
+        "note": "Three visible cache choices and three more defeats needed: Magnet SW 25m, recovery NE 25m, damage NW 34m."
+      }
+    },
+    {
+      "number": 15,
+      "path": "15-style-library.png",
+      "source_filename": "rival-rush-1793596265335-15-style-library.png",
+      "bytes": 94237,
+      "sha256": "d4109ee5ec3d4407563dda5e5f83dc23ce643ec51062f610eb2ea0421177871c",
+      "width": 1280,
+      "height": 720,
+      "pixel_review": {
+        "status": "pass",
+        "reviewer": "arena_experience",
+        "method": "Actual image opened with view_image; review reported directly by the named collaborating reviewer.",
+        "note": "First three lessons are locked; 0/16 learned, zero crew XP, Page 1/6 and home preparation are readable."
+      }
+    },
+    {
+      "number": 16,
+      "path": "16-build-paths.png",
+      "source_filename": "rival-rush-1793596265335-16-build-paths.png",
+      "bytes": 81367,
+      "sha256": "3fe74cebb4c589cab8e38031f386e1ad893054e7492c6fc928aa92cb673af30c",
+      "width": 1280,
+      "height": 720,
+      "pixel_review": {
+        "status": "pass",
+        "reviewer": "root",
+        "method": "Actual image opened with view_image; review reported directly by the named collaborating reviewer.",
+        "note": "Both recipe requirements show 0/3; earned-opportunity action is disabled; no invented unlocked evolution."
+      }
+    },
+    {
+      "number": 17,
+      "path": "17-draft-agency.png",
+      "source_filename": "rival-rush-1793596265335-17-draft-agency.png",
+      "bytes": 93355,
+      "sha256": "b8e8daeb8ca0461dbd9cb53caeebb878be45ebd7e9eb6a198d6250baeac1ea59",
+      "width": 1280,
+      "height": 720,
+      "pixel_review": {
+        "status": "pass",
+        "reviewer": "root",
+        "method": "Actual image opened with view_image; review reported directly by the named collaborating reviewer.",
+        "note": "Three draft options readable with Reroll 2/3, Banish 1/2 and Excluded 1 after the actual packet actions."
+      }
+    },
+    {
+      "number": 18,
+      "path": "18-headliner-tell.png",
+      "source_filename": "rival-rush-1793596265335-18-headliner-tell.png",
+      "bytes": 309591,
+      "sha256": "03800112543532c2f5afa29a3447c4e2cf5d99f06e10cc0e7bd0dfa02234f1ad",
+      "width": 1280,
+      "height": 720,
+      "pixel_review": {
+        "status": "pass",
+        "reviewer": "root",
+        "method": "Actual image opened with view_image; review reported directly by the named collaborating reviewer.",
+        "note": "Actual full-health 561/561 phase-one headliner, Paint drop at 1.2 seconds, fixed red circle and readable counterplay; no overlap."
+      }
+    },
+    {
+      "number": 19,
+      "path": "19-run-debrief.png",
+      "source_filename": "rival-rush-1793596265335-19-run-debrief.png",
+      "bytes": 91596,
+      "sha256": "8ecaebd77d6d05393784cf8fef3b49ebc698e708c7d84ba00441aa00208f9919",
+      "width": 1280,
+      "height": 720,
+      "pixel_review": {
+        "status": "pass",
+        "reviewer": "root",
+        "method": "Actual image opened with view_image; review reported directly by the named collaborating reviewer.",
+        "note": "Visible saved report shows 5:02, two rivals/two cards, zero rooms/zero headliners, 35.1 primary damage, one reroll/one banish. Rewards below the fold were not pixel-reviewed."
+      }
+    }
+  ],
+  "packaging": {
+    "original_log_bytes_preserved": true,
+    "original_png_bytes_preserved": true,
+    "ordinary_and_escalated_log_views_match": true,
+    "prefix_only_logs": false,
+    "synthetic_transcript_created": false,
+    "jar_copied": false,
+    "excluded": [
+      "server.properties",
+      "credentials",
+      "environment secrets",
+      "CI artifact archives",
+      "earlier reused-world attempts"
+    ],
+    "no_runtime_or_build_rerun_during_packaging": true
+  }
+}
