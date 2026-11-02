@@ -1,0 +1,185 @@
+{
+  "schema_version": 1,
+  "document_type": "redacted_runtime_verification_summary",
+  "redaction_notice": "This is an allowlisted, redacted summary derived from locally inspected logs. It is not a complete original log, a reconstructed transcript or a substitute for original log bytes. Original logs are preserved unchanged outside the public evidence package.",
+  "source": {
+    "version": "0.4.0-alpha.6",
+    "local_tested_commit": "f438241e32f8d753cab095ff8f70a03c1302116c",
+    "source_tree": "b2618bbabd94649a88039eefdd2625f9f0839127"
+  },
+  "scope": "Independent local base-configuration source build, required GameTests, dedicated-server readiness and normal shutdown, and nineteen native client captures. Remote CI results are recorded separately.",
+  "original_log_identities": [
+    {
+      "kind": "build_and_gametest",
+      "original_basename": "jetsetcraft-alpha6-isolated-runtime.log",
+      "original_bytes": 47463,
+      "original_sha256": "8a631bbe9eda844c18b165d491b417802f43142b9fdfc27b8eda15f821f3ef4c",
+      "original_log_complete_when_inspected": true,
+      "original_bytes_unchanged": true,
+      "original_log_embedded": false,
+      "harmless_aggregate_messages": [
+        "All 55 required tests passed :)",
+        "Stopping server",
+        "ThreadedAnvilChunkStorage: All dimensions are saved",
+        "BUILD SUCCESSFUL in 2m 8s"
+      ]
+    },
+    {
+      "kind": "dedicated_server_smoke",
+      "original_basename": "jetsetcraft-alpha6-server-smoke.log",
+      "original_bytes": 20440,
+      "original_sha256": "dd031ebea5863afb5b18f0fa187cc5275d1c9c5b7cb48f0e7a2c3eaca7e4b84d",
+      "original_log_complete_when_inspected": true,
+      "original_bytes_unchanged": true,
+      "original_log_embedded": false,
+      "harmless_aggregate_messages": [
+        "Done (10.763s)! For help, type \"help\"",
+        "Stopping server",
+        "ThreadedAnvilChunkStorage: All dimensions are saved",
+        "BUILD SUCCESSFUL in 31s"
+      ]
+    },
+    {
+      "kind": "native_client_audit",
+      "original_basename": "jetsetcraft-alpha6-native-client.log",
+      "original_bytes": 57013,
+      "original_sha256": "af54c5cc4d71aeba854a2dacdaddf1f59d6aa13456a1c52543fa155d445879c5",
+      "original_log_complete_when_inspected": true,
+      "original_bytes_unchanged": true,
+      "original_log_embedded": false,
+      "harmless_aggregate_messages": [
+        "Stopping server",
+        "ThreadedAnvilChunkStorage: All dimensions are saved",
+        "BUILD SUCCESSFUL in 1m 20s"
+      ]
+    }
+  ],
+  "game_tests": {
+    "required": 55,
+    "passed": 55,
+    "failed": 0,
+    "count_scope": "Required GameTest outcomes and explicit GameTest pass markers; not a count of unrelated diagnostic log messages.",
+    "pass_marker_prefix": "JETSETCRAFT_GAMETEST_PASS",
+    "pass_marker_names": [
+      "activity_dimension_return",
+      "activity_hill",
+      "activity_progression",
+      "activity_safety",
+      "activity_tag",
+      "catalogs",
+      "combat_sovereignty",
+      "crew_house",
+      "crew_missions",
+      "crew_persistence",
+      "crew_progress_caps",
+      "crew_progress_history",
+      "crew_progress_mission",
+      "crew_rush",
+      "crew_style_entry",
+      "crew_style_persistence",
+      "crew_style_shared_rewards",
+      "dance_flow",
+      "graffiti_lifecycle",
+      "hoverboard",
+      "paint_balloon_splash",
+      "ride_controls",
+      "rush_album",
+      "rush_arena_catalogue",
+      "rush_arena_rules",
+      "rush_arena_session",
+      "rush_build_rules",
+      "rush_build_runtime",
+      "rush_cache_boundaries",
+      "rush_cache_options",
+      "rush_debrief_rules",
+      "rush_draft_controls",
+      "rush_elite_tells",
+      "rush_evolution_cryo",
+      "rush_evolution_railstorm",
+      "rush_evolution_return",
+      "rush_evolution_rules",
+      "rush_headliner_arena_gate",
+      "rush_headliner_recovery",
+      "rush_headliner_victory",
+      "rush_journey_history",
+      "rush_journey_preview",
+      "rush_objectives",
+      "rush_ownership",
+      "rush_return",
+      "rush_route_exploration",
+      "rush_rules",
+      "rush_session",
+      "rush_spell_relay",
+      "rush_synergy_control",
+      "rush_synergy_recovery",
+      "rush_synergy_rules",
+      "rush_tagger_cover",
+      "scooter",
+      "street_gear"
+    ],
+    "all_required_passed": true,
+    "normal_saved_shutdown_observed": true
+  },
+  "dedicated_server": {
+    "status": "pass",
+    "gate_counts": {
+      "passed": 3,
+      "failed": 0
+    },
+    "gate_names": [
+      "server_readiness",
+      "normal_saved_dimensions_shutdown",
+      "successful_task_completion"
+    ],
+    "normal_saved_shutdown_observed": true
+  },
+  "native_client": {
+    "audit_markers_passed": 4,
+    "audit_markers_failed": 0,
+    "audit_pass_marker_names": [
+      "JETSETCRAFT_CREW_VISUAL_AUDIT_PASS",
+      "JETSETCRAFT_ACTIVITY_VISUAL_AUDIT_PASS",
+      "JETSETCRAFT_PROGRESSION_VISUAL_AUDIT_PASS",
+      "JETSETCRAFT_RUSH_VISUAL_AUDIT_PASS"
+    ],
+    "capture_count": 19,
+    "capture_marker_name": "JETSETCRAFT_RUSH_VISUAL_AUDIT_CAPTURE",
+    "capture_labels": [
+      "01-setup",
+      "02-district-hud",
+      "03-album",
+      "04-return-result",
+      "05-crew-home",
+      "06-crew-roster",
+      "07-crew-facilities",
+      "08-crew-jobs",
+      "09-activities",
+      "10-arena-route",
+      "11-journey-map",
+      "12-run-build",
+      "13-crew-progress",
+      "14-cache-scout",
+      "15-style-library",
+      "16-build-paths",
+      "17-draft-agency",
+      "18-headliner-tell",
+      "19-run-debrief"
+    ],
+    "normal_saved_shutdown_observed": true,
+    "visible_pixel_reviews_passed": 19,
+    "visible_pixel_reviews_failed": 0,
+    "review_limit": "Visible pixels only. The lower build and reward sections below the visible fold of capture 19 were not pixel-reviewed."
+  },
+  "fixture_qualifications": [
+    "The accepted local GameTest run used a fresh isolated world. An earlier reused-world attempt is not acceptance evidence.",
+    "Draft, evolution and report model cases exercise production transactions and bounded serialization; they are not human combat playthroughs.",
+    "Evolution runtime fixtures use real owned rivals, production actions and return settlement, with supplied prerequisite ranks and opportunities. Railstorm charge is supplied using six bounded four-block distance samples; retained tests separately cover physical movement observation.",
+    "Encounter fixtures use compressed active clocks, controlled actor placement and temporary test-region loading. The actual third-room headliner gate is exercised through the manager; final-room abort rules, ring geometry and missed-window scheduling also have direct production-model checks.",
+    "Native arena arrival uses a logged teleport to the actually selected and generated first room with nearby chunk loading. It does not fabricate time, defeats, rewards or an arena clear and does not establish human connector traversal.",
+    "The native progression fixture positions two actual owned rivals and uses the ordinary hit handler. Their pickups and XP are earned through the normal server loop, and actual action packets spend one reroll and one banish.",
+    "The native progression clock is compressed from 77 to 6000 active ticks. The normal manager schedules the headliner; the fixture does not assign boss vitality, defeats, XP, an evolution opportunity or a reward receipt.",
+    "The native headliner camera fixture changes orientation only. Capture 18 shows an undefeated, full-health first-phase headliner; it is not boss-clear evidence.",
+    "The final reopened report records 6054 active ticks, two actual defeats, two cards, zero arena clears and zero headliner victories. Its time includes the clock fixture. Its return-award status is not_recorded because the three-defeat participation requirement is unmet; this status is observed in audited state, not the below-fold screenshot section.",
+    "Ordinary inventory, XP, dimension and position restoration are audited. These checks do not establish a complete human thirty-minute or six-room session, balance, sustained performance, multiplayer scale, every provider creature or broad native spell support."
+  ]
+}
