@@ -1,0 +1,773 @@
+{
+  "schema_version": 1,
+  "checkpoint": "0.4.0-alpha.5 Style Library and deeper Rush builds",
+  "verified_date_utc": "2026-11-02",
+  "status": "verified_ci_merged_and_independent_local_visual_replay",
+  "source": {
+    "repository": "Herbertofury/JetSetCraft",
+    "pull_request": 44,
+    "pull_request_url": "https://github.com/Herbertofury/JetSetCraft/pull/44",
+    "feature_commit": "8bb7109042decfe636ae0b621b8af88169bf61ce",
+    "tested_pr_integration_commit": "6701db2997395f5df90861965a081f8c7708df5e",
+    "identical_feature_and_tested_tree": "878476f60413bfe47c18864a99674c363432ce87",
+    "feature_and_integration_tree_equality_verified_via_github_api": true,
+    "merge_identity": {
+      "status": "verified",
+      "method": "Squash merge confirmed by root; fetched Git objects show an identical tree and empty diff against the tested feature commit.",
+      "actual_main_merge_commit": "5bad45891b6fe7a5c7c133ed0a19ac0556dd5af8",
+      "merged_tree": "878476f60413bfe47c18864a99674c363432ce87",
+      "equals_tested_tree": true,
+      "feature_to_merge_diff_empty": true
+    },
+    "identical_feature_tested_and_merged_tree": "878476f60413bfe47c18864a99674c363432ce87",
+    "merge_capture": {
+      "file": "16-pr-merge.jpg",
+      "bytes": 85527,
+      "sha256": "ef2819e5f3b19793e8cf714e697572fe173c9edf11b650835f0aa0cfb8e64658",
+      "width": 1348,
+      "height": 926,
+      "origin": "Authenticated GitHub browser screenshot captured and reviewed by root",
+      "pixels_modified": false
+    }
+  },
+  "runtime": {
+    "minecraft": "1.20.1",
+    "forge": "47.4.23",
+    "java": 17,
+    "ci_java_distribution": "Temurin",
+    "playeranimator": "1.0.2-rc1+1.20",
+    "network_protocol": 13
+  },
+  "evidence_basis": {
+    "api_checked_at": "2026-11-02T04:35:08.262397+00:00",
+    "method": "Public GitHub REST API workflow, job/step, artifact metadata and Git commit tree responses.",
+    "gate_interpretation": "Successful job steps are checked against the identified workflow source: each test step requires every declared test, all 44 named pass markers and the configuration-specific provider markers. Counts here are workflow-gated results, not an independent parsing of downloaded CI logs.",
+    "ci_logs_independently_downloaded_and_parsed": false,
+    "workflow_sources": [
+      "https://github.com/Herbertofury/JetSetCraft/blob/8bb7109042decfe636ae0b621b8af88169bf61ce/.github/workflows/build.yml",
+      "https://github.com/Herbertofury/JetSetCraft/blob/8bb7109042decfe636ae0b621b8af88169bf61ce/.github/workflows/wave2-provider-compat.yml"
+    ],
+    "dependency_pin_source": "https://github.com/Herbertofury/JetSetCraft/blob/8bb7109042decfe636ae0b621b8af88169bf61ce/build.gradle"
+  },
+  "summary": {
+    "successful_workflows": 2,
+    "successful_configurations": 9,
+    "required_gametests_per_configuration": 44,
+    "new_gametests": 9,
+    "base_client_capture_gate": 15,
+    "dedicated_server_normal_saved_shutdown_gate_passed_in_all_configurations": true,
+    "independent_local_native_captures_reviewed": 15,
+    "merged_tree_equals_tested_tree": true
+  },
+  "workflow_runs": [
+    {
+      "id": 41388639847,
+      "name": "Verify JetSetCraft",
+      "head_sha": "8bb7109042decfe636ae0b621b8af88169bf61ce",
+      "conclusion": "success",
+      "run_attempt": 1,
+      "html_url": "https://github.com/Herbertofury/JetSetCraft/actions/runs/41388639847"
+    },
+    {
+      "id": 41388639856,
+      "name": "Verify Wave 2 Providers",
+      "head_sha": "8bb7109042decfe636ae0b621b8af88169bf61ce",
+      "conclusion": "success",
+      "run_attempt": 1,
+      "html_url": "https://github.com/Herbertofury/JetSetCraft/actions/runs/41388639856"
+    }
+  ],
+  "provider_pins": {
+    "alexsmobs": {
+      "name": "Alex's Mobs",
+      "version": "1.22.9",
+      "coordinate": "curse.maven:alexs-mobs-426558:5698791"
+    },
+    "alexscaves": {
+      "name": "Alex's Caves",
+      "version": "2.0.2",
+      "coordinate": "curse.maven:alexs-caves-924854:5848216"
+    },
+    "cataclysm": {
+      "name": "L_Ender's Cataclysm",
+      "version": "3.31",
+      "coordinate": "curse.maven:lendercataclysm-551586:8246047"
+    },
+    "aether": {
+      "name": "The Aether",
+      "version": "1.20.1-1.5.2-neoforge",
+      "coordinate": "curse.maven:aether-255308:6134920",
+      "note": "Pinned Minecraft 1.20.1 release is Forge-compatible despite its file suffix."
+    },
+    "irons_spellbooks": {
+      "name": "Iron's Spells 'n Spellbooks",
+      "version": "1.20.1-3.4.0.2",
+      "coordinate": "curse.maven:irons-spells-n-spellbooks-855414:5765121"
+    },
+    "aoa3": {
+      "name": "Advent of Ascension (Nevermine)",
+      "version": "3.7.1",
+      "coordinate": "curse.maven:advent-of-ascension-nevermine-311054:4988685",
+      "note": "Exact Minecraft 1.20.1 beta; not the legacy full-dimension catalogue or a later NeoForge release."
+    }
+  },
+  "supporting_library_pins": {
+    "citadel": {
+      "version": "2.6.3",
+      "coordinate": "curse.maven:citadel-331936:7476570"
+    },
+    "curios": {
+      "version": "5.14.1+1.20.1",
+      "coordinate": "curse.maven:curios-309927:6418456"
+    },
+    "geckolib": {
+      "version": "4.4.5",
+      "coordinate": "curse.maven:geckolib-388172:5386948"
+    },
+    "lionfishapi": {
+      "version": "3.0",
+      "coordinate": "curse.maven:lionfish-api-1001614:8095554"
+    },
+    "caelus": {
+      "version": "3.1.0+1.20",
+      "coordinate": "curse.maven:caelus-308989:4581481"
+    }
+  },
+  "provider_combination_scope": {
+    "all": [
+      "alexsmobs",
+      "alexscaves",
+      "cataclysm"
+    ],
+    "adventure_all": [
+      "aether",
+      "irons_spellbooks",
+      "aoa3",
+      "cataclysm"
+    ],
+    "note": "No workflow row installs all six providers together. These are opt-in verification dependencies; they do not become required JetSetCraft runtime dependencies."
+  },
+  "configurations": [
+    {
+      "configuration": "base",
+      "provider_mod_ids": [],
+      "run_id": 41388639847,
+      "job_id": 125095168124,
+      "job_url": "https://github.com/Herbertofury/JetSetCraft/actions/runs/41388639847/job/125095168124",
+      "conclusion": "success",
+      "completed_at": "2026-11-02T04:33:45Z",
+      "gametests_required": 44,
+      "gametests_passed_by_workflow_gate": 44,
+      "gates": {
+        "forge_build": "success",
+        "required_gametests": "success",
+        "dedicated_server_ready_and_normal_saved_shutdown": "success",
+        "native_client_15_capture_audit": "success"
+      },
+      "style_relay_gate": "provider_absent"
+    },
+    {
+      "configuration": "cataclysm",
+      "provider_mod_ids": [
+        "cataclysm"
+      ],
+      "run_id": 41388639856,
+      "job_id": 125095161845,
+      "job_url": "https://github.com/Herbertofury/JetSetCraft/actions/runs/41388639856/job/125095161845",
+      "conclusion": "success",
+      "completed_at": "2026-11-02T04:32:47Z",
+      "gametests_required": 44,
+      "gametests_passed_by_workflow_gate": 44,
+      "gates": {
+        "forge_build": "success",
+        "required_gametests": "success",
+        "dedicated_server_ready_and_normal_saved_shutdown": "success"
+      },
+      "style_relay_gate": "provider_absent"
+    },
+    {
+      "configuration": "all",
+      "provider_mod_ids": [
+        "alexsmobs",
+        "alexscaves",
+        "cataclysm"
+      ],
+      "run_id": 41388639856,
+      "job_id": 125095162046,
+      "job_url": "https://github.com/Herbertofury/JetSetCraft/actions/runs/41388639856/job/125095162046",
+      "conclusion": "success",
+      "completed_at": "2026-11-02T04:33:51Z",
+      "gametests_required": 44,
+      "gametests_passed_by_workflow_gate": 44,
+      "gates": {
+        "forge_build": "success",
+        "required_gametests": "success",
+        "dedicated_server_ready_and_normal_saved_shutdown": "success"
+      },
+      "style_relay_gate": "provider_absent"
+    },
+    {
+      "configuration": "alexscaves",
+      "provider_mod_ids": [
+        "alexscaves"
+      ],
+      "run_id": 41388639856,
+      "job_id": 125095162080,
+      "job_url": "https://github.com/Herbertofury/JetSetCraft/actions/runs/41388639856/job/125095162080",
+      "conclusion": "success",
+      "completed_at": "2026-11-02T04:33:44Z",
+      "gametests_required": 44,
+      "gametests_passed_by_workflow_gate": 44,
+      "gates": {
+        "forge_build": "success",
+        "required_gametests": "success",
+        "dedicated_server_ready_and_normal_saved_shutdown": "success"
+      },
+      "style_relay_gate": "provider_absent"
+    },
+    {
+      "configuration": "alexsmobs",
+      "provider_mod_ids": [
+        "alexsmobs"
+      ],
+      "run_id": 41388639856,
+      "job_id": 125095162173,
+      "job_url": "https://github.com/Herbertofury/JetSetCraft/actions/runs/41388639856/job/125095162173",
+      "conclusion": "success",
+      "completed_at": "2026-11-02T04:33:19Z",
+      "gametests_required": 44,
+      "gametests_passed_by_workflow_gate": 44,
+      "gates": {
+        "forge_build": "success",
+        "required_gametests": "success",
+        "dedicated_server_ready_and_normal_saved_shutdown": "success"
+      },
+      "style_relay_gate": "provider_absent"
+    },
+    {
+      "configuration": "adventure_all",
+      "provider_mod_ids": [
+        "aether",
+        "irons_spellbooks",
+        "aoa3",
+        "cataclysm"
+      ],
+      "run_id": 41388639856,
+      "job_id": 125095162184,
+      "job_url": "https://github.com/Herbertofury/JetSetCraft/actions/runs/41388639856/job/125095162184",
+      "conclusion": "success",
+      "completed_at": "2026-11-02T04:32:54Z",
+      "gametests_required": 44,
+      "gametests_passed_by_workflow_gate": 44,
+      "gates": {
+        "forge_build": "success",
+        "required_gametests": "success",
+        "dedicated_server_ready_and_normal_saved_shutdown": "success"
+      },
+      "style_relay_gate": "provider_present"
+    },
+    {
+      "configuration": "aoa",
+      "provider_mod_ids": [
+        "aoa3"
+      ],
+      "run_id": 41388639856,
+      "job_id": 125095162205,
+      "job_url": "https://github.com/Herbertofury/JetSetCraft/actions/runs/41388639856/job/125095162205",
+      "conclusion": "success",
+      "completed_at": "2026-11-02T04:33:15Z",
+      "gametests_required": 44,
+      "gametests_passed_by_workflow_gate": 44,
+      "gates": {
+        "forge_build": "success",
+        "required_gametests": "success",
+        "dedicated_server_ready_and_normal_saved_shutdown": "success"
+      },
+      "style_relay_gate": "provider_absent"
+    },
+    {
+      "configuration": "aether",
+      "provider_mod_ids": [
+        "aether"
+      ],
+      "run_id": 41388639856,
+      "job_id": 125095162224,
+      "job_url": "https://github.com/Herbertofury/JetSetCraft/actions/runs/41388639856/job/125095162224",
+      "conclusion": "success",
+      "completed_at": "2026-11-02T04:33:20Z",
+      "gametests_required": 44,
+      "gametests_passed_by_workflow_gate": 44,
+      "gates": {
+        "forge_build": "success",
+        "required_gametests": "success",
+        "dedicated_server_ready_and_normal_saved_shutdown": "success"
+      },
+      "style_relay_gate": "provider_absent"
+    },
+    {
+      "configuration": "irons_spells",
+      "provider_mod_ids": [
+        "irons_spellbooks"
+      ],
+      "run_id": 41388639856,
+      "job_id": 125095162261,
+      "job_url": "https://github.com/Herbertofury/JetSetCraft/actions/runs/41388639856/job/125095162261",
+      "conclusion": "success",
+      "completed_at": "2026-11-02T04:33:17Z",
+      "gametests_required": 44,
+      "gametests_passed_by_workflow_gate": 44,
+      "gates": {
+        "forge_build": "success",
+        "required_gametests": "success",
+        "dedicated_server_ready_and_normal_saved_shutdown": "success"
+      },
+      "style_relay_gate": "provider_present"
+    }
+  ],
+  "server_gate_contract": {
+    "readiness": "Minecraft Done(...) startup line with no fatal mod-loading error.",
+    "normal_stop": "Loopback RCON stop through tools/stop_smoke_server.py.",
+    "saved_shutdown": "Successful launcher exit, All dimensions are saved, and a nonempty run/world/level.dat.",
+    "scope": "Both current workflows assert normal shutdown. This receipt does not reattribute that proof to older startup-only provider workflows."
+  },
+  "new_test_markers": [
+    "rush_synergy_rules",
+    "rush_synergy_control",
+    "rush_synergy_recovery",
+    "rush_cache_options",
+    "rush_cache_boundaries",
+    "rush_route_exploration",
+    "crew_style_shared_rewards",
+    "crew_style_persistence",
+    "crew_style_entry"
+  ],
+  "provider_behavior_gate_scope": {
+    "alexsmobs": "Exact registry baseline 90/90 known-safe ids and seven hidden technical ids; six representative challenge round trips with no provider-NBT mutations.",
+    "alexscaves": "Exact registry baseline 43/43 known-safe ids and two hidden technical ids; six representative challenge round trips with no provider-NBT mutations.",
+    "cataclysm": "Exact registry baseline 39/39 known-safe ids and no hidden technical ids; six representative challenge round trips with no provider-NBT mutations.",
+    "aether": "Pinned loaded provider/version, native aether:the_aether to Rush and return, and provider-gated arena eligibility/material checks.",
+    "irons_spellbooks": "Pinned loaded provider/version; actual registered Firebolt collision and owned virtual defeat; Style Library provider-present admission. Other configurations require provider-absent relay markers.",
+    "aoa3": "Pinned loaded provider/version, native aoa3:precasia to Rush and return, and provider-gated arena eligibility/material checks."
+  },
+  "client": {
+    "ci_gate_status": "success",
+    "run_id": 41388639847,
+    "job_id": 125095168124,
+    "expected_capture_count": 15,
+    "capture_labels_required_by_workflow": [
+      "01-setup",
+      "02-district-hud",
+      "03-album",
+      "04-return-result",
+      "05-crew-home",
+      "06-crew-roster",
+      "07-crew-facilities",
+      "08-crew-jobs",
+      "09-activities",
+      "10-arena-route",
+      "11-journey-map",
+      "12-run-build",
+      "13-crew-progress",
+      "14-cache-scout",
+      "15-style-library"
+    ],
+    "window_pixels": [
+      1280,
+      720
+    ],
+    "required_pass_markers": [
+      "JETSETCRAFT_RUSH_VISUAL_AUDIT_PASS",
+      "JETSETCRAFT_CREW_VISUAL_AUDIT_PASS",
+      "JETSETCRAFT_ACTIVITY_VISUAL_AUDIT_PASS",
+      "JETSETCRAFT_RUSH_VISUAL_AUDIT_FIXTURE_OBSERVED"
+    ],
+    "ci_capture_files_independently_downloaded": false,
+    "ci_capture_pixels_independently_reviewed": false,
+    "independent_local_visual_replay": {
+      "status": "passed_and_visually_reviewed",
+      "source_commit": "8bb7109042decfe636ae0b621b8af88169bf61ce",
+      "source_tree": "878476f60413bfe47c18864a99674c363432ce87",
+      "capture_count": 15,
+      "review": "All 15 native local screenshots were directly inspected. No blocking clipping or overlapping controls was found; ordinary hover overlays, empty progress and bounded scrolling remain explicitly documented per capture.",
+      "source_matches_tested_and_merged_tree": true,
+      "native_pass_markers_observed_in_tool_stdout": true,
+      "return_restoration_observed_in_tool_stdout": true,
+      "normal_saved_shutdown_observed_in_tool_stdout": true,
+      "log_completeness": "Untouched on-disk replay-client.log stops after capture01. Later exact stdout excerpts are separately labeled in replay-observed-stdout-excerpt.log; no complete original disk log or downloaded CI log is claimed.",
+      "captures_hash_checked_against_native_originals": true,
+      "capture_pixels_modified": false,
+      "evidence_origin": "Independent exact-source local reproduction; no downloaded CI artifacts",
+      "local_all_44_gametest_pass_claimed": false,
+      "local_world_setup_limit": "One fresh base GameTestServer created the world before asset generation; its missing-catalog setup failure is preserved under incomplete-assets-setup. Corrected build followed exact CI generators; no local all44-test pass is claimed.",
+      "captured_style": {
+        "xp": 0,
+        "learned": 0,
+        "selected": "HOME",
+        "revision": 0,
+        "visible_rows": 3,
+        "page": "1/6"
+      },
+      "captures": [
+        {
+          "file": "01-setup.png",
+          "native_original_file": "rival-rush-1793594422828-01-setup.png",
+          "width": 1280,
+          "height": 720,
+          "bytes": 111395,
+          "sha256": "37ef3515ed9e94ab1403591da36e1f628c5088002cdfb12cafe5467a8349b4b4",
+          "pixels_modified": false,
+          "review": "pass; no blocking clipping or overlapping controls",
+          "notes": "Readable native screen; no blocking layout issue observed."
+        },
+        {
+          "file": "02-district-hud.png",
+          "native_original_file": "rival-rush-1793594422828-02-district-hud.png",
+          "width": 1280,
+          "height": 720,
+          "bytes": 317357,
+          "sha256": "36d2581a627625acd6117f947f7f0d8689f0399421807de015324b632e38e4e6",
+          "pixels_modified": false,
+          "review": "pass; no blocking clipping or overlapping controls",
+          "notes": "Bounded cache hint is ellipsized; full detail is in Scout. No overlapping HUD panels."
+        },
+        {
+          "file": "03-album.png",
+          "native_original_file": "rival-rush-1793594422828-03-album.png",
+          "width": 1280,
+          "height": 720,
+          "bytes": 72311,
+          "sha256": "a32f8940da8d0fdc602338e055a40683d0baf9ee2b9798cd3ea16e0257eaeb43",
+          "pixels_modified": false,
+          "review": "pass; no blocking clipping or overlapping controls",
+          "notes": "Genuine empty album, not invented cards."
+        },
+        {
+          "file": "04-return-result.png",
+          "native_original_file": "rival-rush-1793594422828-04-return-result.png",
+          "width": 1280,
+          "height": 720,
+          "bytes": 100893,
+          "sha256": "fa80ffa3911b46e220966557db2fdf8be6bbc98ce25e9671c7918866521cbc17",
+          "pixels_modified": false,
+          "review": "pass; no blocking clipping or overlapping controls",
+          "notes": "Early-bank result: score20, rivals1, cards0."
+        },
+        {
+          "file": "05-crew-home.png",
+          "native_original_file": "rival-rush-1793594422828-05-crew-home.png",
+          "width": 1280,
+          "height": 720,
+          "bytes": 111475,
+          "sha256": "f44220bcd53e911889bfa800ca7532b93148b5dd363a143ef98f82321e09c0f6",
+          "pixels_modified": false,
+          "review": "pass; no blocking clipping or overlapping controls",
+          "notes": "Ordinary hover tooltip covers part of the home panel; native screenshot retained unchanged."
+        },
+        {
+          "file": "06-crew-roster.png",
+          "native_original_file": "rival-rush-1793594422828-06-crew-roster.png",
+          "width": 1280,
+          "height": 720,
+          "bytes": 110058,
+          "sha256": "d6fb56c16fa90dd60da2e3907c7efc5263360edc2bc76026b68faccbe7b6dc0f",
+          "pixels_modified": false,
+          "review": "pass; no blocking clipping or overlapping controls",
+          "notes": "Ordinary hover tooltip covers part of the roster panel; native screenshot retained unchanged."
+        },
+        {
+          "file": "07-crew-facilities.png",
+          "native_original_file": "rival-rush-1793594422828-07-crew-facilities.png",
+          "width": 1280,
+          "height": 720,
+          "bytes": 122109,
+          "sha256": "c7106b9897700fe50cd52d019e473f032f9cf9e1ed0a4bcfb53d82c8e72e0ad3",
+          "pixels_modified": false,
+          "review": "pass; no blocking clipping or overlapping controls",
+          "notes": "Ordinary hover tooltip covers part of the facilities panel; native screenshot retained unchanged."
+        },
+        {
+          "file": "08-crew-jobs.png",
+          "native_original_file": "rival-rush-1793594422828-08-crew-jobs.png",
+          "width": 1280,
+          "height": 720,
+          "bytes": 103869,
+          "sha256": "6306ec09d2d5000fa829d46a4333bb8d3699fe45c5d299a29a2ffd5d31dbaa27",
+          "pixels_modified": false,
+          "review": "pass; no blocking clipping or overlapping controls",
+          "notes": "Actual running Neighborhood delivery at3:00; no job completion or claim shown."
+        },
+        {
+          "file": "09-activities.png",
+          "native_original_file": "rival-rush-1793594422828-09-activities.png",
+          "width": 1280,
+          "height": 720,
+          "bytes": 110069,
+          "sha256": "ce4a39508b65c18f5399ede975d31aaf69e2f24017c5b8120b95c82a679ef1f8",
+          "pixels_modified": false,
+          "review": "pass; no blocking clipping or overlapping controls",
+          "notes": "Readable native screen; no blocking layout issue observed."
+        },
+        {
+          "file": "10-arena-route.png",
+          "native_original_file": "rival-rush-1793594422828-10-arena-route.png",
+          "width": 1280,
+          "height": 720,
+          "bytes": 88369,
+          "sha256": "a952f3260128b54bb64f33cb53956c107bc47e4c4b94c037d92cdf4325034e1c",
+          "pixels_modified": false,
+          "review": "pass; no blocking clipping or overlapping controls",
+          "notes": "Readable native screen; no blocking layout issue observed."
+        },
+        {
+          "file": "11-journey-map.png",
+          "native_original_file": "rival-rush-1793594422828-11-journey-map.png",
+          "width": 1280,
+          "height": 720,
+          "bytes": 78113,
+          "sha256": "e9d73a618cb919e4f2656cbb9dfeede5af9d8d5fbf5f98676c1703d1624342b9",
+          "pixels_modified": false,
+          "review": "pass; no blocking clipping or overlapping controls",
+          "notes": "Initial real three-choice route;0/6 arenas cleared; detail scroll is available."
+        },
+        {
+          "file": "12-run-build.png",
+          "native_original_file": "rival-rush-1793594422828-12-run-build.png",
+          "width": 1280,
+          "height": 720,
+          "bytes": 77139,
+          "sha256": "8a69407358ea1f88c4a57349d6b8a908cfff7a98fd05954f66b3bc50b7bf26b5",
+          "pixels_modified": false,
+          "review": "pass; no blocking clipping or overlapping controls",
+          "notes": "Actual empty0/3 artifact build; no earned artifact claimed."
+        },
+        {
+          "file": "13-crew-progress.png",
+          "native_original_file": "rival-rush-1793594422828-13-crew-progress.png",
+          "width": 1280,
+          "height": 720,
+          "bytes": 108909,
+          "sha256": "e5b6b860dab4544e8cb97cea0fc367469314ee860537b30d0b1037f56e992a90",
+          "pixels_modified": false,
+          "review": "pass; no blocking clipping or overlapping controls",
+          "notes": "Actual empty recent-reward history and0crewXP."
+        },
+        {
+          "file": "14-cache-scout.png",
+          "native_original_file": "rival-rush-1793594422828-14-cache-scout.png",
+          "width": 1280,
+          "height": 720,
+          "bytes": 114974,
+          "sha256": "c757fc95fe110a9e6ea32c27fb69a7b8950f4b7c1a9582e821cc79d8cc3c6f69",
+          "pixels_modified": false,
+          "review": "pass; no blocking clipping or overlapping controls",
+          "notes": "Six actual caches in server snapshot; three visible entries with scroll hint;3defeats needed;0arenas cleared."
+        },
+        {
+          "file": "15-style-library.png",
+          "native_original_file": "rival-rush-1793594422828-15-style-library.png",
+          "width": 1280,
+          "height": 720,
+          "bytes": 111711,
+          "sha256": "759ef0dbe7f8eb0fa004ebf1c405e3b26d8dad7ccaa0be92dbc61855102e4d5d",
+          "pixels_modified": false,
+          "review": "pass; no blocking clipping or overlapping controls",
+          "notes": "Three full lesson rows; Page1/6;0/16 learned;0crewXP;HOME selected; navigation and footer fit without overlap."
+        }
+      ],
+      "logs": {
+        "prefix": {
+          "file": "evidence/replay-client.log",
+          "kind": "Unmodified native on-disk prefix, incomplete after capture01"
+        },
+        "continuation": {
+          "file": "evidence/replay-observed-stdout-excerpt.log",
+          "kind": "Explicitly labeled verbatim tool-observed stdout excerpts; intentionally contains gaps and is not a complete original log"
+        }
+      },
+      "evidence_files": [
+        {
+          "file": "evidence/replay-source-identity.log",
+          "bytes": 220,
+          "sha256": "20d0dbb2c78896426b75108e71f726c50e58f31bd217f714bfc36805eeec16f8"
+        },
+        {
+          "file": "evidence/replay-asset-generation.log",
+          "bytes": 452,
+          "sha256": "e3e4d834306b4d092f86247d88b31be297a80ab632b6c2e79e642b5374a87199"
+        },
+        {
+          "file": "evidence/replay-build-complete.log",
+          "bytes": 1162,
+          "sha256": "01fc395382cb9e7441a9c6f07905f17ebd171a0d06e0b10e400b7767b15bcb80"
+        },
+        {
+          "file": "evidence/replay-jar-sha256-complete.txt",
+          "bytes": 114,
+          "sha256": "c68fa51611508d340aea41581bd44a2b6361c06263ae5dfd26daad295e24466e"
+        },
+        {
+          "file": "evidence/replay-client.log",
+          "bytes": 38485,
+          "sha256": "ac4024ef7c3e34be1c415bc2e34001b35dc06679f4b95feaa36beeb5418a5109"
+        },
+        {
+          "file": "evidence/replay-observed-stdout-excerpt.log",
+          "bytes": 5987,
+          "sha256": "340c2ca1047f3b3adce25ed895f0d4e5573c6655fae3e2dfab38dc2fd27722bd"
+        }
+      ],
+      "manifest": {
+        "file": "evidence/replay-captures-manifest.json",
+        "sha256": "38e8cb990859e0d1aadb16c1684dcc9aa2f90ef4787c7ed3689f3e86a73d507b"
+      },
+      "observed_markers": [
+        "JETSETCRAFT_CREW_VISUAL_AUDIT_PASS",
+        "JETSETCRAFT_ACTIVITY_AUDIT_ARENA_ARRIVAL_FIXTURE",
+        "JETSETCRAFT_ACTIVITY_AUDIT_CACHE_SCOUT_OBSERVED",
+        "JETSETCRAFT_ACTIVITY_AUDIT_RETURN_RESTORED",
+        "JETSETCRAFT_ACTIVITY_AUDIT_STYLE_LIBRARY_OBSERVED",
+        "JETSETCRAFT_ACTIVITY_VISUAL_AUDIT_PASS",
+        "JETSETCRAFT_RUSH_VISUAL_AUDIT_PASS",
+        "All dimensions are saved",
+        "BUILD SUCCESSFUL"
+      ]
+    },
+    "fixture_and_assertion_contract": {
+      "guard": "Opt-in jetsetcraft.rushVisualAudit property and exact disposable saves/RivalRushAudit integrated save.",
+      "initial_inventory_and_xp": "Vanilla give commands add seven diamonds and five bread; experience commands add 23 levels and 17 points. Native synced state is observed before snapshot and entry.",
+      "crew_room": "After the first verified return, a supported dry room, Boombox, crafting table and Charter are placed in the disposable save. Founding, facility registration and mission dispatch use normal client actions.",
+      "arena_arrival": "After selecting an actual route, the explicitly logged fixture loads nearby chunks and teleports to that selected destination. The production builder, arrival and cache code create the visible arena state; the fixture does not add elapsed time, defeats, rewards or a room clear.",
+      "cache_scout": "Six live cache previews with actual reward labels, colors, positions and distances; zero completed rooms is asserted. Preview capture does not demonstrate a claim.",
+      "style_library": "The screen must agree with actual persisted XP, unlocked lessons, selected style and revision. No lesson XP or unlock is injected for a populated screenshot.",
+      "restoration": "Inventory NBT, XP level and total, XP progress within 0.000001, original dimension and source position within one block are checked before opening crew Progress."
+    }
+  },
+  "artifacts": {
+    "metadata_source": "GitHub Actions artifact REST API",
+    "zip_archives_independently_downloaded": false,
+    "zip_digests_independently_verified": false,
+    "download_blocker": "The authenticated browser security boundary blocked archive download; API metadata is preserved without treating it as downloaded or independently hash-verified bytes.",
+    "digest_scope": "Each digest below is GitHub-reported SHA-256 of an artifact ZIP, not the SHA-256 of its enclosed mod JAR.",
+    "published_jar_sha256_independently_verified": null,
+    "provisional_local_jar_used": false,
+    "provisional_local_jar_exclusion": "The provisional local JAR omitted generated assets and is not used as release or checksum evidence.",
+    "entries": [
+      {
+        "run_id": 41388639847,
+        "id": 13116373844,
+        "name": "jetsetcraft-forge-1.20.1-6701db2997395f5df90861965a081f8c7708df5e",
+        "zip_size_bytes_api_reported": 7831367,
+        "zip_digest_api_reported": "sha256:5e1ab84c4dd501290d8a77bffa352e0478dd002bab00686725a0d769e9ec7f44",
+        "expired_at_observation": false,
+        "api_url": "https://api.github.com/repos/Herbertofury/JetSetCraft/actions/artifacts/13116373844"
+      },
+      {
+        "run_id": 41388639856,
+        "id": 13116895445,
+        "name": "jetsetcraft-wave2-all-6701db2997395f5df90861965a081f8c7708df5e",
+        "zip_size_bytes_api_reported": 5480232,
+        "zip_digest_api_reported": "sha256:e57138afc0e0a9a14e7586067720d832142c04af9ea7730a0a125b48da3ca258",
+        "expired_at_observation": false,
+        "api_url": "https://api.github.com/repos/Herbertofury/JetSetCraft/actions/artifacts/13116895445"
+      },
+      {
+        "run_id": 41388639856,
+        "id": 13116706229,
+        "name": "jetsetcraft-wave2-alexscaves-6701db2997395f5df90861965a081f8c7708df5e",
+        "zip_size_bytes_api_reported": 5473754,
+        "zip_digest_api_reported": "sha256:0eefb21aaf51cc4ce2875fe92b310e4d0b579a966ced88781ea5c92875c981c7",
+        "expired_at_observation": false,
+        "api_url": "https://api.github.com/repos/Herbertofury/JetSetCraft/actions/artifacts/13116706229"
+      },
+      {
+        "run_id": 41388639856,
+        "id": 13116652603,
+        "name": "jetsetcraft-wave2-aoa-6701db2997395f5df90861965a081f8c7708df5e",
+        "zip_size_bytes_api_reported": 5474073,
+        "zip_digest_api_reported": "sha256:32037114f47aa620256b524e6e77ed85eb764c5493fbfaaaaa4ca03762a60474",
+        "expired_at_observation": false,
+        "api_url": "https://api.github.com/repos/Herbertofury/JetSetCraft/actions/artifacts/13116652603"
+      },
+      {
+        "run_id": 41388639856,
+        "id": 13116543124,
+        "name": "jetsetcraft-wave2-alexsmobs-6701db2997395f5df90861965a081f8c7708df5e",
+        "zip_size_bytes_api_reported": 5475313,
+        "zip_digest_api_reported": "sha256:82a578413e447157284683afb4f0e74d8c2265e7cfc013a95357277062e9bb6a",
+        "expired_at_observation": false,
+        "api_url": "https://api.github.com/repos/Herbertofury/JetSetCraft/actions/artifacts/13116543124"
+      },
+      {
+        "run_id": 41388639856,
+        "id": 13116358738,
+        "name": "jetsetcraft-wave2-irons_spells-6701db2997395f5df90861965a081f8c7708df5e",
+        "zip_size_bytes_api_reported": 5479717,
+        "zip_digest_api_reported": "sha256:0d7139e25d8077d4e847b0379f839bdab5edf5c74076007f25c024b9ba53958c",
+        "expired_at_observation": false,
+        "api_url": "https://api.github.com/repos/Herbertofury/JetSetCraft/actions/artifacts/13116358738"
+      },
+      {
+        "run_id": 41388639856,
+        "id": 13116239151,
+        "name": "jetsetcraft-wave2-adventure_all-6701db2997395f5df90861965a081f8c7708df5e",
+        "zip_size_bytes_api_reported": 5486582,
+        "zip_digest_api_reported": "sha256:fbf8c47b04e9f95066dbd92353f00fa5f23a8ed0038f2b88bb9b7abeca6b3d46",
+        "expired_at_observation": false,
+        "api_url": "https://api.github.com/repos/Herbertofury/JetSetCraft/actions/artifacts/13116239151"
+      },
+      {
+        "run_id": 41388639856,
+        "id": 13116159501,
+        "name": "jetsetcraft-wave2-aether-6701db2997395f5df90861965a081f8c7708df5e",
+        "zip_size_bytes_api_reported": 5473910,
+        "zip_digest_api_reported": "sha256:8f04a1d1ecb6ae677867f399a8fe17cbe4a56a6fd35f8dee0c7e03f594708b7d",
+        "expired_at_observation": false,
+        "api_url": "https://api.github.com/repos/Herbertofury/JetSetCraft/actions/artifacts/13116159501"
+      },
+      {
+        "run_id": 41388639856,
+        "id": 13115644260,
+        "name": "jetsetcraft-wave2-cataclysm-6701db2997395f5df90861965a081f8c7708df5e",
+        "zip_size_bytes_api_reported": 5475954,
+        "zip_digest_api_reported": "sha256:eafa98b9211966816ce21728dd0b865334ae44417d0504a096ce6129c316110d",
+        "expired_at_observation": false,
+        "api_url": "https://api.github.com/repos/Herbertofury/JetSetCraft/actions/artifacts/13115644260"
+      }
+    ]
+  },
+  "fixture_limits": [
+    "Cache and six-room route GameTests run production builders and reward code with injected recordDefeat counters and advanced test clocks. They do not establish naturally played room clears or continuous traversal.",
+    "Synergy runtime tests separately use actual director-created session-owned actors and production primary/secondary damage handling, including real virtual defeats, obstruction, owner rejection and native-state preservation. Controlled actor placement and short clocks are not full-session pacing evidence.",
+    "Style Library settlement tests supply qualifying event data to production transactions and use a persisted mission deadline. They do not play complete Tag/Hill/Showdown rounds or wait real mission minutes; codec/handler tests are not remote socket tests.",
+    "The client arena arrival is a documented disposable-world teleport/chunk-load fixture. Fifteen required captures do not prove human connector traversal, a cache claim, a completed arena or a completed six-room circuit.",
+    "The visual audit does not fabricate learned styles, reward history or a populated artifact build. A fresh locked library, empty history or running mission retains that meaning.",
+    "CI capture pixels remain undownloaded and unreviewed. The separate exact-source local replay has 15 unchanged, hash-checked and directly reviewed native captures. Its original on-disk log is incomplete; a clearly labeled tool-stdout excerpt preserves the observed completion. No CI artifact byte equality is established.",
+    "Pinned provider jobs cover the identified representative mobs, dimensions and one Firebolt adapter, not every creature, boss, spell, summon, recipe, capability, mod version or combined modpack.",
+    "Normal saved shutdown is covered; forced crashes, disk failures and arbitrary third-party capability recovery are not certified.",
+    "Machine checks do not establish human thirty-minute pacing, economy balance, prolonged Endless performance or multiplayer scale.",
+    "Dungeons I/II inform original bounded run mechanics; neither full native equipment catalogue nor proprietary assets are imported. Custom arenas are bounded data-pack layouts, not arbitrary NBT imports or an in-game editor.",
+    "An initial independent local GameTest setup failed before generated catalogues were present; this created the disposable audit world. Authored asset generation and the corrected local build then passed, followed by the native client replay. No all-44 local retest is claimed; the final nine-configuration 44-test result is the separately identified CI evidence."
+  ],
+  "independent_local_build": {
+    "source_commit": "8bb7109042decfe636ae0b621b8af88169bf61ce",
+    "source_tree": "878476f60413bfe47c18864a99674c363432ce87",
+    "source_matches_tested_and_merged_tree": true,
+    "authored_asset_generators": "passed",
+    "forge_build": "passed",
+    "jar": {
+      "file": "jetsetcraft-1.20.1-0.4.0-alpha.5.jar",
+      "bytes": 5705489,
+      "sha256": "a5cea430f3b2930b7bae1d479bfda5ac6bf6e08263d3f01e1858835a26fbd847",
+      "hash_independently_recomputed": true,
+      "origin": "Local exact-source replay checkout after authored asset generation",
+      "byte_equality_with_ci_jar_verified": false
+    },
+    "scope": "A separately built local artifact; not the downloaded CI JAR and not evidence of byte equality with a CI artifact.",
+    "evidence_files": [
+      "evidence/replay-source-identity.log",
+      "evidence/replay-asset-generation.log",
+      "evidence/replay-build-complete.log",
+      "evidence/replay-jar-sha256-complete.txt"
+    ]
+  }
+}
