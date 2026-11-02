@@ -2,7 +2,40 @@
 
 JetSetCraft treats a passing Java compile as intermediate evidence, not final proof. The repository CI regenerates assets, validates contracts, builds the reobfuscated JAR, runs real Forge GameTests, and starts a real dedicated server.
 
-## Current alpha.5 Style Library and build acceptance
+## Current alpha.7 candidate acceptance — pending
+
+**The `0.4.0-alpha.7` candidate is implemented; its complete acceptance is pending.** The required suite is **63 distinct Forge GameTests**: 55 retained alpha.6 cases, four optional-contract cases, three Pit stop model cases and one Pit stop runtime case. The target remains base plus eight pinned provider configurations, with a separate native-client audit in base. No candidate pass, CI run, merge identity, archive inspection or capture review is claimed in this section.
+
+| Candidate gate | Required evidence | Status |
+|---|---|---|
+| Source and build | Asset generators, all validators and a clean Forge build | Pending |
+| Base and provider runtime | All 63 required tests in each configuration, build, dedicated-server readiness and normal save/shutdown | Pending |
+| Native client | All retained audit markers, `JETSETCRAFT_CONTRACT_VISUAL_AUDIT_PASS`, contract fixture observations and **23 named captures** | Pending |
+
+### Eight added acceptance cases
+
+| Required alpha.7 marker | Behavior under test |
+|---|---|
+| `rush_contract_catalogue` | Optional contract parsing, legacy no-contract defaults, bounded targets and malformed-data rejection. |
+| `rush_contract_relay` | Ordered beacons reached by observed riding; pause/discontinuity and unavailable-terrain boundaries. |
+| `rush_contract_paint` | Accepted fresh in-room patches, duplicate rejection and optional progress that cannot clear the room itself. |
+| `rush_contract_hunt` | Actual owned elite/captain defeats; ordinary, foreign and repeated defeats cannot satisfy the goal. |
+| `rush_pit_stop_rules` | Canonical clear receipts, one/two shared credits, each service kind once, stale/duplicate rejection, departure invalidation and old Schema 1 report defaults. |
+| `rush_pit_stop_effects` | Room-six Encore services, owned capped ranks, actual partial recovery, no-op/no-spend behavior and provider-unavailable targets. |
+| `rush_pit_stop_snapshots` | Draft-only exclusions, bounded Rewind refills, precise previews, pending-draft blocking and detached results. |
+| `rush_pit_stop_runtime` | Production action handler, actual contracted room settlement and receipt, accepted services/feedback, travel closure, ordinary-state return and persisted counters. |
+
+These are fixture coverage requirements, not completed results. The model cases call production rules with explicit clear inputs; runtime cases exercise actual server sessions and accepted events. Positioning, prerequisite state and clocks may be supplied to reach a bounded scenario. Calling the production packet handler directly is not a network-socket or codec test. Existing room time/defeat/headliner gates remain required, and completing a side contract alone must not grant a service or permanent award.
+
+The client target adds `20-contract-briefing`, `21-contract-progress`, `22-pit-stop` and `23-service-result` after the retained nineteen views. Their actual images and logged fixture boundaries must be reviewed before a visual success claim. Neither a shortened audit nor the provider matrix establishes human pacing, prolonged Endless play, every foreign mob/spell or every mod combination. ForgeGradle's native runtime tasks execute the source set while separately building the distributable JAR; independently installing that packaged JAR remains a separate acceptance boundary.
+
+## Historical alpha.6 headliner, evolution and debrief acceptance
+
+[PR #45](https://github.com/Herbertofury/JetSetCraft/pull/45) merged alpha.6 as `6e85fb3015620a19a6bd4a69b0154cbe8d248527`, with the identical tested tree `b2618bbabd94649a88039eefdd2625f9f0839127`. Its [base run](https://github.com/Herbertofury/JetSetCraft/actions/runs/41392665091) and [eight-provider run](https://github.com/Herbertofury/JetSetCraft/actions/runs/41392665154) passed **55 tests in each of nine configurations: 495 executions of 55 distinct tests**, plus builds and normal dedicated-server save/shutdown. Base passed its nineteen-capture native audit gate.
+
+The [headliner receipt](https://github.com/Herbertofury/JetSetCraft/tree/main/docs/verification/headliners) preserves the eleven added encounter/evolution/draft/debrief cases, exact source identities and nineteen independently reproduced, reviewed local PNGs. It distinguishes source runtime from execution of an installed reobfuscated JAR, and local pixels from uninspected CI archive bytes/pixels. Its public runtime record is a redacted summary with original-log hashes, not a reconstructed complete transcript. These results verify alpha.6 only.
+
+## Historical alpha.5 Style Library and build acceptance
 
 The **`0.4.0-alpha.5` implementation merged through [PR #44](https://github.com/Herbertofury/JetSetCraft/pull/44)** passed **all 44 real Forge GameTests in each of nine configurations**, each build and dedicated-server readiness followed by RCON stop and normal saved-dimensions shutdown. This is **396 successful test executions of 44 distinct tests**. The base also passed the **fifteen-screen native client audit gate**. The [Style Library receipt](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/verification/style-library/README.md) records the exact merge and separates CI results from the independent exact-source local visual reproduction.
 
@@ -111,7 +144,7 @@ The provider-present proofs passed with the actual source mods loaded. The Iron'
 
 ## Versioned verification evidence
 
-The published **v0.3.0** release has **nine** GameTests, as recorded in its [release evidence](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/RELEASE_EVIDENCE_0.3.0.md). The historical **0.4.0-alpha.1** checkpoint added six Rival Rush tests, for fifteen; its [receipt and original captures](https://github.com/Herbertofury/JetSetCraft/tree/main/docs/verification/rival-rush) are preserved. The historical **0.4.0-alpha.2** source added four crew-house/integration tests, bringing that checkpoint to **nineteen**. **Alpha.3** added nine activity/arena tests, reaching **28**. **Alpha.4** added seven reward/journey/build tests, reaching **35**. **Alpha.5** adds nine Style Library, synergy and cache/route cases, reaching **44**, passing in all nine configurations above. Development evidence does not change the published stable release's version or history.
+The published **v0.3.0** release has **nine** GameTests, as recorded in its [release evidence](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/RELEASE_EVIDENCE_0.3.0.md). Historical **alpha.1** added six Rival Rush tests, reaching **15**; its [receipt and original captures](https://github.com/Herbertofury/JetSetCraft/tree/main/docs/verification/rival-rush) are preserved. **Alpha.2** added four crew-house/integration tests, reaching **19**; **alpha.3** added nine activity/arena tests, reaching **28**; **alpha.4** added seven reward/journey/build tests, reaching **35**; **alpha.5** added nine Style Library, synergy and cache/route cases, reaching **44**; and **alpha.6** added eleven encounter/evolution/draft/debrief cases, reaching **55**. Their receipts retain each checkpoint's actual results. The current **alpha.7 candidate adds eight cases for an expected 63**, with acceptance pending. Development evidence does not change the published stable release's version or history.
 
 ### Historical alpha.2 checkpoint
 
@@ -186,7 +219,7 @@ Client controls remain change-driven: any digital mask or analog movement change
 
 ## Dedicated-server smoke
 
-CI launches Forge with `eula=true`, waits for the real ready line, and fails on lifecycle/mod-loading/fatal JetSetCraft errors. The base and all eight provider jobs issue an RCON stop and require normal saved-dimensions shutdown output and successful process completion. Alpha.5 passed this gate, introduced in alpha.4. JARs and logs are uploaded as workflow artifacts; the current CI archives remain uninspected under the access limitation above. Older provider startup-only smoke results retain their historical scope.
+CI launches Forge with `eula=true`, waits for the real ready line, and fails on lifecycle/mod-loading/fatal JetSetCraft errors. The base and all eight provider jobs issue an RCON stop and require normal saved-dimensions shutdown output and successful process completion. Historical alpha.5 and alpha.6 passed this gate, introduced in alpha.4; alpha.7 acceptance remains pending. JARs and logs are workflow artifacts whose inspection status belongs to the corresponding receipt. Alpha.5/alpha.6 CI archive bytes were not independently inspected. Older provider startup-only smoke results retain their historical scope.
 
 ### Known upstream messages retained in passing logs
 
@@ -205,7 +238,13 @@ Run `gradlew.bat -Djetsetcraft.visualAudit=true runClient --no-daemon` on Window
 
 The development CI also runs `./gradlew runClient -Djetsetcraft.rushVisualAudit=true --no-daemon` with a disposable `RivalRushAudit` world prepared by the [build workflow](https://github.com/Herbertofury/JetSetCraft/blob/main/.github/workflows/build.yml). It enters and leaves Rush through real network actions, compares the returned dimension, inventory and vanilla XP with its observed pre-entry fixture, and writes the setup, district HUD, empty-album and return-result captures.
 
-After return, the crew audit uses an actual Charter on placed fixture blocks, founds a home through production actions, checks two real roster profiles, registers an operational workshop and dispatches a real timed job. It captures **Home, Crew, Facilities and Jobs**. The activity audit adds **Activities**, **Arena route**, **Journey map**, **Build** and **Crew Progress**; alpha.5 adds **Cache Scout** and **Style Library**, bringing the gate to **fifteen 1280 × 720 captures**. It requires the Rush, crew and activity `VISUAL_AUDIT_PASS` markers, observed fixtures and all fifteen capture markers/files. The final CI gate passed; direct CI-pixel inspection remains unavailable.
+The current alpha.7 candidate requires **23 captures** and the contract audit marker in addition to the existing Rush, crew, activity and progression audit markers. Its four additional views cover the room briefing, optional-goal progress, earned Pit stop and an accepted service result. All candidate capture, return and shutdown assertions remain pending; the historical galleries below cannot satisfy that gate.
+
+### Historical native audit checkpoints
+
+Alpha.6 expanded the base gate to nineteen views by adding **Build paths, Draft agency, Headliner tell and Run debrief**. Its nineteen reviewed local PNGs show the documented early build and actual draft/headliner state, with explicit clock compression to reach the scheduled boss. They do not show a headliner victory or a human five-minute run. The [alpha.6 receipt](https://github.com/Herbertofury/JetSetCraft/tree/main/docs/verification/headliners) records the exact state and return-reward limits.
+
+In the historical alpha.5 audit, the crew sequence used an actual Charter on placed fixture blocks, founded a home through production actions, checked two real roster profiles, registered an operational workshop and dispatched a real timed job. It captured **Home, Crew, Facilities and Jobs**. The activity sequence added **Activities**, **Arena route**, **Journey map**, **Build** and **Crew Progress**; alpha.5 added **Cache Scout** and **Style Library**, bringing that checkpoint to **fifteen 1280 × 720 captures**. Its Rush, crew and activity `VISUAL_AUDIT_PASS` markers, observed fixtures and all fifteen capture markers/files passed the CI gate; direct CI-pixel inspection was unavailable.
 
 For Cache Scout, the harness chooses an actual offered route, then explicitly logs a disposable-world fixture that teleports to its selected arena and loads nearby chunks. The production builder, arrival rules and cache loop supply the displayed state; the fixture does not fabricate clocks, defeats, rewards or clears. The audit requires **zero completed arenas** and records the six live caches. The empty-progression Style Library fixture shows **0 crew XP, 0/16 learned and HOME selected**, with three lessons on page 1 of 6. These are initial-state inspections, not human traversal, an earned cache, unlocked-style or completed-circuit demonstrations. The [alpha.5 receipt and local gallery](https://github.com/Herbertofury/JetSetCraft/tree/main/docs/verification/style-library) identify this independent exact-source reproduction.
 

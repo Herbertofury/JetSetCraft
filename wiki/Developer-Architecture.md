@@ -6,6 +6,36 @@
 
 The server owns movement and scoring. Client code presents synchronized state; it does not decide whether a trick, landing, dance reward, or grind attachment succeeded.
 
+## Current alpha.7 candidate: room contracts and shared services
+
+This section describes the implemented `0.4.0-alpha.7` candidate. Its **63-test and 23-capture acceptance remains pending**; [Testing and Verification](Testing-and-Verification) separates the required gates from historical alpha.6 and earlier results. Stable `v0.3.0` retains its own release identity.
+
+| Component | Authority and bounds |
+|---|---|
+| `RushArenaCatalog` | Optional `contract` data selects none, Relay (2–4 ordered beacons), Paint (1–8 fresh patches) or Hunt (1–4 elite/captain defeats). Old profiles default to none; invalid specifications are rejected. Existing map bounds and optional-provider admission still apply. |
+| `RushArenaContract` | One room's bounded optional progress. Relay consumes the Manager's actual riding observations and rejects paused/discontinuous movement; unloaded points wait and unsafe built points disable the optional goal. Paint and Hunt observe accepted in-room tagging and owned defeats. No contract grants currency or completes a room. |
+| `RushCircuit` | Keeps required time/defeats, the route, current contract and bounded room history. The Manager also enforces headliner victory gates. A clear's canonical receipt is derived from the run, set and room. |
+| `RushRun` / `RushPitStop` | Own the shared service budget, per-kind usage, exact capped mutations, previews and detached accepted results. One actual clear earns one credit; a completed optional contract makes two total. New stops replace unused budgets. |
+| `RivalRushManager` / `C2SRushActionPacket` | Validate bounded intents, owner/run UUID, current revision and phase. Capture the actual receipt/contract before completion, record the clear once, then open the stop. Keep the existing once-only crew settlement; service actions do not call it again. |
+| `RushEventFeed` / `RushFeedback` | Keep four bounded server-authored notices with increasing per-run IDs. Accepted cache claims, mastery, headliners, evolutions, contracts, clears and services produce feedback. Client snapshots/toasts never authorize rewards; reduced-motion presentation uses chat. |
+| `RushDebrief` | Adds optional `ContractsBanked` and `ServicesUsed` counters to Schema 1. Missing old fields read as zero; reports remain detached, bounded display data saved after successful source-state restoration and settlement. |
+
+### Service transaction
+
+`pit_stop` accepts `TUNE|<Upgrade ID>`, `PATCH` or `REWIND`; the existing `remix` action takes its source and replacement. All use the current run revision. Services require a between-arena window with no pending XP draft, including room six's Encore decision. A successful claim advances the revision and spends one shared credit; each kind can be used once at that stop. Stale, malformed, unowned, capped or no-effect requests spend nothing.
+
+Tune advances one owned, available stat/artifact by one rank without fallback XP or score. Patch applies up to 40% maximum vitality and 50% equipped ward capacity, counting actual recovery and creating no unequipped ward. Rewind replenishes one reroll and one banish within 3/2 caps; accumulated draft exclusions remain bounded by the upgrade catalogue. Remix retains the exact invested rank, three-family limit and removed-family charge cleanup. It has no independent production budget.
+
+`openPitStop(receipt, bonus)` checks both the canonical receipt and a newer recorded clear ordinal, avoiding an expanding receipt ledger. The trusted legacy `grantRemix()` model entry opens the same budget; production clear settlement uses the actual receipt API. Successful route departure or Encore calls `closePitStop()`, which invalidates the revision even after all credits were spent. Finishing the run removes service authority.
+
+`PitStop` snapshots expose available/earned credits, revision, receipt, four options, at most fourteen eligible owned Tune targets and the last accepted result. The Manager adds `Usable` and a phase-specific reason. Actual before/after resource/rank values describe accepted effects; they never become client-supplied award amounts. Contract completion earns its bonus only when the required room is cleared. `ContractsBanked` counts those qualified clears, and `ServicesUsed` counts accepted claims, without creating another permanent award.
+
+### Source and runtime boundaries
+
+The original Minecraft/provider entity remains source-owned. Rush progression, vitality, steering directives and artifact effects stay within the owned session; this continuation does not replace native AI or rewrite native health, attributes or status effects. Optional providers remain isolated and unavailable content fails closed. Required time, defeat and headliner gates remain independent of side-contract success.
+
+Model GameTests exercise production transactions directly; runtime fixtures separately exercise sessions, accepted events and the server action handler. Native Forge source-set execution and a separately built distributable JAR are distinct evidence. Neither the new candidate nor historical provider results imply every native spellbook, foreign capability, mob or mod combination is supported. The saved return journal and accepted crew receipts remain the ordinary-state and permanent-reward boundaries.
+
 ## Movement modules
 
 - `RideMotion`: stride-pulsed ground acceleration, angular drift steering/release, wind-state air control, and boost.
