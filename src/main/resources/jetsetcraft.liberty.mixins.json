@@ -1,0 +1,8 @@
+{
+  "required": false,
+  "minVersion": "0.8",
+  "package": "com.herberto.jetsetcraft.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": ["LibertyTaczProjectileMixin", "LibertyHomeEntityMixin", "LibertyHomeBlockStateMixin"],
+  "injectors": {"defaultRequire": 0}
+}
