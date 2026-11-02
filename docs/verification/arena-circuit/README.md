@@ -1,8 +1,14 @@
 # Arena circuits and shared activity progression — verified checkpoint
 
-**`0.4.0-alpha.3`, verified on 2026-11-01 and merged through [PR #41](https://github.com/Herbertofury/JetSetCraft/pull/41).** The base mod and all eight optional-provider configurations passed the same **28 real Forge GameTests**, dedicated-server readiness and normal shutdown. The base configuration also completed the real graphical-client audit and produced **ten unchanged 1280 × 720 captures**, all inspected after download.
+**`0.4.0-alpha.3`, verified on 2026-11-01 and merged through [PR #41](https://github.com/Herbertofury/JetSetCraft/pull/41).** The base mod and all eight optional-provider configurations passed the same **28 real Forge GameTests** and dedicated-server readiness checks. The base configuration also verified normal dedicated-server save/shutdown, completed the real graphical-client audit and produced **ten unchanged 1280 × 720 captures**, all inspected after download. Provider dedicated-server shutdown was not an asserted gate at this checkpoint; see the dated correction below.
 
 This checkpoint connects completed street games, Rival Rush arenas and run settlement to crew progression, adds the Boombox activity chooser and six-room circuits, and implements scoped native provider integrations. Player instructions are in [Rival Rush](../../../wiki/Rival-Rush.md), [crew houses](../../../wiki/Player-Chapters-Posse-and-Mob-Archetypes.md) and [compatibility](../../../wiki/Compatibility.md). The [Crossfade Yard example](../../../examples/arena-data-pack/README.md) demonstrates a complete editable arena definition.
+
+## Scope correction — 2026-11-02
+
+The earlier description overstated the eight provider **dedicated-server** smoke results as normal save/shutdown proof. The [workflow at the tested alpha.3 source](https://github.com/Herbertofury/JetSetCraft/blob/c733852b260ef5dbf2cb54e7d41fc98ac10b8363/.github/workflows/wave2-provider-compat.yml) required startup readiness, then sent SIGTERM to the process group, waited two seconds and attempted SIGKILL cleanup while ignoring the exit status. It did not issue an RCON stop or require a saved-dimensions shutdown marker. Those smoke jobs prove **startup**, not graceful dedicated-server shutdown.
+
+The historical successful job conclusions, 28-test results in all nine configurations, provider gameplay markers and original hashes remain valid and unchanged. Normal-save evidence from the **GameTest server** is distinct from the later dedicated smoke process; the **base #280 and #282** normal dedicated-server save/shutdown proofs also remain valid. The separate alpha.4 [base #286](https://github.com/Herbertofury/JetSetCraft/actions/runs/41379581968) and [provider matrix #59](https://github.com/Herbertofury/JetSetCraft/actions/runs/41379581891) have now passed the stronger readiness/RCON-stop/saved-dimensions gate in all nine configurations, alongside 35 GameTests per configuration. The [alpha.4 reward/journey receipt](../reward-journeys/README.md) records that new evidence. These later results are not attributed retroactively to the alpha.3 jobs.
 
 ## Exact source and binary
 
@@ -30,16 +36,16 @@ The machine-readable [verification.json](verification.json) records the identiti
 | Configuration | Final successful job | Evidence |
 |---|---|---|
 | Base | [Verify JetSetCraft #280](https://github.com/Herbertofury/JetSetCraft/actions/runs/41356358215/job/124997134020) | Clean Forge build; 28 tests; server ready/normal shutdown; ten actual client captures |
-| Alex's Mobs | [Provider #56 — alexsmobs](https://github.com/Herbertofury/JetSetCraft/actions/runs/41356358302/job/124997134620) | 28 tests; provider registry and six representative gameplay checks; server smoke |
-| Alex's Caves | [Provider #56 — alexscaves](https://github.com/Herbertofury/JetSetCraft/actions/runs/41356358302/job/124997134535) | 28 tests; provider registry and six representative gameplay checks; server smoke |
-| Cataclysm | [Provider #56 — cataclysm](https://github.com/Herbertofury/JetSetCraft/actions/runs/41356358302/job/124997134668) | 28 tests; provider registry and six representative gameplay checks; server smoke |
-| Mobs + Caves + Cataclysm | [Provider #56 — all](https://github.com/Herbertofury/JetSetCraft/actions/runs/41356358302/job/124997134415) | All three installed together; 28 tests and server smoke |
-| The Aether | [Provider #56 — aether](https://github.com/Herbertofury/JetSetCraft/actions/runs/41356358302/job/124997134603) | 28 tests; actual Aether → Rush → Aether state return; server smoke |
-| Iron's Spells | [Provider #56 — irons_spells](https://github.com/Herbertofury/JetSetCraft/actions/runs/41356358302/job/124997134635) | 28 tests; real Firebolt collision, ownership and native-state checks; server smoke |
-| Advent of Ascension | [Provider #56 — aoa](https://github.com/Herbertofury/JetSetCraft/actions/runs/41356358302/job/124997134536) | 28 tests; actual Precasia → Rush → Precasia state return; server smoke |
-| Aether + Iron's + AoA + Cataclysm | [Provider #56 — adventure_all](https://github.com/Herbertofury/JetSetCraft/actions/runs/41356358302/job/124997134611) | All four installed together; both native dimensions and Firebolt exercised; 28 tests and server smoke |
+| Alex's Mobs | [Provider #56 — alexsmobs](https://github.com/Herbertofury/JetSetCraft/actions/runs/41356358302/job/124997134620) | 28 tests; provider registry and six representative gameplay checks; dedicated-server startup smoke |
+| Alex's Caves | [Provider #56 — alexscaves](https://github.com/Herbertofury/JetSetCraft/actions/runs/41356358302/job/124997134535) | 28 tests; provider registry and six representative gameplay checks; dedicated-server startup smoke |
+| Cataclysm | [Provider #56 — cataclysm](https://github.com/Herbertofury/JetSetCraft/actions/runs/41356358302/job/124997134668) | 28 tests; provider registry and six representative gameplay checks; dedicated-server startup smoke |
+| Mobs + Caves + Cataclysm | [Provider #56 — all](https://github.com/Herbertofury/JetSetCraft/actions/runs/41356358302/job/124997134415) | All three installed together; 28 tests and dedicated-server startup smoke |
+| The Aether | [Provider #56 — aether](https://github.com/Herbertofury/JetSetCraft/actions/runs/41356358302/job/124997134603) | 28 tests; actual Aether → Rush → Aether state return; dedicated-server startup smoke |
+| Iron's Spells | [Provider #56 — irons_spells](https://github.com/Herbertofury/JetSetCraft/actions/runs/41356358302/job/124997134635) | 28 tests; real Firebolt collision, ownership and native-state checks; dedicated-server startup smoke |
+| Advent of Ascension | [Provider #56 — aoa](https://github.com/Herbertofury/JetSetCraft/actions/runs/41356358302/job/124997134536) | 28 tests; actual Precasia → Rush → Precasia state return; dedicated-server startup smoke |
+| Aether + Iron's + AoA + Cataclysm | [Provider #56 — adventure_all](https://github.com/Herbertofury/JetSetCraft/actions/runs/41356358302/job/124997134611) | All four installed together; both native dimensions and Firebolt exercised; 28 tests and dedicated-server startup smoke |
 
-This is **252 successful test executions across nine configurations**, not 252 different tests. All jobs were checked for the complete 28-marker set and Forge's all-required-tests-passed summary, followed by successful dedicated-server startup and saved-dimensions shutdown. The full runtime and final job logs are included in the downloadable verified bundle.
+This is **252 successful test executions across nine configurations**, not 252 different tests. All jobs were checked for the complete 28-marker set, Forge's all-required-tests-passed summary and successful dedicated-server startup. The base workflow additionally asserted normal dedicated-server save/shutdown; the provider smoke cleanup did not establish that result. GameTest-server normal-save output remains separate evidence. The full runtime and final job logs are included in the downloadable verified bundle.
 
 The added coverage includes actual Tag and hill objectives, activity ownership and cancellation safety, shared receipts and pre-house banking, provider dimension return, the native spell relay, arena catalogue/rules and a real arena session. Existing movement, combat sovereignty, graffiti, Street Gear, Rush, house and mission tests remain in the gate.
 
@@ -153,7 +159,7 @@ The combined adventure server also logged two provider-owned issues:
 - AoA's Forge version checker could not parse its remote update-check response. This was not an arena or world data-pack parse failure; the evidence does not determine whether the remote body was invalid JSON or an unexpected response.
 - Iron's recipe `irons_spellbooks:curios/concentration_amulet` referenced unregistered `irons_spellbooks:mithril_ingot` and was rejected. That particular crafting recipe was unavailable. This does not establish that every other acquisition route for the amulet was unavailable. The [pinned provider recipe source](https://github.com/iron431/irons-spells-n-spellbooks/blob/ebd1972277d46be48170467b813d6cd8b04d15b8/src/main/resources/data/irons_spellbooks/recipes/curios/concentration_amulet.json) contains the reference.
 
-Those configurations started, passed the specified integration checks and shut down normally. The results do not certify all provider content or recipes.
+Those configurations started and passed the specified integration checks. Their dedicated-server smoke cleanup did not assert graceful shutdown. The results do not certify all provider content or recipes.
 
 ## Practical limits of this checkpoint
 
@@ -161,7 +167,7 @@ Those configurations started, passed the specified integration checks and shut d
 - The visual audit does not complete an arena or six-room journey. Real server GameTests exercise combat, time-plus-defeat clear conditions and settlement using shortened test clocks. No completed job claim, populated card ladder or Build-tab screen is pictured.
 - Crew members are roster/mission profiles; visible residents and follow-along NPCs are future work. Plot expansion recognizes more facility space and capacity; the player builds the house and it is not a general protection claim.
 - Native dimension return and one Iron projectile integration are demonstrated. Every modded boss, foreign capability, spell, summon, recipe and cross-mod combination is not.
-- Normal persistence and shutdown are tested. Forced crashes, storage failures and interrupted external provider state are not certified.
+- Base-workflow normal dedicated-server save/shutdown and GameTest-server normal-save paths are tested. The eight provider dedicated smoke jobs prove startup only; their cleanup did not assert graceful save/shutdown. Forced crashes, storage failures and interrupted external provider state are not certified.
 - Custom arena packs expose bounded maps, layouts and rewards. They do not import arbitrary structure NBT or supply an in-game editor. Crossfade Yard is statically validated and has not received a separate human playtest.
 - Dungeons-inspired artifact families are implemented as JetSetCraft mechanics. This is not an import of the full Minecraft Dungeons I/II item catalogue or assets.
 - The soundtrack importer and two exact supplied recording metadata entries are present. Sonic audio masters are not bundled or auditioned in this build.

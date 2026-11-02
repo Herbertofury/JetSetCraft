@@ -4,7 +4,7 @@
 ![Minecraft](https://img.shields.io/badge/Minecraft-Forge%201.20.1-62b347?style=for-the-badge)
 ![Movement](https://img.shields.io/badge/movement-momentum%20first-f4d03f?style=for-the-badge)
 ![Stable verification](https://img.shields.io/badge/stable%200.3.0-9%20GameTests-e84393?style=for-the-badge)
-[![Alpha verification](https://img.shields.io/badge/development%20alpha.3-28%20GameTests%20%C3%97%209-f4d03f?style=for-the-badge)](https://github.com/Herbertofury/JetSetCraft/tree/main/docs/verification/arena-circuit)
+[![Development alpha verification](https://img.shields.io/badge/development%20alpha.4-35%20GameTests%20%C3%97%209-f4d03f?style=for-the-badge)](https://github.com/Herbertofury/JetSetCraft/tree/main/docs/verification/reward-journeys)
 
 > [!IMPORTANT]
 > **JetSetCraft turns ordinary Minecraft worlds into a momentum-first street-sports playground without replacing the player, the world, or vanilla control.** Inline skates, quad skates, a street board, BMX, hoverboard, and scooter share one expressive movement language built around tricks, grinding, flow, dance, graffiti, and emergent Minecraft physics.
@@ -20,29 +20,31 @@
 | Pick skates, a board, BMX, hoverboard, or scooter | **[Ride Styles](Ride-Styles)** |
 | Build tricks, combos, transfers, and Flow | **[Tricks, Combos & Flow](Tricks-Combos-and-Flow)** |
 | Paint tags, create custom art, or use Free Paint | **[Graffiti](Graffiti)** |
-| Choose an isolated skating roguelite session or an arena circuit | **[Rival Rush](Rival-Rush)** — optional `0.4.0-alpha.3` development mode |
+| Choose an isolated skating roguelite session or an arena circuit | **[Rival Rush](Rival-Rush)** — merged and verified `0.4.0-alpha.4` |
 | Build a house, develop crew profiles and send dispatch jobs | **[Player Chapters and Crew Houses](Player-Chapters-Posse-and-Mob-Archetypes)** |
 | Browse games, music, art and engineering inspiration | **[Inspiration & Research](Inspiration-and-Research)** |
 | Build a compatible modpack or server | **[Modpack Maker Guide](Modpack-Maker-Guide)** |
 | Inspect architecture and verification evidence | **[Developer Architecture](Developer-Architecture)** · **[Testing](Testing-and-Verification)** |
 
-## 🧪 Verified development: shared activities and arena circuits
+## 🧪 Verified alpha.4: rewards, journeys and builds
 
-**Choose your next session at a Boombox:** Tag, King of the Hill, Crew Showdown or **[Rival Rush](Rival-Rush)**, with an explicit reward preview before starting. The generic invitation can reveal a random activity; the Boombox lets you choose deliberately. Completed street games and arenas contribute to the same Supplies, crew XP, member training and gang reputation, including earnings banked before you found a house.
+**See what every session contributes.** Alpha.4 adds sixteen persistent reward receipts showing the Supplies, crew XP, training and reputation actually credited across street games, arenas, qualifying Rush returns and claimed missions. **[Crew Charter → Progress](Player-Chapters-Posse-and-Mob-Archetypes#progress-see-what-you-earned-and-what-to-build-next)** works before founding and shows the next practical home goal, its cost and physical requirements. You still place the blocks yourself.
 
-Rival Rush keeps **Free streets** for thirty-minute or Endless skating survival and adds **Arena circuits** with six-room routes, different build rewards, authored layouts and Encore continuation. Named rival crews, paint combat, independent Rush XP, persistent mob cards, graffiti rewards and music stops share the mode with magnet caches, critical/area upgrades and three artifact slots. A reusable paper + cyan-dye flyer also opens its menu. Players opt in and can return to their saved Minecraft state; the alpha requires Easy, Normal or Hard.
+**[Rival Rush](Rival-Rush)** now has a **Journey** map of visited rooms, the current destination and actual next-room offers, with banked amounts distinguished from possible rewards. **Build** shows current statistics and artifacts. **Line battery, Air break and Breakbeat mark** reward actual riding, qualified landings and focused attacks; an optional **remix** after a genuine arena clear changes one artifact family while retaining its exact rank and the three-slot limit.
 
-The current development checkpoint is **`0.4.0-alpha.3`**, merged through [PR #41](https://github.com/Herbertofury/JetSetCraft/pull/41). It builds on Rival Rush from [PR #39](https://github.com/Herbertofury/JetSetCraft/pull/39) and the alpha.2 [player-built crew house](Player-Chapters-Posse-and-Mob-Archetypes) from [PR #40](https://github.com/Herbertofury/JetSetCraft/pull/40): named roster profiles, manually placed facilities, house expansion, dispatch jobs and optional Rush preparation. **Visible residents and follower AI remain future work.** Stable **`v0.3.0` remains unchanged**, with its nine original GameTests.
+Choose Tag, King of the Hill, Crew Showdown or Rival Rush at a tuned Boombox; a random invitation is reviewed before acceptance. Rush retains thirty-minute/Endless **Free streets** and six-room **Arena circuits**, separate XP/vitality, persistent mob cards and return to the saved Minecraft state. The reusable paper + cyan-dye flyer also opens it. The alpha requires Easy, Normal or Hard. **Visible residents and follower AI remain future work.** Stable **`v0.3.0` remains unchanged**, with its nine original GameTests.
 
-**Completed alpha.3 verification:** [base Forge/client gate #280](https://github.com/Herbertofury/JetSetCraft/actions/runs/41356358215) and [provider matrix #56](https://github.com/Herbertofury/JetSetCraft/actions/runs/41356358302) passed **all 28 real GameTests in each of nine configurations**, with dedicated-server readiness/save/shutdown throughout. The base client audit produced **ten reviewed captures** and checked inventory/XP/dimension return. Native Aether/Precasia return and the actual Iron Firebolt collision passed their provider-present checks. The [arena-circuit receipt](https://github.com/Herbertofury/JetSetCraft/tree/main/docs/verification/arena-circuit) ties the tested source to merged commit `e57e9ab` and records the binary, jobs, captures and limits.
+**Merged and verified through [PR #43](https://github.com/Herbertofury/JetSetCraft/pull/43):** merge [`e826694`](https://github.com/Herbertofury/JetSetCraft/commit/e826694c3429394b2b264f153cd9ea34b1fb9051) has the same tree as the source tested by [base gate #286](https://github.com/Herbertofury/JetSetCraft/actions/runs/41379581968) and [provider matrix #59](https://github.com/Herbertofury/JetSetCraft/actions/runs/41379581891). They passed **all 35 real GameTests in each of nine configurations**, each with build, dedicated-server readiness, RCON stop and normal saved-dimensions shutdown. The base produced **thirteen reviewed 1280 × 720 client captures**. The [reward/journey receipt](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/verification/reward-journeys/README.md) records the exact source, artifacts and scope.
 
-| Choose a Boombox activity — actual Tag preview | Plan the circuit — actual first route choice |
+| Journey — actual first offered routes | Build — actual initial statistics |
 |---|---|
-| [![Actual Boombox activity chooser with Tag and its shared rewards selected](https://raw.githubusercontent.com/Herbertofury/JetSetCraft/main/docs/verification/arena-circuit/09-activities.png)](https://github.com/Herbertofury/JetSetCraft/tree/main/docs/verification/arena-circuit#09--explicit-boombox-activity-choice) | [![Actual first arena fork with three different room and reward offers](https://raw.githubusercontent.com/Herbertofury/JetSetCraft/main/docs/verification/arena-circuit/10-arena-route.png)](https://github.com/Herbertofury/JetSetCraft/tree/main/docs/verification/arena-circuit#10--first-genuine-circuit-fork) |
+| [![Actual early Journey map with no completed room](https://raw.githubusercontent.com/Herbertofury/JetSetCraft/main/docs/verification/reward-journeys/11-journey-map.png)](https://github.com/Herbertofury/JetSetCraft/tree/main/docs/verification/reward-journeys) | [![Actual initial Build view with empty artifact slots](https://raw.githubusercontent.com/Herbertofury/JetSetCraft/main/docs/verification/reward-journeys/12-run-build.png)](https://github.com/Herbertofury/JetSetCraft/tree/main/docs/verification/reward-journeys) |
 
-[View all ten real-client captures and the exact build receipt](https://github.com/Herbertofury/JetSetCraft/tree/main/docs/verification/arena-circuit) · [Read the compatibility evidence and provider limits](Compatibility#rival-rush-dimensions-rivals-and-the-firebolt-relay).
+[Open all thirteen client captures and exact evidence](https://github.com/Herbertofury/JetSetCraft/tree/main/docs/verification/reward-journeys), including the genuine empty-history **Progress** view and its next home goal. [Read the compatibility scope](Compatibility#rival-rush-dimensions-rivals-and-the-firebolt-relay).
 
-The visual audit selected the first route, entered travel and returned; arena combat and clears are covered by real server GameTests. It does not show a complete six-room journey or claim to measure human thirty-minute/Endless enjoyment. [Testing and Verification](Testing-and-Verification) distinguishes those scopes. The [nineteen-test, eight-capture alpha.2 receipt](https://github.com/Herbertofury/JetSetCraft/tree/main/docs/verification/crew-house) and [fifteen-test alpha.1 receipt](https://github.com/Herbertofury/JetSetCraft/tree/main/docs/verification/rival-rush) remain preserved historical checkpoints.
+The visual audit selected the first route, entered travel and returned; its Build slots and reward history are empty early states. Completed-room settlement, artifact mechanics, remix and mission claims are covered by GameTests. No completed six-room client journey or human thirty-minute/Endless enjoyment result is claimed. [Testing and Verification](Testing-and-Verification) distinguishes those scopes.
+
+The [alpha.3 receipt](https://github.com/Herbertofury/JetSetCraft/tree/main/docs/verification/arena-circuit) preserves PR #41's merged `e57e9ab` checkpoint with **28 tests × nine configurations and ten captures**. Its dated correction distinguishes provider dedicated-server startup from the base's normal save/shutdown proof. The [nineteen-test, eight-capture alpha.2 receipt](https://github.com/Herbertofury/JetSetCraft/tree/main/docs/verification/crew-house) and [fifteen-test alpha.1 receipt](https://github.com/Herbertofury/JetSetCraft/tree/main/docs/verification/rival-rush) remain separate historical checkpoints.
 
 ## 🎧 New research collection
 
@@ -64,7 +66,7 @@ The visual audit selected the first route, entered travel and returned; arena co
 | **Graffiti** | 139 persistent aspect-aware tags, custom tag creation, Tag/Free Paint modes, 16 colors, six-face splashes, and throwable paint balloons. |
 | **Minecraft physics** | Ice, slime, honey, Soul Speed, water, bubbles, redstone rails, pistons, explosions, currents, knockback, and optional Create geometry remain useful movement tech. |
 | **Street Gear & gangs** | Reversible gear on compatible source-owned mobs, physical Boombox tuning, data-driven gang identity, bounded actors, anti-farm cleanup, and original entrance stingers. |
-| **Stable verification** | Deterministic asset generation, nine real Forge GameTests, clean client/server builds, dedicated-server smoke, real-client visual audit, and TestGrid protocol proof. The current activity/arena/crew-house development suite and its 28 tests across nine configurations are recorded separately above. |
+| **Stable verification** | Deterministic asset generation, nine real Forge GameTests, clean client/server builds, dedicated-server smoke, real-client visual audit, and TestGrid protocol proof. Current development evidence is recorded separately above. |
 
 ## 🧭 What makes JetSetCraft different
 

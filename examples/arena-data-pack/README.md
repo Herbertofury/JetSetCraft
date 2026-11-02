@@ -1,6 +1,6 @@
 # Your first custom Rival Rush arena
 
-This is an editable **Minecraft 1.20.1 data pack for JetSetCraft 0.4.0-alpha.3**. It adds **Crossfade Yard** to the server's arena catalogue. It requires no optional dimension or magic mod.
+This is an editable **Minecraft 1.20.1 data pack for JetSetCraft 0.4.0-alpha.4 (introduced in alpha.3)**. It adds **Crossfade Yard** to the server's arena catalogue. It requires no optional dimension or magic mod.
 
 ## Install and select
 

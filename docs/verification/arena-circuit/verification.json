@@ -58,12 +58,14 @@
           "url": "https://github.com/Herbertofury/JetSetCraft/actions/runs/41356358302/job/124997134620",
           "required_gametests_passed": 28,
           "dedicated_server_ready": true,
-          "normal_shutdown_dimensions_saved": true,
+          "normal_shutdown_dimensions_saved": null,
           "provider_markers": [
             "JETSETCRAFT_GAMETEST_PASS rush_spell_relay absent",
             "JETSETCRAFT_GAMETEST_PASS activity_dimension_return dimensions=absent",
             "JETSETCRAFT_GAMETEST_PASS graffiti_lifecycle native_support_ticks=40"
-          ]
+          ],
+          "dedicated_server_smoke_scope": "startup_only",
+          "dedicated_server_shutdown_evidence": "not asserted: SIGTERM process-group cleanup, two-second wait, then attempted SIGKILL; exit status ignored; no RCON stop or saved-dimensions assertion"
         },
         {
           "id": 124997134535,
@@ -72,12 +74,14 @@
           "url": "https://github.com/Herbertofury/JetSetCraft/actions/runs/41356358302/job/124997134535",
           "required_gametests_passed": 28,
           "dedicated_server_ready": true,
-          "normal_shutdown_dimensions_saved": true,
+          "normal_shutdown_dimensions_saved": null,
           "provider_markers": [
             "JETSETCRAFT_GAMETEST_PASS rush_spell_relay absent",
             "JETSETCRAFT_GAMETEST_PASS activity_dimension_return dimensions=absent",
             "JETSETCRAFT_GAMETEST_PASS graffiti_lifecycle native_support_ticks=40"
-          ]
+          ],
+          "dedicated_server_smoke_scope": "startup_only",
+          "dedicated_server_shutdown_evidence": "not asserted: SIGTERM process-group cleanup, two-second wait, then attempted SIGKILL; exit status ignored; no RCON stop or saved-dimensions assertion"
         },
         {
           "id": 124997134668,
@@ -86,13 +90,15 @@
           "url": "https://github.com/Herbertofury/JetSetCraft/actions/runs/41356358302/job/124997134668",
           "required_gametests_passed": 28,
           "dedicated_server_ready": true,
-          "normal_shutdown_dimensions_saved": true,
+          "normal_shutdown_dimensions_saved": null,
           "provider_markers": [
             "JETSETCRAFT_GAMETEST_PASS rush_spell_relay absent",
             "JETSETCRAFT_ADVENTURE_PROVIDER cataclysm version=3.31",
             "JETSETCRAFT_GAMETEST_PASS activity_dimension_return dimensions=absent",
             "JETSETCRAFT_GAMETEST_PASS graffiti_lifecycle native_support_ticks=40"
-          ]
+          ],
+          "dedicated_server_smoke_scope": "startup_only",
+          "dedicated_server_shutdown_evidence": "not asserted: SIGTERM process-group cleanup, two-second wait, then attempted SIGKILL; exit status ignored; no RCON stop or saved-dimensions assertion"
         },
         {
           "id": 124997134415,
@@ -101,13 +107,15 @@
           "url": "https://github.com/Herbertofury/JetSetCraft/actions/runs/41356358302/job/124997134415",
           "required_gametests_passed": 28,
           "dedicated_server_ready": true,
-          "normal_shutdown_dimensions_saved": true,
+          "normal_shutdown_dimensions_saved": null,
           "provider_markers": [
             "JETSETCRAFT_GAMETEST_PASS rush_spell_relay absent",
             "JETSETCRAFT_ADVENTURE_PROVIDER cataclysm version=3.31",
             "JETSETCRAFT_GAMETEST_PASS activity_dimension_return dimensions=absent",
             "JETSETCRAFT_GAMETEST_PASS graffiti_lifecycle native_support_ticks=40"
-          ]
+          ],
+          "dedicated_server_smoke_scope": "startup_only",
+          "dedicated_server_shutdown_evidence": "not asserted: SIGTERM process-group cleanup, two-second wait, then attempted SIGKILL; exit status ignored; no RCON stop or saved-dimensions assertion"
         },
         {
           "id": 124997134603,
@@ -116,13 +124,15 @@
           "url": "https://github.com/Herbertofury/JetSetCraft/actions/runs/41356358302/job/124997134603",
           "required_gametests_passed": 28,
           "dedicated_server_ready": true,
-          "normal_shutdown_dimensions_saved": true,
+          "normal_shutdown_dimensions_saved": null,
           "provider_markers": [
             "JETSETCRAFT_GAMETEST_PASS rush_spell_relay absent",
             "JETSETCRAFT_ADVENTURE_PROVIDER aether version=1.20.1-1.5.2-neoforge",
             "JETSETCRAFT_GAMETEST_PASS activity_dimension_return dimensions=aether:the_aether",
             "JETSETCRAFT_GAMETEST_PASS graffiti_lifecycle native_support_ticks=40"
-          ]
+          ],
+          "dedicated_server_smoke_scope": "startup_only",
+          "dedicated_server_shutdown_evidence": "not asserted: SIGTERM process-group cleanup, two-second wait, then attempted SIGKILL; exit status ignored; no RCON stop or saved-dimensions assertion"
         },
         {
           "id": 124997134635,
@@ -131,13 +141,15 @@
           "url": "https://github.com/Herbertofury/JetSetCraft/actions/runs/41356358302/job/124997134635",
           "required_gametests_passed": 28,
           "dedicated_server_ready": true,
-          "normal_shutdown_dimensions_saved": true,
+          "normal_shutdown_dimensions_saved": null,
           "provider_markers": [
             "JETSETCRAFT_ADVENTURE_PROVIDER irons_spellbooks version=1.20.1-3.4.0.2",
             "JETSETCRAFT_GAMETEST_PASS activity_dimension_return dimensions=absent",
             "JETSETCRAFT_GAMETEST_PASS rush_spell_relay provider=irons_spellbooks",
             "JETSETCRAFT_GAMETEST_PASS graffiti_lifecycle native_support_ticks=40"
-          ]
+          ],
+          "dedicated_server_smoke_scope": "startup_only",
+          "dedicated_server_shutdown_evidence": "not asserted: SIGTERM process-group cleanup, two-second wait, then attempted SIGKILL; exit status ignored; no RCON stop or saved-dimensions assertion"
         },
         {
           "id": 124997134536,
@@ -146,13 +158,15 @@
           "url": "https://github.com/Herbertofury/JetSetCraft/actions/runs/41356358302/job/124997134536",
           "required_gametests_passed": 28,
           "dedicated_server_ready": true,
-          "normal_shutdown_dimensions_saved": true,
+          "normal_shutdown_dimensions_saved": null,
           "provider_markers": [
             "JETSETCRAFT_GAMETEST_PASS rush_spell_relay absent",
             "JETSETCRAFT_ADVENTURE_PROVIDER aoa3 version=3.7.1",
             "JETSETCRAFT_GAMETEST_PASS activity_dimension_return dimensions=aoa3:precasia",
             "JETSETCRAFT_GAMETEST_PASS graffiti_lifecycle native_support_ticks=40"
-          ]
+          ],
+          "dedicated_server_smoke_scope": "startup_only",
+          "dedicated_server_shutdown_evidence": "not asserted: SIGTERM process-group cleanup, two-second wait, then attempted SIGKILL; exit status ignored; no RCON stop or saved-dimensions assertion"
         },
         {
           "id": 124997134611,
@@ -161,7 +175,7 @@
           "url": "https://github.com/Herbertofury/JetSetCraft/actions/runs/41356358302/job/124997134611",
           "required_gametests_passed": 28,
           "dedicated_server_ready": true,
-          "normal_shutdown_dimensions_saved": true,
+          "normal_shutdown_dimensions_saved": null,
           "provider_markers": [
             "JETSETCRAFT_ADVENTURE_PROVIDER aether version=1.20.1-1.5.2-neoforge",
             "JETSETCRAFT_ADVENTURE_PROVIDER aoa3 version=3.7.1",
@@ -170,7 +184,9 @@
             "JETSETCRAFT_GAMETEST_PASS activity_dimension_return dimensions=aether:the_aether,aoa3:precasia",
             "JETSETCRAFT_GAMETEST_PASS rush_spell_relay provider=irons_spellbooks",
             "JETSETCRAFT_GAMETEST_PASS graffiti_lifecycle native_support_ticks=40"
-          ]
+          ],
+          "dedicated_server_smoke_scope": "startup_only",
+          "dedicated_server_shutdown_evidence": "not asserted: SIGTERM process-group cleanup, two-second wait, then attempted SIGKILL; exit status ignored; no RCON stop or saved-dimensions assertion"
         }
       ]
     }
@@ -404,7 +420,7 @@
     "Roster and mission profiles are implemented; visible physical residents and follower AI are not.",
     "The native Iron relay is one narrowly scoped projectile adapter, not a full spellbook, summon or arbitrary capability snapshot system.",
     "The tested providers and representative mobs do not certify every mob, boss, spell, recipe or cross-mod combination.",
-    "Normal save and shutdown paths are tested; forced crashes and storage failures are not certified.",
+    "Base workflows #280/#282 verify normal dedicated-server save/shutdown, and GameTest-server normal-save evidence remains valid. The eight provider dedicated-server smoke jobs prove startup only; their SIGTERM/SIGKILL cleanup does not establish graceful save/shutdown. Forced crashes and storage failures are not certified.",
     "Custom data-pack profiles support bounded block maps and rewards, not arbitrary structure/NBT imports or an in-game map editor.",
     "The Crossfade Yard example is statically validated, not separately human playtested.",
     "Two exact Sonic recording metadata entries and an audio importer are included; supplied recording masters are not bundled or auditioned."
@@ -477,5 +493,29 @@
       "This follow-up ran the base workflow; the nine-configuration provider evidence belongs to the separately identified original PR #41 JAR.",
       "Follow-up capture completion is verified from native logs; the ten images in the primary gallery remain the original inspected PR #41 captures."
     ]
-  }
+  },
+  "scope_corrections": [
+    {
+      "date_utc": "2026-11-02",
+      "id": "provider_dedicated_smoke_startup_scope",
+      "affected_workflow_id": 41356358302,
+      "affected_job_ids": [
+        124997134620,
+        124997134535,
+        124997134668,
+        124997134415,
+        124997134603,
+        124997134635,
+        124997134536,
+        124997134611
+      ],
+      "previous_claim": "All nine dedicated-server configurations completed normal shutdown with dimensions saved.",
+      "corrected_scope": "All nine configurations passed their 28 GameTests and dedicated-server startup. The eight provider dedicated smoke jobs did not assert normal save/shutdown; null normal_shutdown_dimensions_saved means not established, not a failed historical job.",
+      "basis": "The pinned provider workflow sends SIGTERM to the server process group, waits two seconds, then attempts SIGKILL cleanup and ignores exit status. It has no RCON stop or saved-dimensions shutdown assertion.",
+      "workflow_source": "https://github.com/Herbertofury/JetSetCraft/blob/c733852b260ef5dbf2cb54e7d41fc98ac10b8363/.github/workflows/wave2-provider-compat.yml",
+      "unaffected_evidence": "Base #280 and #282 normal dedicated-server save/shutdown, GameTest-server normal-save evidence, successful historical job conclusions, all commits/jobs/test counts/provider markers, artifact hashes and capture hashes remain unchanged.",
+      "followup_receipt": "https://github.com/Herbertofury/JetSetCraft/blob/main/docs/verification/reward-journeys/README.md",
+      "followup_status_at_correction": "Alpha.4 base #286 (41379581968) and provider matrix #59 (41379581891) passed 35 GameTests and the explicit readiness/RCON-stop/saved-dimensions gate in all nine configurations on 2026-11-02. The separate reward-journeys receipt records the tested source and merged tree. These later results are not attributed retroactively to the alpha.3 jobs."
+    }
+  ]
 }

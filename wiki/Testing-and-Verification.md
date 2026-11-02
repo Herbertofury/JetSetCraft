@@ -2,23 +2,57 @@
 
 JetSetCraft treats a passing Java compile as intermediate evidence, not final proof. The repository CI regenerates assets, validates contracts, builds the reobfuscated JAR, runs real Forge GameTests, and starts a real dedicated server.
 
-## Alpha.3 activity and arena acceptance
+## Alpha.4 reward, journey and build acceptance
 
-The activity and arena implementation merged in [PR #41](https://github.com/Herbertofury/JetSetCraft/pull/41) passed **all 28 real Forge GameTests in each of nine configurations**, plus every configuration's build and dedicated-server readiness/save/shutdown checks. The base run also produced **ten reviewed 1280 × 720 real-client captures**. The [verification receipt, machine-readable record and gallery](https://github.com/Herbertofury/JetSetCraft/tree/main/docs/verification/arena-circuit) preserve the exact source identities, artifact and scope.
+The **`0.4.0-alpha.4` implementation merged through [PR #43](https://github.com/Herbertofury/JetSetCraft/pull/43)** passed **all 35 real Forge GameTests in each of nine configurations**, each configuration's build, and dedicated-server readiness followed by an RCON stop and verified normal saved-dimensions shutdown. The base also completed the graphical audit and produced **thirteen reviewed 1280 × 720 native captures**. This is **315 successful test executions**, not 315 different tests. The [reward/journey receipt, machine-readable evidence and gallery](https://github.com/Herbertofury/JetSetCraft/tree/main/docs/verification/reward-journeys) record the exact artifacts and limits.
+
+The verified feature is [`b120db1`](https://github.com/Herbertofury/JetSetCraft/commit/b120db1b0a75870f5b9275f81e5e072f836a3893), tested through PR integration [`b0506b0`](https://github.com/Herbertofury/JetSetCraft/commit/b0506b052e2e8d7b8f762bd5da3e6daea878a27f) and merged as [`e826694`](https://github.com/Herbertofury/JetSetCraft/commit/e826694c3429394b2b264f153cd9ea34b1fb9051). All three have Git tree **`1aab5454652554bffee78299a8f86a2c19013261`**. All nine artifacts contain the same **5,644,758-byte JAR**, SHA-256 **`182e4b589191c288472b059e9be71b89374687768f079580301153d97498e24c`**; their downloaded ZIP digests matched GitHub's artifact records.
+
+| Configuration | Completed alpha.4 job |
+|---|---|
+| Base Forge 1.20.1 / Java 17 | [Verify JetSetCraft #286](https://github.com/Herbertofury/JetSetCraft/actions/runs/41379581968/job/125067211271): build, 35 tests, normal server save/shutdown and thirteen reviewed client captures |
+| Alex's Mobs 1.22.9 | [Provider #59 — alexsmobs](https://github.com/Herbertofury/JetSetCraft/actions/runs/41379581891/job/125067210841): build, 35 tests and normal server save/shutdown |
+| Alex's Caves 2.0.2 | [Provider #59 — alexscaves](https://github.com/Herbertofury/JetSetCraft/actions/runs/41379581891/job/125067210692): build, 35 tests and normal server save/shutdown |
+| Cataclysm 3.31 | [Provider #59 — cataclysm](https://github.com/Herbertofury/JetSetCraft/actions/runs/41379581891/job/125067210466): build, 35 tests and normal server save/shutdown |
+| Alex's Mobs + Alex's Caves + Cataclysm | [Provider #59 — all](https://github.com/Herbertofury/JetSetCraft/actions/runs/41379581891/job/125067211000): build, 35 tests and normal server save/shutdown |
+| Aether 1.20.1-1.5.2-neoforge | [Provider #59 — aether](https://github.com/Herbertofury/JetSetCraft/actions/runs/41379581891/job/125067210745): build, 35 tests and normal server save/shutdown |
+| Iron's Spells 1.20.1-3.4.0.2 | [Provider #59 — irons_spells](https://github.com/Herbertofury/JetSetCraft/actions/runs/41379581891/job/125067210739): build, 35 tests and normal server save/shutdown |
+| AoA 1.20.1-3.7.1 Beta | [Provider #59 — aoa](https://github.com/Herbertofury/JetSetCraft/actions/runs/41379581891/job/125067210702): build, 35 tests and normal server save/shutdown |
+| Aether + Iron's Spells + AoA + Cataclysm | [Provider #59 — adventure_all](https://github.com/Herbertofury/JetSetCraft/actions/runs/41379581891/job/125067210795): build, 35 tests and normal server save/shutdown |
+
+### Seven additional acceptance cases
+
+| Alpha.4 marker | Production behavior exercised |
+|---|---|
+| `crew_progress_history` | Actual pre-house rewards, sixteen-row history, saved identity, once-only founding transfer and a separate longer replay guard |
+| `crew_progress_caps` | Credited amounts after caps, explicit busy/no-focus training results and affordable goals that still require physical readiness |
+| `crew_progress_mission` | Mission reward goes to its assigned member, with the actual saved level transition, consumed job and replay rejection |
+| `rush_journey_preview` | Actual room offers, objectives and reward previews; stale/unoffered selection rejection and immutable snapshots |
+| `rush_journey_history` | Real constructed-room admission, bounded six-room history, supplied settlement records without invented payouts, stale receipt rejection and Encore reset |
+| `rush_build_rules` | Finite distance charge, genuine aerial observations, exact-rank remix, unavailable-provider and stale-version rejection, and the three-slot limit |
+| `rush_build_runtime` | Real manager/owned-rival movement and combat paths, visible-target mark, secondary-hit isolation, pause/expiry behavior and exact source-state return |
+
+The rank-one Breakbeat test preserves its mark and active clock through **five paused manager calls**, then proves the mark remains at active tick 49 and expires at **exactly 50 active ticks**. It checks removal of the visible Exposed label and damage multiplier, no replacement mark hiding the result, and unchanged native mob health/effects. Every configuration recorded `JETSETCRAFT_RUSH_MARK_EXPIRY active_ticks=50 paused_calls=5`. These fixture-driven production calls do not claim a fifty-tick human maneuver or a human balance result.
+
+The new client frames show the first **Journey** map, initial **Build** with empty artifact slots, and **Progress** with empty reward history and a real next house goal. No completed room, remix, claimed mission, displayed earned receipt or developed build is pictured. Server GameTests supply their respective mechanic and settlement evidence.
+
+## Historical alpha.3 activity and arena acceptance
+
+The activity and arena implementation merged in [PR #41](https://github.com/Herbertofury/JetSetCraft/pull/41) passed **all 28 real Forge GameTests in each of nine configurations**, plus every configuration's build and dedicated-server startup checks. The base also verified normal dedicated-server save/shutdown and produced **ten reviewed 1280 × 720 real-client captures**. The [historical receipt and dated scope correction](https://github.com/Herbertofury/JetSetCraft/tree/main/docs/verification/arena-circuit#scope-correction--2026-11-02) preserve exact identities and explain that the eight provider smoke jobs used SIGTERM/SIGKILL cleanup without a normal-shutdown assertion. GameTest-server normal-save output remains separate valid evidence; alpha.4's stronger gate does not retroactively change those jobs.
 
 The verified feature commit is [`c733852`](https://github.com/Herbertofury/JetSetCraft/commit/c733852b260ef5dbf2cb54e7d41fc98ac10b8363), tested through PR integration [`2626a8d`](https://github.com/Herbertofury/JetSetCraft/commit/2626a8d63c7c065a6ca5c241610993a28bdb58ca). PR #41 merged as [`e57e9ab`](https://github.com/Herbertofury/JetSetCraft/commit/e57e9ab9732a84d90e6ac35a82439e54cd4461ab). All three commits have Git tree `e5e127156d0335a9c6f2e33ba153e8ecfc75e757`, tying the merged implementation to the tested source. These results were recorded on **2026-11-01**.
 
 | Configuration | Completed evidence |
 |---|---|
 | Base Forge 1.20.1 / Java 17 | [Verify JetSetCraft #280](https://github.com/Herbertofury/JetSetCraft/actions/runs/41356358215/job/124997134020): build, 28 GameTests, dedicated-server readiness/save/shutdown and ten real-client captures |
-| Alex's Mobs 1.22.9 | [Provider #56 — `alexsmobs`](https://github.com/Herbertofury/JetSetCraft/actions/runs/41356358302/job/124997134620): build, 28 GameTests and dedicated-server readiness/save/shutdown |
-| Alex's Caves 2.0.2 | [Provider #56 — `alexscaves`](https://github.com/Herbertofury/JetSetCraft/actions/runs/41356358302/job/124997134535): build, 28 GameTests and dedicated-server readiness/save/shutdown |
-| Cataclysm 3.31 | [Provider #56 — `cataclysm`](https://github.com/Herbertofury/JetSetCraft/actions/runs/41356358302/job/124997134668): build, 28 GameTests and dedicated-server readiness/save/shutdown |
-| Alex's Mobs + Alex's Caves + Cataclysm | [Provider #56 — `all`](https://github.com/Herbertofury/JetSetCraft/actions/runs/41356358302/job/124997134415): build, 28 GameTests and dedicated-server readiness/save/shutdown |
-| Aether 1.20.1-1.5.2-neoforge | [Provider #56 — `aether`](https://github.com/Herbertofury/JetSetCraft/actions/runs/41356358302/job/124997134603): build, 28 GameTests and dedicated-server readiness/save/shutdown |
-| Iron's Spells 1.20.1-3.4.0.2 | [Provider #56 — `irons_spells`](https://github.com/Herbertofury/JetSetCraft/actions/runs/41356358302/job/124997134635): build, 28 GameTests and dedicated-server readiness/save/shutdown |
-| AoA 1.20.1-3.7.1 Beta | [Provider #56 — `aoa`](https://github.com/Herbertofury/JetSetCraft/actions/runs/41356358302/job/124997134536): build, 28 GameTests and dedicated-server readiness/save/shutdown |
-| Aether + Iron's Spells + AoA + Cataclysm | [Provider #56 — `adventure_all`](https://github.com/Herbertofury/JetSetCraft/actions/runs/41356358302/job/124997134611): build, 28 GameTests and dedicated-server readiness/save/shutdown |
+| Alex's Mobs 1.22.9 | [Provider #56 — `alexsmobs`](https://github.com/Herbertofury/JetSetCraft/actions/runs/41356358302/job/124997134620): build, 28 GameTests and dedicated-server startup smoke (normal shutdown not asserted) |
+| Alex's Caves 2.0.2 | [Provider #56 — `alexscaves`](https://github.com/Herbertofury/JetSetCraft/actions/runs/41356358302/job/124997134535): build, 28 GameTests and dedicated-server startup smoke (normal shutdown not asserted) |
+| Cataclysm 3.31 | [Provider #56 — `cataclysm`](https://github.com/Herbertofury/JetSetCraft/actions/runs/41356358302/job/124997134668): build, 28 GameTests and dedicated-server startup smoke (normal shutdown not asserted) |
+| Alex's Mobs + Alex's Caves + Cataclysm | [Provider #56 — `all`](https://github.com/Herbertofury/JetSetCraft/actions/runs/41356358302/job/124997134415): build, 28 GameTests and dedicated-server startup smoke (normal shutdown not asserted) |
+| Aether 1.20.1-1.5.2-neoforge | [Provider #56 — `aether`](https://github.com/Herbertofury/JetSetCraft/actions/runs/41356358302/job/124997134603): build, 28 GameTests and dedicated-server startup smoke (normal shutdown not asserted) |
+| Iron's Spells 1.20.1-3.4.0.2 | [Provider #56 — `irons_spells`](https://github.com/Herbertofury/JetSetCraft/actions/runs/41356358302/job/124997134635): build, 28 GameTests and dedicated-server startup smoke (normal shutdown not asserted) |
+| AoA 1.20.1-3.7.1 Beta | [Provider #56 — `aoa`](https://github.com/Herbertofury/JetSetCraft/actions/runs/41356358302/job/124997134536): build, 28 GameTests and dedicated-server startup smoke (normal shutdown not asserted) |
+| Aether + Iron's Spells + AoA + Cataclysm | [Provider #56 — `adventure_all`](https://github.com/Herbertofury/JetSetCraft/actions/runs/41356358302/job/124997134611): build, 28 GameTests and dedicated-server startup smoke (normal shutdown not asserted) |
 
 ### Client-audit follow-up
 
@@ -26,7 +60,7 @@ A post-merge repeat passed build, all 28 GameTests and dedicated-server smoke bu
 
 [Verify JetSetCraft #282](https://github.com/Herbertofury/JetSetCraft/actions/runs/41357798877/job/125001513156) then passed its build, all 28 GameTests, server smoke, ten captures and all three visual-audit PASS markers. The feature `fe679cf`, tested integration `c0b2028` and actual merge `76f44fe` share tree `ffc85769b8d50143cb7c2e1c66f240ed01515bf8`. The [complete follow-up receipt](https://github.com/Herbertofury/JetSetCraft/tree/main/docs/verification/arena-circuit#follow-up-repeatable-client-fixture-and-final-guides) records the initial failure and observed room/anchor checks.
 
-The downloadable JAR remains the exact original PR #41 artifact tested in all nine configurations. PR #42 has its own passing base result; ordinary gameplay sources and resources are identical. The primary ten-image gallery remains the original inspected capture set.
+The historical alpha.3 JAR remains the exact original PR #41 artifact tested in all nine configurations. PR #42 has its own passing base result; ordinary gameplay sources and resources are identical. That ten-image gallery remains the original inspected capture set, separate from alpha.4.
 
 ### Activity and arena test coverage
 
@@ -48,7 +82,7 @@ The provider-present proofs passed with the actual source mods loaded. The Iron'
 
 ## Versioned verification evidence
 
-The published **v0.3.0** release has **nine** GameTests, as recorded in its [release evidence](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/RELEASE_EVIDENCE_0.3.0.md). The historical **0.4.0-alpha.1** checkpoint added six Rival Rush tests, for fifteen; its [receipt and original captures](https://github.com/Herbertofury/JetSetCraft/tree/main/docs/verification/rival-rush) are preserved. The historical **0.4.0-alpha.2** source added four crew-house/integration tests, bringing that checkpoint to **nineteen**. The **alpha.3** activity/arena implementation adds nine tests, bringing the verified total to **28**, with its completed evidence linked above. Development evidence does not change the published stable release's version or history.
+The published **v0.3.0** release has **nine** GameTests, as recorded in its [release evidence](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/RELEASE_EVIDENCE_0.3.0.md). The historical **0.4.0-alpha.1** checkpoint added six Rival Rush tests, for fifteen; its [receipt and original captures](https://github.com/Herbertofury/JetSetCraft/tree/main/docs/verification/rival-rush) are preserved. The historical **0.4.0-alpha.2** source added four crew-house/integration tests, bringing that checkpoint to **nineteen**. **Alpha.3** added nine activity/arena tests, reaching **28**. **Alpha.4** adds seven reward/journey/build tests, reaching **35**, with all nine configurations verified above. Development evidence does not change the published stable release's version or history.
 
 ### Historical alpha.2 checkpoint
 
@@ -123,14 +157,16 @@ Client controls remain change-driven: any digital mask or analog movement change
 
 ## Dedicated-server smoke
 
-CI launches Forge with `eula=true`, waits for the real ready line, and fails on lifecycle/mod-loading/fatal JetSetCraft errors. The produced JAR and logs are uploaded as workflow artifacts.
+CI launches Forge with `eula=true`, waits for the real ready line, and fails on lifecycle/mod-loading/fatal JetSetCraft errors. Alpha.4's base and all eight provider jobs then issue an RCON stop and require the normal saved-dimensions shutdown output and successful process completion. The produced JAR and logs are uploaded as workflow artifacts. Older provider startup-only smoke results retain their historical scope described above.
 
 ### Known upstream messages retained in passing logs
 
-The final [`adventure_all` log](https://github.com/Herbertofury/JetSetCraft/actions/runs/41356358302/job/124997134611) contains two nonfatal upstream issues alongside its successful tests and server smoke:
+The historical alpha.3 [`adventure_all` log](https://github.com/Herbertofury/JetSetCraft/actions/runs/41356358302/job/124997134611) contains two nonfatal upstream issues alongside its successful tests and dedicated-server startup smoke:
 
 - **AoA's remote update response:** Forge's version checker could not parse the response from the URL declared in AoA's `META-INF/mods.toml` (`Expected ':' at line 120 column 13`). This affected update information, not the tested arena or dimension data.
 - **Iron's concentration-amulet recipe:** `data/irons_spellbooks/recipes/curios/concentration_amulet.json` referenced unregistered `irons_spellbooks:mithril_ingot`, so Minecraft rejected recipe `irons_spellbooks:curios/concentration_amulet`. That crafting recipe did not load.
+
+The final alpha.4 [combined adventure job](https://github.com/Herbertofury/JetSetCraft/actions/runs/41379581891/job/125067210795) still records the rejected Iron recipe alongside all 35 passing tests and normal dedicated-server save/shutdown. The AoA checker parse failure was not observed in that final job's GameTest or dedicated-server logs; it remains a historical observation.
 
 The [Compatibility warning ledger](https://github.com/Herbertofury/JetSetCraft/wiki/Compatibility#known-upstream-messages-in-passing-provider-logs) identifies the exact resources and evidence. Passing integration results do not certify all provider recipes or features, and the upstream resources and version pins were not modified to conceal these messages.
 
@@ -140,9 +176,9 @@ Run `gradlew.bat -Djetsetcraft.visualAudit=true runClient --no-daemon` on Window
 
 The development CI also runs `./gradlew runClient -Djetsetcraft.rushVisualAudit=true --no-daemon` with a disposable `RivalRushAudit` world prepared by the [build workflow](https://github.com/Herbertofury/JetSetCraft/blob/main/.github/workflows/build.yml). It enters and leaves Rush through real network actions, compares the returned dimension, inventory and vanilla XP with its observed pre-entry fixture, and writes the setup, district HUD, empty-album and return-result captures.
 
-After return, the crew audit uses an actual Charter on placed fixture blocks, founds a home through production actions, checks two real roster profiles, registers an operational workshop and dispatches a real timed job. It captures **Home, Crew, Facilities and Jobs**. The activity audit then adds **Activities** and **Arena route**, bringing the current total to **ten written 1280 × 720 screenshots**. The gate requires `JETSETCRAFT_RUSH_VISUAL_AUDIT_PASS`, `JETSETCRAFT_CREW_VISUAL_AUDIT_PASS`, `JETSETCRAFT_ACTIVITY_VISUAL_AUDIT_PASS`, the observed Rush fixture marker and all ten capture markers/files. The final [arena-circuit receipt and gallery](https://github.com/Herbertofury/JetSetCraft/tree/main/docs/verification/arena-circuit) preserve the reviewed captures; the earlier [eight-screen crew-house checkpoint](https://github.com/Herbertofury/JetSetCraft/tree/main/docs/verification/crew-house) remains historical evidence.
+After return, the crew audit uses an actual Charter on placed fixture blocks, founds a home through production actions, checks two real roster profiles, registers an operational workshop and dispatches a real timed job. It captures **Home, Crew, Facilities and Jobs**. The activity audit adds **Activities**, **Arena route**, **Journey map**, **Build** and **Crew Progress**, bringing the current total to **thirteen written and reviewed 1280 × 720 screenshots**. The gate requires `JETSETCRAFT_RUSH_VISUAL_AUDIT_PASS`, `JETSETCRAFT_CREW_VISUAL_AUDIT_PASS`, `JETSETCRAFT_ACTIVITY_VISUAL_AUDIT_PASS`, the observed Rush fixture marker and all thirteen capture markers/files. The [reward/journey receipt and gallery](https://github.com/Herbertofury/JetSetCraft/tree/main/docs/verification/reward-journeys) preserve the current evidence. The [ten-screen alpha.3 gallery](https://github.com/Herbertofury/JetSetCraft/tree/main/docs/verification/arena-circuit) and [eight-screen alpha.2 gallery](https://github.com/Herbertofury/JetSetCraft/tree/main/docs/verification/crew-house) remain historical.
 
-The album is empty in capture 03, captures 05–07 retain a hover overlay, and the job is still running in capture 08. These are the actual client states photographed. Captures 09–10 and the audit markers establish Boombox selection, the first arena fork, entry into travel and ordinary return. Forge tests cover real arena combat/clear/settlement and job deadline/claim behavior; the visual audit does not play a complete room or wait through a mission. This short automated run does not measure house progression balance, thirty-minute/Endless enjoyment, sustained performance, physical follower behavior or a complete human session.
+The album is empty when capture 03 is taken; the later return result in capture 04 shows **score 95, one rival and one collected card**. Captures 05–07 retain native hover overlays, and the job is still running in capture 08. Captures 09–11 show the Boombox chooser and first route/map; the audit enters connected travel and returns. Capture 12 has **zero artifacts**. Capture 13 has **empty reward history**, with **16/40 Supplies** toward the **25 × 25** house goal. Forge tests cover actual combat/clear/settlement, receipts, artifact behavior and job claims. The visual audit does not complete a room, claim a mission or demonstrate a populated history. This short automated run does not measure house progression balance, thirty-minute/Endless enjoyment, sustained performance, physical follower behavior or a complete human session.
 
 ## Runtime acceptance world
 
