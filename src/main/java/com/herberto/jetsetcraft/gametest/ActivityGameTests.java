@@ -68,7 +68,7 @@ public final class ActivityGameTests {
                         && store.pendingTraining(owner.getUUID()) == 110 && store.pendingReputation(owner.getUUID(), GANG.toString()) == 28,
                 "Tag, hill, showdown, arena and Rush rewards did not share one bounded pending account");
         CompoundTag beforeFound = store.save(new CompoundTag());
-        check(beforeFound.getInt("Schema") == 2 && beforeFound.equals(CrewHouseData.load(beforeFound).save(new CompoundTag())),
+        check(beforeFound.getInt("Schema") == 3 && beforeFound.equals(CrewHouseData.load(beforeFound).save(new CompoundTag())),
                 "Pending amounts or receipt identities did not round-trip through world SavedData");
         helper.getLevel().setBlockAndUpdate(anchor.below(), Blocks.STONE.defaultBlockState());
         helper.getLevel().setBlockAndUpdate(anchor, ModBlocks.BOOMBOX.get().defaultBlockState());

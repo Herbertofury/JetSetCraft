@@ -39,6 +39,27 @@ public final class RushArenaCatalog extends SimpleJsonResourceReloadListener {
         Reward(String label, RushRun.Upgrade upgrade) { this.label = label; this.upgrade = upgrade; }
         public String label() { return label; }
         public RushRun.Upgrade upgrade() { return upgrade; }
+        /** The same stable color labels the map, the personal cache and its floor marker. */
+        public int color() {
+            return switch (this) {
+                case DAMAGE -> 0xFF9854;
+                case CRITICAL -> 0xED7DBB;
+                case AREA -> 0x6AE2F3;
+                case RELIC -> 0xBD99FF;
+                case MAGNET -> 0xF7DA66;
+                case RECOVERY -> 0x94E57F;
+            };
+        }
+        public BlockState marker() {
+            return switch (this) {
+                case DAMAGE -> Blocks.ORANGE_GLAZED_TERRACOTTA.defaultBlockState();
+                case CRITICAL -> Blocks.MAGENTA_GLAZED_TERRACOTTA.defaultBlockState();
+                case AREA -> Blocks.CYAN_GLAZED_TERRACOTTA.defaultBlockState();
+                case RELIC -> Blocks.PURPLE_GLAZED_TERRACOTTA.defaultBlockState();
+                case MAGNET -> Blocks.YELLOW_GLAZED_TERRACOTTA.defaultBlockState();
+                case RECOVERY -> Blocks.LIME_GLAZED_TERRACOTTA.defaultBlockState();
+            };
+        }
     }
     public record MapBlock(BlockPos offset, BlockState state) {}
     public record Profile(ResourceLocation id, String name, String description, int radius, int seconds,
@@ -51,6 +72,7 @@ public final class RushArenaCatalog extends SimpleJsonResourceReloadListener {
             tag.putString("Id", id.toString()); tag.putString("Name", name); tag.putString("Description", description);
             tag.putInt("Radius", radius); tag.putInt("Seconds", seconds);
             tag.putString("RewardLabel", reward.label() + " + " + sharedReward + " crew progress");
+            tag.putString("RewardFamily", reward.name().toLowerCase(Locale.ROOT)); tag.putInt("RewardColor", reward.color());
             return tag;
         }
     }

@@ -85,6 +85,8 @@ public final class RivalRushManager {
         long paintDue;
         long staggerUntil;
         long exposedUntil;
+        long venomUntil, venomDue, chillUntil;
+        int venomRank, chillRank;
         double exposureMultiplier = 1;
         Vec3 paintMark;
         boolean claimed;
@@ -122,6 +124,8 @@ public final class RivalRushManager {
         long lastHorn, lastSoul, lastShockwave, lastSpell;
         long lastAirBreak = -100, lastExpose = -140;
         long airBreakPulses, lineProcs, markApplications;
+        long lastSoulBurst = -100;
+        long multishotVolleys, radiantPulses, soulBursts;
         long cards;
         int sequence, announcedOffer, announcedJourney, musicCharge;
         boolean exiting, finaleSent;
@@ -149,6 +153,9 @@ public final class RivalRushManager {
     }
     public static CompoundTag journeySnapshot(ServerPlayer player) {
         Session s = session(player); return s == null || s.circuit == null ? new CompoundTag() : s.circuit.snapshot(s.run, player.position());
+    }
+    public static CompoundTag cacheSnapshot(ServerPlayer player) {
+        Session s = session(player); return s == null ? new CompoundTag() : s.points.snapshot(player, s.run, s.circuit);
     }
     public static BlockPos arenaDestination(ServerPlayer player) {
         Session s = session(player); return s == null || s.circuit == null ? null : s.circuit.center();
@@ -191,6 +198,12 @@ public final class RivalRushManager {
                 try { from = RushRun.Upgrade.valueOf(selection[0]); to = RushRun.Upgrade.valueOf(selection[1]); }
                 catch (IllegalArgumentException ignored) { return; }
                 if (s.run.remix(from, to, version)) {
+                    // Effects belong to the equipped family; a replacement cannot retain its old damage/control.
+                    for (Actor actor : s.actors.values()) {
+                        if (from == RushRun.Upgrade.VENOM) { actor.venomUntil = 0; actor.venomRank = 0; }
+                        if (from == RushRun.Upgrade.CHILL) { actor.chillUntil = 0; actor.chillRank = 0; }
+                        updateName(s, actor);
+                    }
                     s.motion.reset(player.position());
                     send(player, true, "Remixed " + from.label() + " into " + to.label()
                             + " at rank " + s.run.rank(to) + ". Your other upgrades remain in place.", -1, -1);
@@ -667,6 +680,12 @@ public final class RivalRushManager {
             if (actor.exposedUntil > 0 && time >= actor.exposedUntil) {
                 actor.exposedUntil = 0; actor.exposureMultiplier = 1; updateName(s, actor);
             }
+            if (actor.chillUntil > 0 && time >= actor.chillUntil) {
+                actor.chillUntil = 0; actor.chillRank = 0; updateName(s, actor);
+            }
+            if (actor.venomUntil > 0 && time > actor.venomUntil) {
+                actor.venomUntil = 0; actor.venomRank = 0; updateName(s, actor);
+            }
             if (s.circuit != null && !s.circuit.inArena(mob.position(), 6)) { mob.discard(); iterator.remove(); continue; }
             // Preserve the original mob/AI; stop this run-owned creeper's native fuse from destroying its card actor.
             if (mob instanceof net.minecraft.world.entity.monster.Creeper creeper) creeper.setSwellDir(-1);
@@ -678,6 +697,8 @@ public final class RivalRushManager {
             // Endless changes composition and roles; skating opponents retain a readable, bounded top speed.
             speed += Math.min(0.05, s.run.elapsedTicks() / 180000.0);
             if (actor.role == Role.CAPTAIN) speed = 0.17;
+            boolean chilled = actor.chillUntil > time && s.run.rank(RushRun.Upgrade.CHILL) > 0;
+            if (chilled) speed *= .8 - actor.chillRank * .05;
             double orbit = actor.role == Role.TAGGER && distance < 9 ? 1.1 : 0;
             if (distance > 0.1) {
                 Vec3 horizontal = new Vec3(toward.x, 0, toward.z).normalize();
@@ -693,6 +714,7 @@ public final class RivalRushManager {
                 if (s.player.position().distanceToSqr(mark) < 1.5 * 1.5) hurt(s.player, 6);
             }
             long cadence = actor.role == Role.TAGGER ? (remix(s.run) == 4 ? 50 : 70) : actor.role == Role.CAPTAIN ? 40 : 30;
+            if (chilled) cadence = Math.round(cadence * (1 + actor.chillRank * .15));
             double reach = actor.role == Role.TAGGER ? 12 : Math.max(1.5, mob.getBbWidth() * 0.5 + 0.7);
             if (distance < reach && time - actor.lastAttack >= cadence && mob.hasLineOfSight(s.player)) {
                 actor.lastAttack = time;
@@ -801,6 +823,40 @@ public final class RivalRushManager {
     }
 
     private static void onPaintHit(Session s, Entity original, Vec3 impact) {
+        long time = s.run.elapsedTicks();
+        Actor tagged = s.actors.get(original.getUUID());
+        if (tagged != null && !tagged.claimed) {
+            int venom = s.run.rank(RushRun.Upgrade.VENOM), chill = s.run.rank(RushRun.Upgrade.CHILL);
+            if (venom > 0) {
+                if (tagged.venomRank == 0 || tagged.venomUntil < time) tagged.venomDue = time + 20;
+                tagged.venomRank = venom; tagged.venomUntil = time + 60 + venom * 20;
+            }
+            if (chill > 0) { tagged.chillRank = chill; tagged.chillUntil = time + 40 + chill * 10; }
+            if (venom > 0 || chill > 0) updateName(s, tagged);
+        }
+        int radiance = s.run.rank(RushRun.Upgrade.RADIANCE);
+        if (radiance > 0 && s.run.hits() % 6 == 0) {
+            s.run.heal(2 + radiance * 2); s.radiantPulses++;
+            s.player.serverLevel().sendParticles(ParticleTypes.HEART, s.player.getX(), s.player.getY() + 1,
+                    s.player.getZ(), 4, .3, .4, .3, .01);
+        }
+        int multishot = s.run.rank(RushRun.Upgrade.MULTISHOT);
+        if (multishot > 0 && s.run.hits() % 4 == 0) {
+            Vec3 aim = impact.subtract(s.player.position()).normalize();
+            double range = Math.min(28, (10 + multishot * 2) * s.run.areaMultiplier());
+            List<Actor> targets = s.actors.values().stream().filter(a -> a.mob != original && !a.claimed && a.mob.isAlive()
+                            && a.mob.distanceToSqr(s.player) <= range * range && s.player.hasLineOfSight(a.mob)
+                            && a.mob.position().subtract(s.player.position()).normalize().dot(aim) >= .8)
+                    .sorted(Comparator.comparingDouble(a -> a.mob.distanceToSqr(s.player)))
+                    .limit(1 + multishot / 2).toList();
+            boolean hit = false;
+            for (Actor target : targets) {
+                hit |= damageActor(s, target.mob, 2 + multishot, false);
+                s.player.serverLevel().sendParticles(ParticleTypes.SPLASH, target.mob.getX(), target.mob.getY() + .7,
+                        target.mob.getZ(), 8, .3, .4, .3, .03);
+            }
+            if (hit) s.multishotVolleys++;
+        }
         int chain = s.run.rank(RushRun.Upgrade.CHAIN);
         if (chain > 0) {
             double radius = (4 + chain) * s.run.areaMultiplier();
@@ -852,6 +908,31 @@ public final class RivalRushManager {
         if (combatPaused(s)) return;
         long time = s.run.elapsedTicks();
         double interval = s.run.artifactIntervalMultiplier();
+        if (s.run.rank(RushRun.Upgrade.VENOM) > 0) {
+            // Iterate a bounded session snapshot: a damage tick may remove an actor and settle one defeat.
+            for (Actor actor : List.copyOf(s.actors.values())) {
+                if (combatPaused(s)) break;
+                if (actor.venomRank <= 0 || time > actor.venomUntil || time < actor.venomDue) continue;
+                actor.venomDue = time + 20;
+                damageActor(s, actor.mob, 1 + actor.venomRank, false);
+                s.player.serverLevel().sendParticles(ParticleTypes.SPORE_BLOSSOM_AIR, actor.mob.getX(), actor.mob.getY() + .7,
+                        actor.mob.getZ(), 5, .3, .4, .3, .01);
+            }
+        }
+        int burst = s.run.rank(RushRun.Upgrade.SOUL_BURST);
+        if (burst > 0 && s.run.soulBurstCharge() >= 5 && time - s.lastSoulBurst >= Math.round(100 * interval)) {
+            double range = (4 + burst * .5) * s.run.areaMultiplier();
+            List<Actor> targets = s.actors.values().stream().filter(a -> !a.claimed && a.mob.isAlive()
+                            && a.mob.distanceToSqr(s.player) <= range * range && s.player.hasLineOfSight(a.mob))
+                    .sorted(Comparator.comparingDouble(a -> a.mob.distanceToSqr(s.player))).limit(12).toList();
+            if (!targets.isEmpty() && s.run.spendSoulBurst()) {
+                s.lastSoulBurst = time; s.soulBursts++;
+                for (Actor target : targets) damageActor(s, target.mob, 4 + burst * 3, false);
+                s.player.serverLevel().sendParticles(ParticleTypes.SOUL_FIRE_FLAME, s.player.getX(), s.player.getY() + .7,
+                        s.player.getZ(), 20, range / 3, .4, range / 3, .04);
+                s.player.serverLevel().playSound(null, s.player.blockPosition(), SoundEvents.SOUL_ESCAPE, SoundSource.PLAYERS, .5f, 1.1f);
+            }
+        }
         int expose = s.run.rank(RushRun.Upgrade.EXPOSE);
         if (expose > 0 && time - s.lastExpose >= Math.round(140 * interval)) {
             Actor target = s.actors.values().stream().filter(a -> !a.claimed && a.mob.isAlive()
@@ -915,7 +996,9 @@ public final class RivalRushManager {
         boolean exposed = actor.exposedUntil > s.run.elapsedTicks();
         actor.mob.setCustomName(Component.literal(s.gang.canonicalName() + " · "
                 + actor.role.name().toLowerCase(java.util.Locale.ROOT) + " · " + (int) Math.ceil(actor.vitality)
-                + (exposed ? " · Exposed" : ""))
+                + (exposed ? " · Exposed" : "")
+                + (actor.venomUntil >= s.run.elapsedTicks() && actor.venomRank > 0 ? " · Inked" : "")
+                + (actor.chillUntil > s.run.elapsedTicks() ? " · Chilled" : ""))
                 .withStyle(exposed ? ChatFormatting.YELLOW : actor.role == Role.CAPTAIN ? ChatFormatting.GOLD : ChatFormatting.AQUA));
         actor.mob.setCustomNameVisible(exposed || actor.role == Role.CAPTAIN || actor.vitality < actor.maximum);
     }
@@ -1018,12 +1101,18 @@ public final class RivalRushManager {
 
     public static void hurt(ServerPlayer player, double amount) {
         Session s = session(player);
-        if (s == null || combatPaused(s)) return;
+        if (s == null || combatPaused(s) || !Double.isFinite(amount) || amount <= 0) return;
         long time = s.run.elapsedTicks();
         if (time - s.lastHurt < 12) return;
         s.lastHurt = time;
+        double wardBefore = s.run.ward();
         if (s.run.hurt(Math.min(20, Math.max(0, amount))))
             s.objective = "Run finished — your collected cards are banked.";
+        if (s.run.ward() < wardBefore) {
+            player.serverLevel().sendParticles(ParticleTypes.ENCHANTED_HIT, player.getX(), player.getY() + .7,
+                    player.getZ(), 10, .4, .5, .4, .02);
+            player.serverLevel().playSound(null, player.blockPosition(), SoundEvents.SHIELD_BLOCK, SoundSource.PLAYERS, .35f, 1.3f);
+        }
     }
 
     /** Only registered actors/pickups and owned player projectiles may survive a chunk/entity reload. */
@@ -1091,6 +1180,13 @@ public final class RivalRushManager {
         build.putInt("MarkedRivals", (int) s.actors.values().stream().filter(a -> a.exposedUntil > run.elapsedTicks()).count());
         build.putLong("AirBreakPulses", s.airBreakPulses); build.putLong("LineProcs", s.lineProcs);
         build.putLong("MarkApplications", s.markApplications);
+        build.putDouble("Ward", run.ward()); build.putDouble("WardMax", run.maxWard());
+        build.putInt("SoulBurstCharge", run.soulBurstCharge()); build.putInt("SoulBurstChargeMax", 20);
+        build.putInt("SoulBurstCost", 5);
+        build.putInt("VenomRivals", (int) s.actors.values().stream().filter(a -> a.venomRank > 0 && a.venomUntil >= run.elapsedTicks()).count());
+        build.putInt("ChilledRivals", (int) s.actors.values().stream().filter(a -> a.chillUntil > run.elapsedTicks()).count());
+        build.putLong("MultishotVolleys", s.multishotVolleys); build.putLong("RadiantPulses", s.radiantPulses);
+        build.putLong("SoulBursts", s.soulBursts);
         build.putInt("ArtifactSlots", 3);
         build.putBoolean("RemixReady", run.remixReady() && betweenArenas(s) && !run.hasOffer());
         ListTag artifacts = new ListTag(), replacements = new ListTag();
@@ -1125,6 +1221,7 @@ public final class RivalRushManager {
             state.putString("Objective", s.objective); state.putBoolean("Finale", run.awaitingEncore());
             if (s.circuit != null) state.put("Journey", s.circuit.snapshot(run, player.position()));
             state.put("Build", buildSnapshot(s));
+            state.put("Caches", s.points.snapshot(player, run, s.circuit));
             ListTag offers = new ListTag();
             for (RushRun.Upgrade upgrade : run.offers()) {
                 CompoundTag offer = new CompoundTag(); offer.putString("id", upgrade.name());

@@ -40,6 +40,10 @@ public final class RivalRushClient {
         Minecraft minecraft = Minecraft.getInstance();
         CompoundTag previous = state;
         state = incoming.copy();
+        if (state.contains("Caches", Tag.TAG_COMPOUND)) {
+            CompoundTag caches = state.getCompound("Caches");
+            caches.put("Caches", boundedList(caches.getList("Caches", Tag.TAG_COMPOUND), 6));
+        }
         if (state.contains("Journey", Tag.TAG_COMPOUND)) {
             CompoundTag journey = state.getCompound("Journey");
             journey.put("History", boundedList(journey.getList("History", Tag.TAG_COMPOUND), 6));
@@ -93,6 +97,9 @@ public final class RivalRushClient {
     }
     public static boolean isBuildScreenOpen() {
         return Minecraft.getInstance().screen instanceof RivalRushScreen screen && screen.isBuildView();
+    }
+    public static boolean isCacheScreenOpen() {
+        return Minecraft.getInstance().screen instanceof RivalRushScreen screen && screen.isCachesView();
     }
     static int page(boolean cards) { return cards ? albumPage : rosterPage; }
     static int pages(boolean cards) { return cards ? albumPages : rosterPages; }

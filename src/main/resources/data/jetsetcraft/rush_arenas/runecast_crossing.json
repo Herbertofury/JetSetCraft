@@ -1,0 +1,18 @@
+{
+  "name": "Runecast Crossing",
+  "description": "A spell-themed violet crossing with clear casting lanes and short walls. Expand your ability area and earn shared training. Requires Iron's Spells; built in the Rush district with vanilla materials.",
+  "requires_mod": "irons_spellbooks",
+  "radius": 28,
+  "seconds": 150,
+  "defeats": 10,
+  "layout": "cross",
+  "reward": "area",
+  "reward_ranks": 1,
+  "shared_reward": "training",
+  "palette": {
+    "floor": "minecraft:polished_deepslate",
+    "accent": "minecraft:amethyst_block",
+    "wall": "minecraft:purple_concrete",
+    "rail": "minecraft:polished_deepslate_wall"
+  }
+}

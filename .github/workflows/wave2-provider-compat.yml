@@ -143,7 +143,10 @@ jobs:
               crew_rush activity_progression activity_tag activity_safety activity_hill \
               activity_dimension_return rush_spell_relay rush_arena_catalogue rush_arena_rules rush_arena_session \
               rush_build_rules rush_build_runtime rush_journey_preview rush_journey_history \
-              crew_progress_history crew_progress_caps crew_progress_mission; do
+              crew_progress_history crew_progress_caps crew_progress_mission \
+              rush_synergy_rules rush_synergy_control rush_synergy_recovery \
+              rush_cache_options rush_cache_boundaries rush_route_exploration \
+              crew_style_shared_rewards crew_style_persistence crew_style_entry; do
             grep -Fq "JETSETCRAFT_GAMETEST_PASS $marker" "$log" || {
               echo "::error::JetSetCraft GameTest $marker did not pass with ${{ matrix.provider }} installed."
               exit 1
@@ -186,8 +189,12 @@ jobs:
                 echo "::error::The actual Iron Firebolt collision/ownership proof did not run."
                 exit 1
               }
+              grep -Fq 'JETSETCRAFT_GAMETEST_STYLE_RELAY provider_present' "$log"
               ;;
-            *) grep -Fq 'JETSETCRAFT_GAMETEST_PASS rush_spell_relay absent' "$log" ;;
+            *)
+              grep -Fq 'JETSETCRAFT_GAMETEST_PASS rush_spell_relay absent' "$log"
+              grep -Fq 'JETSETCRAFT_GAMETEST_STYLE_RELAY provider_absent' "$log"
+              ;;
           esac
           expected_providers=()
           case "${{ matrix.provider }}" in

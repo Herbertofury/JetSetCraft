@@ -42,14 +42,14 @@ public final class CrewHouseManager {
     private record Candidate(String dimension, BlockPos position, long expires) {}
     private static final Map<MinecraftServer, Map<UUID, Candidate>> CANDIDATES = new HashMap<>();
     private static final class ResponseBudget {
-        long responseAt = -100, previewAt = -100, revision = -1;
+        long responseAt = -100, previewAt = -100, revision = -1, styleRevision = -1;
         UUID house;
         String candidateDimension = "";
         BlockPos candidatePosition;
     }
     private static final Map<MinecraftServer, Map<UUID, ResponseBudget>> RESPONSES = new HashMap<>();
     private static final Set<String> ACTIONS = Set.of("open", "refresh", "found", "relocate", "rename", "preview",
-            "expand", "recruit", "rename_member", "focus", "focus_off", "assign", "claim", "cancel", "facility", "upgrade", "preparation");
+            "expand", "recruit", "rename_member", "focus", "focus_off", "assign", "claim", "cancel", "facility", "upgrade", "preparation", "style");
     private static final int[] EXPANSION_COSTS = {40, 100, 200, 0};
 
     private enum Kind {
@@ -107,6 +107,15 @@ public final class CrewHouseManager {
         CrewHouseData data = CrewHouseData.get(player.getServer());
         CrewProfile profile = data.profile(player.getUUID());
         if (data.blocked(player.getUUID())) { send(player, "This crew record needs recovery or a newer compatible mod version; existing data was retained."); return; }
+        if (action.equals("style")) {
+            boolean selected = data.selectStyle(player.getUUID(), value, revision);
+            send(player, !selected ? "That style is locked, unavailable or the page is stale. Refresh the Style Library."
+                    : CrewStyleLibrary.HOME.equals(value) ? "Your next Rush uses the selected operational house preparation, if available."
+                    : "Starting style selected. Your next Rush begins with one rank of "
+                        + CrewStyleLibrary.preparation(data, player.getUUID()).orElseThrow().label()
+                        + ". This uses the single preparation slot; your crew XP is kept.");
+            return;
+        }
         if (action.equals("found")) {
             if (profile != null || houseId != null || revision != 0) { send(player, "Your home already exists or the page is stale. Refresh the ledger."); return; }
             send(player, found(player, data, value)); return;
@@ -250,10 +259,14 @@ public final class CrewHouseManager {
         return kind.label + " tier " + room.level + " unlocked. Upgraded operational facilities improve frozen mission supply rewards; preparations still grant only one rank.";
     }
 
-    /** Root calls this before creating the active session or teleporting. No perk is granted remotely. */
+    /** One starting rank: a learned style anywhere, otherwise the physically validated house preparation. */
     public static Optional<RushRun.Upgrade> rushPreparation(ServerPlayer player) {
         if (player == null || !normalModeReason(player).isEmpty()) return Optional.empty();
-        CrewProfile profile = CrewHouseData.get(player.getServer()).profile(player.getUUID());
+        CrewHouseData data = CrewHouseData.get(player.getServer());
+        if (data.blocked(player.getUUID())) return Optional.empty();
+        Optional<RushRun.Upgrade> style = CrewStyleLibrary.preparation(data, player.getUUID());
+        if (style.isPresent()) return style;
+        CrewProfile profile = data.profile(player.getUUID());
         if (profile == null || !managementReason(player, profile).isEmpty()) return Optional.empty();
         for (Kind kind : Kind.values()) if (kind.perk.name().equals(profile.preparation)
                 && operationalLevel(player.getServer(), profile, kind) > 0) return Optional.of(kind.perk);
@@ -325,7 +338,16 @@ public final class CrewHouseManager {
     /** Presentation follows the committed result. A disconnected client cannot undo or repeat an award. */
     private static void publishReward(ServerPlayer player, CrewRewardReceipt receipt) {
         try {
-            JetSetNetwork.syncCrewReward(player, receipt.snapshot());
+            CompoundTag notification = receipt.snapshot();
+            long xp = CrewHouseData.get(player.getServer()).styleXp(player.getUUID());
+            ListTag learned = new ListTag();
+            for (CrewStyleLibrary.Lesson lesson : CrewStyleLibrary.LESSONS) {
+                if (lesson.requiredXp() > xp - receipt.crewXp() && lesson.requiredXp() <= xp) {
+                    CompoundTag row = new CompoundTag(); row.putString("Name", lesson.upgrade().label()); learned.add(row);
+                }
+            }
+            notification.put("StylesLearned", learned);
+            JetSetNetwork.syncCrewReward(player, notification);
             CompoundTag state = snapshot(player); state.putBoolean("Open", false);
             JetSetNetwork.syncCrew(player, state);
         } catch (RuntimeException error) {
@@ -345,6 +367,7 @@ public final class CrewHouseManager {
         out.putInt("PendingSupplies", data.pendingSupplies(player.getUUID()));
         out.putLong("PendingCrewXp", data.pendingXp(player.getUUID()));
         out.putLong("PendingTraining", data.pendingTraining(player.getUUID()));
+        out.put("StyleLibrary", CrewStyleLibrary.snapshot(data, player.getUUID(), normalModeReason(player).isEmpty()));
         String founding = foundingReason(player, data, profile);
         out.putBoolean("CanFound", profile == null && founding.isEmpty());
         out.putBoolean("CanRelocate", profile != null && founding.isEmpty()); out.putString("FoundReason", founding);
@@ -565,17 +588,20 @@ public final class CrewHouseManager {
         // Bound read/rejected-action responses before performing the expensive world/album snapshot. Successful
         // transactions change revision, and selecting a different physical block changes context; both respond
         // immediately. Domain mutations and in-memory GameTests never depend on this presentation budget.
-        CrewProfile profile = CrewHouseData.get(player.getServer()).profile(player.getUUID());
+        CrewHouseData data = CrewHouseData.get(player.getServer());
+        CrewProfile profile = data.profile(player.getUUID());
         UUID house = profile == null ? null : profile.id;
         long revision = profile == null ? 0 : profile.revision;
+        long styleRevision = data.styleRevision(player.getUUID());
         Candidate candidate = candidate(player);
         String dimension = candidate == null ? "" : candidate.dimension;
         BlockPos position = candidate == null ? null : candidate.position;
         ResponseBudget budget = responseBudget(player);
         boolean unchanged = java.util.Objects.equals(house, budget.house) && revision == budget.revision
+                && styleRevision == budget.styleRevision
                 && dimension.equals(budget.candidateDimension) && java.util.Objects.equals(position, budget.candidatePosition);
         if (unchanged && now(player) < budget.responseAt + 4) return;
-        budget.responseAt = now(player); budget.house = house; budget.revision = revision;
+        budget.responseAt = now(player); budget.house = house; budget.revision = revision; budget.styleRevision = styleRevision;
         budget.candidateDimension = dimension; budget.candidatePosition = position;
         CompoundTag state = snapshot(player); state.putString("Message", message); JetSetNetwork.syncCrew(player, state);
     }
