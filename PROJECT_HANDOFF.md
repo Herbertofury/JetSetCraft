@@ -10,7 +10,7 @@
 
 ## Continuation-safe state
 
-Tag `v0.3.0` remains the stable release baseline. The development source advances through Rival Rush **alpha.7** to the **0.4.0-alpha.8 Liberty Grind** continuation described below. The stable release reconciles the valuable historical branch work in `docs/RECONCILIATION_0.3.0.md`. Do not revive an archive/export branch as a new base; compare its actual feature content against `main` first.
+Tag `v0.3.0` remains the stable release baseline. The development source advances through Rival Rush **alpha.7**, the initial Liberty Grind **alpha.8**, and the **0.4.0-alpha.9 Liberty Grind campaign expansion** described below. The stable release reconciles the valuable historical branch work in `docs/RECONCILIATION_0.3.0.md`. Do not revive an archive/export branch as a new base; compare its actual feature content against `main` first.
 
 The physical ride item in `JetSetData` is the source of truth. The server owns movement, scoring, graffiti selection/custom payloads, Street Gear, gangs, and persistence. Clients send bounded input and render sanitized snapshots. PlayerAnimator is client-only; optional integrations remain isolated and optional.
 
@@ -18,7 +18,25 @@ Neutral directional input means neutral: stale momentum cannot manufacture camer
 
 The custom graffiti format is deliberately bounded to a 16 × 10, 4-bit palette payload. Do not replace it with arbitrary client texture/file uploads. Paid Marketplace and research-only references remain non-redistributable even when present in the private Desktop/Drive source-assets area.
 
-## Liberty Grind continuation — 0.4.0-alpha.8
+## Current Liberty Grind campaign expansion — 0.4.0-alpha.9
+
+Current source is **alpha.9 / protocol 17**. The mode has six persistent campaign regions, twenty-eight seeded mission templates, difficulty 1–10, 20/25/30 minute budgets and isolated arena radii of 512/640/768 blocks: inclusive widths of 1,025/1,281/1,537. The three frontier routes unlock at 20% liberation of their parent. All ten difficulties are selectable on unlocked routes. Solo operations contribute to shared server liberation, threat and defense offers; shared-squad combat is not implemented.
+
+`LibertyMissionCatalog`, `LibertyMissionPlan` and `LibertyDifficulty` define immutable mission choices and bounded tuning. `LibertyMissionRuntime` owns stage gating and actual action progress for eight primitives: territory, relay, courier, demolition, sweep, scan, escort and defense. A designated-actor hunt is a distinct sweep form. `LibertyManager` performs actual world/entity actions and validates owned damage, surface placement, native core deaths and target identity before credit. Keep optional objectives out of the extraction gate. A bulk paint action captures one active stage and credits only cell centers covered by actually placed overlays.
+
+The director admits at most eight combat actors per operation per tick, caps each operation at 24–96 residents and all operations at 384, and releases a finite lifetime budget over the chosen clock. Priority bosses consume those same budgets. Faction actors retain native Minecraft classes; evoker summons and splitting descendants are excluded from the curated roster. Moving escort/evacuation rigs are mission markers, not a full civilian-rescue AI implementation. Terrain generation belongs only to isolated mission districts; accepted home defense remaps sites onto existing loaded terrain without rebuilding it.
+
+The physical ship hub leads to a mandatory pre-pod review of primary, secondary, armor and four call-in slots. `LibertyArmory` discovers the pinned merged pack's 68 live gun definitions and supplies real light/medium/heavy kits; optional compatible native armor is discovered from the installed registry. The call-in catalogue contains 94 sourced selectable entries plus six originals, and 25 separate shared/mission/historical entries. Nine exact MCDivers calls and seventeen exact TaCZ support weapons use native providers when admitted. Other entries have explicit JetSetCraft effects/hardware, with one-rider vehicles. Preserve the provider mapping and fail-closed safety boundaries; never infer native parity from a display name.
+
+`LibertyCampaignData` owns the shared front and once-only campaign results. `LibertyShipProgress` owns independent requisitions, call-in purchases, four equipped slots and four ship modules. The six retained `LibertyResearch` projects keep super credits/samples separate from ship requisitions and crew balances. Pressure Saver, Signal Lacquer and Supply Skates are prerequisites for three modules; the Crew Sample Lab requires a founded crew with 100 crew XP. Signal Lacquer's legacy three-to-two marked-panel effect does **not** reduce campaign territory quotas. Preserve one Rival Rush starting preparation and three Rush artifact slots.
+
+Defense deadlines use active campaign time only. Losing or missing a regional defense can create an untimed home offer; accepting it is a separate explicit action. Home events use temporary owned actors/overlays and preserve ordinary blocks, chest data, unrelated mobs and existing graffiti. Native MCDivers effects are restricted to isolated districts; safe documented adaptations run at home. The return journal must keep the original source world, location, deep inventory, physical ride and captured vanilla state through ship visits, redeployments, disconnects and rewards. Unknown or unacknowledged saved data remains recoverable rather than being overwritten.
+
+**Final local alpha.9 gates passed on 2 November 2026:** the clean build and ten offline checks, **118/118 required GameTests in each of three fresh configurations**, **nineteen individually reviewed native-client captures**, and normal startup/save/shutdown of the separately installed exact reobfuscated JAR. Each absence lane explicitly skips 21 optional-content cases; full-provider executes every required native marker without a Liberty skip. The [campaign receipt](docs/verification/liberty-campaign/README.md) records the 689-file input identity, JAR hash, both pixel reviews and earlier failed iterations. Source-set gameplay, client screenshots and installed-package smoke remain separate proof boundaries. The client uses disclosed requisition/position/camera fixtures, demonstrates actual paint and two original-world returns, and does not complete a full campaign extraction. Preserve these limits and the original alpha.8 identities. Human 20–30 minute pacing, economy, aiming and sustained multi-player server load remain open playtesting work.
+
+Read [current implementation notes](docs/LIBERTY_GRIND.md), [the player guide](wiki/Liberty-Grind.md), [mission research and historical/current mapping](docs/research/LIBERTY_MISSION_RESEARCH.md), [call-in implementation mapping](docs/research/LIBERTY_CALLIN_IMPLEMENTATION.md), [the dated call-in inventory](docs/research/LIBERTY_CALLIN_CATALOGUE.json), and [exact optional pack/provider setup](docs/LIBERTY_GRIND_PACK.md). These are playable adaptations with explicit limits, not imports of original game assets or every native game mechanic.
+
+## Archived Liberty Grind continuation — 0.4.0-alpha.8
 
 Liberty Grind adds a sixth selectable activity: a server-owned war map, three isolated expedition districts, passenger pod arrival, native TaCZ Helldivers gun combat, rival-clearing/graffiti/skating objectives, field research and a passenger extraction ship. The shared return journal restores the player's source dimension, location, inventory, physical ride, vanilla XP and other captured state. Earned super credits survive an interrupted expedition; field samples require successful extraction. Reward intent and settlement IDs protect recovery from duplicate payouts.
 
@@ -57,6 +75,8 @@ Human pacing, full-session economy/Endless balance, multiplayer scale, visible c
 - `gradlew.bat -Djetsetcraft.rushVisualAudit=true runClient --no-daemon` — Rush/crew/activity/progression audit, only with the workflow's disposable `saves/RivalRushAudit` setup.
 - `python tools/prepare_liberty_pack.py` — hash-checked optional Helldivers pack setup; see the pack guide before running.
 - `gradlew.bat -PlibertyTacz=true runGameTestServer --no-daemon` — real guns, native mission lifecycle and all base regressions.
+- `python tools/prepare_liberty_helldivers.py` — hash-checked optional MCDivers provider setup; follow the current pack guide.
+- `gradlew.bat -PlibertyTacz=true -PlibertyHelldivers=true runGameTestServer --no-daemon` — full optional-provider campaign lane; final alpha.9 receipt records observed outcomes separately.
 - `gradlew.bat -PlibertyTacz=true -Djetsetcraft.libertyVisualAudit=true runClient --no-daemon` — Liberty audit with the workflow's disposable `saves/LibertyGrindAudit` setup.
 
 Release evidence and the exact artifact checksum are recorded in `docs/RELEASE_EVIDENCE_0.3.0.md`.
