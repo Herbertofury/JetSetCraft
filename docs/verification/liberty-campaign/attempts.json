@@ -1,0 +1,32 @@
+[
+  {
+    "attempt": 1,
+    "original_bytes": 716161,
+    "original_sha256": "d0f27c20ec3ae515955c081f038f6fd740339d1cc205f98440556f19a977d44a",
+    "file": "gametest-attempt-1.log",
+    "bytes": 715079,
+    "sha256": "f6ea42afece752a580c5625bb11cd0e7ed7b38641ecab964cb93cd879fd6b237",
+    "result": "Stopped: globally colliding test event-listener names",
+    "transform": "Absolute checkout/cache/tmp paths replaced; all test diagnostics retained."
+  },
+  {
+    "attempt": 2,
+    "original_bytes": 149801,
+    "original_sha256": "32aad5c3c3e99e5c17ecc4e25260d90136d89a2cab39203f7b516c6badb90ef0",
+    "file": "gametest-attempt-2.log",
+    "bytes": 148886,
+    "sha256": "570ecee05211941a47e0515472142fbcacc26683b7b7359f493c5462e77891cb",
+    "result": "112/115; actual home-pod dimension guard and all-gun ammunition assertion under correction",
+    "transform": "Absolute checkout/cache/tmp paths replaced; all test diagnostics retained."
+  },
+  {
+    "attempt": 3,
+    "file": "gametest-attempt-3.log",
+    "bytes": 137862,
+    "sha256": "b6f8000ce33874d0f945fd426bc5fd3b5c605ce60b8e73d8d3ec80c75d2536e6",
+    "source_manifest": "candidate-1-final-source-manifest.json",
+    "matrix": "candidate-1-final-matrix.json",
+    "result": "113/118; LAS-12 native heat/ammo sentinel rejected by magazine guard, and four native fixture issues (home land preflight, FakePlayer damage immunity, server-player fall callback, Rush chunk visibility).",
+    "transform": "Absolute checkout/cache/tmp paths replaced; all test diagnostics retained."
+  }
+]

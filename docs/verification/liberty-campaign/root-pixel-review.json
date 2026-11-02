@@ -1,0 +1,145 @@
+{
+  "status": "PASS",
+  "reviewer": "root",
+  "capture_prefix": "liberty-grind-1793640220492-",
+  "review_method": "Individually viewed all 19 original native-client PNGs; no generated or edited screenshots.",
+  "limits": [
+    "Native advancement toasts overlap upper-right chrome in 15 and 16; objective/actions remain readable.",
+    "Screenshots do not by themselves demonstrate 30-minute human mission pacing or complete every objective."
+  ],
+  "captures": [
+    {
+      "name": "01-campaign-war-map-default",
+      "review": "Six legible faction-colored region cards; root/frontier links and 20% unlocks are visible; no overlapping controls.",
+      "file": "01-campaign-war-map-default.png",
+      "sha256": "68a154492f54cc8b26ebdb22c251261fc6d5733fd265fab60c588503e94677f1",
+      "bytes": 94993
+    },
+    {
+      "name": "02-campaign-plan-default",
+      "review": "Neon Docks, Turf Liberation, difficulty 10/10 and 30-minute plan are visible, with a clear pre-pod review action.",
+      "file": "02-campaign-plan-default.png",
+      "sha256": "585ec705bcb30635281d201381748edad7473ef99fe780fed1d6ac892168603a",
+      "bytes": 157202
+    },
+    {
+      "name": "03-callin-catalog-default",
+      "review": "Search, unlocked/cost indicators and 125-entry pagination are legible with clear navigation.",
+      "file": "03-callin-catalog-default.png",
+      "sha256": "4f28b09ee4120d247a7281bc206696e35a6112d8897f7ee614e5c1e550e261c6",
+      "bytes": 143520
+    },
+    {
+      "name": "04-chromageddon-equipped-default",
+      "review": "CHROMAGEDDON uses player-facing copy; actual purchase balance 270, cost 240, mission limit and equipped slot 4 are visible.",
+      "file": "04-chromageddon-equipped-default.png",
+      "sha256": "e4d75575c677db545f72b7b41bad6a5848cf5371a3afb9e8b3edcaf1b6b466fc",
+      "bytes": 155255
+    },
+    {
+      "name": "05-armory-all-weapons-default",
+      "review": "Primary/secondary/armor tabs, current selection, search and 68-entry pagination are legible.",
+      "file": "05-armory-all-weapons-default.png",
+      "sha256": "38690b41e6da54c7d269bffe5f8056d8ebd4156ef25961f3fab3a20750ddd3b9",
+      "bytes": 138995
+    },
+    {
+      "name": "06-armor-heavy-minimum",
+      "review": "Minimum logical size shows heavy-kit selection and 17 armor/6 toughness/\u221210% movement tradeoff; footer labels intentionally clip with readable controls.",
+      "file": "06-armor-heavy-minimum.png",
+      "sha256": "2c9ea6bcc3175b5b95be0633c834bee2b6d57775258548c71232b4ca0f87d622",
+      "bytes": 101869
+    },
+    {
+      "name": "07-armory-weapon-search-minimum",
+      "review": "Minimum-size native search resolves the exact Breaker and displays [SET]; long input scrolls horizontally as expected.",
+      "file": "07-armory-weapon-search-minimum.png",
+      "sha256": "4ccf97c07f50d6be0a25e37fb3ccef32c3e8e7a9d9e3d6c21d2a05f70559b8f1",
+      "bytes": 101315
+    },
+    {
+      "name": "08-campaign-war-map-minimum",
+      "review": "All six region cards and three 20% route connectors fit at 320\u00d7240 logical pixels; faction colors, lock icons and main controls remain legible.",
+      "file": "08-campaign-war-map-minimum.png",
+      "sha256": "0cb7acad08c498d9edf8cff9ea7ef4653179544ae50175e39290e45c2878f68d",
+      "bytes": 78878
+    },
+    {
+      "name": "09-campaign-plan-minimum",
+      "review": "Difficulty 10/10,30-minute budget, mission text and review action remain readable at minimum size; secondary guidance uses an intentional ellipsis.",
+      "file": "09-campaign-plan-minimum.png",
+      "sha256": "bf8f3cbeff1fbdfd5e7ebdf27985faa9fe9997dc27b40cdc29fbabce9be8c015",
+      "bytes": 104717
+    },
+    {
+      "name": "10-loadout-review-minimum",
+      "review": "Minimum review shows primary Breaker, secondary Peacemaker, heavy armor and all four selected call-ins, with edit controls and the explicit launch confirmation visible.",
+      "file": "10-loadout-review-minimum.png",
+      "sha256": "f23ad4a7672e536933c5b64638ce8297b082bed4ae0edd94a065a8866d2457f4",
+      "bytes": 109711
+    },
+    {
+      "name": "10b-loadout-review-scroll-minimum",
+      "review": "Scrolled minimum review reveals the mission-loan and original inventory/XP/world restoration explanation; all edit and launch controls remain in place.",
+      "file": "10b-loadout-review-scroll-minimum.png",
+      "sha256": "c07d5ad19b2f48c809c560b30098897ea6de35a9e50e948283fae4595e10be38",
+      "bytes": 109242
+    },
+    {
+      "name": "11-loadout-review-default",
+      "review": "Default review fits the complete chosen loadout and restoration explanation without scrolling; explicit Confirm loadout/Launch pod is visible.",
+      "file": "11-loadout-review-default.png",
+      "sha256": "6a0ed87a5bed26b11caec24a0fe83b6c9c07eaaff1296d7f9a5794778b95a398",
+      "bytes": 160394
+    },
+    {
+      "name": "12-live-pod",
+      "review": "Visible physical pod surrounds its seated rider, heavy armor and skates are visible, and the mission HUD correctly says DROPPING.",
+      "file": "12-live-pod.png",
+      "sha256": "40a121a2a99bacda53619293521ec944e43761c894796ca80c29e093c9c833e2",
+      "bytes": 172460
+    },
+    {
+      "name": "13-selected-native-gun-hud",
+      "review": "Native selected Breaker model and ammunition HUD are visible in first person during an active mission, surrounded by actual themed enemy actors.",
+      "file": "13-selected-native-gun-hud.png",
+      "sha256": "23f3842478ef42d485cd74849a0832c354102e292d7efe8c0678ae73115e0c56",
+      "bytes": 549056
+    },
+    {
+      "name": "14-chromageddon-paint-blast",
+      "review": "Real pink/cyan graffiti covers nearby ground while enemies display damage/death effects; contemporaneous HUD reads 5/40 paint progress. This frame alone does not claim mission completion.",
+      "file": "14-chromageddon-paint-blast.png",
+      "sha256": "87a58aae0b456c06ba2b4675a126b1fddaaa2673e594161e97b71e38df320b39",
+      "bytes": 431349
+    },
+    {
+      "name": "15-field-progress-minimum",
+      "review": "Minimum field controls and 1/5 secured status are readable. A native Monster Hunter toast overlaps the upper-right header; objective text, call-in controls and return action remain visible.",
+      "file": "15-field-progress-minimum.png",
+      "sha256": "bf1826857a7283a263f89e151b9f756960fe8ab8d3aca66c64dc2ce5fb07511d",
+      "bytes": 82441
+    },
+    {
+      "name": "16-ship-hardware-minimum",
+      "review": "All four module names/prices,330 requisitions, armory and Return to Minecraft controls are legible. The transient native advancement toast overlaps upper-right subtitle chrome.",
+      "file": "16-ship-hardware-minimum.png",
+      "sha256": "0ece3882f3800152ac0cff241d6adb319217adf80ad8490bee3159f5a8166ce2",
+      "bytes": 80338
+    },
+    {
+      "name": "17-walkable-ship-deck",
+      "review": "Actual ship geometry is visible: continuous metal deck, marked yellow path, central platform, windows and roof beams. This still frame is supported by the native movement assertion for walkability.",
+      "file": "17-walkable-ship-deck.png",
+      "sha256": "f9470e15cd30c6f08068ebfcf5cb9e69e8ae4399511ce8841c425bff1f663b42",
+      "bytes": 353762
+    },
+    {
+      "name": "18-returned-home-map",
+      "review": "Actual reopened war map is visible after return, with 330 requisitions and Neon Docks threat 30; all six regions and the Board your ship action remain legible.",
+      "file": "18-returned-home-map.png",
+      "sha256": "03d05bf414e21adc106312c1c9ea2c519d9bc80e90e83f47b0ed56e2d25f00d0",
+      "bytes": 92473
+    }
+  ]
+}

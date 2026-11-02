@@ -1,0 +1,91 @@
+{
+  "date": "20261102T171309Z",
+  "required_tests": 118,
+  "source_digest": "48afdfa7fece7bb786b08d9f7cd30dcb7edaa101b612a8fdc0a05bae06b3c134",
+  "scope": "Native ForgeGradle source-set integration. Separately built reobfuscated JAR identity recorded; installed-package smoke and client gallery recorded independently.",
+  "lanes": [
+    {
+      "lane": "full-provider",
+      "provider": true,
+      "pack": true,
+      "mcdivers": true,
+      "exit_code": 0,
+      "seconds": 269.65,
+      "all_required_pass": true,
+      "source_and_artifact_unchanged": true,
+      "instance": "<TMP>/liberty-campaign-final-20261102T171309Z/full-provider-instance",
+      "fresh_unique_instance": true,
+      "missing_markers": [],
+      "log": {
+        "file": "gametest-final-full-provider.log",
+        "bytes": 144840,
+        "sha256": "2a56c06e3d171f9711cd7faf0ec2ad8c5898480e5ba425a313a478249d1decf1",
+        "original_bytes": 144958,
+        "original_sha256": "3a46a117176fb7d10ad55adc75af1478f76c9417ba2a8bcffa1a95053add316f",
+        "transform": "Only absolute checkout/cache/tmp paths replaced; all diagnostics retained."
+      }
+    },
+    {
+      "lane": "missing-pack",
+      "provider": true,
+      "pack": false,
+      "mcdivers": false,
+      "exit_code": 0,
+      "seconds": 143.61,
+      "all_required_pass": true,
+      "source_and_artifact_unchanged": true,
+      "instance": "<TMP>/liberty-campaign-final-20261102T171309Z/missing-pack-instance",
+      "fresh_unique_instance": true,
+      "missing_markers": [],
+      "log": {
+        "file": "gametest-final-missing-pack.log",
+        "bytes": 61026,
+        "sha256": "e508ed02a947b984233041deba597fd3284b7859a5abb941992aee2dd5de9c9b",
+        "original_bytes": 61144,
+        "original_sha256": "b003cd0d7d224536986d2f4d51cd61fbfba1a41886f398346583f978c50cf371",
+        "transform": "Only absolute checkout/cache/tmp paths replaced; all diagnostics retained."
+      }
+    },
+    {
+      "lane": "base",
+      "provider": false,
+      "pack": false,
+      "mcdivers": false,
+      "exit_code": 0,
+      "seconds": 139.3,
+      "all_required_pass": true,
+      "source_and_artifact_unchanged": true,
+      "instance": "<TMP>/liberty-campaign-final-20261102T171309Z/base-instance",
+      "fresh_unique_instance": true,
+      "missing_markers": [],
+      "log": {
+        "file": "gametest-final-base.log",
+        "bytes": 51424,
+        "sha256": "76681ec4a6bb0762b9b76f2dbdcb7763fd174ef4e98ad529407c3477dd9ec0c1",
+        "original_bytes": 51414,
+        "original_sha256": "e6e77f78ff77e85aa916639fd3d55c63a46359c54bc38d9be49d441645058700",
+        "transform": "Only absolute checkout/cache/tmp paths replaced; all diagnostics retained."
+      }
+    }
+  ],
+  "build": {
+    "exit_code": 0,
+    "seconds": 22.3,
+    "log": {
+      "file": "final-build.log",
+      "bytes": 20001,
+      "sha256": "fb67dee9cdbba0bac653a6366bf76e64195040d29319eb7e26c8d8df233e42a3",
+      "original_bytes": 21717,
+      "original_sha256": "05f68cbde7f01c6f8b9109e377baa342d1505d46ef7781b48705b7e871139dbb",
+      "transform": "Only absolute checkout/cache/tmp paths replaced; all diagnostics retained."
+    }
+  },
+  "jar": {
+    "file": "jetsetcraft-1.20.1-0.4.0-alpha.9.jar",
+    "bytes": 6495215,
+    "sha256": "cf892bd0bc04fb3f9678ad665b764342c94c141e84435ee2f4dd5c6781937251"
+  },
+  "compiled_inputs_sha256": "90f6509ad857aa689c1e2a37e14a9548c4d908672dbba7d6019912c3466d794a",
+  "status": "PASS",
+  "workspace_world_and_pack_untouched": true
+}
