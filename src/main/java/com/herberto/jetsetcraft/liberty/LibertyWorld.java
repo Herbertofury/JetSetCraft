@@ -37,10 +37,12 @@ public final class LibertyWorld {
         }
     }
     private static boolean reserved(LibertyOperation operation, int x, int z) {
-        if (Math.abs(x - operation.origin.getX()) < 12 && Math.abs(z - operation.origin.getZ()) < 12) return true;
+        if (Math.abs(x - operation.drop.getX()) < 12 && Math.abs(z - operation.drop.getZ()) < 12) return true;
         if (Math.abs(x - operation.extraction.getX()) < 14 && Math.abs(z - operation.extraction.getZ()) < 14) return true;
         for (LibertyOperation.Objective objective : operation.objectives)
             if (Math.abs(x - objective.center().getX()) < 30 && Math.abs(z - objective.center().getZ()) < 36) return true;
+        if (operation.mission != null) for (LibertyMissionRuntime.Site site : operation.mission.sites())
+            if (Math.abs(x - site.center().getX()) < 36 && Math.abs(z - site.center().getZ()) < 36) return true;
         for (int i = 0; i < 9; i++) if (Math.abs(x - operation.cachePosition(i).getX()) < 5
                 && Math.abs(z - operation.cachePosition(i).getZ()) < 5) return true;
         return false;
@@ -65,7 +67,71 @@ public final class LibertyWorld {
             if (lx >= 20 && lx <= 24 && lz >= 13 && lz <= 16) put(level, x, FLOOR_Y + 1, z, Blocks.SMOOTH_QUARTZ.defaultBlockState());
             if (lx == 37 && lz == 16) { put(level, x, FLOOR_Y + 1, z, Blocks.SMOOTH_STONE.defaultBlockState());
                 put(level, x, FLOOR_Y + 2, z, Blocks.SEA_LANTERN.defaultBlockState()); }
+            if (operation.campaign()) {
+                long blockSeed = operation.plan.seed() ^ Math.floorDiv(x - operation.origin.getX(), 48) * 73428767L
+                        ^ Math.floorDiv(z - operation.origin.getZ(), 48) * 912931L;
+                int height = 6 + (int) Math.floorMod(blockSeed, 4) * 4;
+                boolean building = lx >= 20 && lx <= 35 && lz >= 20 && lz <= 30;
+                if (building && (lx == 20 || lx == 35 || lz == 20 || lz == 30)) {
+                    for (int y = 1; y <= height; y++) {
+                        if (lz == 20 && lx >= 25 && lx <= 28 && y <= 3) continue;
+                        BlockState material = y % 4 == 0 ? accent : y % 4 == 2 && (lx + lz) % 3 != 0
+                                ? Blocks.TINTED_GLASS.defaultBlockState() : Blocks.GRAY_CONCRETE.defaultBlockState();
+                        put(level, x, FLOOR_Y + y, z, material);
+                    }
+                }
+                if (building) put(level, x, FLOOR_Y + height + 1, z, Blocks.SMOOTH_STONE.defaultBlockState());
+                // Continuous street furniture, sloped transfers and a second rail line preserve skating routes.
+                if (lx == 8 && lz >= 7 && lz <= 39) put(level, x, FLOOR_Y + 1, z, Blocks.IRON_BARS.defaultBlockState());
+                if (lx >= 38 && lx <= 42 && lz >= 23 && lz <= 29)
+                    put(level, x, FLOOR_Y + 1 + Math.min(2, (lz - 23) / 2), z, Blocks.SMOOTH_QUARTZ_STAIRS.defaultBlockState());
+            }
         }
+    }
+    public static BlockPos campaignOrigin(int slot) {
+        return new BlockPos(-10_000_008 + slot % 4096 * 2048, FLOOR_Y, -10_000_008 + slot / 4096 * 2048);
+    }
+    public static BlockPos shipOrigin(int slot) {
+        return new BlockPos(-20_000_008 + slot % 4096 * 128, FLOOR_Y, -20_000_008 + slot / 4096 * 128);
+    }
+    public static boolean buildSite(ServerLevel level, LibertyMissionRuntime.Site site, LibertyMissionCatalog.Faction faction) {
+        if (!isLiberty(level) || !loaded(level, site.center(), 24)) return false;
+        BlockPos c = site.center();
+        BlockState accent = (faction == LibertyMissionCatalog.Faction.AUTOMATON ? Blocks.RED_CONCRETE
+                : faction == LibertyMissionCatalog.Faction.TERMINID ? Blocks.LIME_CONCRETE : Blocks.PURPLE_CONCRETE).defaultBlockState();
+        for (int x=-20;x<=20;x++) for (int z=-20;z<=20;z++) {
+            if (Math.abs(x)==20 || Math.abs(z)==20 || x%8==0 && z%8==0) level.setBlock(c.offset(x,0,z),accent,2);
+            if ((Math.abs(x)==18 || Math.abs(z)==18) && Math.abs(x)>4 && Math.abs(z)>4)
+                level.setBlock(c.offset(x,1,z),Blocks.POLISHED_DEEPSLATE_WALL.defaultBlockState(),2);
+        }
+        // Paintable floor and walls are both useful; territory is measured per cell by the mission rules.
+        for (int x=-12;x<=12;x++) for (int y=1;y<=4;y++)
+            level.setBlock(c.offset(x,y,-15), y==4 ? accent : Blocks.WHITE_CONCRETE.defaultBlockState(),2);
+        if (site.kind()==LibertyMissionCatalog.ObjectiveKind.RELAY_HOLD || site.kind()==LibertyMissionCatalog.ObjectiveKind.SCAN) {
+            for (int y=1;y<=10;y++) level.setBlock(c.offset(0,y,0),Blocks.IRON_BARS.defaultBlockState(),2);
+            level.setBlock(c.above(11),Blocks.SEA_LANTERN.defaultBlockState(),2);
+            level.setBlock(c.offset(2,1,2),Blocks.LODESTONE.defaultBlockState(),2);
+        }
+        return true;
+    }
+    /** A private walkable ship deck. No inventory-bearing blocks or third-party assets. */
+    public static boolean buildShip(ServerLevel level, BlockPos c) {
+        if (!isLiberty(level) || !loaded(level,c,24)) return false;
+        for (int x=-20;x<=20;x++) for (int z=-24;z<=24;z++) {
+            if (Math.abs(x)+Math.max(0,-z-12)>23) continue;
+            level.setBlock(c.offset(x,0,z),(Math.abs(x)%8==0 ? Blocks.YELLOW_CONCRETE : Blocks.POLISHED_DEEPSLATE).defaultBlockState(),2);
+            if (Math.abs(x)==20 || Math.abs(z)==24) for (int y=1;y<=8;y++)
+                level.setBlock(c.offset(x,y,z),(y>=3&&y<=6 ? Blocks.CYAN_STAINED_GLASS : Blocks.GRAY_CONCRETE).defaultBlockState(),2);
+            if (Math.abs(x)==20 || Math.abs(z)==24 || Math.abs(x)%10==0) level.setBlock(c.offset(x,9,z),Blocks.GRAY_CONCRETE.defaultBlockState(),2);
+            if (x%8==0&&z%8==0) level.setBlock(c.offset(x,0,z),Blocks.SEA_LANTERN.defaultBlockState(),2);
+        }
+        for (int x=-4;x<=4;x++) for (int z=-8;z<=-3;z++)
+            level.setBlock(c.offset(x,1,z),(Math.abs(x)==4||z==-8||z==-3 ? Blocks.IRON_BLOCK : Blocks.CYAN_STAINED_GLASS).defaultBlockState(),2);
+        for (int x:new int[]{-12,12}) for (int z=2;z<=9;z++) {
+            level.setBlock(c.offset(x,1,z),Blocks.IRON_BLOCK.defaultBlockState(),2);
+            if (z%3==0) level.setBlock(c.offset(x,2,z),Blocks.SEA_LANTERN.defaultBlockState(),2);
+        }
+        return true;
     }
     /** Small objective builds wait for all affected chunks; these methods never request chunks. */
     public static boolean buildObjective(ServerLevel level, LibertyOperation.Objective objective) {
