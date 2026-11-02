@@ -13,5 +13,9 @@
     "accent": "minecraft:lime_concrete",
     "wall": "minecraft:green_concrete",
     "rail": "minecraft:mossy_stone_brick_wall"
+  },
+  "contract": {
+    "type": "paint",
+    "target": 3
   }
 }

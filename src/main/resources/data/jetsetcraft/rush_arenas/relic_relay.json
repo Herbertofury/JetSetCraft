@@ -13,5 +13,9 @@
     "accent": "minecraft:end_stone_bricks",
     "wall": "minecraft:purple_concrete",
     "rail": "minecraft:end_stone_brick_wall"
+  },
+  "contract": {
+    "type": "hunt",
+    "target": 3
   }
 }

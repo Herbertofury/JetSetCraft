@@ -23,5 +23,9 @@
       "minecraft:obsidian"
     ],
     "rail": "minecraft:polished_blackstone_wall"
+  },
+  "contract": {
+    "type": "hunt",
+    "target": 3
   }
 }

@@ -26,5 +26,9 @@
       "aether:quicksoil_glass_pane",
       "minecraft:iron_bars"
     ]
+  },
+  "contract": {
+    "type": "relay",
+    "target": 4
   }
 }

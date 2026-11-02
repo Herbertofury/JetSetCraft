@@ -13,5 +13,9 @@
     "accent": "minecraft:magenta_concrete",
     "wall": "minecraft:black_concrete",
     "rail": "minecraft:polished_blackstone_wall"
+  },
+  "contract": {
+    "type": "hunt",
+    "target": 2
   }
 }

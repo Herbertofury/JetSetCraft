@@ -13,5 +13,9 @@
     "accent": "minecraft:orange_concrete",
     "wall": "minecraft:gray_concrete",
     "rail": "minecraft:iron_bars"
+  },
+  "contract": {
+    "type": "paint",
+    "target": 3
   }
 }
