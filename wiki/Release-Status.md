@@ -5,7 +5,7 @@
 ![Forge](https://img.shields.io/badge/Forge-47.4.23-f16436?style=for-the-badge)
 
 > [!IMPORTANT]
-> The published stable release remains `0.3.0`. The current verified development alpha is `0.4.0-alpha.7`, merged through [PR #46](https://github.com/Herbertofury/JetSetCraft/pull/46). Its 63-test/nine-configuration and 23-capture results identify the development source; they do not replace the stable artifact. Alpha.6 and earlier receipts retain their own historical identities.
+> The published stable release remains `0.3.0`. The current development alpha is `0.4.0-alpha.7`; its original gameplay checkpoint merged through [PR #46](https://github.com/Herbertofury/JetSetCraft/pull/46). Its original 63-test/nine-configuration and 23-capture results identify that source; they do not replace the stable artifact. Alpha.6 and earlier receipts retain their own historical identities.
 
 ## ✅ Verified release
 
@@ -37,7 +37,9 @@ Street movement, six ride styles, trick/Flow scoring, grinding/transfers, world-
 
 ## ✅ Current verified development: 0.4.0-alpha.7
 
-**Merged and verified through [PR #46](https://github.com/Herbertofury/JetSetCraft/pull/46).** This continuation adds optional room contracts and a shared Pit stop choice to the existing arena circuits, headliners, build evolutions and shared progression. It does not add a separate permanent currency.
+**Original gameplay checkpoint merged and verified through [PR #46](https://github.com/Herbertofury/JetSetCraft/pull/46).** This continuation adds optional room contracts and a shared Pit stop choice to the existing arena circuits, headliners, build evolutions and shared progression. It does not add a separate permanent currency.
+
+**Verification follow-up:** [PR #47](https://github.com/Herbertofury/JetSetCraft/pull/47) merged as [`1fcb78852f893f083749aac2e566addc3acca78b`](https://github.com/Herbertofury/JetSetCraft/commit/1fcb78852f893f083749aac2e566addc3acca78b) with the existing midpoint fixture corrected for actual pickup-earned drafts. Production gameplay is unchanged. The [separate follow-up record](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/verification/contracts/README.md#post-merge-verification-follow-up) identifies the failed push, controlled reproduction and corrected gates. Original source identities and local image reviews below remain tied to PR #46.
 
 | System | Implemented behavior |
 |---|---|
@@ -48,9 +50,9 @@ Street movement, six ride styles, trick/Flow scoring, grinding/transfers, world-
 
 The server validates the owner, run UUID, current revision and between-arena window. A pending XP draft must be resolved first; room-six services work at the Encore decision. Invalid, stale, repeated and no-effect requests do not spend credits. Clear receipts guard the service opening, while the existing crew settlement remains the only permanent room payout.
 
-[Base verification](https://github.com/Herbertofury/JetSetCraft/actions/runs/41397720888) and the [provider matrix](https://github.com/Herbertofury/JetSetCraft/actions/runs/41397720946) passed **63 required Forge GameTests in each of nine configurations — 567 executions of 63 distinct tests**, all builds and normal dedicated-server save/shutdown. Base also passed its **23-capture native-client gate**. An independent local replay passed all repository validators, clean build, the 63-test suite, normal dedicated-server smoke and the native audit; all 23 local PNGs were visually reviewed. The [contract/Pit stop receipt](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/verification/contracts/README.md) records the source identities, local JAR hash, actual Paint clear and Tune result, and explicit fixture limitations. Native ForgeGradle source-set execution is separate from an independently installed distributable-JAR runtime.
+For the original PR #46 source, [base verification](https://github.com/Herbertofury/JetSetCraft/actions/runs/41397720888) and the [provider matrix](https://github.com/Herbertofury/JetSetCraft/actions/runs/41397720946) passed **63 required Forge GameTests in each of nine configurations — 567 executions of 63 distinct tests**, all builds and normal dedicated-server save/shutdown. Base also passed its **23-capture native-client gate**. An independent local replay passed all repository validators, clean build, the 63-test suite, normal dedicated-server smoke and the native audit; all 23 local PNGs were visually reviewed. The [contract/Pit stop receipt](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/verification/contracts/README.md) records the source identities, local JAR hash, actual Paint clear and Tune result, and explicit fixture limitations. Native ForgeGradle source-set execution is separate from an independently installed distributable-JAR runtime.
 
-| Development identity | Verified value |
+| Original PR #46 development identity | Verified value |
 |---|---|
 | Local tested checkpoint | `3e211313f8b2fd4898abc05c9836099817f6a249` |
 | Feature source | `56b27b6b42ad55ac668e40ae294cadecf1f3948c` |
