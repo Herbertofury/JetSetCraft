@@ -15,6 +15,11 @@ if (!['true', 'false'].contains(libertyTaczOption)) {
     throw new GradleException('Use -PlibertyTacz=true or -PlibertyTacz=false')
 }
 def libertyTacz = libertyTaczOption == 'true'
+def libertyHelldiversOption = providers.gradleProperty('libertyHelldivers').orElse('false').get().trim()
+if (!['true', 'false'].contains(libertyHelldiversOption)) {
+    throw new GradleException('Use -PlibertyHelldivers=true or -PlibertyHelldivers=false')
+}
+def libertyHelldivers = libertyHelldiversOption == 'true'
 def libertyPackOption = providers.gradleProperty('libertyPackExpected').orElse(libertyTaczOption).get().trim()
 if (!['true', 'false'].contains(libertyPackOption) || (libertyPackOption == 'true' && !libertyTacz)) {
     throw new GradleException('Use -PlibertyPackExpected=true|false; a true value also requires -PlibertyTacz=true')
@@ -40,10 +45,12 @@ minecraft {
             property 'jetsetcraft.wave2Provider', wave2RosterProvider
             property 'jetsetcraft.providerSelection', wave2Provider
             property 'jetsetcraft.libertyTacz', libertyTacz.toString()
+            property 'jetsetcraft.libertyHelldivers', libertyHelldivers.toString()
             property 'jetsetcraft.libertyPackExpected', libertyPackOption
+            args '--mixin', 'jetsetcraft.liberty.mixins.json'
             // Production provider jars ship SRG/refmap mixin targets. ForgeGradle's named userdev runtime
             // must remap those targets for GameTest/server verification; production Minecraft does not need this.
-            if (!wave2Provider.isEmpty() || libertyTacz) {
+            if (!wave2Provider.isEmpty() || libertyTacz || libertyHelldivers) {
                 property 'mixin.env.remapRefMap', 'true'
                 property 'mixin.env.refMapRemappingFile', file("${buildDir}/createSrgToMcp/output.srg").absolutePath
             }
@@ -56,6 +63,7 @@ minecraft {
             property 'jetsetcraft.visualAudit', System.getProperty('jetsetcraft.visualAudit', 'false')
             property 'jetsetcraft.rushVisualAudit', System.getProperty('jetsetcraft.rushVisualAudit', 'false')
             property 'jetsetcraft.libertyVisualAudit', System.getProperty('jetsetcraft.libertyVisualAudit', 'false')
+            property 'jetsetcraft.libertyCampaignVisualAudit', System.getProperty('jetsetcraft.libertyCampaignVisualAudit', 'false')
             if (System.getProperty('jetsetcraft.libertyVisualAudit', 'false') == 'true') {
                 if (System.getProperty('jetsetcraft.rushVisualAudit', 'false') == 'true'
                         || System.getProperty('jetsetcraft.visualAudit', 'false') == 'true')
@@ -72,6 +80,9 @@ minecraft {
         }
         server { args '--nogui' }
         gameTestServer {
+            // Keep independent verification lanes in distinct disposable directories when requested.
+            // The ordinary developer and CI invocation still uses run/.
+            workingDirectory project.file(providers.gradleProperty('gameTestRunDirectory').orElse('run').get())
             property 'forge.enabledGameTestNamespaces', mod_id
         }
     }
@@ -103,6 +114,11 @@ dependencies {
     // The upstream release requires only Forge/Minecraft; the pack is prepared separately in run/tacz.
     if (libertyTacz) {
         runtimeOnly fg.deobf("curse.maven:timeless-and-classics-zero-1028108:9037989") // TaCZ 1.1.8-hotfix2
+    }
+
+    // Real Helldivers call-in provider, optional and separate from the TaCZ gun-pack lane.
+    if (libertyHelldivers) {
+        runtimeOnly fg.deobf("curse.maven:mcdiver-1738922:9307472") // MCDivers 1.0.3, Forge 1.20.1; no companion dependency
     }
 
     // Provider-present verification is opt-in. These never enter JetSetCraft's normal runtime dependency set
@@ -176,7 +192,8 @@ jar {
         'Specification-Version': '1',
         'Implementation-Title': project.name,
         'Implementation-Version': project.jar.archiveVersion,
-        'Implementation-Vendor': 'Herberto'
+        'Implementation-Vendor': 'Herberto',
+        'MixinConfigs': 'jetsetcraft.liberty.mixins.json'
     ]) }
     finalizedBy 'reobfJar'
 }
