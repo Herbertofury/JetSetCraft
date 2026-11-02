@@ -18,12 +18,12 @@ import java.util.UUID;
 
 /** A native, non-pausing crew ledger. Buttons submit intent; displayed eligibility is server-owned. */
 final class CrewHouseScreen extends Screen {
-    private enum View { HOME, CREW, FACILITIES, JOBS, MEMBER, RECRUIT, SPECIES, FACILITY, PREPARATIONS,
+    private enum View { HOME, CREW, FACILITIES, JOBS, PROGRESS, REWARD, GOAL, MEMBER, RECRUIT, SPECIES, FACILITY, PREPARATIONS,
         FOUND, RELOCATE, RENAME, RENAME_MEMBER, ASSIGN, MISSION, JOB, CANCEL_JOB }
     private static final String[] ROLES = {"Courier", "Tagger", "Technician", "DJ"};
     private static final int WHITE = 0xFFE7E7E7, MUTED = 0xFFB8BEC5, CYAN = 0xFF87E1EA, GREEN = 0xFFC5ED55;
     private View view = View.HOME;
-    private UUID memberId, jobId;
+    private UUID memberId, jobId, receiptId;
     private String facilityId = "", missionId = "", nameDraft = "My crew", pendingAction = "", message = "";
     private int page, recruitIndex, roleIndex, textScroll, pendingTicks;
     private boolean pending;
@@ -58,6 +58,7 @@ final class CrewHouseScreen extends Screen {
         if (!previous.getBoolean("Exists") && current.getBoolean("Exists")) view = View.HOME;
         if (memberId != null && member().isEmpty()) { memberId = null; if (memberView()) view = View.CREW; }
         if (jobId != null && job().isEmpty()) { jobId = null; if (view == View.JOB || view == View.CANCEL_JOB) view = View.JOBS; }
+        if (receiptId != null && reward().isEmpty()) { receiptId = null; if (view == View.REWARD) view = View.PROGRESS; }
         pending = false;
         pendingTicks = 0;
         pendingAction = "";
@@ -71,17 +72,21 @@ final class CrewHouseScreen extends Screen {
         nameSubmit = null;
         labels.clear();
         detailLines.clear();
-        int left = left(), span = span(), quarter = (span - 9) / 4;
-        View[] tabs = {View.HOME, View.CREW, View.FACILITIES, View.JOBS};
-        String[] names = {"Home", "Crew", "Facilities", "Jobs"};
+        int left = left(), span = span(), tabWidth = (span - 12) / 5;
+        View[] tabs = {View.HOME, View.CREW, View.FACILITIES, View.JOBS, View.PROGRESS};
+        String[] names = {"Home", "Crew", "Facilities", "Jobs", "Progress"};
         for (int i = 0; i < tabs.length; i++) {
             View target = tabs[i];
-            button(names[i], left + i * (quarter + 3), 43, i == 3 ? span - 3 * (quarter + 3) : quarter,
+            button(names[i], left + i * (tabWidth + 3), 43, i == 4 ? span - 4 * (tabWidth + 3) : tabWidth,
                     true, "", () -> navigate(target));
         }
-        if (!state().getBoolean("Exists") && view != View.HOME && view != View.FOUND) view = View.HOME;
+        if (!state().getBoolean("Exists") && view != View.HOME && view != View.FOUND
+                && view != View.PROGRESS && view != View.REWARD && view != View.GOAL) view = View.HOME;
         switch (view) {
             case HOME -> buildHome();
+            case PROGRESS -> buildProgress();
+            case REWARD -> buildReward();
+            case GOAL -> buildGoal();
             case CREW, FACILITIES, JOBS, SPECIES, PREPARATIONS, ASSIGN -> buildList();
             case MEMBER -> buildMember();
             case RECRUIT -> buildRecruit();
@@ -105,11 +110,11 @@ final class CrewHouseScreen extends Screen {
     private void buildHome() {
         CompoundTag s = state();
         if (!s.getBoolean("Exists")) {
-            label("Build your own house around a Boombox, then give your crew a place to train and work.", 75, 3, WHITE);
+            label("Build around a Boombox. Activity earnings are saved before founding; inspect them in Progress.", 75, 3, WHITE);
             label(s.getString("CandidateLabel"), 116, 2, CYAN);
             action("Found a home", left(), firstActions(), span(), s.getBoolean("CanFound"), s.getString("FoundReason"),
                     () -> { nameDraft = "My crew"; navigate(View.FOUND); });
-            label("Home bounds track facilities without restricting building.", 141, 1, MUTED);
+            label(s.getInt("PendingSupplies") + " Supplies banked • " + s.getLong("PendingTraining") + " training XP saved", 141, 1, MUTED);
             return;
         }
         label(s.getString("HomeLabel"), 75, 1, WHITE);
@@ -125,6 +130,69 @@ final class CrewHouseScreen extends Screen {
         twoButtons(secondActions(), "Show boundary", s.getBoolean("CanManage"), s.getString("ManageReason"),
                 () -> send("preview", "", 0, null), "Move home", s.getBoolean("CanRelocate"), s.getString("FoundReason"),
                 () -> navigate(View.RELOCATE));
+    }
+
+    private void buildProgress() {
+        CompoundTag s = state(), goal = s.getCompound("NextGoal");
+        ListTag rewards = list("RecentRewards");
+        String heading = s.getBoolean("Exists") ? "Every completed activity can grow your crew"
+                : "Banked: " + s.getInt("PendingSupplies") + " Supplies • " + s.getLong("PendingCrewXp") + " crew XP";
+        label(heading, 74, 1, CYAN);
+        String goalTitle = "Next: " + goal.getString("Title") + (goal.getInt("Cost") > 0
+                ? " • " + goal.getInt("Available") + " / " + goal.getInt("Cost") + " Supplies" : "");
+        button(goalTitle, left(), 88, span(), true,
+                goal.getString("Status") + "\n" + goal.getString("Detail"), () -> navigate(View.GOAL));
+        label("Recent rewards • latest " + s.getInt("RewardHistoryLimit") + " kept • actual amounts received", 113, 1, MUTED);
+        int rows = progressRows(), pages = Math.max(1, (rewards.size() + rows - 1) / rows);
+        page = Math.max(0, Math.min(page, pages - 1));
+        if (rewards.isEmpty()) label("No rewards yet. Finish a street game, clear an arena, bank Rush or claim a job.", 131,
+                Math.max(1, Math.min(3, (firstActions() - 132) / 11)), WHITE);
+        for (int row = 0; row < rows && page * rows + row < rewards.size(); row++) {
+            CompoundTag entry = rewards.getCompound(page * rows + row);
+            String title = entry.getString("Name") + " • +" + entry.getInt("Supplies") + " Supplies";
+            if (!entry.getString("LevelSummary").isBlank()) title += " • Level up!";
+            String hint = entry.getString("Summary") + "\n" + entry.getString("TrainingSummary")
+                    + (entry.getString("LevelSummary").isBlank() ? "" : "\n" + entry.getString("LevelSummary"));
+            button(title, left(), 126 + row * 22, span(), true, hint,
+                    () -> { receiptId = id(entry); navigate(View.REWARD); });
+        }
+        twoButtons(firstActions(), "‹ Previous", page > 0, "", () -> { page--; rebuildWidgets(); },
+                "Next ›", page + 1 < pages, "", () -> { page++; rebuildWidgets(); });
+        button(s.getBoolean("Exists") ? "Choose a training focus" : "Plan your first home", left(), secondActions(), span(), true,
+                s.getBoolean("Exists") ? "Select an idle crew member to receive activity training." : "Banked progress stays saved until you confirm founding.",
+                () -> navigate(s.getBoolean("Exists") ? View.CREW : View.HOME));
+    }
+
+    private void buildReward() {
+        CompoundTag receipt = reward();
+        detail(receipt.getString("Name"), GREEN);
+        detail(receipt.getString("Summary"), WHITE);
+        detail(receipt.getString("TrainingSummary"), CYAN);
+        detail("Gang reputation: " + receipt.getString("GangName"), MUTED);
+        if (!receipt.getString("LevelSummary").isBlank()) detail(receipt.getString("LevelSummary"), GREEN);
+        if (receipt.getBoolean("Pending")) detail("Earned before founding. These are the original amounts saved for your first home; founding transfers that bank once.", MUTED);
+        if (receipt.getBoolean("Capped")) detail("An account limit reduced this award. The amounts above are the amounts actually added.", 0xFFE6DBA6);
+        button("Back to Progress", left(), secondActions(), span(), true, "", () -> navigate(View.PROGRESS));
+    }
+
+    private void buildGoal() {
+        CompoundTag goal = state().getCompound("NextGoal");
+        detail(goal.getString("Title"), GREEN);
+        detail(goal.getString("Status"), goal.getBoolean("Affordable") ? CYAN : 0xFFE6DBA6);
+        detail(goal.getString("Detail"), WHITE);
+        if (!state().getBoolean("Exists")) detail("Saved now: " + state().getInt("PendingSupplies") + " Supplies, "
+                + state().getLong("PendingCrewXp") + " crew XP and " + state().getLong("PendingTraining")
+                + " training XP. Earned gang reputation is saved too.", CYAN);
+        if (state().getBoolean("Exists") && !state().getBoolean("CanManage")) detail(state().getString("ManageReason"), MUTED);
+        button("Review this goal", left(), firstActions(), span(), true, "Open the relevant ledger page; this spends nothing.", () -> {
+            switch (goal.getString("View")) {
+                case "FACILITY" -> { facilityId = goal.getString("Target"); navigate(View.FACILITY); }
+                case "RECRUIT" -> navigate(View.RECRUIT);
+                case "JOBS" -> navigate(View.JOBS);
+                default -> navigate(View.HOME);
+            }
+        });
+        button("Back to Progress", left(), secondActions(), span(), true, "", () -> navigate(View.PROGRESS));
     }
 
     private void buildList() {
@@ -326,12 +394,14 @@ final class CrewHouseScreen extends Screen {
     private int firstActions() { return height - 85; }
     private int secondActions() { return height - 61; }
     private int listRows() { return Math.max(1, Math.min(8, (height - 150) / 22)); }
+    private int progressRows() { return Math.max(1, Math.min(6, (firstActions() - 126) / 22)); }
     private int maxScroll() { return Math.max(0, detailLines.size() * 11 - Math.max(1, height - 166)); }
     private static CompoundTag state() { return CrewHouseClient.state(); }
     private static ListTag list(String key) { return CrewHouseClient.list(key); }
     private static UUID id(CompoundTag tag) { return tag.hasUUID("Id") ? tag.getUUID("Id") : null; }
     private CompoundTag member() { return find("Members", memberId); }
     private CompoundTag job() { return find("Jobs", jobId); }
+    private CompoundTag reward() { return find("RecentRewards", receiptId); }
 
     private static CompoundTag find(String list, UUID id) {
         if (id != null) for (var tag : list(list)) if (tag instanceof CompoundTag row && id.equals(id(row))) return row;
@@ -343,7 +413,7 @@ final class CrewHouseScreen extends Screen {
     }
     private ListTag visibleList() {
         return list(switch (view) { case CREW -> "Members"; case FACILITIES -> "Facilities"; case JOBS -> "Jobs";
-            case SPECIES -> "Recruits"; case PREPARATIONS -> "Preparations"; case ASSIGN -> "Missions"; default -> ""; });
+            case SPECIES -> "Recruits"; case PREPARATIONS -> "Preparations"; case ASSIGN -> "Missions"; case PROGRESS -> "RecentRewards"; default -> ""; });
     }
     private static String xp(String subject, long xp, long next) { return subject + " XP: " + xp + (next > 0 ? " / " + next : " • max level"); }
     private static String clock(long ticks) { long seconds = Math.max(0L, ticks) / 20L; return seconds / 60L + ":" + String.format(java.util.Locale.ROOT, "%02d", seconds % 60L); }
@@ -386,7 +456,7 @@ final class CrewHouseScreen extends Screen {
         String name = state().getBoolean("Exists") ? state().getString("Name") + " • Crew House" : "Crew House";
         gui.drawCenteredString(font, clipped(name, span()), width / 2, 10, GREEN);
         String summary = state().getBoolean("Exists") ? "Crew level " + state().getInt("CrewLevel") + " • " + state().getInt("Supplies")
-                + " supplies • " + state().getString("ReputationTier") : "Build a home • train your crew • take on jobs";
+                + " supplies • " + state().getString("ReputationTier") : state().getInt("PendingSupplies") + " Supplies saved • build a home when ready";
         gui.drawCenteredString(font, clipped(summary, span()), width / 2, 26, WHITE);
         for (TextAt line : labels) gui.drawString(font, line.text(), left(), line.y(), line.color(), true);
         textScroll = Math.max(0, Math.min(textScroll, maxScroll()));
@@ -423,7 +493,8 @@ final class CrewHouseScreen extends Screen {
         if (!detailLines.isEmpty()) { textScroll = Math.max(0, Math.min(maxScroll(), textScroll - (int) (amount * 22))); return true; }
         ListTag entries = visibleList();
         if (!entries.isEmpty()) {
-            int pages = Math.max(1, (entries.size() + listRows() - 1) / listRows());
+            int rows = view == View.PROGRESS ? progressRows() : listRows();
+            int pages = Math.max(1, (entries.size() + rows - 1) / rows);
             page = Math.max(0, Math.min(pages - 1, page - (int) Math.signum(amount)));
             rebuildWidgets(); return true;
         }

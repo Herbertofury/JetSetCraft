@@ -30,6 +30,11 @@ public final class CrewHouseClient {
     }
 
     static CompoundTag state() { return state; }
+    public static CompoundTag stateSnapshot() { return state.copy(); }
+    public static boolean isScreenOpen() { return Minecraft.getInstance().screen instanceof CrewHouseScreen; }
+    public static boolean isProgressScreenOpen() {
+        return Minecraft.getInstance().screen instanceof CrewHouseScreen screen && screen.isView("PROGRESS");
+    }
     static ListTag list(String key) { return state.getList(key, Tag.TAG_COMPOUND); }
     static UUID homeId() { return state.hasUUID("HomeId") ? state.getUUID("HomeId") : null; }
 
@@ -58,7 +63,7 @@ public final class CrewHouseClient {
     @Mod.EventBusSubscriber(modid = JetSetCraft.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
     public static final class Events {
         @SubscribeEvent
-        public static void logout(ClientPlayerNetworkEvent.LoggingOut event) { state = new CompoundTag(); }
+        public static void logout(ClientPlayerNetworkEvent.LoggingOut event) { state = new CompoundTag(); CrewRewardFeedback.reset(); }
     }
 
     private CrewHouseClient() {}

@@ -1,5 +1,6 @@
 package com.herberto.jetsetcraft.rush;
 
+import com.herberto.jetsetcraft.crew.CrewHouseManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -84,16 +85,39 @@ public final class RushCircuit {
     /** The manager first validates physical participation and banks one authoritative node reward. */
     public boolean complete(RushRun run) {
         if (!objectiveMet(run)) return false;
-        CompoundTag entry = new CompoundTag(); entry.putInt("Stage", completed + 1);
-        entry.putString("Name", current.name()); entry.putString("Reward", current.reward().label()); history.add(entry);
+        CompoundTag entry = arenaSummary(current, center);
+        entry.putInt("Stage", completed + 1); entry.putInt("Set", set); entry.putUUID("Receipt", rewardId());
+        entry.putString("Reward", current.reward().label()); entry.putBoolean("SettlementRecorded", false);
+        // Completion does not itself assert a banked payout. The manager records the actual settled deltas.
+        entry.remove("SharedReward"); history.add(entry);
         completed++; version++;
         if (completed == 6) { phase = Phase.COMPLETE; choices = List.of(); run.pauseForEncore(); }
         else { phase = Phase.CHOOSING; offer(); }
         return true;
     }
+
+    /** Attaches exactly one real manager settlement to the latest completed room; never accepts a client amount. */
+    public boolean recordSettlement(UUID receipt, String runReward, CompoundTag sharedReward) {
+        if (receipt == null || runReward == null || sharedReward == null || history.isEmpty() || history.size() > 6) return false;
+        CompoundTag entry = history.get(history.size() - 1);
+        if (!entry.hasUUID("Receipt") || !receipt.equals(entry.getUUID("Receipt")) || entry.getBoolean("SettlementRecorded")) return false;
+        int[] limits = {60, 300, 180, 40};
+        String[] amounts = {"Supplies", "CrewXp", "MemberXp", "Reputation"};
+        CompoundTag settled = new CompoundTag();
+        settled.putBoolean("Accepted", sharedReward.getBoolean("Accepted"));
+        settled.putBoolean("PendingHouse", sharedReward.getBoolean("PendingHouse"));
+        for (int i = 0; i < amounts.length; i++) {
+            int value = sharedReward.getInt(amounts[i]);
+            if (value < 0 || value > limits[i] || !settled.getBoolean("Accepted") && value != 0) return false;
+            settled.putInt(amounts[i], value);
+        }
+        entry.putString("RunReward", runReward.substring(0, Math.min(240, runReward.length())));
+        entry.put("SharedReward", settled); entry.putBoolean("SettlementRecorded", true); version++;
+        return true;
+    }
     public boolean encore() {
         if (phase != Phase.COMPLETE || set == Integer.MAX_VALUE) return false;
-        set++; completed = 0; phase = Phase.CHOOSING; history.clear(); center = origin; builder = null; version++;
+        set++; completed = 0; phase = Phase.CHOOSING; history.clear(); current = null; center = origin; builder = null; version++;
         offer(); return true;
     }
     private void offer() {
@@ -121,9 +145,49 @@ public final class RushCircuit {
         tag.putLong("TicksLeft", current == null ? 0 : Math.max(0, current.seconds() * 20L - activeTicks(run)));
         tag.putInt("Distance", (int) Math.sqrt(position.distanceToSqr(Vec3.atCenterOf(center))));
         tag.putString("Objective", objective(run));
-        ListTag choiceTags = new ListTag(); choices.forEach(p -> choiceTags.add(p.summary())); tag.put("Choices", choiceTags);
+        tag.putInt("OriginX", 0); tag.putInt("OriginZ", 0); tag.putInt("MapScaleBlocks", 128);
+        // A cleared room already exists in History. It must not appear again as a new/current destination.
+        if (current != null && (phase == Phase.TRAVEL || phase == Phase.ARENA)) {
+            CompoundTag destination = arenaSummary(current, center);
+            destination.putInt("Stage", completed + 1); destination.putInt("Set", set);
+            tag.put("Current", destination);
+        }
+        ListTag choiceTags = new ListTag();
+        for (int i = 0; i < Math.min(3, choices.size()); i++) {
+            CompoundTag choice = arenaSummary(choices.get(i), center.offset((i - 1) * 128, 0, 128));
+            choice.putInt("Stage", completed + 1); choice.putInt("Set", set); choiceTags.add(choice);
+        }
+        tag.put("Choices", choiceTags);
         ListTag historyTags = new ListTag(); history.forEach(h -> historyTags.add(h.copy())); tag.put("History", historyTags);
+        if (!history.isEmpty()) tag.put("LastCompleted", history.get(history.size() - 1).copy());
         return tag;
+    }
+
+    private CompoundTag arenaSummary(RushArenaCatalog.Profile profile, BlockPos destination) {
+        CompoundTag tag = profile.summary();
+        tag.putInt("Defeats", profile.defeats()); tag.putString("Emphasis", profile.sharedReward());
+        tag.putString("RunReward", previewRunReward(profile));
+        tag.putInt("MapX", (destination.getX() - origin.getX()) / 128);
+        tag.putInt("MapZ", (destination.getZ() - origin.getZ()) / 128);
+        String mode = profile.sharedReward().equals("balanced") ? "rush_arena" : "rush_arena_" + profile.sharedReward();
+        var reward = CrewHouseManager.activityReward(mode);
+        CompoundTag shared = new CompoundTag();
+        shared.putInt("Supplies", reward.supplies()); shared.putInt("CrewXp", reward.crewXp());
+        shared.putInt("MemberXp", reward.memberXp()); shared.putInt("Reputation", reward.reputation());
+        tag.put("SharedReward", shared);
+        return tag;
+    }
+
+    private static String previewRunReward(RushArenaCatalog.Profile profile) {
+        String ranks = "+" + profile.rewardRanks() + (profile.rewardRanks() == 1 ? " rank" : " ranks");
+        return switch (profile.reward()) {
+            case DAMAGE -> "Paint pressure " + ranks + " · 15% damage per rank";
+            case CRITICAL -> "Critical chance and power " + ranks;
+            case AREA -> "Bigger chorus " + ranks + " · 12% area per rank";
+            case RELIC -> "Artifact " + ranks + " · within your three family slots";
+            case MAGNET -> "Magnetic mixtape " + ranks + " + 10s pickup magnet";
+            case RECOVERY -> "Easy breathing " + ranks + " + " + (25 * profile.rewardRanks()) + " vitality";
+        };
     }
     public String objective(RushRun run) {
         return switch (phase) {

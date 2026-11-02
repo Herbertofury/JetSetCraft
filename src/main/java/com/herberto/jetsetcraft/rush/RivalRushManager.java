@@ -84,6 +84,8 @@ public final class RivalRushManager {
         long lastAttack;
         long paintDue;
         long staggerUntil;
+        long exposedUntil;
+        double exposureMultiplier = 1;
         Vec3 paintMark;
         boolean claimed;
 
@@ -114,9 +116,12 @@ public final class RivalRushManager {
         final Map<String, Long> walls = new HashMap<>();
         final Map<Long, Long> musicStops = new HashMap<>();
         final RushPointsOfInterest points = new RushPointsOfInterest();
+        final RushMotionTracker motion = new RushMotionTracker();
         RushCircuit circuit;
         long lastSpawn, lastShot, lastHurt, lastCaptain = -1, lastStyle;
         long lastHorn, lastSoul, lastShockwave, lastSpell;
+        long lastAirBreak = -100, lastExpose = -140;
+        long airBreakPulses, lineProcs, markApplications;
         long cards;
         int sequence, announcedOffer, announcedJourney, musicCharge;
         boolean exiting, finaleSent;
@@ -139,6 +144,9 @@ public final class RivalRushManager {
 
     public static boolean active(Player player) { return session(player) != null; }
     public static RushRun run(ServerPlayer player) { Session s = session(player); return s == null ? null : s.run; }
+    public static CompoundTag buildSnapshot(ServerPlayer player) {
+        Session s = session(player); return s == null ? new CompoundTag() : buildSnapshot(s);
+    }
     public static CompoundTag journeySnapshot(ServerPlayer player) {
         Session s = session(player); return s == null || s.circuit == null ? new CompoundTag() : s.circuit.snapshot(s.run, player.position());
     }
@@ -173,6 +181,21 @@ public final class RivalRushManager {
                 if (s != null && s.run.id().equals(runId) && number >= 0 && number < s.run.offers().size()
                         && (value.isEmpty() || s.run.offers().get(number).name().equalsIgnoreCase(value))
                         && s.run.choose(number, version)) send(player, true, "", -1, -1);
+            }
+            case "remix" -> {
+                if (s == null || !s.run.id().equals(runId) || !betweenArenas(s) || s.run.hasOffer()
+                        || version != s.run.offerVersion()) return;
+                String[] selection = value.split("\\|", -1);
+                if (selection.length != 2) return;
+                RushRun.Upgrade from, to;
+                try { from = RushRun.Upgrade.valueOf(selection[0]); to = RushRun.Upgrade.valueOf(selection[1]); }
+                catch (IllegalArgumentException ignored) { return; }
+                if (s.run.remix(from, to, version)) {
+                    s.motion.reset(player.position());
+                    send(player, true, "Remixed " + from.label() + " into " + to.label()
+                            + " at rank " + s.run.rank(to) + ". Your other upgrades remain in place.", -1, -1);
+                    player.serverLevel().playSound(null, player.blockPosition(), SoundEvents.NOTE_BLOCK_CHIME.value(), SoundSource.PLAYERS, .45f, 1.2f);
+                }
             }
             case "encore" -> {
                 if (s != null && s.run.id().equals(runId) && s.run.offerVersion() == version && s.run.continueEndless()) {
@@ -445,6 +468,7 @@ public final class RivalRushManager {
             leave(player, "You left the playable district. Your collected cards were kept."); return;
         }
         if (s.run.hasOffer() || s.run.awaitingEncore()) {
+            s.motion.reset(player.position());
             freeze(s);
             if (s.announcedOffer != s.run.offerVersion() || (s.run.awaitingEncore() && !s.finaleSent)) {
                 s.announcedOffer = s.run.offerVersion(); s.finaleSent = s.run.awaitingEncore();
@@ -455,6 +479,7 @@ public final class RivalRushManager {
         if (s.circuit != null) {
             s.objective = s.circuit.objective(s.run);
             if (s.circuit.phase() == RushCircuit.Phase.CHOOSING || s.circuit.phase() == RushCircuit.Phase.COMPLETE) {
+                s.motion.reset(player.position());
                 freeze(s);
                 if (s.announcedJourney != s.circuit.version()) {
                     s.announcedJourney = s.circuit.version(); send(player, true, "", -1, -1);
@@ -463,6 +488,7 @@ public final class RivalRushManager {
             }
             if (s.circuit.phase() == RushCircuit.Phase.TRAVEL) {
                 s.run.tickActive(); freeze(s);
+                tickMovementArtifacts(s, false);
                 if (s.circuit.arrive(s.run, player.position())) {
                     s.lastSpawn = s.run.elapsedTicks(); s.lastHurt = s.run.elapsedTicks();
                     s.musicStop = s.circuit.center().offset(0, 1, s.circuit.current().radius() - 6);
@@ -481,6 +507,7 @@ public final class RivalRushManager {
                 return;
             }
             if (!s.circuit.inArena(player.position(), 4)) {
+                s.motion.reset(player.position());
                 freeze(s); s.objective = "Return to " + s.circuit.current().name() + " — arena time is paused.";
                 if (level.getGameTime() % 10 == 0) send(player, false, "", -1, -1);
                 return;
@@ -500,10 +527,12 @@ public final class RivalRushManager {
         }
         collectPickups(s);
         if (s.run.hasOffer()) {
+            s.motion.reset(player.position());
             freeze(s); s.announcedOffer = s.run.offerVersion(); send(player, true, "", -1, -1); return;
         }
         tickActors(s);
         if (s.run.isFinished()) return;
+        tickMovementArtifacts(s, true);
         autoFire(s);
         tickArtifacts(s);
         tickObjectives(s);
@@ -538,15 +567,21 @@ public final class RivalRushManager {
         for (Projectile projectile : s.projectiles.values()) projectile.discard();
         s.actors.clear(); s.projectiles.clear();
         if (!s.circuit.complete(s.run)) return;
+        s.run.grantRemix();
         String mode = profile.sharedReward().equals("balanced") ? "rush_arena" : "rush_arena_" + profile.sharedReward();
         String settlement = "";
+        CompoundTag shared = new CompoundTag();
         try {
             var earned = CrewHouseManager.bankActivity(s.player, receipt, s.gang.id(), mode, activeTicks, defeats, s.run.score());
+            shared.putBoolean("Accepted", earned.accepted()); shared.putBoolean("PendingHouse", earned.pendingHouse());
+            shared.putInt("Supplies", earned.supplies()); shared.putInt("CrewXp", earned.crewXp());
+            shared.putInt("MemberXp", earned.memberXp()); shared.putInt("Reputation", earned.reputation());
             if (earned.accepted()) settlement = " · supplies +" + earned.supplies() + " · crew XP +" + earned.crewXp()
                     + " · member XP +" + earned.memberXp() + " · reputation +" + earned.reputation();
         } catch (RuntimeException error) {
             JetSetCraft.LOGGER.error("Could not settle completed Rush arena {} for {}", receipt, s.player.getUUID(), error);
         }
+        s.circuit.recordSettlement(receipt, reward, shared);
         s.player.sendSystemMessage(Component.literal(profile.name() + " cleared! " + reward + settlement).withStyle(ChatFormatting.GOLD));
         s.player.serverLevel().playSound(null, s.player.blockPosition(), SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS, .5f, 1.1f);
         s.objective = s.circuit.objective(s.run); send(s.player, true, reward + settlement, -1, -1);
@@ -555,6 +590,11 @@ public final class RivalRushManager {
     private static boolean combatPaused(Session s) {
         return s.exiting || s.run.isFinished() || s.run.hasOffer() || s.run.awaitingEncore()
                 || (s.circuit != null && (s.circuit.phase() != RushCircuit.Phase.ARENA || !s.circuit.inArena(s.player.position(), 4)));
+    }
+
+    private static boolean betweenArenas(Session s) {
+        return s.circuit != null && !s.exiting && !s.run.isFinished()
+                && (s.circuit.phase() == RushCircuit.Phase.CHOOSING || s.circuit.phase() == RushCircuit.Phase.COMPLETE);
     }
 
     private static Role nextRole(Session s) {
@@ -624,6 +664,9 @@ public final class RivalRushManager {
                 mob.discard(); iterator.remove(); continue;
             }
             mob.clearFire(); mob.setAirSupply(mob.getMaxAirSupply());
+            if (actor.exposedUntil > 0 && time >= actor.exposedUntil) {
+                actor.exposedUntil = 0; actor.exposureMultiplier = 1; updateName(s, actor);
+            }
             if (s.circuit != null && !s.circuit.inArena(mob.position(), 6)) { mob.discard(); iterator.remove(); continue; }
             // Preserve the original mob/AI; stop this run-owned creeper's native fuse from destroying its card actor.
             if (mob instanceof net.minecraft.world.entity.monster.Creeper creeper) creeper.setSwellDir(-1);
@@ -711,6 +754,12 @@ public final class RivalRushManager {
         return damageActor(s, target, baseDamage, true);
     }
 
+    /** Native spell relays and secondary effects do not consume primary-tag charges or recursively trigger artifacts. */
+    public static boolean artifactHit(ServerPlayer player, Entity target, double baseDamage) {
+        Session s = session(player);
+        return s != null && damageActor(s, target, baseDamage, false);
+    }
+
     /** Read-only diagnostic used by provider acceptance tests and overlay integrations. */
     public static double actorVitality(ServerPlayer player, Entity target) {
         Session s = session(player); Actor actor = s == null || target == null ? null : s.actors.get(target.getUUID());
@@ -724,7 +773,16 @@ public final class RivalRushManager {
         if (actor == null || actor.claimed || target.isRemoved() || !Double.isFinite(baseDamage) || baseDamage <= 0) return false;
         if (s.circuit != null && !s.circuit.inArena(target.position(), 6)) return false;
         boolean critical = primary && s.run.recordHitAndRollCritical();
-        actor.vitality -= Math.min(40, baseDamage) * s.run.damageMultiplier() * (critical ? s.run.criticalMultiplier() : 1);
+        double line = primary ? s.run.consumeLineMultiplier() : 1;
+        double exposure = actor.exposedUntil > s.run.elapsedTicks() ? actor.exposureMultiplier : 1;
+        actor.vitality -= Math.min(40, baseDamage) * s.run.damageMultiplier()
+                * (critical ? s.run.criticalMultiplier() : 1) * line * exposure;
+        if (line > 1) {
+            s.lineProcs++;
+            player.serverLevel().sendParticles(ParticleTypes.ELECTRIC_SPARK, target.getX(), target.getY() + .7,
+                    target.getZ(), 14, .4, .5, .4, .05);
+            player.serverLevel().playSound(null, target.blockPosition(), SoundEvents.NOTE_BLOCK_BELL.value(), SoundSource.PLAYERS, .35f, 1.6f);
+        }
         player.serverLevel().sendParticles(ParticleTypes.WAX_OFF, target.getX(), target.getY() + target.getBbHeight() * 0.5,
                 target.getZ(), 5, 0.3, 0.5, 0.3, 0.01);
         if (critical) player.serverLevel().sendParticles(ParticleTypes.CRIT, target.getX(), target.getY() + 1, target.getZ(), 12, .4, .4, .4, .05);
@@ -764,10 +822,55 @@ public final class RivalRushManager {
         }
     }
 
+    private static void tickMovementArtifacts(Session s, boolean combat) {
+        JetSetData ride = s.player.getCapability(JetSetDataProvider.CAPABILITY).resolve().orElse(null);
+        boolean riding = ride != null && ride.active() && !s.player.isPassenger() && !s.player.isFallFlying()
+                && !s.player.isInWaterOrBubble() && !s.player.isSwimming();
+        RushMotionTracker.Step motion = s.motion.sample(s.player.position(), s.player.onGround(), riding, combat);
+        if (s.run.chargeLine(motion.ridingDistance())) {
+            s.player.serverLevel().sendParticles(ParticleTypes.ELECTRIC_SPARK, s.player.getX(), s.player.getY() + .3,
+                    s.player.getZ(), 8, .35, .2, .35, .02);
+            s.player.serverLevel().playSound(null, s.player.blockPosition(), SoundEvents.NOTE_BLOCK_CHIME.value(), SoundSource.PLAYERS, .3f, 1.7f);
+        }
+        int rank = s.run.rank(RushRun.Upgrade.AIR_BREAK);
+        long time = s.run.elapsedTicks();
+        if (!combat || rank == 0 || !motion.landed() || combatPaused(s)
+                || time - s.lastAirBreak < Math.round(100 * s.run.artifactIntervalMultiplier())) return;
+        s.lastAirBreak = time; s.airBreakPulses++;
+        double radius = (3 + rank * .5) * s.run.areaMultiplier();
+        List<Actor> targets = s.actors.values().stream().filter(a -> !a.claimed && a.mob.isAlive()
+                        && a.mob.distanceToSqr(s.player) <= radius * radius && s.player.hasLineOfSight(a.mob))
+                .sorted(Comparator.comparingDouble(a -> a.mob.distanceToSqr(s.player))).limit(12).toList();
+        for (Actor actor : targets) if (damageActor(s, actor.mob, 3 + rank * 2, false) && !actor.mob.isRemoved())
+            actor.staggerUntil = Math.max(actor.staggerUntil, time + 10 + rank * 5);
+        s.player.serverLevel().sendParticles(ParticleTypes.CLOUD, s.player.getX(), s.player.getY() + .15,
+                s.player.getZ(), 18, radius / 3, .08, radius / 3, .035);
+        s.player.serverLevel().playSound(null, s.player.blockPosition(), SoundEvents.PLAYER_ATTACK_SWEEP, SoundSource.PLAYERS, .45f, .85f);
+    }
+
     private static void tickArtifacts(Session s) {
         if (combatPaused(s)) return;
         long time = s.run.elapsedTicks();
         double interval = s.run.artifactIntervalMultiplier();
+        int expose = s.run.rank(RushRun.Upgrade.EXPOSE);
+        if (expose > 0 && time - s.lastExpose >= Math.round(140 * interval)) {
+            Actor target = s.actors.values().stream().filter(a -> !a.claimed && a.mob.isAlive()
+                            && a.mob.distanceToSqr(s.player) <= 400 && s.player.hasLineOfSight(a.mob))
+                    .sorted(Comparator.comparingInt((Actor a) -> a.role == Role.CAPTAIN ? 0 : a.role == Role.BRUISER ? 1 : 2)
+                            .thenComparingDouble(a -> a.mob.distanceToSqr(s.player))).findFirst().orElse(null);
+            if (target != null) {
+                for (Actor previous : s.actors.values()) if (previous != target && previous.exposedUntil > 0) {
+                    previous.exposedUntil = 0; previous.exposureMultiplier = 1; updateName(s, previous);
+                }
+                s.lastExpose = time; s.markApplications++;
+                target.exposedUntil = time + 40 + expose * 10;
+                target.exposureMultiplier = 1.20 + expose * .05;
+                updateName(s, target);
+                s.player.serverLevel().sendParticles(ParticleTypes.ENCHANT, target.mob.getX(), target.mob.getY() + 1.2,
+                        target.mob.getZ(), 12, .3, .5, .3, .1);
+                s.player.serverLevel().playSound(null, target.mob.blockPosition(), SoundEvents.NOTE_BLOCK_PLING.value(), SoundSource.PLAYERS, .35f, .9f);
+            }
+        }
         int wind = s.run.rank(RushRun.Upgrade.WIND);
         if (wind > 0 && time - s.lastHorn >= Math.round(180 * interval)) {
             s.lastHorn = time;
@@ -809,10 +912,12 @@ public final class RivalRushManager {
     }
 
     private static void updateName(Session s, Actor actor) {
+        boolean exposed = actor.exposedUntil > s.run.elapsedTicks();
         actor.mob.setCustomName(Component.literal(s.gang.canonicalName() + " · "
-                + actor.role.name().toLowerCase(java.util.Locale.ROOT) + " · " + (int) Math.ceil(actor.vitality))
-                .withStyle(actor.role == Role.CAPTAIN ? ChatFormatting.GOLD : ChatFormatting.AQUA));
-        actor.mob.setCustomNameVisible(actor.role == Role.CAPTAIN || actor.vitality < actor.maximum);
+                + actor.role.name().toLowerCase(java.util.Locale.ROOT) + " · " + (int) Math.ceil(actor.vitality)
+                + (exposed ? " · Exposed" : ""))
+                .withStyle(exposed ? ChatFormatting.YELLOW : actor.role == Role.CAPTAIN ? ChatFormatting.GOLD : ChatFormatting.AQUA));
+        actor.mob.setCustomNameVisible(exposed || actor.role == Role.CAPTAIN || actor.vitality < actor.maximum);
     }
 
     private static void spawnCard(Session s, Actor actor) {
@@ -974,6 +1079,33 @@ public final class RivalRushManager {
         s.run.finish();
     }
 
+    private static CompoundTag buildSnapshot(Session s) {
+        RushRun run = s.run;
+        CompoundTag build = new CompoundTag();
+        build.putDouble("DamageMultiplier", run.damageMultiplier()); build.putDouble("CritChance", run.criticalChance());
+        build.putDouble("CritMultiplier", run.criticalMultiplier()); build.putDouble("AreaMultiplier", run.areaMultiplier());
+        build.putDouble("CadenceMultiplier", run.cadenceMultiplier()); build.putDouble("PickupRadius", run.pickupRadius());
+        build.putDouble("RecoveryPerSecond", run.recoveryPerSecond()); build.putDouble("ArtifactIntervalMultiplier", run.artifactIntervalMultiplier());
+        build.putDouble("LineCharge", run.lineCharge()); build.putDouble("LineChargeMax", run.lineChargeMax());
+        build.putBoolean("AirborneReady", run.rank(RushRun.Upgrade.AIR_BREAK) > 0 && s.motion.airborneReady());
+        build.putInt("MarkedRivals", (int) s.actors.values().stream().filter(a -> a.exposedUntil > run.elapsedTicks()).count());
+        build.putLong("AirBreakPulses", s.airBreakPulses); build.putLong("LineProcs", s.lineProcs);
+        build.putLong("MarkApplications", s.markApplications);
+        build.putInt("ArtifactSlots", 3);
+        build.putBoolean("RemixReady", run.remixReady() && betweenArenas(s) && !run.hasOffer());
+        ListTag artifacts = new ListTag(), replacements = new ListTag();
+        for (RushRun.Upgrade upgrade : RushRun.Upgrade.values()) {
+            if (!run.artifactAvailable(upgrade)) continue;
+            CompoundTag artifact = new CompoundTag(); artifact.putString("Id", upgrade.name());
+            artifact.putString("Name", upgrade.label()); artifact.putString("Description", upgrade.description());
+            artifact.putInt("Rank", run.rank(upgrade)); artifact.putInt("MaxRank", upgrade.maxRank());
+            replacements.add(artifact.copy());
+            if (run.rank(upgrade) > 0) artifacts.add(artifact);
+        }
+        build.put("Artifacts", artifacts); build.put("RemixChoices", replacements);
+        return build;
+    }
+
     private static void send(ServerPlayer player, boolean open, String summary, int albumPage, int rosterPage) {
         CompoundTag state = new CompoundTag();
         state.putBoolean("Open", open); state.putString("Summary", summary);
@@ -992,15 +1124,7 @@ public final class RivalRushManager {
             state.putLong("Score", run.score()); state.putInt("Kills", (int) Math.min(Integer.MAX_VALUE, run.defeats()));
             state.putString("Objective", s.objective); state.putBoolean("Finale", run.awaitingEncore());
             if (s.circuit != null) state.put("Journey", s.circuit.snapshot(run, player.position()));
-            CompoundTag build = new CompoundTag();
-            build.putDouble("DamageMultiplier", run.damageMultiplier()); build.putDouble("CritChance", run.criticalChance());
-            build.putDouble("CritMultiplier", run.criticalMultiplier()); build.putDouble("AreaMultiplier", run.areaMultiplier());
-            build.putInt("ArtifactSlots", 3); ListTag artifacts = new ListTag();
-            for (RushRun.Upgrade upgrade : RushRun.Upgrade.values()) if (upgrade.artifact() && run.rank(upgrade) > 0) {
-                CompoundTag artifact = new CompoundTag(); artifact.putString("Id", upgrade.name());
-                artifact.putString("Name", upgrade.label()); artifact.putInt("Rank", run.rank(upgrade)); artifacts.add(artifact);
-            }
-            build.put("Artifacts", artifacts); state.put("Build", build);
+            state.put("Build", buildSnapshot(s));
             ListTag offers = new ListTag();
             for (RushRun.Upgrade upgrade : run.offers()) {
                 CompoundTag offer = new CompoundTag(); offer.putString("id", upgrade.name());

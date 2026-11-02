@@ -1,6 +1,8 @@
 # Rival Rush — optional skating roguelite
 
-**Status: optional `0.4.0-alpha.3`, merged and machine-verified.** [PR #41](https://github.com/Herbertofury/JetSetCraft/pull/41) adds the shared activity menu, arena circuit and expanded builds; the [alpha.3 verification receipt](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/verification/arena-circuit/README.md) records all nine passing runtime configurations and ten reviewed client captures. The stable `v0.3.0` release is unchanged and does not include Rival Rush, which first arrived through [PR #39](https://github.com/Herbertofury/JetSetCraft/pull/39). Rival Rush is one optional mode inside JetSetCraft; normal movement, graffiti, crews, Boombox challenges and Minecraft continue independently. The [18-game research and design study](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/RIVAL_RUSH_DESIGN.md) separates further proposals from current code.
+**Status: optional `0.4.0-alpha.4` development milestone; new runtime acceptance is pending.** The candidate adds Line battery, Air break, Breakbeat mark, an optional artifact remix after arena clears, a journey map and visible shared reward history. Their exact rules are described below. New CI results and client evidence have not yet been recorded for these changes.
+
+The verified **alpha.3 baseline** in [PR #41](https://github.com/Herbertofury/JetSetCraft/pull/41) added the shared activity menu, arena circuit and earlier artifact families. Its [historical verification receipt](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/verification/arena-circuit/README.md) records nine passing runtime configurations and ten reviewed client captures; those results do not certify alpha.4. The stable `v0.3.0` release is unchanged and does not include Rival Rush, which first arrived through [PR #39](https://github.com/Herbertofury/JetSetCraft/pull/39). Rival Rush is one optional mode inside JetSetCraft; normal movement, graffiti, crews, Boombox challenges and Minecraft continue independently. The [18-game research and design study](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/RIVAL_RUSH_DESIGN.md) separates source observations, candidate rules and future proposals.
 
 ## One activity menu, shared crew progress
 
@@ -12,7 +14,7 @@ Completed **Tag, King of the Hill and Showdown objectives, arena clears, qualify
 
 ### Shared completion rewards
 
-These are alpha.3's configured amounts, with crew progression enabled and room below the account caps. Their settlement paths have machine verification; the amounts remain tuning choices awaiting human progression playtests.
+These configured amounts carry forward from alpha.3, with crew progression enabled and room below the account caps. Their alpha.3 settlement paths have machine verification; alpha.4 changes await a new runtime result. The amounts remain tuning choices awaiting human progression playtests.
 
 | Completed activity | Crew Supplies | Crew XP | Member training XP | Gang reputation |
 |---|---:|---:|---:|---:|
@@ -31,6 +33,14 @@ A Rush return qualifies after at least **one active minute and three genuine riv
 
 The account retains its most recent **128 settlement receipts** to reject repeated reward calls, and those receipts move with pre-house earnings on founding. Each result also has a server-owned completion lifecycle. Mission claims remove the claimed job. These are bounded replay protections; durability follows normal world saves, so an abrupt crash can lose changes since the last completed save. Menu refreshes, ordinary mob kills, cancelled street games and unloaded legacy Boombox actors do not settle these rewards.
 
+### See what actually advanced your crew
+
+The alpha.4 candidate adds a **recent reward history with sixteen persistent entries** spanning street activities, arena clears, qualifying Rush returns and claimed missions. Each entry records what was actually added to the account, including reduced amounts at a cap and whether training was applied, saved before founding, unavailable because the focused member was away, or unavailable because no focus was selected. This presentation history is separate from the 128-entry replay guard above; viewing an old receipt does not pay it again.
+
+Successful awards produce a **nonblocking Minecraft toast** with their contribution and any crew/member level change. With reduced motion enabled, a text notification carries the same result. Open **Crew Charter → Progress** to review recent receipts and their detail. Pre-house history moves into the founded house with its earned progress; those entries preserve their original pre-house meaning.
+
+The Progress tab also shows the next practical home goal: the supply cost or shortfall, the required placed blocks, and the relevant home/facility page. Suggestions can lead from founding and registering a workshop to expanding the plot and adding facilities. You still place the blocks yourself and explicitly purchase eligible upgrades. Viewing a goal spends nothing. This history follows normal world saves and is not an unlimited activity archive.
+
 ## Arena circuit: choose, ride, clear, collect
 
 Rush setup has two play styles. **Free streets** retains the thirty-minute/Endless district. **Arena circuit** gives a six-stop journey; a Boombox Rival Rush invitation starts this circuit. At each fork, choose one of up to three profiles showing the reward, size and duration, then skate along the generated nine-block-wide connection to the next room. The HUD shows route progress, distance and the current combat objective.
@@ -38,6 +48,12 @@ Rush setup has two play styles. **Free streets** retains the thirty-minute/Endle
 An arena clears only after **both** its active combat duration and owned-rival defeat target are met. Leaving its boundary pauses its objective. Upgrade and route choices pause the participant's simulation. Arena timers range from 30 to 360 seconds by data pack; the supplied rooms use 120–240 seconds. Six rooms therefore have 12–24 minutes of configured combat plus travel and decisions, rather than an enforced thirty-minute circuit timer.
 
 Each clear gives its stated build reward and a distinct shared crew reward. A victory magnet collects nearby owned cards before the next route, so the player need not abandon earned pickups to continue. After six clears choose **Return to Minecraft** or **Encore**. Encore preserves the build and begins another six-room set from the circuit lobby.
+
+The alpha.4 candidate also grants **one optional artifact remix per genuine clear**. It is available while choosing the next room and after the sixth clear. Keeping the current build and continuing remains valid; unused opportunities do not accumulate into a stockpile. See [Remix a three-slot build](#remix-a-three-slot-build) below.
+
+Open **Journey** to inspect the current set's visited rooms, current destination and up to three offered routes. Select a known room or offer to read its reward, objective and travel state. Offers show shared rewards as **up to** amounts; cleared rooms show the exact accepted amounts already banked. The map adds those accepted results to **Banked this set** and explicitly identifies unavailable or still-unrecorded settlement. The next destinations are actual server-held choices, and choosing one retains the ride along its connector. Encore starts a fresh six-room map; the shared reward history remains available in Progress.
+
+The map marks the start with **S**, completed rooms with their numbers, and current offers with **A/B/C**. It does not draw unknown future branches. A new clear opens the latest room's debrief after any earned XP draft, including its actual settlement and a note if the progress is saved before founding. The separate route comparison remains available for choosing the next arena.
 
 | Arena | Layout / radius | Combat time / rivals | Build reward | Shared emphasis |
 |---|---|---|---|---|
@@ -55,7 +71,7 @@ Rooms are generated only inside the registered Rush dimension. Terrain from the 
 
 Glowing personal caches offer **magnet, paint damage, critical chance/power, area, recovery or an artifact**. Three additional owned rival defeats charge the next claim. Skate through a charged cache to collect it. A magnet reaches only owned run-card pickups; it does not attract vanilla items or another player's rewards. Each arena has a fresh set. Free streets continually discovers new nearby caches; previously claimed locations replenish after at least ten active minutes, with a bounded conservative cooldown ledger.
 
-Runs have **three artifact-family slots**. The ranked catalogue contains **18 choices: eleven stat upgrades and seven artifact families**. Firebolt relay requires the optional Iron's provider/API, leaving seventeen ranked choices without it. Taking more ranks strengthens an existing family. Full builds still receive useful score/recovery rewards; a stale draft cannot open a fourth slot.
+Runs have **three artifact-family slots**. The alpha.4 candidate catalogue contains **21 ranked choices: eleven stat upgrades and ten artifact families**. Firebolt relay requires the optional Iron's provider/API, leaving twenty ranked choices and nine families without it. Each artifact has **four ranks**; taking another rank strengthens an existing family. Full builds still receive useful score/recovery rewards; a stale draft cannot open a fourth slot.
 
 | Artifact | Implemented behavior |
 |---|---|
@@ -66,12 +82,37 @@ Runs have **three artifact-family slots**. The ranked catalogue contains **18 ch
 | Tempo drive | Every eighth defeat grants a brief faster-firing window |
 | Soul mixtape | Defeats charge a bounded recovery pool; five charges fuel a healing pulse |
 | Firebolt relay | When the pinned Iron's provider/API is present, periodically launches its real native Firebolt |
+| Line battery — alpha.4 | Ride 24 actual horizontal blocks to charge a stronger next primary paint or contact tag |
+| Air break — alpha.4 | Complete a moving airborne interval and land to pulse nearby visible rivals |
+| Breakbeat mark — alpha.4 | Briefly expose a visible priority rival to greater mode damage |
 
 **Critical rhythm** adds critical chance, **Finishing touch** raises critical damage, **Bigger chorus** expands paint/artifact area and **Fast rewind** reduces artifact intervals. These are run statistics. They do not change vanilla weapon damage or carry temporary run equipment home.
 
 The optional Firebolt relay is a focused integration. Native spellbook casting, provider mana/cooldowns, summons and arbitrary third-party capability restoration are outside its scope. See [Compatibility](Compatibility) for the exact tested versions and evidence.
 
-## Alpha.3 activity and arena captures
+### Ride a line, land a pulse, use the opening
+
+These are **alpha.4 candidate rules awaiting runtime acceptance**. Their values are initial tuning, not a claim that long-session balance has been measured.
+
+**Line battery** fills from 24 actual horizontal blocks travelled on your JetSetCraft ride, including real riding along arena connectors. Native passenger mounts, fall flight and swimming do not count. A single observation exceeding four horizontal or four vertical blocks is rejected. That excludes large position jumps; it does not claim to recognize every possible short teleport from another system. The next valid **primary tag**, delivered by paint or direct contact, consumes a full charge for **1.50× / 1.65× / 1.80× / 1.95×** damage at ranks one through four. Misses, splash, chains, landing pulses and native Firebolts do not spend this charge.
+
+**Air break** needs at least six observed airborne ticks, 1.5 blocks of horizontal travel and 0.6 blocks of vertical travel, followed by a real landing during combat. Its base cooldown is **100 active ticks**; Fast rewind shortens that interval. At ranks one through four, its base radius is **3.5 / 4 / 4.5 / 5 blocks**, damage is **5 / 7 / 9 / 11**, and surviving targets receive **15 / 20 / 25 / 30 active ticks** of directed stagger. Bigger chorus scales the radius. The pulse affects at most twelve visible rivals belonging to your session; it changes virtual combat health and briefly delays directed rival attacks, leaving their native health untouched. The airborne trigger clears during connector travel, so only Line battery charges there.
+
+**Breakbeat mark** looks for a visible owned rival within twenty blocks, prioritizing captains and bruisers. Its base interval is **140 active ticks**, shortened by Fast rewind; no target means no mark. At ranks one through four, the opening lasts **50 / 60 / 70 / 80 active ticks** and increases virtual damage to **1.25× / 1.30× / 1.35× / 1.40×**. It is a mode-specific opening, not a vanilla potion. A charged tag and the marked target can give a line a deliberate finish.
+
+At the usual twenty simulation ticks per second, those base cooldowns are five and seven seconds. Upgrade and route decisions pause the run clock; they do not consume the mark's remaining active time. Observations reset after pauses and rejected discontinuities, so paused menu time does not accumulate ridden distance or aerial progress.
+
+### Remix a three-slot build
+
+After clearing a real arena, the alpha.4 candidate lets you replace **one owned artifact family with a different available family you do not already hold**. The replacement carries the old family's exact rank. For example, replacing a rank-three Bass horn with Line battery gives rank-three Line battery while retaining the same three-slot limit.
+
+The choice is optional and only available between rooms, including the decision after room six. One clear supplies one opportunity; unused opportunities never stack. Rejected, unavailable, unchanged or stale-version requests spend nothing. Removing a charged family clears its associated charge instead of moving that charge into another ability. The optional Iron's relay can only be selected when its provider/API is available. Normal drafts still provide new ranks; remix changes build direction.
+
+Open **Build** to see the current run statistics and artifact descriptions. When a remix is available, choose the owned source, choose an available replacement, review the displayed **source → replacement** and retained rank, then explicitly confirm. Opening the page or inspecting a replacement makes no change.
+
+These original mechanics draw from Dungeons I's [movement-triggered build effects](https://www.minecraft.net/en-us/article/dungeons-september-dev-blog), its [Light Feather and Gong of Weakening](https://www.minecraft.net/en-us/article/minecraft-dungeons--9-essential-artifacts), and Dungeons II's [gear refinement and connected effects](https://news.xbox.com/en-us/2026/08/26/minecraft-dungeons-ii-new-features-gamescom-2026/amp/). They do not import either game's complete item catalogue, assets or native equipment. The [focused design notes](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/RIVAL_RUSH_DESIGN.md#144-focused-alpha4-adaptation-four-useful-decisions) distinguish the reference mechanisms from JetSetCraft's own numbers and rules.
+
+## Historical alpha.3 activity and arena captures
 
 These actual **1280 × 720** base-client captures show the Boombox activity preview and the first circuit fork. The client then chose a route and entered its connected travel path. Arena combat, clear conditions and settlement were exercised separately by server GameTests with shortened test clocks. [Open all ten captures, checksums and verification details](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/verification/arena-circuit/README.md).
 
@@ -144,21 +185,21 @@ A [player-built crew house](Player-Chapters-Posse-and-Mob-Archetypes) can prepar
 
 ## Build choices
 
-| Upgrade | Current effect |
-|---|---|
-| **Paint pressure** | Increased tag damage |
-| **Quick hands** | Faster automatic firing, with a bounded minimum interval |
-| **Wide spray** | Larger splash reach |
-| **Magnetic mixtape** | Larger card collection radius |
-| **Second wind** | More maximum run vitality and immediate recovery |
-| **Easy breathing** | Recovery after avoiding damage |
-| **Style dividends** | Stronger mode rewards for eligible walls and movement |
-| **Critical rhythm** | Higher paint critical chance, capped at 35% |
-| **Finishing touch** | More critical-hit damage |
-| **Bigger chorus** | Larger paint and artifact area |
-| **Fast rewind** | Shorter artifact intervals, with bounded minimums |
+| Upgrade | Current effect | Maximum rank |
+|---|---|---:|
+| **Paint pressure** | Increased tag damage | 8 |
+| **Quick hands** | Faster automatic firing, with a bounded minimum interval | 8 |
+| **Wide spray** | Larger splash reach | 6 |
+| **Magnetic mixtape** | Larger card collection radius | 6 |
+| **Second wind** | More maximum run vitality and immediate recovery | 8 |
+| **Easy breathing** | Recovery after avoiding damage | 6 |
+| **Style dividends** | Stronger mode rewards for eligible walls and movement | 6 |
+| **Critical rhythm** | Higher paint critical chance, capped at 35% | 6 |
+| **Finishing touch** | More critical-hit damage | 6 |
+| **Bigger chorus** | Larger paint and artifact area | 6 |
+| **Fast rewind** | Shorter artifact intervals, with bounded minimums | 6 |
 
-These eleven stat upgrades join the seven artifact families listed above; the original alpha.2 pool had seven stat upgrades. Stat and artifact ranks have defined ceilings. Once capped, drafts remain useful through **Fresh wheels** healing, **Victory lap** score, and temporary **Overdrive** damage. Choices validate the player, current run UUID, offer version and offered index. Replaying an old request cannot buy an upgrade in a new run.
+These eleven stat upgrades join alpha.4's ten artifact families, or nine without the optional relay; alpha.3 had seven families and the original alpha.2 pool had seven stat upgrades. All artifacts cap at rank four. Once capped, drafts remain useful through **Fresh wheels** healing, **Victory lap** score, and temporary **Overdrive** damage. Choices validate the player, current run UUID, offer version and offered index. Replaying an old request cannot buy an upgrade in a new run.
 
 ## Optional crew-house preparation and training
 
@@ -249,7 +290,7 @@ Limits: radius **16–48**, duration **30–360 seconds**, **3–80** required d
 
 Inventories, entity data, block-entity NBT, fluids, portals and explicitly dangerous vanilla blocks are rejected. The actual ride-in connector has priority over authored blocks so every chosen branch stays passable. This is a bounded block-map format, not an arbitrary structure-NBT importer or in-game arena editor.
 
-## Verified alpha.3 checkpoint
+## Historical verified alpha.3 checkpoint
 
 [PR #41](https://github.com/Herbertofury/JetSetCraft/pull/41) merged the same source tree that passed these gates. The [arena-circuit verification receipt](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/verification/arena-circuit/README.md) records the exact feature, tested integration and merge commits, shared tree identity, binary checksum and original captures.
 
@@ -281,7 +322,7 @@ The [alpha.1 verification receipt](https://github.com/Herbertofury/JetSetCraft/t
 
 ## What remains a design proposal
 
-The alpha.3 build implements chaining, rail-triggered pulses and the other artifact families listed above. Painted drift trails, evolutions, reusable enchantment libraries, equipment rerolls and the full Dungeons item catalogues remain design work. Human playtesting is still needed for the implemented families.
+Alpha.3 implements chaining, rail-triggered pulses and its seven earlier artifact families. Alpha.4 adds the three candidate families and rank-preserving artifact remix described above, with runtime acceptance pending. Painted drift trails, evolutions, reusable enchantment libraries, native equipment rerolls and the full Dungeons item catalogues remain design work. Human playtesting is still needed for the implemented families.
 
 Captains currently add tougher priority targets and rewards. Bespoke boss attack patterns, paired bosses, crew-specific final headliners, and the proposed authored thirty-minute sequence remain future work. Free streets ends at its timer boundary; the circuit ends after six arena clears. Both offer Return/Encore without a bespoke final boss.
 

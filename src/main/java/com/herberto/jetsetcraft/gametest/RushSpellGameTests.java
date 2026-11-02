@@ -84,6 +84,10 @@ public final class RushSpellGameTests {
                 int vanillaXp = owner.totalExperience;
                 float nativeHealth = target.getHealth();
                 long defeats = RivalRushManager.run(owner).defeats();
+                var run = RivalRushManager.run(owner);
+                check(run.grantReward(com.herberto.jetsetcraft.rush.RushRun.Upgrade.BATTERY), "Could not prepare relay proc isolation fixture");
+                for (int step = 0; step < 6; step++) run.chargeLine(4);
+                long primaryHits = run.hits();
                 SpawnCapture capture = new SpawnCapture(owner);
                 MinecraftForge.EVENT_BUS.register(capture);
                 Projectile shot;
@@ -123,6 +127,8 @@ public final class RushSpellGameTests {
                 shot.getClass().getMethod("handleHitDetection").invoke(shot);
                 check(shot.isRemoved() && target.isRemoved() && RivalRushManager.run(owner).defeats() == defeats + 1,
                         "Real provider collision did not produce exactly one virtual rival defeat");
+                check(run.lineCharge() == 24 && run.hits() == primaryHits,
+                        "Native Firebolt collision consumed paint charge or recursively triggered primary artifacts");
                 check(target.getHealth() == nativeHealth && owner.totalExperience == vanillaXp
                                 && inventory.equals(owner.getInventory().save(new ListTag()))
                                 && Float.compare(mana, providerMana(owner)) == 0,

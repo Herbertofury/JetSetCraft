@@ -63,9 +63,13 @@ public final class RivalRushEvents {
             event.setCanceled(true);
             if (event.getSource().getEntity() instanceof ServerPlayer player) {
                 var direct = event.getSource().getDirectEntity();
-                if (direct == player || (direct instanceof Projectile shot && RushSpellCompat.allowed(shot)
-                        && RivalRushManager.belongsTo(shot, player)))
-                    RivalRushManager.tagEnemy(player, event.getEntity(), event.getAmount());
+                if (direct == player) RivalRushManager.tagEnemy(player, event.getEntity(), event.getAmount());
+                else if (direct instanceof Projectile shot && RushSpellCompat.allowed(shot)
+                        && RivalRushManager.belongsTo(shot, player)) {
+                    if (shot instanceof com.herberto.jetsetcraft.entity.PaintBalloonEntity)
+                        RivalRushManager.tagEnemy(player, event.getEntity(), event.getAmount());
+                    else RivalRushManager.artifactHit(player, event.getEntity(), event.getAmount());
+                }
             }
         } else if (RivalRushManager.owned(event.getSource().getEntity())
                 || RivalRushManager.owned(event.getSource().getDirectEntity())) event.setCanceled(true);

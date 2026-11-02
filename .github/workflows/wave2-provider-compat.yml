@@ -21,6 +21,7 @@ on:
       - "src/main/resources/data/jetsetcraft/dimension_type/**"
       - "src/main/resources/data/jetsetcraft/tags/**"
       - "tools/validate_wave2_compat.py"
+      - "tools/stop_smoke_server.py"
       - ".github/workflows/wave2-provider-compat.yml"
   pull_request:
     paths:
@@ -41,6 +42,7 @@ on:
       - "src/main/resources/data/jetsetcraft/dimension_type/**"
       - "src/main/resources/data/jetsetcraft/tags/**"
       - "tools/validate_wave2_compat.py"
+      - "tools/stop_smoke_server.py"
       - ".github/workflows/wave2-provider-compat.yml"
   workflow_dispatch:
 
@@ -139,7 +141,9 @@ jobs:
               street_gear graffiti_lifecycle paint_balloon_splash rush_rules rush_album rush_return \
               rush_session rush_ownership rush_objectives crew_house crew_missions crew_persistence \
               crew_rush activity_progression activity_tag activity_safety activity_hill \
-              activity_dimension_return rush_spell_relay rush_arena_catalogue rush_arena_rules rush_arena_session; do
+              activity_dimension_return rush_spell_relay rush_arena_catalogue rush_arena_rules rush_arena_session \
+              rush_build_rules rush_build_runtime rush_journey_preview rush_journey_history \
+              crew_progress_history crew_progress_caps crew_progress_mission; do
             grep -Fq "JETSETCRAFT_GAMETEST_PASS $marker" "$log" || {
               echo "::error::JetSetCraft GameTest $marker did not pass with ${{ matrix.provider }} installed."
               exit 1
@@ -235,6 +239,9 @@ jobs:
           set -euo pipefail
           mkdir -p run build/verification
           printf 'eula=true\n' > run/eula.txt
+          export JETSETCRAFT_SMOKE_RCON_PASSWORD="$(python -c 'import secrets; print(secrets.token_hex(24))')"
+          printf 'server-ip=127.0.0.1\nenable-rcon=true\nrcon.port=25575\nrcon.password=%s\nbroadcast-rcon-to-ops=false\n' \
+            "$JETSETCRAFT_SMOKE_RCON_PASSWORD" > run/server.properties
           log="build/verification/wave2-${{ matrix.provider }}-server.log"
           : > "$log"
           setsid ./gradlew runServer -Pwave2Provider=${{ matrix.provider }} --no-daemon > "$log" 2>&1 &
@@ -271,10 +278,37 @@ jobs:
             echo "::error::Fatal mod-loading/runtime error with ${{ matrix.provider }} present."
             exit 1
           fi
-          kill -TERM -- "-$server_pid" 2>/dev/null || true
-          sleep 2
-          kill -KILL -- "-$server_pid" 2>/dev/null || true
-          wait "$server_pid" 2>/dev/null || true
+          if ! python tools/stop_smoke_server.py; then
+            kill -TERM -- "-$server_pid" 2>/dev/null || true
+            sleep 2
+            kill -KILL -- "-$server_pid" 2>/dev/null || true
+            wait "$server_pid" 2>/dev/null || true
+            tail -n 80 "$log"
+            echo '::error::Could not request a normal Minecraft stop over loopback RCON.'
+            exit 1
+          fi
+          shutdown_complete=0
+          shutdown_deadline=$((SECONDS + 30))
+          while (( SECONDS < shutdown_deadline )); do
+            if ! kill -0 "$server_pid" 2>/dev/null \
+                && grep -Fq 'All dimensions are saved' "$log"; then
+              shutdown_complete=1
+              break
+            fi
+            sleep 1
+          done
+          if [[ "$shutdown_complete" -ne 1 ]]; then
+            kill -KILL -- "-$server_pid" 2>/dev/null || true
+            wait "$server_pid" 2>/dev/null || true
+            tail -n 80 "$log"
+            echo '::error::Forge did not finish a graceful world save and shutdown within 30 seconds.'
+            exit 1
+          fi
+          if ! wait "$server_pid"; then
+            echo '::error::Forge launcher exited unsuccessfully after the normal stop.'
+            exit 1
+          fi
+          test -s run/world/level.dat
 
       - name: Seal evidence
         shell: bash

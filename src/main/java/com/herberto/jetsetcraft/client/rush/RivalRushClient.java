@@ -40,6 +40,11 @@ public final class RivalRushClient {
         Minecraft minecraft = Minecraft.getInstance();
         CompoundTag previous = state;
         state = incoming.copy();
+        if (state.contains("Journey", Tag.TAG_COMPOUND)) {
+            CompoundTag journey = state.getCompound("Journey");
+            journey.put("History", boundedList(journey.getList("History", Tag.TAG_COMPOUND), 6));
+            journey.put("Choices", boundedList(journey.getList("Choices", Tag.TAG_COMPOUND), 3));
+        }
         if (incoming.contains("Album", Tag.TAG_LIST)) {
             album = boundedPage(incoming.getList("Album", Tag.TAG_COMPOUND));
             albumPage = Math.max(0, incoming.getInt("Page"));
@@ -64,8 +69,12 @@ public final class RivalRushClient {
     }
 
     private static ListTag boundedPage(ListTag source) {
+        return boundedList(source, 20);
+    }
+
+    private static ListTag boundedList(ListTag source, int limit) {
         ListTag result = new ListTag();
-        for (int i = 0; i < Math.min(20, source.size()); i++) result.add(source.getCompound(i).copy());
+        for (int i = 0; i < Math.min(limit, source.size()); i++) result.add(source.getCompound(i).copy());
         return result;
     }
 
@@ -78,6 +87,12 @@ public final class RivalRushClient {
     public static CompoundTag stateSnapshot() { return state.copy(); }
     public static boolean isJourneyScreenOpen() {
         return Minecraft.getInstance().screen instanceof RivalRushScreen screen && screen.isRouteView();
+    }
+    public static boolean isJourneyMapScreenOpen() {
+        return Minecraft.getInstance().screen instanceof RivalRushScreen screen && screen.isJourneyView();
+    }
+    public static boolean isBuildScreenOpen() {
+        return Minecraft.getInstance().screen instanceof RivalRushScreen screen && screen.isBuildView();
     }
     static int page(boolean cards) { return cards ? albumPage : rosterPage; }
     static int pages(boolean cards) { return cards ? albumPages : rosterPages; }
@@ -136,8 +151,11 @@ public final class RivalRushClient {
         } : active ? (state.getBoolean("Endless") ? "+ " + clock(state.getLong("Ticks"))
                 : clock(Math.max(0L, 36_000L - state.getLong("Ticks")))) : "HUD preview";
         gui.drawString(font, timer, HUD_WIDTH - 7 - font.width(timer), 6, 0xFFFFFFFF, true);
-        String gang = circuit ? "Arena " + journey.getInt("Stage") + "/" + Math.max(1, journey.getInt("StagesPerSet"))
-                + " • " + journey.getString("CurrentName") : active ? state.getString("Gang") : "Your rival crew";
+        String gang = circuit ? switch (journey.getString("Phase")) {
+            case "choosing" -> "Arena " + journey.getInt("Stage") + "/6 • choose a reward";
+            case "complete" -> "Set " + journey.getInt("Set") + " • six arenas cleared";
+            default -> "Arena " + journey.getInt("Stage") + "/" + Math.max(1, journey.getInt("StagesPerSet")) + " • " + journey.getString("CurrentName");
+        } : active ? state.getString("Gang") : "Your rival crew";
         gui.drawString(font, clipped(gang, HUD_WIDTH - 14), 7, 20, 0xFFE7E7E7, true);
         long xp = Math.max(0L, state.getLong("Xp"));
         long next = Math.max(1L, state.getLong("NextXp"));

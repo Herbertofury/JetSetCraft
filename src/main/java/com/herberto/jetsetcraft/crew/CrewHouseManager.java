@@ -1,5 +1,6 @@
 package com.herberto.jetsetcraft.crew;
 
+import com.herberto.jetsetcraft.JetSetCraft;
 import com.herberto.jetsetcraft.activity.ActivityManager;
 import com.herberto.jetsetcraft.blockentity.BoomboxBlockEntity;
 import com.herberto.jetsetcraft.config.JetSetConfig;
@@ -136,8 +137,11 @@ public final class CrewHouseManager {
         profile.addMember("Riff", species, gang, CrewMissionCatalog.Role.COURIER);
         profile.addMember("Patches", species, gang, CrewMissionCatalog.Role.TAGGER);
         profile.focus = profile.members.keySet().iterator().next();
-        return data.add(profile) ? "Home founded. Build it yourself, meet your two apprentice roster members, and send a delivery job."
-                : "Your existing crew record was preserved; a second home was not created.";
+        if (!data.add(profile)) return "Your existing crew record was preserved; a second home was not created.";
+        CrewProfile.Member first = profile.members.get(profile.focus);
+        return "Home founded with " + profile.supplies + " Crew Supplies. "
+                + (first != null && first.xp > 0 ? "Saved training applied to " + first.name + ": level " + first.level() + ". " : "")
+                + "Build your own house; the Progress tab shows your next practical goal.";
     }
 
     private static String relocate(ServerPlayer player, CrewProfile profile, CrewHouseData data) {
@@ -195,7 +199,13 @@ public final class CrewHouseManager {
                 return job == null ? "Choose an idle member and an available mission slot."
                         : "Member dispatched. Rewards are fixed now; the assignment progresses while this server runs and waits for your claim.";
             }
-            case "claim" -> { return profile.claimMission(target, now(player)) ? "Mission claimed: supplies, member XP, crew XP and gang reputation banked once." : "That mission is not ready, is not yours, or has already been claimed."; }
+            case "claim" -> {
+                CrewRewardReceipt receipt = profile.claimMissionReward(target, now(player));
+                if (receipt == null) return "That mission is not ready, is not yours, or has already been claimed.";
+                CrewHouseData.get(player.getServer()).setDirty();
+                publishReward(player, receipt);
+                return receipt.summary() + ". " + receipt.trainingSummary() + ". " + receipt.levelSummary();
+            }
             case "cancel" -> { return profile.cancelMission(target) ? "Assignment cancelled. The member is idle; no rewards were granted." : "That assignment is no longer active."; }
             case "facility" -> { return registerFacility(player, profile, Kind.find(value)); }
             case "upgrade" -> { return upgradeFacility(player, profile, Kind.find(value)); }
@@ -282,7 +292,7 @@ public final class CrewHouseManager {
         };
         if (!eligible) return ActivityReward.NONE;
         ActivityReward reward = activityReward(mode);
-        return settle(player, eventId, gang, reward.supplies, reward.crewXp, reward.memberXp, reward.reputation);
+        return settle(player, eventId, gang, reward.supplies, reward.crewXp, reward.memberXp, reward.reputation, mode);
     }
 
     /** Settles genuine mode participation into the same account, including earnings before founding a home. */
@@ -296,30 +306,31 @@ public final class CrewHouseManager {
         int training = profile == null ? 0 : operationalLevel(player.getServer(), profile, Kind.TRAINING);
         settle(player, runId, rivalGang, Math.min(60, 8 + minutes + cardBonus / 3),
                 Math.min(300, 20 + minutes * 6 + cardBonus * 2), Math.min(180, 20 + minutes * 3 + training * 10),
-                Math.min(40, 2 + minutes));
+                Math.min(40, 2 + minutes), "rush_return");
     }
 
     private static ActivityReward settle(ServerPlayer player, UUID receipt, ResourceLocation gang,
-                                         int supplies, int xp, int training, int reputation) {
+                                         int supplies, int xp, int training, int reputation, String source) {
         if (player == null || player.getServer() == null || receipt == null || gang == null
                 || !JetSetConfig.SERVER.enableCrewHouse.get()) return ActivityReward.NONE;
         CrewHouseData data = CrewHouseData.get(player.getServer());
         if (data.blocked(player.getUUID())) return ActivityReward.NONE;
-        CrewProfile profile = data.profile(player.getUUID());
-        CrewProfile.Member member = profile == null ? null : profile.members.get(profile.focus);
-        int beforeSupplies = profile == null ? data.pendingSupplies(player.getUUID()) : profile.supplies;
-        long beforeXp = profile == null ? data.pendingXp(player.getUUID()) : profile.xp;
-        long beforeTraining = profile == null ? data.pendingTraining(player.getUUID()) : member == null ? 0 : member.xp;
-        int beforeReputation = profile == null ? data.pendingReputation(player.getUUID(), gang.toString()) : profile.reputation(gang.toString());
-        if (!data.award(player.getUUID(), receipt, gang.toString(), Math.max(0, Math.min(60, supplies)),
-                Math.max(0, Math.min(300, xp)), Math.max(0, Math.min(180, training)), Math.max(0, Math.min(40, reputation))))
-            return ActivityReward.NONE;
-        return new ActivityReward(true,
-                (profile == null ? data.pendingSupplies(player.getUUID()) : profile.supplies) - beforeSupplies,
-                (int) ((profile == null ? data.pendingXp(player.getUUID()) : profile.xp) - beforeXp),
-                (int) ((profile == null ? data.pendingTraining(player.getUUID()) : member == null ? 0 : member.xp) - beforeTraining),
-                (profile == null ? data.pendingReputation(player.getUUID(), gang.toString()) : profile.reputation(gang.toString())) - beforeReputation,
-                profile == null);
+        CrewRewardReceipt awarded = data.award(player.getUUID(), receipt, gang.toString(), Math.max(0, Math.min(60, supplies)),
+                Math.max(0, Math.min(300, xp)), Math.max(0, Math.min(180, training)), Math.max(0, Math.min(40, reputation)), source, now(player));
+        if (awarded == null) return ActivityReward.NONE;
+        publishReward(player, awarded);
+        return new ActivityReward(true, awarded.supplies(), awarded.crewXp(), awarded.memberXp(), awarded.reputation(), awarded.pending());
+    }
+
+    /** Presentation follows the committed result. A disconnected client cannot undo or repeat an award. */
+    private static void publishReward(ServerPlayer player, CrewRewardReceipt receipt) {
+        try {
+            JetSetNetwork.syncCrewReward(player, receipt.snapshot());
+            CompoundTag state = snapshot(player); state.putBoolean("Open", false);
+            JetSetNetwork.syncCrew(player, state);
+        } catch (RuntimeException error) {
+            JetSetCraft.LOGGER.warn("Crew reward {} was saved but its notification could not be sent to {}", receipt.id(), player.getUUID(), error);
+        }
     }
 
     public static CompoundTag snapshot(ServerPlayer player) {
@@ -340,7 +351,7 @@ public final class CrewHouseManager {
         String manage = profile == null ? "Found your home at a placed Boombox first." : managementReason(player, profile);
         if (data.blocked(player.getUUID())) manage = "Saved crew data was retained for recovery; management is unavailable.";
         out.putBoolean("CanManage", manage.isEmpty()); out.putString("ManageReason", manage);
-        if (profile == null) return out;
+        if (profile == null) { CrewProgressView.write(out, data, player.getUUID()); return out; }
         boolean canManage = manage.isEmpty();
         out.putUUID("HomeId", profile.id); out.putLong("Revision", profile.revision); out.putString("Name", profile.name);
         out.putString("GangId", profile.gang); out.putString("GangName", gangName(profile.gang));
@@ -423,6 +434,7 @@ public final class CrewHouseManager {
             row.putString("Reason", !canManage ? manage : !room ? "Expand your plot for more member capacity." : profile.supplies < recruitCost ? "Needs " + recruitCost + " Crew Supplies." : "A mission roster profile; no world mob is captured or replaced."); recruits.add(row);
         }
         out.put("Recruits", recruits);
+        CrewProgressView.write(out, data, player.getUUID());
         return out;
     }
 

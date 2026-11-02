@@ -3,6 +3,7 @@ package com.herberto.jetsetcraft.client.activity;
 import com.herberto.jetsetcraft.JetSetCraft;
 import com.herberto.jetsetcraft.blockentity.BoomboxBlockEntity;
 import com.herberto.jetsetcraft.client.crew.CrewHouseVisualAudit;
+import com.herberto.jetsetcraft.client.crew.CrewHouseClient;
 import com.herberto.jetsetcraft.client.rush.RivalRushClient;
 import com.herberto.jetsetcraft.network.JetSetNetwork;
 import com.herberto.jetsetcraft.registry.ModBlocks;
@@ -38,6 +39,7 @@ public final class ActivityJourneyVisualAudit {
     private static int originalLevel, originalTotalXp;
     private static float originalProgress;
     private static UUID runId, chosenRun;
+    private static String selectedRoute;
     private static int chosenVersion = Integer.MIN_VALUE;
 
     public static boolean advance(Minecraft minecraft, Consumer<String> capture, Predicate<String> captured) {
@@ -117,17 +119,59 @@ public final class ActivityJourneyVisualAudit {
             }
             case 8 -> {
                 if (!captured.test("10-arena-route")) return false;
+                click(minecraft, "Journey"); next(11);
+            }
+            case 11 -> {
+                if (!RivalRushClient.isJourneyMapScreenOpen()) return false;
                 CompoundTag journey = rush.getCompound("Journey");
-                CompoundTag choice = journey.getList("Choices", Tag.TAG_COMPOUND).getCompound(0);
+                require(journey.getString("Phase").equals("choosing") && journey.getInt("Completed") == 0
+                        && journey.getList("History", Tag.TAG_COMPOUND).isEmpty() && !journey.contains("Current", Tag.TAG_COMPOUND)
+                        && journey.getList("Choices", Tag.TAG_COMPOUND).size() == 3,
+                        "Initial journey map invented a completed or unoffered room");
+                for (var raw : journey.getList("Choices", Tag.TAG_COMPOUND)) {
+                    CompoundTag room = (CompoundTag) raw;
+                    require(room.contains("MapX") && room.getInt("MapZ") == 1 && !room.getString("RunReward").isBlank()
+                            && room.getCompound("SharedReward").getInt("Supplies") > 0,
+                            "Actual map offer lacks its route coordinate or server reward preview");
+                }
+                if (!captureReady(minecraft)) return false;
+                capture.accept("11-journey-map"); next(12);
+            }
+            case 12 -> {
+                if (!captured.test("11-journey-map")) return false;
+                click(minecraft, "Build"); next(13);
+            }
+            case 13 -> {
+                if (!RivalRushClient.isBuildScreenOpen()) return false;
+                CompoundTag build = rush.getCompound("Build");
+                require(build.getInt("ArtifactSlots") == 3 && build.getList("Artifacts", Tag.TAG_COMPOUND).size() <= 3
+                        && Double.isFinite(build.getDouble("DamageMultiplier")) && build.getDouble("DamageMultiplier") >= 1
+                        && build.getDouble("AreaMultiplier") >= 1, "Build screen lacks a genuine bounded server build");
+                if (!captureReady(minecraft)) return false;
+                capture.accept("12-run-build"); next(14);
+            }
+            case 14 -> {
+                if (!captured.test("12-run-build")) return false;
+                click(minecraft, "Journey"); next(15);
+            }
+            case 15 -> {
+                if (!RivalRushClient.isJourneyMapScreenOpen()) return false;
+                click(minecraft, "Compare routes"); next(16);
+            }
+            case 16 -> {
+                if (!RivalRushClient.isJourneyScreenOpen()) return false;
+                CompoundTag choice = rush.getCompound("Journey").getList("Choices", Tag.TAG_COMPOUND).getCompound(0);
                 require(!choice.getString("Id").isBlank(), "First route has no authoritative profile identity");
-                RivalRushClient.requestJourney(choice.getString("Id")); next(9);
+                selectedRoute = choice.getString("Id");
+                clickContaining(minecraft, choice.getString("Name")); next(9);
             }
             case 9 -> {
                 CompoundTag journey = rush.getCompound("Journey");
                 String journeyPhase = journey.getString("Phase");
                 if (!journeyPhase.equals("travel") && !journeyPhase.equals("arena")) return false;
                 require(rush.hasUUID("Run") && rush.getUUID("Run").equals(runId)
-                        && !journey.getString("CurrentName").isBlank(), "Selecting a route lost the live run or arena");
+                        && journey.getCompound("Current").getString("Id").equals(selectedRoute),
+                        "Selecting a route lost the live run or the actual chosen arena");
                 if (++ticks < 20) return false;
                 // No room completion is fabricated: this verifies choosing a real connected arena and the normal exit.
                 JetSetNetwork.sendRushAction("leave", "", 0, runId, rush.getInt("Version")); next(10);
@@ -140,10 +184,28 @@ public final class ActivityJourneyVisualAudit {
                         && Math.abs(minecraft.player.experienceProgress - originalProgress) <= 0.000001F,
                         "Circuit return changed ordinary Minecraft XP");
                 require(minecraft.player.position().distanceToSqr(originalPosition) <= 1.0D, "Circuit return lost its source position");
-                JetSetCraft.LOGGER.info("JETSETCRAFT_ACTIVITY_VISUAL_AUDIT_PASS real Boombox preview; explicit Rival Rush; genuine first route choice; entered connected arena travel; inventory/XP/dimension restored");
-                next(11); return true;
+                JetSetCraft.LOGGER.info("JETSETCRAFT_ACTIVITY_AUDIT_RETURN_RESTORED inventory/XP/dimension and source position verified before opening crew progress");
+                click(minecraft, "Crew House"); next(17);
             }
-            case 11 -> { return true; }
+            case 17 -> {
+                if (!CrewHouseClient.isScreenOpen() || !CrewHouseClient.stateSnapshot().getBoolean("Exists")) return false;
+                click(minecraft, "Progress"); next(18);
+            }
+            case 18 -> {
+                if (!CrewHouseClient.isProgressScreenOpen()) return false;
+                CompoundTag crew = CrewHouseClient.stateSnapshot();
+                require(crew.hasUUID("HomeId") && crew.getList("RecentRewards", Tag.TAG_COMPOUND).size() <= 16
+                        && !crew.getCompound("NextGoal").getString("Title").isBlank(),
+                        "Progress view lost the actual home, bounded reward history or practical next goal");
+                if (!captureReady(minecraft)) return false;
+                capture.accept("13-crew-progress"); next(19);
+            }
+            case 19 -> {
+                if (!captured.test("13-crew-progress")) return false;
+                JetSetCraft.LOGGER.info("JETSETCRAFT_ACTIVITY_VISUAL_AUDIT_PASS real Boombox preview; explicit Rival Rush; genuine journey map and Build; first route choice; connected arena travel; inventory/XP/dimension restored; actual crew Progress view");
+                next(20); return true;
+            }
+            case 20 -> { return true; }
             default -> throw new IllegalStateException("Unknown activity audit phase " + phase);
         }
         return false;
