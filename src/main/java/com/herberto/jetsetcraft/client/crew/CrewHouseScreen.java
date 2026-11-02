@@ -176,12 +176,14 @@ final class CrewHouseScreen extends Screen {
     private void buildStyles() {
         CompoundTag library = state().getCompound("StyleLibrary");
         ListTag lessons = library.getList("Lessons", Tag.TAG_COMPOUND);
-        label("Style Library • " + library.getInt("Unlocked") + "/" + library.getInt("Total")
-                + " learned • " + library.getLong("Xp") + " crew XP", 74, 1, CYAN);
-        label("Choose one starting artifact. XP is kept; every mode helps.", 88, 2, MUTED);
-        int rows = Math.max(1, Math.min(8, (firstActions() - 113) / 22));
+        int rows = styleRows();
         int pages = Math.max(1, (lessons.size() + rows - 1) / rows);
         page = Math.max(0, Math.min(page, pages - 1));
+        String heading = "Style Library • " + library.getInt("Unlocked") + "/" + library.getInt("Total")
+                + " learned • " + library.getLong("Xp") + " crew XP";
+        String pageLabel = " • Page " + (page + 1) + "/" + pages;
+        label(heading + (font.width(heading + pageLabel) <= span() ? pageLabel : ""), 74, 1, CYAN);
+        label("Choose one starting artifact. XP is kept; every mode helps.", 88, 2, MUTED);
         for (int i = 0; i < rows && page * rows + i < lessons.size(); i++) {
             CompoundTag lesson = lessons.getCompound(page * rows + i);
             String status = !lesson.getBoolean("Available") ? lesson.getBoolean("Selected") ? "Absent; using home" : "Provider absent"
@@ -190,16 +192,21 @@ final class CrewHouseScreen extends Screen {
             String hint = lesson.getString("Description") + "\nLearned at " + lesson.getInt("RequiredXp") + " shared crew XP. "
                     + "Uses the single starting preparation and one of three artifact slots. All artifacts remain in ordinary run drafts."
                     + (!library.getBoolean("CanManage") ? "\nFinish your current activity before changing your next starting style." : "");
-            action(lesson.getString("Name") + " • " + status, left(), 113 + i * 22, span(),
+            action(lesson.getString("Name") + " • " + status, left(), 111 + i * 22, span(),
                     library.getBoolean("CanManage") && lesson.getBoolean("Unlocked") && lesson.getBoolean("Available")
                             && !lesson.getBoolean("Selected"), hint, () -> send("style", lesson.getString("Id"), 0, null));
         }
-        twoButtons(firstActions(), "‹ Previous", page > 0, "", () -> { page--; rebuildWidgets(); },
-                "Next ›", page + 1 < pages, "", () -> { page++; rebuildWidgets(); });
-        twoButtons(secondActions(), library.getString("Selected").equals("HOME") ? "Using home preparation" : "Use home preparation",
+        int navigationWidth = Math.min(80, (span() - 8) / 4);
+        String navigationHint = "Page " + (page + 1) + " of " + pages + ". Scroll or use Page Up / Down to browse styles.";
+        button("‹ Previous", left(), secondActions(), navigationWidth, page > 0,
+                navigationHint, () -> pageStyles(-1));
+        button("Next ›", left() + navigationWidth + 4, secondActions(), navigationWidth, page + 1 < pages,
+                navigationHint, () -> pageStyles(1));
+        action(library.getString("Selected").equals("HOME") ? "Using home preparation" : "Use home preparation",
+                left() + 2 * (navigationWidth + 4), secondActions(), span() - 2 * (navigationWidth + 4),
                 library.getBoolean("CanManage") && !library.getString("Selected").equals("HOME"),
                 "Use your selected operational house facility, or the ordinary starting build if none is available.",
-                () -> send("style", "HOME", 0, null), "Back to Progress", true, "", () -> navigate(View.PROGRESS));
+                () -> send("style", "HOME", 0, null));
     }
 
     private void buildReward() {
@@ -434,6 +441,14 @@ final class CrewHouseScreen extends Screen {
     private int secondActions() { return height - 61; }
     private int listRows() { return Math.max(1, Math.min(8, (height - 150) / 22)); }
     private int progressRows() { return Math.max(1, Math.min(6, (firstActions() - 126) / 22)); }
+    // Twenty-pixel lessons on a 22-pixel pitch leave at least four pixels before the shared action row.
+    private int styleRows() { return Math.max(1, Math.min(8, 1 + (secondActions() - 4 - 111 - 20) / 22)); }
+    private void pageStyles(int direction) {
+        int rows = styleRows(), count = state().getCompound("StyleLibrary").getList("Lessons", Tag.TAG_COMPOUND).size();
+        int pages = Math.max(1, (count + rows - 1) / rows);
+        page = Math.max(0, Math.min(pages - 1, page + direction));
+        rebuildWidgets();
+    }
     private int maxScroll() { return Math.max(0, detailLines.size() * 11 - Math.max(1, height - 166)); }
     private static CompoundTag state() { return CrewHouseClient.state(); }
     private static ListTag list(String key) { return CrewHouseClient.list(key); }
@@ -537,6 +552,7 @@ final class CrewHouseScreen extends Screen {
 
     @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double amount) {
+        if (view == View.STYLES) { pageStyles(-(int) Math.signum(amount)); return true; }
         if (!detailLines.isEmpty()) { textScroll = Math.max(0, Math.min(maxScroll(), textScroll - (int) (amount * 22))); return true; }
         ListTag entries = visibleList();
         if (!entries.isEmpty()) {
@@ -550,6 +566,7 @@ final class CrewHouseScreen extends Screen {
 
     @Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+        if (view == View.STYLES && (keyCode == 266 || keyCode == 267)) { pageStyles(keyCode == 266 ? -1 : 1); return true; }
         if ((keyCode == 257 || keyCode == 335) && nameSubmit != null && nameSubmit.active) { nameSubmit.onPress(); return true; }
         if ((keyCode == 266 || keyCode == 267) && !detailLines.isEmpty()) {
             textScroll = Math.max(0, Math.min(maxScroll(), textScroll + (keyCode == 266 ? -55 : 55))); return true;
