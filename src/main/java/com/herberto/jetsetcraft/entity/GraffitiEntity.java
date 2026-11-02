@@ -61,6 +61,14 @@ public final class GraffitiEntity extends Entity {
                 blockPos.getZ() + 0.5 + face.getStepZ() * 0.505);
     }
 
+    /** Large temporary operation paint. The caller must already own this entity in a live server session. */
+    public void configureMissionSplash(BlockPos support, Direction face, String pattern, float size) {
+        if (level().isClientSide || !com.herberto.jetsetcraft.liberty.LibertyManager.owned(this)) return;
+        configureSplash(support, face, pattern, 2.5f);
+        float bounded = Float.isFinite(size) ? Math.max(.5f, Math.min(10f, size)) : 2.5f;
+        entityData.set(RENDER_WIDTH, bounded); entityData.set(RENDER_HEIGHT, bounded);
+    }
+
     public int getVariant() {
         return entityData.get(VARIANT);
     }
@@ -131,6 +139,9 @@ public final class GraffitiEntity extends Entity {
 
     @Override
     public boolean hurt(DamageSource source, float amount) {
+        if (source.getEntity() instanceof net.minecraft.server.level.ServerPlayer player
+                && com.herberto.jetsetcraft.liberty.LibertyManager.active(player)
+                && !com.herberto.jetsetcraft.liberty.LibertyManager.belongsTo(this,player)) return false;
         if (!level().isClientSide && source.getEntity() instanceof Player) {
             discard();
             return true;

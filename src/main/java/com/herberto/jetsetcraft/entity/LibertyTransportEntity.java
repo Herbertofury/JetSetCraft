@@ -1,7 +1,6 @@
 package com.herberto.jetsetcraft.entity;
 
 import com.herberto.jetsetcraft.liberty.LibertyManager;
-import com.herberto.jetsetcraft.liberty.LibertyWorld;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
@@ -16,7 +15,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.network.NetworkHooks;
 
-/** A visible, server-driven passenger pod / extraction ship, never a usable overworld vehicle. */
+/** A visible, server-driven mission transport; valid ownership also covers an accepted home defense. */
 public final class LibertyTransportEntity extends Entity {
     private static final EntityDataAccessor<Boolean> SHIP = SynchedEntityData.defineId(LibertyTransportEntity.class, EntityDataSerializers.BOOLEAN);
     private int interpolationSteps;
@@ -37,7 +36,7 @@ public final class LibertyTransportEntity extends Entity {
                 setRot(getYRot() + Mth.wrapDegrees(targetYaw - getYRot()) * (float) fraction,
                         Mth.lerp((float) fraction, getXRot(), targetPitch));
             }
-        } else if (!LibertyWorld.isLiberty(level()) || !LibertyManager.validOwned(this)) discard();
+        } else if (!LibertyManager.validOwned(this)) discard();
     }
     @Override public void lerpTo(double x, double y, double z, float yaw, float pitch, int steps, boolean teleport) {
         if (!level().isClientSide) { super.lerpTo(x, y, z, yaw, pitch, steps, teleport); return; }
