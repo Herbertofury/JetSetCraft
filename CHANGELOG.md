@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.4.0-alpha.6 — headliners and build evolutions, 2026-11-02
+
+- Added three elite attack identities, **Linebreaker**, **Bombardier** and **Basswarden**, with fixed lane, circle and ring tells, private owner feedback, active-clock timing, block line-of-sight checks and a recovery opening. The original selected vanilla or modded body keeps its native health, attributes and effects.
+- Added three-phase **Headliner** encounters at circuit rooms three and six and every five active minutes in Free streets. A headliner victory earns one saved evolution opportunity and restores one draft reroll, up to three. Boss rooms require actual owned victory; a missing or invalid headliner returns safely without inventing a clear. Finite street sessions retain their normal thirty-minute bank/Encore choice.
+- Added **Cryo shatter**, **Railstorm** and **Radiant barrier** build evolutions. Each requires two specific rank-three artifact families and an earned opportunity, selected during an XP draft, between arenas or at Encore. The three-slot build remains consequential: removing a prerequisite makes the selected evolution dormant. Secondary procs are bounded and cannot recursively trigger primary tags.
+- Added **three rerolls and two banishes** per run, exact next-rank descriptions and visible draft exclusions. These controls keep the already-earned level and XP; stale, replayed and foreign-run intents cannot spend another control. Banishes affect XP drafts only, preserving physical cache and remix rewards.
+- Added a persistent **Last run** debrief with the final build, evolution, actual combat/recovery totals, room/headliner counts and the accepted Rush-return reward receipt. Overkill and attempted rewards are not recorded as credited progress. The report is optional display data and cannot authorize another payout or replay the temporary inventory.
+- Extended the movable Rush HUD with current threat health, phase, attack intent/counterplay and useful build charges. Added Build Paths and draft detail views, and previewed headliner stages before route selection. Network protocol is now **14**; both client and server need the matching alpha.
+- Validation and publication evidence for this candidate are in progress. Historical alpha.5 results below apply only to their recorded source.
+
 ## 0.4.0-alpha.5 — shared style library and arena builds, 2026-11-02
 
 - Added a permanent **Style Library** that uses the same crew XP earned through all activities, arena rewards, qualifying Rush returns and claimed missions. Sixteen lessons unlock starting choices without spending supplies or resetting when a house is founded. One selected available style grants one rank and uses the existing preparation and artifact-slot budgets; home preparation remains available.
