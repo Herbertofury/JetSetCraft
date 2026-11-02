@@ -34,9 +34,11 @@ Rival Rush remains an opt-in skating, paint-combat and mob-card mode with separa
 
 Craft a reusable **Rival Rush Flyer** from paper + cyan dye, or use `/jetsetcraft rush`. The alpha supports Easy, Normal and Hard and never changes the world's difficulty. Controls, card rewards and limits are documented in [Rival Rush](wiki/Rival-Rush.md); the [18-game research/design study](docs/RIVAL_RUSH_DESIGN.md) separates deeper build families, bespoke bosses and rhythm-scored challenges from the implemented loop.
 
-The current working development version is **`0.4.0-alpha.5`**. Its own runtime verification and publication receipt are pending; the alpha.4 evidence below belongs to the preceding version. This continuation builds on [alpha.4 / PR #43](https://github.com/Herbertofury/JetSetCraft/pull/43), the shared activity/arena layer from [PR #41](https://github.com/Herbertofury/JetSetCraft/pull/41), Rival Rush from [PR #39](https://github.com/Herbertofury/JetSetCraft/pull/39), and crew houses from [PR #40](https://github.com/Herbertofury/JetSetCraft/pull/40). Stable **`v0.3.0` remains unchanged** and does not contain this mode.
+The current development version is **`0.4.0-alpha.5`**, merged through [PR #44](https://github.com/Herbertofury/JetSetCraft/pull/44) as [`5bad458`](https://github.com/Herbertofury/JetSetCraft/commit/5bad45891b6fe7a5c7c133ed0a19ac0556dd5af8), with the exact tested source tree. This continuation builds on [alpha.4 / PR #43](https://github.com/Herbertofury/JetSetCraft/pull/43), the shared activity/arena layer from [PR #41](https://github.com/Herbertofury/JetSetCraft/pull/41), Rival Rush from [PR #39](https://github.com/Herbertofury/JetSetCraft/pull/39), and crew houses from [PR #40](https://github.com/Herbertofury/JetSetCraft/pull/40). Stable **`v0.3.0` remains unchanged** and does not contain this mode.
 
-**Verified alpha.4:** [base gate #286](https://github.com/Herbertofury/JetSetCraft/actions/runs/41379581968) and [provider matrix #59](https://github.com/Herbertofury/JetSetCraft/actions/runs/41379581891) passed **all 35 real Forge GameTests in each of nine configurations**. Every configuration passed build, dedicated-server readiness, RCON stop and the normal saved-dimensions shutdown check. The base graphical audit produced **thirteen reviewed 1280 × 720 captures**. The [reward/journey receipt and gallery](docs/verification/reward-journeys/README.md) records the identical tested/merged tree, artifacts and scope.
+**Verified alpha.5:** [base gate #290](https://github.com/Herbertofury/JetSetCraft/actions/runs/41388639847) and the [provider matrix](https://github.com/Herbertofury/JetSetCraft/actions/runs/41388639856) passed **all 44 real Forge GameTests in each of nine configurations — 396 executions**. Every configuration passed build, dedicated-server readiness, RCON stop and the normal saved-dimensions shutdown check. The base passed its **fifteen-capture native-client gate**. The [Style Library receipt and gallery](docs/verification/style-library/README.md) records the exact source/merge identity and an independent local reproduction of those fifteen screens. CI archive metadata is API-reported; the browser could not download the archive, so the local gallery is not presented as downloaded CI evidence or proof of identical binaries.
+
+The [historical alpha.4 receipt](docs/verification/reward-journeys/README.md) retains its separate 35-test/nine-configuration checkpoint and thirteen reviewed captures.
 
 The [historical alpha.3 receipt](docs/verification/arena-circuit/README.md) preserves its 28-test/nine-configuration checkpoint and ten client captures, with a dated correction: its provider dedicated-server smoke proved startup, while normal dedicated-server save/shutdown was established by the base workflow. [Alpha.2](docs/verification/crew-house/README.md) and [alpha.1](docs/verification/rival-rush/README.md) retain their separate evidence. These are machine integration checks; **human thirty-minute pacing, Endless balance, house progression balance and broad modded-AI playtesting remain outstanding**. [Read the verification scope](wiki/Testing-and-Verification.md).
 
@@ -55,11 +57,19 @@ The [three-arena example pack](examples/arena-data-pack/README.md) is ready to c
 
 **Crew Charter → Progress → Style Library** offers sixteen permanent lessons using existing crew XP, from Line battery at 55 XP to the optional Firebolt relay at 2,000 XP. Learning and selection cost no currency. The selected available style replaces the single house preparation for that run; it does not add another starting rank or a fourth artifact slot. Leaving the selection at **House preparation** preserves the physically validated home-facility choice. An unavailable optional provider leaves its saved style dormant and falls back to the house. Shared progression remains separate from Minecraft XP and ordinary loot.
 
+**Try the connected loop:** finish a Tag objective to earn the 55 crew XP for Line battery, select it in the Style Library, then start Rival Rush from the Boombox and choose an arena circuit. Follow the reward you want at each fork, scout the caches once you arrive, and use a room clear's optional remix to reshape your three-artifact build. Returning banks the qualifying shared rewards, so another activity, a house upgrade or the next run can build on that session.
+
 | Journey — actual first fork | Build — actual initial state |
 |---|---|
 | ![Actual Journey map with the first offered routes; no room has been cleared](docs/verification/reward-journeys/11-journey-map.png) | ![Actual initial Build view with baseline statistics and empty artifact slots](docs/verification/reward-journeys/12-run-build.png) |
 
-These are early client states. Completed-room settlement, artifact behavior and remix are exercised by GameTests; the captures do not depict a finished circuit or a developed three-artifact build.
+These alpha.4 images show early client states. Completed-room settlement, artifact behavior and remix are exercised by GameTests; the captures do not depict a finished circuit or a developed three-artifact build.
+
+| Alpha.5 Style Library | Alpha.5 reward-cache Scout |
+|---|---|
+| ![Native Style Library with three readable lessons and the actual fresh locked state](docs/verification/style-library/15-style-library.png) | ![Native cache Scout with real directions, distances and recharge state](docs/verification/style-library/14-cache-scout.png) |
+
+These are native screenshots from the exact-source local reproduction. The library honestly shows **0 crew XP and 0/16 learned**, and the cache Scout shows **three defeats still needed**. The audit's logged arrival teleport reaches an actually generated arena; it does not demonstrate a naturally traversed connector or a completed room.
 
 ## Build a crew house — development alpha
 
