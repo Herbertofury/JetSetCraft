@@ -29,6 +29,7 @@ final class LibertyScreen extends Screen {
         super(Component.literal("Liberty Grind"));
         view = LibertyClient.state().getBoolean("Active") ? View.MISSION : View.WAR_MAP;
     }
+    LibertyScreen(boolean research) { this(); if(research)view=View.RESEARCH; }
 
     void onSnapshot(CompoundTag incoming, CompoundTag previous) {
         boolean started = incoming.getBoolean("Active") && !previous.getBoolean("Active");
@@ -47,7 +48,7 @@ final class LibertyScreen extends Screen {
     @Override protected void init() {
         int left = left(), span = span(), half = (span - 4) / 2;
         boolean active = LibertyClient.state().getBoolean("Active");
-        button(active ? "Mission" : "War map", left, 39, half, () -> change(active ? View.MISSION : View.WAR_MAP));
+        button(active ? "Mission" : "War map", left, 39, half, () -> minecraft.setScreen(new LibertyCampaignScreen()));
         button("Research", left + half + 4, 39, span - half - 4, () -> change(View.RESEARCH));
         int quarter = (span - 12) / 4;
         button("Back", left, height - 26, quarter, this::back);
@@ -167,7 +168,7 @@ final class LibertyScreen extends Screen {
     private void back() {
         if (view == View.THEATER) change(View.WAR_MAP);
         else if (view == View.PROJECT) change(View.RESEARCH);
-        else change(LibertyClient.state().getBoolean("Active") ? View.MISSION : View.WAR_MAP);
+        else minecraft.setScreen(new LibertyCampaignScreen());
     }
 
     @Override public void tick() {

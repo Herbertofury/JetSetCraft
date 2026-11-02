@@ -32,16 +32,19 @@ public final class LibertyClient {
 
     public static void accept(CompoundTag incoming) {
         CompoundTag previous = state;
-        state = incoming == null ? new CompoundTag() : incoming.copy();
+        if(incoming!=null&&incoming.getBoolean("Partial")) {
+            state=previous.copy(); for(String key:incoming.getAllKeys())state.put(key,incoming.get(key).copy());
+        } else state = incoming == null ? new CompoundTag() : incoming.copy();
         state.put("Theaters", bounded(state.getList("Theaters", Tag.TAG_COMPOUND), 12));
-        state.put("Objectives", bounded(state.getList("Objectives", Tag.TAG_COMPOUND), 16));
+        state.put("Objectives", bounded(state.getList("Objectives", Tag.TAG_COMPOUND), 64));
         CompoundTag research = state.getCompound("Research");
         research.put("Projects", bounded(research.getList("Projects", Tag.TAG_COMPOUND), 32));
         state.put("Research", research);
         Minecraft minecraft = Minecraft.getInstance();
         if (minecraft.player == null) return;
-        if (minecraft.screen instanceof LibertyScreen screen) screen.onSnapshot(state, previous);
-        else if (state.getBoolean("Open")) minecraft.setScreen(new LibertyScreen());
+        if (minecraft.screen instanceof LibertyCampaignScreen screen) screen.onSnapshot(state,previous);
+        else if (minecraft.screen instanceof LibertyScreen screen) screen.onSnapshot(state, previous);
+        else if (state.getBoolean("Open")) minecraft.setScreen(new LibertyCampaignScreen());
     }
 
     private static ListTag bounded(ListTag source, int limit) {
@@ -55,19 +58,20 @@ public final class LibertyClient {
     static ListTag objectives() { return state.getList("Objectives", Tag.TAG_COMPOUND); }
     static CompoundTag research() { return state.getCompound("Research"); }
     public static CompoundTag stateSnapshot() { return state.copy(); }
-    public static boolean isScreenOpen() { return Minecraft.getInstance().screen instanceof LibertyScreen; }
+    public static boolean isScreenOpen() { return Minecraft.getInstance().screen instanceof LibertyScreen || Minecraft.getInstance().screen instanceof LibertyCampaignScreen; }
     public static boolean active() {
         Minecraft minecraft = Minecraft.getInstance();
         return state.getBoolean("Active") && minecraft.player != null && minecraft.level != null
                 && minecraft.getConnection() != null
-                && minecraft.level.dimension().location().toString().equals("jetsetcraft:liberty_grind");
+                && (state.getBoolean("HomeDefense") || minecraft.level.dimension().location().toString().equals("jetsetcraft:liberty_grind"));
     }
 
     public static void request(String action, String value) {
         if (Minecraft.getInstance().getConnection() == null) return;
         UUID mission = state.hasUUID("Mission") ? state.getUUID("Mission") : null;
         long revision = action.equals("research") || action.equals("research_select")
-                ? research().getLong("Revision") : state.getLong("Revision");
+                ? research().getLong("Revision") : action.startsWith("ship_") ? state.getCompound("Ship").getLong("Revision")
+                : action.equals("armory_select") ? state.getCompound("Armory").getLong("Revision") : state.getLong("Revision");
         JetSetNetwork.sendLibertyAction(action, value == null ? "" : value, mission, Math.max(0, revision));
     }
 
@@ -109,7 +113,12 @@ public final class LibertyClient {
         if (active() && state.getString("Phase").equals("EXTRACTING")) phase += " · " + Math.max(0, state.getInt("ExtractionSeconds")) + "s";
         gui.drawString(font, clipped(phase, HUD_WIDTH - 14), 7, 20, 0xFF87E1EA, true);
         CompoundTag next = new CompoundTag();
-        for (var raw : objectives()) if (raw instanceof CompoundTag row && !row.getBoolean("Complete")) { next = row; break; }
+        for (var raw : objectives()) if (raw instanceof CompoundTag row && !row.getBoolean("Complete")
+                && (!row.contains("Active") || row.getBoolean("Active"))) {
+            int rank=row.getBoolean("Priority")?0:row.getBoolean("Optional")?2:1;
+            int previousRank=next.getBoolean("Priority")?0:next.getBoolean("Optional")?2:1;
+            if(next.isEmpty()||rank<previousRank||rank==previousRank&&row.getDouble("Distance")<next.getDouble("Distance"))next=row;
+        }
         String objective = !active() ? "Next objective · progress · distance" : next.isEmpty()
                 ? state.getString("Status") : next.getString("Name") + " " + Math.max(0, next.getInt("Progress"))
                         + "/" + Math.max(1, next.getInt("Goal"));
@@ -145,7 +154,7 @@ public final class LibertyClient {
         @SubscribeEvent public static void overlay(RenderGuiOverlayEvent.Post event) {
             Minecraft minecraft = Minecraft.getInstance();
             if (event.getOverlay() != VanillaGuiOverlay.HOTBAR.type() || minecraft.player == null || minecraft.options.hideGui
-                    || minecraft.screen instanceof LibertyScreen || minecraft.screen instanceof LibertyHudScreen) return;
+                    || minecraft.screen instanceof LibertyScreen || minecraft.screen instanceof LibertyCampaignScreen || minecraft.screen instanceof LibertyHudScreen) return;
             drawHud(event.getGuiGraphics(), minecraft.getWindow().getGuiScaledWidth(), minecraft.getWindow().getGuiScaledHeight(), false);
         }
         @SubscribeEvent public static void logout(ClientPlayerNetworkEvent.LoggingOut event) { state = new CompoundTag(); }
