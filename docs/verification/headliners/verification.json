@@ -47,7 +47,6 @@
   },
   "evidence_basis": {
     "api_observed_at_utc": "2026-11-02T05:18:13.308943+00:00",
-    "raw_metadata": "evidence/ci-metadata.json",
     "local_manifest": "local-evidence.json",
     "gate_interpretation": "Successful CI job steps were checked against exact-source workflow requirements for all individual markers, framework required-test total, provider-specific assertions, readiness, loopback RCON stop, successful process exit, saved dimensions and level.dat. CI logs were not independently downloaded and parsed.",
     "ci_archive_bytes_downloaded": false,
@@ -56,7 +55,11 @@
     "workflow_sources": [
       "https://github.com/Herbertofury/JetSetCraft/blob/1e8da0f47b2a9622a9ed454cbe8ac10fafdbad0a/.github/workflows/build.yml",
       "https://github.com/Herbertofury/JetSetCraft/blob/1e8da0f47b2a9622a9ed454cbe8ac10fafdbad0a/.github/workflows/wave2-provider-compat.yml"
-    ]
+    ],
+    "public_ci_metadata": "evidence/ci-metadata.json",
+    "public_runtime_summary": "evidence/runtime-verification-summary.json",
+    "raw_local_logs_published": false,
+    "publication_note": "Automatic approval review rejected raw local runtime-log publication; a redacted verification summary and original log hashes are provided instead."
   },
   "workflow_runs": [
     {
@@ -971,7 +974,6 @@
     "clean_build_and_55_required_gametests": "pass",
     "dedicated_server_readiness_rcon_stop_and_normal_saved_shutdown": "pass",
     "native_audit_and_19_image_pixel_review": "pass",
-    "complete_logs": true,
     "ordinary_and_escalated_log_hashes_equal": true,
     "jar": {
       "filename": "jetsetcraft-1.20.1-0.4.0-alpha.6.jar",
@@ -980,7 +982,9 @@
       "copied_into_evidence": false,
       "ci_binary_equality_claimed": false
     },
-    "manifest_sha256": "daa882d5b6b91f1ded20a29d29bf12346fe1d38f49c2eef8caedbfa21e22c697"
+    "manifest_sha256": "5e8095e013d9097e59e6bccdc9713ce6acfd64920f4333311dbf5676d6f4cd5c",
+    "original_logs_retained_locally_complete": true,
+    "raw_logs_published": false
   },
   "scope_limits": [
     "Alpha continuation; stable published release remains v0.3.0. Whole finish contract and packaged-final-JAR gate are not claimed complete.",
