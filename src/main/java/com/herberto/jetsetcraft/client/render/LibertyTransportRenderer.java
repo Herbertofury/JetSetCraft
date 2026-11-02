@@ -14,9 +14,13 @@ import net.minecraft.world.level.block.Blocks;
 
 /** Original block-built hard-surface silhouettes, using only Minecraft's existing block materials. */
 public final class LibertyTransportRenderer extends EntityRenderer<LibertyTransportEntity> {
+    private static final java.util.Map<Integer, Long> AUDIT_RENDER_CALLS = Boolean.getBoolean("jetsetcraft.libertyVisualAudit")
+            ? new java.util.HashMap<>() : null;
+    public static long auditRenderCalls(int entityId) { return AUDIT_RENDER_CALLS == null ? 0 : AUDIT_RENDER_CALLS.getOrDefault(entityId, 0L); }
     public LibertyTransportRenderer(EntityRendererProvider.Context context) { super(context); shadowRadius = 1.5f; }
     @Override public void render(LibertyTransportEntity entity, float yaw, float partialTick, PoseStack pose,
                                  MultiBufferSource buffer, int light) {
+        if (AUDIT_RENDER_CALLS != null) AUDIT_RENDER_CALLS.merge(entity.getId(), 1L, Long::sum);
         pose.pushPose(); pose.mulPose(Axis.YP.rotationDegrees(-yaw));
         if (entity.ship()) {
             box(pose, buffer, light, Blocks.GRAY_CONCRETE, -1.7, -.35, -3, 3.4f, .65f, 6);
