@@ -147,6 +147,7 @@ public final class RushCircuit {
         tag.putString("Phase", phase.name().toLowerCase(java.util.Locale.ROOT));
         tag.putInt("Stage", Math.min(6, completed + 1)); tag.putInt("Completed", completed);
         tag.putInt("Set", set); tag.putInt("StagesPerSet", 6); tag.putInt("Version", version);
+        tag.putBoolean("HeadlinerStage", completed < 6 && (completed + 1 == 3 || completed + 1 == 6));
         tag.putString("CurrentName", current == null ? "Choose your first arena" : current.name());
         tag.putString("Reward", current == null ? "" : current.reward().label());
         tag.putLong("TicksLeft", current == null ? 0 : Math.max(0, current.seconds() * 20L - activeTicks(run)));
@@ -172,6 +173,9 @@ public final class RushCircuit {
 
     private CompoundTag arenaSummary(RushArenaCatalog.Profile profile, BlockPos destination) {
         CompoundTag tag = profile.summary();
+        boolean headliner = completed < 6 && (completed + 1 == 3 || completed + 1 == 6);
+        tag.putBoolean("Headliner", headliner);
+        tag.putString("HeadlinerReward", headliner ? "Defeat the headliner to earn an evolution opportunity and one reroll (up to 3)." : "");
         tag.putInt("Defeats", profile.defeats()); tag.putString("Emphasis", profile.sharedReward());
         tag.putInt("VisitsThisSet", (int) visits(profile));
         tag.putString("RunReward", previewRunReward(profile));

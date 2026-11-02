@@ -3,14 +3,19 @@ package com.herberto.jetsetcraft.rush;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.EnumMap;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 import java.util.UUID;
 
 /** Mode-only, deterministic run rules. No vanilla XP, inventory, world, or client authority lives here. */
 public final class RushRun {
     public static final long SESSION_TICKS = 30L * 60L * 20L;
     private static final long COUNTER_LIMIT = Long.MAX_VALUE / 4L;
+    private static final double METRIC_LIMIT = 1_000_000_000_000D;
+    public static final int MAX_REROLLS = 3;
+    public static final int MAX_BANISHES = 2;
 
     public enum Upgrade {
         FORCE("Paint pressure", "Increase tag damage by 15% per rank.", 8),
@@ -72,6 +77,8 @@ public final class RushRun {
     private final long seed;
     private final String gangId;
     private final EnumMap<Upgrade, Integer> ranks = new EnumMap<>(Upgrade.class);
+    private final EnumSet<Upgrade> banishedDrafts = EnumSet.noneOf(Upgrade.class);
+    private final EnumMap<RushBuildPaths.Evolution, Long> evolutionProcs = new EnumMap<>(RushBuildPaths.Evolution.class);
     private boolean endless;
     private boolean awaitingEncore;
     private boolean finished;
@@ -79,6 +86,21 @@ public final class RushRun {
     private boolean circuit;
     private boolean spellRelayAvailable;
     private boolean remixReady;
+    private boolean buildOpportunity;
+    private RushBuildPaths.Evolution selectedEvolution = RushBuildPaths.Evolution.NONE;
+    private int rerolls = MAX_REROLLS;
+    private int banishes = MAX_BANISHES;
+    private long rerollsUsed;
+    private long banishesUsed;
+    private long arenaClears;
+    private long headliners;
+    private long nextCryoShatterTick;
+    private double primaryDamage;
+    private double secondaryDamage;
+    private double damageTaken;
+    private double vitalityRestored;
+    private double wardAbsorbed;
+    private double wardRestored;
     private double lineCharge;
     private long elapsedTicks;
     private long xp;
@@ -146,6 +168,27 @@ public final class RushRun {
     public double lineCharge() { return lineCharge; }
     public double lineChargeMax() { return 24.0D; }
     public boolean remixReady() { return remixReady && !finished; }
+    public int rerollsRemaining() { return rerolls; }
+    public int banishesRemaining() { return banishes; }
+    public Set<Upgrade> banishedDraftUpgrades() { return Set.copyOf(banishedDrafts); }
+    public long rerollsUsed() { return rerollsUsed; }
+    public long banishesUsed() { return banishesUsed; }
+    public long arenaClears() { return arenaClears; }
+    public long headliners() { return headliners; }
+    public double primaryDamage() { return primaryDamage; }
+    public double secondaryDamage() { return secondaryDamage; }
+    public double damageTaken() { return damageTaken; }
+    public double vitalityRestored() { return vitalityRestored; }
+    public double wardAbsorbed() { return wardAbsorbed; }
+    public double wardRestored() { return wardRestored; }
+    public boolean hasBuildOpportunity() { return buildOpportunity && !finished; }
+    public RushBuildPaths.Evolution selectedEvolution() { return selectedEvolution; }
+    /** Activity is derived from the current three-slot build, including after a rank-preserving remix. */
+    public boolean evolutionActive(RushBuildPaths.Evolution evolution) {
+        return evolution != null && evolution != RushBuildPaths.Evolution.NONE
+                && selectedEvolution == evolution && evolution.ready(this);
+    }
+    public long evolutionProcs(RushBuildPaths.Evolution evolution) { return evolutionProcs.getOrDefault(evolution, 0L); }
     public boolean artifactAvailable(Upgrade upgrade) {
         return upgrade != null && upgrade.artifact() && (upgrade != Upgrade.SPELL_RELAY || spellRelayAvailable);
     }
@@ -155,6 +198,97 @@ public final class RushRun {
         return upgrade != null && !upgrade.repeatable() && rank(upgrade) < upgrade.maxRank()
                 && (upgrade != Upgrade.SPELL_RELAY || spellRelayAvailable)
                 && (!upgrade.artifact() || rank(upgrade) > 0 || artifactCount() < 3);
+    }
+
+    /** Draft-only exclusions never remove earned ranks or prevent physical cache/remix rewards. */
+    public boolean canDraft(Upgrade upgrade) { return canAdvance(upgrade) && !banishedDrafts.contains(upgrade); }
+
+    public boolean canBanish(int offerIndex) {
+        return !finished && !awaitingEncore && banishes > 0 && offerIndex >= 0 && offerIndex < offers.size()
+                && !offers.get(offerIndex).repeatable() && !banishedDrafts.contains(offers.get(offerIndex));
+    }
+
+    public boolean canReroll() {
+        if (finished || awaitingEncore || rerolls <= 0 || offers.isEmpty()) return false;
+        return !sameChoices(offers, drawOffers(nextVersion(), offers));
+    }
+
+    /** Keeps the earned draft/level. A no-change shuffle does not spend the player's finite control. */
+    public boolean reroll(int version) {
+        if (version != offerVersion || !canReroll()) return false;
+        List<Upgrade> replacement = drawOffers(nextVersion(), offers);
+        rerolls--; rerollsUsed = saturatingAdd(rerollsUsed, 1);
+        offerVersion = nextVersion(); offers = replacement;
+        return true;
+    }
+
+    /** Replaces only the rejected row; stale requests cannot spend another banish or alter the kept rows. */
+    public boolean banish(int offerIndex, int version) {
+        if (version != offerVersion || !canBanish(offerIndex)) return false;
+        Upgrade rejected = offers.get(offerIndex);
+        List<Upgrade> pool = draftPool(nextVersion());
+        pool.removeIf(offers::contains);
+        for (Upgrade terminal : terminalRewards()) if (!offers.contains(terminal)) pool.add(terminal);
+        if (pool.isEmpty()) return false;
+        List<Upgrade> replacement = new ArrayList<>(offers);
+        replacement.set(offerIndex, pool.get(0));
+        banishedDrafts.add(rejected); banishes--; banishesUsed = saturatingAdd(banishesUsed, 1);
+        offerVersion = nextVersion(); offers = List.copyOf(replacement);
+        return true;
+    }
+
+    /** The director must call exactly once after an owned headliner settlement; this is not a payout guard. */
+    public void grantHeadlinerReward() {
+        if (finished) return;
+        headliners = saturatingAdd(headliners, 1);
+        buildOpportunity = true; rerolls = Math.min(MAX_REROLLS, rerolls + 1);
+        offerVersion = nextVersion();
+    }
+
+    /** The manager additionally validates the owner/run and a draft, between-room or Encore decision window. */
+    public boolean evolve(RushBuildPaths.Evolution evolution, int version) {
+        if (finished || !buildOpportunity || version != offerVersion || evolution == null
+                || evolution == RushBuildPaths.Evolution.NONE || evolution == selectedEvolution || !evolution.ready(this)) return false;
+        selectedEvolution = evolution; buildOpportunity = false; nextCryoShatterTick = elapsedTicks;
+        offerVersion = nextVersion();
+        return true;
+    }
+
+    /** Call only after selecting actual owned targets and validating the recipe's physical trigger. */
+    public boolean tryEvolutionProc(RushBuildPaths.Evolution evolution) {
+        if (finished || awaitingEncore || hasOffer() || !evolutionActive(evolution)) return false;
+        if (evolution == RushBuildPaths.Evolution.CRYO_SHATTER) {
+            if (elapsedTicks < nextCryoShatterTick) return false;
+            nextCryoShatterTick = saturatingAdd(elapsedTicks, 60);
+        }
+        evolutionProcs.put(evolution, saturatingAdd(evolutionProcs(evolution), 1));
+        return true;
+    }
+
+    /** Counts accepted damage capped by the actor's pre-hit virtual vitality, never attempted/overkill damage. */
+    public void recordVirtualDamage(double actualApplied, boolean primary) {
+        if (finished || !Double.isFinite(actualApplied) || actualApplied <= 0) return;
+        if (primary) primaryDamage = addMetric(primaryDamage, actualApplied);
+        else secondaryDamage = addMetric(secondaryDamage, actualApplied);
+    }
+
+    /** Called by the existing once-only room settlement, including clears before the final Encore prompt. */
+    public void recordArenaClear() { if (!finished) arenaClears = saturatingAdd(arenaClears, 1); }
+
+    public record Recovery(double vitalityRestored, double wardRestored) {}
+
+    /** Sixth-primary Radiance only; ordinary healing cannot manufacture offensive or shield procs. */
+    public Recovery applyRadiance() {
+        if (finished || awaitingEncore || hasOffer() || rank(Upgrade.RADIANCE) == 0) return new Recovery(0, 0);
+        double amount = 2 + rank(Upgrade.RADIANCE) * 2;
+        double before = vitality; heal(amount); double restored = vitality - before;
+        double shield = 0;
+        if (evolutionActive(RushBuildPaths.Evolution.RADIANT_BARRIER)) {
+            double overflow = Math.min(6, Math.max(0, amount - restored));
+            if (overflow > 0 && ward < maxWard() && tryEvolutionProc(RushBuildPaths.Evolution.RADIANT_BARRIER))
+                shield = restoreWard(overflow);
+        }
+        return new Recovery(restored, shield);
     }
 
     /** The manager supplies observed, continuous movement while actually riding; no input-button charge. */
@@ -178,7 +312,7 @@ public final class RushRun {
         if (circuit && !finished) {
             remixReady = true;
             // Also invalidates a queued remix from an earlier room, even if no XP draft intervened.
-            offerVersion = offerVersion == Integer.MAX_VALUE ? 1 : offerVersion + 1;
+            offerVersion = nextVersion();
         }
     }
 
@@ -195,7 +329,7 @@ public final class RushRun {
         if (source == Upgrade.TEMPO) tempoTicks = 0;
         if (replacement == Upgrade.WARD) { ward = maxWard(); wardLastHit = elapsedTicks; }
         remixReady = false;
-        offerVersion = offerVersion == Integer.MAX_VALUE ? 1 : offerVersion + 1;
+        offerVersion = nextVersion();
         return true;
     }
 
@@ -236,7 +370,7 @@ public final class RushRun {
         if (magnetTicks > 0) magnetTicks--;
         if (tempoTicks > 0) tempoTicks--;
         if (rank(Upgrade.WARD) > 0 && elapsedTicks - wardLastHit >= 120 && elapsedTicks % 20 == 0)
-            ward = Math.min(maxWard(), ward + 2 + rank(Upgrade.WARD));
+            restoreWard(2 + rank(Upgrade.WARD));
         if (!circuit && !endless && elapsedTicks >= SESSION_TICKS) awaitingEncore = true;
     }
 
@@ -250,7 +384,7 @@ public final class RushRun {
     public boolean choose(int offerIndex, int version) {
         if (finished || version != offerVersion || offerIndex < 0 || offerIndex >= offers.size()) return false;
         Upgrade upgrade = offers.get(offerIndex);
-        if (!upgrade.repeatable() && !canAdvance(upgrade)) { refreshOffer(); return false; }
+        if (!upgrade.repeatable() && !canDraft(upgrade)) { refreshOffer(); return false; }
         offers = List.of();
         if (upgrade.repeatable()) {
             switch (upgrade) {
@@ -314,7 +448,10 @@ public final class RushRun {
         wardLastHit = elapsedTicks;
         double absorbed = Math.min(ward, amount);
         ward -= absorbed; amount -= absorbed;
+        wardAbsorbed = addMetric(wardAbsorbed, absorbed);
+        double previousVitality = vitality;
         vitality = Math.max(0.0D, vitality - amount);
+        damageTaken = addMetric(damageTaken, previousVitality - vitality);
         if (vitality <= 0.0D) {
             finish();
             return true;
@@ -323,7 +460,10 @@ public final class RushRun {
     }
 
     public void heal(double amount) {
-        if (!finished && Double.isFinite(amount) && amount > 0.0D) vitality = Math.min(maxVitality(), vitality + amount);
+        if (!finished && Double.isFinite(amount) && amount > 0.0D) {
+            double before = vitality; vitality = Math.min(maxVitality(), vitality + amount);
+            vitalityRestored = addMetric(vitalityRestored, vitality - before);
+        }
     }
 
     private void prepareOffer() {
@@ -335,17 +475,50 @@ public final class RushRun {
 
     /** A reward cache can change slot/rank eligibility while an XP draft is already open. */
     private void refreshOffer() {
-        offerVersion = offerVersion == Integer.MAX_VALUE ? 1 : offerVersion + 1;
+        offerVersion = nextVersion();
+        offers = drawOffers(offerVersion, List.of());
+    }
+
+    private int nextVersion() { return offerVersion == Integer.MAX_VALUE ? 1 : offerVersion + 1; }
+
+    private List<Upgrade> draftPool(int version) {
         List<Upgrade> available = new ArrayList<>();
         for (Upgrade upgrade : Upgrade.values()) {
-            if (canAdvance(upgrade)) available.add(upgrade);
+            if (canDraft(upgrade)) available.add(upgrade);
         }
-        Collections.shuffle(available, new Random(seed ^ ((long) offerVersion << 32) ^ level));
-        for (Upgrade terminal : List.of(Upgrade.REPAIR, Upgrade.CACHE, Upgrade.SURGE)) {
-            if (available.size() >= 3) break;
-            available.add(terminal);
+        Collections.shuffle(available, new Random(seed ^ ((long) version << 32) ^ level));
+        // An equipped artifact gets an actionable rank-up when one remains eligible. During a reroll,
+        // excluded choices yield to genuinely new choices instead of forcing the old family back in.
+        return available;
+    }
+
+    private List<Upgrade> drawOffers(int version, List<Upgrade> excluded) {
+        List<Upgrade> pool = draftPool(version);
+        List<Upgrade> fresh = new ArrayList<>();
+        for (Upgrade upgrade : pool) if (!excluded.contains(upgrade)) fresh.add(upgrade);
+        List<Upgrade> result = new ArrayList<>(3);
+        for (Upgrade upgrade : fresh) if (upgrade.artifact() && rank(upgrade) > 0) {
+            result.add(upgrade); break;
         }
-        offers = List.copyOf(available.subList(0, Math.min(3, available.size())));
+        for (Upgrade upgrade : fresh) if (result.size() < 3 && !result.contains(upgrade)) result.add(upgrade);
+        for (Upgrade terminal : terminalRewards()) if (result.size() < 3 && !excluded.contains(terminal)) result.add(terminal);
+        for (Upgrade upgrade : pool) if (result.size() < 3 && !result.contains(upgrade)) result.add(upgrade);
+        for (Upgrade terminal : terminalRewards()) if (result.size() < 3 && !result.contains(terminal)) result.add(terminal);
+        return List.copyOf(result);
+    }
+
+    private static List<Upgrade> terminalRewards() { return List.of(Upgrade.REPAIR, Upgrade.CACHE, Upgrade.SURGE); }
+
+    private static boolean sameChoices(List<Upgrade> a, List<Upgrade> b) { return a.size() == b.size() && a.containsAll(b); }
+
+    private double restoreWard(double amount) {
+        double before = ward; ward = Math.min(maxWard(), ward + Math.max(0, amount));
+        double restored = ward - before; wardRestored = addMetric(wardRestored, restored);
+        return restored;
+    }
+
+    private static double addMetric(double value, double amount) {
+        return !Double.isFinite(amount) || amount <= 0 ? value : Math.min(METRIC_LIMIT, value + Math.min(METRIC_LIMIT, amount));
     }
 
     private static long saturatingAdd(long value, long amount) {
