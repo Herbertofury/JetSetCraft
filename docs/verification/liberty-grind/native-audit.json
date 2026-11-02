@@ -1,0 +1,354 @@
+{
+  "schema": 1,
+  "audit": "Liberty Grind native client audit 8",
+  "status": "PASS",
+  "process_exit_code": 0,
+  "capture_stamp": "1793607954898",
+  "capture_session_started_utc": "2026-11-02T08:25:54.898000+00:00",
+  "review_completed_utc": "2026-11-02T08:30:06.481826+00:00",
+  "local_evidence": true,
+  "ci_binary_equality_claimed": false,
+  "source": {
+    "base_commit": "86e6589ed6ecfb0715630474fecfba849d5a7077",
+    "uncommitted_feature_inputs": true,
+    "manifest": "native-source-manifest.json",
+    "source_input_sha256": "a102469ffdeb48ccf5e7b8e1cf296d9e9597e6583593bf3fb31153c4dc978970",
+    "file_count": 654,
+    "input_scope": [
+      "src/main",
+      "src/test",
+      "build.gradle",
+      "gradle.properties",
+      "settings.gradle"
+    ],
+    "exit_verification": {
+      "verified_at_utc": "2026-11-02T08:27:33.563205+00:00",
+      "source_inputs_unchanged_through_process_exit": true,
+      "source_tree_sha256": "a102469ffdeb48ccf5e7b8e1cf296d9e9597e6583593bf3fb31153c4dc978970"
+    },
+    "later_changes": [
+      "src/main/java/com/herberto/jetsetcraft/gametest/ActivityGameTests.java"
+    ],
+    "later_change_scope": "Hill GameTest fixture only; native UI, renderer, gameplay and resource inputs unchanged at gallery publication."
+  },
+  "command": "LIBGL_ALWAYS_SOFTWARE=true timeout 360s xvfb-run -a -s \"-screen 0 1280x960x24\" ./gradlew runClient -PlibertyTacz=true -Djetsetcraft.libertyVisualAudit=true --no-daemon",
+  "environment": {
+    "minecraft": "1.20.1",
+    "forge": "47.4.23",
+    "java": "17.0.20",
+    "platform": "Linux x86_64 under Xvfb",
+    "graphics": "Mesa 25.2.8 llvmpipe (LLVM 20.1.2)",
+    "tacz_version": "1.1.8-hotfix2",
+    "tacz_curseforge_file": 9037989,
+    "helldivers_curseforge_file": 9341504,
+    "helldivers_zip_bytes": 72883841,
+    "helldivers_zip_sha256": "fe4e01693cf3957d971e556a1d2fcd9ae0c98cb973cf47aa6d52e157c187378a",
+    "world": "LibertyGrindAudit"
+  },
+  "fixture": {
+    "scope": "Exact guarded disposable integrated save only",
+    "ordinary_setup": [
+      "Normal difficulty",
+      "Creative source-world mode",
+      "7 additional diamond sentinel items",
+      "17 additional XP points"
+    ],
+    "mission_reward_or_objective_completion_fixture": false,
+    "research_purchase_fixture": false,
+    "native_buttons_used": true,
+    "mission_opened_by_actual_field_radio_use": true,
+    "toasts_allowed_to_expire_naturally": true
+  },
+  "asserted_restoration": [
+    "Original inventory NBT",
+    "Original XP level, total and progress",
+    "Original source dimension"
+  ],
+  "transport_regression": {
+    "moving_frames_at_capture": 4,
+    "consecutive_aligned_moving_frames": 4,
+    "seat_interpolation_error_blocks": 0.0,
+    "tolerance_blocks": 0.05,
+    "visible_moving_pod_confirmed_from_png": true,
+    "pre_fix_frame": {
+      "probe": 7,
+      "frame": 13,
+      "partial_tick": 6.67572e-06,
+      "pod_current_and_old_y": 125.79052734375,
+      "rider_current_y": 125.59052734375,
+      "rider_old_y": 128.8,
+      "camera_y": 130.4199784600176,
+      "incoming_pose_y": -4.6294513
+    },
+    "fix": "Client network targets are applied during the vehicle tick before passenger ticking, so rider and transport interpolation histories advance together."
+  },
+  "all_15_native_pngs_individually_reviewed": true,
+  "screenshots": [
+    {
+      "file": "01-war-map-default.png",
+      "original_native_filename": "liberty-grind-1793607954898-01-war-map-default.png",
+      "bytes": 190597,
+      "sha256": "bc2965b45b7d1c039928997309c9e4d54cfcd96768140538892c6f007fad963b",
+      "pixels": [
+        1280,
+        720
+      ],
+      "gui_scale": 2,
+      "logical_size": [
+        640,
+        360
+      ],
+      "individually_reviewed": true,
+      "review": "Three named districts, connected map nodes, gang/size details and complete status; all controls readable."
+    },
+    {
+      "file": "02-district-default.png",
+      "original_native_filename": "liberty-grind-1793607954898-02-district-default.png",
+      "bytes": 180866,
+      "sha256": "7034eae7399c325750558c8ae7c685a7a9f88aad917ad6110d7c370839e71f7a",
+      "pixels": [
+        1280,
+        720
+      ],
+      "gui_scale": 2,
+      "logical_size": [
+        640,
+        360
+      ],
+      "individually_reviewed": true,
+      "review": "Actual Neon Docks briefing, rewards and enabled deployment action; no obstructing overlays."
+    },
+    {
+      "file": "03-research-default.png",
+      "original_native_filename": "liberty-grind-1793607954898-03-research-default.png",
+      "bytes": 196124,
+      "sha256": "9ed76992d974b78fa83499e43c044211e8f6764ac113d9caa320ec6163e73387",
+      "pixels": [
+        1280,
+        720
+      ],
+      "gui_scale": 2,
+      "logical_size": [
+        640,
+        360
+      ],
+      "individually_reviewed": true,
+      "review": "Actual balances, project costs and pagination; no invented purchases."
+    },
+    {
+      "file": "04-project-default.png",
+      "original_native_filename": "liberty-grind-1793607954898-04-project-default.png",
+      "bytes": 178126,
+      "sha256": "840219040432867a33208fdf621c53bdab68d5c7af8124ef428ebdf225fa581e",
+      "pixels": [
+        1280,
+        720
+      ],
+      "gui_scale": 2,
+      "logical_size": [
+        640,
+        360
+      ],
+      "individually_reviewed": true,
+      "review": "Actual locked Pressure Saver effect and costs; purchase disabled for insufficient balances."
+    },
+    {
+      "file": "05-hud-default.png",
+      "original_native_filename": "liberty-grind-1793607954898-05-hud-default.png",
+      "bytes": 299662,
+      "sha256": "e01cd946fa4c84f94d87c94d8fffd7bcd724f30673147f410cc9b8513f533c11",
+      "pixels": [
+        1280,
+        720
+      ],
+      "gui_scale": 2,
+      "logical_size": [
+        640,
+        360
+      ],
+      "individually_reviewed": true,
+      "review": "HUD layout preview, drag/scale instructions and all footer controls are clear."
+    },
+    {
+      "file": "06-war-map-minimum.png",
+      "original_native_filename": "liberty-grind-1793607954898-06-war-map-minimum.png",
+      "bytes": 89389,
+      "sha256": "add9da2ddcbf484dd438f6e4bbccc41ee0d8b31e4ff83322e24e193730817917",
+      "pixels": [
+        960,
+        720
+      ],
+      "gui_scale": 3,
+      "logical_size": [
+        320,
+        240
+      ],
+      "individually_reviewed": true,
+      "review": "All three choices and complete status fit; no hover tooltip obscures cards."
+    },
+    {
+      "file": "07-research-minimum.png",
+      "original_native_filename": "liberty-grind-1793607954898-07-research-minimum.png",
+      "bytes": 94313,
+      "sha256": "0258eb86f082ec34301ba50a1be20833e47292064c003df379d9a5941c475d10",
+      "pixels": [
+        960,
+        720
+      ],
+      "gui_scale": 3,
+      "logical_size": [
+        320,
+        240
+      ],
+      "individually_reviewed": true,
+      "review": "Costs, separate rows and usable pagination fit the minimum viewport."
+    },
+    {
+      "file": "08-project-minimum.png",
+      "original_native_filename": "liberty-grind-1793607954898-08-project-minimum.png",
+      "bytes": 92222,
+      "sha256": "7539582c487824b4c39d7b65dbdf02a8ff0eb38f235fd37c82895162063c7f4a",
+      "pixels": [
+        960,
+        720
+      ],
+      "gui_scale": 3,
+      "logical_size": [
+        320,
+        240
+      ],
+      "individually_reviewed": true,
+      "review": "Complete wrapped text lines; scroll hint, scrollbar and fixed action controls remain separate."
+    },
+    {
+      "file": "09-project-scroll-minimum.png",
+      "original_native_filename": "liberty-grind-1793607954898-09-project-scroll-minimum.png",
+      "bytes": 91924,
+      "sha256": "498f2270c69035821854d34ad4f715a754b0d1cec65daad3191f8f8006d424f7",
+      "pixels": [
+        960,
+        720
+      ],
+      "gui_scale": 3,
+      "logical_size": [
+        320,
+        240
+      ],
+      "individually_reviewed": true,
+      "review": "Real scrolling reaches the rest of the detail; no partial-line clipping."
+    },
+    {
+      "file": "10-hud-minimum.png",
+      "original_native_filename": "liberty-grind-1793607954898-10-hud-minimum.png",
+      "bytes": 200801,
+      "sha256": "36a0019cc998b364a41f86d32319f218b10c78a96db080ca8345200af82831be",
+      "pixels": [
+        960,
+        720
+      ],
+      "gui_scale": 3,
+      "logical_size": [
+        320,
+        240
+      ],
+      "individually_reviewed": true,
+      "review": "HUD preview and move/scale controls are usable at minimum logical size."
+    },
+    {
+      "file": "11-district-minimum.png",
+      "original_native_filename": "liberty-grind-1793607954898-11-district-minimum.png",
+      "bytes": 93366,
+      "sha256": "6e43172dc6d547ba280b6013146a571aaa268e94aca6bf9726ce44c4ada7f6c5",
+      "pixels": [
+        960,
+        720
+      ],
+      "gui_scale": 3,
+      "logical_size": [
+        320,
+        240
+      ],
+      "individually_reviewed": true,
+      "review": "Briefing wraps and scrolls; actual deployment action stays accessible."
+    },
+    {
+      "file": "12-live-pod.png",
+      "original_native_filename": "liberty-grind-1793607954898-12-live-pod.png",
+      "bytes": 135870,
+      "sha256": "7e6644ed3ea909bd2a4ab5bee43abbb72437745b6d75f3c2363175c308c9b746",
+      "pixels": [
+        960,
+        720
+      ],
+      "gui_scale": 3,
+      "logical_size": [
+        320,
+        240
+      ],
+      "individually_reviewed": true,
+      "review": "Actual descending pod sides, back and floor visibly surround the seated radio-holding rider. Moving-seat interpolation gate passed; no skate-meter overlap."
+    },
+    {
+      "file": "13-live-gun-hud.png",
+      "original_native_filename": "liberty-grind-1793607954898-13-live-gun-hud.png",
+      "bytes": 195352,
+      "sha256": "46ccfa86efa170397d9dcfeebf8aa9dd8cfc2f47d9bac475b6a84b0733cfe936",
+      "pixels": [
+        960,
+        720
+      ],
+      "gui_scale": 3,
+      "logical_size": [
+        320,
+        240
+      ],
+      "individually_reviewed": true,
+      "review": "Real AR-23 Liberator model, native ammunition display, arena and both gameplay HUDs coexist after natural toast expiry."
+    },
+    {
+      "file": "14-live-mission-minimum.png",
+      "original_native_filename": "liberty-grind-1793607954898-14-live-mission-minimum.png",
+      "bytes": 58370,
+      "sha256": "dfeae2cd5c74d34810a042b4da98592868b348a8a5ea4f1c58251abe234627af",
+      "pixels": [
+        960,
+        720
+      ],
+      "gui_scale": 3,
+      "logical_size": [
+        320,
+        240
+      ],
+      "individually_reviewed": true,
+      "review": "Real field-radio right-click opened this mission screen; actual objectives, resupply and early-return controls fit and scroll."
+    },
+    {
+      "file": "15-returned-war-map.png",
+      "original_native_filename": "liberty-grind-1793607954898-15-returned-war-map.png",
+      "bytes": 88906,
+      "sha256": "277428d299ccfee9e6dc4a4989f6a4d7866b97017ab4608f9dfb3908c9671f64",
+      "pixels": [
+        960,
+        720
+      ],
+      "gui_scale": 3,
+      "logical_size": [
+        320,
+        240
+      ],
+      "individually_reviewed": true,
+      "review": "Confirmed early return reopened the map in the original world; full three-line outcome is readable and restoration assertions passed."
+    }
+  ],
+  "evidence_excerpt": "native-audit-excerpt.log",
+  "original_local_log_name": "jetsetcraft-liberty-client8.log",
+  "original_local_log_sha256": "9ecd5306c75895c166c14beeca2273eb82f9b5817258728639529a065839bde9",
+  "limits": [
+    "Native screenshots cover deployment, gun presentation, field-radio mission UI and ordinary early return; they do not show completed objectives or ship extraction.",
+    "Full extraction, rewards, progression persistence and native combat are covered by separate GameTest/runtime evidence.",
+    "The displayed research detail is the actual locked Pressure Saver project; no purchased research state was fabricated.",
+    "No audio review: the headless environment could not initialize an audio device.",
+    "Upstream gun packs emitted optional Create-recipe and invalid-path diagnostics; required Helldivers content loaded and passed actual deployment and loan checks.",
+    "No local-native-to-CI-binary equality is claimed."
+  ]
+}
