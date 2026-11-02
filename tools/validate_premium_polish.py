@@ -201,6 +201,7 @@ allowed_import_prefixes = (
     "com.herberto.jetsetcraft.",
     "com.mojang.",
     "dev.kosmx.playerAnim.",
+    "io.netty.buffer.",  # Minecraft's bundled packet buffers, including real encode/decode GameTests.
     "java.",
     "javax.",
     "net.minecraft.",
