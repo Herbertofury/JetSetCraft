@@ -13,5 +13,9 @@
     "accent": "minecraft:cyan_concrete",
     "wall": "minecraft:blue_concrete",
     "rail": "minecraft:iron_bars"
+  },
+  "contract": {
+    "type": "relay",
+    "target": 3
   }
 }

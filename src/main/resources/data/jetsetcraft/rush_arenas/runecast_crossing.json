@@ -14,5 +14,9 @@
     "accent": "minecraft:amethyst_block",
     "wall": "minecraft:purple_concrete",
     "rail": "minecraft:polished_deepslate_wall"
+  },
+  "contract": {
+    "type": "paint",
+    "target": 3
   }
 }

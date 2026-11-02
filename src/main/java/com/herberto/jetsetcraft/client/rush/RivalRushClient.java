@@ -2,6 +2,7 @@ package com.herberto.jetsetcraft.client.rush;
 
 import com.herberto.jetsetcraft.JetSetCraft;
 import com.herberto.jetsetcraft.network.JetSetNetwork;
+import com.herberto.jetsetcraft.rush.RushRun;
 import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
@@ -45,9 +46,16 @@ public final class RivalRushClient {
         CompoundTag previous = state;
         state = incoming.copy();
         state.put("Offers", boundedList(state.getList("Offers", Tag.TAG_COMPOUND), 3));
+        state.put("Feedback", boundedList(state.getList("Feedback", Tag.TAG_COMPOUND), 4));
+        if (state.contains("PitStop", Tag.TAG_COMPOUND)) {
+            CompoundTag stop = state.getCompound("PitStop");
+            stop.put("Options", boundedList(stop.getList("Options", Tag.TAG_COMPOUND), 4));
+            stop.put("TuneChoices", boundedList(stop.getList("TuneChoices", Tag.TAG_COMPOUND), 14));
+        }
         if (state.contains("Draft", Tag.TAG_COMPOUND)) {
             CompoundTag draft = state.getCompound("Draft");
-            draft.put("Banished", boundedList(draft.getList("Banished", Tag.TAG_COMPOUND), 2));
+            // Rewind replenishes the two-use budget; lifetime exclusions can span the bounded upgrade pool.
+            draft.put("Banished", boundedList(draft.getList("Banished", Tag.TAG_COMPOUND), RushRun.Upgrade.values().length));
         }
         if (state.contains("Build", Tag.TAG_COMPOUND)) {
             CompoundTag build = state.getCompound("Build");
@@ -94,6 +102,7 @@ public final class RivalRushClient {
             for (int i = 0; i < Math.min(32, source.size()); i++) arenaCatalogue.add(source.getCompound(i).copy());
         }
         if (minecraft.player == null) return;
+        RushFeedback.accept(state);
         if (minecraft.screen instanceof RivalRushScreen screen) {
             screen.onSnapshot(incoming, previous);
         } else if (incoming.getBoolean("Open")) {
@@ -117,6 +126,8 @@ public final class RivalRushClient {
     static ListTag arenaCatalogue() { return arenaCatalogue; }
     static CompoundTag debrief() { return debrief; }
     static CompoundTag journey() { return state.getCompound("Journey"); }
+    static CompoundTag contract() { return journey().getCompound("Contract"); }
+    static CompoundTag pitStop() { return state.getCompound("PitStop"); }
     static boolean choosingRoute() { return state.getBoolean("Active") && "choosing".equals(journey().getString("Phase")); }
     public static CompoundTag stateSnapshot() { return state.copy(); }
     public static boolean isJourneyScreenOpen() {
@@ -139,6 +150,15 @@ public final class RivalRushClient {
     }
     public static boolean isDebriefScreenOpen() {
         return Minecraft.getInstance().screen instanceof RivalRushScreen screen && screen.isDebriefView();
+    }
+    public static boolean isContractScreenOpen() {
+        return Minecraft.getInstance().screen instanceof RivalRushScreen screen && screen.isContractView();
+    }
+    public static boolean isPitStopScreenOpen() {
+        return Minecraft.getInstance().screen instanceof RivalRushScreen screen && screen.isPitStopView();
+    }
+    public static boolean isServiceResultScreenOpen() {
+        return Minecraft.getInstance().screen instanceof RivalRushScreen screen && screen.isServiceResultView();
     }
     static int page(boolean cards) { return cards ? albumPage : rosterPage; }
     static int pages(boolean cards) { return cards ? albumPages : rosterPages; }
@@ -221,8 +241,21 @@ public final class RivalRushClient {
                 ? List.of("Artifact charge and ward", "Your active evolution") : buildResources;
     }
 
+    private static boolean contractVisible(boolean preview) {
+        String phase = journey().getString("Phase"), type = contract().getString("Type");
+        return preview || state.getBoolean("Active") && (phase.equals("arena") || phase.equals("travel"))
+                && !type.isBlank() && !type.equals("none");
+    }
+
+    private static String requiredObjective() {
+        CompoundTag journey = journey();
+        String required = journey.getString("Objective"), prefix = journey.getString("CurrentName") + ": ";
+        return required.startsWith(prefix) ? required.substring(prefix.length()) : required;
+    }
+
     static int hudHeight(boolean preview) {
         return HUD_HEIGHT + (threatVisible(preview) ? 47 : 0)
+                + (contractVisible(preview) ? 24 : 0)
                 + (hudResources(preview).isEmpty() ? 0 : hudResources(preview).size() * 11 + 4);
     }
 
@@ -279,8 +312,9 @@ public final class RivalRushClient {
                 + Math.max(0L, state.getLong("Cards")) : "Score and card progress";
         gui.drawString(font, clipped(progress, HUD_WIDTH - 14), 7, 73, 0xFFE7E7E7, true);
         String objective = !active ? "Objective / upgrade reminder" : !offers().isEmpty() ? "Choose an upgrade — open Rush menu"
+                : choosingRoute() && pitStop().getBoolean("Available") ? "Pit stop: " + Math.max(0, pitStop().getInt("Credits")) + " services · Rush menu"
                 : choosingRoute() ? "Choose the next arena — open Rush menu"
-                : state.getBoolean("Finale") ? "Set complete — extract or play Encore" : state.getString("Objective");
+                : state.getBoolean("Finale") ? "Set complete — extract or play Encore" : circuit ? requiredObjective() : state.getString("Objective");
         gui.drawString(font, clipped(objective, HUD_WIDTH - 14), 7, 86, 0xFFE6DBA6, true);
         int detailY = HUD_HEIGHT;
         if (threatVisible(preview)) {
@@ -307,6 +341,24 @@ public final class RivalRushClient {
             String counterplay = actual ? encounter.getString("Counterplay") : "Read the marked ground";
             gui.drawString(font, clipped(counterplay, HUD_WIDTH - 14), 7, detailY + 35, 0xFFFFFFFF, true);
             detailY += 47;
+        }
+        if (contractVisible(preview)) {
+            CompoundTag contract = contract();
+            boolean actual = active && !contract.isEmpty();
+            String contractTitle = actual ? "Optional · " + contract.getString("Name") : "Optional room contract";
+            gui.drawString(font, clipped(contractTitle, HUD_WIDTH - 14), 7, detailY + 1, 0xFFD7B7FF, true);
+            String hint = !actual ? "Progress and next target" : switch (contract.getString("State")) {
+                case "complete" -> "Complete · +1 service on room clear";
+                case "disabled" -> "Unavailable · open Room contract";
+                case "missed" -> "Unfinished · room clear still counts";
+                case "pending" -> journey.getString("Phase").equals("travel") ? "Starts on arrival"
+                        : contract.getString("Reason").isBlank() ? "Waiting for the next beacon" : contract.getString("Reason");
+                default -> Math.max(0, contract.getInt("Progress")) + "/" + Math.max(1, contract.getInt("Target"))
+                        + (contract.contains("Distance") ? " · " + contract.getString("Direction") + " "
+                        + Math.max(0, contract.getInt("Distance")) + "m" : " · optional bonus");
+            };
+            gui.drawString(font, clipped(hint, HUD_WIDTH - 14), 7, detailY + 12, 0xFFDDDDDD, true);
+            detailY += 24;
         }
         for (String resource : hudResources(preview)) {
             gui.drawString(font, clipped(resource, HUD_WIDTH - 14), 7, detailY + 2, 0xFF87E1EA, true);
@@ -336,6 +388,7 @@ public final class RivalRushClient {
         public static void tick(TickEvent.ClientTickEvent event) {
             if (event.phase != TickEvent.Phase.END) return;
             Minecraft minecraft = Minecraft.getInstance();
+            RushFeedback.tick();
             while (MENU.consumeClick()) {
                 if (minecraft.player != null && minecraft.screen == null) request("menu", "", 0);
             }
@@ -359,6 +412,7 @@ public final class RivalRushClient {
             arenaCatalogue = new ListTag();
             debrief = new CompoundTag();
             buildResources = List.of();
+            RushFeedback.reset();
             albumPage = rosterPage = 0;
             albumPages = rosterPages = 1;
         }

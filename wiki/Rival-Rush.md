@@ -69,7 +69,7 @@ Every arena requires its active combat duration and owned-rival defeat target. I
 
 Each clear gives its stated build reward and a distinct shared crew reward. A victory magnet collects nearby owned cards before the next route, so the player need not abandon earned pickups to continue. After six clears choose **Return to Minecraft** or **Encore**. Encore preserves the build and begins another six-room set from the circuit lobby.
 
-Alpha.4 also grants **one optional artifact remix per genuine clear**. It is available while choosing the next room and after the sixth clear. Keeping the current build and continuing remains valid; unused opportunities do not accumulate into a stockpile. See [Remix a three-slot build](#remix-a-three-slot-build) below.
+Alpha.7 replaces the separate remix opportunity with a shared **Pit stop**. A genuine clear earns one service, or two if that room's optional contract was completed. Services are available after earned XP drafts, while choosing the next room and after the sixth clear. Unused choices close when you depart or begin Encore. See [Pit stops](#pit-stops--alpha7) below.
 
 Open **Journey** to inspect the current set's visited rooms, current destination and up to three offered routes. Select a known room or offer to read its reward, objective and travel state. Offers show shared rewards as **up to** amounts; cleared rooms show the exact accepted amounts already banked. The map adds those accepted results to **Banked this set** and explicitly identifies unavailable or still-unrecorded settlement. The next destinations are actual server-held choices, and choosing one retains the ride along its connector. Encore starts a fresh six-room map; the shared reward history remains available in Progress.
 
@@ -77,22 +77,49 @@ The map marks the start with **S**, completed rooms with their numbers, and curr
 
 In the **alpha.5 continuation**, forks favor profiles not yet visited in the current set and different reward families when the installed catalogue permits. The cache result and room debrief also name the **actual build changes**: the ranks gained and their resulting ranks, score granted at a cap, vitality actually restored and any owned-card magnet. A full build does not receive a fictional rank or full-heal claim. The existing shared settlement still reports the amounts actually credited to the crew account.
 
-| Arena | Layout / radius | Combat time / rivals | Build reward | Shared emphasis |
-|---|---|---|---|---|
-| Signal Yard | Plaza / 24 | 120 s / 8 | Paint damage | Balanced |
-| Needlepoint Crossing | Crossing / 28 | 150 s / 10 | Critical chance and power | Reputation |
-| Widewave Terraces | Terraces / 32 | 180 s / 12 | Ability area | Training |
-| Relic Relay | Loop / 36 | 210 s / 16 | Artifact | Balanced |
-| Copper Current | Loop / 30 | 150 s / 10 | Magnet and pickup reach | Supplies |
-| Greenroom Steps | Terraces / 40 | 240 s / 20 | Recovery | Training |
-| Cloudline Circuit, with Aether | Loop / 32 | 180 s / 12 | Magnet and pickup reach | Training |
-| Runecast Crossing, with Iron's Spells — alpha.5 | Crossing / 28 | 150 s / 10 | Ability area | Training |
-| Embervault Loop, with Cataclysm — alpha.5 | Loop / 36 | 210 s / 16 | Artifact | Reputation |
-| Expedition Steps, with AoA — alpha.5 | Terraces / 32 | 180 s / 12 | Recovery | Supplies |
+| Arena | Layout / radius | Combat time / rivals | Build reward | Shared emphasis  Optional contract |
+|---|---|---|---|---|---|
+| Signal Yard | Plaza / 24 | 120 s / 8 | Paint damage | Balanced  Paint 3 |
+| Needlepoint Crossing | Crossing / 28 | 150 s / 10 | Critical chance and power | Reputation  Hunt 2 |
+| Widewave Terraces | Terraces / 32 | 180 s / 12 | Ability area | Training  Relay 3 |
+| Relic Relay | Loop / 36 | 210 s / 16 | Artifact | Balanced  Hunt 3 |
+| Copper Current | Loop / 30 | 150 s / 10 | Magnet and pickup reach | Supplies  Relay 3 |
+| Greenroom Steps | Terraces / 40 | 240 s / 20 | Recovery | Training  Paint 3 |
+| Cloudline Circuit, with Aether | Loop / 32 | 180 s / 12 | Magnet and pickup reach | Training  Relay 4 |
+| Runecast Crossing, with Iron's Spells — alpha.5 | Crossing / 28 | 150 s / 10 | Ability area | Training  Paint 3 |
+| Embervault Loop, with Cataclysm — alpha.5 | Loop / 36 | 210 s / 16 | Artifact | Reputation  Hunt 3 |
+| Expedition Steps, with AoA — alpha.5 | Terraces / 32 | 180 s / 12 | Recovery | Supplies  Relay 3 |
 
-The supplied alpha.5 catalogue has **six base profiles**, or **ten with Aether, Iron's, Cataclysm and AoA installed**. Each optional profile requires its named provider. Cloudline Circuit uses Aether materials with vanilla fallbacks; Embervault Loop uses safe decorative Cataclysm materials with vanilla fallbacks. Runecast Crossing and Expedition Steps use vanilla materials to express their themes. These are rooms inside Rush, not copies of provider dimensions, native boss dungeons or absent legacy AoA worlds.
+The supplied catalogue has **six base profiles**, or **ten with Aether, Iron's, Cataclysm and AoA installed**. Each optional profile requires its named provider. Cloudline Circuit uses Aether materials with vanilla fallbacks; Embervault Loop uses safe decorative Cataclysm materials with vanilla fallbacks. Runecast Crossing and Expedition Steps use vanilla materials to express their themes. These are rooms inside Rush, not copies of provider dimensions, native boss dungeons or absent legacy AoA worlds.
 
 Rooms are generated only inside the registered Rush dimension. Terrain from the original world, player builds, mobs and inventories are not imported. Connectors preserve passable lanes through walls and authored blocks. Generation advances in bounded batches using loaded chunks; it adds no persistent chunk tickets.
+
+### Optional arena contracts — alpha.7
+
+Contracts give a room a second goal that fits its route and reward. They are tracked automatically while the room is active. They never replace the required combat time, owned-rival quota or headliner gate, and missing one does not prevent a clear. Finish it **and clear the room** to earn one additional Pit stop service. Leaving early does not bank the bonus.
+
+| Contract | What counts | What the player sees |
+|---|---|---|
+| **Relay** | Ride through the ordered checkpoints with continuous movement. Standing still, walking, paused movement, teleport resets and jumps over four blocks do not count. | The next owner-visible marker, direction, distance and checkpoint number. |
+| **Paint** | Paint distinct, accepted wall patches inside the active room. The same patch cannot count twice for that contract. | Fresh patches completed and the target. |
+| **Hunt** | Defeat your run's actual elite or captain rivals, including headliners. Ordinary rivals, native deaths, removed bodies and another owner's targets do not count. | Dangerous rivals defeated and the target. |
+
+Relay markers use the room's protected crossing and require a loaded, built, supported and clear standing position. They create particles, not blocks or extra entities. A still-building location remains pending; a genuinely blocked location disables the optional goal with a reason. The Journey view previews offered contracts, tracks the active one and records the actual completed or missed result when the room clears.
+
+### Pit stops — alpha.7
+
+The stop shares **one earned choice**, or **two with a completed contract**, across these services. Each service can be used once at that stop; the bonus does not permit two Tunes. Complete pending XP drafts first, then choose the service and inspect its exact preview.
+
+| Service | Effect | When it cannot be spent |
+|---|---|---|
+| **Tune** | Add one rank to an already-owned stat or artifact within its normal cap. A target preview shows the resulting effect. | No eligible owned rank remains, the provider is unavailable or Tune was already used. |
+| **Patch** | Restore up to 40% maximum vitality and 50% equipped maximum ward, limited to what is actually missing. | Vitality and available ward are already full. It does not equip a ward. |
+| **Rewind** | Restore one reroll and one banish, capped at three and two. Existing excluded draft choices remain excluded. | Both controls are already at their caps. |
+| **Remix** | Replace an owned artifact family with an available unowned family at its exact rank. | No owned artifact is available, the target is unavailable or Remix was already used. |
+
+The result names the accepted change and the remaining choices. A full-cap, invalid, stale or repeated request spends nothing. Tune and Remix keep the three-artifact limit; the same services work at the room-six Encore decision. Departure closes unused choices. Services spend no supplies, mint no extra permanent reward receipt and do not change ordinary Minecraft inventory or XP.
+
+Accepted cache claims, card mastery, contract completion, headliner rewards, evolutions and services now have separate run feedback. Repeated snapshots do not replay a notice, and objective hints cannot overwrite an accepted reward. Reduced-motion mode uses text feedback. Permanent crew awards continue to use their existing receipt feedback.
 
 ### Read the threat — alpha.6
 
@@ -181,9 +208,9 @@ The runtime test preserves a rank-one mark through **five paused manager calls**
 
 ### Remix a three-slot build
 
-After clearing a real arena, alpha.4 lets you replace **one owned artifact family with a different available family you do not already hold**. The replacement carries the old family's exact rank. For example, replacing a rank-three Bass horn with Line battery gives rank-three Line battery while retaining the same three-slot limit.
+After clearing a real arena, the **Remix** Pit stop service lets you replace **one owned artifact family with a different available family you do not already hold**. The replacement carries the old family's exact rank. For example, replacing a rank-three Bass horn with Line battery gives rank-three Line battery while retaining the same three-slot limit.
 
-The choice is optional and only available between rooms, including the decision after room six. One clear supplies one opportunity; unused opportunities never stack. Rejected, unavailable, unchanged or stale-version requests spend nothing. Removing a charged family clears its associated charge instead of moving that charge into another ability. The optional Iron's relay can only be selected when its provider/API is available. Normal drafts still provide new ranks; remix changes build direction.
+The choice is optional and only available between rooms, including the decision after room six. Remix consumes one choice from that stop's shared budget and can be used once there; unused choices never stack across rooms. Rejected, unavailable, unchanged or stale-version requests spend nothing. Removing a charged family clears its associated charge instead of moving that charge into another ability. The optional Iron's relay can only be selected when its provider/API is available. Normal drafts still provide new ranks; remix changes build direction.
 
 Open **Build** to see the current run statistics and artifact descriptions. When a remix is available, choose the owned source, choose an available replacement, review the displayed **source → replacement** and retained rank, then explicitly confirm. Opening the page or inspecting a replacement makes no change.
 
@@ -250,7 +277,7 @@ If the entry checkpoint cannot be saved, the run stops before lending equipment 
 
 ### Review the last run — alpha.6
 
-After returning, **Last run** preserves one report with the result and saved exit reason, active time, room/headliner clears, cards, final artifact/stat ranks, selected evolution and proc count, and rerolls/banishes used. Its combat totals count **actual** primary and secondary virtual damage, vitality lost/restored and ward absorbed/restored. Overkill, unused healing and newly added shield capacity do not inflate those totals. Scroll or use Page Up/Down to inspect the reward and final-build sections below the initial combat summary.
+After returning, **Last run** preserves one report with the result and saved exit reason, active time, room/headliner clears, cards, final artifact/stat ranks, selected evolution and proc count, rerolls/banishes used, **Contracts banked** and **Services used**. Contracts banked counts completed goals whose rooms actually cleared; a goal achieved before an early return is not counted. Older saved reports display zero for the new counters. Its combat totals count **actual** primary and secondary virtual damage, vitality lost/restored and ward absorbed/restored. Overkill, unused healing and newly added shield capacity do not inflate those totals. Scroll or use Page Up/Down to inspect the reward and final-build sections below the initial combat summary.
 
 **Accepted return award** shows the matching saved settlement's actual contribution. It covers the return only; earlier arena awards are already separate entries in crew Progress. Banking normally, running out of vitality, completing the qualified six-room headliner ending and an interrupted restoration have distinct result labels. Viewing the report never pays a reward again. It follows ordinary player saving, replaces the preceding report and cannot resume a finished build. Recovery without the original live run data does not invent a new result.
 
@@ -372,7 +399,7 @@ The mode filters absent entity IDs without requiring optional mods. A completely
 
 ### Custom arena data packs
 
-Start with the [ready-to-edit arena data pack](https://github.com/Herbertofury/JetSetCraft/tree/main/examples/arena-data-pack). Its alpha.5 continuation contains **three complete profiles**, pack metadata and installation instructions. Crossfade Yard includes four authored corner markers.
+Start with the [ready-to-edit arena data pack](https://github.com/Herbertofury/JetSetCraft/tree/main/examples/arena-data-pack). It contains **three complete profiles** with optional contracts, pack metadata and installation instructions. Crossfade Yard includes four authored corner markers.
 
 | Example profile | Layout / radius | Combat time / rivals | Build reward | Shared emphasis |
 |---|---|---|---|---|
@@ -395,6 +422,7 @@ Add `data/<namespace>/rush_arenas/<name>.json`. The server loads at most 32 prof
   "reward": "critical",
   "reward_ranks": 1,
   "shared_reward": "reputation",
+  "contract": {"type": "paint", "target": 3},
   "palette": {
     "floor": "minecraft:smooth_stone",
     "accent": "minecraft:magenta_concrete",
@@ -408,6 +436,8 @@ Add `data/<namespace>/rush_arenas/<name>.json`. The server loads at most 32 prof
 ```
 
 Limits: radius **16–48**, duration **30–360 seconds**, **3–80** required defeats, **1–2** reward ranks, at most **4096 authored blocks**. Layouts are `plaza`, `cross`, `loop`, `terraces`; rewards are `damage`, `critical`, `area`, `relic`, `magnet`, `recovery`; shared emphasis is `balanced`, `supplies`, `training`, `reputation`. Blocks use offsets from the floor center, `y=1..8`, and must leave the central crossing clear (`abs(x)>4` and `abs(z)>4`, inside radius minus four). An optional `properties` object sets valid block-state properties.
+
+The optional `contract` object accepts `relay` with **2–4 checkpoints** (default 3), `paint` with **1–8 fresh patches** (default 3), or `hunt` with **1–4 dangerous rivals** (default 2). Omit it for no contract; existing packs retain their original clear rules. Invalid types and out-of-range targets reject that profile instead of silently raising its reward.
 
 Inventories, entity data, block-entity NBT, fluids, portals and explicitly dangerous vanilla blocks are rejected. The actual ride-in connector has priority over authored blocks so every chosen branch stays passable. This is a bounded block-map format, not an arbitrary structure-NBT importer or in-game arena editor.
 

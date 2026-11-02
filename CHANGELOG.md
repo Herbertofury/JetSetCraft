@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.4.0-alpha.7 — arena contracts and Pit stops, 2026-11-02
+
+- Added optional **Relay, Paint and Hunt** contracts to supplied arenas and the editable example pack. Real riding through ordered checkpoints, accepted distinct wall patches and actual owned elite/captain defeats advance separate room goals. The normal timer, rival quota and room-three/six headliner gates remain authoritative; a missed contract never blocks exit.
+- Added a shared **Pit stop** budget: one service per actual room clear, two if its contract was completed, each service once per stop. **Tune** raises an owned rank, **Patch** restores actual missing vitality/ward, **Rewind** replenishes bounded draft controls and **Remix** swaps an artifact at its exact rank. No-effect or stale intents spend nothing; departure closes unused choices, including the final-room Encore stop.
+- Added exact service previews, actual accepted-result screens, live optional-goal HUD guidance, route contract previews and frozen completed/missed results. Last run records **Contracts banked** and **Services used** while retaining older saved reports.
+- Added a bounded run reward feed so accepted cache, mastery, contract, headliner, evolution and service events survive changing objective hints. Repeated snapshots cannot replay a notice; reduced-motion mode uses text. Existing permanent crew receipt feedback remains separate.
+- Network protocol is now **15**; client and server require the matching alpha. Optional provider APIs and pins remain unchanged.
+- Expanded contract/service regression cases and four appended native-client audit views are implemented. Validation and publication of this candidate are pending; the alpha.6 results below remain historical evidence, not results for this source.
+
 ## 0.4.0-alpha.6 — headliners and build evolutions, 2026-11-02
 
 - Added three elite attack identities, **Linebreaker**, **Bombardier** and **Basswarden**, with fixed lane, circle and ring tells, private owner feedback, active-clock timing, block line-of-sight checks and a recovery opening. The original selected vanilla or modded body keeps its native health, attributes and effects.

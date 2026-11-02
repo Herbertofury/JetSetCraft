@@ -5,7 +5,7 @@
 ![Forge](https://img.shields.io/badge/Forge-47.4.23-f16436?style=for-the-badge)
 
 > [!IMPORTANT]
-> This page distinguishes the published stable `0.3.0` release, the separately verified `0.4.0-alpha.3` development checkpoint, outside research, and preserved future design. Development verification does not replace the stable release's identity or artifact.
+> The published stable release remains `0.3.0`. The current development candidate is `0.4.0-alpha.7`, whose acceptance is pending. Alpha.6 and earlier results below are historical evidence for their own source identities; they do not verify the candidate or replace the stable artifact.
 
 ## ✅ Verified release
 
@@ -35,7 +35,28 @@ See **[Testing & Verification](Testing-and-Verification)** for the complete matr
 
 Street movement, six ride styles, trick/Flow scoring, grinding/transfers, world-physics composition, vanilla swimming boundaries, graffiti/custom tags/Free Paint, paint balloons, dance/cyphers, reversible Street Gear, Boombox tuning, data-driven gangs, configuration, multiplayer synchronization, and accessibility controls are current `0.3.0` surfaces.
 
-## ✅ Verified development: 0.4.0-alpha.3
+## 🧪 Current development candidate: 0.4.0-alpha.7
+
+**Implemented candidate; acceptance pending.** This continuation adds optional room contracts and a shared Pit stop choice to the existing arena circuits, headliners, build evolutions and shared progression. It does not add a separate permanent currency.
+
+| Candidate system | Implemented behavior |
+|---|---|
+| **Optional arena contracts** | Relay follows ordered beacons through observed riding; Paint counts accepted fresh in-room wall patches; Hunt counts owned elite/captain defeats. Missing contract data defaults to none. Required room time, defeats and headliner gates still determine the clear. |
+| **One shared Pit stop budget** | An actual room clear earns one service; completing its optional contract earns two total. Each service kind is usable once per stop. Unused choices expire on route departure or Encore. |
+| **Tune / Patch / Rewind / Remix** | Tune adds one owned stat/artifact rank within its cap. Patch recovers up to 40% maximum vitality and 50% equipped ward capacity. Rewind restores one reroll and one banish within the 3/2 caps, retaining draft exclusions. Remix retains the exchanged artifact's exact rank and spends the same budget. |
+| **Accepted feedback and report** | Server-calculated previews show capped effects; successful services have actual before/after results. A bounded event feed reports accepted caches, mastery, contracts, clears, headliners, evolutions and services. Optional Schema 1 Last run counters record contracts banked on clears and accepted services; older reports read these as zero. |
+
+The server validates the owner, run UUID, current revision and between-arena window. A pending XP draft must be resolved first; room-six services work at the Encore decision. Invalid, stale, repeated and no-effect requests do not spend credits. Clear receipts guard the service opening, while the existing crew settlement remains the only permanent room payout.
+
+The candidate requires **63 distinct Forge GameTests**: 55 retained alpha.6 tests, four contract tests, three Pit stop model tests and one Pit stop runtime test. The base native audit is expected to produce **23 captures**, including four contract/service views and `JETSETCRAFT_CONTRACT_VISUAL_AUDIT_PASS`. Builds, the base/eight-provider matrix, normal server shutdown and this expanded audit are **pending**, with no alpha.7 CI, merge or artifact receipt asserted here. [Testing and Verification](Testing-and-Verification) records the required scope.
+
+## ✅ Historical development: 0.4.0-alpha.6
+
+The [headliner/evolution/debrief receipt](https://github.com/Herbertofury/JetSetCraft/tree/main/docs/verification/headliners) records [PR #45](https://github.com/Herbertofury/JetSetCraft/pull/45), merge `6e85fb3015620a19a6bd4a69b0154cbe8d248527`, **55 passing tests in each of nine configurations**, builds and normal dedicated-server save/shutdown. Base passed its nineteen-capture audit gate; nineteen independently reproduced local PNGs were reviewed. CI archive bytes and CI pixels were not independently inspected. These results belong to alpha.6, not alpha.7.
+
+The [alpha.5 Style Library receipt](https://github.com/Herbertofury/JetSetCraft/tree/main/docs/verification/style-library) and [alpha.4 reward/journey receipt](https://github.com/Herbertofury/JetSetCraft/tree/main/docs/verification/reward-journeys) preserve their respective 44-test/fifteen-capture and 35-test/thirteen-capture checkpoints.
+
+## ✅ Historical development: 0.4.0-alpha.3
 
 [PR #41](https://github.com/Herbertofury/JetSetCraft/pull/41) merged the shared-activity and arena-circuit implementation on **2026-11-01**. It builds on the earlier Rival Rush and crew-house checkpoints. The published stable release above remains `v0.3.0`; this section records the tested development source and its own evidence.
 
@@ -46,14 +67,14 @@ Street movement, six ride styles, trick/Flow scoring, grinding/transfers, world-
 | Tested PR integration | [`2626a8d63c7c065a6ca5c241610993a28bdb58ca`](https://github.com/Herbertofury/JetSetCraft/commit/2626a8d63c7c065a6ca5c241610993a28bdb58ca) |
 | Actual merge | [`e57e9ab9732a84d90e6ac35a82439e54cd4461ab`](https://github.com/Herbertofury/JetSetCraft/commit/e57e9ab9732a84d90e6ac35a82439e54cd4461ab) |
 | Identical feature/tested/merged tree | `e5e127156d0335a9c6f2e33ba153e8ecfc75e757` |
-| Completed gates | **28 real Forge GameTests in each of nine configurations**, with build and dedicated-server readiness/save/shutdown; **ten reviewed real-client captures** in base |
+| Completed gates | **28 real Forge GameTests in each of nine configurations**, builds and dedicated-server readiness; normal server save/shutdown and **ten reviewed real-client captures** in base. The eight provider smoke jobs asserted startup only. |
 | Exact artifact and scope | [Arena-circuit verification receipt, machine-readable record and gallery](https://github.com/Herbertofury/JetSetCraft/tree/main/docs/verification/arena-circuit) |
 
 [Base verification #280](https://github.com/Herbertofury/JetSetCraft/actions/runs/41356358215) and [provider matrix #56](https://github.com/Herbertofury/JetSetCraft/actions/runs/41356358302) passed. The nine configurations are base; Alex's Mobs; Alex's Caves; Cataclysm; those three together; Aether; Iron's Spells; AoA; and Aether/Iron/AoA/Cataclysm together. [Testing and Verification](Testing-and-Verification) links each job and identifies its actual assertions.
 
-### Implemented in the verified development checkpoint
+### Implemented in the historical alpha.3 checkpoint
 
-| System | Current implementation |
+| System | Alpha.3 implementation |
 |---|---|
 | **Shared street activities** | A Boombox chooser for Tag, King of the Hill, Crew Showdown and Rival Rush, plus a revealed random invitation; explicit launch, server-owned objectives, ownership/cancellation checks and reward previews. |
 | **Shared progression** | Completed street games, arena clears and eligible Rush settlement contribute Supplies, crew XP, focused-member training and gang reputation. Earnings can be banked before founding a home; persisted receipts reject duplicate settlement. |
@@ -74,7 +95,7 @@ The **[Inspiration & Research Atlas](Inspiration-and-Research)** catalogs extern
 
 ## 📋 Preserved design lineage
 
-Expanded territory simulation, authored story chapters, physical posse/resident/follower AI, Junior Atlas, further competitive formats and other long-horizon concepts remain design lineage. Crew-profile progression, gang reputation, player-built houses, facilities, dispatch jobs and the street activities described above are already implemented in the verified development checkpoint; they are separate from these future physical/story systems and from stable `v0.3.0`.
+Expanded territory simulation, authored story chapters, physical posse/resident/follower AI, Junior Atlas, further competitive formats and other long-horizon concepts remain design lineage. Crew-profile progression, gang reputation, player-built houses, facilities, dispatch jobs and the street activities described above are implemented in the historical development checkpoints. Alpha.7 adds the candidate systems listed above; human pacing, long Endless sessions, broad native spellbooks and the complete Dungeons-inspired catalogue remain further work.
 
 ## 🔗 Canonical records
 
@@ -82,5 +103,7 @@ Expanded territory simulation, authored story chapters, physical posse/resident/
 - [GitHub Actions verification](https://github.com/Herbertofury/JetSetCraft/actions)
 - [Canonical Drive folder](https://drive.google.com/drive/folders/1npHf1VwOj-tybm791XShz2IvY8LmjjUU)
 - [Repository release evidence](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/RELEASE_EVIDENCE_0.3.0.md)
-- [Verified alpha.3 development receipt and ten-client-capture gallery](https://github.com/Herbertofury/JetSetCraft/tree/main/docs/verification/arena-circuit)
+- [Historical alpha.6 headliner, evolution and debrief receipt](https://github.com/Herbertofury/JetSetCraft/tree/main/docs/verification/headliners)
+- [Historical alpha.5 Style Library receipt](https://github.com/Herbertofury/JetSetCraft/tree/main/docs/verification/style-library)
+- [Historical alpha.3 development receipt and ten-client-capture gallery](https://github.com/Herbertofury/JetSetCraft/tree/main/docs/verification/arena-circuit)
 - [Merged activity and arena implementation — PR #41](https://github.com/Herbertofury/JetSetCraft/pull/41)

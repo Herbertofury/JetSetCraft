@@ -131,6 +131,7 @@ public final class RivalRushManager {
         final RushPointsOfInterest points = new RushPointsOfInterest();
         final RushMotionTracker motion = new RushMotionTracker();
         final RushDirector director = new RushDirector();
+        final RushEventFeed feedback = new RushEventFeed();
         RushCircuit circuit;
         long lastSpawn, lastShot, lastHurt, lastCaptain = -1, lastStyle;
         long lastHorn, lastSoul, lastShockwave, lastSpell;
@@ -173,6 +174,23 @@ public final class RivalRushManager {
     public static CompoundTag cacheSnapshot(ServerPlayer player) {
         Session s = session(player); return s == null ? new CompoundTag() : s.points.snapshot(player, s.run, s.circuit);
     }
+    public static CompoundTag contractSnapshot(ServerPlayer player) {
+        Session s = session(player); return s == null || s.circuit == null ? new CompoundTag() : s.circuit.contractSnapshot(player.position());
+    }
+    public static CompoundTag pitStopSnapshot(ServerPlayer player) {
+        Session s = session(player); return s == null ? new CompoundTag() : pitStopSnapshot(s);
+    }
+    public static ListTag feedbackSnapshot(ServerPlayer player) {
+        Session s = session(player); return s == null ? new ListTag() : s.feedback.snapshot();
+    }
+    public static RushArenaCatalog.Profile currentArenaProfile(ServerPlayer player) {
+        Session s = session(player); return s == null || s.circuit == null ? null : s.circuit.current();
+    }
+    /** Explicit server teleport signals reset movement observation; they never change a goal or event destination. */
+    public static void movementDiscontinuity(ServerPlayer player) {
+        Session s = session(player); if (s == null) return;
+        s.motion.reset(null); if (s.circuit != null) s.circuit.pauseContract();
+    }
     public static CompoundTag encounterSnapshot(ServerPlayer player) {
         Session s = session(player); return s == null ? new CompoundTag() : encounterSnapshot(s);
     }
@@ -212,7 +230,10 @@ public final class RivalRushManager {
             case "choose" -> {
                 if (s != null && s.run.id().equals(runId) && number >= 0 && number < s.run.offers().size()
                         && (value.isEmpty() || s.run.offers().get(number).name().equalsIgnoreCase(value))
-                        && s.run.choose(number, version)) send(player, true, "", -1, -1);
+                        && s.run.choose(number, version)) {
+                    // Even a draft opened and answered between two server ticks is a movement pause.
+                    resetMotion(s); send(player, true, "", -1, -1);
+                }
             }
             case "reroll" -> {
                 if (s != null && s.run.id().equals(runId) && s.run.reroll(version)) send(player, true, "", -1, -1);
@@ -228,8 +249,30 @@ public final class RivalRushManager {
                 try { evolution = RushBuildPaths.Evolution.valueOf(value); }
                 catch (IllegalArgumentException ignored) { return; }
                 if (s.run.evolve(evolution, version)) {
+                    s.feedback.emit(RushEventFeed.Kind.EVOLUTION, evolution.label() + " forged", evolution.description());
                     send(player, true, "", -1, -1);
                     if (JetSetNetwork.canSync(player)) player.playNotifySound(SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS, .6f, 1.35f);
+                }
+            }
+            case "pit_stop" -> {
+                if (s == null || !s.run.id().equals(runId) || !betweenArenas(s) || s.run.hasOffer()
+                        || version != s.run.offerVersion()) return;
+                String[] selection = value.split("\\|", -1);
+                if (selection.length < 1 || selection.length > 2) return;
+                RushPitStop.Service service;
+                RushRun.Upgrade upgrade = null;
+                try {
+                    service = RushPitStop.Service.valueOf(selection[0]);
+                    if (service == RushPitStop.Service.TUNE) {
+                        if (selection.length != 2) return;
+                        upgrade = RushRun.Upgrade.valueOf(selection[1]);
+                    } else if (selection.length != 1 || service == RushPitStop.Service.REMIX) return;
+                } catch (IllegalArgumentException ignored) { return; }
+                RushPitStop.Result result = s.run.takePitStop(service, upgrade, version);
+                if (result.accepted()) {
+                    serviceNotice(s);
+                    send(player, true, result.summary(), -1, -1);
+                    if (JetSetNetwork.canSync(player)) player.playNotifySound(SoundEvents.NOTE_BLOCK_CHIME.value(), SoundSource.PLAYERS, .45f, 1.2f);
                 }
             }
             case "remix" -> {
@@ -247,15 +290,16 @@ public final class RivalRushManager {
                         if (from == RushRun.Upgrade.CHILL) { actor.chillUntil = 0; actor.chillRank = 0; }
                         updateName(s, actor);
                     }
-                    s.motion.reset(player.position());
-                    send(player, true, "Remixed " + from.label() + " into " + to.label()
-                            + " at rank " + s.run.rank(to) + ". Your other upgrades remain in place.", -1, -1);
+                    resetMotion(s);
+                    serviceNotice(s);
+                    send(player, true, s.run.lastPitStopResult().summary(), -1, -1);
                     player.serverLevel().playSound(null, player.blockPosition(), SoundEvents.NOTE_BLOCK_CHIME.value(), SoundSource.PLAYERS, .45f, 1.2f);
                 }
             }
             case "encore" -> {
                 if (s != null && s.run.id().equals(runId) && s.run.offerVersion() == version && s.run.continueEndless()) {
                     if (s.circuit != null && s.circuit.encore()) {
+                        s.run.closePitStop(); resetMotion(s);
                         s.points.reset();
                         BlockPos origin = s.circuit.origin();
                         player.teleportTo(player.serverLevel(), origin.getX() + 0.5, RushWorld.FLOOR_Y + 1,
@@ -268,6 +312,7 @@ public final class RivalRushManager {
             case "journey_choose" -> {
                 if (s != null && s.circuit != null && s.run.id().equals(runId) && !s.run.hasOffer()
                         && s.circuit.choose(ResourceLocation.tryParse(value), version)) {
+                    s.run.closePitStop(); resetMotion(s);
                     s.points.reset(); s.objective = s.circuit.objective(s.run);
                     send(player, false, "", -1, -1);
                 }
@@ -554,7 +599,7 @@ public final class RivalRushManager {
             leave(player, "You left the playable district. Your collected cards were kept."); return;
         }
         if (s.run.hasOffer() || s.run.awaitingEncore()) {
-            s.motion.reset(player.position());
+            resetMotion(s);
             freeze(s);
             if (s.announcedOffer != s.run.offerVersion() || (s.run.awaitingEncore() && !s.finaleSent)) {
                 s.announcedOffer = s.run.offerVersion(); s.finaleSent = s.run.awaitingEncore();
@@ -565,7 +610,7 @@ public final class RivalRushManager {
         if (s.circuit != null) {
             s.objective = s.circuit.objective(s.run);
             if (s.circuit.phase() == RushCircuit.Phase.CHOOSING || s.circuit.phase() == RushCircuit.Phase.COMPLETE) {
-                s.motion.reset(player.position());
+                resetMotion(s);
                 freeze(s);
                 if (s.announcedJourney != s.circuit.version()) {
                     s.announcedJourney = s.circuit.version(); send(player, true, "", -1, -1);
@@ -593,7 +638,7 @@ public final class RivalRushManager {
                 return;
             }
             if (!s.circuit.inArena(player.position(), 4)) {
-                s.motion.reset(player.position());
+                resetMotion(s);
                 freeze(s); s.objective = "Return to " + s.circuit.current().name() + " — arena time is paused.";
                 if (level.getGameTime() % 10 == 0) send(player, false, "", -1, -1);
                 return;
@@ -623,7 +668,7 @@ public final class RivalRushManager {
         }
         collectPickups(s);
         if (s.run.hasOffer()) {
-            s.motion.reset(player.position());
+            resetMotion(s);
             freeze(s); s.announcedOffer = s.run.offerVersion(); send(player, true, "", -1, -1); return;
         }
         if (!tickEncounter(s)) return;
@@ -638,6 +683,8 @@ public final class RivalRushManager {
         tickObjectives(s);
         String cache = s.points.tick(player, s.run, s.circuit);
         if (!cache.isEmpty()) s.objective = cache;
+        RushPointsOfInterest.Claim claim = s.points.pollClaim();
+        if (claim != null) s.feedback.emit(RushEventFeed.Kind.CACHE, claim.reward().label() + " cache", claim.result());
         if (s.circuit != null && s.circuit.objectiveMet(s.run) && !s.run.hasOffer()
                 && s.director.permitsRoomCompletion(s.circuit.set(), s.circuit.completed() + 1)) {
             finishArena(s); return;
@@ -665,6 +712,7 @@ public final class RivalRushManager {
         long activeTicks = s.circuit.activeTicks(s.run);
         int defeats = (int) Math.min(Integer.MAX_VALUE, s.circuit.defeats(s.run));
         UUID receipt = s.circuit.rewardId();
+        boolean contractBonus = s.circuit.contractCompleted();
         String reward = RushPointsOfInterest.grant(s.run, profile.reward(), profile.rewardRanks());
         s.run.magnet(200); collectPickups(s);
         for (Actor actor : s.actors.values()) actor.mob.discard();
@@ -673,7 +721,8 @@ public final class RivalRushManager {
         s.director.clearTells();
         if (!s.circuit.complete(s.run)) return;
         s.run.recordArenaClear();
-        s.run.grantRemix();
+        boolean stopOpened = s.run.openPitStop(receipt, contractBonus);
+        if (!stopOpened) JetSetCraft.LOGGER.error("Could not open the earned Pit stop for completed Rush arena {}", receipt);
         String mode = profile.sharedReward().equals("balanced") ? "rush_arena" : "rush_arena_" + profile.sharedReward();
         String settlement = "";
         CompoundTag shared = new CompoundTag();
@@ -688,6 +737,8 @@ public final class RivalRushManager {
             JetSetCraft.LOGGER.error("Could not settle completed Rush arena {} for {}", receipt, s.player.getUUID(), error);
         }
         s.circuit.recordSettlement(receipt, reward, shared);
+        s.feedback.emit(RushEventFeed.Kind.ARENA, profile.name() + " cleared", reward
+                + (stopOpened ? " · " + s.run.pitStopEarned() + (s.run.pitStopEarned() == 1 ? " Pit stop service earned." : " Pit stop services earned.") : ""));
         s.player.sendSystemMessage(Component.literal(profile.name() + " cleared! " + reward + settlement).withStyle(ChatFormatting.GOLD));
         s.player.serverLevel().playSound(null, s.player.blockPosition(), SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS, .5f, 1.1f);
         s.objective = s.circuit.objective(s.run); send(s.player, true, reward + settlement, -1, -1);
@@ -696,6 +747,36 @@ public final class RivalRushManager {
     private static boolean combatPaused(Session s) {
         return s.exiting || s.run.isFinished() || s.run.hasOffer() || s.run.awaitingEncore()
                 || (s.circuit != null && (s.circuit.phase() != RushCircuit.Phase.ARENA || !s.circuit.inArena(s.player.position(), 4)));
+    }
+
+    private static void resetMotion(Session s) {
+        s.motion.reset(s.player.position());
+        if (s.circuit != null) s.circuit.pauseContract();
+    }
+
+    private static void contractNotice(Session s, boolean completedNow) {
+        if (!completedNow || s.circuit == null) return;
+        CompoundTag contract = s.circuit.contractSnapshot(s.player.position());
+        s.feedback.emit(RushEventFeed.Kind.CONTRACT, contract.getString("Name") + " complete",
+                "Clear this arena to earn a second pit-stop service. Required room goals still apply.");
+    }
+
+    private static void serviceNotice(Session s) {
+        CompoundTag result = s.run.lastPitStopResult().snapshot();
+        if (result.getBoolean("Accepted")) s.feedback.emit(RushEventFeed.Kind.SERVICE,
+                result.getString("Name") + " applied", result.getString("Summary"));
+    }
+
+    private static CompoundTag pitStopSnapshot(Session s) {
+        CompoundTag result = RushPitStop.snapshot(s.run);
+        String blocked = !s.run.circuit() ? "Pit stops are earned in Arena circuits."
+                : s.run.hasOffer() ? "Choose your earned XP upgrade first."
+                : !betweenArenas(s) ? "Pit stops are available between cleared arenas."
+                : !s.run.pitStopAvailable() ? s.run.pitStopReceipt() == null
+                    ? "Clear an arena to earn a Pit stop service." : "Clear another arena to earn Pit stop services."
+                : "";
+        result.putBoolean("Usable", blocked.isEmpty()); result.putString("BlockedReason", blocked);
+        return result;
     }
 
     private static boolean betweenArenas(Session s) {
@@ -1079,11 +1160,17 @@ public final class RivalRushManager {
             s.actors.remove(target.getUUID());
             s.director.cancel(target.getUUID());
             s.run.recordDefeat(); s.run.addScore(actor.role == Role.CAPTAIN ? 500 : actor.elite != RushDirector.Elite.NONE ? 60 : 20);
+            if (s.circuit != null && (actor.role == Role.CAPTAIN || actor.elite != RushDirector.Elite.NONE))
+                contractNotice(s, s.circuit.recordContractHunt());
             spawnCard(s, actor);
             if (actor.role == Role.CAPTAIN) { s.pendingCombatXp += 36; s.run.heal(18); }
             else if (actor.elite != RushDirector.Elite.NONE) s.pendingCombatXp += 6;
             if (actor.headliner && s.director.defeated(target.getUUID())) {
+                int rerollsBefore = s.run.rerollsRemaining();
                 s.run.grantHeadlinerReward();
+                s.feedback.emit(RushEventFeed.Kind.HEADLINER, "Headliner defeated",
+                        "Evolution opportunity earned" + (s.run.rerollsRemaining() > rerollsBefore ? " and one reroll restored" : "")
+                                + ". Choose your build path at a draft or reward stop.");
                 s.objective = "Headliner defeated! Evolution opportunity earned; choose it at a draft or reward stop.";
                 player.sendSystemMessage(Component.literal(s.objective).withStyle(ChatFormatting.GOLD));
             }
@@ -1211,6 +1298,7 @@ public final class RivalRushManager {
         boolean riding = ride != null && ride.active() && !s.player.isPassenger() && !s.player.isFallFlying()
                 && !s.player.isInWaterOrBubble() && !s.player.isSwimming();
         RushMotionTracker.Step motion = s.motion.sample(s.player.position(), s.player.onGround(), riding, combat);
+        if (combat && !combatPaused(s) && s.circuit != null) contractNotice(s, s.circuit.tickContract(s.player, s.run, motion));
         if (s.run.chargeLine(motion.ridingDistance())) {
             s.player.serverLevel().sendParticles(ParticleTypes.ELECTRIC_SPARK, s.player.getX(), s.player.getY() + .3,
                     s.player.getZ(), 8, .35, .2, .35, .02);
@@ -1369,7 +1457,11 @@ public final class RivalRushManager {
             for (int i = 0; i < pickup.count; i++) {
                 RushAlbum.CollectionReward reward = RushAlbum.collect(s.player, pickup.species.toString(), s.gang.id().toString());
                 s.run.gainXp(reward.runXp()); s.run.addScore(reward.score()); s.cards++;
-                if (reward.newTier()) s.objective = "Card mastery " + reward.tier() + ": " + pickup.species.getPath().replace('_', ' ') + "!";
+                if (reward.newTier()) {
+                    s.objective = "Card mastery " + reward.tier() + ": " + pickup.species.getPath().replace('_', ' ') + "!";
+                    s.feedback.emit(RushEventFeed.Kind.MASTERY, "Card mastery " + reward.tier(),
+                            pickup.species.getPath().replace('_', ' ') + " · " + reward.count() + " collected. This card now earns a stronger reward.");
+                }
             }
             s.player.serverLevel().playSound(null, s.player.blockPosition(), SoundEvents.NOTE_BLOCK_CHIME.value(), SoundSource.PLAYERS, 0.25f, 1.5f);
         }
@@ -1384,6 +1476,8 @@ public final class RivalRushManager {
         long time = s.run.elapsedTicks();
         if (time - s.walls.getOrDefault(patch, time - 6001) <= 6000) return false;
         s.walls.put(patch, time);
+        // This patch is already accepted. Its XP may open a draft, so credit the goal before that pause.
+        if (s.circuit != null) contractNotice(s, s.circuit.recordContractPaint(patch, support));
         s.run.gainXp((int) Math.round(8 * s.run.flowMultiplier()));
         s.run.addScore(Math.round(60 * s.run.flowMultiplier()));
         s.objective = "Fresh wall tagged! Find another line, wall, or music stop.";
@@ -1600,6 +1694,7 @@ public final class RivalRushManager {
             state.put("Draft", RushBuildPaths.draftSnapshot(run));
             state.put("Caches", s.points.snapshot(player, run, s.circuit));
             state.put("Encounter", encounterSnapshot(s));
+            state.put("PitStop", pitStopSnapshot(s)); state.put("Feedback", s.feedback.snapshot());
             ListTag offers = new ListTag();
             for (int index = 0; index < run.offers().size(); index++) {
                 RushRun.Upgrade upgrade = run.offers().get(index);

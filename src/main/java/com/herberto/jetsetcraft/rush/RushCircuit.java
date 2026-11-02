@@ -5,6 +5,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.phys.Vec3;
 
 import java.nio.charset.StandardCharsets;
@@ -29,6 +30,7 @@ public final class RushCircuit {
     private RushArenaCatalog.Profile current;
     private BlockPos center;
     private RushArenaBuilder builder;
+    private RushArenaContract contract;
     private long beganAt, startDefeats;
 
     public RushCircuit(UUID runId, long seed, BlockPos origin, int slot) {
@@ -46,6 +48,21 @@ public final class RushCircuit {
     public RushArenaCatalog.Profile current() { return current; }
     public RushArenaBuilder builder() { return builder; }
     public List<RushArenaCatalog.Profile> choices() { return choices; }
+    public boolean contractCompleted() { return contract != null && contract.completed(); }
+    public CompoundTag contractSnapshot(Vec3 position) {
+        return contract == null ? RushArenaCatalog.ContractSpec.NONE.summary() : contract.snapshot(position);
+    }
+    boolean tickContract(ServerPlayer player, RushRun run, RushMotionTracker.Step motion) {
+        return phase == Phase.ARENA && contract != null && contract.tick(player, motion, builder, run.elapsedTicks());
+    }
+    boolean recordContractPaint(String patch, BlockPos support) {
+        return phase == Phase.ARENA && contract != null && support.getY() >= RushWorld.FLOOR_Y
+                && support.getY() <= RushWorld.FLOOR_Y + 8
+                && Math.abs((long) support.getX() - center.getX()) <= current.radius()
+                && Math.abs((long) support.getZ() - center.getZ()) <= current.radius() && contract.paint(patch);
+    }
+    boolean recordContractHunt() { return phase == Phase.ARENA && contract != null && contract.hunt(); }
+    void pauseContract() { if (contract != null) contract.pause(); }
     public long activeTicks(RushRun run) { return phase == Phase.ARENA ? Math.max(0, run.elapsedTicks() - beganAt) : 0; }
     public long defeats(RushRun run) { return Math.max(0, run.defeats() - startDefeats); }
     public boolean inCell(Vec3 pos) { return Math.abs(pos.x - origin.getX()) <= 1536 && Math.abs(pos.z - origin.getZ()) <= 1536; }
@@ -70,12 +87,14 @@ public final class RushCircuit {
         current = profile;
         center = previous.offset(branch * 128, 0, 128);
         builder = new RushArenaBuilder(profile, previous, center);
+        contract = new RushArenaContract(profile, center, rewardId());
         phase = Phase.TRAVEL;
         choices = List.of(); version++;
     }
     public boolean arrive(RushRun run, Vec3 position) {
         if (phase != Phase.TRAVEL || builder == null || !builder.readyForEntry() || !inArena(position, -6)) return false;
         phase = Phase.ARENA; beganAt = run.elapsedTicks(); startDefeats = run.defeats(); version++;
+        if (contract != null) contract.begin();
         return true;
     }
     public boolean objectiveMet(RushRun run) {
@@ -88,6 +107,7 @@ public final class RushCircuit {
     public boolean complete(RushRun run) {
         if (!objectiveMet(run)) return false;
         CompoundTag entry = arenaSummary(current, center);
+        if (contract != null) { contract.finish(); entry.put("Contract", contract.snapshot(Vec3.atCenterOf(center))); }
         entry.putInt("Stage", completed + 1); entry.putInt("Set", set); entry.putUUID("Receipt", rewardId());
         entry.putString("Reward", current.reward().label()); entry.putBoolean("SettlementRecorded", false);
         // Completion does not itself assert a banked payout. The manager records the actual settled deltas.
@@ -119,7 +139,7 @@ public final class RushCircuit {
     }
     public boolean encore() {
         if (phase != Phase.COMPLETE || set == Integer.MAX_VALUE) return false;
-        set++; completed = 0; phase = Phase.CHOOSING; history.clear(); current = null; center = origin; builder = null; version++;
+        set++; completed = 0; phase = Phase.CHOOSING; history.clear(); current = null; center = origin; builder = null; contract = null; version++;
         offer(); return true;
     }
     private void offer() {
@@ -153,11 +173,13 @@ public final class RushCircuit {
         tag.putLong("TicksLeft", current == null ? 0 : Math.max(0, current.seconds() * 20L - activeTicks(run)));
         tag.putInt("Distance", (int) Math.sqrt(position.distanceToSqr(Vec3.atCenterOf(center))));
         tag.putString("Objective", objective(run));
+        tag.put("Contract", contractSnapshot(position));
         tag.putInt("OriginX", 0); tag.putInt("OriginZ", 0); tag.putInt("MapScaleBlocks", 128);
         // A cleared room already exists in History. It must not appear again as a new/current destination.
         if (current != null && (phase == Phase.TRAVEL || phase == Phase.ARENA)) {
             CompoundTag destination = arenaSummary(current, center);
             destination.putInt("Stage", completed + 1); destination.putInt("Set", set);
+            destination.put("Contract", contractSnapshot(position));
             tag.put("Current", destination);
         }
         ListTag choiceTags = new ListTag();

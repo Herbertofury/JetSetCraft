@@ -62,16 +62,21 @@ public final class RushCacheGameTests {
         CompoundTag damage = cache(preview, "damage");
         move(fixture.player, position(damage));
         pulse(points, fixture);
-        check(fixture.run.rank(RushRun.Upgrade.FORCE) == 0, "An uncharged cache granted power");
+        check(fixture.run.rank(RushRun.Upgrade.FORCE) == 0 && points.pollClaim() == null, "An uncharged cache granted power or success feedback");
         for (int defeat = 0; defeat < 3; defeat++) fixture.run.recordDefeat();
         pulse(points, fixture);
         check(fixture.run.rank(RushRun.Upgrade.FORCE) == 1
                         && cache(points.snapshot(fixture.player, fixture.run, fixture.route), "damage").getInt("CooldownTicks") > 0,
                 "A charged physical cache did not grant and cool down its actual run reward");
+        RushPointsOfInterest.Claim accepted = points.pollClaim();
+        check(accepted != null && accepted.reward() == RushArenaCatalog.Reward.DAMAGE
+                        && accepted.result().contains("Paint pressure") && points.pollClaim() == null,
+                "An actual cache claim did not expose exactly one typed accepted reward for feedback");
         points.tick(fixture.player, fixture.run, fixture.route);
         for (int defeat = 0; defeat < 3; defeat++) fixture.run.recordDefeat();
         pulse(points, fixture);
-        check(fixture.run.rank(RushRun.Upgrade.FORCE) == 1, "The same cache paid twice before cooldown");
+        check(fixture.run.rank(RushRun.Upgrade.FORCE) == 1 && points.pollClaim() == null,
+                "The same cache paid or reported another success before cooldown");
         CompoundTag magnet = cache(points.snapshot(fixture.player, fixture.run, fixture.route), "magnet");
         move(fixture.player, position(magnet)); pulse(points, fixture);
         check(fixture.run.rank(RushRun.Upgrade.PICKUP) == 1 && fixture.run.pickupRadius() == 128

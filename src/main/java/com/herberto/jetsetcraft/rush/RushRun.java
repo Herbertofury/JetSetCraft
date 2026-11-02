@@ -1,5 +1,6 @@
 package com.herberto.jetsetcraft.rush;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.EnumMap;
@@ -79,14 +80,22 @@ public final class RushRun {
     private final EnumMap<Upgrade, Integer> ranks = new EnumMap<>(Upgrade.class);
     private final EnumSet<Upgrade> banishedDrafts = EnumSet.noneOf(Upgrade.class);
     private final EnumMap<RushBuildPaths.Evolution, Long> evolutionProcs = new EnumMap<>(RushBuildPaths.Evolution.class);
+    private final EnumSet<RushPitStop.Service> pitStopUsed = EnumSet.noneOf(RushPitStop.Service.class);
     private boolean endless;
     private boolean awaitingEncore;
     private boolean finished;
     private boolean startingPerkGranted;
     private boolean circuit;
     private boolean spellRelayAvailable;
-    private boolean remixReady;
+    private boolean pitStopOpen;
     private boolean buildOpportunity;
+    private UUID pitStopReceipt;
+    private int pitStopCredits;
+    private int pitStopEarned;
+    private long lastPitStopClear;
+    private long contractClears;
+    private long pitStopServicesUsed;
+    private RushPitStop.Result lastPitStopResult = RushPitStop.Result.empty();
     private RushBuildPaths.Evolution selectedEvolution = RushBuildPaths.Evolution.NONE;
     private int rerolls = MAX_REROLLS;
     private int banishes = MAX_BANISHES;
@@ -167,7 +176,15 @@ public final class RushRun {
     public int artifactCount() { return (int) ranks.keySet().stream().filter(u -> u.artifact() && rank(u) > 0).count(); }
     public double lineCharge() { return lineCharge; }
     public double lineChargeMax() { return 24.0D; }
-    public boolean remixReady() { return remixReady && !finished; }
+    public boolean remixReady() { return pitStopAvailable() && !pitStopUsed(RushPitStop.Service.REMIX); }
+    public boolean pitStopAvailable() { return pitStopOpen && !finished && pitStopCredits > 0; }
+    public int pitStopCredits() { return pitStopCredits; }
+    public int pitStopEarned() { return pitStopEarned; }
+    public UUID pitStopReceipt() { return pitStopReceipt; }
+    public boolean pitStopUsed(RushPitStop.Service service) { return service != null && pitStopUsed.contains(service); }
+    public RushPitStop.Result lastPitStopResult() { return lastPitStopResult; }
+    public long contractClears() { return contractClears; }
+    public long pitStopServicesUsed() { return pitStopServicesUsed; }
     public int rerollsRemaining() { return rerolls; }
     public int banishesRemaining() { return banishes; }
     public Set<Upgrade> banishedDraftUpgrades() { return Set.copyOf(banishedDrafts); }
@@ -307,12 +324,63 @@ public final class RushRun {
         return 1.35D + rank(Upgrade.BATTERY) * .15D;
     }
 
-    /** A completed circuit room supplies one optional replacement, never a stockpile of future rerolls. */
+    /**
+     * Opens the one shared service budget after the manager's actual, once-only room settlement.
+     * The monotonic clear ordinal and canonical receipt reject old clears without retaining a UUID ledger.
+     */
+    public boolean openPitStop(UUID receipt, boolean bonus) {
+        if (!circuit || finished || receipt == null || arenaClears <= lastPitStopClear || arenaClears <= 0) return false;
+        long set = (arenaClears - 1) / 6 + 1;
+        if (set > Integer.MAX_VALUE) return false;
+        long room = (arenaClears - 1) % 6;
+        UUID expected = UUID.nameUUIDFromBytes((id + ":arena:" + set + ":" + room).getBytes(StandardCharsets.UTF_8));
+        if (!expected.equals(receipt)) return false;
+        lastPitStopClear = arenaClears;
+        if (bonus) contractClears = saturatingAdd(contractClears, 1);
+        beginPitStop(receipt, bonus ? 2 : 1);
+        return true;
+    }
+
+    /** Departure consumes no reward, but invalidates even a fully spent stop's queued lifecycle intents. */
+    public void closePitStop() {
+        if (!pitStopOpen) return;
+        pitStopOpen = false; pitStopCredits = 0;
+        offerVersion = nextVersion();
+    }
+
+    public boolean canTune(Upgrade upgrade) { return upgrade != null && rank(upgrade) > 0 && canAdvance(upgrade); }
+
+    /** The manager also requires the owning run and a between-arena decision window. */
+    public RushPitStop.Result takePitStop(RushPitStop.Service service, Upgrade upgrade, int revision) {
+        if (revision != offerVersion) return RushPitStop.Result.rejected(service, "The Pit Stop changed; use its current choices.");
+        if (hasOffer()) return RushPitStop.Result.rejected(service, "Finish the earned upgrade draft first.");
+        String unavailable = RushPitStop.unavailableReason(this, service);
+        if (!unavailable.isEmpty()) return RushPitStop.Result.rejected(service, unavailable);
+        if (service == RushPitStop.Service.REMIX)
+            return RushPitStop.Result.rejected(service, "Choose both artifact families in Remix.");
+        if (service == RushPitStop.Service.TUNE && !canTune(upgrade))
+            return RushPitStop.Result.rejected(service, "Choose an owned upgrade with another available rank.");
+        if (service != RushPitStop.Service.TUNE && upgrade != null)
+            return RushPitStop.Result.rejected(service, "This service does not take an upgrade target.");
+        RushPitStop.Before before = RushPitStop.observe(this, upgrade);
+        String effect = service == RushPitStop.Service.TUNE ? RushBuildPaths.nextRankDescription(this, upgrade) : "";
+        switch (service) {
+            case TUNE -> advanceRank(upgrade);
+            case PATCH -> { heal(maxVitality() * .4D); restoreWard(maxWard() * .5D); }
+            case REWIND -> { rerolls = Math.min(MAX_REROLLS, rerolls + 1); banishes = Math.min(MAX_BANISHES, banishes + 1); }
+            default -> throw new IllegalStateException("Unknown Pit Stop service");
+        }
+        return completePitStop(service, upgrade, null, before, effect);
+    }
+
+    /**
+     * Trusted legacy model entry point. It opens the same one-service budget, never a separate remix balance.
+     * Production room settlement uses openPitStop with the actual clear receipt instead.
+     */
     public void grantRemix() {
         if (circuit && !finished) {
-            remixReady = true;
-            // Also invalidates a queued remix from an earlier room, even if no XP draft intervened.
-            offerVersion = nextVersion();
+            UUID receipt = UUID.nameUUIDFromBytes((id + ":legacy-remix:" + nextVersion()).getBytes(StandardCharsets.UTF_8));
+            beginPitStop(receipt, 1);
         }
     }
 
@@ -320,6 +388,7 @@ public final class RushRun {
         if (!remixReady() || hasOffer() || version != offerVersion || source == null || !source.artifact()
                 || rank(source) <= 0 || !artifactAvailable(replacement) || source == replacement || rank(replacement) > 0
                 || rank(source) > replacement.maxRank()) return false;
+        RushPitStop.Before before = RushPitStop.observe(this, source);
         int preserved = rank(source);
         ranks.remove(source); ranks.put(replacement, preserved);
         if (source == Upgrade.BATTERY) lineCharge = 0;
@@ -328,19 +397,38 @@ public final class RushRun {
         if (source == Upgrade.WARD) ward = 0;
         if (source == Upgrade.TEMPO) tempoTicks = 0;
         if (replacement == Upgrade.WARD) { ward = maxWard(); wardLastHit = elapsedTicks; }
-        remixReady = false;
-        offerVersion = nextVersion();
+        completePitStop(RushPitStop.Service.REMIX, replacement, source, before, "");
         return true;
+    }
+
+    private void beginPitStop(UUID receipt, int earned) {
+        pitStopOpen = true; pitStopReceipt = receipt; pitStopCredits = earned; pitStopEarned = earned;
+        pitStopUsed.clear(); lastPitStopResult = RushPitStop.Result.empty();
+        offerVersion = nextVersion();
+    }
+
+    private RushPitStop.Result completePitStop(RushPitStop.Service service, Upgrade target, Upgrade source,
+                                              RushPitStop.Before before, String effect) {
+        pitStopUsed.add(service); pitStopCredits--;
+        pitStopServicesUsed = saturatingAdd(pitStopServicesUsed, 1);
+        offerVersion = nextVersion();
+        lastPitStopResult = RushPitStop.accepted(this, service, target, source, before, effect);
+        return lastPitStopResult;
+    }
+
+    /** Checked callers grant exactly one rank, including a paid Tune during the final-room Encore pause. */
+    private void advanceRank(Upgrade upgrade) {
+        double oldWardMax = maxWard();
+        ranks.put(upgrade, rank(upgrade) + 1);
+        if (upgrade == Upgrade.VITALITY) heal(12);
+        if (upgrade == Upgrade.WARD) ward = Math.min(maxWard(), ward + maxWard() - oldWardMax);
     }
 
     /** Server-earned arena/POI reward. Full builds receive useful score instead of an unusable rank. */
     public boolean grantReward(Upgrade upgrade) {
         if (finished || awaitingEncore || upgrade == null) return false;
         if (!canAdvance(upgrade)) { addScore(250); heal(5); return false; }
-        double oldWardMax = maxWard();
-        ranks.put(upgrade, rank(upgrade) + 1);
-        if (upgrade == Upgrade.VITALITY) heal(12);
-        if (upgrade == Upgrade.WARD) ward = Math.min(maxWard(), ward + maxWard() - oldWardMax);
+        advanceRank(upgrade);
         if (hasOffer()) refreshOffer();
         return true;
     }
@@ -423,8 +511,8 @@ public final class RushRun {
     }
 
     public void finish() {
+        closePitStop();
         finished = true;
-        remixReady = false;
         awaitingEncore = false;
         offers = List.of();
     }

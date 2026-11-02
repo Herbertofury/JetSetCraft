@@ -34,12 +34,12 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * Opt-in acceptance through the real client, production network and integrated server.
  * Enable only with -Djetsetcraft.rushVisualAudit=true against the disposable RivalRushAudit save.
- * Screens use actual production state. The appended progression audit explicitly logs its guarded
- * owned-hit and active-clock fixtures; no offer, evolution, boss victory or receipt is assigned.
+ * Screens use actual production state. The appended progression and contract audits explicitly log
+ * guarded owned-hit, authored-wall and active-clock fixtures; no offer, rank, credit or receipt is assigned.
  */
 @Mod.EventBusSubscriber(modid = JetSetCraft.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
 public final class RivalRushVisualAudit {
-    private static final long DEADLINE_NANOS = 240_000_000_000L;
+    private static final long DEADLINE_NANOS = 360_000_000_000L;
     private static final byte[] PNG = {(byte) 137, 80, 78, 71, 13, 10, 26, 10};
     private static final String STAMP = Long.toString(System.currentTimeMillis());
     private static final Map<String, Path> CAPTURES = new ConcurrentHashMap<>();
@@ -80,7 +80,7 @@ public final class RivalRushVisualAudit {
         }
         if (started == 0L) started = System.nanoTime();
         if (System.nanoTime() - started > DEADLINE_NANOS) {
-            finish(minecraft, false, "240-second deadline exceeded in phase " + phase);
+            finish(minecraft, false, "360-second deadline exceeded in phase " + phase);
             return;
         }
         if (captureFailure != null) { finish(minecraft, false, captureFailure); return; }
@@ -249,7 +249,12 @@ public final class RivalRushVisualAudit {
             case 12 -> {
                 if (!RushProgressionVisualAudit.advance(minecraft, label -> capture(minecraft, label), CAPTURES::containsKey)) return;
                 if (CAPTURES.size() != 19) { finish(minecraft, false, "expected nineteen completed Rush, Crew, Activity and Progression PNG captures"); return; }
-                finish(minecraft, true, "nineteen real-client captures; original fifteen preserved; actual recipe requirements, earned draft steering, live headliner tell and reopened saved debrief; inventory/XP/dimension restored; arena arrival and progression owned-hit/clock fixtures are explicitly logged, not human traversal/duration or boss-clear proof");
+                next(13);
+            }
+            case 13 -> {
+                if (!RushContractVisualAudit.advance(minecraft, label -> capture(minecraft, label), CAPTURES::containsKey)) return;
+                if (CAPTURES.size() != 23) { finish(minecraft, false, "expected twenty-three completed native PNG captures"); return; }
+                finish(minecraft, true, "twenty-three real-client captures; original nineteen preserved; actual PAINT briefing/progress, normally settled room/contract service budget, accepted TUNE packet and result; inventory/XP/dimension restored; owned-hit, authored-wall, arrival and clock fixtures explicitly logged, not human traversal/duration or boss-clear proof");
             }
             default -> finish(minecraft, false, "unknown audit phase");
         }

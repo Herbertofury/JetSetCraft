@@ -14,5 +14,9 @@
     "accent": "minecraft:emerald_block",
     "wall": "minecraft:green_terracotta",
     "rail": "minecraft:mossy_stone_brick_wall"
+  },
+  "contract": {
+    "type": "relay",
+    "target": 3
   }
 }

@@ -142,7 +142,15 @@ jobs:
             'JETSETCRAFT_GAMETEST_PASS rush_tagger_cover' \
             'JETSETCRAFT_GAMETEST_PASS rush_headliner_victory' \
             'JETSETCRAFT_GAMETEST_PASS rush_headliner_arena_gate' \
-            'JETSETCRAFT_GAMETEST_PASS rush_headliner_recovery'; do
+            'JETSETCRAFT_GAMETEST_PASS rush_headliner_recovery' \
+            'JETSETCRAFT_GAMETEST_PASS rush_contract_catalogue' \
+            'JETSETCRAFT_GAMETEST_PASS rush_contract_relay' \
+            'JETSETCRAFT_GAMETEST_PASS rush_contract_paint' \
+            'JETSETCRAFT_GAMETEST_PASS rush_contract_hunt' \
+            'JETSETCRAFT_GAMETEST_PASS rush_pit_stop_runtime' \
+            'JETSETCRAFT_GAMETEST_PASS rush_pit_stop_rules' \
+            'JETSETCRAFT_GAMETEST_PASS rush_pit_stop_effects' \
+            'JETSETCRAFT_GAMETEST_PASS rush_pit_stop_snapshots'; do
             grep -Fq "$marker" "$log" || { echo "::error::Missing GameTest marker: $marker"; exit 1; }
           done
           expected_tests=$(python -c "import pathlib,re; print(sum(len(re.findall(r'@GameTest\\s*\\(', p.read_text()) ) for p in pathlib.Path('src/main/java/com/herberto/jetsetcraft/gametest').glob('*.java')))")
@@ -252,7 +260,7 @@ jobs:
           }
           trap collect_client_captures EXIT
           log=build/verification/rush-client.log
-          timeout 300s xvfb-run -a -s '-screen 0 1280x720x24' ./gradlew runClient -Djetsetcraft.rushVisualAudit=true --no-daemon 2>&1 | tee "$log"
+          timeout 450s xvfb-run -a -s '-screen 0 1280x720x24' ./gradlew runClient -Djetsetcraft.rushVisualAudit=true --no-daemon 2>&1 | tee "$log"
           grep -Fq 'JETSETCRAFT_RUSH_VISUAL_AUDIT_PASS' "$log"
           grep -Fq 'JETSETCRAFT_CREW_VISUAL_AUDIT_PASS' "$log"
           grep -Fq 'JETSETCRAFT_ACTIVITY_VISUAL_AUDIT_PASS' "$log"
@@ -260,11 +268,16 @@ jobs:
           grep -Fq 'JETSETCRAFT_PROGRESSION_VISUAL_AUDIT_PASS' "$log"
           grep -Fq 'JETSETCRAFT_PROGRESSION_AUDIT_CLOCK_FIXTURE' "$log"
           grep -Fq 'JETSETCRAFT_PROGRESSION_AUDIT_DEBRIEF_OBSERVED' "$log"
+          grep -Fq 'JETSETCRAFT_CONTRACT_VISUAL_AUDIT_PASS' "$log"
+          grep -Fq 'JETSETCRAFT_CONTRACT_AUDIT_BRIEFING_OBSERVED' "$log"
+          grep -Fq 'JETSETCRAFT_CONTRACT_AUDIT_PROGRESS_OBSERVED' "$log"
+          grep -Fq 'JETSETCRAFT_CONTRACT_AUDIT_PIT_STOP_OBSERVED' "$log"
+          grep -Fq 'JETSETCRAFT_CONTRACT_AUDIT_SERVICE_OBSERVED' "$log"
           if grep -Fq 'JETSETCRAFT_RUSH_VISUAL_AUDIT_FAIL' "$log"; then
             echo '::error::Rival Rush client audit reported failure.'
             exit 1
           fi
-          for capture in 01-setup 02-district-hud 03-album 04-return-result 05-crew-home 06-crew-roster 07-crew-facilities 08-crew-jobs 09-activities 10-arena-route 11-journey-map 12-run-build 13-crew-progress 14-cache-scout 15-style-library 16-build-paths 17-draft-agency 18-headliner-tell 19-run-debrief; do
+          for capture in 01-setup 02-district-hud 03-album 04-return-result 05-crew-home 06-crew-roster 07-crew-facilities 08-crew-jobs 09-activities 10-arena-route 11-journey-map 12-run-build 13-crew-progress 14-cache-scout 15-style-library 16-build-paths 17-draft-agency 18-headliner-tell 19-run-debrief 20-contract-briefing 21-contract-progress 22-pit-stop 23-service-result; do
             grep -Fq "JETSETCRAFT_RUSH_VISUAL_AUDIT_CAPTURE $capture " "$log"
             compgen -G "run/screenshots/rival-rush-*-$capture.png" >/dev/null
           done
