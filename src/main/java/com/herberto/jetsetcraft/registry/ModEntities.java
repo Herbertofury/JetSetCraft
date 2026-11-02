@@ -3,6 +3,7 @@ package com.herberto.jetsetcraft.registry;
 import com.herberto.jetsetcraft.JetSetCraft;
 import com.herberto.jetsetcraft.entity.GraffitiEntity;
 import com.herberto.jetsetcraft.entity.PaintBalloonEntity;
+import com.herberto.jetsetcraft.entity.LibertyTransportEntity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraftforge.registries.DeferredRegister;
@@ -25,6 +26,11 @@ public final class ModEntities {
                     .clientTrackingRange(8)
                     .updateInterval(10)
                     .build("jetsetcraft:paint_balloon"));
+
+    public static final RegistryObject<EntityType<LibertyTransportEntity>> LIBERTY_TRANSPORT = ENTITIES.register("liberty_transport",
+            () -> EntityType.Builder.<LibertyTransportEntity>of(LibertyTransportEntity::new, MobCategory.MISC)
+                    .sized(2.4F, 3.2F).clientTrackingRange(12).updateInterval(1).fireImmune()
+                    .build("jetsetcraft:liberty_transport"));
 
     private ModEntities() {}
 }
