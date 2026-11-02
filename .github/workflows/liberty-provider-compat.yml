@@ -9,6 +9,7 @@ on:
       - "gradle/wrapper/**"
       - "src/main/**"
       - "tools/prepare_liberty_pack.py"
+      - "tools/prepare_liberty_helldivers.py"
       - "tools/stop_smoke_server.py"
       - ".github/workflows/liberty-provider-compat.yml"
   pull_request:
@@ -18,6 +19,7 @@ on:
       - "gradle/wrapper/**"
       - "src/main/**"
       - "tools/prepare_liberty_pack.py"
+      - "tools/prepare_liberty_helldivers.py"
       - "tools/stop_smoke_server.py"
       - ".github/workflows/liberty-provider-compat.yml"
   workflow_dispatch:
@@ -31,7 +33,7 @@ concurrency:
 
 jobs:
   liberty:
-    name: ${{ matrix.lane }} / TaCZ 1.1.8-hotfix2
+    name: ${{ matrix.lane }} / TaCZ 1.1.8-hotfix2 / MCDivers ${{ matrix.helldivers }}
     runs-on: ubuntu-latest
     timeout-minutes: 45
     strategy:
@@ -40,10 +42,13 @@ jobs:
         include:
           - lane: full-provider
             pack: "true"
+            helldivers: "true"
           - lane: missing-pack
             pack: "false"
+            helldivers: "false"
     env:
       LIBERTY_PACK_EXPECTED: ${{ matrix.pack }}
+      LIBERTY_HELLDIVERS: ${{ matrix.helldivers }}
 
     steps:
       - name: Check out sources into a fresh test workspace
@@ -74,6 +79,8 @@ jobs:
           set -euo pipefail
           python tools/prepare_liberty_pack.py 2>&1 | tee "$RUNNER_TEMP/liberty-pack.log"
           python tools/prepare_liberty_pack.py --verify-only 2>&1 | tee -a "$RUNNER_TEMP/liberty-pack.log"
+          python tools/prepare_liberty_helldivers.py 2>&1 | tee "$RUNNER_TEMP/liberty-helldivers.log"
+          python tools/prepare_liberty_helldivers.py --verify-only 2>&1 | tee -a "$RUNNER_TEMP/liberty-helldivers.log"
 
       - name: Verify intentional absence of the Helldivers pack
         if: matrix.pack == 'false'
@@ -93,14 +100,14 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          ./gradlew clean build -PlibertyTacz=true -PlibertyPackExpected="$LIBERTY_PACK_EXPECTED" --no-daemon \
+          ./gradlew clean build -PlibertyTacz=true -PlibertyHelldivers="$LIBERTY_HELLDIVERS" -PlibertyPackExpected="$LIBERTY_PACK_EXPECTED" --no-daemon \
             2>&1 | tee "$RUNNER_TEMP/liberty-build.log"
 
       - name: Record resolved runtime dependencies
         shell: bash
         run: |
           set -euo pipefail
-          ./gradlew dependencies --configuration runtimeClasspath -PlibertyTacz=true \
+          ./gradlew dependencies --configuration runtimeClasspath -PlibertyTacz=true -PlibertyHelldivers="$LIBERTY_HELLDIVERS" \
             -PlibertyPackExpected="$LIBERTY_PACK_EXPECTED" --no-daemon \
             2>&1 | tee "$RUNNER_TEMP/liberty-dependencies.log"
 
@@ -108,7 +115,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          timeout 600s ./gradlew runGameTestServer -PlibertyTacz=true \
+          timeout 600s ./gradlew runGameTestServer -PlibertyTacz=true -PlibertyHelldivers="$LIBERTY_HELLDIVERS" \
             -PlibertyPackExpected="$LIBERTY_PACK_EXPECTED" --no-daemon \
             2>&1 | tee "$RUNNER_TEMP/liberty-gametest.log"
           python - <<'PY'
@@ -131,20 +138,43 @@ jobs:
                       for name in ('mural', 'radio', 'courier', 'cache_supply', 'extraction', 'war_map')]
           markers += [f'JETSETCRAFT_LIBERTY_RESEARCH_PASS liberty_research_{name}'
                       for name in ('settlement', 'purchase', 'rush', 'schema', 'caps')]
+          markers += [f'JETSETCRAFT_GAMETEST_PASS liberty_stratagem_catalog native={os.environ["LIBERTY_HELLDIVERS"]} selectable=100 conditional=25']
+          markers += [f'JETSETCRAFT_GAMETEST_PASS liberty_stratagem_{name}' for name in ('resources', 'effects', 'equipment')]
+          markers += ['JETSETCRAFT_LIBERTY_ARMORY_PASS liberty_armory_schema_selection']
+          markers += ['JETSETCRAFT_LIBERTY_PACKET_PASS liberty_loadout_native_codec_actions']
           if expected == 'true':
               markers += [f'JETSETCRAFT_GAMETEST_PASS liberty_tacz_{name}'
                           for name in ('loadout', 'resupply', 'reload', 'combat')]
+              markers += ['JETSETCRAFT_GAMETEST_PASS liberty_mcdivers_native',
+                          'JETSETCRAFT_LIBERTY_MOB_SAFETY_PASS native_home_actors_callbacks_reinforcements_conversion_raid_return',
+                          'JETSETCRAFT_GAMETEST_PASS liberty_tacz_home_safety native_fire_explosion_potion_arrow_practice_target_chest_return',
+                          'JETSETCRAFT_LIBERTY_ARMORY_PASS liberty_armory_all_pack_guns count=68',
+                          'JETSETCRAFT_LIBERTY_ARMORY_PASS liberty_armory_resupply',
+                          'JETSETCRAFT_LIBERTY_ARMORY_PASS liberty_armory_armor']
               markers += [f'JETSETCRAFT_LIBERTY_RUNTIME_PASS liberty_runtime_{name}'
                           for name in ('abort_death_disconnect', 'action_identity', 'future_research_recovery',
                                        'serialized_rejoin', 'full_extraction')]
+              markers += [f'JETSETCRAFT_LIBERTY_CAMPAIGN_RUNTIME_PASS liberty_campaign_native_{name}'
+                          for name in ('director_caps', 'tacz_core', 'floor_turf', 'home_preservation', 'ship_redeploy_return', 'stratagem_lifecycle')]
               if 'JETSETCRAFT_GAMETEST_SKIP liberty_tacz_' in log or 'JETSETCRAFT_LIBERTY_RUNTIME_SKIP' in log:
                   raise SystemExit('The full-provider lane must execute its required native tests without skipping')
+              if re.search(r'JETSETCRAFT_GAMETEST_SKIP liberty_(?:mcdivers|armory)', log):
+                  raise SystemExit('The full-provider lane must execute native call-in and complete armory tests')
+              if 'JETSETCRAFT_LIBERTY_CAMPAIGN_RUNTIME_SKIP' in log:
+                  raise SystemExit('The full-provider lane must execute each actual campaign lifecycle fixture')
           else:
               markers += [f'JETSETCRAFT_GAMETEST_SKIP liberty_tacz_{name} optional-provider-or-pack-absent'
                           for name in ('loadout', 'resupply', 'reload', 'combat')]
+              markers += ['JETSETCRAFT_GAMETEST_SKIP liberty_mcdivers_native optional-provider-absent']
+              markers += [f'JETSETCRAFT_GAMETEST_SKIP {name} optional-provider-or-pack-absent'
+                          for name in ('liberty_tacz_home_safety', 'liberty_mob_home_safety', 'liberty_armory_all_pack_guns',
+                                       'liberty_armory_resupply', 'liberty_armory_armor')]
               for name in ('lifecycle', 'action_identity', 'future_research_recovery', 'serialized_rejoin', 'extraction'):
                   if not re.search(rf'JETSETCRAFT_LIBERTY_RUNTIME_SKIP {name} .*expectedPack=false', log):
                       raise SystemExit(f'The intentional missing-pack lane did not record native skip: {name}')
+              for name in ('director_pressure', 'native_base_cores', 'native_turf', 'home_world_safety', 'ship_redeploy', 'stratagem_lifecycle'):
+                  if not re.search(rf'JETSETCRAFT_LIBERTY_CAMPAIGN_RUNTIME_SKIP {name} .*optional-provider-or-pack-absent', log):
+                      raise SystemExit(f'The intentional missing-pack lane did not record campaign skip: {name}')
               if re.search(r'JETSETCRAFT_GAMETEST_PASS liberty_tacz_(?:loadout|resupply|reload|combat)', log):
                   raise SystemExit('The missing-pack lane unexpectedly admitted native Helldivers content')
           missing = [marker for marker in markers if marker not in log]
@@ -164,7 +194,7 @@ jobs:
           printf 'server-ip=127.0.0.1\nenable-rcon=true\nrcon.port=25575\nrcon.password=%s\nbroadcast-rcon-to-ops=false\n' \
             "$JETSETCRAFT_SMOKE_RCON_PASSWORD" > run/server.properties
           log="$RUNNER_TEMP/liberty-server-smoke.log"
-          setsid ./gradlew runServer -PlibertyTacz=true -PlibertyPackExpected=true --no-daemon > "$log" 2>&1 &
+          setsid ./gradlew runServer -PlibertyTacz=true -PlibertyHelldivers=true -PlibertyPackExpected=true --no-daemon > "$log" 2>&1 &
           server_pid=$!
           cleanup_failed_server() {
             if kill -0 "$server_pid" 2>/dev/null; then
@@ -181,7 +211,8 @@ jobs:
             if grep -Eiq 'ModLoadingException|Failed to complete lifecycle event|Exception in thread "main"|FATAL.*jetsetcraft|Encountered an unexpected exception' "$log"; then
               break
             fi
-            if grep -Eq 'Done \([0-9.]+s\)!' "$log"; then
+            if grep -Eq 'Done \([0-9.]+s\)!' "$log" && \
+                grep -Fq 'JETSETCRAFT_LIBERTY_PROVIDER_STATUS tacz=true pack=true native_guard=true mcdivers_installed=true mcdivers_ready=true home_guard=true' "$log"; then
               ready=1
               break
             fi
@@ -189,7 +220,7 @@ jobs:
           done
           if [[ "$ready" -ne 1 ]]; then
             tail -n 100 "$log"
-            echo '::error::Full-provider dedicated server did not reach a healthy ready state.'
+            echo '::error::Full-provider dedicated server did not reach readiness with its actual native guard and content loaded.'
             exit 1
           fi
           python tools/stop_smoke_server.py 2>&1 | tee "$RUNNER_TEMP/liberty-rcon-stop.log"
@@ -232,18 +263,22 @@ jobs:
           test -s run/saves/LibertyGrindAudit/level.dat
           log="$RUNNER_TEMP/liberty-client.log"
           timeout 450s xvfb-run -a -s '-screen 0 1280x720x24' ./gradlew runClient \
-            -PlibertyTacz=true -PlibertyPackExpected=true -Djetsetcraft.libertyVisualAudit=true --no-daemon \
+            -PlibertyTacz=true -PlibertyHelldivers=true -PlibertyPackExpected=true \
+            -Djetsetcraft.libertyVisualAudit=true -Djetsetcraft.libertyCampaignVisualAudit=true --no-daemon \
             2>&1 | tee "$log"
           grep -Fq 'JETSETCRAFT_LIBERTY_VISUAL_AUDIT_PASS' "$log"
+          grep -Fq 'JETSETCRAFT_LIBERTY_CAMPAIGN_VISUAL_PASS captures=19 ' "$log"
           grep -Fq 'JETSETCRAFT_LIBERTY_VISUAL_AUDIT_FIXTURE' "$log"
           if grep -Fq 'JETSETCRAFT_LIBERTY_VISUAL_AUDIT_FAIL' "$log"; then
             echo '::error::The native Liberty client audit reported a failure.'
             exit 1
           fi
-          for capture in 01-war-map-default 02-district-default 03-research-default 04-project-default \
-              05-hud-default 06-war-map-minimum 07-research-minimum 08-project-minimum \
-              09-project-scroll-minimum 10-hud-minimum 11-district-minimum 12-live-pod \
-              13-live-gun-hud 14-live-mission-minimum 15-returned-war-map; do
+          for capture in 01-campaign-war-map-default 02-campaign-plan-default 03-callin-catalog-default \
+              04-chromageddon-equipped-default 05-armory-all-weapons-default 06-armor-heavy-minimum \
+              07-armory-weapon-search-minimum 08-campaign-war-map-minimum 09-campaign-plan-minimum \
+              10-loadout-review-minimum 10b-loadout-review-scroll-minimum 11-loadout-review-default \
+              12-live-pod 13-selected-native-gun-hud 14-chromageddon-paint-blast 15-field-progress-minimum \
+              16-ship-hardware-minimum 17-walkable-ship-deck 18-returned-home-map; do
             grep -Fq "JETSETCRAFT_LIBERTY_VISUAL_AUDIT_CAPTURE $capture " "$log"
             compgen -G "run/screenshots/liberty-grind-*-$capture.png" >/dev/null
           done
@@ -270,7 +305,7 @@ jobs:
                       raise SystemExit(f'Native capture is not a PNG: {path}')
                   width, height = picture.size
                   picture.verify()
-              label = re.search(r'-(\d{2}-[^.]+)\.png$', path.name).group(1)
+              label = re.search(r'-(\d{2}[a-z]?-[^.]+)\.png$', path.name).group(1)
               captures.append({'file': path.name, 'label': label, 'width': width, 'height': height,
                                'bytes': path.stat().st_size, 'sha256': hashlib.sha256(path.read_bytes()).hexdigest(),
                                'capture_marker_observed': label in observed})
@@ -279,10 +314,13 @@ jobs:
           output.write_text(json.dumps({
               'source_commit': os.environ.get('GITHUB_SHA', ''),
               'world': 'LibertyGrindAudit', 'tacz': '1.1.8-hotfix2', 'helldivers_file': 9341504,
+              'mcdivers': '1.0.3', 'mcdivers_file': 9307472,
               'audit_pass_marker': 'JETSETCRAFT_LIBERTY_VISUAL_AUDIT_PASS' in log,
+              'campaign_pass_marker': 'JETSETCRAFT_LIBERTY_CAMPAIGN_VISUAL_PASS captures=19 ' in log,
               'audit_failure_marker': 'JETSETCRAFT_LIBERTY_VISUAL_AUDIT_FAIL' in log,
               'capture_count': len(captures), 'captures': captures,
-              'scope': 'Native activity handoff, default/minimum UI, live pod and loan weapon, early return. '
+              'scope': 'Native campaign planning, complete armory/search/armor, four-slot review at default/minimum size, '
+                       'live pod and selected weapon, actual CHROMAGEDDON paint effect, field progress, walkable ship and home return. '
                        'The client audit does not simulate objective, research reward or ship extraction completion.'
           }, indent=2) + '\n')
           print(f'Recorded {len(captures)} native PNGs in {output}')
