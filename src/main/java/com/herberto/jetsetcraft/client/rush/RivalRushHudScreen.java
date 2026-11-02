@@ -44,10 +44,12 @@ final class RivalRushHudScreen extends Screen {
         return Component.literal(RivalRushHudPreferences.get().visible ? "HUD: shown" : "HUD: hidden");
     }
 
+    private int previewHeight() { return Math.max(1, height - 65); }
+
     @Override
     public void render(GuiGraphics gui, int mouseX, int mouseY, float partialTick) {
         renderBackground(gui);
-        RivalRushClient.drawHud(gui, width, height, true);
+        RivalRushClient.drawHud(gui, width, previewHeight(), true);
         gui.fill(0, height - 61, width, height, 0xC0181C20);
         gui.drawCenteredString(font, title, width / 2, height - 56, 0xFFC5ED55);
         gui.drawCenteredString(font, "Drag to move • scroll to scale • arrow keys to nudge", width / 2,
@@ -59,10 +61,11 @@ final class RivalRushHudScreen extends Screen {
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         if (super.mouseClicked(mouseX, mouseY, button)) return true;
         var preferences = RivalRushHudPreferences.get();
-        int w = Math.round(RivalRushClient.HUD_WIDTH * preferences.scale);
-        int h = Math.round(RivalRushClient.HUD_HEIGHT * preferences.scale);
+        float scale = RivalRushClient.hudScale(width, previewHeight(), true);
+        int w = Math.round(RivalRushClient.HUD_WIDTH * scale);
+        int h = Math.round(RivalRushClient.hudHeight(true) * scale);
         double x = preferences.x * Math.max(0, width - w);
-        double y = preferences.y * Math.max(0, height - h);
+        double y = preferences.y * Math.max(0, previewHeight() - h);
         if (button == 0 && mouseX >= x && mouseX <= x + w && mouseY >= y && mouseY <= y + h) {
             dragging = true;
             grabX = mouseX - x;
@@ -76,8 +79,9 @@ final class RivalRushHudScreen extends Screen {
     public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
         if (dragging && button == 0) {
             var preferences = RivalRushHudPreferences.get();
-            preferences.x = (float) ((mouseX - grabX) / Math.max(1, width - Math.round(RivalRushClient.HUD_WIDTH * preferences.scale)));
-            preferences.y = (float) ((mouseY - grabY) / Math.max(1, height - Math.round(RivalRushClient.HUD_HEIGHT * preferences.scale)));
+            float scale = RivalRushClient.hudScale(width, previewHeight(), true);
+            preferences.x = (float) ((mouseX - grabX) / Math.max(1, width - Math.round(RivalRushClient.HUD_WIDTH * scale)));
+            preferences.y = (float) ((mouseY - grabY) / Math.max(1, previewHeight() - Math.round(RivalRushClient.hudHeight(true) * scale)));
             preferences.sanitize();
             return true;
         }
