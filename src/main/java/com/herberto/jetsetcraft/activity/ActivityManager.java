@@ -10,6 +10,8 @@ import com.herberto.jetsetcraft.gang.GangChallengeController;
 import com.herberto.jetsetcraft.gang.GangRegistry;
 import com.herberto.jetsetcraft.gang.HeadGangTargetResolver;
 import com.herberto.jetsetcraft.mob.MobCompatibilityRegistry;
+import com.herberto.jetsetcraft.liberty.LibertyManager;
+import com.herberto.jetsetcraft.liberty.LibertyWorld;
 import com.herberto.jetsetcraft.network.JetSetNetwork;
 import com.herberto.jetsetcraft.registry.ModBlocks;
 import com.herberto.jetsetcraft.rush.RivalRushManager;
@@ -123,6 +125,9 @@ public final class ActivityManager {
     public static void open(ServerPlayer player) { openAt(player, null); }
     public static void openAt(ServerPlayer player, BlockPos clicked) {
         if (player == null || !budget(player)) return;
+        if (LibertyManager.active(player) || LibertyManager.hasReturn(player) || LibertyWorld.isLiberty(player.level())) {
+            LibertyManager.open(player); return;
+        }
         if (RivalRushManager.active(player) || RushReturnState.hasJournal(player)) {
             RivalRushManager.handleAction(player, "menu", "", 0, null, 0); return;
         }
@@ -140,6 +145,9 @@ public final class ActivityManager {
     /** Used by commands: the chosen mode is still an invitation, never an implicit teleport or launch. */
     public static void invite(ServerPlayer player, String modeId) {
         if (player == null || !budget(player)) return;
+        if (LibertyManager.active(player) || LibertyManager.hasReturn(player) || LibertyWorld.isLiberty(player.level())) {
+            LibertyManager.open(player); return;
+        }
         Context old = context(player);
         if (old != null && old.active()) { send(old, true); return; }
         ActivityMode selected = ActivityMode.byId(modeId).orElse(ActivityMode.RANDOM);
@@ -149,6 +157,10 @@ public final class ActivityManager {
 
     public static void handleAction(ServerPlayer player, String action, String mode, UUID contextId, int version) {
         if (player == null || !ACTIONS.contains(action)) return;
+        if (LibertyManager.active(player) || LibertyManager.hasReturn(player) || LibertyWorld.isLiberty(player.level())) {
+            if (budget(player)) LibertyManager.open(player);
+            return;
+        }
         if (action.equals("open")) { open(player); return; }
         Context c = context(player);
         if (c == null) { open(player); return; }
@@ -187,12 +199,15 @@ public final class ActivityManager {
     private static void choose(Context c, ActivityMode selected) {
         c.selected = selected;
         if (selected == ActivityMode.RANDOM) {
-            List<ActivityMode> allowed = ActivityMode.games().stream().filter(mode -> unavailable(c, mode).isEmpty()).toList();
+            List<ActivityMode> allowed = ActivityMode.games().stream().filter(mode -> unavailable(c, mode).isEmpty()
+                    && (mode != ActivityMode.LIBERTY_GRIND || LibertyManager.unavailable(c.player).isEmpty())).toList();
             c.mode = allowed.isEmpty() ? ActivityMode.TAG : allowed.get(c.player.getRandom().nextInt(allowed.size()));
             c.summary = "Random invitation: " + c.mode.label + ". Review the objective, then accept to start.";
         } else {
             c.mode = selected;
-            c.summary = selected == ActivityMode.RIVAL_RUSH
+            c.summary = selected == ActivityMode.LIBERTY_GRIND
+                    ? "Open the war map to review a district and its loadout before deploying. Research connects graffiti, crew progress and Rival Rush."
+                    : selected == ActivityMode.RIVAL_RUSH
                     ? "Enter a separate arena journey. Your normal Minecraft inventory and XP are saved for return."
                     : "Play on the nearby loaded terrain. Your normal inventory and Minecraft XP stay with you.";
         }
@@ -203,7 +218,15 @@ public final class ActivityManager {
         ServerPlayer player = c.player;
         if (!JetSetConfig.SERVER.enableStreetActivities.get()) return "Street activities are disabled by this server.";
         if (!player.isAlive() || player.isSpectator() || player.isPassenger() || player.isSleeping()) return "Stand safely, alive and outside Spectator mode.";
+        if (LibertyManager.active(player) || LibertyManager.hasReturn(player) || LibertyWorld.isLiberty(player.level()))
+            return "Return from Liberty Grind before choosing another activity.";
         if (RivalRushManager.active(player) || RushReturnState.hasJournal(player) || RushWorld.isRush(player.level())) return "Return from your current Rush before another activity.";
+        // A war-map preview and research do not need a local mob or installed weapon pack.
+        // Deployment has its own server-side dependency and mission admission checks.
+        if (mode == ActivityMode.LIBERTY_GRIND) return "";
+        if (mode == ActivityMode.RANDOM) return ActivityMode.games().stream().anyMatch(game -> unavailable(c, game).isEmpty()
+                && (game != ActivityMode.LIBERTY_GRIND || LibertyManager.unavailable(player).isEmpty()))
+                ? "" : "No activity is currently available here.";
         if (c.target == null) return "No eligible local crew is available here. Tune a Boombox with an eligible mob head.";
         var definition = GangRegistry.definitionForEntity(c.target.entityId());
         if (!MobCompatibilityRegistry.boomboxAllowed(c.target.entityId()) || definition.legendary() || !definition.boomboxEligible())
@@ -233,6 +256,11 @@ public final class ActivityManager {
                 reason = "The Boombox target changed. Reopen its menu to review the new crew.";
         }
         if (!reason.isEmpty()) { c.summary = reason; send(c, true); return; }
+        if (c.mode == ActivityMode.LIBERTY_GRIND) {
+            contexts(player.getServer()).remove(player.getUUID(), c);
+            LibertyManager.open(player);
+            return;
+        }
         if (c.mode == ActivityMode.RIVAL_RUSH) {
             // Consume the reviewed invitation before handoff; Rush's own admission guard sees no local game.
             contexts(player.getServer()).remove(player.getUUID(), c);
@@ -427,13 +455,16 @@ public final class ActivityManager {
         CrewHouseManager.ActivityReward rewards = completed ? c.reward : JetSetConfig.SERVER.enableCrewHouse.get()
                 ? CrewHouseManager.activityReward(c.mode.id) : CrewHouseManager.ActivityReward.NONE;
         out.putInt("Supplies", rewards.supplies()); out.putInt("CrewXp", rewards.crewXp()); out.putInt("Reputation", rewards.reputation());
-        out.putString("RewardSummary", !JetSetConfig.SERVER.enableCrewHouse.get() ? "Crew progression is disabled on this server."
+        out.putString("RewardSummary", c.mode == ActivityMode.LIBERTY_GRIND
+                ? "Extract samples for graffiti research and Rival Rush preparations; mission rewards also grow your crew."
+                : !JetSetConfig.SERVER.enableCrewHouse.get() ? "Crew progression is disabled on this server."
                 : c.mode == ActivityMode.RIVAL_RUSH ? "Arena caches and earned run progress grow your crew."
                 : (completed ? "Banked: " : "Completion, up to: ") + rewards.supplies() + " Supplies · "
                         + rewards.crewXp() + " crew XP · " + rewards.reputation() + " reputation · " + rewards.memberXp() + " training XP");
         out.putInt("MemberXp", rewards.memberXp()); out.putBoolean("Completed", completed); out.putBoolean("Won", completed && c.run.won());
         out.putBoolean("CanLaunch", !c.active() && !completed && clock(player) < c.expires && unavailable(c, c.mode).isEmpty());
-        out.putString("LaunchLabel", c.mode == ActivityMode.RIVAL_RUSH ? "Start arena journey" : "Start " + c.mode.label);
+        out.putString("LaunchLabel", c.mode == ActivityMode.LIBERTY_GRIND ? "Open war map"
+                : c.mode == ActivityMode.RIVAL_RUSH ? "Start arena journey" : "Start " + c.mode.label);
         out.putBoolean("CanCancel", c.active());
         out.putInt("PendingSupplies", CrewHouseData.get(player.getServer()).pendingSupplies(player.getUUID()));
         ListTag games = new ListTag();
