@@ -1,0 +1,32 @@
+# Evidence type: verbatim excerpts from the tool-observed stdout of local exec session 91596.
+# This is an explicitly retained excerpt, not an original complete Minecraft or Gradle disk log.
+# The untouched replay-client.log file view stops after capture 01 despite later stdout and all PNGs being observed.
+# Gaps between the following excerpts are intentional. No omitted line is represented as reproduced here.
+# Source: commit 8bb7109042decfe636ae0b621b8af88169bf61ce, tree 878476f60413bfe47c18864a99674c363432ce87.
+# Evidence was generated locally from public source; no CI artifacts were downloaded.
+[11:40:51] [Render thread/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_RUSH_VISUAL_AUDIT_ENTERED jetsetcraft:rival_rush
+[11:40:55] [IO-Worker-13/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_RUSH_VISUAL_AUDIT_CAPTURE 02-district-hud /workspace/scratch/5c41974df12d/JetSetCraft-alpha5-replay/run/./screenshots/rival-rush-1793594422828-02-district-hud.png
+[11:40:56] [IO-Worker-12/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_RUSH_VISUAL_AUDIT_CAPTURE 03-album /workspace/scratch/5c41974df12d/JetSetCraft-alpha5-replay/run/./screenshots/rival-rush-1793594422828-03-album.png
+[11:40:58] [IO-Worker-9/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_RUSH_VISUAL_AUDIT_CAPTURE 04-return-result /workspace/scratch/5c41974df12d/JetSetCraft-alpha5-replay/run/./screenshots/rival-rush-1793594422828-04-return-result.png
+[11:41:00] [IO-Worker-13/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_RUSH_VISUAL_AUDIT_CAPTURE 05-crew-home /workspace/scratch/5c41974df12d/JetSetCraft-alpha5-replay/run/./screenshots/rival-rush-1793594422828-05-crew-home.png
+[11:41:01] [IO-Worker-11/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_RUSH_VISUAL_AUDIT_CAPTURE 06-crew-roster /workspace/scratch/5c41974df12d/JetSetCraft-alpha5-replay/run/./screenshots/rival-rush-1793594422828-06-crew-roster.png
+[11:41:02] [IO-Worker-9/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_RUSH_VISUAL_AUDIT_CAPTURE 07-crew-facilities /workspace/scratch/5c41974df12d/JetSetCraft-alpha5-replay/run/./screenshots/rival-rush-1793594422828-07-crew-facilities.png
+[11:41:03] [IO-Worker-11/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_RUSH_VISUAL_AUDIT_CAPTURE 08-crew-jobs /workspace/scratch/5c41974df12d/JetSetCraft-alpha5-replay/run/./screenshots/rival-rush-1793594422828-08-crew-jobs.png
+[11:41:03] [Render thread/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_CREW_VISUAL_AUDIT_PASS real charter use; founded home; two profiles; physical workshop; real timed job
+[11:41:05] [IO-Worker-9/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_RUSH_VISUAL_AUDIT_CAPTURE 09-activities /workspace/scratch/5c41974df12d/JetSetCraft-alpha5-replay/run/./screenshots/rival-rush-1793594422828-09-activities.png
+[11:41:07] [IO-Worker-9/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_RUSH_VISUAL_AUDIT_CAPTURE 10-arena-route /workspace/scratch/5c41974df12d/JetSetCraft-alpha5-replay/run/./screenshots/rival-rush-1793594422828-10-arena-route.png
+[11:41:08] [IO-Worker-9/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_RUSH_VISUAL_AUDIT_CAPTURE 11-journey-map /workspace/scratch/5c41974df12d/JetSetCraft-alpha5-replay/run/./screenshots/rival-rush-1793594422828-11-journey-map.png
+[11:41:09] [IO-Worker-9/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_RUSH_VISUAL_AUDIT_CAPTURE 12-run-build /workspace/scratch/5c41974df12d/JetSetCraft-alpha5-replay/run/./screenshots/rival-rush-1793594422828-12-run-build.png
+[11:41:10] [Server thread/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_ACTIVITY_AUDIT_ARENA_ARRIVAL_FIXTURE run=3191aa2f-cdca-43ed-bbce-db9a7adcfdc3 arena=jetsetcraft:copper_current from=(2000000.5, 64.0, 0.5) to=(1999872.5, 64.0, 128.5) (teleport and nearby chunk loading only; no clock, defeats, rewards or clear fabricated)
+[11:41:12] [Render thread/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_ACTIVITY_AUDIT_CACHE_SCOUT_OBSERVED run=3191aa2f-cdca-43ed-bbce-db9a7adcfdc3 caches=6 defeatsNeeded=3 completed=0
+[11:41:12] [IO-Worker-13/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_RUSH_VISUAL_AUDIT_CAPTURE 14-cache-scout /workspace/scratch/5c41974df12d/JetSetCraft-alpha5-replay/run/./screenshots/rival-rush-1793594422828-14-cache-scout.png
+[11:41:13] [Render thread/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_ACTIVITY_AUDIT_RETURN_RESTORED inventory/XP/dimension and source position verified before opening crew progress
+[11:41:14] [IO-Worker-11/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_RUSH_VISUAL_AUDIT_CAPTURE 13-crew-progress /workspace/scratch/5c41974df12d/JetSetCraft-alpha5-replay/run/./screenshots/rival-rush-1793594422828-13-crew-progress.png
+[11:41:16] [Render thread/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_ACTIVITY_AUDIT_STYLE_LIBRARY_OBSERVED xp=0 learned=0 selected=HOME revision=0
+[11:41:16] [IO-Worker-11/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_RUSH_VISUAL_AUDIT_CAPTURE 15-style-library /workspace/scratch/5c41974df12d/JetSetCraft-alpha5-replay/run/./screenshots/rival-rush-1793594422828-15-style-library.png
+[11:41:16] [Render thread/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_ACTIVITY_VISUAL_AUDIT_PASS real Boombox preview; explicit Rival Rush; genuine Journey and Build; actual first route; logged fixture arrival (not human traversal); six live cache previews; inventory/XP/dimension restored; actual Progress and Style Library with no fabricated rewards
+[11:41:16] [Render thread/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_ACTIVITY_VISUAL_AUDIT_PHASE 20
+[11:41:16] [Render thread/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_RUSH_VISUAL_AUDIT_PASS fifteen real-client captures; street and arena inventory/XP/dimension restored; actual Charter, facilities, job, Boombox activity, first arena choice, Journey, Build, cache scouting, crew Progress and Style Library verified; arena inspection uses a logged disposable-world arrival fixture, not a human traversal or completed room
+[11:41:17] [Server thread/INFO] [minecraft/MinecraftServer]: ThreadedAnvilChunkStorage: All dimensions are saved
+BUILD SUCCESSFUL in 1m 10s
+10 actionable tasks: 3 executed, 7 up-to-date

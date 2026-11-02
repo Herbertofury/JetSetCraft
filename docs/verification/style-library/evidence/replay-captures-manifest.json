@@ -1,0 +1,229 @@
+{
+  "evidence_kind": "Independent exact-source local reproduction; no downloaded CI artifacts",
+  "source_commit": "8bb7109042decfe636ae0b621b8af88169bf61ce",
+  "source_tree": "878476f60413bfe47c18864a99674c363432ce87",
+  "source_ui_sha256": "c2392e24c17c928a1386da264c8bb4f4cb1720e8a1473dc9893a5251875ef015",
+  "native_client_result": "All three pass markers, normal return restoration and graceful saved shutdown observed in tool stdout;15native PNGs preserved",
+  "log_limit": "Untouched on-disk replay-client.log stops after capture01. Later exact stdout excerpts are separately labeled in replay-observed-stdout-excerpt.log; no complete original disk log or downloaded CI log is claimed.",
+  "world_limit": "One fresh base GameTestServer created the world before asset generation; its missing-catalog setup failure is preserved under incomplete-assets-setup. Corrected build followed exact CI generators; no local all44-test pass is claimed.",
+  "arena_fixture_limit": "Exact disposable-world guarded teleport and nearby chunk loading; no human traversal or arena clear claimed.",
+  "captured_style": {
+    "xp": 0,
+    "learned": 0,
+    "selected": "HOME",
+    "revision": 0,
+    "visible_rows": 3,
+    "page": "1/6"
+  },
+  "jar": {
+    "path": "/workspace/scratch/5c41974df12d/JetSetCraft-alpha5-replay/build/libs/jetsetcraft-1.20.1-0.4.0-alpha.5.jar",
+    "bytes": 5705489,
+    "sha256": "a5cea430f3b2930b7bae1d479bfda5ac6bf6e08263d3f01e1858835a26fbd847",
+    "comparison": "Local corrected reobfuscated build hash only; no CI binary equality claim"
+  },
+  "captures": [
+    {
+      "label": "01-setup",
+      "source_path": "/workspace/scratch/5c41974df12d/JetSetCraft-alpha5-replay/run/screenshots/rival-rush-1793594422828-01-setup.png",
+      "gallery_path": "/workspace/scratch/5c41974df12d/JetSetCraft/docs/verification/style-library/01-setup.png",
+      "width": 1280,
+      "height": 720,
+      "bytes": 111395,
+      "sha256": "37ef3515ed9e94ab1403591da36e1f628c5088002cdfb12cafe5467a8349b4b4",
+      "visual_review": "pass; no blocking clipping or overlapping controls",
+      "notes": "Readable native screen; no blocking layout issue observed."
+    },
+    {
+      "label": "02-district-hud",
+      "source_path": "/workspace/scratch/5c41974df12d/JetSetCraft-alpha5-replay/run/screenshots/rival-rush-1793594422828-02-district-hud.png",
+      "gallery_path": "/workspace/scratch/5c41974df12d/JetSetCraft/docs/verification/style-library/02-district-hud.png",
+      "width": 1280,
+      "height": 720,
+      "bytes": 317357,
+      "sha256": "36d2581a627625acd6117f947f7f0d8689f0399421807de015324b632e38e4e6",
+      "visual_review": "pass; no blocking clipping or overlapping controls",
+      "notes": "Bounded cache hint is ellipsized; full detail is in Scout. No overlapping HUD panels."
+    },
+    {
+      "label": "03-album",
+      "source_path": "/workspace/scratch/5c41974df12d/JetSetCraft-alpha5-replay/run/screenshots/rival-rush-1793594422828-03-album.png",
+      "gallery_path": "/workspace/scratch/5c41974df12d/JetSetCraft/docs/verification/style-library/03-album.png",
+      "width": 1280,
+      "height": 720,
+      "bytes": 72311,
+      "sha256": "a32f8940da8d0fdc602338e055a40683d0baf9ee2b9798cd3ea16e0257eaeb43",
+      "visual_review": "pass; no blocking clipping or overlapping controls",
+      "notes": "Genuine empty album, not invented cards."
+    },
+    {
+      "label": "04-return-result",
+      "source_path": "/workspace/scratch/5c41974df12d/JetSetCraft-alpha5-replay/run/screenshots/rival-rush-1793594422828-04-return-result.png",
+      "gallery_path": "/workspace/scratch/5c41974df12d/JetSetCraft/docs/verification/style-library/04-return-result.png",
+      "width": 1280,
+      "height": 720,
+      "bytes": 100893,
+      "sha256": "fa80ffa3911b46e220966557db2fdf8be6bbc98ce25e9671c7918866521cbc17",
+      "visual_review": "pass; no blocking clipping or overlapping controls",
+      "notes": "Early-bank result: score20, rivals1, cards0."
+    },
+    {
+      "label": "05-crew-home",
+      "source_path": "/workspace/scratch/5c41974df12d/JetSetCraft-alpha5-replay/run/screenshots/rival-rush-1793594422828-05-crew-home.png",
+      "gallery_path": "/workspace/scratch/5c41974df12d/JetSetCraft/docs/verification/style-library/05-crew-home.png",
+      "width": 1280,
+      "height": 720,
+      "bytes": 111475,
+      "sha256": "f44220bcd53e911889bfa800ca7532b93148b5dd363a143ef98f82321e09c0f6",
+      "visual_review": "pass; no blocking clipping or overlapping controls",
+      "notes": "Ordinary hover tooltip covers part of the home panel; native screenshot retained unchanged."
+    },
+    {
+      "label": "06-crew-roster",
+      "source_path": "/workspace/scratch/5c41974df12d/JetSetCraft-alpha5-replay/run/screenshots/rival-rush-1793594422828-06-crew-roster.png",
+      "gallery_path": "/workspace/scratch/5c41974df12d/JetSetCraft/docs/verification/style-library/06-crew-roster.png",
+      "width": 1280,
+      "height": 720,
+      "bytes": 110058,
+      "sha256": "d6fb56c16fa90dd60da2e3907c7efc5263360edc2bc76026b68faccbe7b6dc0f",
+      "visual_review": "pass; no blocking clipping or overlapping controls",
+      "notes": "Ordinary hover tooltip covers part of the roster panel; native screenshot retained unchanged."
+    },
+    {
+      "label": "07-crew-facilities",
+      "source_path": "/workspace/scratch/5c41974df12d/JetSetCraft-alpha5-replay/run/screenshots/rival-rush-1793594422828-07-crew-facilities.png",
+      "gallery_path": "/workspace/scratch/5c41974df12d/JetSetCraft/docs/verification/style-library/07-crew-facilities.png",
+      "width": 1280,
+      "height": 720,
+      "bytes": 122109,
+      "sha256": "c7106b9897700fe50cd52d019e473f032f9cf9e1ed0a4bcfb53d82c8e72e0ad3",
+      "visual_review": "pass; no blocking clipping or overlapping controls",
+      "notes": "Ordinary hover tooltip covers part of the facilities panel; native screenshot retained unchanged."
+    },
+    {
+      "label": "08-crew-jobs",
+      "source_path": "/workspace/scratch/5c41974df12d/JetSetCraft-alpha5-replay/run/screenshots/rival-rush-1793594422828-08-crew-jobs.png",
+      "gallery_path": "/workspace/scratch/5c41974df12d/JetSetCraft/docs/verification/style-library/08-crew-jobs.png",
+      "width": 1280,
+      "height": 720,
+      "bytes": 103869,
+      "sha256": "6306ec09d2d5000fa829d46a4333bb8d3699fe45c5d299a29a2ffd5d31dbaa27",
+      "visual_review": "pass; no blocking clipping or overlapping controls",
+      "notes": "Actual running Neighborhood delivery at3:00; no job completion or claim shown."
+    },
+    {
+      "label": "09-activities",
+      "source_path": "/workspace/scratch/5c41974df12d/JetSetCraft-alpha5-replay/run/screenshots/rival-rush-1793594422828-09-activities.png",
+      "gallery_path": "/workspace/scratch/5c41974df12d/JetSetCraft/docs/verification/style-library/09-activities.png",
+      "width": 1280,
+      "height": 720,
+      "bytes": 110069,
+      "sha256": "ce4a39508b65c18f5399ede975d31aaf69e2f24017c5b8120b95c82a679ef1f8",
+      "visual_review": "pass; no blocking clipping or overlapping controls",
+      "notes": "Readable native screen; no blocking layout issue observed."
+    },
+    {
+      "label": "10-arena-route",
+      "source_path": "/workspace/scratch/5c41974df12d/JetSetCraft-alpha5-replay/run/screenshots/rival-rush-1793594422828-10-arena-route.png",
+      "gallery_path": "/workspace/scratch/5c41974df12d/JetSetCraft/docs/verification/style-library/10-arena-route.png",
+      "width": 1280,
+      "height": 720,
+      "bytes": 88369,
+      "sha256": "a952f3260128b54bb64f33cb53956c107bc47e4c4b94c037d92cdf4325034e1c",
+      "visual_review": "pass; no blocking clipping or overlapping controls",
+      "notes": "Readable native screen; no blocking layout issue observed."
+    },
+    {
+      "label": "11-journey-map",
+      "source_path": "/workspace/scratch/5c41974df12d/JetSetCraft-alpha5-replay/run/screenshots/rival-rush-1793594422828-11-journey-map.png",
+      "gallery_path": "/workspace/scratch/5c41974df12d/JetSetCraft/docs/verification/style-library/11-journey-map.png",
+      "width": 1280,
+      "height": 720,
+      "bytes": 78113,
+      "sha256": "e9d73a618cb919e4f2656cbb9dfeede5af9d8d5fbf5f98676c1703d1624342b9",
+      "visual_review": "pass; no blocking clipping or overlapping controls",
+      "notes": "Initial real three-choice route;0/6 arenas cleared; detail scroll is available."
+    },
+    {
+      "label": "12-run-build",
+      "source_path": "/workspace/scratch/5c41974df12d/JetSetCraft-alpha5-replay/run/screenshots/rival-rush-1793594422828-12-run-build.png",
+      "gallery_path": "/workspace/scratch/5c41974df12d/JetSetCraft/docs/verification/style-library/12-run-build.png",
+      "width": 1280,
+      "height": 720,
+      "bytes": 77139,
+      "sha256": "8a69407358ea1f88c4a57349d6b8a908cfff7a98fd05954f66b3bc50b7bf26b5",
+      "visual_review": "pass; no blocking clipping or overlapping controls",
+      "notes": "Actual empty0/3 artifact build; no earned artifact claimed."
+    },
+    {
+      "label": "13-crew-progress",
+      "source_path": "/workspace/scratch/5c41974df12d/JetSetCraft-alpha5-replay/run/screenshots/rival-rush-1793594422828-13-crew-progress.png",
+      "gallery_path": "/workspace/scratch/5c41974df12d/JetSetCraft/docs/verification/style-library/13-crew-progress.png",
+      "width": 1280,
+      "height": 720,
+      "bytes": 108909,
+      "sha256": "e5b6b860dab4544e8cb97cea0fc367469314ee860537b30d0b1037f56e992a90",
+      "visual_review": "pass; no blocking clipping or overlapping controls",
+      "notes": "Actual empty recent-reward history and0crewXP."
+    },
+    {
+      "label": "14-cache-scout",
+      "source_path": "/workspace/scratch/5c41974df12d/JetSetCraft-alpha5-replay/run/screenshots/rival-rush-1793594422828-14-cache-scout.png",
+      "gallery_path": "/workspace/scratch/5c41974df12d/JetSetCraft/docs/verification/style-library/14-cache-scout.png",
+      "width": 1280,
+      "height": 720,
+      "bytes": 114974,
+      "sha256": "c757fc95fe110a9e6ea32c27fb69a7b8950f4b7c1a9582e821cc79d8cc3c6f69",
+      "visual_review": "pass; no blocking clipping or overlapping controls",
+      "notes": "Six actual caches in server snapshot; three visible entries with scroll hint;3defeats needed;0arenas cleared."
+    },
+    {
+      "label": "15-style-library",
+      "source_path": "/workspace/scratch/5c41974df12d/JetSetCraft-alpha5-replay/run/screenshots/rival-rush-1793594422828-15-style-library.png",
+      "gallery_path": "/workspace/scratch/5c41974df12d/JetSetCraft/docs/verification/style-library/15-style-library.png",
+      "width": 1280,
+      "height": 720,
+      "bytes": 111711,
+      "sha256": "759ef0dbe7f8eb0fa004ebf1c405e3b26d8dad7ccaa0be92dbc61855102e4d5d",
+      "visual_review": "pass; no blocking clipping or overlapping controls",
+      "notes": "Three full lesson rows; Page1/6;0/16 learned;0crewXP;HOME selected; navigation and footer fit without overlap."
+    }
+  ],
+  "evidence": [
+    {
+      "file": "replay-source-identity.log",
+      "path": "/workspace/scratch/5c41974df12d/JetSetCraft-alpha5-replay/build/verification/replay-source-identity.log",
+      "bytes": 220,
+      "sha256": "20d0dbb2c78896426b75108e71f726c50e58f31bd217f714bfc36805eeec16f8"
+    },
+    {
+      "file": "replay-asset-generation.log",
+      "path": "/workspace/scratch/5c41974df12d/JetSetCraft-alpha5-replay/build/verification/replay-asset-generation.log",
+      "bytes": 452,
+      "sha256": "e3e4d834306b4d092f86247d88b31be297a80ab632b6c2e79e642b5374a87199"
+    },
+    {
+      "file": "replay-build-complete.log",
+      "path": "/workspace/scratch/5c41974df12d/JetSetCraft-alpha5-replay/build/verification/replay-build-complete.log",
+      "bytes": 1162,
+      "sha256": "01fc395382cb9e7441a9c6f07905f17ebd171a0d06e0b10e400b7767b15bcb80"
+    },
+    {
+      "file": "replay-jar-sha256-complete.txt",
+      "path": "/workspace/scratch/5c41974df12d/JetSetCraft-alpha5-replay/build/verification/replay-jar-sha256-complete.txt",
+      "bytes": 114,
+      "sha256": "c68fa51611508d340aea41581bd44a2b6361c06263ae5dfd26daad295e24466e"
+    },
+    {
+      "file": "replay-client.log",
+      "path": "/workspace/scratch/5c41974df12d/JetSetCraft-alpha5-replay/build/verification/replay-client.log",
+      "bytes": 38485,
+      "sha256": "ac4024ef7c3e34be1c415bc2e34001b35dc06679f4b95feaa36beeb5418a5109"
+    },
+    {
+      "file": "replay-observed-stdout-excerpt.log",
+      "path": "/workspace/scratch/5c41974df12d/JetSetCraft-alpha5-replay/build/verification/replay-observed-stdout-excerpt.log",
+      "bytes": 5987,
+      "sha256": "340c2ca1047f3b3adce25ed895f0d4e5573c6655fae3e2dfab38dc2fd27722bd"
+    }
+  ]
+}
