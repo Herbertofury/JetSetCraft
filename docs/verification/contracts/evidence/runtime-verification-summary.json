@@ -1,0 +1,287 @@
+{
+  "schema_version": 1,
+  "evidence_scope": "Allowlisted local native-client audit observations only",
+  "audit_markers": {
+    "passes": [
+      {
+        "name": "JETSETCRAFT_RUSH_VISUAL_AUDIT_PASS",
+        "occurrences": 1
+      },
+      {
+        "name": "JETSETCRAFT_CREW_VISUAL_AUDIT_PASS",
+        "occurrences": 1
+      },
+      {
+        "name": "JETSETCRAFT_ACTIVITY_VISUAL_AUDIT_PASS",
+        "occurrences": 1
+      },
+      {
+        "name": "JETSETCRAFT_PROGRESSION_VISUAL_AUDIT_PASS",
+        "occurrences": 1
+      },
+      {
+        "name": "JETSETCRAFT_CONTRACT_VISUAL_AUDIT_PASS",
+        "occurrences": 1
+      }
+    ],
+    "observations": [
+      {
+        "name": "JETSETCRAFT_CREW_AUDIT_ROOM_OBSERVED",
+        "occurrences": 1
+      },
+      {
+        "name": "JETSETCRAFT_ACTIVITY_AUDIT_RETURN_RESTORED",
+        "occurrences": 1
+      },
+      {
+        "name": "JETSETCRAFT_ACTIVITY_AUDIT_CACHE_SCOUT_OBSERVED",
+        "occurrences": 1
+      },
+      {
+        "name": "JETSETCRAFT_ACTIVITY_AUDIT_STYLE_LIBRARY_OBSERVED",
+        "occurrences": 1
+      },
+      {
+        "name": "JETSETCRAFT_PROGRESSION_AUDIT_RECIPES_OBSERVED",
+        "occurrences": 1
+      },
+      {
+        "name": "JETSETCRAFT_PROGRESSION_AUDIT_DRAFT_OBSERVED",
+        "occurrences": 1
+      },
+      {
+        "name": "JETSETCRAFT_PROGRESSION_AUDIT_HEADLINER_OBSERVED",
+        "occurrences": 1
+      },
+      {
+        "name": "JETSETCRAFT_PROGRESSION_AUDIT_DEBRIEF_OBSERVED",
+        "occurrences": 1
+      },
+      {
+        "name": "JETSETCRAFT_CONTRACT_AUDIT_BRIEFING_OBSERVED",
+        "occurrences": 1
+      },
+      {
+        "name": "JETSETCRAFT_CONTRACT_AUDIT_PROGRESS_OBSERVED",
+        "occurrences": 1
+      },
+      {
+        "name": "JETSETCRAFT_CONTRACT_AUDIT_PIT_STOP_OBSERVED",
+        "occurrences": 1
+      },
+      {
+        "name": "JETSETCRAFT_CONTRACT_AUDIT_SERVICE_OBSERVED",
+        "occurrences": 1
+      }
+    ],
+    "explicit_fixtures": [
+      {
+        "name": "JETSETCRAFT_RUSH_VISUAL_AUDIT_FIXTURE_OBSERVED",
+        "occurrences": 1
+      },
+      {
+        "name": "JETSETCRAFT_CREW_AUDIT_ROOM_PLACED",
+        "occurrences": 1
+      },
+      {
+        "name": "JETSETCRAFT_ACTIVITY_AUDIT_ARENA_ARRIVAL_FIXTURE",
+        "occurrences": 1
+      },
+      {
+        "name": "JETSETCRAFT_PROGRESSION_AUDIT_OWNED_HIT_FIXTURE",
+        "occurrences": 2
+      },
+      {
+        "name": "JETSETCRAFT_PROGRESSION_AUDIT_CLOCK_FIXTURE",
+        "occurrences": 1
+      },
+      {
+        "name": "JETSETCRAFT_PROGRESSION_AUDIT_CAMERA_FIXTURE",
+        "occurrences": 1
+      },
+      {
+        "name": "JETSETCRAFT_CONTRACT_AUDIT_ARRIVAL_FIXTURE",
+        "occurrences": 1
+      },
+      {
+        "name": "JETSETCRAFT_CONTRACT_AUDIT_PAINT_FIXTURE",
+        "occurrences": 3
+      },
+      {
+        "name": "JETSETCRAFT_CONTRACT_AUDIT_POSITION_FIXTURE",
+        "occurrences": 1
+      },
+      {
+        "name": "JETSETCRAFT_CONTRACT_AUDIT_OWNED_HIT_FIXTURE",
+        "occurrences": 7
+      },
+      {
+        "name": "JETSETCRAFT_CONTRACT_AUDIT_CLOCK_FIXTURE",
+        "occurrences": 1
+      },
+      {
+        "name": "JETSETCRAFT_CONTRACT_AUDIT_WAITING_FOR_AUTHORED_WALL",
+        "occurrences": 1
+      }
+    ],
+    "capture_marker_occurrences": 23
+  },
+  "captures": {
+    "count": 23,
+    "frames": [
+      {
+        "ordinal": 1,
+        "label": "01-setup",
+        "basename": "rival-rush-1793599027502-01-setup.png"
+      },
+      {
+        "ordinal": 2,
+        "label": "02-district-hud",
+        "basename": "rival-rush-1793599027502-02-district-hud.png"
+      },
+      {
+        "ordinal": 3,
+        "label": "03-album",
+        "basename": "rival-rush-1793599027502-03-album.png"
+      },
+      {
+        "ordinal": 4,
+        "label": "04-return-result",
+        "basename": "rival-rush-1793599027502-04-return-result.png"
+      },
+      {
+        "ordinal": 5,
+        "label": "05-crew-home",
+        "basename": "rival-rush-1793599027502-05-crew-home.png"
+      },
+      {
+        "ordinal": 6,
+        "label": "06-crew-roster",
+        "basename": "rival-rush-1793599027502-06-crew-roster.png"
+      },
+      {
+        "ordinal": 7,
+        "label": "07-crew-facilities",
+        "basename": "rival-rush-1793599027502-07-crew-facilities.png"
+      },
+      {
+        "ordinal": 8,
+        "label": "08-crew-jobs",
+        "basename": "rival-rush-1793599027502-08-crew-jobs.png"
+      },
+      {
+        "ordinal": 9,
+        "label": "09-activities",
+        "basename": "rival-rush-1793599027502-09-activities.png"
+      },
+      {
+        "ordinal": 10,
+        "label": "10-arena-route",
+        "basename": "rival-rush-1793599027502-10-arena-route.png"
+      },
+      {
+        "ordinal": 11,
+        "label": "11-journey-map",
+        "basename": "rival-rush-1793599027502-11-journey-map.png"
+      },
+      {
+        "ordinal": 12,
+        "label": "12-run-build",
+        "basename": "rival-rush-1793599027502-12-run-build.png"
+      },
+      {
+        "ordinal": 13,
+        "label": "13-crew-progress",
+        "basename": "rival-rush-1793599027502-13-crew-progress.png"
+      },
+      {
+        "ordinal": 14,
+        "label": "14-cache-scout",
+        "basename": "rival-rush-1793599027502-14-cache-scout.png"
+      },
+      {
+        "ordinal": 15,
+        "label": "15-style-library",
+        "basename": "rival-rush-1793599027502-15-style-library.png"
+      },
+      {
+        "ordinal": 16,
+        "label": "16-build-paths",
+        "basename": "rival-rush-1793599027502-16-build-paths.png"
+      },
+      {
+        "ordinal": 17,
+        "label": "17-draft-agency",
+        "basename": "rival-rush-1793599027502-17-draft-agency.png"
+      },
+      {
+        "ordinal": 18,
+        "label": "18-headliner-tell",
+        "basename": "rival-rush-1793599027502-18-headliner-tell.png"
+      },
+      {
+        "ordinal": 19,
+        "label": "19-run-debrief",
+        "basename": "rival-rush-1793599027502-19-run-debrief.png"
+      },
+      {
+        "ordinal": 20,
+        "label": "20-contract-briefing",
+        "basename": "rival-rush-1793599027502-20-contract-briefing.png"
+      },
+      {
+        "ordinal": 21,
+        "label": "21-contract-progress",
+        "basename": "rival-rush-1793599027502-21-contract-progress.png"
+      },
+      {
+        "ordinal": 22,
+        "label": "22-pit-stop",
+        "basename": "rival-rush-1793599027502-22-pit-stop.png"
+      },
+      {
+        "ordinal": 23,
+        "label": "23-service-result",
+        "basename": "rival-rush-1793599027502-23-service-result.png"
+      }
+    ]
+  },
+  "paint_contract_and_service_run": {
+    "contract_type": "PAINT",
+    "accepted_wall_patches": 3,
+    "owned_rival_defeats": 8,
+    "collected_cards": 8,
+    "active_ticks_including_clock_fixture": 2416,
+    "arena_clears": 1,
+    "contracts_banked": 1,
+    "services_used": 1,
+    "pit_stop_credits_earned": 2,
+    "pit_stop_credits_before_service": 2,
+    "accepted_service": "TUNE",
+    "tuned_rank_before": 1,
+    "tuned_rank_after": 2,
+    "pit_stop_credits_after_service": 1,
+    "return_reward_status": "accepted",
+    "audited_source_state_restored": true
+  },
+  "fixture_and_verification_limits": [
+    "The native audit uses a disposable integrated test world and an explicit opt-in guard.",
+    "Arena arrival and safe combat positioning include scripted teleports and nearby chunk loading; they are not evidence of human traversal.",
+    "PAINT progress comes from three accepted production wall-handler calls against inspected authored solid supports. Scripted placement and handler calls do not demonstrate human graffiti input.",
+    "Owned-rival placement and production primary-hit calls accelerate combat. Pickups and earned draft choices follow the normal production paths.",
+    "The remaining room clock is advanced only after the actual optional task and owned-defeat quota are satisfied. The reported active ticks are not elapsed human play time.",
+    "The normal manager completion gate settles the room and opens the earned service budget. A real UI confirmation and production packet apply Tune; completion flags, service credits, ranks, reward receipts and client snapshots are not assigned by the fixture.",
+    "Source-state restoration covers audited inventory, Minecraft experience, source dimension and position; it does not establish preservation of arbitrary third-party capabilities.",
+    "The new gallery focuses on PAINT. It does not show human RELAY or HUNT completion, a full six-room traversal, a defeated headliner, a forged evolution, or a full human session.",
+    "Earlier progression captures belong to a separate Free-streets run and must not be presented as the later PAINT contract or service result.",
+    "This local native ForgeGradle source-set audit is not an independently installed distributable-JAR runtime or evidence of CI binary equivalence.",
+    "Capture markers record named output files. This summary contains no image pixels and does not substitute for visual inspection.",
+    "This summary establishes no CI or merge status, broader provider behavior, multiplayer scaling, sustained performance or balance result."
+  ],
+  "redaction": {
+    "construction": "Only fixed schema text, explicit marker-name allowlists, constrained capture basenames, validated enums and numeric aggregates are retained.",
+    "raw_log_text_included": false,
+    "runtime_identifiers_or_environment_details_included": false,
+    "diagnostic_messages_included": false
+  }
+}
