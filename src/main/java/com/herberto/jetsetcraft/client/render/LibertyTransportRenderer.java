@@ -16,11 +16,39 @@ import net.minecraft.world.level.block.Blocks;
 public final class LibertyTransportRenderer extends EntityRenderer<LibertyTransportEntity> {
     private static final java.util.Map<Integer, Long> AUDIT_RENDER_CALLS = Boolean.getBoolean("jetsetcraft.libertyVisualAudit")
             ? new java.util.HashMap<>() : null;
+    private static final java.util.Map<Integer, Long> AUDIT_MOVING_RENDER_CALLS = AUDIT_RENDER_CALLS == null ? null : new java.util.HashMap<>();
+    private record AuditAlignment(int consecutiveFrames, double error) {}
+    private static final java.util.Map<Integer, AuditAlignment> AUDIT_ALIGNMENT = AUDIT_RENDER_CALLS == null ? null : new java.util.HashMap<>();
     public static long auditRenderCalls(int entityId) { return AUDIT_RENDER_CALLS == null ? 0 : AUDIT_RENDER_CALLS.getOrDefault(entityId, 0L); }
+    public static long auditMovingRenderCalls(int entityId) { return AUDIT_MOVING_RENDER_CALLS == null ? 0 : AUDIT_MOVING_RENDER_CALLS.getOrDefault(entityId, 0L); }
+    public static int auditAlignedMovingFrames(int entityId) { return AUDIT_ALIGNMENT == null ? 0 : AUDIT_ALIGNMENT.getOrDefault(entityId, new AuditAlignment(0, Double.POSITIVE_INFINITY)).consecutiveFrames(); }
+    public static double auditSeatError(int entityId) { return AUDIT_ALIGNMENT == null ? Double.POSITIVE_INFINITY : AUDIT_ALIGNMENT.getOrDefault(entityId, new AuditAlignment(0, Double.POSITIVE_INFINITY)).error(); }
     public LibertyTransportRenderer(EntityRendererProvider.Context context) { super(context); shadowRadius = 1.5f; }
     @Override public void render(LibertyTransportEntity entity, float yaw, float partialTick, PoseStack pose,
                                  MultiBufferSource buffer, int light) {
-        if (AUDIT_RENDER_CALLS != null) AUDIT_RENDER_CALLS.merge(entity.getId(), 1L, Long::sum);
+        if (AUDIT_RENDER_CALLS != null) {
+            long calls = AUDIT_RENDER_CALLS.merge(entity.getId(), 1L, Long::sum);
+            var minecraft = Minecraft.getInstance(); var player = minecraft.player;
+            boolean moving = !entity.ship() && entity.getY() < com.herberto.jetsetcraft.liberty.LibertyWorld.FLOOR_Y + 65;
+            if (moving) {
+                AUDIT_MOVING_RENDER_CALLS.merge(entity.getId(), 1L, Long::sum);
+                if (player != null && player.getVehicle() == entity) {
+                    double interpolatedGap = net.minecraft.util.Mth.lerp(partialTick, player.yOld, player.getY())
+                            - net.minecraft.util.Mth.lerp(partialTick, entity.yOld, entity.getY());
+                    double error = Math.abs(interpolatedGap - (player.getY() - entity.getY()));
+                    int consecutive = Double.isFinite(error) && error <= .05 ? auditAlignedMovingFrames(entity.getId()) + 1 : 0;
+                    AUDIT_ALIGNMENT.put(entity.getId(), new AuditAlignment(consecutive, error));
+                }
+            }
+            if (calls <= 20) {
+                var matrix = pose.last().pose();
+                com.herberto.jetsetcraft.JetSetCraft.LOGGER.info("JETSETCRAFT_LIBERTY_VISUAL_AUDIT_RENDER frame={} partial={} pose=({},{},{}) camera={} entity={} old=({},{},{}) tickOld=({},{},{}) player={} playerOld=({},{},{}) playerTickOld=({},{},{}) light={} seatError={}",
+                        calls, partialTick, matrix.m30(), matrix.m31(), matrix.m32(), minecraft.gameRenderer.getMainCamera().getPosition(),
+                        entity.position(), entity.xOld, entity.yOld, entity.zOld, entity.xo, entity.yo, entity.zo,
+                        player == null ? null : player.position(), player == null ? 0 : player.xOld, player == null ? 0 : player.yOld, player == null ? 0 : player.zOld,
+                        player == null ? 0 : player.xo, player == null ? 0 : player.yo, player == null ? 0 : player.zo, light, auditSeatError(entity.getId()));
+            }
+        }
         pose.pushPose(); pose.mulPose(Axis.YP.rotationDegrees(-yaw));
         if (entity.ship()) {
             box(pose, buffer, light, Blocks.GRAY_CONCRETE, -1.7, -.35, -3, 3.4f, .65f, 6);
