@@ -7,6 +7,8 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.toasts.Toast;
 import net.minecraft.client.gui.components.toasts.ToastComponent;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.FormattedCharSequence;
 
@@ -25,11 +27,16 @@ public final class CrewRewardFeedback {
         CrewRewardReceipt receipt = CrewRewardReceipt.load(incoming);
         if (minecraft.player == null || minecraft.getConnection() == null || receipt == null || !SEEN.add(receipt.id())) return;
         while (SEEN.size() > 64) SEEN.remove(SEEN.iterator().next());
+        ListTag learned = incoming.getList("StylesLearned", Tag.TAG_COMPOUND);
+        String styles = learned.isEmpty() ? "" : learned.size() == 1
+                ? "Style learned: " + learned.getCompound(0).getString("Name")
+                : Math.min(16, learned.size()) + " starting styles learned";
         if (JetSetConfig.CLIENT.reducedMotion.get()) {
             // Keep the complete receipt accessible without the native toast's slide animation.
             minecraft.player.displayClientMessage(Component.literal(receipt.name() + ": " + receipt.summary()
-                    + ". " + receipt.trainingSummary() + ". " + receipt.levelSummary()), false);
-        } else minecraft.getToasts().addToast(new RewardToast(receipt, generation));
+                    + ". " + receipt.trainingSummary() + ". " + receipt.levelSummary()
+                    + (styles.isBlank() ? "" : ". " + styles)), false);
+        } else minecraft.getToasts().addToast(new RewardToast(receipt, styles, generation));
     }
 
     static void reset() { SEEN.clear(); generation++; }
@@ -40,7 +47,7 @@ public final class CrewRewardFeedback {
         private final List<Line> lines = new ArrayList<>();
         private record Line(FormattedCharSequence text, int color) {}
 
-        RewardToast(CrewRewardReceipt receipt, int epoch) {
+        RewardToast(CrewRewardReceipt receipt, String styles, int epoch) {
             this.receipt = receipt; this.epoch = epoch;
             Minecraft minecraft = Minecraft.getInstance();
             width = Math.max(160, Math.min(330, minecraft.getWindow().getGuiScaledWidth() - 16));
@@ -48,6 +55,7 @@ public final class CrewRewardFeedback {
             add(receipt.summary(), 0xFFE7E7E7);
             add(receipt.trainingSummary(), 0xFF87E1EA);
             if (!receipt.levelSummary().isBlank()) add(receipt.levelSummary(), 0xFFC5ED55);
+            if (!styles.isBlank()) add(styles, 0xFFC5ED55);
             add("Crew Charter → Progress", 0xFFB8BEC5);
             height = 12 + lines.size() * 11;
         }

@@ -35,12 +35,16 @@ public final class CrewHouseClient {
     public static boolean isProgressScreenOpen() {
         return Minecraft.getInstance().screen instanceof CrewHouseScreen screen && screen.isView("PROGRESS");
     }
+    public static boolean isStyleLibraryOpen() {
+        return Minecraft.getInstance().screen instanceof CrewHouseScreen screen && screen.isView("STYLES");
+    }
     static ListTag list(String key) { return state.getList(key, Tag.TAG_COMPOUND); }
     static UUID homeId() { return state.hasUUID("HomeId") ? state.getUUID("HomeId") : null; }
 
     static void request(String action, String value, int number, UUID target) {
         if (Minecraft.getInstance().getConnection() == null) return;
-        JetSetNetwork.sendCrewAction(action, value, number, homeId(), target, state.getLong("Revision"));
+        long revision = action.equals("style") ? state.getCompound("StyleLibrary").getLong("Revision") : state.getLong("Revision");
+        JetSetNetwork.sendCrewAction(action, value, number, homeId(), target, revision);
     }
 
     /** A read-only, loaded-client-world check for optional home music; never fetches or loads a chunk. */
