@@ -1,0 +1,18 @@
+{
+  "name": "Expedition Steps",
+  "description": "An AoA-themed yard with emerald waymarks and terraced escape lines. Recover vitality and earn supplies. Uses vanilla materials in Rush; missing legacy AoA dimensions are not recreated.",
+  "requires_mod": "aoa3",
+  "radius": 32,
+  "seconds": 180,
+  "defeats": 12,
+  "layout": "terraces",
+  "reward": "recovery",
+  "reward_ranks": 1,
+  "shared_reward": "supplies",
+  "palette": {
+    "floor": "minecraft:mossy_stone_bricks",
+    "accent": "minecraft:emerald_block",
+    "wall": "minecraft:green_terracotta",
+    "rail": "minecraft:mossy_stone_brick_wall"
+  }
+}

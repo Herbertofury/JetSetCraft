@@ -1,0 +1,27 @@
+{
+  "name": "Embervault Loop",
+  "description": "A Cataclysm-themed end-stone loop with obsidian edges. Earn an artifact and reputation. Decorative provider blocks have vanilla fallbacks; this Rush arena does not recreate a native boss dungeon.",
+  "requires_mod": "cataclysm",
+  "radius": 36,
+  "seconds": 210,
+  "defeats": 16,
+  "layout": "loop",
+  "reward": "relic",
+  "reward_ranks": 1,
+  "shared_reward": "reputation",
+  "palette": {
+    "floor": [
+      "cataclysm:polished_end_stone",
+      "minecraft:end_stone_bricks"
+    ],
+    "accent": [
+      "cataclysm:purpur_tiles",
+      "minecraft:purpur_block"
+    ],
+    "wall": [
+      "cataclysm:obsidian_bricks",
+      "minecraft:obsidian"
+    ],
+    "rail": "minecraft:polished_blackstone_wall"
+  }
+}
