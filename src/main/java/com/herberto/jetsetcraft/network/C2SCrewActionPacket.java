@@ -13,7 +13,7 @@ import java.util.function.Supplier;
 public record C2SCrewActionPacket(String action, String value, int number, UUID houseId, UUID targetId, long revision) {
     private static final Set<String> ACTIONS = Set.of("open", "refresh", "found", "relocate", "rename", "preview",
             "expand", "recruit", "rename_member", "focus", "focus_off", "assign", "claim", "cancel", "facility",
-            "upgrade", "preparation");
+            "upgrade", "preparation", "style");
 
     public static void encode(C2SCrewActionPacket packet, FriendlyByteBuf buffer) {
         buffer.writeUtf(packet.action, 32);
@@ -38,11 +38,16 @@ public record C2SCrewActionPacket(String action, String value, int number, UUID 
     public static void handle(C2SCrewActionPacket packet, Supplier<NetworkEvent.Context> supplier) {
         NetworkEvent.Context context = supplier.get();
         context.enqueueWork(() -> {
-            ServerPlayer player = context.getSender();
-            if (player == null || !ACTIONS.contains(packet.action) || packet.revision < 0L) return;
-            CrewHouseManager.handleAction(player, packet.action, packet.value, packet.number,
-                    packet.houseId, packet.targetId, packet.revision);
+            handleForPlayer(packet, context.getSender());
         });
         context.setPacketHandled(true);
+    }
+
+    /** The production receive boundary, also exercised with decoded packets by Forge acceptance tests. */
+    public static void handleForPlayer(C2SCrewActionPacket packet, ServerPlayer player) {
+        if (packet == null || player == null || packet.action == null || !ACTIONS.contains(packet.action)
+                || packet.value == null || packet.value.length() > 128 || packet.revision < 0L) return;
+        CrewHouseManager.handleAction(player, packet.action, packet.value, packet.number,
+                packet.houseId, packet.targetId, packet.revision);
     }
 }
