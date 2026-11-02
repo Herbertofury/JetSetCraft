@@ -390,8 +390,8 @@ else:
         for field in record_fields:
             if field != 'entityId' and f'packet.{field}()' not in client_state:
                 errors.append(f'client snapshot does not consume S2C field {field}')
-if 'private static final String PROTOCOL = "16"' not in network:
-    errors.append('network protocol must be 16 for bounded Liberty expedition actions and the existing Rush/crew contracts')
+if 'private static final String PROTOCOL = "17"' not in network:
+    errors.append('network protocol must be 17 for campaign loadouts, ship progression and bounded Liberty actions')
 
 required_gametest_markers = {
     'JETSETCRAFT_GAMETEST_PASS hoverboard': hoverboard_tests,

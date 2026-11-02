@@ -212,13 +212,28 @@ allowed_import_prefixes = (
     "org.slf4j.",
 )
 optional_compat_prefixes = ("com.simibubi.create.", "com.tacz.guns.")
+# The pinned TaCZ custom bullet sweep bypasses Forge's ProjectileImpactEvent, then invokes
+# foreign target/block callbacks before its public damage event. Its optional @Pseudo HEAD
+# guard closes that boundary. Two exact vanilla contact guards prevent accepted home actors
+# from mutating pressure plates, eggs, ore and other home blocks before Forge events fire.
+# Runtime admission checks actual markers and pinned versions. Keep the general injection ban
+# and never allow a hard-linked optional target. See docs/LIBERTY_GRIND.md.
+native_bullet_guard = JAVA / "mixin/LibertyTaczProjectileMixin.java"
+home_entity_guard = JAVA / "mixin/LibertyHomeEntityMixin.java"
+home_block_guard = JAVA / "mixin/LibertyHomeBlockStateMixin.java"
+bounded_injection_guards = {native_bullet_guard, home_entity_guard, home_block_guard}
 for java_path in sorted(JAVA.rglob("*.java")):
     text = java_path.read_text(encoding="utf-8")
     in_isolated_compat = "compat" in java_path.relative_to(JAVA).parts
+    is_native_bullet_guard = java_path == native_bullet_guard
+    is_bounded_guard = java_path in bounded_injection_guards
     for imported in re.findall(r"^import\s+([^;]+);", text, re.MULTILINE):
+        imported = imported.removeprefix("static ")
         if imported.startswith(optional_compat_prefixes):
             if not in_isolated_compat:
                 fail(f"{java_path.relative_to(ROOT)}: optional mod class escaped isolated compat package: {imported}")
+        elif is_bounded_guard and imported.startswith("org.spongepowered.asm.mixin."):
+            pass
         elif not imported.startswith(allowed_import_prefixes):
             fail(f"{java_path.relative_to(ROOT)}: hard optional/unknown class import {imported}")
     for forbidden in (
@@ -228,8 +243,35 @@ for java_path in sorted(JAVA.rglob("*.java")):
         "Class.forName(\"com.aether",
         "Class.forName(\"twilightforest",
     ):
-        if forbidden in text:
+        if forbidden in text and not (is_bounded_guard and forbidden == "org.spongepowered.asm.mixin"):
             fail(f"{java_path.relative_to(ROOT)}: forbidden invasive/optional classloading token {forbidden}")
+    if is_native_bullet_guard:
+        for boundary in ('@Pseudo', '@Mixin(targets = "com.tacz.guns.entity.EntityKineticBullet", remap = false)',
+                         'method = "onHitEntity", at = @At("HEAD")', 'method = "onHitBlock", at = @At("HEAD")',
+                         'LibertyNativeBulletSafety.rejectEntity', 'LibertyNativeBulletSafety.handleBlock'):
+            if boundary not in text:
+                fail(f"{java_path.relative_to(ROOT)}: missing bounded optional bullet guard: {boundary}")
+    if java_path == home_entity_guard:
+        for boundary in ('@Mixin(value = Entity.class, remap = false)',
+                         'implements LibertyHomeEntityGuard', 'LibertyMobSafety.protectedHomeActor',
+                         '"isIgnoringBlockTriggers()Z", "m_6090_()Z"',
+                         '@Group(name = "jetsetcraft_home_step", min = 1, max = 1)',
+                         '@Group(name = "jetsetcraft_home_fall", min = 1, max = 1)',
+                         'block.stepOn(level, position, state, actor)',
+                         'block.fallOn(level, state, position, actor, distance)',
+                         'LibertyMobSafety.fallWithoutBlockCallbacks'):
+            if boundary not in text:
+                fail(f"{java_path.relative_to(ROOT)}: missing bounded home entity guard: {boundary}")
+        if text.count('@Redirect(') != 4 or text.count('@Inject(') != 1 or text.count('@Group(') != 4:
+            fail(f"{java_path.relative_to(ROOT)}: unexpected home entity injection surface")
+    if java_path == home_block_guard:
+        for boundary in ('@Mixin(value = BlockBehaviour.BlockStateBase.class, remap = false)',
+                         'implements LibertyHomeBlockGuard', 'LibertyMobSafety.protectedHomeActor(actor)',
+                         '"entityInside(', '"m_60682_(', 'at = @At("HEAD"), cancellable = true, require = 1'):
+            if boundary not in text:
+                fail(f"{java_path.relative_to(ROOT)}: missing bounded home block guard: {boundary}")
+        if text.count('@Inject(') != 1 or '@Redirect(' in text:
+            fail(f"{java_path.relative_to(ROOT)}: unexpected home block injection surface")
 
 source_contracts = {
     JAVA / "client/ClientEvents.java": (
