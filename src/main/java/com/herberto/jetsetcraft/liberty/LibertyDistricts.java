@@ -1,5 +1,6 @@
 package com.herberto.jetsetcraft.liberty;
 
+import com.herberto.jetsetcraft.data.SavedDataCheckpoint;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.server.MinecraftServer;
@@ -7,10 +8,14 @@ import net.minecraft.world.level.saveddata.SavedData;
 
 /** Monotonic arena allocation avoids recycling another mission's painted walls or terrain layout. */
 public final class LibertyDistricts extends SavedData {
+    private static final String NAME = "jetsetcraft_liberty_districts";
     private int next;
     private CompoundTag retained;
     public static LibertyDistricts get(MinecraftServer server) {
-        return server.overworld().getDataStorage().computeIfAbsent(LibertyDistricts::load, LibertyDistricts::new, "jetsetcraft_liberty_districts");
+        return server.overworld().getDataStorage().computeIfAbsent(LibertyDistricts::load, LibertyDistricts::new, NAME);
+    }
+    public static boolean saveAcknowledged(MinecraftServer server) {
+        return server != null && SavedDataCheckpoint.saveAndAcknowledge(server, NAME, get(server));
     }
     public int allocate() {
         if (retained != null || next >= 1_000_000) return -1;

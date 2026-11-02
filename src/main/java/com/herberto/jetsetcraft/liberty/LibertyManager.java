@@ -187,6 +187,8 @@ public final class LibertyManager {
         if (theater == null) return fail(player, "Choose an available war-map district.");
         State data = state(player.getServer()); int slot = data.sessions.size() >= 32 ? -1 : LibertyDistricts.get(player.getServer()).allocate();
         if (slot < 0) return fail(player, "All expedition districts are occupied. Wait for a crew to return.");
+        if (!LibertyDistricts.saveAcknowledged(player.getServer()))
+            return fail(player, "The server could not save your district allocation. No gear or location was changed.");
         UUID mission = UUID.randomUUID();
         if (!RushReturnState.capture(player, RETURN_KEY)) return fail(player, "Could not preserve your return checkpoint. No gear or location was changed.");
         if (!LibertyResearch.begin(player, mission)) {
@@ -201,7 +203,6 @@ public final class LibertyManager {
             LibertyResearch.abandonPending(player); persisted(player).remove(RETURN_KEY); persisted(player).remove(OUTCOME_KEY);
             return fail(player, "The server could not save your checkpoint. Your Minecraft belongings were not changed.");
         }
-        player.getServer().overworld().getDataStorage().save();
         data.sessions.put(player.getUUID(), s); data.menus.remove(player.getUUID());
         try {
             ItemStack ride = player.getCapability(JetSetDataProvider.CAPABILITY).map(value -> value.rideGear().copy()).orElse(ItemStack.EMPTY);
@@ -501,7 +502,8 @@ public final class LibertyManager {
                     throw new IllegalStateException("Shared crew progression is retained for a compatible recovery");
                 CrewHouseManager.bankLiberty(player, outcome.getUUID("Run"), ResourceLocation.tryParse(outcome.getString("Gang")),
                         outcome.getInt("Completed"), outcome.getBoolean("Extracted"));
-                player.getServer().overworld().getDataStorage().save();
+                if (!CrewHouseData.saveAcknowledged(player.getServer()))
+                    throw new IllegalStateException("Shared crew reward checkpoint was not acknowledged on disk");
                 outcome.putString("Summary", message == null ? "Returned from Liberty Grind." : message);
                 persisted(player).put(DEBRIEF_KEY, outcome.copy()); persisted(player).remove(OUTCOME_KEY);
             }
