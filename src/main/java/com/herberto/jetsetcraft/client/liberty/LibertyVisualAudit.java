@@ -221,7 +221,7 @@ public final class LibertyVisualAudit {
             }
             case 25 -> {
                 require(!state.getBoolean("Active") || state.getString("Phase").equals("DROPPING"),
-                        "Pod drop ended before its current vehicle had a genuine rendered frame");
+                        "Pod drop ended before three aligned moving render frames were observed");
                 if (!state.getBoolean("Active") || !LibertyClient.active() || minecraft.player.getVehicle() == null) return;
                 if (minecraft.screen != null) { ticks = 0; return; } // A terrain loading screen is not visual proof of a pod.
                 minecraft.player.getInventory().selected = 4; // Actual field radio: TaCZ may force first-person while holding a gun.
@@ -237,6 +237,8 @@ public final class LibertyVisualAudit {
                         && Double.isFinite(vehiclePos.x) && Double.isFinite(vehiclePos.y) && Double.isFinite(vehiclePos.z),
                         "Non-finite native transport or rider position");
                 long renderCalls = com.herberto.jetsetcraft.client.render.LibertyTransportRenderer.auditRenderCalls(vehicle.getId());
+                long movingRenderCalls = com.herberto.jetsetcraft.client.render.LibertyTransportRenderer.auditMovingRenderCalls(vehicle.getId());
+                int alignedFrames = com.herberto.jetsetcraft.client.render.LibertyTransportRenderer.auditAlignedMovingFrames(vehicle.getId());
                 boolean compiled = minecraft.levelRenderer.isChunkCompiled(vehicle.blockPosition());
                 if (ticks == 5 || compiled && renderCalls > 0) JetSetCraft.LOGGER.info("JETSETCRAFT_LIBERTY_VISUAL_AUDIT_TRANSPORT type={} class={} renderer={} player={} vehicle={} ticks={} chunk={} compiled={} riderCompiled={} old=({},{},{}) removed={} controlledLocal={} invisible={} renderCalls={} bounds={}",
                         net.minecraft.core.registries.BuiltInRegistries.ENTITY_TYPE.getKey(vehicle.getType()), vehicle.getClass().getName(),
@@ -245,7 +247,9 @@ public final class LibertyVisualAudit {
                         minecraft.levelRenderer.isChunkCompiled(minecraft.player.blockPosition()), vehicle.xOld, vehicle.yOld, vehicle.zOld, vehicle.isRemoved(),
                         vehicle.isControlledByLocalInstance(), vehicle.isInvisible(),
                         renderCalls, vehicle.getBoundingBox());
-                if (!compiled || renderCalls == 0) return;
+                if (!compiled || renderCalls == 0 || movingRenderCalls == 0 || alignedFrames < 3) return;
+                JetSetCraft.LOGGER.info("JETSETCRAFT_LIBERTY_VISUAL_AUDIT_SEAT movingFrames={} consecutiveAlignedFrames={} interpolationError={} tolerance=0.05",
+                        movingRenderCalls, alignedFrames, com.herberto.jetsetcraft.client.render.LibertyTransportRenderer.auditSeatError(vehicle.getId()));
                 capture(minecraft, "12-live-pod"); next(26);
             }
             case 26 -> {
