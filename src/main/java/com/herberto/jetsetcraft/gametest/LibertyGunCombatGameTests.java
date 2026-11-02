@@ -164,8 +164,8 @@ public final class LibertyGunCombatGameTests {
                     "A foreign mission's real bullet passed the damage admission guard");
             hit(foreign, protectedRival);
             check(protectedRival.getHealth() == health && operation.objectives.get(0).defeats() == defeats + 1
-                            && capture.attacks.stream().anyMatch(hit -> hit.attacker() == other
-                            && hit.direct() == foreign && hit.cancelled()),
+                            && foreign.isRemoved() && capture.attacks.stream().noneMatch(hit -> hit.attacker() == other
+                            && hit.direct() == foreign && !hit.cancelled()),
                     "Native cross-session collision damaged a rival or earned another player's mission progress");
             foreign.discard();
 
