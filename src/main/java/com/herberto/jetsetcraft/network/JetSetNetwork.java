@@ -15,7 +15,7 @@ import net.minecraftforge.network.simple.SimpleChannel;
 import java.util.UUID;
 
 public final class JetSetNetwork {
-    private static final String PROTOCOL = "15";
+    private static final String PROTOCOL = "16";
     private static final SimpleChannel CHANNEL = NetworkRegistry.ChannelBuilder
             .named(ResourceLocation.fromNamespaceAndPath(JetSetCraft.MOD_ID, "main"))
             .networkProtocolVersion(() -> PROTOCOL).clientAcceptedVersions(PROTOCOL::equals).serverAcceptedVersions(PROTOCOL::equals)
@@ -54,9 +54,15 @@ public final class JetSetNetwork {
         CHANNEL.messageBuilder(S2CActivityStatePacket.class, id++, NetworkDirection.PLAY_TO_CLIENT)
                 .encoder(S2CActivityStatePacket::encode).decoder(S2CActivityStatePacket::decode)
                 .consumerMainThread(S2CActivityStatePacket::handle).add();
-        CHANNEL.messageBuilder(S2CCrewRewardPacket.class, id, NetworkDirection.PLAY_TO_CLIENT)
+        CHANNEL.messageBuilder(S2CCrewRewardPacket.class, id++, NetworkDirection.PLAY_TO_CLIENT)
                 .encoder(S2CCrewRewardPacket::encode).decoder(S2CCrewRewardPacket::decode)
                 .consumerMainThread(S2CCrewRewardPacket::handle).add();
+        CHANNEL.messageBuilder(C2SLibertyActionPacket.class, id++, NetworkDirection.PLAY_TO_SERVER)
+                .encoder(C2SLibertyActionPacket::encode).decoder(C2SLibertyActionPacket::decode)
+                .consumerMainThread(C2SLibertyActionPacket::handle).add();
+        CHANNEL.messageBuilder(S2CLibertyStatePacket.class, id, NetworkDirection.PLAY_TO_CLIENT)
+                .encoder(S2CLibertyStatePacket::encode).decoder(S2CLibertyStatePacket::decode)
+                .consumerMainThread(S2CLibertyStatePacket::handle).add();
     }
     public static void sendInput(int mask, float forward, float strafe) { CHANNEL.sendToServer(new C2SInputPacket(mask, forward, strafe)); }
     public static void sendRideLoadoutAction(boolean unequip) { CHANNEL.sendToServer(new C2SRideLoadoutPacket(unequip)); }
@@ -70,6 +76,15 @@ public final class JetSetNetwork {
 
     public static void sendActivityAction(String action, String mode, UUID contextId, int version) {
         CHANNEL.sendToServer(new C2SActivityActionPacket(action, mode, contextId, version));
+    }
+
+    public static void sendLibertyAction(String action, String value, UUID missionId, long revision) {
+        CHANNEL.sendToServer(new C2SLibertyActionPacket(action, value, missionId, revision));
+    }
+
+    public static void syncLiberty(ServerPlayer player, CompoundTag state) {
+        if (player == null || !canSync(player)) return;
+        CHANNEL.send(PacketDistributor.PLAYER.with(() -> player), new S2CLibertyStatePacket(state));
     }
 
     public static void syncActivity(ServerPlayer player, CompoundTag state) {
