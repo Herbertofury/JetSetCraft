@@ -174,6 +174,8 @@ public final class RushBuildGameTests {
         RivalRushManager.tick(player.getServer());
         check(RivalRushManager.buildSnapshot(player).getInt("MarkedRivals") == 1
                         && target.getCustomName().getString().contains("Exposed"), "Visible priority rival did not receive a readable mark");
+        long markedAt = run.elapsedTicks();
+        long markApplications = RivalRushManager.buildSnapshot(player).getLong("MarkApplications");
         double before = RivalRushManager.actorVitality(player, target);
         check(RivalRushManager.artifactHit(player, target, 1)
                         && near(before - RivalRushManager.actorVitality(player, target), 1.25),
@@ -218,9 +220,50 @@ public final class RushBuildGameTests {
         check(target.getHealth() == nativeHealth
                         && nativeEffects.equals(target.saveWithoutId(new CompoundTag()).getList("ActiveEffects", Tag.TAG_COMPOUND)),
                 "Run-only marks or pulses mutated native mob health or potion effects");
+        long beforePause = run.elapsedTicks();
+        check(beforePause < markedAt + 49 && RivalRushManager.buildSnapshot(player).getInt("MarkedRivals") == 1,
+                "The bounded movement fixture exhausted its mark before the pause/expiry checks");
         run.gainXp(run.xpToNextLevel());
-        player.moveTo(base.x + 1, base.y, base.z, 0, 0); RivalRushManager.tick(player.getServer());
-        check(run.hasOffer() && run.lineCharge() == 0, "An upgrade decision pause generated movement power");
+        player.moveTo(base.x + 1, base.y, base.z, 0, 0);
+        for (int tick = 0; tick < 5; tick++) RivalRushManager.tick(player.getServer());
+        check(run.hasOffer() && run.lineCharge() == 0 && run.elapsedTicks() == beforePause
+                        && RivalRushManager.buildSnapshot(player).getInt("MarkedRivals") == 1
+                        && RivalRushManager.buildSnapshot(player).getLong("MarkApplications") == markApplications
+                        && target.getCustomName().getString().contains("Exposed"),
+                "An upgrade pause advanced movement power, mark applications or the active expiry clock");
+        // Prefer a damage-neutral actual choice; a non-mark fallback keeps the fixture valid for every draft.
+        int resumeChoice = -1;
+        for (int index = 0; index < run.offers().size(); index++) {
+            RushRun.Upgrade offered = run.offers().get(index);
+            if (offered != RushRun.Upgrade.FORCE && offered != RushRun.Upgrade.SURGE && offered != RushRun.Upgrade.EXPOSE) {
+                resumeChoice = index; break;
+            }
+        }
+        if (resumeChoice < 0) for (int index = 0; index < run.offers().size(); index++) {
+            if (run.offers().get(index) != RushRun.Upgrade.EXPOSE) { resumeChoice = index; break; }
+        }
+        check(resumeChoice >= 0, "The real fixture draft has no choice that preserves the rank-one mark");
+        RivalRushManager.handleAction(player, "choose", run.offers().get(resumeChoice).name(), resumeChoice, run.id(), run.offerVersion());
+        check(!run.hasOffer() && run.rank(RushRun.Upgrade.EXPOSE) == 1,
+                "Resuming the earned draft changed the rank-one expiry fixture");
+        // Advance this run through its production tick, never the native world clock. Rank one lasts 50 active ticks.
+        for (int tick = 0; tick < 50 && run.elapsedTicks() < markedAt + 49; tick++) RivalRushManager.tick(player.getServer());
+        check(run.elapsedTicks() == markedAt + 49 && RivalRushManager.buildSnapshot(player).getInt("MarkedRivals") == 1
+                        && target.getCustomName().getString().contains("Exposed"), "The rank-one mark expired before its fiftieth active tick");
+        RivalRushManager.tick(player.getServer());
+        check(run.elapsedTicks() == markedAt + 50 && RivalRushManager.buildSnapshot(player).getInt("MarkedRivals") == 0
+                        && RivalRushManager.buildSnapshot(player).getLong("MarkApplications") == markApplications
+                        && !target.getCustomName().getString().contains("Exposed"),
+                "The rank-one mark or its visible name survived expiry, or a new mark hid the expiry result");
+        before = RivalRushManager.actorVitality(player, target);
+        double unmarkedDamage = run.damageMultiplier();
+        check(before > 1 && RivalRushManager.artifactHit(player, target, 1)
+                        && near(before - RivalRushManager.actorVitality(player, target), unmarkedDamage),
+                "An expired mark retained its virtual damage multiplier");
+        check(target.getHealth() == nativeHealth
+                        && nativeEffects.equals(target.saveWithoutId(new CompoundTag()).getList("ActiveEffects", Tag.TAG_COMPOUND)),
+                "Mark expiry or the post-expiry hit mutated native mob health or potion effects");
+        JetSetCraft.LOGGER.info("JETSETCRAFT_RUSH_MARK_EXPIRY active_ticks=50 paused_calls=5 unmarked_damage={}", unmarkedDamage);
     }
 
     private static void cleanup(ServerPlayer player, ServerLevel level, ChunkPos center) {
