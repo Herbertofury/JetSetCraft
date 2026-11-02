@@ -32,7 +32,9 @@ The [wiki](https://github.com/Herbertofury/JetSetCraft/wiki) covers mechanics, c
 
 Recover super credits and three tiers of samples for six research projects. **Pressure Saver** improves ordinary graffiti; **Magnetic Pigment, Blast Stencil and Prism Ink** unlock selectable preparations for the existing single Rival Rush starting slot. Completed objectives and extraction also contribute to the same crew supplies, XP, training, reputation and Style Library. [Read the implemented scope and progression loop](docs/LIBERTY_GRIND.md).
 
-The [exact pack guide](docs/LIBERTY_GRIND_PACK.md) covers the current merged Helldivers release, installation and the optional native verification lane. JetSetCraft remains standalone; missing optional content blocks this deployment with a reason. Current missions are individual isolated deployments. Shared squads, galactic liberation and broader stratagem/weapon collections remain expansion work. The historical alpha evidence below does not certify this new mode.
+The [exact pack guide](docs/LIBERTY_GRIND_PACK.md) covers the current merged Helldivers release, installation and the optional native verification lane. JetSetCraft remains standalone; missing optional content blocks this deployment with a reason. Current missions are individual isolated deployments. Shared squads, galactic liberation and broader stratagem/weapon collections remain expansion work.
+
+The [Liberty Grind verification receipt and native gallery](docs/verification/liberty-grind/README.md) identify the actual tests, installed-package check, reviewed client captures and their source/artifact identities. The historical alpha evidence below describes its original versions separately.
 
 ## Optional Rival Rush mode — development alpha
 
