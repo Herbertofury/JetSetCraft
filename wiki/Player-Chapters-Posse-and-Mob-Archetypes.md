@@ -6,6 +6,8 @@
 
 The **historical alpha.3 baseline** in [PR #41](https://github.com/Herbertofury/JetSetCraft/pull/41) added shared street-game/arena rewards and banking before the first house. Player-built facilities, a persistent named roster, levels, dispatch jobs and optional Rival Rush preparation were introduced in alpha.2, whose historical evidence remains below. **Members are saved profiles: visible residents, skating followers and physical posse AI are future work.** Stable `v0.3.0` is unchanged. The [Crew House design study](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/CREW_HOUSE_DESIGN.md) contains eight primary-source inspirations and clearly labelled extensions. Older receipts retain their own source identities and scope.
 
+**Working continuation — `0.4.0-alpha.5`, 1 November 2026 (America/Denver):** the current implementation adds a **sixteen-lesson Style Library** learned through the existing shared crew XP account, including progress earned before founding. The alpha.5 sections below describe that working change; **its own runtime verification and merge receipt are pending**. The alpha.4 results and captures retain their historical scope.
+
 ## Alpha.4 Progress capture
 
 ![Actual Crew Progress tab with empty reward history and 16 of 40 Supplies toward a 25 by 25 house goal](https://raw.githubusercontent.com/Herbertofury/JetSetCraft/main/docs/verification/reward-journeys/13-crew-progress.png)
@@ -44,7 +46,7 @@ The client used the Charter, founded a home through production actions, displaye
 4. Build your own house and facilities. Founding grants **24 starting Crew Supplies, plus any previously banked activity earnings**, and creates two named profiles: **Riff** (Courier) and **Patches** (Tagger). Pending crew XP and reputation transfer too; all pending member training goes to **Riff, the initially focused member**, so he can begin above level one. No structure or resident mob is generated.
 5. In **Crew**, choose a member and a job; in **Jobs**, claim its result when ready. You can keep building, skating or playing ordinary Minecraft while the assignment advances.
 
-The alpha.4 book has **Home**, **Crew**, **Facilities**, **Jobs** and **Progress** tabs. You can inspect it away from home; managing members, jobs or facilities requires returning to the same dimension, standing inside the registered plot and having its Boombox naturally loaded and present. Finish or cancel a street activity, or return from Rival Rush, before managing the house. The server can disable this optional feature with `[crewHouse] enabled = false` while retaining saved progression.
+The book has **Home**, **Crew**, **Facilities**, **Jobs** and **Progress** tabs; alpha.5 adds **Style Library** inside Progress. You can inspect it away from home; managing members, jobs or facilities requires returning to the same dimension, standing inside the registered plot and having its Boombox naturally loaded and present. Starting styles can be selected away from home and before founding. Finish or cancel a street activity, or return from Rival Rush, before changing a style or managing the house. The server can disable this optional feature with `[crewHouse] enabled = false` while retaining saved progression.
 
 Each player has one owned house. **Show boundary** previews its square footprint. This area determines which facilities belong to the house; it does not protect blocks, reserve building permissions, create terrain or force-load chunks. Registered crew plots cannot overlap one another or extend past the world border, but ordinary Minecraft building remains governed by the server's usual rules.
 
@@ -58,9 +60,40 @@ Accepted rewards show a **seven-second native toast** without opening a menu. Re
 
 **Next goal** shows a practical step such as founding, registering a workshop or expanding the plot, with available Supplies, cost and shortfall. Its review action opens the relevant page without spending anything. **Affordable** and **physically ready** are different: you still place the required blocks, keep the home valid and loaded, and explicitly confirm an eligible purchase. No goal automatically builds your house.
 
+### Style Library: every mode's XP helps the next run
+
+The **alpha.5 continuation** adds **Crew Charter → Progress → Style Library**. Existing cumulative **crew XP** learns sixteen possible starting artifacts. Completed Tag, King of the Hill and Showdown rounds, arena clears, qualifying Rush returns and claimed missions all contribute to that same total. This is separate from member training XP and Minecraft XP, and learning or selecting a style spends no XP or Supplies.
+
+| Learned starting style | Cumulative crew XP required |
+|---|---:|
+| Line battery | 55 |
+| Air break | 110 |
+| Arc paint | 180 |
+| Beat ward | 260 |
+| Radiant groove | 350 |
+| Firework cap | 450 |
+| Venom ink | 560 |
+| Chill paint | 680 |
+| Split chorus | 810 |
+| Bass horn | 950 |
+| Rail shockwave | 1,100 |
+| Tempo drive | 1,260 |
+| Soul mixtape | 1,430 |
+| Soul burst | 1,610 |
+| Breakbeat mark | 1,800 |
+| Firebolt relay, with its optional Iron's provider/API | 2,000 |
+
+The library shows learned progress, the XP remaining for each lesson, the current selection and any missing provider. A reward notification announces newly crossed lesson thresholds after the reward is actually credited. Existing earned XP counts when loading an older crew account; no additional claim is required. Pre-house XP learns the same lessons, and founding preserves both the XP and the chosen style. Looking at a receipt or replaying an already-settled result does not learn it again through a second payout.
+
+Choose an available learned style while outside an active street game or Rush. The next Rush starts with **one rank of that artifact**, which uses **one of its three artifact-family slots** and takes the same single preparation slot as a house facility. It can apply without a house or while starting away from home. It does not stack with the facility perk or grow into several starting ranks at a higher XP total. The album's separately earned starting drafts still apply.
+
+**Use home preparation** remains the default. It uses the selected operational facility only when starting from the valid, loaded home; without one, the run starts with its ordinary build. Firebolt relay cannot be newly selected while its provider/API is absent. If an already-selected relay later becomes unavailable, the saved selection is retained and the next run falls back to those house rules. You can select another learned style or choose **Use home preparation** without a cost.
+
+The library unlocks **starting choices**: all currently available artifact families remain in ordinary Rush drafts regardless of lesson progress. Sixteen learned styles do not mean sixteen equipped artifacts. [The Rival Rush guide](Rival-Rush#six-new-artifact-rules--alpha5-continuation) explains the new effects, their ranks and their mode-only scope.
+
 ### An early loop: earn, found, build
 
-With crew progression enabled and the standard rewards, complete **one Tag round, one King of the Hill round and one Showdown before founding**. Their genuine completed objectives bank **34 Crew Supplies** and **77 member training XP**. Founding adds its 24 Supplies and gives that pending training to **Riff only**, bringing him to **level 2**; Patches begins at level 1.
+With crew progression enabled and the standard rewards, complete **one Tag round, one King of the Hill round and one Showdown before founding**. Their genuine completed objectives bank **34 Crew Supplies**, **220 crew XP** and **77 member training XP**. In alpha.5 that crew XP learns **Line battery, Air break and Arc paint** before the house exists; the first Tag alone reaches Line battery's 55-XP threshold. Founding adds its 24 Supplies and gives the pending training to **Riff only**, bringing him to **level 2**; Patches begins at level 1. Learned styles and the selected style carry into the new house account.
 
 | Step | Crew Supplies available |
 |---|---:|
@@ -130,11 +163,11 @@ Choose **Claim rewards** at home to bank the saved supplies, member XP, crew XP 
 
 Missions and completed **Tag, King of the Hill and Showdown** rounds can fund house growth without entering Rush. Arena clears also settle their own shared rewards. A qualifying Rush return adds a separate reward after at least **one minute of active run time and three rival defeats**; finishing all six arenas is not required. [The exact shared reward table](Rival-Rush#shared-completion-rewards) lists supplies, crew XP, member training and reputation. These rewards can be earned before founding and transfer with their recent settlement receipts when the first house is created. Ordinary mob kills, menu refreshes, cancelled street rounds and unloaded legacy Boombox actors do not settle these rewards. Crew Supplies never become vanilla items or XP orbs.
 
-In **Facilities**, **Choose preparation** selects at most **one** starting perk from an operational facility. The default is **No house preparation**. The benefit applies only when starting Rush from inside the valid, loaded home plot, and always grants one rank even if the facility is tier 3. It does not change ordinary Minecraft health, damage or item yield. The existing mob-card album's starting-draft milestones remain a separate Rush system.
+In **Facilities**, **Choose preparation** selects at most **one** starting perk from an operational facility; the default facility choice is **No house preparation**. With the Style Library set to **Use home preparation**, that benefit applies only when starting Rush from inside the valid, loaded home plot, and always grants one rank even if the facility is tier 3. A selected, learned and available style uses this same preparation slot instead. An unavailable selected provider style falls back to the facility rules. These perks do not change ordinary Minecraft health, damage or item yield. The existing mob-card album's starting-draft milestones remain a separate Rush system.
 
 The first slice provides no physical NPC residents, follower navigation, provider-backed recovery, playable expeditions, personal bond scenes or music-timed house activities. Those ideas have a clear place in the extension design below and in the [eight-game research study](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/CREW_HOUSE_DESIGN.md).
 
-House progression and pre-house earnings live in the world's saved crew record, separately from Rush's temporary player-return snapshot. Activity receipts and their rewards update together; the account retains the most recent **128 receipts** to reject repeated settlements, and founding transfers those identities with the pending earnings. Claiming a mission removes its job and adds its rewards together. These are bounded server-side replay protections; durability follows ordinary Minecraft world saves. An abrupt crash can lose changes since the last completed world save. Unrecognized save schemas are retained read-only, with management blocked until recovery or a compatible mod version is available.
+House progression, pre-house earnings and the selected starting style live in the world's saved crew record, separately from Rush's temporary player-return snapshot. Activity receipts and their rewards update together; the account retains the most recent **128 receipts** to reject repeated settlements, and founding transfers those identities with the pending earnings. Claiming a mission removes its job and adds its rewards together. Older supported saves keep their earned XP and begin with **Use home preparation** unless a style was already saved. These are bounded server-side replay protections; durability follows ordinary Minecraft world saves. An abrupt crash can lose changes since the last completed world save. Unrecognized save schemas are retained read-only, with management blocked until recovery or a compatible mod version is available.
 
 ## Future physical chapters and posse design
 

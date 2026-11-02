@@ -6,6 +6,8 @@
 
 The **historical alpha.3 baseline** in [PR #41](https://github.com/Herbertofury/JetSetCraft/pull/41) added the shared activity menu, arena circuit and earlier artifact families. Its [separate receipt](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/verification/arena-circuit/README.md) preserves 28 tests in nine configurations and ten reviewed client captures, with the dated provider-startup scope correction. The stable `v0.3.0` release is unchanged and does not include Rival Rush, which first arrived through [PR #39](https://github.com/Herbertofury/JetSetCraft/pull/39). Rival Rush is one optional mode inside JetSetCraft; normal movement, graffiti, crews, Boombox challenges and Minecraft continue independently. The [18-game research and design study](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/RIVAL_RUSH_DESIGN.md) separates source observations, implemented rules and future proposals.
 
+**Working continuation — `0.4.0-alpha.5`, 1 November 2026 (America/Denver):** the current implementation adds six artifact families, a permanent sixteen-lesson Style Library, readable reward caches, actual build-reward debriefs and three more optional provider arenas. The alpha.5 sections below describe this working change; **its own runtime verification and merge receipt are pending**. The alpha.4 results and captures above remain historical evidence for that version.
+
 ## One activity menu, shared crew progress
 
 Use a tuned Boombox with an empty hand, or `/jetsetcraft activity`. The activity catalogue contains **Random, Tag, King of the Hill, Showdown and Rival Rush**. Random rolls a preview; you explicitly accept before actors appear or Rush moves you into its separate district. Selecting an explicit mode at the Boombox keeps that selection.
@@ -43,6 +45,14 @@ Successful awards produce a **nonblocking Minecraft toast** with their contribut
 
 The Progress tab also shows the next practical home goal: the supply cost or shortfall, the required placed blocks, and the relevant home/facility page. Suggestions can lead from founding and registering a workshop to expanding the plot and adding facilities. You still place the blocks yourself and explicitly purchase eligible upgrades. Viewing a goal spends nothing. This history follows normal world saves and is not an unlimited activity archive.
 
+### Permanent starting styles — alpha.5 continuation
+
+Open **Crew Charter → Progress → Style Library** to choose a learned starting artifact. The library has **sixteen lessons at 55–2,000 cumulative shared crew XP**. Completed street games, arena clears, qualifying Rush returns and claimed missions all advance that same XP total. No second currency or purchase is required: the first completed Tag round earns 55 crew XP and learns **Line battery**, even before a house exists. Previously earned crew XP counts too; founding keeps the earned progress and selected style.
+
+Selecting a learned, available style is free and grants **exactly one rank** at the start of the next Rush, using one of its three artifact slots. It replaces the facility preparation rather than adding another starting perk. Choose **Use home preparation**, the default, to retain the existing operational-facility rules; without an eligible facility the run uses its ordinary starting build. The mob album's earned starting drafts remain separate.
+
+You can change your choice away from home, including before founding, after finishing any active street game or Rush. Firebolt relay needs its provider/API both to be selected and to apply. If that provider later disappears, the saved choice remains and the next run falls back to an eligible house preparation, or the ordinary build. **All available artifact families remain in normal run drafts from the start**; learning a style unlocks a deliberate starting choice. [The crew guide lists every lesson and threshold](Player-Chapters-Posse-and-Mob-Archetypes#style-library-every-modes-xp-helps-the-next-run).
+
 ## Arena circuit: choose, ride, clear, collect
 
 Rush setup has two play styles. **Free streets** retains the thirty-minute/Endless district. **Arena circuit** gives a six-stop journey; a Boombox Rival Rush invitation starts this circuit. At each fork, choose one of up to three profiles showing the reward, size and duration, then skate along the generated nine-block-wide connection to the next room. The HUD shows route progress, distance and the current combat objective.
@@ -57,6 +67,8 @@ Open **Journey** to inspect the current set's visited rooms, current destination
 
 The map marks the start with **S**, completed rooms with their numbers, and current offers with **A/B/C**. It does not draw unknown future branches. A new clear opens the latest room's debrief after any earned XP draft, including its actual settlement and a note if the progress is saved before founding. The separate route comparison remains available for choosing the next arena.
 
+In the **alpha.5 continuation**, forks favor profiles not yet visited in the current set and different reward families when the installed catalogue permits. The cache result and room debrief also name the **actual build changes**: the ranks gained and their resulting ranks, score granted at a cap, vitality actually restored and any owned-card magnet. A full build does not receive a fictional rank or full-heal claim. The existing shared settlement still reports the amounts actually credited to the crew account.
+
 | Arena | Layout / radius | Combat time / rivals | Build reward | Shared emphasis |
 |---|---|---|---|---|
 | Signal Yard | Plaza / 24 | 120 s / 8 | Paint damage | Balanced |
@@ -66,14 +78,30 @@ The map marks the start with **S**, completed rooms with their numbers, and curr
 | Copper Current | Loop / 30 | 150 s / 10 | Magnet and pickup reach | Supplies |
 | Greenroom Steps | Terraces / 40 | 240 s / 20 | Recovery | Training |
 | Cloudline Circuit, with Aether | Loop / 32 | 180 s / 12 | Magnet and pickup reach | Training |
+| Runecast Crossing, with Iron's Spells — alpha.5 | Crossing / 28 | 150 s / 10 | Ability area | Training |
+| Embervault Loop, with Cataclysm — alpha.5 | Loop / 36 | 210 s / 16 | Artifact | Reputation |
+| Expedition Steps, with AoA — alpha.5 | Terraces / 32 | 180 s / 12 | Recovery | Supplies |
+
+The supplied alpha.5 catalogue has **six base profiles**, or **ten with Aether, Iron's, Cataclysm and AoA installed**. Each optional profile requires its named provider. Cloudline Circuit uses Aether materials with vanilla fallbacks; Embervault Loop uses safe decorative Cataclysm materials with vanilla fallbacks. Runecast Crossing and Expedition Steps use vanilla materials to express their themes. These are rooms inside Rush, not copies of provider dimensions, native boss dungeons or absent legacy AoA worlds.
 
 Rooms are generated only inside the registered Rush dimension. Terrain from the original world, player builds, mobs and inventories are not imported. Connectors preserve passable lanes through walls and authored blocks. Generation advances in bounded batches using loaded chunks; it adds no persistent chunk tickets.
 
 ## Reward caches and three artifact slots
 
-Glowing personal caches offer **magnet, paint damage, critical chance/power, area, recovery or an artifact**. Three additional owned rival defeats charge the next claim. Skate through a charged cache to collect it. A magnet reaches only owned run-card pickups; it does not attract vanilla items or another player's rewards. Each arena has a fresh set. Free streets continually discovers new nearby caches; previously claimed locations replenish after at least ten active minutes, with a bounded conservative cooldown ledger.
+Glowing personal caches offer **magnet, paint damage, critical chance/power, area, recovery or an artifact**. In alpha.5 each has a distinct colored floor pattern as well as a readable name. Open **Build → Scout reward caches** for up to six nearby caches, their compass direction, distance, current benefit, recharge time and the defeats still needed. Inspecting the list does not claim a reward.
 
-Runs have **three artifact-family slots**. The alpha.4 catalogue contains **21 ranked choices: eleven stat upgrades and ten artifact families**. Firebolt relay requires the optional Iron's provider/API, leaving twenty ranked choices and nine families without it. Each artifact has **four ranks**; taking another rank strengthens an existing family. Full builds still receive useful score/recovery rewards; a stale draft cannot open a fourth slot.
+| Cache marker | Reward while the relevant rank is available |
+|---|---|
+| Orange | Paint pressure: more tag damage |
+| Magenta | Critical rhythm and Finishing touch: critical chance and damage |
+| Cyan | Bigger chorus: ability and paint area |
+| Purple | One available artifact rank, respecting the three-family limit |
+| Yellow | Magnetic mixtape: pickup reach, plus a ten-second owned-card magnet |
+| Lime | Easy breathing: recovery between threats, plus up to 25 immediate vitality |
+
+In an arena, **three new owned rival defeats in the current room charge one claim**. After collecting, three further defeats charge the next choice; unused defeats from an earlier room do not precharge the next arena. Skate through a charged cache with a clear approach to collect it. A magnet reaches only owned run-card pickups. Each arena has a fresh set; Free streets uses the same three-defeat claim requirement while continually discovering nearby caches. Claimed locations replenish after at least ten active minutes using a bounded conservative cooldown ledger. At a rank or slot cap, the result reports its accepted score and recovery instead of promising another rank.
+
+Runs have **three artifact-family slots**. The alpha.5 continuation has **27 ranked choices: eleven stat upgrades and sixteen artifact families**. Firebolt relay requires the optional Iron's provider/API, leaving **26 ranked choices and fifteen families** without it. The historical alpha.4 pool had 21 choices and ten families, or twenty and nine without the relay. Each artifact has **four ranks**; taking another rank strengthens an existing family. Full builds still receive useful score/recovery rewards; a stale draft cannot open a fourth slot.
 
 | Artifact | Implemented behavior |
 |---|---|
@@ -87,10 +115,31 @@ Runs have **three artifact-family slots**. The alpha.4 catalogue contains **21 r
 | Line battery — alpha.4 | Ride 24 actual horizontal blocks to charge a stronger next primary paint or contact tag |
 | Air break — alpha.4 | Complete a moving airborne interval and land to pulse nearby visible rivals |
 | Breakbeat mark — alpha.4 | Briefly expose a visible priority rival to greater mode damage |
+| Venom ink — alpha.5 | Primary tags apply refreshing, nonstacking damage over active time |
+| Chill paint — alpha.5 | Primary tags briefly slow Rush-directed rival steering and attack cadence |
+| Split chorus — alpha.5 | Every fourth primary tag hits additional visible rivals in a forward cone |
+| Radiant groove — alpha.5 | Every sixth accepted primary tag restores run vitality |
+| Beat ward — alpha.5 | A virtual shield absorbs run damage and recharges after a quiet interval |
+| Soul burst — alpha.5 | Owned defeats charge an automatic nearby burst, separate from Soul mixtape's healing pool |
 
 **Critical rhythm** adds critical chance, **Finishing touch** raises critical damage, **Bigger chorus** expands paint/artifact area and **Fast rewind** reduces artifact intervals. These are run statistics. They do not change vanilla weapon damage or carry temporary run equipment home.
 
 The optional Firebolt relay is a focused integration. Native spellbook casting, provider mana/cooldowns, summons and arbitrary third-party capability restoration are outside its scope. See [Compatibility](Compatibility) for the exact tested versions and evidence.
+
+### Six new artifact rules — alpha.5 continuation
+
+These are the working implementation's tuning values, pending its own runtime receipt. Let **r** be the artifact rank, from one to four, **A** the current area multiplier and **I** the artifact-interval multiplier. Twenty active ticks are one second at normal simulation speed; upgrade and route decisions pause active time.
+
+| Artifact | Trigger, scaling and limits |
+|---|---|
+| **Venom ink** | A primary tag applies **1 + r** base virtual damage every **20 active ticks** for **60 + 20r ticks**. Reapplying refreshes the duration without stacking another effect or delaying its next tick. |
+| **Chill paint** | A primary tag chills for **40 + 10r active ticks**. Rush-directed steering speed is multiplied by **0.8 − 0.05r**; the directed attack interval is multiplied by **1 + 0.15r**. |
+| **Split chorus** | Every fourth accepted primary tag hits **1 + floor(r / 2)** additional visible rivals: **1 / 2 / 2 / 3** by rank. They must be in the forward cone (`dot ≥ 0.8`) and within **min(28, (10 + 2r) × A)** blocks. Base damage is **2 + r** per target. |
+| **Radiant groove** | Every sixth accepted primary tag heals **2 + 2r** run vitality, up to the current maximum. |
+| **Beat ward** | Shield capacity is **8 + 4r**. It absorbs run damage before vitality; after **120 active ticks** without incoming run damage, it restores **2 + r** shield each active second, up to capacity. |
+| **Soul burst** | While equipped, owned defeats fill a separate pool capped at **20 charges**. An automatic burst spends **five** when a visible target is in range and its **round(100 × I)-tick** interval is ready. It deals **4 + 3r** base damage within **(4 + 0.5r) × A** blocks to at most **twelve visible owned rivals**. |
+
+Secondary damage uses the run's applicable damage multipliers but does not critically hit or recursively trigger primary-tag artifacts. Venom and Chill affect the session's virtual combat; they do not add native poison or slowness potions or rewrite provider attributes. Radiant groove and Beat ward use run vitality and shielding, not Minecraft hearts or armor. Soul burst and Soul mixtape hold independent charge pools. All six families support the existing four-rank, three-slot and between-room remix rules.
 
 ### Ride a line, land a pulse, use the opening
 
@@ -195,7 +244,7 @@ The album shows the creature identity, crew, count, tier and next threshold. It 
 
 ## Optional crew-house connection
 
-A [player-built crew house](Player-Chapters-Posse-and-Mob-Archetypes) can prepare **one selected starting rank** when a run begins from its valid loaded plot. The album's earned starting drafts remain separate. Qualifying run results can also bank bounded Crew Supplies, crew XP, gang reputation and training for a selected idle roster member. House dispatch jobs provide a non-Rush progression route, and Rush remains playable without a house. These are persistent profiles; physical companions do not enter the run.
+A [player-built crew house](Player-Chapters-Posse-and-Mob-Archetypes) can prepare **one selected starting rank** when a run begins from its valid loaded plot. Alpha.5's learned Style Library choice can use that same single preparation slot without requiring a house; see [Permanent starting styles](#permanent-starting-styles--alpha5-continuation). The album's earned starting drafts remain separate. Qualifying run results also bank bounded Crew Supplies, crew XP, gang reputation and training for a selected idle roster member. House dispatch jobs provide a non-Rush progression route and help learn styles. These are persistent profiles; physical companions do not enter the run.
 
 ## Build choices
 
@@ -213,11 +262,11 @@ A [player-built crew house](Player-Chapters-Posse-and-Mob-Archetypes) can prepar
 | **Bigger chorus** | Larger paint and artifact area | 6 |
 | **Fast rewind** | Shorter artifact intervals, with bounded minimums | 6 |
 
-These eleven stat upgrades join alpha.4's ten artifact families, or nine without the optional relay; alpha.3 had seven families and the original alpha.2 pool had seven stat upgrades. All artifacts cap at rank four. Once capped, drafts remain useful through **Fresh wheels** healing, **Victory lap** score, and temporary **Overdrive** damage. Choices validate the player, current run UUID, offer version and offered index. Replaying an old request cannot buy an upgrade in a new run.
+These eleven stat upgrades join alpha.5's sixteen artifact families, or fifteen without the optional relay. Alpha.4 had ten families, alpha.3 had seven, and the original alpha.2 pool had seven stat upgrades. All artifacts cap at rank four. Once capped, drafts remain useful through **Fresh wheels** healing, **Victory lap** score, and temporary **Overdrive** damage. Style Library unlocks do not restrict ordinary drafts. Choices validate the player, current run UUID, offer version and offered index. Replaying an old request cannot buy an upgrade in a new run.
 
 ## Optional crew-house preparation and training
 
-The [player-built crew-house layer](Player-Chapters-Posse-and-Mob-Archetypes) can now support Rush without becoming a prerequisite. Register physical workshop, practice, studio or recovery facilities at home and choose **one** starting rank. Enter from inside your valid, loaded house plot to receive it; higher facility tiers do not stack more starting ranks. Album-earned draft choices remain separate.
+The [player-built crew-house layer](Player-Chapters-Posse-and-Mob-Archetypes) supports Rush through physical workshop, practice, studio or recovery facilities. With **Use home preparation** selected in the Style Library, enter from inside your valid, loaded house plot to receive its **one** chosen rank. An earned, available starting style takes that same preparation slot instead; an unavailable selected provider style falls back to the house rules. Higher facility tiers do not stack more starting ranks. Album-earned draft choices remain separate.
 
 A settled run with at least one minute of active time and three genuine rival defeats can earn virtual Crew Supplies, crew XP, reputation with that rival gang and training for one selected idle roster member. Those rewards never become vanilla items or XP. Dispatch missions provide a separate route to house progress while playing ordinary Minecraft. Crew members are currently persistent roster profiles, not physical followers.
 
@@ -273,7 +322,15 @@ The mode filters absent entity IDs without requiring optional mods. A completely
 
 ### Custom arena data packs
 
-Start with the [ready-to-edit Crossfade Yard data pack](https://github.com/Herbertofury/JetSetCraft/tree/main/examples/arena-data-pack). It contains the pack metadata, a complete arena definition, four authored corner markers and installation instructions.
+Start with the [ready-to-edit arena data pack](https://github.com/Herbertofury/JetSetCraft/tree/main/examples/arena-data-pack). Its alpha.5 continuation contains **three complete profiles**, pack metadata and installation instructions. Crossfade Yard includes four authored corner markers.
+
+| Example profile | Layout / radius | Combat time / rivals | Build reward | Shared emphasis |
+|---|---|---|---|---|
+| Crossfade Yard | Crossing / 28 | 150 s / 10 | Critical chance and power | Reputation |
+| Collector's Loop | Loop / 24 | 120 s / 8 | Pickup reach and owned-card magnet | Supplies |
+| Chorus Terrace | Terraces / 32 | 180 s / 14 | Two ability-area ranks | Training |
+
+Install the folder under the world's `datapacks`, then `/reload` or restart. Choose **Arena circuit** and a starting profile in Rush setup. The example adds profiles to the route pool rather than forcing a three-room order. A running circuit keeps the definitions it started with; begin another run after editing/reloading to use the changes.
 
 Add `data/<namespace>/rush_arenas/<name>.json`. The server loads at most 32 profiles. The optional `requires_mod` key hides a provider-specific profile when that provider is absent. Palette entries may be one block ID or an ordered array of up to eight fallback IDs.
 
@@ -338,7 +395,7 @@ The [alpha.1 verification receipt](https://github.com/Herbertofury/JetSetCraft/t
 
 ## What remains a design proposal
 
-Alpha.3 implements chaining, rail-triggered pulses and its seven earlier artifact families. Alpha.4 adds the three verified families and rank-preserving artifact remix described above. Painted drift trails, evolutions, reusable enchantment libraries, native equipment rerolls and the full Dungeons item catalogues remain design work. Human playtesting is still needed for the implemented families.
+Alpha.3 implements chaining, rail-triggered pulses and its seven earlier artifact families. Alpha.4 adds the three verified families and rank-preserving artifact remix described above. The alpha.5 working continuation adds six more families and the **limited sixteen-lesson permanent Style Library**; its verification remains pending. Painted drift trails, evolutions, full equipment/enchantment collections, native equipment rerolls and the comprehensive Dungeons item catalogues remain design work. The Style Library preserves a starting choice, not native Dungeons gear or a complete enchantment system. Human playtesting is still needed for the implemented families.
 
 Captains currently add tougher priority targets and rewards. Bespoke boss attack patterns, paired bosses, crew-specific final headliners, and the proposed authored thirty-minute sequence remain future work. Free streets ends at its timer boundary; the circuit ends after six arena clears. Both offer Return/Encore without a bespoke final boss.
 
