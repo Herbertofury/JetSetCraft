@@ -6,9 +6,9 @@
 
 The server owns movement and scoring. Client code presents synchronized state; it does not decide whether a trick, landing, dance reward, or grind attachment succeeded.
 
-## Current alpha.7 candidate: room contracts and shared services
+## Current alpha.7: room contracts and shared services
 
-This section describes the implemented `0.4.0-alpha.7` candidate. Its **63-test and 23-capture acceptance remains pending**; [Testing and Verification](Testing-and-Verification) separates the required gates from historical alpha.6 and earlier results. Stable `v0.3.0` retains its own release identity.
+This section describes `0.4.0-alpha.7`, merged through [PR #46](https://github.com/Herbertofury/JetSetCraft/pull/46) as [`af8e7f1b7a41b0e491f04d3f3f8ca4288ac5eed7`](https://github.com/Herbertofury/JetSetCraft/commit/af8e7f1b7a41b0e491f04d3f3f8ca4288ac5eed7). Its 63 required GameTests passed in each of nine configurations, and base passed the 23-capture native gate. [Testing and Verification](Testing-and-Verification) and the [alpha.7 receipt](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/verification/contracts/README.md) identify the exact tested source, reviewed independent local images and fixture/packaged-JAR boundaries. Stable `v0.3.0` retains its own release identity.
 
 | Component | Authority and bounds |
 |---|---|
@@ -34,7 +34,7 @@ Tune advances one owned, available stat/artifact by one rank without fallback XP
 
 The original Minecraft/provider entity remains source-owned. Rush progression, vitality, steering directives and artifact effects stay within the owned session; this continuation does not replace native AI or rewrite native health, attributes or status effects. Optional providers remain isolated and unavailable content fails closed. Required time, defeat and headliner gates remain independent of side-contract success.
 
-Model GameTests exercise production transactions directly; runtime fixtures separately exercise sessions, accepted events and the server action handler. Native Forge source-set execution and a separately built distributable JAR are distinct evidence. Neither the new candidate nor historical provider results imply every native spellbook, foreign capability, mob or mod combination is supported. The saved return journal and accepted crew receipts remain the ordinary-state and permanent-reward boundaries.
+Model GameTests exercise production transactions directly; runtime fixtures separately exercise sessions, accepted events and the server action handler. Native Forge source-set execution and a separately built distributable JAR are distinct evidence. Neither these results nor historical provider results imply every native spellbook, foreign capability, mob or mod combination is supported. The saved return journal and accepted crew receipts remain the ordinary-state and permanent-reward boundaries.
 
 ## Movement modules
 

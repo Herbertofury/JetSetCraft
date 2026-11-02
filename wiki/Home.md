@@ -20,13 +20,19 @@
 | Pick skates, a board, BMX, hoverboard, or scooter | **[Ride Styles](Ride-Styles)** |
 | Build tricks, combos, transfers, and Flow | **[Tricks, Combos & Flow](Tricks-Combos-and-Flow)** |
 | Paint tags, create custom art, or use Free Paint | **[Graffiti](Graffiti)** |
-| Choose an isolated skating roguelite session or an arena circuit | **[Rival Rush](Rival-Rush)** — merged and verified `0.4.0-alpha.4` |
+| Choose an isolated skating roguelite session or an arena circuit | **[Rival Rush](Rival-Rush)** — merged and verified `0.4.0-alpha.7` |
 | Build a house, develop crew profiles and send dispatch jobs | **[Player Chapters and Crew Houses](Player-Chapters-Posse-and-Mob-Archetypes)** |
 | Browse games, music, art and engineering inspiration | **[Inspiration & Research](Inspiration-and-Research)** |
 | Build a compatible modpack or server | **[Modpack Maker Guide](Modpack-Maker-Guide)** |
 | Inspect architecture and verification evidence | **[Developer Architecture](Developer-Architecture)** · **[Testing](Testing-and-Verification)** |
 
-## 🧪 Verified alpha.4: rewards, journeys and builds
+## 🧪 Verified alpha.7: room contracts and earned Pit stops
+
+Optional **Relay, Paint and Hunt** contracts give arena routes an additional goal. A genuine room clear earns one **Pit stop** choice, or two with a completed contract, shared by **Tune, Patch, Rewind and Remix**. Accepted feedback and Last run counters show what actually changed; required time, rivals and headliners still decide each clear.
+
+[PR #46](https://github.com/Herbertofury/JetSetCraft/pull/46) merged as [`af8e7f1b7a41b0e491f04d3f3f8ca4288ac5eed7`](https://github.com/Herbertofury/JetSetCraft/commit/af8e7f1b7a41b0e491f04d3f3f8ca4288ac5eed7), retaining tested tree `e33c221bb02df4c949c28766007893215d7ca2ed`. [Base verification](https://github.com/Herbertofury/JetSetCraft/actions/runs/41397720888) and the [provider matrix](https://github.com/Herbertofury/JetSetCraft/actions/runs/41397720946) passed **63 required Forge GameTests in each of nine configurations — 567 executions of 63 distinct tests**, all builds and normal dedicated-server save/shutdown. Base also passed its **23-capture native-client gate**. The [23-image independent local gallery and receipt](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/verification/contracts/README.md) show the real Paint goal, earned stop and accepted Tune from rank one to two, with scripted arrival/hit and clock fixtures explicitly identified. These development results do not change stable `v0.3.0` or establish a full human circuit, every provider combination or installed-JAR runtime.
+
+## Historical alpha.4: rewards, journeys and builds
 
 **See what every session contributes.** Alpha.4 adds sixteen persistent reward receipts showing the Supplies, crew XP, training and reputation actually credited across street games, arenas, qualifying Rush returns and claimed missions. **[Crew Charter → Progress](Player-Chapters-Posse-and-Mob-Archetypes#progress-see-what-you-earned-and-what-to-build-next)** works before founding and shows the next practical home goal, its cost and physical requirements. You still place the blocks yourself.
 

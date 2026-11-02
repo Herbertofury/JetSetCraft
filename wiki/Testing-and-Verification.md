@@ -2,32 +2,32 @@
 
 JetSetCraft treats a passing Java compile as intermediate evidence, not final proof. The repository CI regenerates assets, validates contracts, builds the reobfuscated JAR, runs real Forge GameTests, and starts a real dedicated server.
 
-## Current alpha.7 candidate acceptance — pending
+## Current alpha.7 contract and Pit stop acceptance
 
-**The `0.4.0-alpha.7` candidate is implemented; its complete acceptance is pending.** The required suite is **63 distinct Forge GameTests**: 55 retained alpha.6 cases, four optional-contract cases, three Pit stop model cases and one Pit stop runtime case. The target remains base plus eight pinned provider configurations, with a separate native-client audit in base. No candidate pass, CI run, merge identity, archive inspection or capture review is claimed in this section.
+**`0.4.0-alpha.7` merged through [PR #46](https://github.com/Herbertofury/JetSetCraft/pull/46) as [`af8e7f1b7a41b0e491f04d3f3f8ca4288ac5eed7`](https://github.com/Herbertofury/JetSetCraft/commit/af8e7f1b7a41b0e491f04d3f3f8ca4288ac5eed7).** [Base verification](https://github.com/Herbertofury/JetSetCraft/actions/runs/41397720888) and the [provider matrix](https://github.com/Herbertofury/JetSetCraft/actions/runs/41397720946) passed **63 required Forge GameTests in each of nine configurations — 567 executions of 63 distinct tests**, all builds and normal dedicated-server save/shutdown. Base also passed its **23-capture native-client gate**. The suite contains 55 retained alpha.6 cases, four optional-contract cases, three Pit stop model cases and one Pit stop runtime case. Local checkpoint `3e211313f8b2fd4898abc05c9836099817f6a249`, feature `56b27b6b42ad55ac668e40ae294cadecf1f3948c` and tested integration `e8115bf2339318273618846a26e1bdb40434aa8b` share verified tree `e33c221bb02df4c949c28766007893215d7ca2ed` with the merge. The [alpha.7 receipt](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/verification/contracts/README.md) separates CI gate results from the independently reproduced local source runtime, artifact hashes and 23 reviewed local PNGs.
 
-| Candidate gate | Required evidence | Status |
+| Gate | Observed evidence | Status |
 |---|---|---|
-| Source and build | Asset generators, all validators and a clean Forge build | Pending |
-| Base and provider runtime | All 63 required tests in each configuration, build, dedicated-server readiness and normal save/shutdown | Pending |
-| Native client | All retained audit markers, `JETSETCRAFT_CONTRACT_VISUAL_AUDIT_PASS`, contract fixture observations and **23 named captures** | Pending |
+| Source and build | Asset generators, all repository validators and a clean Forge build | [PASS — base](https://github.com/Herbertofury/JetSetCraft/actions/runs/41397720888) |
+| Base and provider runtime | All 63 required tests in each of nine configurations; build, dedicated-server readiness, RCON stop and normal save/shutdown | [PASS — base](https://github.com/Herbertofury/JetSetCraft/actions/runs/41397720888) · [eight provider lanes](https://github.com/Herbertofury/JetSetCraft/actions/runs/41397720946) |
+| Native client | All five audit PASS markers, contract fixture/return observations and **23 named captures**; 23 independent local PNGs reviewed | [PASS — base gate](https://github.com/Herbertofury/JetSetCraft/actions/runs/41397720888) · [local gallery](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/verification/contracts/README.md) |
 
 ### Eight added acceptance cases
 
 | Required alpha.7 marker | Behavior under test |
 |---|---|
 | `rush_contract_catalogue` | Optional contract parsing, legacy no-contract defaults, bounded targets and malformed-data rejection. |
-| `rush_contract_relay` | Ordered beacons reached by observed riding; pause/discontinuity and unavailable-terrain boundaries. |
-| `rush_contract_paint` | Accepted fresh in-room patches, duplicate rejection and optional progress that cannot clear the room itself. |
+| `rush_contract_relay` | Ordered manager-observed riding; pause, same-tick draft, standard teleport and greater-than-four-block discontinuity resets; blocked standing space. |
+| `rush_contract_paint` | Actual east perimeter acceptance, outside-column/duplicate/paused rejection, accepted patch credit before its XP draft and no independent room clear. |
 | `rush_contract_hunt` | Actual owned elite/captain defeats; ordinary, foreign and repeated defeats cannot satisfy the goal. |
 | `rush_pit_stop_rules` | Canonical clear receipts, one/two shared credits, each service kind once, stale/duplicate rejection, departure invalidation and old Schema 1 report defaults. |
 | `rush_pit_stop_effects` | Room-six Encore services, owned capped ranks, actual partial recovery, no-op/no-spend behavior and provider-unavailable targets. |
 | `rush_pit_stop_snapshots` | Draft-only exclusions, bounded Rewind refills, precise previews, pending-draft blocking and detached results. |
 | `rush_pit_stop_runtime` | Production action handler, actual contracted room settlement and receipt, accepted services/feedback, travel closure, ordinary-state return and persisted counters. |
 
-These are fixture coverage requirements, not completed results. The model cases call production rules with explicit clear inputs; runtime cases exercise actual server sessions and accepted events. Positioning, prerequisite state and clocks may be supplied to reach a bounded scenario. Calling the production packet handler directly is not a network-socket or codec test. Existing room time/defeat/headliner gates remain required, and completing a side contract alone must not grant a service or permanent award.
+These eight cases passed within the 63-test local suite and each CI configuration. The model cases call production rules with explicit clear inputs; runtime cases exercise actual server sessions and accepted events. Positioning, prerequisite state and clocks may be supplied to reach a bounded scenario. Calling the production packet handler directly is not a network-socket or codec test. Existing room time/defeat/headliner gates remain required, and completing a side contract alone must not grant a service or permanent award.
 
-The client target adds `20-contract-briefing`, `21-contract-progress`, `22-pit-stop` and `23-service-result` after the retained nineteen views. Their actual images and logged fixture boundaries must be reviewed before a visual success claim. Neither a shortened audit nor the provider matrix establishes human pacing, prolonged Endless play, every foreign mob/spell or every mod combination. ForgeGradle's native runtime tasks execute the source set while separately building the distributable JAR; independently installing that packaged JAR remains a separate acceptance boundary.
+The base client gate adds `20-contract-briefing`, `21-contract-progress`, `22-pit-stop` and `23-service-result` after the retained nineteen views. All 23 independent local images were reviewed for readable, truthful state. The new sequence establishes a Paint contract, a normal actual room clear and a confirmed Tune, not native-client Relay/Hunt completion or all service types. Neither this shortened audit nor the provider matrix establishes human pacing, prolonged Endless play, every foreign mob/spell or every mod combination. ForgeGradle runtime tasks execute the source set while separately building the distributable JAR; independently installing that JAR remains a separate acceptance boundary. Local images and local JAR hashes do not establish CI archive or binary equality.
 
 ## Historical alpha.6 headliner, evolution and debrief acceptance
 
@@ -144,7 +144,7 @@ The provider-present proofs passed with the actual source mods loaded. The Iron'
 
 ## Versioned verification evidence
 
-The published **v0.3.0** release has **nine** GameTests, as recorded in its [release evidence](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/RELEASE_EVIDENCE_0.3.0.md). Historical **alpha.1** added six Rival Rush tests, reaching **15**; its [receipt and original captures](https://github.com/Herbertofury/JetSetCraft/tree/main/docs/verification/rival-rush) are preserved. **Alpha.2** added four crew-house/integration tests, reaching **19**; **alpha.3** added nine activity/arena tests, reaching **28**; **alpha.4** added seven reward/journey/build tests, reaching **35**; **alpha.5** added nine Style Library, synergy and cache/route cases, reaching **44**; and **alpha.6** added eleven encounter/evolution/draft/debrief cases, reaching **55**. Their receipts retain each checkpoint's actual results. The current **alpha.7 candidate adds eight cases for an expected 63**, with acceptance pending. Development evidence does not change the published stable release's version or history.
+The published **v0.3.0** release has **nine** GameTests, as recorded in its [release evidence](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/RELEASE_EVIDENCE_0.3.0.md). Historical **alpha.1** added six Rival Rush tests, reaching **15**; its [receipt and original captures](https://github.com/Herbertofury/JetSetCraft/tree/main/docs/verification/rival-rush) are preserved. **Alpha.2** added four crew-house/integration tests, reaching **19**; **alpha.3** added nine activity/arena tests, reaching **28**; **alpha.4** added seven reward/journey/build tests, reaching **35**; **alpha.5** added nine Style Library, synergy and cache/route cases, reaching **44**; and **alpha.6** added eleven encounter/evolution/draft/debrief cases, reaching **55**. Their receipts retain each checkpoint's actual results. Current **alpha.7 adds eight cases, reaching 63**, which passed in each of nine configurations; the [alpha.7 receipt](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/verification/contracts/README.md) records its own source and evidence. Development evidence does not change the published stable release's version or history.
 
 ### Historical alpha.2 checkpoint
 
@@ -219,7 +219,7 @@ Client controls remain change-driven: any digital mask or analog movement change
 
 ## Dedicated-server smoke
 
-CI launches Forge with `eula=true`, waits for the real ready line, and fails on lifecycle/mod-loading/fatal JetSetCraft errors. The base and all eight provider jobs issue an RCON stop and require normal saved-dimensions shutdown output and successful process completion. Historical alpha.5 and alpha.6 passed this gate, introduced in alpha.4; alpha.7 acceptance remains pending. JARs and logs are workflow artifacts whose inspection status belongs to the corresponding receipt. Alpha.5/alpha.6 CI archive bytes were not independently inspected. Older provider startup-only smoke results retain their historical scope.
+CI launches Forge with `eula=true`, waits for the real ready line, and fails on lifecycle/mod-loading/fatal JetSetCraft errors. The base and all eight provider jobs issue an RCON stop and require normal saved-dimensions shutdown output and successful process completion. Alpha.7 passed this gate in [base](https://github.com/Herbertofury/JetSetCraft/actions/runs/41397720888) and [all eight provider lanes](https://github.com/Herbertofury/JetSetCraft/actions/runs/41397720946), retaining the explicit normal-shutdown gate introduced in alpha.4. Historical alpha.5 and alpha.6 results remain separately identified. JARs and logs are workflow artifacts whose inspection status belongs to the corresponding receipt. Alpha.5/alpha.6 CI archive bytes were not independently inspected. Older provider startup-only smoke results retain their historical scope.
 
 ### Known upstream messages retained in passing logs
 
@@ -238,7 +238,7 @@ Run `gradlew.bat -Djetsetcraft.visualAudit=true runClient --no-daemon` on Window
 
 The development CI also runs `./gradlew runClient -Djetsetcraft.rushVisualAudit=true --no-daemon` with a disposable `RivalRushAudit` world prepared by the [build workflow](https://github.com/Herbertofury/JetSetCraft/blob/main/.github/workflows/build.yml). It enters and leaves Rush through real network actions, compares the returned dimension, inventory and vanilla XP with its observed pre-entry fixture, and writes the setup, district HUD, empty-album and return-result captures.
 
-The current alpha.7 candidate requires **23 captures** and the contract audit marker in addition to the existing Rush, crew, activity and progression audit markers. Its four additional views cover the room briefing, optional-goal progress, earned Pit stop and an accepted service result. All candidate capture, return and shutdown assertions remain pending; the historical galleries below cannot satisfy that gate.
+Alpha.7 passed its **23-capture gate**, including `JETSETCRAFT_CONTRACT_VISUAL_AUDIT_PASS` and the existing Rush, crew, activity and progression audit markers. The [independent local gallery and receipt](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/verification/contracts/README.md) preserve all 23 reviewed images and the actual fixture/return/shutdown observations. The appended sequence uses three accepted Paint patches and eight actual owned defeats, then compresses only the remaining room clock. The normal manager clear opens two services; a real UI confirmation applies Tune from rank one to two and leaves one choice. The returned report records one arena clear, one contract banked and one service used. These are scripted fixture interactions, not human graffiti controls, a complete six-room journey or evidence that the downloaded CI screenshots/binary were inspected. Earlier Free-streets progression captures belong to a separate run and do not describe this Paint settlement.
 
 ### Historical native audit checkpoints
 
