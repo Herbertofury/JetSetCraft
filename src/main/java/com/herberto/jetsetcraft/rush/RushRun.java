@@ -34,6 +34,12 @@ public final class RushRun {
         BATTERY("Line battery", "Ride 24 actual blocks to empower your next primary tag, by paint or contact. One artifact slot.", 4),
         AIR_BREAK("Air break", "A moving jump or drop followed by a real landing pulses nearby rivals. One artifact slot.", 4),
         EXPOSE("Breakbeat mark", "Briefly expose a visible priority rival to increased run damage. One artifact slot.", 4),
+        VENOM("Venom ink", "Primary tags apply nonstacking run damage each second for 4–7 seconds. One artifact slot.", 4),
+        CHILL("Chill paint", "Primary tags briefly slow rival run steering and directed attacks. One artifact slot.", 4),
+        MULTISHOT("Split chorus", "Every fourth primary tag hits 1–3 extra visible rivals in its forward cone. One artifact slot.", 4),
+        RADIANCE("Radiant groove", "Every sixth primary tag restores 4–10 run vitality. One artifact slot.", 4),
+        WARD("Beat ward", "Absorb 12–24 run damage; recharge after six active seconds without damage. One artifact slot.", 4),
+        SOUL_BURST("Soul burst", "Five owned defeats charge a burst against nearby visible rivals. One artifact slot.", 4),
         REPAIR("Fresh wheels", "Recover half your maximum run vitality now.", 0),
         CACHE("Victory lap", "Bank a chapter-scaled score bonus; no vanilla reward.", 0),
         SURGE("Overdrive", "Refresh a 15-second, 25% tag-damage surge.", 0);
@@ -54,7 +60,8 @@ public final class RushRun {
         public boolean repeatable() { return maxRank == 0; }
         public boolean artifact() {
             return switch (this) {
-                case CHAIN, FIREWORK, WIND, SHOCKWAVE, TEMPO, SOUL, SPELL_RELAY, BATTERY, AIR_BREAK, EXPOSE -> true;
+                case CHAIN, FIREWORK, WIND, SHOCKWAVE, TEMPO, SOUL, SPELL_RELAY, BATTERY, AIR_BREAK, EXPOSE,
+                        VENOM, CHILL, MULTISHOT, RADIANCE, WARD, SOUL_BURST -> true;
                 default -> false;
             };
         }
@@ -83,6 +90,9 @@ public final class RushRun {
     private int magnetTicks;
     private int tempoTicks;
     private int soulCharge;
+    private int soulBurstCharge;
+    private double ward;
+    private long wardLastHit;
     private long hits;
     private double vitality = 100.0D;
     private List<Upgrade> offers = List.of();
@@ -127,6 +137,9 @@ public final class RushRun {
     public double areaMultiplier() { return 1.0D + rank(Upgrade.AMPLITUDE) * 0.12D; }
     public double artifactIntervalMultiplier() { return Math.max(0.5D, 1.0D - rank(Upgrade.RESONANCE) * 0.08D); }
     public int soulCharge() { return soulCharge; }
+    public int soulBurstCharge() { return soulBurstCharge; }
+    public double ward() { return ward; }
+    public double maxWard() { return rank(Upgrade.WARD) == 0 ? 0 : 8 + rank(Upgrade.WARD) * 4; }
     public long hits() { return hits; }
     public boolean circuit() { return circuit; }
     public int artifactCount() { return (int) ranks.keySet().stream().filter(u -> u.artifact() && rank(u) > 0).count(); }
@@ -177,7 +190,10 @@ public final class RushRun {
         ranks.remove(source); ranks.put(replacement, preserved);
         if (source == Upgrade.BATTERY) lineCharge = 0;
         if (source == Upgrade.SOUL) soulCharge = 0;
+        if (source == Upgrade.SOUL_BURST) soulBurstCharge = 0;
+        if (source == Upgrade.WARD) ward = 0;
         if (source == Upgrade.TEMPO) tempoTicks = 0;
+        if (replacement == Upgrade.WARD) { ward = maxWard(); wardLastHit = elapsedTicks; }
         remixReady = false;
         offerVersion = offerVersion == Integer.MAX_VALUE ? 1 : offerVersion + 1;
         return true;
@@ -187,13 +203,19 @@ public final class RushRun {
     public boolean grantReward(Upgrade upgrade) {
         if (finished || awaitingEncore || upgrade == null) return false;
         if (!canAdvance(upgrade)) { addScore(250); heal(5); return false; }
+        double oldWardMax = maxWard();
         ranks.put(upgrade, rank(upgrade) + 1);
         if (upgrade == Upgrade.VITALITY) heal(12);
+        if (upgrade == Upgrade.WARD) ward = Math.min(maxWard(), ward + maxWard() - oldWardMax);
         if (hasOffer()) refreshOffer();
         return true;
     }
     public void magnet(int ticks) { if (!finished) magnetTicks = Math.max(magnetTicks, Math.min(200, Math.max(0, ticks))); }
     public boolean spendSouls() { if (soulCharge < 5 || rank(Upgrade.SOUL) == 0) return false; soulCharge -= 5; return true; }
+    public boolean spendSoulBurst() {
+        if (finished || awaitingEncore || hasOffer() || soulBurstCharge < 5 || rank(Upgrade.SOUL_BURST) == 0) return false;
+        soulBurstCharge -= 5; return true;
+    }
     public void pauseForEncore() { if (!finished) awaitingEncore = true; }
 
     /** Deterministic per-run critical sequence, called only after an owned valid hit is accepted. */
@@ -213,6 +235,8 @@ public final class RushRun {
         if (surgeTicks > 0) surgeTicks--;
         if (magnetTicks > 0) magnetTicks--;
         if (tempoTicks > 0) tempoTicks--;
+        if (rank(Upgrade.WARD) > 0 && elapsedTicks - wardLastHit >= 120 && elapsedTicks % 20 == 0)
+            ward = Math.min(maxWard(), ward + 2 + rank(Upgrade.WARD));
         if (!circuit && !endless && elapsedTicks >= SESSION_TICKS) awaitingEncore = true;
     }
 
@@ -236,8 +260,10 @@ public final class RushRun {
                 default -> throw new IllegalStateException("Unknown repeatable reward");
             }
         } else {
+            double oldWardMax = maxWard();
             ranks.put(upgrade, Math.min(upgrade.maxRank(), rank(upgrade) + 1));
             if (upgrade == Upgrade.VITALITY) heal(12.0D);
+            if (upgrade == Upgrade.WARD) ward = Math.min(maxWard(), ward + maxWard() - oldWardMax);
         }
         prepareOffer();
         return true;
@@ -245,10 +271,12 @@ public final class RushRun {
 
     /** A loaded, physical crew facility is validated by the manager; at most one starting rank is accepted. */
     public boolean grantStartingPerk(Upgrade upgrade) {
-        if (upgrade == null || upgrade.repeatable() || startingPerkGranted || elapsedTicks != 0L || finished) return false;
+        if (upgrade == null || startingPerkGranted || elapsedTicks != 0L || finished
+                || !canAdvance(upgrade) || rank(upgrade) != 0) return false;
         startingPerkGranted = true;
         ranks.put(upgrade, 1);
         if (upgrade == Upgrade.VITALITY) vitality = maxVitality();
+        if (upgrade == Upgrade.WARD) ward = maxWard();
         return true;
     }
 
@@ -275,6 +303,7 @@ public final class RushRun {
         if (!finished && !awaitingEncore) {
             defeats = saturatingAdd(defeats, 1L);
             if (rank(Upgrade.SOUL) > 0) soulCharge = Math.min(20, soulCharge + 1);
+            if (rank(Upgrade.SOUL_BURST) > 0) soulBurstCharge = Math.min(20, soulBurstCharge + 1);
             if (rank(Upgrade.TEMPO) > 0 && defeats % 8 == 0) tempoTicks = 80 + rank(Upgrade.TEMPO) * 20;
         }
     }
@@ -282,6 +311,9 @@ public final class RushRun {
     /** Returns true exactly when this hit exhausts run vitality. It never changes a Player's real health. */
     public boolean hurt(double amount) {
         if (finished || awaitingEncore || !Double.isFinite(amount) || amount <= 0.0D) return false;
+        wardLastHit = elapsedTicks;
+        double absorbed = Math.min(ward, amount);
+        ward -= absorbed; amount -= absorbed;
         vitality = Math.max(0.0D, vitality - amount);
         if (vitality <= 0.0D) {
             finish();

@@ -21,6 +21,7 @@ public final class RushCircuit {
     private final long seed;
     private final BlockPos origin;
     private final int slot;
+    private final List<RushArenaCatalog.Profile> catalogue;
     private int completed, set = 1, version = 1;
     private Phase phase = Phase.CHOOSING;
     private List<RushArenaCatalog.Profile> choices = List.of();
@@ -32,6 +33,7 @@ public final class RushCircuit {
 
     public RushCircuit(UUID runId, long seed, BlockPos origin, int slot) {
         this.runId = runId; this.seed = seed; this.origin = origin; this.slot = slot; this.center = origin;
+        this.catalogue = List.copyOf(RushArenaCatalog.all());
         offer();
     }
     public int slot() { return slot; }
@@ -121,9 +123,11 @@ public final class RushCircuit {
         offer(); return true;
     }
     private void offer() {
-        List<RushArenaCatalog.Profile> available = new ArrayList<>(RushArenaCatalog.all());
+        List<RushArenaCatalog.Profile> available = new ArrayList<>(catalogue);
         Collections.shuffle(available, new Random(seed ^ ((long) set << 32) ^ completed * 7919L));
-        // Prefer different reward families before filling the remaining slots.
+        // Stable sorting retains seeded variety among equally visited rooms. Offer new places first,
+        // then retain a choice of reward families when a small pack needs to repeat earlier rooms.
+        available.sort(java.util.Comparator.comparingLong(this::visits));
         List<RushArenaCatalog.Profile> selected = new ArrayList<>();
         for (RushArenaCatalog.Profile candidate : available) {
             if (selected.size() == 3) break;
@@ -134,6 +138,9 @@ public final class RushCircuit {
             if (!selected.contains(candidate)) selected.add(candidate);
         }
         choices = List.copyOf(selected);
+    }
+    private long visits(RushArenaCatalog.Profile profile) {
+        return history.stream().filter(room -> room.getString("Id").equals(profile.id().toString())).count();
     }
     public CompoundTag snapshot(RushRun run, Vec3 position) {
         CompoundTag tag = new CompoundTag();
@@ -166,6 +173,7 @@ public final class RushCircuit {
     private CompoundTag arenaSummary(RushArenaCatalog.Profile profile, BlockPos destination) {
         CompoundTag tag = profile.summary();
         tag.putInt("Defeats", profile.defeats()); tag.putString("Emphasis", profile.sharedReward());
+        tag.putInt("VisitsThisSet", (int) visits(profile));
         tag.putString("RunReward", previewRunReward(profile));
         tag.putInt("MapX", (destination.getX() - origin.getX()) / 128);
         tag.putInt("MapZ", (destination.getZ() - origin.getZ()) / 128);
