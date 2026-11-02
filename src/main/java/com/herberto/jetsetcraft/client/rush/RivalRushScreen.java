@@ -22,7 +22,7 @@ import java.util.UUID;
 
 /** Native focusable controls for explicit entry, choices, card collection and immediate extraction. */
 final class RivalRushScreen extends Screen {
-    private enum View { RUN, ADVANCED, ROSTER, ALBUM, CARD, UPGRADES, RESULT, ARENAS, ROUTE, JOURNEY, BUILD, REMIX, CACHES, PATHS, DRAFT_DETAILS, DEBRIEF }
+    private enum View { RUN, ADVANCED, ROSTER, ALBUM, CARD, UPGRADES, RESULT, ARENAS, ROUTE, JOURNEY, BUILD, REMIX, CACHES, PATHS, DRAFT_DETAILS, DEBRIEF, CONTRACT, PIT_STOP, TUNE, SERVICE_DETAIL, SERVICE_RESULT }
     private View view = View.RUN;
     private EditBox gangField, mobField;
     private String gang = "jetsetcraft:dead_beat";
@@ -37,6 +37,7 @@ final class RivalRushScreen extends Screen {
     private int recipePage;
     private String selectedJourney = "", remixFrom = "", remixTo = "";
     private String remixFeedback = "";
+    private String selectedService = "", selectedTune = "";
     private boolean debriefPending;
     private String resultSummary = "";
     private String debriefNotice = "";
@@ -55,6 +56,9 @@ final class RivalRushScreen extends Screen {
     boolean isPathsView() { return view == View.PATHS; }
     boolean isUpgradeView() { return view == View.UPGRADES; }
     boolean isDebriefView() { return view == View.DEBRIEF; }
+    boolean isContractView() { return view == View.CONTRACT; }
+    boolean isPitStopView() { return view == View.PIT_STOP; }
+    boolean isServiceResultView() { return view == View.SERVICE_RESULT; }
 
     RivalRushScreen(CompoundTag opening) {
         this(opening, false);
@@ -78,6 +82,9 @@ final class RivalRushScreen extends Screen {
         boolean choosingRoute = RivalRushClient.choosingRoute();
         CompoundTag journey = incoming.getCompound("Journey");
         CompoundTag priorJourney = previous.getCompound("Journey");
+        boolean newSet = active && previous.getBoolean("Active") && incoming.hasUUID("Run") && previous.hasUUID("Run")
+                && incoming.getUUID("Run").equals(previous.getUUID("Run")) && priorJourney.getInt("Set") > 0
+                && journey.getInt("Set") > priorJourney.getInt("Set");
         if (active && journey.getInt("Set") == priorJourney.getInt("Set")
                 && journey.getInt("Completed") > priorJourney.getInt("Completed")) {
             selectedJourney = "done:" + journey.getInt("Completed");
@@ -96,7 +103,7 @@ final class RivalRushScreen extends Screen {
             minecraft.setScreen(null);
             return;
         }
-        if ((view == View.ROUTE || view == View.JOURNEY) && active && "choosing".equals(previous.getCompound("Journey").getString("Phase"))
+        if ((view == View.ROUTE || view == View.JOURNEY || view == View.CONTRACT || serviceView()) && active && "choosing".equals(previous.getCompound("Journey").getString("Phase"))
                 && !choosingRoute && !hasOffers && !incoming.getBoolean("Finale")) {
             minecraft.setScreen(null);
             return;
@@ -106,16 +113,28 @@ final class RivalRushScreen extends Screen {
                 || incoming.getBoolean("Finale") != previous.getBoolean("Finale")
                 || incoming.contains("Album", Tag.TAG_LIST) || incoming.contains("Roster", Tag.TAG_LIST)
                 || incoming.contains("ArenaCatalogue", Tag.TAG_LIST)
-                || incoming.getCompound("Journey").getInt("Version") != previous.getCompound("Journey").getInt("Version");
+                || incoming.getCompound("Journey").getInt("Version") != previous.getCompound("Journey").getInt("Version")
+                || incoming.getCompound("PitStop").getInt("Version") != previous.getCompound("PitStop").getInt("Version");
         if (changed) {
             rememberFields();
+            CompoundTag serviceResult = incoming.getCompound("PitStop").getCompound("LastResult");
+            boolean acceptedService = serviceResult.getBoolean("Accepted")
+                    && !serviceResult.equals(previous.getCompound("PitStop").getCompound("LastResult"));
             if (view == View.REMIX && pending && !incoming.getString("Summary").isBlank()) remixFeedback = incoming.getString("Summary");
             if (view == View.REMIX && previous.getCompound("Build").getBoolean("RemixReady")
                     && !incoming.getCompound("Build").getBoolean("RemixReady")) {
                 view = View.BUILD; remixFrom = remixTo = ""; detailScroll = 0;
             }
-            if (RivalRushClient.endedRun(incoming, previous)) {
+            if (acceptedService) {
+                view = View.SERVICE_RESULT; detailScroll = 0; remixFrom = remixTo = "";
+            }
+            else if (RivalRushClient.endedRun(incoming, previous)) {
                 view = View.DEBRIEF; detailScroll = 0; rememberDebriefNotice(incoming);
+            }
+            else if (newSet) {
+                selectedJourney = ""; selectedService = ""; selectedTune = ""; remixFrom = remixTo = "";
+                debriefPending = false; detailScroll = 0;
+                view = hasOffers ? View.UPGRADES : View.ROUTE;
             }
             else if (incoming.getBoolean("Open")) selectView(incoming);
             pending = false;
@@ -128,18 +147,22 @@ final class RivalRushScreen extends Screen {
         if (incoming.getBoolean("Active") && !RivalRushClient.offers().isEmpty()) {
             if (view != View.PATHS && view != View.DRAFT_DETAILS) view = View.UPGRADES;
         }
-        else if (incoming.getBoolean("Active") && debriefPending) { view = View.JOURNEY; debriefPending = false; }
+        else if (incoming.getBoolean("Active") && (debriefPending || hasPitStop() && (view == View.RUN || view == View.UPGRADES))) {
+            view = hasPitStop() ? View.PIT_STOP : View.JOURNEY; debriefPending = false;
+        }
         else if (RivalRushClient.choosingRoute()) {
             // A requested collection page remains usable while the next route waits for a decision.
             if (incoming.contains("Album", Tag.TAG_LIST)) { view = View.ALBUM; window = responseWindow; responseWindow = 0; }
             else if (incoming.contains("Roster", Tag.TAG_LIST)) { view = View.ROSTER; window = responseWindow; responseWindow = 0; }
             else if (view != View.ALBUM && view != View.CARD && view != View.ROSTER
                     && view != View.JOURNEY && view != View.BUILD && view != View.REMIX
-                    && view != View.PATHS && view != View.DRAFT_DETAILS) view = View.ROUTE;
+                    && view != View.PATHS && view != View.DRAFT_DETAILS && view != View.CONTRACT
+                    && !(serviceView() && hasPitStop())) view = View.ROUTE;
         }
+        else if (incoming.getBoolean("Active") && serviceView() && hasPitStop()) { /* Keep this stop's result and rejection details readable. */ }
         else if (!incoming.getString("Summary").isBlank()) { resultSummary = incoming.getString("Summary"); view = View.RESULT; }
         else if (incoming.getBoolean("Finale")) {
-            if (view != View.PATHS) view = incoming.contains("Journey", Tag.TAG_COMPOUND) ? View.JOURNEY : View.RUN;
+            if (view != View.PATHS && view != View.CONTRACT) view = incoming.contains("Journey", Tag.TAG_COMPOUND) ? View.JOURNEY : View.RUN;
         }
         else if (incoming.contains("Album", Tag.TAG_LIST)) { view = View.ALBUM; window = responseWindow; responseWindow = 0; }
         else if (incoming.contains("Roster", Tag.TAG_LIST)) { view = View.ROSTER; window = responseWindow; responseWindow = 0; }
@@ -167,6 +190,7 @@ final class RivalRushScreen extends Screen {
         detailScroll = 0;
         if (target == View.PATHS) recipePage = 0;
         if (target == View.REMIX) { remixFrom = ""; remixTo = ""; remixFeedback = ""; }
+        if (target == View.PIT_STOP) { selectedService = ""; selectedTune = ""; }
         rebuildWidgets();
     }
 
@@ -205,6 +229,11 @@ final class RivalRushScreen extends Screen {
             case ARENAS -> buildArenas(left, span);
             case ROUTE -> buildRoute(left, span);
             case JOURNEY -> buildJourney(left, span);
+            case CONTRACT -> buildContract(left, span);
+            case PIT_STOP -> buildPitStop(left, span);
+            case TUNE -> buildTune(left, span);
+            case SERVICE_DETAIL -> buildServiceDetail(left, span);
+            case SERVICE_RESULT -> buildServiceResult(left, span);
             case BUILD -> buildBuild(left, span);
             case PATHS -> buildPaths(left, span);
             case DRAFT_DETAILS -> addRenderableWidget(Button.builder(Component.literal(RivalRushClient.offers().isEmpty()
@@ -321,6 +350,7 @@ final class RivalRushScreen extends Screen {
             choice.setTooltip(Tooltip.create(Component.literal(arena == null
                     ? "Preview the available arena routes after entry. Select a reward, then ride to the chosen room."
                     : arena.getString("Name") + "\n" + arena.getString("Description") + "\n" + arenaDetails(arena)
+                    + contractPreview(arena.getCompound("Contract"))
                     + "\nThis selects the first arena only; later rooms offer branching choices.")));
         }
         Button previous = addRenderableWidget(Button.builder(Component.literal("‹ Previous"), button -> { window--; rebuildWidgets(); })
@@ -345,20 +375,33 @@ final class RivalRushScreen extends Screen {
             CompoundTag arena = choices.getCompound(i);
             Button choice = addRenderableWidget(Button.builder(Component.literal(RivalRushClient.clipped(
                     (char) ('A' + i) + ": " + arena.getString("Name") + " · "
-                            + RivalRushClient.clock(arena.getInt("Seconds") * 20L), span - 12)), button -> {
+                            + RivalRushClient.clock(arena.getInt("Seconds") * 20L), span - 84)), button -> {
                 selectRoute(arena);
-            }).bounds(left, 77 + i * cardHeight, span, 20).build());
+            }).bounds(left, 77 + i * cardHeight, span - 74, 20).build());
             choice.active = !pending;
             choice.setTooltip(Tooltip.create(Component.literal(arena.getString("Name") + "\n" + arenaDetails(arena)
                     + "\nRun: " + arena.getString("RunReward") + "\n" + sharedInline(arena.getCompound("SharedReward"), true)
+                    + contractPreview(arena.getCompound("Contract"))
                     + (arena.getBoolean("Headliner") ? "\nHeadliner stage: victory required.\n" + arena.getString("HeadlinerReward") : "")
                     + "\n" + arena.getString("Description") + "\nSelecting opens a connected route. Ride into the next arena.")));
+            Button briefing = addRenderableWidget(Button.builder(Component.literal("Briefing"), button -> {
+                selectedJourney = "offer:" + arena.getString("Id"); navigate(View.CONTRACT);
+            }).bounds(left + span - 70, 77 + i * cardHeight, 70, 20).build());
+            briefing.active = !pending;
+            briefing.setTooltip(Tooltip.create(Component.literal("Inspect " + arena.getString("Name")
+                    + ": required clear, optional contract and rewards. This does not select the route.")));
         }
     }
 
     private void selectRoute(CompoundTag arena) {
         pending = true; pendingTicks = 0;
         RivalRushClient.requestJourney(arena.getString("Id")); rebuildWidgets();
+    }
+
+    private static String contractPreview(CompoundTag contract) {
+        return contract.getString("Type").isBlank() || contract.getString("Type").equals("none") ? ""
+                : "\nOptional: " + contract.getString("Name") + "\n" + contract.getString("Description")
+                + "\n" + contract.getString("Reward");
     }
 
     private record JourneyNode(String key, String kind, String label, CompoundTag data, int x, int z) {}
@@ -420,8 +463,10 @@ final class RivalRushScreen extends Screen {
             room.setTooltip(Tooltip.create(Component.literal(status + (node.kind().equals("start") ? "" : "\n" + node.data().getString("Name")))));
         }
         int half = (span - 4) / 2;
-        addRenderableWidget(Button.builder(Component.literal(RivalRushClient.choosingRoute() ? "Compare routes" : "Run summary"),
-                button -> navigate(RivalRushClient.choosingRoute() ? View.ROUTE : View.RUN)).bounds(left, height - 53, half, 20).build());
+        boolean stop = hasPitStop();
+        addRenderableWidget(Button.builder(Component.literal(stop ? pitStopLabel() : RivalRushClient.choosingRoute() ? "Compare routes" : "Room briefing"),
+                button -> navigate(stop ? View.PIT_STOP : RivalRushClient.choosingRoute() ? View.ROUTE : View.CONTRACT))
+                .bounds(left, height - 53, half, 20).build());
         boolean finale = RivalRushClient.state().getBoolean("Finale");
         String action = finale ? "Continue into Encore" : selected.kind().equals("offer") ? "Take this route"
                 : RivalRushClient.choosingRoute() ? "Choose next arena" : "Resume skating";
@@ -456,6 +501,11 @@ final class RivalRushScreen extends Screen {
                     : "In progress · " + RivalRushClient.clock(journey.getLong("TicksLeft"));
             detail(lines, status, availableWidth, 0xFF87E1EA);
             detail(lines, "Run: " + room.getString("RunReward"), availableWidth, 0xFFE7E7E7);
+            CompoundTag contract = node.kind().equals("current") ? RivalRushClient.journey().getCompound("Contract") : room.getCompound("Contract");
+            if (hasContract(contract)) {
+                detail(lines, "Optional: " + contract.getString("Name"), availableWidth, 0xFFD7B7FF);
+                if (!node.kind().equals("offer")) detail(lines, contractStatus(contract), availableWidth, 0xFFB8B8B8);
+            }
             boolean recorded = room.getBoolean("SettlementRecorded");
             CompoundTag shared = room.getCompound("SharedReward");
             if (node.kind().equals("done") && (!recorded || !shared.getBoolean("Accepted"))) {
@@ -500,17 +550,221 @@ final class RivalRushScreen extends Screen {
     }
 
     private void buildBuild(int left, int span) {
-        CompoundTag build = RivalRushClient.state().getCompound("Build");
-        boolean ready = build.getBoolean("RemixReady") && !build.getList("Artifacts", Tag.TAG_COMPOUND).isEmpty();
-        Button remix = addRenderableWidget(Button.builder(Component.literal("Remix artifact"), button -> navigate(View.REMIX))
+        Button stop = addRenderableWidget(Button.builder(Component.literal(pitStopLabel()), button -> navigate(View.PIT_STOP))
                 .bounds(left, height - 53, (span - 4) / 2, 20).build());
-        remix.active = ready;
-        remix.setTooltip(Tooltip.create(Component.literal("A completed arena offers one optional replacement. Keep the replaced artifact's rank."
-                + "\nThe opportunity does not stack; it is usable only between rooms, outside upgrade drafts.")));
+        stop.active = hasPitStop();
+        stop.setTooltip(Tooltip.create(Component.literal("Clear an arena for one service; finish its optional contract for two."
+                + "\nTune, Patch, Rewind and Remix share that budget. Unused services expire when you depart.")));
+        boolean circuitRun = RivalRushClient.state().contains("Journey", Tag.TAG_COMPOUND);
+        int pathWidth = circuitRun ? (span - 4) / 2 : span;
         addRenderableWidget(Button.builder(Component.literal("Build paths"), button -> navigate(View.PATHS))
-                .bounds(left, 77, span, 20).build());
+                .bounds(left, 77, pathWidth, 20).build());
+        if (circuitRun) addRenderableWidget(Button.builder(Component.literal("Room contract"), button -> {
+            selectedJourney = "current"; navigate(View.CONTRACT);
+        }).bounds(left + pathWidth + 4, 77, span - pathWidth - 4, 20).build());
         addRenderableWidget(Button.builder(Component.literal("Scout reward caches"), button -> navigate(View.CACHES))
                 .bounds(left + (span - 4) / 2 + 4, height - 53, span - (span - 4) / 2 - 4, 20).build());
+    }
+
+    private static boolean hasContract(CompoundTag contract) {
+        return !contract.getString("Type").isBlank() && !contract.getString("Type").equals("none");
+    }
+
+    private static String contractStatus(CompoundTag contract) {
+        return switch (contract.getString("State")) {
+            case "complete" -> "Complete · bonus is earned when this room clears";
+            case "disabled" -> "Unavailable: " + contract.getString("Reason");
+            case "missed" -> "Optional contract unfinished · the room clear still counts";
+            case "preview" -> "Optional · decide whether to pursue it after arrival";
+            case "pending" -> contract.getString("Reason").isBlank() ? "Preparing the optional contract" : contract.getString("Reason");
+            case "active" -> "Progress " + Math.max(0, contract.getInt("Progress")) + "/" + Math.max(1, contract.getInt("Target"));
+            default -> "No optional contract for this room";
+        };
+    }
+
+    private void buildContract(int left, int span) {
+        JourneyNode node = selectedNode(journeyNodes());
+        int half = (span - 4) / 2;
+        addRenderableWidget(Button.builder(Component.literal("Back to journey"), button -> navigate(View.JOURNEY))
+                .bounds(left, height - 53, half, 20).build());
+        boolean offered = node.kind().equals("offer") && RivalRushClient.choosingRoute();
+        Button proceed = addRenderableWidget(Button.builder(Component.literal(offered ? "Take this route"
+                        : hasPitStop() ? pitStopLabel() : "Resume skating"), button -> {
+            if (offered) selectRoute(node.data());
+            else if (hasPitStop()) navigate(View.PIT_STOP);
+            else onClose();
+        }).bounds(left + half + 4, height - 53, span - half - 4, 20).build());
+        proceed.active = !pending;
+    }
+
+    private List<CardLine> contractLines() {
+        List<CardLine> lines = new ArrayList<>();
+        JourneyNode node = selectedNode(journeyNodes());
+        CompoundTag room = node.data();
+        CompoundTag contract = node.kind().equals("current") ? RivalRushClient.journey().getCompound("Contract") : room.getCompound("Contract");
+        detail(lines, room.getString("Name"), span(), 0xFFC5ED55);
+        if (hasContract(contract)) {
+            detail(lines, "Optional · " + contract.getString("Name"), span(), 0xFFD7B7FF);
+            detail(lines, contract.getString("Description"), span(), 0xFFE7E7E7);
+            detail(lines, node.kind().equals("done") && contract.getBoolean("Completed")
+                    ? "Contract completed in this cleared room." : contractStatus(contract), span(), 0xFF87E1EA);
+            if (contract.contains("Distance")) detail(lines, "Next beacon " + Math.max(1, contract.getInt("Checkpoint"))
+                    + "/" + Math.max(1, contract.getInt("Checkpoints")) + " · " + contract.getString("Direction")
+                    + " · " + Math.max(0, contract.getInt("Distance")) + "m", span(), 0xFFE6DBA6);
+            detail(lines, contract.getString("Reward"), span(), 0xFFC5ED55);
+            if (!contract.getString("Reason").isBlank() && !contract.getString("State").equals("disabled"))
+                detail(lines, contract.getString("Reason"), span(), 0xFFE6DBA6);
+        } else detail(lines, "No optional contract in this room.", span(), 0xFFB8B8B8);
+        if (!room.isEmpty()) {
+            detail(lines, "Required room clear", span(), 0xFFC5ED55);
+            detail(lines, RivalRushClient.clock(room.getInt("Seconds") * 20L) + " active time + "
+                    + room.getInt("Defeats") + " owned rivals" + (room.getBoolean("Headliner") ? " + headliner victory" : ""), span(), 0xFFE7E7E7);
+            if (node.kind().equals("current")) detail(lines, RivalRushClient.journey().getString("Objective"), span(), 0xFF87E1EA);
+            detail(lines, "The optional contract never blocks this clear. Its progress stays in this room.", span(), 0xFFB8B8B8);
+            detail(lines, "Run reward: " + room.getString("RunReward"), span(), 0xFFE7E7E7);
+            detail(lines, "Clear for one Pit stop service; complete the contract for two. Unused services expire on departure or Encore.", span(), 0xFFE6DBA6);
+        }
+        return lines;
+    }
+
+    private boolean serviceView() {
+        return view == View.PIT_STOP || view == View.TUNE || view == View.SERVICE_DETAIL || view == View.SERVICE_RESULT;
+    }
+
+    private static boolean hasPitStop() {
+        CompoundTag stop = RivalRushClient.pitStop();
+        String phase = RivalRushClient.journey().getString("Phase");
+        return RivalRushClient.journey().getInt("Completed") > 0 && (phase.equals("choosing") || phase.equals("complete"))
+                && (stop.hasUUID("Receipt") || stop.getBoolean("Available") || !stop.getCompound("LastResult").isEmpty());
+    }
+
+    private static String pitStopLabel() {
+        return "Pit stop (" + Math.max(0, RivalRushClient.pitStop().getInt("Credits")) + ")";
+    }
+
+    private CompoundTag serviceOption(String id) {
+        for (var raw : RivalRushClient.pitStop().getList("Options", Tag.TAG_COMPOUND)) {
+            CompoundTag option = (CompoundTag) raw;
+            if (option.getString("Id").equals(id)) return option;
+        }
+        return new CompoundTag();
+    }
+
+    private CompoundTag tuneChoice() {
+        for (var raw : RivalRushClient.pitStop().getList("TuneChoices", Tag.TAG_COMPOUND)) {
+            CompoundTag choice = (CompoundTag) raw;
+            if (choice.getString("Id").equals(selectedTune)) return choice;
+        }
+        return new CompoundTag();
+    }
+
+    private void buildPitStop(int left, int span) {
+        CompoundTag stop = RivalRushClient.pitStop();
+        ListTag options = stop.getList("Options", Tag.TAG_COMPOUND);
+        int half = (span - 8) / 2;
+        for (int i = 0; i < Math.min(4, options.size()); i++) {
+            CompoundTag option = options.getCompound(i);
+            int x = left + (i % 2) * (half + 8), y = 92 + (i / 2) * 42;
+            Button choice = addRenderableWidget(Button.builder(Component.literal(option.getString("Name")), button -> {
+                selectedService = option.getString("Id"); selectedTune = "";
+                navigate(selectedService.equals("TUNE") ? View.TUNE : selectedService.equals("REMIX") ? View.REMIX : View.SERVICE_DETAIL);
+            }).bounds(x, y, half, 20).build());
+            choice.active = !pending && stop.getBoolean("Usable") && option.getBoolean("Enabled");
+            choice.setTooltip(Tooltip.create(Component.literal(option.getString("Description") + "\n" + option.getString("Preview")
+                    + (option.getBoolean("Enabled") ? "" : "\n" + option.getString("Reason"))
+                    + (stop.getBoolean("Usable") ? "" : "\n" + stop.getString("BlockedReason")))));
+        }
+        addServiceNavigation(left, span, false);
+    }
+
+    private void addServiceNavigation(int left, int span, boolean result) {
+        int half = (span - 4) / 2;
+        boolean hasResult = RivalRushClient.pitStop().getCompound("LastResult").getBoolean("Accepted");
+        Button back = addRenderableWidget(Button.builder(Component.literal(result ? pitStopLabel() : hasResult ? "Last service" : "Back to journey"),
+                button -> navigate(result ? View.PIT_STOP : hasResult ? View.SERVICE_RESULT : View.JOURNEY)).bounds(left, height - 53, half, 20).build());
+        back.active = !pending;
+        boolean finale = RivalRushClient.state().getBoolean("Finale");
+        Button next = addRenderableWidget(Button.builder(Component.literal(finale ? "Continue into Encore" : "Compare routes"), button -> {
+            if (finale) { pending = true; pendingTicks = 0; RivalRushClient.request("encore", "", 0); rebuildWidgets(); }
+            else navigate(View.ROUTE);
+        }).bounds(left + half + 4, height - 53, span - half - 4, 20).build());
+        next.active = !pending && (finale || RivalRushClient.choosingRoute());
+        next.setTooltip(Tooltip.create(Component.literal("Unused services expire when you select a route or begin Encore."
+                + "\nEvery service type can be used once at this stop. Your earned build and crew rewards remain.")));
+    }
+
+    private void buildTune(int left, int span) {
+        ListTag choices = RivalRushClient.pitStop().getList("TuneChoices", Tag.TAG_COMPOUND);
+        int visible = remixRows();
+        window = Math.max(0, Math.min(window, Math.max(0, (choices.size() - 1) / visible)));
+        for (int i = 0; i < visible && window * visible + i < choices.size(); i++) {
+            CompoundTag choice = choices.getCompound(window * visible + i);
+            Button target = addRenderableWidget(Button.builder(Component.literal(RivalRushClient.clipped(choice.getString("Name")
+                    + " · " + choice.getInt("Rank") + " → " + choice.getInt("NextRank"), span - 12)), button -> {
+                selectedTune = choice.getString("Id"); selectedService = "TUNE"; navigate(View.SERVICE_DETAIL);
+            }).bounds(left, 94 + i * 23, span, 20).build());
+            target.active = !pending && RivalRushClient.pitStop().getBoolean("Usable") && serviceOption("TUNE").getBoolean("Enabled");
+            target.setTooltip(Tooltip.create(Component.literal(choice.getString("NextDescription"))));
+        }
+        Button previous = addRenderableWidget(Button.builder(Component.literal("‹ Previous"), button -> { window--; rebuildWidgets(); })
+                .bounds(left, height - 77, 88, 20).build());
+        Button next = addRenderableWidget(Button.builder(Component.literal("Next ›"), button -> { window++; rebuildWidgets(); })
+                .bounds(left + span - 88, height - 77, 88, 20).build());
+        previous.active = window > 0;
+        next.active = (window + 1) * visible < choices.size();
+        addRenderableWidget(Button.builder(Component.literal("Back to pit stop"), button -> navigate(View.PIT_STOP))
+                .bounds(left, height - 53, span, 20).build());
+    }
+
+    private void buildServiceDetail(int left, int span) {
+        int half = (span - 4) / 2;
+        addRenderableWidget(Button.builder(Component.literal(selectedService.equals("TUNE") ? "Change target" : "Back to pit stop"),
+                button -> navigate(selectedService.equals("TUNE") ? View.TUNE : View.PIT_STOP)).bounds(left, height - 53, half, 20).build());
+        Button confirm = addRenderableWidget(Button.builder(Component.literal("Use 1 service"), button -> {
+            pending = true; pendingTicks = 0;
+            RivalRushClient.request("pit_stop", selectedService.equals("TUNE") ? "TUNE|" + selectedTune : selectedService, 0);
+            rebuildWidgets();
+        }).bounds(left + half + 4, height - 53, span - half - 4, 20).build());
+        confirm.active = !pending && RivalRushClient.pitStop().getBoolean("Usable") && serviceOption(selectedService).getBoolean("Enabled")
+                && (!selectedService.equals("TUNE") || !tuneChoice().isEmpty());
+    }
+
+    private List<CardLine> serviceLines() {
+        List<CardLine> lines = new ArrayList<>();
+        CompoundTag stop = RivalRushClient.pitStop(), option = serviceOption(selectedService);
+        detail(lines, option.getString("Name"), span(), 0xFFC5ED55);
+        detail(lines, option.getString("Description"), span(), 0xFFE7E7E7);
+        if (selectedService.equals("TUNE")) {
+            CompoundTag choice = tuneChoice();
+            if (choice.isEmpty()) detail(lines, "That upgrade is no longer eligible. Choose another target.", span(), 0xFFE6DBA6);
+            else {
+                detail(lines, choice.getString("Name") + " · rank " + choice.getInt("Rank") + " → " + choice.getInt("NextRank"), span(), 0xFF87E1EA);
+                detail(lines, choice.getString("NextDescription"), span(), 0xFFE7E7E7);
+            }
+        } else detail(lines, option.getString("Preview"), span(), 0xFF87E1EA);
+        detail(lines, "Costs 1 of " + Math.max(0, stop.getInt("Credits")) + " available services. Each type can be used once at this stop.", span(), 0xFFE6DBA6);
+        if (!option.getBoolean("Enabled")) detail(lines, option.getString("Reason"), span(), 0xFFE6DBA6);
+        if (!stop.getBoolean("Usable")) detail(lines, stop.getString("BlockedReason"), span(), 0xFFE6DBA6);
+        if (pending) detail(lines, "Waiting for the server's accepted result…", span(), 0xFFB8B8B8);
+        return lines;
+    }
+
+    private void buildServiceResult(int left, int span) { addServiceNavigation(left, span, true); }
+
+    private List<CardLine> serviceResultLines() {
+        List<CardLine> lines = new ArrayList<>();
+        CompoundTag stop = RivalRushClient.pitStop(), result = stop.getCompound("LastResult");
+        if (!result.getBoolean("Accepted")) {
+            detail(lines, "No accepted service is recorded at this stop.", span(), 0xFFE6DBA6); return lines;
+        }
+        detail(lines, "Service accepted · " + result.getString("Name"), span(), 0xFFC5ED55);
+        detail(lines, result.getString("Summary"), span(), 0xFF87E1EA);
+        detail(lines, "Services remaining: " + Math.max(0, stop.getInt("Credits")), span(), 0xFFE7E7E7);
+        detail(lines, "Applied to your current run.", span(), 0xFFB8B8B8);
+        if (stop.getInt("Credits") > 0) detail(lines, "Choose a different service, or continue to your next arena.", span(), 0xFFE6DBA6);
+        else detail(lines, "This stop's services are used. Choose the next arena when ready.", span(), 0xFFE6DBA6);
+        detail(lines, "Unused services expire when you leave the stop. View the separate crew reward result in Journey and Progress.", span(), 0xFFB8B8B8);
+        return lines;
     }
 
     private CompoundTag paths() { return RivalRushClient.state().getCompound("Build").getCompound("Paths"); }
@@ -606,6 +860,9 @@ final class RivalRushScreen extends Screen {
                 + " · " + RivalRushClient.clock(result.getLong("Ticks")) + " active time · level " + result.getInt("Level"), span(), 0xFF87E1EA);
         detail(lines, "Score " + result.getLong("Score") + " · " + result.getLong("Defeats") + " rivals · " + result.getLong("Cards") + " cards", span(), 0xFFE7E7E7);
         detail(lines, result.getLong("ArenaClears") + " arenas cleared · " + result.getLong("Headliners") + " headliners defeated", span(), 0xFFE7E7E7);
+        if (result.contains("ContractsBanked") || result.contains("ServicesUsed"))
+            detail(lines, "Contracts banked " + Math.max(0, result.getLong("ContractsBanked"))
+                    + " · services used " + Math.max(0, result.getLong("ServicesUsed")), span(), 0xFFE7E7E7);
         detail(lines, "Run damage: primary " + decimal(result.getDouble("PrimaryDamage")) + " · effects " + decimal(result.getDouble("SecondaryDamage")), span(), 0xFFE7E7E7);
         detail(lines, "Vitality lost " + decimal(result.getDouble("DamageTaken")) + " · restored " + decimal(result.getDouble("VitalityRestored")), span(), 0xFFE7E7E7);
         detail(lines, "Ward absorbed " + decimal(result.getDouble("WardAbsorbed")) + " · restored " + decimal(result.getDouble("WardRestored")), span(), 0xFFE7E7E7);
@@ -727,8 +984,8 @@ final class RivalRushScreen extends Screen {
 
     private void buildRemix(int left, int span) {
         CompoundTag build = RivalRushClient.state().getCompound("Build");
-        if (!build.getBoolean("RemixReady")) {
-            addRenderableWidget(Button.builder(Component.literal("Back to build"), button -> navigate(View.BUILD))
+        if (!build.getBoolean("RemixReady") || !RivalRushClient.pitStop().getBoolean("Usable")) {
+            addRenderableWidget(Button.builder(Component.literal("Back to pit stop"), button -> navigate(View.PIT_STOP))
                     .bounds(left, height - 53, span, 20).build()); return;
         }
         if (!remixFrom.isBlank() && artifact(remixFrom, "Artifacts").isEmpty()) { remixFrom = remixTo = ""; window = 0; }
@@ -742,7 +999,7 @@ final class RivalRushScreen extends Screen {
                 }).bounds(left, 94 + i * 24, span, 20).build())
                         .setTooltip(Tooltip.create(Component.literal(source.getString("Description"))));
             }
-            addRenderableWidget(Button.builder(Component.literal("Back to build"), button -> navigate(View.BUILD))
+            addRenderableWidget(Button.builder(Component.literal("Back to pit stop"), button -> navigate(View.PIT_STOP))
                     .bounds(left, height - 53, span, 20).build());
             return;
         } else if (remixTo.isBlank()) {
@@ -762,31 +1019,31 @@ final class RivalRushScreen extends Screen {
             previous.active = window > 0; next.active = (window + 1) * rows < targets.size();
         }
         int half = (span - 4) / 2;
-        addRenderableWidget(Button.builder(Component.literal(remixFrom.isBlank() ? "Back to build" : remixTo.isBlank() ? "Change source" : "Change target"), button -> {
-            if (remixFrom.isBlank()) navigate(View.BUILD);
+        addRenderableWidget(Button.builder(Component.literal(remixFrom.isBlank() ? "Back to pit stop" : remixTo.isBlank() ? "Change source" : "Change target"), button -> {
+            if (remixFrom.isBlank()) navigate(View.PIT_STOP);
             else if (remixTo.isBlank()) { remixFrom = ""; window = 0; rebuildWidgets(); }
             else { remixTo = ""; detailScroll = 0; rebuildWidgets(); }
         }).bounds(left, height - 53, half, 20).build());
-        Button confirm = addRenderableWidget(Button.builder(Component.literal(remixTo.isBlank() ? "Back to build" : "Confirm remix"), button -> {
-            if (remixTo.isBlank()) navigate(View.BUILD);
+        Button confirm = addRenderableWidget(Button.builder(Component.literal(remixTo.isBlank() ? "Back to pit stop" : "Confirm remix"), button -> {
+            if (remixTo.isBlank()) navigate(View.PIT_STOP);
             else {
                 pending = true; pendingTicks = 0;
                 RivalRushClient.request("remix", remixFrom + "|" + remixTo, 0); rebuildWidgets();
             }
         }).bounds(left + half + 4, height - 53, span - half - 4, 20).build());
-        confirm.active = !pending;
+        confirm.active = !pending && RivalRushClient.pitStop().getBoolean("Usable") && serviceOption("REMIX").getBoolean("Enabled");
     }
 
     private List<CardLine> remixLines() {
         List<CardLine> lines = new ArrayList<>();
         CompoundTag build = RivalRushClient.state().getCompound("Build");
-        if (!build.getBoolean("RemixReady")) detail(lines, "No remix is available now. Clear an arena to earn one opportunity, then use it between rooms.", span(), 0xFFDDDDDD);
+        if (!build.getBoolean("RemixReady")) detail(lines, "Remix is unavailable at this stop. It uses one earned service and can be used once per stop.", span(), 0xFFDDDDDD);
         else if (!remixTo.isBlank()) {
             CompoundTag source = artifact(remixFrom, "Artifacts"), target = artifact(remixTo, "RemixChoices");
             detail(lines, source.getString("Name") + " → " + target.getString("Name"), span(), 0xFFC5ED55);
             detail(lines, "Keep rank " + source.getInt("Rank") + ". Replace this family; the other artifact slots stay the same.", span(), 0xFF87E1EA);
             detail(lines, target.getString("Description"), span(), 0xFFDDDDDD);
-            detail(lines, "Uses this arena's one remix opportunity. Continue without a remix whenever you prefer.", span(), 0xFFE6DBA6);
+            detail(lines, "Uses 1 of " + Math.max(0, RivalRushClient.pitStop().getInt("Credits")) + " services. Remix is usable once at this stop.", span(), 0xFFE6DBA6);
             detail(lines, remixFeedback, span(), 0xFFE6DBA6);
         }
         return lines;
@@ -975,6 +1232,11 @@ final class RivalRushScreen extends Screen {
                 : view == View.PATHS ? "Evolution recipes · headliners earn a forge"
                 : view == View.DRAFT_DETAILS ? "Your remaining choices and excluded upgrades"
                 : view == View.DEBRIEF ? "Last run · saved results and accepted rewards"
+                : view == View.CONTRACT ? "Room briefing · optional contract, required clear"
+                : view == View.PIT_STOP ? "Pit stop · choose how to strengthen your run"
+                : view == View.TUNE ? "Tune · improve one upgrade you already own"
+                : view == View.SERVICE_DETAIL ? "Service preview · confirm the exact change"
+                : view == View.SERVICE_RESULT ? "Pit stop · your accepted service"
                 : view == View.UPGRADES ? "Choose a rank · or steer this draft"
                 : "An optional skating survival set • your own run XP";
         gui.drawCenteredString(font, subtitle, width / 2, 26, 0xFFDDDDDD);
@@ -1051,6 +1313,31 @@ final class RivalRushScreen extends Screen {
             drawJourney(gui, left, span);
         } else if (view == View.BUILD) {
             drawDetails(gui, buildLines(), left, span);
+        } else if (view == View.CONTRACT) {
+            drawDetails(gui, contractLines(), left, span);
+        } else if (view == View.PIT_STOP) {
+            CompoundTag stop = RivalRushClient.pitStop();
+            gui.drawString(font, RivalRushClient.clipped("Services " + Math.max(0, stop.getInt("Credits")) + " / "
+                    + Math.max(0, stop.getInt("Earned")) + " earned · each type once", span), left, 76, 0xFFC5ED55);
+            ListTag options = stop.getList("Options", Tag.TAG_COMPOUND);
+            int half = (span - 8) / 2;
+            for (int i = 0; i < Math.min(4, options.size()); i++) {
+                CompoundTag option = options.getCompound(i);
+                String preview = option.getBoolean("Enabled") ? option.getString("Preview") : option.getString("Reason");
+                gui.drawString(font, RivalRushClient.clipped(preview, half - 4), left + (i % 2) * (half + 8) + 2,
+                        115 + (i / 2) * 42, option.getBoolean("Enabled") ? 0xFF87E1EA : 0xFFB8B8B8);
+            }
+            gui.drawString(font, RivalRushClient.clipped(!stop.getBoolean("Usable") && !stop.getString("BlockedReason").isBlank()
+                    ? stop.getString("BlockedReason") : "Unused services expire on departure or Encore.", span), left, height - 66, 0xFFE6DBA6);
+        } else if (view == View.TUNE) {
+            ListTag choices = RivalRushClient.pitStop().getList("TuneChoices", Tag.TAG_COMPOUND);
+            gui.drawString(font, "Owned upgrades · page " + (window + 1) + "/" + Math.max(1, (choices.size() + remixRows() - 1) / remixRows()),
+                    left, 77, 0xFFC5ED55);
+            if (choices.isEmpty()) wrap(gui, "No owned upgrade can gain another rank at this stop.", left, 101, span, 3, 0xFFE6DBA6);
+        } else if (view == View.SERVICE_DETAIL) {
+            drawDetails(gui, serviceLines(), left, span);
+        } else if (view == View.SERVICE_RESULT) {
+            drawDetails(gui, serviceResultLines(), left, span);
         } else if (view == View.PATHS) {
             ListTag recipes = paths().getList("Recipes", Tag.TAG_COMPOUND);
             String label = recipe().getString("Name") + " · " + (recipes.isEmpty() ? "0/0" : (recipePage + 1) + "/" + recipes.size());
@@ -1150,7 +1437,9 @@ final class RivalRushScreen extends Screen {
     private List<CardLine> currentDetails() {
         return view == View.JOURNEY ? journeyLines(span() - mapWidth() - 12) : view == View.BUILD ? buildLines()
                 : view == View.CACHES ? cacheLines() : view == View.PATHS ? pathLines()
-                : view == View.DRAFT_DETAILS ? draftLines() : view == View.DEBRIEF ? debriefLines() : remixLines();
+                : view == View.DRAFT_DETAILS ? draftLines() : view == View.DEBRIEF ? debriefLines()
+                : view == View.CONTRACT ? contractLines() : view == View.SERVICE_DETAIL ? serviceLines()
+                : view == View.SERVICE_RESULT ? serviceResultLines() : remixLines();
     }
 
     private void drawDetails(GuiGraphics gui, List<CardLine> lines, int left, int availableWidth) {
@@ -1249,7 +1538,8 @@ final class RivalRushScreen extends Screen {
 
     private boolean scrollsDetails() {
         return view == View.JOURNEY || view == View.BUILD || view == View.CACHES || view == View.PATHS
-                || view == View.DRAFT_DETAILS || view == View.DEBRIEF || view == View.REMIX && !remixTo.isBlank();
+                || view == View.DRAFT_DETAILS || view == View.DEBRIEF || view == View.CONTRACT
+                || view == View.SERVICE_DETAIL || view == View.SERVICE_RESULT || view == View.REMIX && !remixTo.isBlank();
     }
 
     @Override

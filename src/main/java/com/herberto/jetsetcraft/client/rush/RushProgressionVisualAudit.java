@@ -341,6 +341,7 @@ public final class RushProgressionVisualAudit {
     }
 
     private static boolean captureReady(Minecraft minecraft) {
+        if (!RushFeedback.isIdle()) { stableTicks = 0; return false; }
         ticks++;
         long window = minecraft.getWindow().getWindow();
         boolean focused = GLFW.glfwGetWindowAttrib(window, GLFW.GLFW_FOCUSED) == GLFW.GLFW_TRUE;
