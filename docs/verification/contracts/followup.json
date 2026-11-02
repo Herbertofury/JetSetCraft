@@ -1,0 +1,1456 @@
+{
+  "schema_version": 1,
+  "checkpoint": "0.4.0-alpha.7 test-only pickup-draft acceptance follow-up",
+  "status": "merged_and_verified",
+  "recorded_at_utc": "2026-11-02T06:35:14.283255+00:00",
+  "source": {
+    "pull_request": 47,
+    "pull_request_url": "https://github.com/Herbertofury/JetSetCraft/pull/47",
+    "local_tested_commit": "a2a6da18a40b60b4fd11073a5b45207cf470fc7d",
+    "feature_commit": "e0601fb7a7e5594224bf8880f397766668706ec3",
+    "tested_pr_integration_commit": "97d5be9dc0b91e14827b69a5b505874bb927e81c",
+    "actual_squash_merge_commit": "1fcb78852f893f083749aac2e566addc3acca78b",
+    "identical_tree": "7f6b36dabb6cdb9e46085d24188cd98bb563c0f2",
+    "all_four_trees_fetched_and_compared": true,
+    "all_diffs_against_local_tested_empty": true,
+    "baseline_published_main": "2ec5548a7e13cc2f323432dae54e60ed6089d639",
+    "changed_paths": [
+      "src/main/java/com/herberto/jetsetcraft/gametest/RushEncounterGameTests.java"
+    ],
+    "production_gameplay_changed": false,
+    "required_test_count_changed": false
+  },
+  "prior_failed_push": {
+    "schema_version": 1,
+    "scope": "Curated public CI observations for the automatic post-merge rerun; no raw logs or runtime identifiers.",
+    "source_commit": "af8e7f1b7a41b0e491f04d3f3f8ca4288ac5eed7",
+    "source_tree": "e33c221bb02df4c949c28766007893215d7ca2ed",
+    "workflow_run": 41398418225,
+    "workflow_url": "https://github.com/Herbertofury/JetSetCraft/actions/runs/41398418225",
+    "event": "push",
+    "failed_test": "midpointArenaCannotSettleUntilItsRealHeadlinerIsDefeated",
+    "required_marker": "rush_headliner_arena_gate",
+    "failed_jobs": [
+      {
+        "configuration": "alexscaves",
+        "job_id": 125124711667,
+        "job_url": "https://github.com/Herbertofury/JetSetCraft/actions/runs/41398418225/job/125124711667",
+        "failed_step": "Run real Forge GameTests with provider present",
+        "assertion": "A real midpoint headliner victory failed to release exactly one room settlement and forge opportunity"
+      },
+      {
+        "configuration": "all",
+        "job_id": 125124711720,
+        "job_url": "https://github.com/Herbertofury/JetSetCraft/actions/runs/41398418225/job/125124711720",
+        "failed_step": "Run real Forge GameTests with provider present",
+        "assertion": "Actual native rival defeats did not settle an ordinary room"
+      },
+      {
+        "configuration": "aoa",
+        "job_id": 125124711735,
+        "job_url": "https://github.com/Herbertofury/JetSetCraft/actions/runs/41398418225/job/125124711735",
+        "failed_step": "Run real Forge GameTests with provider present",
+        "assertion": "A real midpoint headliner victory failed to release exactly one room settlement and forge opportunity"
+      }
+    ],
+    "other_provider_jobs": [
+      "adventure_all",
+      "aether",
+      "alexsmobs",
+      "cataclysm",
+      "irons_spells"
+    ],
+    "other_provider_jobs_conclusion": "success",
+    "original_pr_matrix": {
+      "base_run": 41397720888,
+      "provider_run": 41397720946,
+      "all_nine_configurations_passed": true
+    },
+    "diagnosis_status": "Confirmed by a controlled actual boss-card pickup: the manager opens an earned draft and correctly pauses before settlement. The retained fixture made a premature one-tick clear assertion."
+  },
+  "controlled_reproduction": {
+    "result": "expected_headliner_assertion_reproduced_with_one_separate_local_setup_failure",
+    "source_file_sha256": "f69688363d1212a4779cebb103fec6e16fcc51ef6c5adb7138969f339d521d05",
+    "required_tests": 63,
+    "passing_markers": 61,
+    "failed_tests": [
+      "midpointArenaCannotSettleUntilItsRealHeadlinerIsDefeated",
+      "graffitiPersistsAndLeavesWithItsWall"
+    ],
+    "observed_boundary": {
+      "phase": "arena",
+      "completed": 2,
+      "offer": true,
+      "cards_before": 24,
+      "cards_after": 25,
+      "headliners": 1,
+      "forge_opportunity": true,
+      "headliner_state": "victory",
+      "actual_boss_card_claimed": true
+    },
+    "separate_setup_failure": "This fresh local reproduction omitted the generated graffiti catalogue. The one-entry emergency fallback normalized fixture variant 2 to 0. No graffiti codec change was made; normal asset generation and validation preceded the corrected fresh-JVM/world run.",
+    "raw_log_published": false,
+    "log": {
+      "filename": "jetsetcraft-alpha7-followup-reproduction-gametest.log",
+      "bytes": 55223,
+      "sha256": "8b99a46400e4ce3e2df0dd35fc77ceaedb348022dbc4da1114bceb8c8a3d403d"
+    }
+  },
+  "fix": {
+    "bounded_manager_ticks": 8,
+    "real_draft_choices_only": true,
+    "asserts_pickup_pause_before_settlement": true,
+    "asserts_exact_circuit_and_run_clear_counts": true,
+    "retains_headliner_victory_and_forge_checks": true,
+    "assigns_completion_ranks_service_credits_or_payout_receipts": false,
+    "explicit_xp_prerequisite": "One XP below the next level; setup itself must not open an offer. The actual owned boss card must open the tested draft."
+  },
+  "local_acceptance": {
+    "status": "pass",
+    "asset_generation_and_all_six_validators": true,
+    "research_browser_checks": true,
+    "clean_build": true,
+    "required_tests": 63,
+    "unique_pass_markers": [
+      "activity_dimension_return",
+      "activity_hill",
+      "activity_progression",
+      "activity_safety",
+      "activity_tag",
+      "catalogs",
+      "combat_sovereignty",
+      "crew_house",
+      "crew_missions",
+      "crew_persistence",
+      "crew_progress_caps",
+      "crew_progress_history",
+      "crew_progress_mission",
+      "crew_rush",
+      "crew_style_entry",
+      "crew_style_persistence",
+      "crew_style_shared_rewards",
+      "dance_flow",
+      "graffiti_lifecycle",
+      "hoverboard",
+      "paint_balloon_splash",
+      "ride_controls",
+      "rush_album",
+      "rush_arena_catalogue",
+      "rush_arena_rules",
+      "rush_arena_session",
+      "rush_build_rules",
+      "rush_build_runtime",
+      "rush_cache_boundaries",
+      "rush_cache_options",
+      "rush_contract_catalogue",
+      "rush_contract_hunt",
+      "rush_contract_paint",
+      "rush_contract_relay",
+      "rush_debrief_rules",
+      "rush_draft_controls",
+      "rush_elite_tells",
+      "rush_evolution_cryo",
+      "rush_evolution_railstorm",
+      "rush_evolution_return",
+      "rush_evolution_rules",
+      "rush_headliner_arena_gate",
+      "rush_headliner_recovery",
+      "rush_headliner_victory",
+      "rush_journey_history",
+      "rush_journey_preview",
+      "rush_objectives",
+      "rush_ownership",
+      "rush_pit_stop_effects",
+      "rush_pit_stop_rules",
+      "rush_pit_stop_runtime",
+      "rush_pit_stop_snapshots",
+      "rush_return",
+      "rush_route_exploration",
+      "rush_rules",
+      "rush_session",
+      "rush_spell_relay",
+      "rush_synergy_control",
+      "rush_synergy_recovery",
+      "rush_synergy_rules",
+      "rush_tagger_cover",
+      "scooter",
+      "street_gear"
+    ],
+    "normal_saved_dimensions_shutdown": true,
+    "fresh_world_and_game_jvm": true,
+    "logs": [
+      {
+        "filename": "jetsetcraft-alpha7-followup-preparation.log",
+        "bytes": 3401,
+        "sha256": "6f58b1f837657a7f2de250eb148d56e51fd7917b39908767eaa2ce17abb89219"
+      },
+      {
+        "filename": "jetsetcraft-alpha7-followup-build.log",
+        "bytes": 9160,
+        "sha256": "cd0b2b77e47b455be94f2b345cb3874e0af5dee67bbc7c1187c78d13676e3605"
+      },
+      {
+        "filename": "jetsetcraft-alpha7-followup-fixed-gametest.log",
+        "bytes": 36786,
+        "sha256": "e1cadd0a8834f28078f04cc57aafa340b7969ddf9c7adcbaad24a556cf0e49d0"
+      }
+    ],
+    "jar": {
+      "filename": "jetsetcraft-1.20.1-0.4.0-alpha.7.jar",
+      "bytes": 5895047,
+      "sha256": "1a5a7284246671eeaf89d2e9b3ac7f0b5860e24f5e486a52df9b2e47e4f161d9"
+    },
+    "runtime": "ForgeGradle sourceSets.main",
+    "independently_installed_reobfuscated_jar": false,
+    "local_native_audit_repeated": false,
+    "ci_binary_equality_claimed": false
+  },
+  "ci": {
+    "schema_version": 1,
+    "scope": "Curated public GitHub API metadata plus final browser-visible workflow, job, step and merge status. No CI logs or archives, private runner details or local environment data.",
+    "observed_at_utc": "2026-11-02T06:34:55.818Z",
+    "pull_request": {
+      "number": 47,
+      "html_url": "https://github.com/Herbertofury/JetSetCraft/pull/47",
+      "state": "closed",
+      "draft": false,
+      "merged": true,
+      "merge_commit_sha": "1fcb78852f893f083749aac2e566addc3acca78b",
+      "head_sha": "e0601fb7a7e5594224bf8880f397766668706ec3",
+      "base_sha": "2ec5548a7e13cc2f323432dae54e60ed6089d639",
+      "status_source": "Actual merged PR browser UI; full merge SHA fetched and tree compared"
+    },
+    "workflow_runs": [
+      {
+        "id": 41399807738,
+        "name": "Verify JetSetCraft",
+        "head_sha": "e0601fb7a7e5594224bf8880f397766668706ec3",
+        "event": "pull_request",
+        "run_number": 313,
+        "run_attempt": 1,
+        "status": "completed",
+        "conclusion": "success",
+        "html_url": "https://github.com/Herbertofury/JetSetCraft/actions/runs/41399807738",
+        "created_at": "2026-11-02T06:25:28Z",
+        "updated_at": "2026-11-02T06:25:31Z",
+        "status_source": "Final GitHub browser UI; completed successfully indicator"
+      },
+      {
+        "id": 41399807752,
+        "name": "Verify Wave 2 Providers",
+        "head_sha": "e0601fb7a7e5594224bf8880f397766668706ec3",
+        "event": "pull_request",
+        "run_number": 68,
+        "run_attempt": 1,
+        "status": "completed",
+        "conclusion": "success",
+        "html_url": "https://github.com/Herbertofury/JetSetCraft/actions/runs/41399807752",
+        "created_at": "2026-11-02T06:25:28Z",
+        "updated_at": "2026-11-02T06:25:42Z",
+        "status_source": "Final GitHub browser UI; completed successfully indicator"
+      }
+    ],
+    "configurations": [
+      {
+        "configuration": "base",
+        "job_id": 125128965463,
+        "job_url": "https://github.com/Herbertofury/JetSetCraft/actions/runs/41399807738/job/125128965463",
+        "name": "Java 17 / Forge 1.20.1",
+        "status": "completed",
+        "conclusion": "success",
+        "started_at": "2026-11-02T06:25:31Z",
+        "completed_at": null,
+        "required_gametests": 63,
+        "runtime_source": "ForgeGradle sourceSets.main",
+        "native_client_capture_gate": 23,
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Check out sources",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Set up Temurin 17",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Set up Gradle wrapper cache",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Set up asset tooling",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Regenerate deterministic authored assets",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Validate assets, gameplay contracts, source, and wiki",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Clean Forge build",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run all real Forge GameTests",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run real Forge dedicated-server smoke",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Verify activities, arena journeys and crew houses in a real Minecraft client",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Seal artifact checksums",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Upload verified release candidate",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Set up Gradle wrapper cache",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Set up Temurin 17",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Check out sources",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success"
+          }
+        ],
+        "status_source": "Final GitHub browser UI; succeeded job and per-step passed indicators"
+      },
+      {
+        "configuration": "irons_spells",
+        "job_id": 125128965533,
+        "job_url": "https://github.com/Herbertofury/JetSetCraft/actions/runs/41399807752/job/125128965533",
+        "name": "irons_spells / Forge 1.20.1",
+        "status": "completed",
+        "conclusion": "success",
+        "started_at": "2026-11-02T06:25:30Z",
+        "completed_at": "2026-11-02T06:29:22Z",
+        "required_gametests": 63,
+        "runtime_source": "ForgeGradle sourceSets.main",
+        "native_client_capture_gate": 0,
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Check out sources",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Set up Temurin 17",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Set up Gradle wrapper cache",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Set up asset tooling",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Regenerate deterministic authored assets",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Validate source, assets, and exact Wave 2 manifests",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Build with pinned provider present",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Record resolved provider dependencies",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run real Forge GameTests with provider present",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run dedicated-server smoke with provider present",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Seal evidence",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Upload provider-present evidence",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Set up Gradle wrapper cache",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Set up Temurin 17",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Check out sources",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success"
+          }
+        ],
+        "status_source": "Earlier public API completed result; also present in final PR nine-successful-checks list"
+      },
+      {
+        "configuration": "alexsmobs",
+        "job_id": 125128965766,
+        "job_url": "https://github.com/Herbertofury/JetSetCraft/actions/runs/41399807752/job/125128965766",
+        "name": "alexsmobs / Forge 1.20.1",
+        "status": "completed",
+        "conclusion": "success",
+        "started_at": "2026-11-02T06:25:31Z",
+        "completed_at": "2026-11-02T06:29:52Z",
+        "required_gametests": 63,
+        "runtime_source": "ForgeGradle sourceSets.main",
+        "native_client_capture_gate": 0,
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Check out sources",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Set up Temurin 17",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Set up Gradle wrapper cache",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Set up asset tooling",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Regenerate deterministic authored assets",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Validate source, assets, and exact Wave 2 manifests",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Build with pinned provider present",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Record resolved provider dependencies",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run real Forge GameTests with provider present",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run dedicated-server smoke with provider present",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Seal evidence",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Upload provider-present evidence",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Set up Gradle wrapper cache",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Set up Temurin 17",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Check out sources",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success"
+          }
+        ],
+        "status_source": "Earlier public API completed result; also present in final PR nine-successful-checks list"
+      },
+      {
+        "configuration": "cataclysm",
+        "job_id": 125128965794,
+        "job_url": "https://github.com/Herbertofury/JetSetCraft/actions/runs/41399807752/job/125128965794",
+        "name": "cataclysm / Forge 1.20.1",
+        "status": "completed",
+        "conclusion": "success",
+        "started_at": "2026-11-02T06:25:35Z",
+        "completed_at": "2026-11-02T06:30:00Z",
+        "required_gametests": 63,
+        "runtime_source": "ForgeGradle sourceSets.main",
+        "native_client_capture_gate": 0,
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Check out sources",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Set up Temurin 17",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Set up Gradle wrapper cache",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Set up asset tooling",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Regenerate deterministic authored assets",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Validate source, assets, and exact Wave 2 manifests",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Build with pinned provider present",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Record resolved provider dependencies",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run real Forge GameTests with provider present",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run dedicated-server smoke with provider present",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Seal evidence",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Upload provider-present evidence",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Set up Gradle wrapper cache",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Set up Temurin 17",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Check out sources",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success"
+          }
+        ],
+        "status_source": "Earlier public API completed result; also present in final PR nine-successful-checks list"
+      },
+      {
+        "configuration": "alexscaves",
+        "job_id": 125128965849,
+        "job_url": "https://github.com/Herbertofury/JetSetCraft/actions/runs/41399807752/job/125128965849",
+        "name": "alexscaves / Forge 1.20.1",
+        "status": "completed",
+        "conclusion": "success",
+        "started_at": "2026-11-02T06:25:31Z",
+        "completed_at": "2026-11-02T06:30:17Z",
+        "required_gametests": 63,
+        "runtime_source": "ForgeGradle sourceSets.main",
+        "native_client_capture_gate": 0,
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Check out sources",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Set up Temurin 17",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Set up Gradle wrapper cache",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Set up asset tooling",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Regenerate deterministic authored assets",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Validate source, assets, and exact Wave 2 manifests",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Build with pinned provider present",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Record resolved provider dependencies",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run real Forge GameTests with provider present",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run dedicated-server smoke with provider present",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Seal evidence",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Upload provider-present evidence",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Set up Gradle wrapper cache",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Set up Temurin 17",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Check out sources",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success"
+          }
+        ],
+        "status_source": "Earlier public API completed result; also present in final PR nine-successful-checks list"
+      },
+      {
+        "configuration": "aoa",
+        "job_id": 125128965865,
+        "job_url": "https://github.com/Herbertofury/JetSetCraft/actions/runs/41399807752/job/125128965865",
+        "name": "aoa / Forge 1.20.1",
+        "status": "completed",
+        "conclusion": "success",
+        "started_at": "2026-11-02T06:25:31Z",
+        "completed_at": "2026-11-02T06:30:31Z",
+        "required_gametests": 63,
+        "runtime_source": "ForgeGradle sourceSets.main",
+        "native_client_capture_gate": 0,
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Check out sources",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Set up Temurin 17",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Set up Gradle wrapper cache",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Set up asset tooling",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Regenerate deterministic authored assets",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Validate source, assets, and exact Wave 2 manifests",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Build with pinned provider present",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Record resolved provider dependencies",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run real Forge GameTests with provider present",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run dedicated-server smoke with provider present",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Seal evidence",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Upload provider-present evidence",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Set up Gradle wrapper cache",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Set up Temurin 17",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Check out sources",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success"
+          }
+        ],
+        "status_source": "Earlier public API completed result; also present in final PR nine-successful-checks list"
+      },
+      {
+        "configuration": "aether",
+        "job_id": 125128965868,
+        "job_url": "https://github.com/Herbertofury/JetSetCraft/actions/runs/41399807752/job/125128965868",
+        "name": "aether / Forge 1.20.1",
+        "status": "completed",
+        "conclusion": "success",
+        "started_at": "2026-11-02T06:25:41Z",
+        "completed_at": "2026-11-02T06:30:30Z",
+        "required_gametests": 63,
+        "runtime_source": "ForgeGradle sourceSets.main",
+        "native_client_capture_gate": 0,
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Check out sources",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Set up Temurin 17",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Set up Gradle wrapper cache",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Set up asset tooling",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Regenerate deterministic authored assets",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Validate source, assets, and exact Wave 2 manifests",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Build with pinned provider present",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Record resolved provider dependencies",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run real Forge GameTests with provider present",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run dedicated-server smoke with provider present",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Seal evidence",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Upload provider-present evidence",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Set up Gradle wrapper cache",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Set up Temurin 17",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Check out sources",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success"
+          }
+        ],
+        "status_source": "Earlier public API completed result; also present in final PR nine-successful-checks list"
+      },
+      {
+        "configuration": "all",
+        "job_id": 125128965938,
+        "job_url": "https://github.com/Herbertofury/JetSetCraft/actions/runs/41399807752/job/125128965938",
+        "name": "all / Forge 1.20.1",
+        "status": "completed",
+        "conclusion": "success",
+        "started_at": "2026-11-02T06:25:31Z",
+        "completed_at": null,
+        "required_gametests": 63,
+        "runtime_source": "ForgeGradle sourceSets.main",
+        "native_client_capture_gate": 0,
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Check out sources",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Set up Temurin 17",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Set up Gradle wrapper cache",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Set up asset tooling",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Regenerate deterministic authored assets",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Validate source, assets, and exact Wave 2 manifests",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Build with pinned provider present",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Record resolved provider dependencies",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run real Forge GameTests with provider present",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run dedicated-server smoke with provider present",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Seal evidence",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Upload provider-present evidence",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Set up Gradle wrapper cache",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Set up Temurin 17",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Check out sources",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success"
+          }
+        ],
+        "status_source": "Final GitHub browser UI; succeeded job and per-step passed indicators"
+      },
+      {
+        "configuration": "adventure_all",
+        "job_id": 125128965974,
+        "job_url": "https://github.com/Herbertofury/JetSetCraft/actions/runs/41399807752/job/125128965974",
+        "name": "adventure_all / Forge 1.20.1",
+        "status": "completed",
+        "conclusion": "success",
+        "started_at": "2026-11-02T06:25:31Z",
+        "completed_at": "2026-11-02T06:30:09Z",
+        "required_gametests": 63,
+        "runtime_source": "ForgeGradle sourceSets.main",
+        "native_client_capture_gate": 0,
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Check out sources",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Set up Temurin 17",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Set up Gradle wrapper cache",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Set up asset tooling",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Regenerate deterministic authored assets",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Validate source, assets, and exact Wave 2 manifests",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Build with pinned provider present",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Record resolved provider dependencies",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run real Forge GameTests with provider present",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run dedicated-server smoke with provider present",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Seal evidence",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Upload provider-present evidence",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Set up Gradle wrapper cache",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Set up Temurin 17",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Check out sources",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success"
+          }
+        ],
+        "status_source": "Earlier public API completed result; also present in final PR nine-successful-checks list"
+      }
+    ],
+    "artifacts": [
+      {
+        "id": 13121336612,
+        "name": "jetsetcraft-wave2-aoa-97d5be9dc0b91e14827b69a5b505874bb927e81c",
+        "size_in_bytes": 5660813,
+        "digest": "sha256:4a82f19e6c5aefae1f423c7eee19cb0a322d6f3f4c74b214a112ef8dedd59681",
+        "expired": false,
+        "created_at": "2026-11-02T06:30:28Z",
+        "updated_at": "2026-11-02T06:30:28Z",
+        "expires_at": "2027-01-31T06:25:28Z"
+      },
+      {
+        "id": 13121108279,
+        "name": "jetsetcraft-wave2-adventure_all-97d5be9dc0b91e14827b69a5b505874bb927e81c",
+        "size_in_bytes": 5671345,
+        "digest": "sha256:a61a26f0489e142d8054a8d33e37ed4d98d94bb6859144042007a588eac14cc7",
+        "expired": false,
+        "created_at": "2026-11-02T06:30:05Z",
+        "updated_at": "2026-11-02T06:30:05Z",
+        "expires_at": "2027-01-31T06:25:28Z"
+      },
+      {
+        "id": 13121108133,
+        "name": "jetsetcraft-wave2-irons_spells-97d5be9dc0b91e14827b69a5b505874bb927e81c",
+        "size_in_bytes": 5664356,
+        "digest": "sha256:fa06115102a0d9bf344a103c30935529978bbae82412394fdbf421d04cdcc2d4",
+        "expired": false,
+        "created_at": "2026-11-02T06:29:20Z",
+        "updated_at": "2026-11-02T06:29:20Z",
+        "expires_at": "2027-01-31T06:25:28Z"
+      },
+      {
+        "id": 13120663063,
+        "name": "jetsetcraft-wave2-alexsmobs-97d5be9dc0b91e14827b69a5b505874bb927e81c",
+        "size_in_bytes": 5659874,
+        "digest": "sha256:ba94fc360e3481f5966a913709827bb5e4c1006412403b837b79794dcb1f6b2c",
+        "expired": false,
+        "created_at": "2026-11-02T06:29:49Z",
+        "updated_at": "2026-11-02T06:29:49Z",
+        "expires_at": "2027-01-31T06:25:28Z"
+      },
+      {
+        "id": 13120643173,
+        "name": "jetsetcraft-wave2-aether-97d5be9dc0b91e14827b69a5b505874bb927e81c",
+        "size_in_bytes": 5658493,
+        "digest": "sha256:817abd3b91f2eaf6f294c37face93c64c1b023d034bdb5e28531f0647f2ec7a9",
+        "expired": false,
+        "created_at": "2026-11-02T06:30:27Z",
+        "updated_at": "2026-11-02T06:30:27Z",
+        "expires_at": "2027-01-31T06:25:28Z"
+      },
+      {
+        "id": 13120588168,
+        "name": "jetsetcraft-wave2-alexscaves-97d5be9dc0b91e14827b69a5b505874bb927e81c",
+        "size_in_bytes": 5658411,
+        "digest": "sha256:c9a5a70df2dda8d62285627466c017b2ed92c508a0b9764d16c9b1f2b89c338e",
+        "expired": false,
+        "created_at": "2026-11-02T06:30:15Z",
+        "updated_at": "2026-11-02T06:30:15Z",
+        "expires_at": "2027-01-31T06:25:28Z"
+      },
+      {
+        "id": 13120519710,
+        "name": "jetsetcraft-wave2-all-97d5be9dc0b91e14827b69a5b505874bb927e81c",
+        "size_in_bytes": 5664895,
+        "digest": "sha256:d242c95a3af13f4850afbfc646f304174f0f841cbfdea61540295bfdc0883620",
+        "expired": false,
+        "created_at": "2026-11-02T06:30:50Z",
+        "updated_at": "2026-11-02T06:30:50Z",
+        "expires_at": "2027-01-31T06:25:28Z"
+      },
+      {
+        "id": 13120313711,
+        "name": "jetsetcraft-wave2-cataclysm-97d5be9dc0b91e14827b69a5b505874bb927e81c",
+        "size_in_bytes": 5660713,
+        "digest": "sha256:5cdde9fc30782ed0bcf8699037c190e666e3159f092b35dc9f495db3b9f7d8fe",
+        "expired": false,
+        "created_at": "2026-11-02T06:29:57Z",
+        "updated_at": "2026-11-02T06:29:57Z",
+        "expires_at": "2027-01-31T06:25:28Z"
+      }
+    ],
+    "api_metadata_observed_at_utc": "2026-11-02T06:30:54.515010+00:00",
+    "browser_completion_verification": {
+      "observed_at_utc": "2026-11-02T06:34:55.818Z",
+      "source": "Authenticated GitHub browser UI; public DOM status and step indicators only",
+      "pull_request_url": "https://github.com/Herbertofury/JetSetCraft/pull/47",
+      "merged": true,
+      "merge_commit_sha": "1fcb78852f893f083749aac2e566addc3acca78b",
+      "successful_checks": 9,
+      "workflow_conclusions": [
+        {
+          "id": 41399807738,
+          "conclusion": "success",
+          "observed_indicator": "completed successfully"
+        },
+        {
+          "id": 41399807752,
+          "conclusion": "success",
+          "observed_indicator": "completed successfully"
+        }
+      ],
+      "final_jobs": [
+        {
+          "configuration": "base",
+          "job_id": 125128965463,
+          "conclusion": "success",
+          "steps": [
+            {
+              "indicator": "This step passed",
+              "name": "Set up job"
+            },
+            {
+              "indicator": "This step passed",
+              "name": "Check out sources"
+            },
+            {
+              "indicator": "This step passed",
+              "name": "Set up Temurin 17"
+            },
+            {
+              "indicator": "This step passed",
+              "name": "Set up Gradle wrapper cache"
+            },
+            {
+              "indicator": "This step passed",
+              "name": "Set up asset tooling"
+            },
+            {
+              "indicator": "This step passed",
+              "name": "Regenerate deterministic authored assets"
+            },
+            {
+              "indicator": "This step passed",
+              "name": "Validate assets, gameplay contracts, source, and wiki"
+            },
+            {
+              "indicator": "This step passed",
+              "name": "Clean Forge build"
+            },
+            {
+              "indicator": "This step passed",
+              "name": "Run all real Forge GameTests"
+            },
+            {
+              "indicator": "This step passed",
+              "name": "Run real Forge dedicated-server smoke"
+            },
+            {
+              "indicator": "This step passed",
+              "name": "Verify activities, arena journeys and crew houses in a real Minecraft client"
+            },
+            {
+              "indicator": "This step passed",
+              "name": "Seal artifact checksums"
+            },
+            {
+              "indicator": "This step passed",
+              "name": "Upload verified release candidate"
+            },
+            {
+              "indicator": "This step passed",
+              "name": "Post Set up Gradle wrapper cache"
+            },
+            {
+              "indicator": "This step passed",
+              "name": "Post Set up Temurin 17"
+            },
+            {
+              "indicator": "This step passed",
+              "name": "Post Check out sources"
+            },
+            {
+              "indicator": "This step passed",
+              "name": "Complete job"
+            }
+          ]
+        },
+        {
+          "configuration": "all",
+          "job_id": 125128965938,
+          "conclusion": "success",
+          "steps": [
+            {
+              "indicator": "This step passed",
+              "name": "Set up job"
+            },
+            {
+              "indicator": "This step passed",
+              "name": "Check out sources"
+            },
+            {
+              "indicator": "This step passed",
+              "name": "Set up Temurin 17"
+            },
+            {
+              "indicator": "This step passed",
+              "name": "Set up Gradle wrapper cache"
+            },
+            {
+              "indicator": "This step passed",
+              "name": "Set up asset tooling"
+            },
+            {
+              "indicator": "This step passed",
+              "name": "Regenerate deterministic authored assets"
+            },
+            {
+              "indicator": "This step passed",
+              "name": "Validate source, assets, and exact Wave 2 manifests"
+            },
+            {
+              "indicator": "This step passed",
+              "name": "Build with pinned provider present"
+            },
+            {
+              "indicator": "This step passed",
+              "name": "Record resolved provider dependencies"
+            },
+            {
+              "indicator": "This step passed",
+              "name": "Run real Forge GameTests with provider present"
+            },
+            {
+              "indicator": "This step passed",
+              "name": "Run dedicated-server smoke with provider present"
+            },
+            {
+              "indicator": "This step passed",
+              "name": "Seal evidence"
+            },
+            {
+              "indicator": "This step passed",
+              "name": "Upload provider-present evidence"
+            },
+            {
+              "indicator": "This step passed",
+              "name": "Post Set up Gradle wrapper cache"
+            },
+            {
+              "indicator": "This step passed",
+              "name": "Post Set up Temurin 17"
+            },
+            {
+              "indicator": "This step passed",
+              "name": "Post Check out sources"
+            },
+            {
+              "indicator": "This step passed",
+              "name": "Complete job"
+            }
+          ]
+        }
+      ],
+      "no_raw_logs_or_archives": true
+    },
+    "artifact_metadata_scope": "API artifact metadata observed before final completion; later artifact metadata may be omitted. No artifact bytes were fetched or inspected.",
+    "timestamp_scope": "Existing job completion timestamps and workflow update timestamps remain the earlier API values. Final browser observations supply status, not unobserved API timestamps."
+  },
+  "summary": {
+    "configurations_passed": 9,
+    "distinct_required_tests": 63,
+    "ci_test_executions": 567,
+    "base_native_capture_gate": 23,
+    "builds_and_normal_dedicated_server_save_shutdown_passed": true,
+    "ci_archives_downloaded": false,
+    "ci_pixels_independently_reviewed": false
+  },
+  "existing_native_gallery": {
+    "origin": "Original PR #46 exact-source local reproduction",
+    "captures": 23,
+    "pixel_reviewed": true,
+    "new_capture_claimed": false,
+    "source_record": "verification.json",
+    "qualification": "The production client and gameplay code are unchanged by this test-only follow-up. The original images and old local JAR identity remain attached to their original source; they are not relabelled as captures or binaries from this follow-up."
+  },
+  "merge_capture": {
+    "filename": "25-followup-merge.jpg",
+    "bytes": 79424,
+    "sha256": "de280f67a867651290ddde5437ff11b4dd9255b67554e02ac4f4d92d6ce05292",
+    "resolution": [
+      1348,
+      926
+    ],
+    "origin": "Actual authenticated GitHub browser screenshot, reviewed by root",
+    "pixels_modified": false
+  },
+  "redaction": {
+    "raw_logs_published": false,
+    "private_runtime_paths_identifiers_addresses_or_environment_values_included": false,
+    "basis": "Explicit public metadata fields, observed assertion states, basenames and byte hashes only."
+  }
+}

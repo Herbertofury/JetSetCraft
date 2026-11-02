@@ -1,8 +1,47 @@
 # Arena contracts, Pit stops and accepted feedback — alpha.7
 
-**Verification status: PASS. Merge: `af8e7f1b7a41b0e491f04d3f3f8ca4288ac5eed7`.** This receipt covers `0.4.0-alpha.7` and [PR #46](https://github.com/Herbertofury/JetSetCraft/pull/46). It adds optional room goals and shared between-room services to the existing connected arena journey. The 23 Minecraft PNGs are an independent local reproduction. Historical results remain in the [alpha.6 receipt](../headliners/README.md).
+**Original PR #46 verification: PASS. Merge: `af8e7f1b7a41b0e491f04d3f3f8ca4288ac5eed7`.** This receipt covers `0.4.0-alpha.7` and [PR #46](https://github.com/Herbertofury/JetSetCraft/pull/46). It adds optional room goals and shared between-room services to the existing connected arena journey. The 23 Minecraft PNGs are an independent local reproduction. Historical results remain in the [alpha.6 receipt](../headliners/README.md).
 
-## Source and artifact identity
+## Post-merge verification follow-up
+
+**Fixture follow-up: PASS through [PR #47](https://github.com/Herbertofury/JetSetCraft/pull/47), merge [`1fcb78852f893f083749aac2e566addc3acca78b`](https://github.com/Herbertofury/JetSetCraft/commit/1fcb78852f893f083749aac2e566addc3acca78b).** This strengthens the existing midpoint-headliner GameTest; the suite remains **63 distinct tests**. Production gameplay, resources and network protocol are unchanged. The follow-up has its own source tree and evidence below; the original PR #46 results and 23 reviewed local Minecraft images retain their original identity.
+
+### Observed failure and controlled reproduction
+
+The later automatic [provider run 41398418225](https://github.com/Herbertofury/JetSetCraft/actions/runs/41398418225) failed three jobs in retained test `midpointArenaCannotSettleUntilItsRealHeadlinerIsDefeated`:
+
+| Lane / failed job | Assertion reached too early |
+|---|---|
+| [`alexscaves` / 125124711667](https://github.com/Herbertofury/JetSetCraft/actions/runs/41398418225/job/125124711667) | Midpoint room settlement and forge opportunity after the actual headliner defeat. |
+| [`aoa` / 125124711735](https://github.com/Herbertofury/JetSetCraft/actions/runs/41398418225/job/125124711735) | The same midpoint settlement/forge check. |
+| [`all` / 125124711720](https://github.com/Herbertofury/JetSetCraft/actions/runs/41398418225/job/125124711720) | Ordinary room settlement after actual native rival defeats. |
+
+A controlled midpoint reproduction confirmed that the actual boss-card pickup could open another earned XP draft before the manager reached room settlement. After that pickup, the observed state was `Phase=arena`, `Completed=2`, `offer=true`, cards **24 → 25**, **one headliner defeated**, forge opportunity retained, headliner state `victory` and the actual boss card claimed. The one-tick fixture assertion expected a clear while the legitimate choice pause was active; the victory had not been lost.
+
+That deliberately failing full local reproduction produced **61 pass markers and two required failures**. Its second failure was a separate setup error: omitted generated graffiti assets selected the one-entry fallback catalogue, which normalized requested variant 2 to 0 before save/load. The combined NBT assertion then failed. The reproduction log is retained privately; neither a passing full run nor a graffiti persistence regression is inferred from it.
+
+The corrected existing test places the player one XP short of the next level, then requires the real owned boss-card pickup to open the draft while preserving victory and blocking settlement. It resolves actual offers and advances the production manager for at most eight attempts before demanding the exact room/clear count. Ordinary rooms use the same bounded settling helper. No production clear, reward or pause rule is relaxed, and no extra test is counted. A fresh JVM/world with generated assets and all six repository validators then passed the clean build and all **63 required GameTests**.
+
+### Follow-up source and acceptance
+
+| Follow-up identity | Recorded value |
+|---|---|
+| Local candidate | `a2a6da18a40b60b4fd11073a5b45207cf470fc7d` |
+| Feature head | `e0601fb7a7e5594224bf8880f397766668706ec3` |
+| Tested PR integration | `97d5be9dc0b91e14827b69a5b505874bb927e81c` |
+| Follow-up tree | `7f6b36dabb6cdb9e46085d24188cd98bb563c0f2`; distinct from the original PR #46 tree |
+| Actual follow-up merge | [`1fcb78852f893f083749aac2e566addc3acca78b`](https://github.com/Herbertofury/JetSetCraft/commit/1fcb78852f893f083749aac2e566addc3acca78b), verified against this follow-up tree |
+| Base workflow | [Run 41399807738](https://github.com/Herbertofury/JetSetCraft/actions/runs/41399807738) — PASS |
+| Eight-provider workflow | [Run 41399807752](https://github.com/Herbertofury/JetSetCraft/actions/runs/41399807752) — PASS |
+| Separately rebuilt local JAR | **5,895,047 bytes**, SHA-256 `1a5a7284246671eeaf89d2e9b3ac7f0b5860e24f5e486a52df9b2e47e4f161d9` |
+
+All nine follow-up configurations passed the **63-test** suite, builds and normal dedicated-server readiness/save/shutdown; that is **567 executions of the same 63 distinct tests** in this acceptance run. Base also passed the existing **23-capture native gate**. These follow-up workflow conclusions are separate from the original local pixel review. The gallery below is still the original PR #46 reproduction; no newly reviewed local gallery, downloaded CI pixels, CI/local binary equality or installed reobfuscated-JAR runtime is claimed.
+
+Final workflow/job conclusions and the remaining base/all step results were verified in GitHub's browser UI. Earlier public API metadata remains timestamped separately in `followup.json`; its artifact listing may omit artifacts uploaded after that snapshot. No artifact bytes were fetched.
+
+[followup.json](followup.json) records the failed push, controlled reproduction, corrected acceptance and source/artifact identities. [25-followup-merge.jpg](25-followup-merge.jpg) records the separately reviewed PR #47 merge. The original `verification.json`, `local-evidence.json`, runtime summary and Minecraft PNGs remain the original PR #46 record.
+
+## Original PR #46 source and artifact identity
 
 | Identity | Recorded value |
 |---|---|
@@ -24,7 +63,9 @@ The local JAR hash does not establish CI binary equality. ForgeGradle runtime ta
 
 ## What players can do
 
-Use a tuned **Boombox** with an empty hand, choose **Rival Rush**, review the invitation and select **Arena circuit → Start 6-arena journey**. It remains beside Tag, King of the Hill, Crew showdown and **Surprise me**. Random invitations reveal the selected game before launch. Separate Rush setup retains Free streets and its finite/Endless options.
+Use a tuned **Boombox** with an empty hand, choose **Rival Rush**, review the invitation and select **Start arena journey**. It remains beside Tag, King of the Hill, Crew showdown and **Surprise me**. Random invitations reveal the selected game before launch.
+
+In standalone Rush setup, choose **Arena circuit → Start 6-arena journey**. That setup also provides Free streets with its finite/Endless options.
 
 Compare up to three routes, inspect **Briefing**, then ride the connector into the chosen room. **Journey** records actual visited rooms and current offers. Required time, owned-rival quota and any headliner gate still determine the clear. The optional goal adds a reason to ride, paint or seek dangerous rivals while completing that room:
 
@@ -53,9 +94,9 @@ The four-entry feedback feed reports accepted caches, mastery, contracts, clears
 
 ![Two earned Pit stop choices after an actual contracted room clear](22-pit-stop.png)
 
-## Verified matrix
+## Original PR #46 verified matrix
 
-The suite contains **63 distinct Forge GameTests**: 55 retained tests plus four contract, three Pit stop model and one Pit stop runtime test. Both workflows require the complete suite, build, dedicated-server readiness and normal saved-dimensions shutdown. Base additionally requires five native audit pass markers, including `JETSETCRAFT_CONTRACT_VISUAL_AUDIT_PASS`, and all 23 named captures. Final outcome: **all nine configurations passed on their first attempt: 567 executions of 63 distinct tests**, with builds and normal dedicated-server save/shutdown. Base also passed all 23 named native captures. The independent local replay passed all six validators, research-browser checks, clean build, all 63 GameTests, dedicated-server readiness/RCON stop/normal saved shutdown, and the reviewed 23-screen native audit. The three asset generators were invoked; optional brand source was absent, so existing tracked brand derivatives were retained.
+The suite contains **63 distinct Forge GameTests**: 55 retained tests plus four contract, three Pit stop model and one Pit stop runtime test. Both workflows require the complete suite, build, dedicated-server readiness and normal saved-dimensions shutdown. Base additionally requires five native audit pass markers, including `JETSETCRAFT_CONTRACT_VISUAL_AUDIT_PASS`, and all 23 named captures. Original PR #46 outcome: **all nine configurations passed on their first attempt: 567 executions of 63 distinct tests**, with builds and normal dedicated-server save/shutdown. Base also passed all 23 named native captures. The independent local replay passed all six validators, research-browser checks, clean build, all 63 GameTests, dedicated-server readiness/RCON stop/normal saved shutdown, and the reviewed 23-screen native audit. The three asset generators were invoked; optional brand source was absent, so existing tracked brand derivatives were retained.
 
 | Configuration | Pinned providers |
 |---|---|
@@ -88,7 +129,7 @@ Model assertions and server runtime fixtures have different scopes. Fixtures sho
 
 ## Twenty-three native Minecraft captures
 
-The original **1280 × 720, GUI scale 3** PNGs were captured in the guarded disposable audit world. All were directly reviewed across the team. The allowlisted native summary records each of the five audit PASS markers once, 23 capture markers and audited source-state restoration. These local observations do not determine CI or merge status.
+The original PR #46 **1280 × 720, GUI scale 3** PNGs were captured in the guarded disposable audit world. All were directly reviewed across the team. The allowlisted native summary records each of the five audit PASS markers once, 23 capture markers and audited source-state restoration. These local observations do not determine CI or merge status.
 
 | Captures | Observed state and scope |
 |---|---|
