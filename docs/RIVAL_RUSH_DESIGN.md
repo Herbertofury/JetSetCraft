@@ -733,3 +733,27 @@ Iron's [official progression guide](https://iron.wiki/progression/) describes sc
 
 The alpha.5 status/charge, cache and Style Library cases passed in base and all eight pinned provider lanes. Their recorded scopes include active-clock duration, no secondary-hit recursion, native effect/health preservation, remix and room cleanup, and explicit unavailable-provider behavior. The [receipt](verification/style-library/README.md) distinguishes actual owned-actor defeats from injected cache counters and compressed clocks. Broader native spell, summon, teleport, healing and boss support remains a distinct adapter task. Human movement feel and sustained combined-mod performance still require playtesting after machine acceptance.
 
+
+## 17. Alpha.7: a reason to take the next room
+
+This continuation adds optional room contracts and a shared Pit stop decision. It builds on the existing real arena objective, cache families, three artifact slots, headliners and evolutions. The goal is to make the route affect how the player moves and what the build becomes without requiring a second currency or delaying every clear for a side objective. Validation of the current candidate is recorded separately from the historical receipts above.
+
+### 17.1 Optional room identity
+
+**Relay** rewards continuous riding through ordered beacons, **Paint** rewards distinct accepted wall patches, and **Hunt** rewards actual owned elite/captain defeats. Contracts begin automatically on room entry. They never replace the combat clock, defeat quota or headliner gates. Their preview travels with the server-held arena profile; the room history freezes the actual outcome. Existing data packs without a contract keep their old behavior.
+
+Relay uses the existing motion observation once, alongside the movement artifacts. Pauses, transitions and standard Forge teleport events reset the baseline. Only loaded, built and collision-safe standing points can become markers. Particle-only markers preserve authored geometry, while blocked layouts disable an optional goal explicitly. This proves the supported event and displacement boundaries; arbitrary third-party direct position writes below the discontinuity threshold are not identifiable as teleports from coordinates alone.
+
+### 17.2 One shared stop budget
+
+A normal clear earns one service. A completed contract earns a second service only when that room actually clears. The run validates the canonical room receipt against its monotonic clear ordinal, then opens a single bounded budget. Each service can be used once. A player with a damaged build can Patch and Tune; a player planning a new evolution can Remix and Tune; a player steering future drafts can Rewind and choose another service. Two Tunes are deliberately unavailable at one stop.
+
+Tune grants one owned rank within existing caps. Patch spends only when some vitality or equipped ward can actually be restored. Rewind keeps the three-reroll/two-banish caps and does not undo exclusions. Remix preserves exact rank and the three-family cap. All previews come from the same run rules as acceptance, and successful results report actual before/after values. An invalid or no-effect request leaves the budget intact. The final room supports the same decisions during Encore; successful departure closes remaining choices.
+
+No service pays supplies, crew XP, score or a second permanent receipt. The existing completed-room settlement and eventual qualified return continue feeding shared progression. **Contracts banked** in Last run records the bonus actually earned at a completed room, while **Services used** counts accepted actions. A completed side goal followed by an early return cannot inflate either reward count.
+
+### 17.3 Rewards should remain readable
+
+Changing proximity hints and combat objectives previously shared one transient string with cache/mastery messages. Accepted events now append to a four-entry server-owned feed with monotonic run-local IDs. The client deduplicates the run identity and event ID, then uses a bounded toast queue or reduced-motion text. It does not infer a reward from a nearby cache, a menu preview or a changing rank. Permanent crew awards retain their existing saved receipt presentation.
+
+This is a concrete improvement to choice and feedback. Human circuit playtests still determine whether the optional goals interrupt flow, whether two services over-accelerate a build, and whether relay placement, enemy pressure and route variety stay interesting across complete sets. Those judgments are not replaced by fixture-driven acceptance tests.
