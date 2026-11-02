@@ -58,12 +58,16 @@ public final class CrewProgressGameTests {
 
         placeAnchor(owner, anchor);
         CrewHouseManager.openAt(owner, anchor);
+        CompoundTag founding = CrewHouseManager.snapshot(owner);
+        check(founding.getBoolean("CanFound"), "The earned-history founding fixture was unavailable at " + anchor
+                + ": " + founding.getString("FoundReason"));
         CrewHouseManager.handleAction(owner, "found", "Progress crew", 0, null, null, 0);
         CrewProfile house = data.profile(owner.getUUID());
         check(house != null && house.supplies() == 58 && house.members().get(0).xp() == 77
                         && house.members().get(0).level() == 2 && house.members().get(1).xp() == 0
                         && data.pendingSupplies(owner.getUUID()) == 0 && data.recentRewards(owner.getUUID()).equals(earned),
-                "Founding replayed, lost or reassigned banked training/history instead of transferring it once");
+                "Founding replayed, lost or reassigned banked training/history instead of transferring it once: "
+                        + (house == null ? CrewHouseManager.snapshot(owner) : house.save()));
         check(!data.add(house) && !CrewHouseManager.bankActivity(owner, first, GANG, "tag", 400, 6, 600).accepted()
                         && house.supplies() == 58 && data.recentRewards(owner.getUUID()).size() == 3,
                 "Founding or repeated activity settlement produced another reward or history row");
@@ -161,7 +165,19 @@ public final class CrewProgressGameTests {
         check(profile != null && CrewHouseData.get(owner.getServer()).add(profile), "The valid saved-account fixture was rejected");
         return profile;
     }
-    private static BlockPos anchor(GameTestHelper helper, int x) { return new BlockPos(x, helper.absolutePos(new BlockPos(0, 1, 0)).getY(), 24000); }
+    private static BlockPos anchor(GameTestHelper helper, int x) {
+        CrewHouseData data = CrewHouseData.get(helper.getLevel().getServer());
+        for (int attempt = 0; attempt < 128; attempt++) {
+            BlockPos anchor = new BlockPos(x + attempt * 128, helper.absolutePos(new BlockPos(0, 1, 0)).getY(), 24000);
+            boolean occupied = data.profiles().stream().anyMatch(profile -> {
+                BlockPos existing = BlockPos.of(profile.save().getLong("Anchor"));
+                return Math.abs((long) existing.getX() - anchor.getX()) < 100
+                        && Math.abs((long) existing.getZ() - anchor.getZ()) < 100;
+            });
+            if (!occupied) return anchor;
+        }
+        throw new GameTestAssertException("Could not reserve isolated fixture space for crew progression");
+    }
     private static ServerPlayer owner(GameTestHelper helper, BlockPos anchor) {
         ServerPlayer owner = FakePlayerFactory.get(helper.getLevel(), new GameProfile(UUID.randomUUID(), "JSC_progress"));
         owner.setGameMode(GameType.SURVIVAL); owner.setHealth(owner.getMaxHealth());

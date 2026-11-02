@@ -48,7 +48,7 @@ public final class ActivityGameTests {
 
     @GameTest(template = "hoverboard_empty", timeoutTicks = 100)
     public static void pendingRewardsTransferReceiptsAndTrainingExactlyOnce(GameTestHelper helper) {
-        BlockPos anchor = new BlockPos(24000, 100, 16000);
+        BlockPos anchor = freeHomeAnchor(helper);
         ServerPlayer owner = player(helper, "wallet", anchor);
         CrewHouseData store = CrewHouseData.get(owner.getServer());
         UUID tag = UUID.randomUUID(), rush = UUID.randomUUID();
@@ -73,12 +73,16 @@ public final class ActivityGameTests {
         helper.getLevel().setBlockAndUpdate(anchor.below(), Blocks.STONE.defaultBlockState());
         helper.getLevel().setBlockAndUpdate(anchor, ModBlocks.BOOMBOX.get().defaultBlockState());
         CrewHouseManager.openAt(owner, anchor);
+        CompoundTag founding = CrewHouseManager.snapshot(owner);
+        check(founding.getBoolean("CanFound"), "The real Boombox founding fixture was unavailable at " + anchor
+                + ": " + founding.getString("FoundReason"));
         CrewHouseManager.handleAction(owner, "found", "Every mode crew", 0, null, null, 0);
         CrewProfile home = store.profile(owner.getUUID());
         check(home != null && home.supplies() == 80 && home.xp() == 277 && home.members().get(0).xp() == 110
                         && home.reputation(GANG.toString()) == 28 && store.pendingSupplies(owner.getUUID()) == 0
                         && store.pendingTraining(owner.getUUID()) == 0 && store.pendingXp(owner.getUUID()) == 0,
-                "Founding failed to transfer pending supplies, crew/member XP and reputation exactly once");
+                "Founding failed to transfer pending supplies, crew/member XP and reputation exactly once: "
+                        + (home == null ? CrewHouseManager.snapshot(owner) : home.save()));
         check(!CrewHouseManager.bankActivity(owner, tag, GANG, "tag", 400, 6, 600).accepted(),
                 "A pre-house receipt became payable again after transfer");
         CrewHouseManager.bankRush(owner, rush, GANG, 1200, 3, 3, 1000);
@@ -164,8 +168,9 @@ public final class ActivityGameTests {
         ActivityManager.open(owner);
         CompoundTag random = ActivityManager.snapshot(owner);
         check(random.getString("SelectedMode").equals("random") && !ActivityManager.active(owner)
-                        && random.getList("Activities", 10).size() == 5,
-                "The generic invitation did not put random and four actual modes in one optional catalogue");
+                        && random.getList("Activities", 10).size() == 6
+                        && random.getList("Activities", 10).stream().anyMatch(value -> value instanceof CompoundTag row && row.getString("Id").equals("liberty_grind")),
+                "The generic invitation did not put random and all five actual modes, including Liberty Grind, in one optional catalogue");
         helper.runAfterDelay(5, () -> {
             action(owner, "refresh", "");
             check(ActivityManager.snapshot(owner).getString("Mode").equals(random.getString("Mode"))
@@ -320,6 +325,20 @@ public final class ActivityGameTests {
         check(box.setTarget(head), "The real test Boombox rejected an explicit source-mob adapter head");
         return anchor;
     }
+    private static BlockPos freeHomeAnchor(GameTestHelper helper) {
+        CrewHouseData data = CrewHouseData.get(helper.getLevel().getServer());
+        for (int attempt = 0; attempt < 128; attempt++) {
+            BlockPos anchor = new BlockPos(24000 + attempt * 128, 100, 16000);
+            boolean occupied = data.profiles().stream().anyMatch(profile -> {
+                BlockPos existing = BlockPos.of(profile.save().getLong("Anchor"));
+                return Math.abs((long) existing.getX() - anchor.getX()) < 100
+                        && Math.abs((long) existing.getZ() - anchor.getZ()) < 100;
+            });
+            if (!occupied) return anchor;
+        }
+        throw new GameTestAssertException("Could not reserve an isolated plot for the earned-reward founding fixture");
+    }
+
     private static ServerPlayer player(GameTestHelper helper, String name, BlockPos anchor) {
         ServerPlayer player = FakePlayerFactory.get(helper.getLevel(), new GameProfile(UUID.randomUUID(), "JSC_activity_" + name));
         player.setGameMode(GameType.SURVIVAL); player.setHealth(player.getMaxHealth());
