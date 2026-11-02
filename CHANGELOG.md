@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.4.0-alpha.5 — shared style library and arena builds, in development
+
+- Added a permanent **Style Library** that uses the same crew XP earned through all activities, arena rewards, qualifying Rush returns and claimed missions. Sixteen lessons unlock starting choices without spending supplies or resetting when a house is founded. One selected available style grants one rank and uses the existing preparation and artifact-slot budgets; home preparation remains available.
+- Added six four-rank virtual-combat artifacts: **Venom ink** damage over time, **Chill paint** director slowdown, **Split chorus** forward-cone multishot, **Radiant groove** periodic primary-hit healing, **Beat ward** rechargeable shielding and **Soul burst** charged by owned defeats. Secondary damage does not recursively trigger primary effects or mutate native mob health, attributes, AI or potion effects.
+- Added server-saved, revision-checked style selection with schema-1/2 migration, schema-3 round trips, pre-house retention, read-only future-schema handling and optional-provider fallback. Real encoded/decoded action packets are exercised by the new tests.
+- Made all six arena reward caches physically distinguishable through owner-visible colors and floor patterns. Added a read-only **Scout reward caches** screen with actual locations, directions, effects and charge state; collision-safe placement, line-of-sight claims and per-room defeat baselines improve authored-map behavior and prevent inherited-room charge.
+- Made route offers favor unvisited profiles while preserving distinct reward emphases where available. Runs freeze their arena catalogue so a data reload cannot change the remaining route. Added optional Iron's Spells, Cataclysm and AoA arena profiles alongside Aether, plus magnet/supplies and area/training examples in the editable arena data pack.
+- Expanded the acceptance gate from 35 to 44 real Forge GameTests and from thirteen to fifteen native client captures. The new cache capture uses a guarded, explicitly logged arrival teleport in the disposable audit world; it requires actual arena construction and cache placement and does not represent human traversal or a completed room. Alpha.5 runtime results and publication identity will be recorded separately from the historical alpha.4 receipt.
+- Extended the Dungeons I/II research matrix using primary sources, distinguishing implemented upgrade families and permanent preparation lessons from the larger unimplemented gear, companion, beam and native-magic systems.
+
 ## 0.4.0-alpha.4 — rewarding journeys, 2026-11-02
 
 - Added persistent, readable receipts for the last sixteen activity, arena, Rush-return and mission rewards. Receipts show the actual credited amounts after caps, the training recipient and level changes, including progress earned before founding a crew home. The once-only settlement guard remains separate from display history.
