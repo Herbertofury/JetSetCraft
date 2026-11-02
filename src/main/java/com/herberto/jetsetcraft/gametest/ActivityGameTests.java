@@ -240,36 +240,58 @@ public final class ActivityGameTests {
         BlockPos anchor = arena(helper, 30000);
         ServerPlayer owner = player(helper, "hill", anchor);
         ActivityManager.openAt(owner, anchor);
-        helper.runAfterDelay(5, () -> {
-            action(owner, "select", "king_of_hill");
-            helper.runAfterDelay(5, () -> {
-                action(owner, "launch", ""); check(ActivityManager.active(owner), "A clear three-site hill layout was rejected: " + diagnostics(owner, anchor));
-                helper.runAfterDelay(35, () -> {
-                    List<Mob> rivals = actors(owner, anchor); check(rivals.size() == 3, "Hill mode did not create its three contenders");
-                    Vec3 hill = hill(anchor, 0); owner.moveTo(hill);
-                    for (Mob mob : rivals) mob.moveTo(hill.add(1, 0, 0));
-                    int before = ActivityManager.snapshot(owner).getInt("Progress");
-                    helper.runAfterDelay(5, () -> {
-                        check(ActivityManager.snapshot(owner).getInt("Progress") == before,
-                                "Contested hill presence incorrectly advanced capture time");
-                        for (Mob mob : actors(owner, anchor)) owner.attack(mob);
-                        helper.runAfterDelay(20, () -> {
-                            int held = ActivityManager.snapshot(owner).getInt("Progress");
-                            check(held > before, "Tagging contenders did not open a real capture window");
-                            owner.moveTo(Vec3.atBottomCenterOf(anchor));
-                            helper.runAfterDelay(20, () -> {
-                                check(ActivityManager.snapshot(owner).getInt("Progress") == held,
-                                        "Being outside the hill still earned capture time");
-                                hillLoop(helper, owner, anchor, 0);
-                            });
-                        });
-                    });
+        NativeClock clock = new NativeClock(helper, () -> ActivityManager.forget(owner));
+        clock.later(5, () -> prepareHill(clock, helper, owner, anchor, 80));
+    }
+
+    private static void prepareHill(NativeClock clock, GameTestHelper helper, ServerPlayer owner, BlockPos anchor, int remaining) {
+        boolean ticking = true;
+        for (int x : new int[]{-12, 12}) for (int z : new int[]{-12, 12})
+            ticking &= owner.serverLevel().isPositionEntityTicking(anchor.offset(x, 0, z));
+        if (!ticking) {
+            check(remaining > 0, "The hill fixture never obtained native entity-ticking residency: " + diagnostics(owner, anchor));
+            clock.later(1, () -> prepareHill(clock, helper, owner, anchor, remaining - 1)); return;
+        }
+        action(owner, "select", "king_of_hill");
+        clock.later(5, () -> {
+            action(owner, "launch", "");
+            check(ActivityManager.active(owner), "A clear three-site hill layout was rejected: " + diagnostics(owner, anchor));
+            // Production retries safe native spawns every ten ticks, up to twelve attempts for three
+            // contenders. Observe that bounded real window instead of assuming three first-try spawns.
+            clock.later(1, () -> awaitHillContenders(clock, helper, owner, anchor, 120));
+        });
+    }
+
+    private static void awaitHillContenders(NativeClock clock, GameTestHelper helper, ServerPlayer owner, BlockPos anchor, int remaining) {
+        List<Mob> rivals = actors(owner, anchor);
+        check(ActivityManager.active(owner), "The hill round ended before its three contenders arrived: " + diagnostics(owner, anchor));
+        check(rivals.size() <= 3, "Hill mode exceeded its three real contenders: " + diagnostics(owner, anchor));
+        if (rivals.size() < 3) {
+            check(remaining > 0, "Hill mode did not create its three contenders within the native spawn window: " + diagnostics(owner, anchor));
+            clock.later(1, () -> awaitHillContenders(clock, helper, owner, anchor, remaining - 1)); return;
+        }
+        check(rivals.size() == 3, "Hill mode did not create exactly three native contenders");
+        Vec3 hill = hill(anchor, 0); owner.moveTo(hill);
+        for (Mob mob : rivals) mob.moveTo(hill.add(1, 0, 0));
+        int before = ActivityManager.snapshot(owner).getInt("Progress");
+        clock.later(5, () -> {
+            check(ActivityManager.snapshot(owner).getInt("Progress") == before,
+                    "Contested hill presence incorrectly advanced capture time");
+            for (Mob mob : actors(owner, anchor)) owner.attack(mob);
+            clock.later(20, () -> {
+                int held = ActivityManager.snapshot(owner).getInt("Progress");
+                check(held > before, "Tagging contenders did not open a real capture window");
+                owner.moveTo(Vec3.atBottomCenterOf(anchor));
+                clock.later(20, () -> {
+                    check(ActivityManager.snapshot(owner).getInt("Progress") == held,
+                            "Being outside the hill still earned capture time");
+                    hillLoop(clock, helper, owner, anchor, 0);
                 });
             });
         });
     }
 
-    private static void hillLoop(GameTestHelper helper, ServerPlayer owner, BlockPos anchor, int attempt) {
+    private static void hillLoop(NativeClock clock, GameTestHelper helper, ServerPlayer owner, BlockPos anchor, int attempt) {
         try {
             check(attempt < 75, "Three real hill captures failed to complete within the bounded session");
             CompoundTag state = ActivityManager.snapshot(owner);
@@ -281,8 +303,27 @@ public final class ActivityGameTests {
             }
             Vec3 hill = hill(anchor, Math.min(2, state.getInt("Progress") / 160)); owner.moveTo(hill);
             for (Mob mob : actors(owner, anchor)) { mob.moveTo(hill.add(1, 0, 0)); owner.attack(mob); }
-            helper.runAfterDelay(10, () -> hillLoop(helper, owner, anchor, attempt + 1));
+            clock.later(10, () -> hillLoop(clock, helper, owner, anchor, attempt + 1));
         } catch (RuntimeException error) { ActivityManager.forget(owner); throw error; }
+    }
+
+    /** One initial native tick registration; continuations never mutate GameTest's scheduled-task map. */
+    private static final class NativeClock {
+        private int ticks, due;
+        private Runnable pending;
+        NativeClock(GameTestHelper helper, Runnable cleanup) {
+            helper.onEachTick(() -> {
+                ticks++;
+                if (pending == null || ticks < due) return;
+                Runnable action = pending; pending = null;
+                try { action.run(); }
+                catch (RuntimeException error) { cleanup.run(); throw error; }
+            });
+        }
+        void later(int delay, Runnable action) {
+            check(pending == null && delay > 0, "The native activity fixture overwrote a scheduled continuation");
+            due = ticks + delay; pending = action;
+        }
     }
 
     private static Vec3 hill(BlockPos anchor, int index) {
@@ -362,6 +403,8 @@ public final class ActivityGameTests {
         CompoundTag state = ActivityManager.snapshot(player);
         return "summary=" + state.getString("Summary") + ", mode=" + state.getString("Mode")
                 + ", canLaunch=" + state.getBoolean("CanLaunch") + ", version=" + state.getInt("Version")
+                + ", active=" + state.getBoolean("Active") + ", remainingTicks=" + state.getLong("RemainingTicks")
+                + ", actors=" + actors(player, anchor).stream().map(mob -> mob.getType() + "@" + mob.position()).toList()
                 + ", anchorLoaded=" + player.serverLevel().hasChunkAt(anchor)
                 + ", entityTicking=" + player.serverLevel().isPositionEntityTicking(anchor)
                 + ", distanceSquared=" + player.distanceToSqr(Vec3.atCenterOf(anchor))

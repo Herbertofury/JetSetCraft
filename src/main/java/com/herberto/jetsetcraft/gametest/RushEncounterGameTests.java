@@ -231,6 +231,9 @@ public final class RushEncounterGameTests {
                     if (run.defeats() - start >= quota) break;
                 }
             }
+            check(run.defeats() - start >= quota || RivalRushManager.journeySnapshot(player).getInt("Completed") == stage,
+                    "The bounded native combat fixture did not earn its rival quota: stage=" + stage
+                            + ", fixtureDefeats=" + (run.defeats() - start) + "/" + quota + ", " + circuitState(player));
             if (stage < 3) {
                 settleCircuitRoom(player, stage, "Actual native rival defeats did not settle an ordinary room");
                 prepareCircuitRoom(helper, fixture, stage + 1); return;
@@ -296,7 +299,13 @@ public final class RushEncounterGameTests {
 
     private static String circuitState(ServerPlayer player) {
         RushRun run = RivalRushManager.run(player); CompoundTag journey = RivalRushManager.journeySnapshot(player);
-        return "phase=" + journey.getString("Phase") + ", completed=" + journey.getInt("Completed")
+        return "phase=" + journey.getString("Phase") + ", stage=" + journey.getInt("Stage")
+                + ", completed=" + journey.getInt("Completed") + ", room=" + journey.getString("CurrentName")
+                + ", objective=" + journey.getString("Objective") + ", ticksLeft=" + journey.getLong("TicksLeft")
+                + ", elapsed=" + (run == null ? -1 : run.elapsedTicks()) + ", defeats=" + (run == null ? -1 : run.defeats())
+                + ", actors=" + actors(player).size() + ", player=" + player.position()
+                + ", destination=" + RivalRushManager.arenaDestination(player)
+                + ", finished=" + (run != null && run.isFinished()) + ", encore=" + (run != null && run.awaitingEncore())
                 + ", offer=" + (run != null && run.hasOffer()) + ", cards=" + RushAlbum.total(player)
                 + ", headliners=" + (run == null ? -1 : run.headliners())
                 + ", opportunity=" + (run != null && run.hasBuildOpportunity())
