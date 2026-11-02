@@ -1,0 +1,828 @@
+{
+  "schema": 1,
+  "version": "0.4.0-alpha.7",
+  "scope": "Independent local exact-source verification with redacted allowlisted observations",
+  "recorded_at_utc": "2026-11-02T06:07:56+00:00",
+  "source_identity": {
+    "commit": "3e211313f8b2fd4898abc05c9836099817f6a249",
+    "tree": "e33c221bb02df4c949c28766007893215d7ca2ed",
+    "worktree_clean_at_packaging": true,
+    "identity_check": "Read directly from the replay checkout; commit and tree match the supplied final source.",
+    "uploaded_pr_integration": {
+      "feature_commit": "56b27b6b42ad55ac668e40ae294cadecf1f3948c",
+      "integration_commit": "e8115bf2339318273618846a26e1bdb40434aa8b",
+      "merge_commit": "af8e7f1b7a41b0e491f04d3f3f8ca4288ac5eed7",
+      "tree": "e33c221bb02df4c949c28766007893215d7ca2ed",
+      "all_fetched_trees_equal": true,
+      "all_diffs_against_local_tested_empty": true
+    }
+  },
+  "runtime_model": {
+    "execution": "ForgeGradle sourceSets.main",
+    "native_forge_execution": true,
+    "independently_installed_distributable_jar_runtime": false,
+    "scope": "The packaged JAR is built and hashed separately from the native source-set runtime."
+  },
+  "asset_generation": {
+    "scripts_invoked": [
+      "generate_models.py",
+      "generate_animations.py",
+      "generate_brand.py"
+    ],
+    "graffiti_catalog_entries": 139,
+    "animation_clips": 72,
+    "optional_brand_source_available": false,
+    "brand_derivatives_generated_in_this_invocation": false,
+    "brand_scope": "The optional brand source was unavailable; this invocation did not regenerate brand derivatives.",
+    "final_transcript_hashed": true
+  },
+  "validators": {
+    "all_passed": true,
+    "static_validator_count": 5,
+    "java_syntax_parser_count": 1,
+    "checks": [
+      {
+        "name": "assets",
+        "script": "validate_assets.py",
+        "passed": true
+      },
+      {
+        "name": "gameplay_contract",
+        "script": "validate_gameplay_contract.py",
+        "passed": true
+      },
+      {
+        "name": "premium_polish",
+        "script": "validate_premium_polish.py",
+        "passed": true
+      },
+      {
+        "name": "wiki",
+        "script": "validate_wiki.py",
+        "passed": true,
+        "pages": 52
+      },
+      {
+        "name": "wave2_compatibility",
+        "script": "validate_wave2_compat.py",
+        "passed": true,
+        "curated_safe_records": 172,
+        "hidden_technical_records": 9
+      },
+      {
+        "name": "java_syntax",
+        "script": "validate_java_syntax.py",
+        "passed": true,
+        "source_files": 182
+      }
+    ]
+  },
+  "local_jar": {
+    "filename": "jetsetcraft-1.20.1-0.4.0-alpha.7.jar",
+    "bytes": 5893408,
+    "sha256": "c3886a511082baf295934f469cf7c385542bbf167bfc287badc77308261f37d0",
+    "matches_supplied_size_and_digest": true,
+    "runtime_installation_verified": false,
+    "copied_into_evidence": false
+  },
+  "logs": [
+    {
+      "kind": "assets",
+      "basename": "jetsetcraft-alpha7-assets.log",
+      "bytes": 715,
+      "sha256": "e35d9d5d7f98e345bb56a8d11064795580928a9293e10b6c33033bc7fb95a817",
+      "line_count": 14,
+      "raw_text_included": false,
+      "allowlisted_assertions": {}
+    },
+    {
+      "kind": "validators",
+      "basename": "jetsetcraft-alpha7-validators.log",
+      "bytes": 2951,
+      "sha256": "6b24b7a051c9479e546d1e53d394e8482e750b6938d19d046a54a7f64d4b6267",
+      "line_count": 53,
+      "raw_text_included": false,
+      "allowlisted_assertions": {}
+    },
+    {
+      "kind": "build",
+      "basename": "jetsetcraft-alpha7-build.log",
+      "bytes": 9165,
+      "sha256": "9b4f9eea15a7bbf9205bc58f3e09eef5f3ad403c5626eb41fe0bd9a997701255",
+      "line_count": 99,
+      "raw_text_included": false,
+      "allowlisted_assertions": {
+        "gradle_build_successful": true
+      }
+    },
+    {
+      "kind": "gametest",
+      "basename": "jetsetcraft-alpha7-gametest.log",
+      "bytes": 37435,
+      "sha256": "54a17e81534d80416ec65ea14e100de2f53e0e73755678a53706de17ac583aed",
+      "line_count": 364,
+      "raw_text_included": false,
+      "allowlisted_assertions": {
+        "gradle_build_successful": true,
+        "shutdown": {
+          "stop_observed": true,
+          "players_saved": true,
+          "worlds_saved": true,
+          "all_dimensions_saved": true
+        }
+      }
+    },
+    {
+      "kind": "server-smoke",
+      "basename": "jetsetcraft-alpha7-server-smoke.log",
+      "bytes": 19154,
+      "sha256": "e663fdba9edc295c7e5cebaa64a7895e00cbdccf91c623780c3b93af3b8cdd47",
+      "line_count": 189,
+      "raw_text_included": false,
+      "allowlisted_assertions": {
+        "gradle_build_successful": true,
+        "shutdown": {
+          "stop_observed": true,
+          "players_saved": true,
+          "worlds_saved": true,
+          "all_dimensions_saved": true
+        },
+        "readiness_observed": true
+      }
+    },
+    {
+      "kind": "client",
+      "basename": "jetsetcraft-alpha7-client.log",
+      "bytes": 68847,
+      "sha256": "7523f54b5e03b95ad0e3b6cbead36e6e3b2e09304cb01d881145d982fcd44ba5",
+      "line_count": 503,
+      "raw_text_included": false,
+      "allowlisted_assertions": {
+        "gradle_build_successful": true,
+        "shutdown": {
+          "stop_observed": true,
+          "players_saved": true,
+          "worlds_saved": true,
+          "all_dimensions_saved": true
+        }
+      }
+    }
+  ],
+  "build_and_gametest": {
+    "status": "passed",
+    "build_tasks_observed": [
+      "compileJava",
+      "processResources",
+      "classes",
+      "jar",
+      "reobfJar",
+      "build"
+    ],
+    "gametest_task_observed": true,
+    "required_tests_passed": 63,
+    "pass_marker_count": 63,
+    "unique_pass_markers": [
+      "activity_dimension_return",
+      "activity_hill",
+      "activity_progression",
+      "activity_safety",
+      "activity_tag",
+      "catalogs",
+      "combat_sovereignty",
+      "crew_house",
+      "crew_missions",
+      "crew_persistence",
+      "crew_progress_caps",
+      "crew_progress_history",
+      "crew_progress_mission",
+      "crew_rush",
+      "crew_style_entry",
+      "crew_style_persistence",
+      "crew_style_shared_rewards",
+      "dance_flow",
+      "graffiti_lifecycle",
+      "hoverboard",
+      "paint_balloon_splash",
+      "ride_controls",
+      "rush_album",
+      "rush_arena_catalogue",
+      "rush_arena_rules",
+      "rush_arena_session",
+      "rush_build_rules",
+      "rush_build_runtime",
+      "rush_cache_boundaries",
+      "rush_cache_options",
+      "rush_contract_catalogue",
+      "rush_contract_hunt",
+      "rush_contract_paint",
+      "rush_contract_relay",
+      "rush_debrief_rules",
+      "rush_draft_controls",
+      "rush_elite_tells",
+      "rush_evolution_cryo",
+      "rush_evolution_railstorm",
+      "rush_evolution_return",
+      "rush_evolution_rules",
+      "rush_headliner_arena_gate",
+      "rush_headliner_recovery",
+      "rush_headliner_victory",
+      "rush_journey_history",
+      "rush_journey_preview",
+      "rush_objectives",
+      "rush_ownership",
+      "rush_pit_stop_effects",
+      "rush_pit_stop_rules",
+      "rush_pit_stop_runtime",
+      "rush_pit_stop_snapshots",
+      "rush_return",
+      "rush_route_exploration",
+      "rush_rules",
+      "rush_session",
+      "rush_spell_relay",
+      "rush_synergy_control",
+      "rush_synergy_recovery",
+      "rush_synergy_rules",
+      "rush_tagger_cover",
+      "scooter",
+      "street_gear"
+    ],
+    "normal_saved_dimensions_shutdown": true,
+    "scope": "Local base configuration in a fresh disposable GameTest runtime; markers cover the controlled cases described by the source."
+  },
+  "dedicated_server": {
+    "status": "passed",
+    "task": "runServer",
+    "task_observed": true,
+    "readiness_observed": true,
+    "normal_saved_dimensions_shutdown": true
+  },
+  "native_client": {
+    "status": "passed",
+    "task": "runClient",
+    "task_observed": true,
+    "capture_count": 23,
+    "resolution": [
+      1280,
+      720
+    ],
+    "normal_saved_dimensions_shutdown": true,
+    "audit_pass_markers": [
+      {
+        "name": "JETSETCRAFT_RUSH_VISUAL_AUDIT_PASS",
+        "occurrences": 1
+      },
+      {
+        "name": "JETSETCRAFT_CREW_VISUAL_AUDIT_PASS",
+        "occurrences": 1
+      },
+      {
+        "name": "JETSETCRAFT_ACTIVITY_VISUAL_AUDIT_PASS",
+        "occurrences": 1
+      },
+      {
+        "name": "JETSETCRAFT_PROGRESSION_VISUAL_AUDIT_PASS",
+        "occurrences": 1
+      },
+      {
+        "name": "JETSETCRAFT_CONTRACT_VISUAL_AUDIT_PASS",
+        "occurrences": 1
+      }
+    ],
+    "allowlisted_observation_markers": [
+      {
+        "name": "JETSETCRAFT_CREW_AUDIT_ROOM_OBSERVED",
+        "occurrences": 1
+      },
+      {
+        "name": "JETSETCRAFT_ACTIVITY_AUDIT_RETURN_RESTORED",
+        "occurrences": 1
+      },
+      {
+        "name": "JETSETCRAFT_ACTIVITY_AUDIT_CACHE_SCOUT_OBSERVED",
+        "occurrences": 1
+      },
+      {
+        "name": "JETSETCRAFT_ACTIVITY_AUDIT_STYLE_LIBRARY_OBSERVED",
+        "occurrences": 1
+      },
+      {
+        "name": "JETSETCRAFT_PROGRESSION_AUDIT_RECIPES_OBSERVED",
+        "occurrences": 1
+      },
+      {
+        "name": "JETSETCRAFT_PROGRESSION_AUDIT_DRAFT_OBSERVED",
+        "occurrences": 1
+      },
+      {
+        "name": "JETSETCRAFT_PROGRESSION_AUDIT_HEADLINER_OBSERVED",
+        "occurrences": 1
+      },
+      {
+        "name": "JETSETCRAFT_PROGRESSION_AUDIT_DEBRIEF_OBSERVED",
+        "occurrences": 1
+      },
+      {
+        "name": "JETSETCRAFT_CONTRACT_AUDIT_BRIEFING_OBSERVED",
+        "occurrences": 1
+      },
+      {
+        "name": "JETSETCRAFT_CONTRACT_AUDIT_PROGRESS_OBSERVED",
+        "occurrences": 1
+      },
+      {
+        "name": "JETSETCRAFT_CONTRACT_AUDIT_PIT_STOP_OBSERVED",
+        "occurrences": 1
+      },
+      {
+        "name": "JETSETCRAFT_CONTRACT_AUDIT_SERVICE_OBSERVED",
+        "occurrences": 1
+      }
+    ],
+    "allowlisted_fixture_markers": [
+      {
+        "name": "JETSETCRAFT_RUSH_VISUAL_AUDIT_FIXTURE_OBSERVED",
+        "occurrences": 1
+      },
+      {
+        "name": "JETSETCRAFT_CREW_AUDIT_ROOM_PLACED",
+        "occurrences": 1
+      },
+      {
+        "name": "JETSETCRAFT_ACTIVITY_AUDIT_ARENA_ARRIVAL_FIXTURE",
+        "occurrences": 1
+      },
+      {
+        "name": "JETSETCRAFT_PROGRESSION_AUDIT_OWNED_HIT_FIXTURE",
+        "occurrences": 2
+      },
+      {
+        "name": "JETSETCRAFT_PROGRESSION_AUDIT_CLOCK_FIXTURE",
+        "occurrences": 1
+      },
+      {
+        "name": "JETSETCRAFT_PROGRESSION_AUDIT_CAMERA_FIXTURE",
+        "occurrences": 1
+      },
+      {
+        "name": "JETSETCRAFT_CONTRACT_AUDIT_ARRIVAL_FIXTURE",
+        "occurrences": 1
+      },
+      {
+        "name": "JETSETCRAFT_CONTRACT_AUDIT_PAINT_FIXTURE",
+        "occurrences": 3
+      },
+      {
+        "name": "JETSETCRAFT_CONTRACT_AUDIT_POSITION_FIXTURE",
+        "occurrences": 1
+      },
+      {
+        "name": "JETSETCRAFT_CONTRACT_AUDIT_OWNED_HIT_FIXTURE",
+        "occurrences": 7
+      },
+      {
+        "name": "JETSETCRAFT_CONTRACT_AUDIT_CLOCK_FIXTURE",
+        "occurrences": 1
+      },
+      {
+        "name": "JETSETCRAFT_CONTRACT_AUDIT_WAITING_FOR_AUTHORED_WALL",
+        "occurrences": 1
+      }
+    ],
+    "paint_contract_and_service_outcomes": {
+      "contract_type": "PAINT",
+      "accepted_wall_patches": 3,
+      "owned_rival_defeats": 8,
+      "collected_cards": 8,
+      "active_ticks_including_clock_fixture": 2416,
+      "arena_clears": 1,
+      "contracts_banked": 1,
+      "services_used": 1,
+      "pit_stop_credits_earned": 2,
+      "pit_stop_credits_before_service": 2,
+      "accepted_service": "TUNE",
+      "tuned_rank_before": 1,
+      "tuned_rank_after": 2,
+      "pit_stop_credits_after_service": 1,
+      "return_reward_status": "accepted",
+      "audited_source_state_restored": true
+    },
+    "all_captures_pixel_reviewed": true,
+    "pixel_qa_summary": {
+      "blocking_layout_issues_observed": false,
+      "coverage": [
+        {
+          "frames": "01-10",
+          "reviewer_role": "artifact review"
+        },
+        {
+          "frames": "11-19",
+          "reviewer_role": "client UI review"
+        },
+        {
+          "frames": "20-23",
+          "reviewer_role": "lead review"
+        }
+      ],
+      "limits": "Ordinary hover tips obscure some content in frames 05 and 07. Scrollable body clipping appears in 11, 14 and 19; visible scroll hints and fixed controls remain clear. Below-fold report rows are not claimed as visually inspected."
+    }
+  },
+  "gametest_fixture_limits": [
+    "Contract relay cases use scripted position segments and physical-motion samples; they do not demonstrate human controls or a complete natural route.",
+    "Paint cases exercise accepted authored-boundary wall events; hunt cases exercise actual owned virtual elite or captain defeats.",
+    "Encounter and evolution fixtures use controlled builds and the admitted Dead Beat cast. Broad provider-specific mob phases, spell families and arbitrary foreign capabilities are outside this local scope.",
+    "Passing controlled cases do not establish human pacing, long-session balance, multiplayer scaling or sustained performance."
+  ],
+  "native_fixture_and_verification_limits": [
+    "The native audit uses a disposable integrated test world and an explicit opt-in guard.",
+    "Arena arrival and safe combat positioning include scripted teleports and nearby chunk loading; they are not evidence of human traversal.",
+    "PAINT progress comes from three accepted production wall-handler calls against inspected authored solid supports. Scripted placement and handler calls do not demonstrate human graffiti input.",
+    "Owned-rival placement and production primary-hit calls accelerate combat. Pickups and earned draft choices follow the normal production paths.",
+    "The remaining room clock is advanced only after the actual optional task and owned-defeat quota are satisfied. The reported active ticks are not elapsed human play time.",
+    "The normal manager completion gate settles the room and opens the earned service budget. A real UI confirmation and production packet apply Tune; completion flags, service credits, ranks, reward receipts and client snapshots are not assigned by the fixture.",
+    "Source-state restoration covers audited inventory, Minecraft experience, source dimension and position; it does not establish preservation of arbitrary third-party capabilities.",
+    "The new gallery focuses on PAINT. It does not show human RELAY or HUNT completion, a full six-room traversal, a defeated headliner, a forged evolution, or a full human session.",
+    "Earlier progression captures belong to a separate Free-streets run and must not be presented as the later PAINT contract or service result.",
+    "Capture markers record named output files. This summary contains no image pixels and does not substitute for visual inspection."
+  ],
+  "captures": [
+    {
+      "number": 1,
+      "label": "01-setup",
+      "basename": "rival-rush-1793599027502-01-setup.png",
+      "bytes": 93053,
+      "sha256": "3d0595c38715aa4c14d112131d94d1c192c05557b64eee8e4ce779d7bc2b7bd5",
+      "width": 1280,
+      "height": 720,
+      "pixel_review": {
+        "completed": true,
+        "reviewer_role": "artifact review",
+        "blocking_layout_issue_observed": false,
+        "basis": "reported direct original-pixel review"
+      }
+    },
+    {
+      "number": 2,
+      "label": "02-district-hud",
+      "basename": "rival-rush-1793599027502-02-district-hud.png",
+      "bytes": 334554,
+      "sha256": "c136f10c9028f8af81557ba1708daf1227ca7eee910cc64b1e8a91eb25a8006d",
+      "width": 1280,
+      "height": 720,
+      "pixel_review": {
+        "completed": true,
+        "reviewer_role": "artifact review",
+        "blocking_layout_issue_observed": false,
+        "basis": "reported direct original-pixel review",
+        "note": "The cache hint uses an intentional ellipsis."
+      }
+    },
+    {
+      "number": 3,
+      "label": "03-album",
+      "basename": "rival-rush-1793599027502-03-album.png",
+      "bytes": 71309,
+      "sha256": "411e30e059c3bed9ecab354c4793a918d54ae84e4c1427f3ab93354c65053fd0",
+      "width": 1280,
+      "height": 720,
+      "pixel_review": {
+        "completed": true,
+        "reviewer_role": "artifact review",
+        "blocking_layout_issue_observed": false,
+        "basis": "reported direct original-pixel review"
+      }
+    },
+    {
+      "number": 4,
+      "label": "04-return-result",
+      "basename": "rival-rush-1793599027502-04-return-result.png",
+      "bytes": 65767,
+      "sha256": "b1a69e50484249f6437f4b41d838d72683e6f51ad162aa534a36838dff16305e",
+      "width": 1280,
+      "height": 720,
+      "pixel_review": {
+        "completed": true,
+        "reviewer_role": "artifact review",
+        "blocking_layout_issue_observed": false,
+        "basis": "reported direct original-pixel review",
+        "note": "The visible report shows an early five-second run with one rival, no cards or clears, and 21.0 primary damage. Rows below the viewport were not inspected in this frame."
+      }
+    },
+    {
+      "number": 5,
+      "label": "05-crew-home",
+      "basename": "rival-rush-1793599027502-05-crew-home.png",
+      "bytes": 94681,
+      "sha256": "482a40d8df6941419576caea5755929f94fcc5e66cefc7018c4a9edbf0ff1100",
+      "width": 1280,
+      "height": 720,
+      "pixel_review": {
+        "completed": true,
+        "reviewer_role": "artifact review",
+        "blocking_layout_issue_observed": false,
+        "basis": "reported direct original-pixel review",
+        "note": "A normal legible hover tip obscures some lower-right controls or rows."
+      }
+    },
+    {
+      "number": 6,
+      "label": "06-crew-roster",
+      "basename": "rival-rush-1793599027502-06-crew-roster.png",
+      "bytes": 91903,
+      "sha256": "ce367e59d574dc53f28ce2346816579bf8d75bbcb5de13ffbae02411e18cafd1",
+      "width": 1280,
+      "height": 720,
+      "pixel_review": {
+        "completed": true,
+        "reviewer_role": "artifact review",
+        "blocking_layout_issue_observed": false,
+        "basis": "reported direct original-pixel review",
+        "note": "The normal hover tip fits the available blank area."
+      }
+    },
+    {
+      "number": 7,
+      "label": "07-crew-facilities",
+      "basename": "rival-rush-1793599027502-07-crew-facilities.png",
+      "bytes": 106959,
+      "sha256": "0554f0054d5b1882ae3856517935f4b4d7c376aa002e40467d08e1411ec98f2c",
+      "width": 1280,
+      "height": 720,
+      "pixel_review": {
+        "completed": true,
+        "reviewer_role": "artifact review",
+        "blocking_layout_issue_observed": false,
+        "basis": "reported direct original-pixel review",
+        "note": "A normal legible requirements hover tip obscures some lower-right controls or rows."
+      }
+    },
+    {
+      "number": 8,
+      "label": "08-crew-jobs",
+      "basename": "rival-rush-1793599027502-08-crew-jobs.png",
+      "bytes": 83325,
+      "sha256": "0ce2cd72e9bb1bbf46ae91ad371ac3c998742dab65f1bb9f41348f7be704d23e",
+      "width": 1280,
+      "height": 720,
+      "pixel_review": {
+        "completed": true,
+        "reviewer_role": "artifact review",
+        "blocking_layout_issue_observed": false,
+        "basis": "reported direct original-pixel review",
+        "note": "The job is an active three-minute assignment, not a completed or claimed job."
+      }
+    },
+    {
+      "number": 9,
+      "label": "09-activities",
+      "basename": "rival-rush-1793599027502-09-activities.png",
+      "bytes": 86025,
+      "sha256": "deb2aa221beab86b5c7f0a373e3c20e474c4bfdb6b9316e5efecdb3fd2fd0cbf",
+      "width": 1280,
+      "height": 720,
+      "pixel_review": {
+        "completed": true,
+        "reviewer_role": "artifact review",
+        "blocking_layout_issue_observed": false,
+        "basis": "reported direct original-pixel review",
+        "note": "Displayed activity rewards are previews, not settled awards."
+      }
+    },
+    {
+      "number": 10,
+      "label": "10-arena-route",
+      "basename": "rival-rush-1793599027502-10-arena-route.png",
+      "bytes": 99475,
+      "sha256": "4798b059e1d5bf3cd168bf9646c789a893b78891474a7cf7aca063f7b0ca0d5b",
+      "width": 1280,
+      "height": 720,
+      "pixel_review": {
+        "completed": true,
+        "reviewer_role": "artifact review",
+        "blocking_layout_issue_observed": false,
+        "basis": "reported direct original-pixel review",
+        "note": "Displayed first-route benefits are previews, not settled awards."
+      }
+    },
+    {
+      "number": 11,
+      "label": "11-journey-map",
+      "basename": "rival-rush-1793599027502-11-journey-map.png",
+      "bytes": 85016,
+      "sha256": "e167820032e0ace45f876712b43e7017eb9ef937d8ef07fc1041021e987030d6",
+      "width": 1280,
+      "height": 720,
+      "pixel_review": {
+        "completed": true,
+        "reviewer_role": "client UI review",
+        "blocking_layout_issue_observed": false,
+        "basis": "direct original-pixel review",
+        "note": "The bottom scrollable duration, quota and size line is partly clipped; the scroll affordance and fixed controls remain visible."
+      }
+    },
+    {
+      "number": 12,
+      "label": "12-run-build",
+      "basename": "rival-rush-1793599027502-12-run-build.png",
+      "bytes": 95607,
+      "sha256": "5666ddfe536c6f093c8fda8149d0388dd9766549ef6f8be5e74a27234c0bcc95",
+      "width": 1280,
+      "height": 720,
+      "pixel_review": {
+        "completed": true,
+        "reviewer_role": "client UI review",
+        "blocking_layout_issue_observed": false,
+        "basis": "direct original-pixel review",
+        "note": "The baseline build has no artifacts and shows the disabled zero-credit Pit stop beside Room contract and other navigation."
+      }
+    },
+    {
+      "number": 13,
+      "label": "13-crew-progress",
+      "basename": "rival-rush-1793599027502-13-crew-progress.png",
+      "bytes": 90496,
+      "sha256": "0c59be961b0790c4c0e33e7d08a80a326136801751dbd97026866d9379be55f3",
+      "width": 1280,
+      "height": 720,
+      "pixel_review": {
+        "completed": true,
+        "reviewer_role": "client UI review",
+        "blocking_layout_issue_observed": false,
+        "basis": "direct original-pixel review",
+        "note": "The crew has sixteen supplies and no recent reward entries in this frame."
+      }
+    },
+    {
+      "number": 14,
+      "label": "14-cache-scout",
+      "basename": "rival-rush-1793599027502-14-cache-scout.png",
+      "bytes": 109577,
+      "sha256": "689686cfba49cdfcc33c065cad577b10f02800bfd9d6259aad0944de15a827ba",
+      "width": 1280,
+      "height": 720,
+      "pixel_review": {
+        "completed": true,
+        "reviewer_role": "client UI review",
+        "blocking_layout_issue_observed": false,
+        "basis": "direct original-pixel review",
+        "note": "Three cache entries are visible; further entries require scrolling. The last visible benefit line is partly clipped, with a clear scroll affordance."
+      }
+    },
+    {
+      "number": 15,
+      "label": "15-style-library",
+      "basename": "rival-rush-1793599027502-15-style-library.png",
+      "bytes": 94229,
+      "sha256": "5c77864c668b34d1f15efca8bed85c01123f9d9d6caa687258d732e01c46a574",
+      "width": 1280,
+      "height": 720,
+      "pixel_review": {
+        "completed": true,
+        "reviewer_role": "client UI review",
+        "blocking_layout_issue_observed": false,
+        "basis": "direct original-pixel review",
+        "note": "The Style Library shows zero learned styles, zero crew experience, three locked lessons and page one of six."
+      }
+    },
+    {
+      "number": 16,
+      "label": "16-build-paths",
+      "basename": "rival-rush-1793599027502-16-build-paths.png",
+      "bytes": 81339,
+      "sha256": "1af7af9ede0616131a9cff035f46a2cdf0bbed25a2cc39f3fc9bbb7e68ca3aad",
+      "width": 1280,
+      "height": 720,
+      "pixel_review": {
+        "completed": true,
+        "reviewer_role": "client UI review",
+        "blocking_layout_issue_observed": false,
+        "basis": "direct original-pixel review",
+        "note": "The initial Cryo shatter recipe shows both requirements at zero of three and an unavailable forge action."
+      }
+    },
+    {
+      "number": 17,
+      "label": "17-draft-agency",
+      "basename": "rival-rush-1793599027502-17-draft-agency.png",
+      "bytes": 94052,
+      "sha256": "7213c5d1619f27b96d3884c98e1ddf0a8b70e6761fd4c3019b2aca971268be53",
+      "width": 1280,
+      "height": 720,
+      "pixel_review": {
+        "completed": true,
+        "reviewer_role": "client UI review",
+        "blocking_layout_issue_observed": false,
+        "basis": "direct original-pixel review",
+        "note": "All three real draft choices and the remaining reroll, banish and exclusion counts are legible."
+      }
+    },
+    {
+      "number": 18,
+      "label": "18-headliner-tell",
+      "basename": "rival-rush-1793599027502-18-headliner-tell.png",
+      "bytes": 307837,
+      "sha256": "51b7beafb225b2ac06e68cdf0d085bec1c75f9fe68bf4290471316746aad6dd5",
+      "width": 1280,
+      "height": 720,
+      "pixel_review": {
+        "completed": true,
+        "reviewer_role": "client UI review",
+        "blocking_layout_issue_observed": false,
+        "basis": "direct original-pixel review",
+        "note": "The live headliner shows 561 of 561 health, phase-one Paint drop, a 1.2-second warning and the complete counterplay instruction. Ground markers and the separate vanilla HUD remain visible."
+      }
+    },
+    {
+      "number": 19,
+      "label": "19-run-debrief",
+      "basename": "rival-rush-1793599027502-19-run-debrief.png",
+      "bytes": 84273,
+      "sha256": "efdcb11182a9c9c30f1b225a5fd6835e40fd9c75c5649da0cfbf1ff692735e4a",
+      "width": 1280,
+      "height": 720,
+      "pixel_review": {
+        "completed": true,
+        "reviewer_role": "client UI review",
+        "blocking_layout_issue_observed": false,
+        "basis": "direct original-pixel review",
+        "note": "The visible earlier Free-streets report shows two rivals and two cards, no clears, contracts or services, and 42.1 primary damage. Its bottom ward line is partly clipped with a clear scroll affordance; later rows are below the viewport."
+      }
+    },
+    {
+      "number": 20,
+      "label": "20-contract-briefing",
+      "basename": "rival-rush-1793599027502-20-contract-briefing.png",
+      "bytes": 81438,
+      "sha256": "26b8ad49138269d711e49d4ec013c3d0252fcbe7c4bd10e6c7f2c3bf1c0fc61a",
+      "width": 1280,
+      "height": 720,
+      "pixel_review": {
+        "completed": true,
+        "reviewer_role": "lead review",
+        "blocking_layout_issue_observed": false,
+        "basis": "reported direct original-pixel review",
+        "note": "The real optional PAINT briefing is readable and distinguishes the optional task from the required clear."
+      }
+    },
+    {
+      "number": 21,
+      "label": "21-contract-progress",
+      "basename": "rival-rush-1793599027502-21-contract-progress.png",
+      "bytes": 261203,
+      "sha256": "3fd17dc5ea003cc65c1fbe34cef71ce2dde4250e1e752f476759b0aa3bf27c60",
+      "width": 1280,
+      "height": 720,
+      "pixel_review": {
+        "completed": true,
+        "reviewer_role": "lead review",
+        "blocking_layout_issue_observed": false,
+        "basis": "reported direct original-pixel review",
+        "note": "The live contract progress and required objective remain readable in the movable HUD."
+      }
+    },
+    {
+      "number": 22,
+      "label": "22-pit-stop",
+      "basename": "rival-rush-1793599027502-22-pit-stop.png",
+      "bytes": 95874,
+      "sha256": "704a8fa1c48f21780996efb7d843c56705f5de1abd813270df831016eedaf766",
+      "width": 1280,
+      "height": 720,
+      "pixel_review": {
+        "completed": true,
+        "reviewer_role": "lead review",
+        "blocking_layout_issue_observed": false,
+        "basis": "reported direct original-pixel review",
+        "note": "The earned Pit stop budget and actual service choices are clear and actionable."
+      }
+    },
+    {
+      "number": 23,
+      "label": "23-service-result",
+      "basename": "rival-rush-1793599027502-23-service-result.png",
+      "bytes": 79076,
+      "sha256": "af88feddf02d0e33571eaef1f1470b16a444fbafe9bcc0622cc3f2fa7b031ba7",
+      "width": 1280,
+      "height": 720,
+      "pixel_review": {
+        "completed": true,
+        "reviewer_role": "lead review",
+        "blocking_layout_issue_observed": false,
+        "basis": "reported direct original-pixel review",
+        "note": "The accepted Tune result and remaining service credit are clear and actionable."
+      }
+    }
+  ],
+  "packaging": {
+    "hashes_computed_from_actual_final_bytes": true,
+    "original_pngs_modified": false,
+    "raw_logs_included": false,
+    "raw_log_text_published": false,
+    "no_runtime_or_build_rerun_during_packaging": true,
+    "repository_files_modified": false,
+    "publication_performed": false,
+    "personal_or_runtime_identifiers_included": false,
+    "environment_values_included": false,
+    "diagnostic_messages_included": false,
+    "policy": "Only fixed schema text, explicit marker names, source Git hashes, constrained file basenames, file digests and sizes, validated enums, numeric aggregates and reported pixel-review conclusions are retained."
+  }
+}
