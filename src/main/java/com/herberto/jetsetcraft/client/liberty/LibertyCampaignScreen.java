@@ -179,7 +179,7 @@ public final class LibertyCampaignScreen extends Screen {
                     () -> send("armory_select", armorySlot + "|" + id));
             choice.active = !pending && armory().getBoolean("CanManage") && (armorySlot.equals("armor") || row.getBoolean("Ready"));
             tip(choice, name(row) + "\n" + (armorySlot.equals("armor") ? row.getString("Description")
-                    : row.getString("Id") + " · " + row.getString("Type") + "\n" + row.getInt("Capacity") + " loaded · " + row.getString("Ammo") + "\n" + row.getString("Reason")));
+                    : row.getString("Id") + " · " + row.getString("Type") + "\n" + row.getString("LoadDescription") + " · " + row.getString("Ammo") + "\n" + row.getString("Reason")));
         }
         pages(rows.size(), count);
     }
