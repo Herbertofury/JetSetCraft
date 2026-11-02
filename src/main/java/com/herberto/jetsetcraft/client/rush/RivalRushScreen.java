@@ -21,7 +21,7 @@ import java.util.Locale;
 
 /** Native focusable controls for explicit entry, choices, card collection and immediate extraction. */
 final class RivalRushScreen extends Screen {
-    private enum View { RUN, ADVANCED, ROSTER, ALBUM, CARD, UPGRADES, RESULT, ARENAS, ROUTE, JOURNEY, BUILD, REMIX }
+    private enum View { RUN, ADVANCED, ROSTER, ALBUM, CARD, UPGRADES, RESULT, ARENAS, ROUTE, JOURNEY, BUILD, REMIX, CACHES }
     private View view = View.RUN;
     private EditBox gangField, mobField;
     private String gang = "jetsetcraft:dead_beat";
@@ -47,6 +47,7 @@ final class RivalRushScreen extends Screen {
     boolean isRouteView() { return view == View.ROUTE; }
     boolean isJourneyView() { return view == View.JOURNEY; }
     boolean isBuildView() { return view == View.BUILD; }
+    boolean isCachesView() { return view == View.CACHES; }
 
     RivalRushScreen(CompoundTag opening) {
         super(Component.literal("Rival Rush"));
@@ -172,6 +173,8 @@ final class RivalRushScreen extends Screen {
             case ROUTE -> buildRoute(left, span);
             case JOURNEY -> buildJourney(left, span);
             case BUILD -> buildBuild(left, span);
+            case CACHES -> addRenderableWidget(Button.builder(Component.literal("Back to build"), button -> navigate(View.BUILD))
+                    .bounds(left, height - 53, span, 20).build());
             case REMIX -> buildRemix(left, span);
             case CARD -> addRenderableWidget(Button.builder(Component.literal("Back to cards"),
                     button -> navigate(View.ALBUM)).bounds(left, height - 53, span, 20).build());
@@ -457,10 +460,34 @@ final class RivalRushScreen extends Screen {
         boolean ready = build.getBoolean("RemixReady") && !build.getList("Artifacts", Tag.TAG_COMPOUND).isEmpty();
         Button remix = addRenderableWidget(Button.builder(Component.literal(ready ? "Remix an artifact"
                         : "Artifact remix · earned between arenas"), button -> navigate(View.REMIX))
-                .bounds(left, height - 53, span, 20).build());
+                .bounds(left, height - 53, (span - 4) / 2, 20).build());
         remix.active = ready;
         remix.setTooltip(Tooltip.create(Component.literal("A completed arena offers one optional replacement. Keep the replaced artifact's rank."
                 + "\nThe opportunity does not stack; it is usable only between rooms, outside upgrade drafts.")));
+        addRenderableWidget(Button.builder(Component.literal("Scout reward caches"), button -> navigate(View.CACHES))
+                .bounds(left + (span - 4) / 2 + 4, height - 53, span - (span - 4) / 2 - 4, 20).build());
+    }
+
+    private List<CardLine> cacheLines() {
+        List<CardLine> lines = new ArrayList<>();
+        CompoundTag scouting = RivalRushClient.state().getCompound("Caches");
+        ListTag caches = scouting.getList("Caches", Tag.TAG_COMPOUND);
+        if (!caches.isEmpty()) detail(lines, scouting.getBoolean("Ready") ? "A cache is charged. Ride through the reward you want."
+                : "Defeat " + scouting.getLong("DefeatsNeeded") + " more rivals to charge your next cache.", span(), 0xFFC5ED55);
+        detail(lines, "Each marker has its own color and floor pattern. Three new defeats charge another choice.", span(), 0xFFB8B8B8);
+        if (caches.isEmpty()) detail(lines, "Caches appear inside the active arena or nearby free streets. Follow your route to reach them.", span(), 0xFFE7E7E7);
+        for (int i = 0; i < Math.min(6, caches.size()); i++) {
+            CompoundTag cache = caches.getCompound(i);
+            double dx = minecraft.player == null ? 0 : cache.getInt("X") + .5 - minecraft.player.getX();
+            double dz = minecraft.player == null ? 0 : cache.getInt("Z") + .5 - minecraft.player.getZ();
+            String direction = Math.abs(dx) < 3 && Math.abs(dz) < 3 ? "Here" : (dz < -3 ? "N" : dz > 3 ? "S" : "")
+                    + (dx < -3 ? "W" : dx > 3 ? "E" : "");
+            detail(lines, cache.getString("Label") + " • " + direction + " • " + cache.getInt("Distance") + "m", span(), 0xFF000000 | cache.getInt("Color"));
+            detail(lines, cache.getString("Benefit"), span(), 0xFFE7E7E7);
+            if (cache.getLong("CooldownTicks") > 0) detail(lines, "Recharges in " + RivalRushClient.clock(cache.getLong("CooldownTicks"))
+                    + " active time", span(), 0xFFB8B8B8);
+        }
+        return lines;
     }
 
     private List<CardLine> buildLines() {
@@ -490,6 +517,15 @@ final class RivalRushScreen extends Screen {
                 case "AIR_BREAK" -> detail(lines, build.getBoolean("AirborneReady") ? "Landing pulse ready: land from your current airborne move."
                         : "Build an airborne move, then land to trigger the pulse.", span(), 0xFF87E1EA);
                 case "EXPOSE" -> detail(lines, "Marked rivals: " + build.getInt("MarkedRivals"), span(), 0xFF87E1EA);
+                case "VENOM" -> detail(lines, "Rivals carrying venom: " + build.getInt("VenomRivals"), span(), 0xFF87E1EA);
+                case "CHILL" -> detail(lines, "Chilled rivals: " + build.getInt("ChilledRivals"), span(), 0xFF87E1EA);
+                case "MULTISHOT" -> detail(lines, "Split volleys: " + build.getLong("MultishotVolleys"), span(), 0xFF87E1EA);
+                case "RADIANCE" -> detail(lines, "Recovery pulses: " + build.getLong("RadiantPulses"), span(), 0xFF87E1EA);
+                case "WARD" -> detail(lines, "Ward " + (int) Math.ceil(build.getDouble("Ward")) + "/"
+                        + (int) Math.ceil(build.getDouble("WardMax")) + " • recharges after six active seconds without damage", span(), 0xFF87E1EA);
+                case "SOUL_BURST" -> detail(lines, "Soul charge " + build.getInt("SoulBurstCharge") + "/"
+                        + build.getInt("SoulBurstChargeMax") + " • " + build.getInt("SoulBurstCost")
+                        + " per burst • " + build.getLong("SoulBursts") + " bursts", span(), 0xFF87E1EA);
                 default -> { }
             }
         }
@@ -731,6 +767,7 @@ final class RivalRushScreen extends Screen {
                 : view == View.ROUTE ? "Compare rewards · Journey opens the map"
                 : view == View.ARENAS ? "Choose the first arena • later routes branch"
                 : view == View.BUILD ? "Your current run effects • three artifact families"
+                : view == View.CACHES ? "Scout caches • choose where to ride"
                 : view == View.REMIX ? "Replace one artifact family · keep its rank"
                 : "An optional skating survival set • your own run XP";
         gui.drawCenteredString(font, subtitle, width / 2, 26, 0xFFDDDDDD);
@@ -803,6 +840,8 @@ final class RivalRushScreen extends Screen {
             drawJourney(gui, left, span);
         } else if (view == View.BUILD) {
             drawDetails(gui, buildLines(), left, span);
+        } else if (view == View.CACHES) {
+            drawDetails(gui, cacheLines(), left, span);
         } else if (view == View.REMIX) {
             if (!state.getCompound("Build").getBoolean("RemixReady") || !remixTo.isBlank()) drawDetails(gui, remixLines(), left, span);
             else {
@@ -885,7 +924,8 @@ final class RivalRushScreen extends Screen {
     private int maxDetailScroll(List<CardLine> lines) { return Math.max(0, lines.size() * 11 - Math.max(22, height - 145)); }
 
     private List<CardLine> currentDetails() {
-        return view == View.JOURNEY ? journeyLines(span() - mapWidth() - 12) : view == View.BUILD ? buildLines() : remixLines();
+        return view == View.JOURNEY ? journeyLines(span() - mapWidth() - 12) : view == View.BUILD ? buildLines()
+                : view == View.CACHES ? cacheLines() : remixLines();
     }
 
     private void drawDetails(GuiGraphics gui, List<CardLine> lines, int left, int availableWidth) {
@@ -961,7 +1001,7 @@ final class RivalRushScreen extends Screen {
             cardScroll = Math.max(0, Math.min(maxCardScroll(cardLines()), cardScroll - (int) (amount * 22)));
             return true;
         }
-        if (view == View.JOURNEY || view == View.BUILD || view == View.REMIX && !remixTo.isBlank()) {
+        if (view == View.JOURNEY || view == View.BUILD || view == View.CACHES || view == View.REMIX && !remixTo.isBlank()) {
             detailScroll = Math.max(0, Math.min(maxDetailScroll(currentDetails()), detailScroll - (int) (amount * 22)));
             return true;
         }
@@ -974,7 +1014,7 @@ final class RivalRushScreen extends Screen {
             cardScroll = Math.max(0, Math.min(maxCardScroll(cardLines()), cardScroll + (keyCode == 266 ? -66 : 66)));
             return true;
         }
-        if ((view == View.JOURNEY || view == View.BUILD || view == View.REMIX && !remixTo.isBlank()) && (keyCode == 266 || keyCode == 267)) {
+        if ((view == View.JOURNEY || view == View.BUILD || view == View.CACHES || view == View.REMIX && !remixTo.isBlank()) && (keyCode == 266 || keyCode == 267)) {
             detailScroll = Math.max(0, Math.min(maxDetailScroll(currentDetails()), detailScroll + (keyCode == 266 ? -66 : 66)));
             return true;
         }

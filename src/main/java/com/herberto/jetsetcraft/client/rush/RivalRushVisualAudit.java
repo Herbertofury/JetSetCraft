@@ -242,8 +242,8 @@ public final class RivalRushVisualAudit {
             }
             case 11 -> {
                 if (!ActivityJourneyVisualAudit.advance(minecraft, label -> capture(minecraft, label), CAPTURES::containsKey)) return;
-                if (CAPTURES.size() != 13) { finish(minecraft, false, "expected thirteen completed Rush, Crew and Activity PNG captures"); return; }
-                finish(minecraft, true, "thirteen real-client captures; street and arena inventory/XP/dimension restored; actual Charter, facilities, job, Boombox activity, first arena choice, journey map, build and crew progress verified");
+                if (CAPTURES.size() != 15) { finish(minecraft, false, "expected fifteen completed Rush, Crew and Activity PNG captures"); return; }
+                finish(minecraft, true, "fifteen real-client captures; street and arena inventory/XP/dimension restored; actual Charter, facilities, job, Boombox activity, first arena choice, Journey, Build, cache scouting, crew Progress and Style Library verified; arena inspection uses a logged disposable-world arrival fixture, not a human traversal or completed room");
             }
             default -> finish(minecraft, false, "unknown audit phase");
         }
