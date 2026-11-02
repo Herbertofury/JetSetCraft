@@ -10,6 +10,15 @@ base { archivesName = "${mod_id}-${minecraft_version}" }
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 def wave2Provider = providers.gradleProperty('wave2Provider').orElse('').get().trim()
+def libertyTaczOption = providers.gradleProperty('libertyTacz').orElse('false').get().trim()
+if (!['true', 'false'].contains(libertyTaczOption)) {
+    throw new GradleException('Use -PlibertyTacz=true or -PlibertyTacz=false')
+}
+def libertyTacz = libertyTaczOption == 'true'
+def libertyPackOption = providers.gradleProperty('libertyPackExpected').orElse(libertyTaczOption).get().trim()
+if (!['true', 'false'].contains(libertyPackOption) || (libertyPackOption == 'true' && !libertyTacz)) {
+    throw new GradleException('Use -PlibertyPackExpected=true|false; a true value also requires -PlibertyTacz=true')
+}
 def validProviderSelections = ['', 'alexsmobs', 'alexscaves', 'cataclysm', 'all',
                                'aether', 'irons_spells', 'aoa', 'adventure_all']
 if (!validProviderSelections.contains(wave2Provider)) {
@@ -30,9 +39,11 @@ minecraft {
             property 'forge.logging.console.level', 'info'
             property 'jetsetcraft.wave2Provider', wave2RosterProvider
             property 'jetsetcraft.providerSelection', wave2Provider
+            property 'jetsetcraft.libertyTacz', libertyTacz.toString()
+            property 'jetsetcraft.libertyPackExpected', libertyPackOption
             // Production provider jars ship SRG/refmap mixin targets. ForgeGradle's named userdev runtime
             // must remap those targets for GameTest/server verification; production Minecraft does not need this.
-            if (!wave2Provider.isEmpty()) {
+            if (!wave2Provider.isEmpty() || libertyTacz) {
                 property 'mixin.env.remapRefMap', 'true'
                 property 'mixin.env.refMapRemappingFile', file("${buildDir}/createSrgToMcp/output.srg").absolutePath
             }
@@ -44,7 +55,13 @@ minecraft {
             property 'mixin.env.refMapRemappingFile', file("${buildDir}/createSrgToMcp/output.srg").absolutePath
             property 'jetsetcraft.visualAudit', System.getProperty('jetsetcraft.visualAudit', 'false')
             property 'jetsetcraft.rushVisualAudit', System.getProperty('jetsetcraft.rushVisualAudit', 'false')
-            if (System.getProperty('jetsetcraft.rushVisualAudit', 'false') == 'true') {
+            property 'jetsetcraft.libertyVisualAudit', System.getProperty('jetsetcraft.libertyVisualAudit', 'false')
+            if (System.getProperty('jetsetcraft.libertyVisualAudit', 'false') == 'true') {
+                if (System.getProperty('jetsetcraft.rushVisualAudit', 'false') == 'true'
+                        || System.getProperty('jetsetcraft.visualAudit', 'false') == 'true')
+                    throw new GradleException('Run the Liberty Grind visual audit separately.')
+                args '--quickPlaySingleplayer', 'LibertyGrindAudit', '--width', '960', '--height', '720'
+            } else if (System.getProperty('jetsetcraft.rushVisualAudit', 'false') == 'true') {
                 if (System.getProperty('jetsetcraft.visualAudit', 'false') == 'true') {
                     throw new GradleException('Run the ordinary and Rival Rush visual audits separately.')
                 }
@@ -81,6 +98,12 @@ dependencies {
 
     // Create 6.0.8 is optional at runtime; the official slim artifact compiles the native track geometry adapter.
     compileOnly fg.deobf("com.simibubi.create:create-1.20.1:6.0.8-289:slim") { transitive = false }
+
+    // Exact optional Helldivers verification lane. This adds no production dependency or packaged JAR.
+    // The upstream release requires only Forge/Minecraft; the pack is prepared separately in run/tacz.
+    if (libertyTacz) {
+        runtimeOnly fg.deobf("curse.maven:timeless-and-classics-zero-1028108:9037989") // TaCZ 1.1.8-hotfix2
+    }
 
     // Provider-present verification is opt-in. These never enter JetSetCraft's normal runtime dependency set
     // or mods.toml, so production remains fully optional/fail-soft when the provider is absent.
