@@ -1,6 +1,14 @@
 # Liberty Grind campaign — alpha.9 verification receipt
 
-**Final local result, 2 November 2026: 118/118 required GameTests passed in each of three configurations, and all nineteen final native-client captures passed individual pixel review.** The clean build, ten offline gates and independently installed dedicated-server smoke check also passed. The exact evidence and scope limits are recorded below. Candidate 1’s earlier installed smoke remains archived against its own JAR; hosted publication is separate from these local results.
+## Continuation status — 3 November 2026 UTC
+
+The follow-up to PR #49 changes production source after the local checkpoint below. It adds bounded retirement of abandoned ordinary combatants, fairer access to shared admissions, terrain-grounded home routes, varied repeatable defense offers and extraction-deadline handling. It also repairs two native timing/isolation fixtures and the hosted client gate's outdated fixture marker. Four new required GameTests bring the source inventory to **122 distinct required cases**; the existing native director case additionally checks relocation and replacement pressure.
+
+The current workspace passes asset, gameplay-contract, premium-polish, provider-manifest, wiki, research-browser, Python-compilation and whitespace checks. The unchanged Java syntax validator helper also parses all **240 Java files** successfully through Java 17 source launching; the stock wrapper requires an unavailable `javac` executable. **Forge compilation, the 122-case native matrix, the rebuilt installed JAR and new native-client captures are pending hosted verification.** This workspace cannot download the Gradle distribution, so the archived local results must not be treated as verification of the changed source. The provider workflow now prepares a separate official Forge installation from pinned original providers and tests the exact newly built JAR, retaining its checksum and sanitized evidence.
+
+## Archived local checkpoint — 2 November 2026
+
+**118/118 required GameTests passed in each of three configurations, and all nineteen native-client captures passed individual pixel review for the exact source and JAR identified below.** The clean build, ten offline gates and independently installed dedicated-server smoke check also passed at that checkpoint. Candidate 1’s earlier installed smoke remains archived against its own JAR; these records do not establish a later source revision's outcome.
 
 This expansion supplies 28 seeded mission adaptations, difficulties 1–10, 20/25/30 minute operation budgets, six shared campaign regions, the pre-pod armory/four-call review, a walkable ship and explicitly accepted home defense. The catalogue distinguishes 100 selectable calls from 25 shared/mission/historical references; exact native provider mappings and JetSetCraft adaptations are documented separately. Read the [implementation guide](../../LIBERTY_GRIND.md), [player guide](../../../wiki/Liberty-Grind.md), [mission source mapping](../../research/LIBERTY_MISSION_RESEARCH.md) and [per-call behavior mapping](../../research/LIBERTY_CALLIN_IMPLEMENTATION.md).
 
