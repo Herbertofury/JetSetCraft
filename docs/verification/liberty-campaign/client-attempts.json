@@ -1,0 +1,46 @@
+[
+  {
+    "attempt": 1,
+    "source_inputs_sha256": "4693185d0855de268820715260fdc5a6e88755b97f5baeeca70c6c3969b06fac",
+    "exit_code": -15,
+    "duration_seconds": 155.71,
+    "settings_restored_byte_for_byte": true,
+    "source_inputs_unchanged": true,
+    "result": "Stopped after three captures: packet allowlist rejected the new pre-pod actions.",
+    "file": "client-attempt-1.log",
+    "bytes": 215145,
+    "sha256": "29f3708dbe9e31dcabfca593968ab763586caa7cbc486475aef907d591e39979",
+    "transform": "Absolute checkout/cache/tmp paths replaced; actual diagnostics retained."
+  },
+  {
+    "attempt": 2,
+    "source_inputs_sha256": "3ca22dcced86651d1d2d82199dd03e3633ba928d1e961f382afc1654f3deed6e",
+    "exit_code": 0,
+    "duration_seconds": 96.68,
+    "settings_restored_byte_for_byte": true,
+    "source_inputs_unchanged": true,
+    "result": "Produced 14 ordinary captures through label 13, plus a failure capture; failed at actual call-in readiness because the dropping phase closed the live stratagem engine. Process exit 0 was not an audit pass.",
+    "file": "client-attempt-2.log",
+    "bytes": 230835,
+    "sha256": "04e33b98c49f177ec17a6150e0fb87b14b58c0e74f9770af3a057e9b9c326386",
+    "transform": "Absolute checkout/cache/tmp paths replaced; actual diagnostics retained."
+  },
+  {
+    "attempt": 3,
+    "source_inputs_sha256": "c554960669f629745fde6365dfd058c24c8a509ec5de879f8bade0808700fc80",
+    "exit_code": 0,
+    "duration_seconds": 71.92,
+    "settings_restored_byte_for_byte": true,
+    "source_inputs_unchanged": true,
+    "result": "Three ordinary captures plus a failure capture. Strict clean-baseline precondition rejected the previous attempt purchase before deployment; disposable-save reset was repaired without changing game source. Process exit 0 was not an audit pass.",
+    "file": "client-attempt-3.log",
+    "bytes": 206532,
+    "sha256": "4c3d059888144f4a9b5b4efaeaf6442ad78c6086137e9ca61307104638507f48",
+    "original_bytes": 206853,
+    "original_sha256": "de6e7935146107c37934e1928e9e26ac21904f5146d8aa6578957a2b597d49d6",
+    "transform": "Absolute checkout/cache/tmp paths replaced; actual diagnostics retained.",
+    "source_inputs_match_recorded_candidate_by_file": true,
+    "compared_source_manifest_file": "candidate-1-final-source-manifest.json",
+    "compared_source_digest": "6d2d82b51234b4d02d83594d141f364c34f131ce26af10a4bad9712995f47cb7"
+  }
+]

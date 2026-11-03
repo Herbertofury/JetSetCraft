@@ -1,0 +1,179 @@
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/8.8/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+> Task :clean
+
+> Task :compileJava
+<CHECKOUT>/src/main/java/com/herberto/jetsetcraft/crew/CrewHouseManager.java:98: warning: [deprecation] hasChunkAt(BlockPos) in LevelReader has been deprecated
+                && player.serverLevel().hasChunkAt(position)) {
+                                       ^
+<CHECKOUT>/src/main/java/com/herberto/jetsetcraft/crew/CrewHouseManager.java:401: warning: [deprecation] hasChunkAt(BlockPos) in LevelReader has been deprecated
+        boolean anchorLoaded = home != null && home.hasChunkAt(profile.anchor);
+                                                   ^
+<CHECKOUT>/src/main/java/com/herberto/jetsetcraft/crew/CrewHouseManager.java:500: warning: [deprecation] hasChunkAt(BlockPos) in LevelReader has been deprecated
+        if (!level.hasChunkAt(profile.anchor)) return "Your home is unloaded. Visit it to check its facilities; no chunks are force-loaded.";
+                  ^
+<CHECKOUT>/src/main/java/com/herberto/jetsetcraft/crew/CrewHouseManager.java:512: warning: [deprecation] hasChunkAt(BlockPos) in LevelReader has been deprecated
+        if (!level.hasChunkAt(candidate.position) || !level.getBlockState(candidate.position).is(ModBlocks.BOOMBOX.get())
+                  ^
+<CHECKOUT>/src/main/java/com/herberto/jetsetcraft/crew/CrewHouseManager.java:542: warning: [deprecation] hasChunkAt(BlockPos) in LevelReader has been deprecated
+        if (!world.hasChunkAt(position)) return "The facility is unloaded; visit it before registering or using it.";
+                  ^
+<CHECKOUT>/src/main/java/com/herberto/jetsetcraft/crew/CrewHouseManager.java:553: warning: [deprecation] hasChunkAt(BlockPos) in LevelReader has been deprecated
+            if (profile.contains(pos) && level.hasChunkAt(pos) && match.test(level.getBlockState(pos))) return true;
+                                              ^
+<CHECKOUT>/src/main/java/com/herberto/jetsetcraft/liberty/LibertyStratagemEngine.java:220: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
+            if(new ResourceLocation("mcdivers","sentry_light").equals(block))level().setBlock(entry.getKey(),entry.getValue(),3);
+               ^
+<CHECKOUT>/src/main/java/com/herberto/jetsetcraft/liberty/LibertyStratagemEngine.java:224: warning: [deprecation] hasChunkAt(BlockPos) in LevelReader has been deprecated
+    private boolean valid(Vec3 pos){return pos!=null&&Double.isFinite(pos.x)&&Double.isFinite(pos.y)&&Double.isFinite(pos.z)&&pos.distanceToSqr(context.player().position())<=128*128&&context.validTarget(pos)&&level().hasChunkAt(BlockPos.containing(pos));}
+                                                                                                                                                                                                                        ^
+<CHECKOUT>/src/main/java/com/herberto/jetsetcraft/liberty/LibertyStratagemEngine.java:305: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
+        EntityType<?> type=ForgeRegistries.ENTITY_TYPES.getValue(new ResourceLocation("jetsetcraft","liberty_support"));
+                                                                 ^
+<CHECKOUT>/src/main/java/com/herberto/jetsetcraft/liberty/LibertyStratagemEngine.java:401: warning: [deprecation] hasChunkAt(BlockPos) in LevelReader has been deprecated
+                Vec3 next=actor.position().add(move);if(context.validTarget(next)&&level().hasChunkAt(BlockPos.containing(next))){actor.setYRot(rider.getYRot());actor.move(MoverType.SELF,new Vec3(move.x,actor.onGround()?0:-.15,move.z));actor.setDeltaMovement(Vec3.ZERO);}
+                                                                                          ^
+<CHECKOUT>/src/main/java/com/herberto/jetsetcraft/liberty/LibertyArmory.java:37: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
+    private static final ResourceLocation AMMO_ITEM = new ResourceLocation("tacz", "ammo");
+                                                      ^
+<CHECKOUT>/src/main/java/com/herberto/jetsetcraft/liberty/LibertyEvents.java:194: warning: [removal] setCanceled(boolean) in ProjectileImpactEvent has been deprecated and marked for removal
+        if (LibertyProjectileSafety.intercept(event.getProjectile(), event.getRayTraceResult())) event.setCanceled(true);
+                                                                                                      ^
+<CHECKOUT>/src/main/java/com/herberto/jetsetcraft/client/crew/CrewHouseClient.java:60: warning: [deprecation] hasChunkAt(BlockPos) in LevelReader has been deprecated
+        if (radius < 1 || radius > 24 || !minecraft.level.hasChunkAt(anchor)
+                                                         ^
+<CHECKOUT>/src/main/java/com/herberto/jetsetcraft/client/liberty/LibertyVisualAudit.java:277: warning: [deprecation] ENTITY_TYPE in BuiltInRegistries has been deprecated
+                        net.minecraft.core.registries.BuiltInRegistries.ENTITY_TYPE.getKey(vehicle.getType()), vehicle.getClass().getName(),
+                                                                       ^
+<CHECKOUT>/src/main/java/com/herberto/jetsetcraft/client/liberty/LibertyVisualAudit.java:279: warning: [deprecation] hasChunkAt(BlockPos) in LevelReader has been deprecated
+                        vehicle.tickCount, minecraft.level.hasChunkAt(vehicle.blockPosition()), compiled,
+                                                          ^
+<CHECKOUT>/src/main/java/com/herberto/jetsetcraft/client/render/LibertyCoreRenderer.java:43: warning: [deprecation] renderSingleBlock(BlockState,PoseStack,MultiBufferSource,int,int) in BlockRenderDispatcher has been deprecated
+        Minecraft.getInstance().getBlockRenderer().renderSingleBlock(block.defaultBlockState(),p,b,light,OverlayTexture.NO_OVERLAY); p.popPose();
+                                                  ^
+<CHECKOUT>/src/main/java/com/herberto/jetsetcraft/client/render/LibertySupportRenderer.java:86: warning: [deprecation] renderSingleBlock(BlockState,PoseStack,MultiBufferSource,int,int) in BlockRenderDispatcher has been deprecated
+        Minecraft.getInstance().getBlockRenderer().renderSingleBlock(block.defaultBlockState(),p,b,light,OverlayTexture.NO_OVERLAY);p.popPose();
+                                                  ^
+<CHECKOUT>/src/main/java/com/herberto/jetsetcraft/client/render/LibertyTransportRenderer.java:81: warning: [deprecation] renderSingleBlock(BlockState,PoseStack,MultiBufferSource,int,int) in BlockRenderDispatcher has been deprecated
+        Minecraft.getInstance().getBlockRenderer().renderSingleBlock(material.defaultBlockState(), pose, buffer, light, OverlayTexture.NO_OVERLAY);
+                                                  ^
+<CHECKOUT>/src/main/java/com/herberto/jetsetcraft/client/rush/RushContractVisualAudit.java:271: warning: [deprecation] hasChunkAt(BlockPos) in LevelReader has been deprecated
+                if (TAGGED_SUPPORTS.contains(support) || !player.serverLevel().hasChunkAt(support)
+                                                                              ^
+<CHECKOUT>/src/main/java/com/herberto/jetsetcraft/client/activity/ActivityJourneyVisualAudit.java:341: warning: [deprecation] hasChunkAt(BlockPos) in LevelReader has been deprecated
+                        && player.serverLevel().hasChunkAt(anchor)
+                                               ^
+<CHECKOUT>/src/main/java/com/herberto/jetsetcraft/client/activity/ActivityJourneyVisualAudit.java:381: warning: [deprecation] hasChunkAt(BlockPos) in LevelReader has been deprecated
+                && minecraft.level.hasChunkAt(anchor) && minecraft.level.getBlockState(anchor).is(ModBlocks.BOOMBOX.get())
+                                  ^
+<CHECKOUT>/src/main/java/com/herberto/jetsetcraft/gametest/ActivityGameTests.java:408: warning: [deprecation] hasChunkAt(BlockPos) in LevelReader has been deprecated
+                + ", anchorLoaded=" + player.serverLevel().hasChunkAt(anchor)
+                                                          ^
+<CHECKOUT>/src/main/java/com/herberto/jetsetcraft/gametest/ActivityGameTests.java:422: warning: [deprecation] hasChunksAt(BlockPos,BlockPos) in LevelReader has been deprecated
+            if (!level.hasChunksAt(site.offset(-2, 0, -2), site.offset(2, 2, 2))) { out.append("unloaded"); continue; }
+                      ^
+<CHECKOUT>/src/main/java/com/herberto/jetsetcraft/gametest/RushArenaGameTests.java:252: warning: [deprecation] hasChunkAt(BlockPos) in LevelReader has been deprecated
+                        + ", profile=" + profile.id() + ", loaded=" + player.serverLevel().hasChunkAt(player.blockPosition())
+                                                                                          ^
+<CHECKOUT>/src/main/java/com/herberto/jetsetcraft/gametest/LibertyTaczGameTests.java:187: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
+        check(!stack.isEmpty() && new ResourceLocation("tacz", "modern_kinetic_gun")
+                                  ^
+<CHECKOUT>/src/main/java/com/herberto/jetsetcraft/gametest/LibertyTaczGameTests.java:200: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
+        check(!stack.isEmpty() && new ResourceLocation("tacz", "ammo").equals(ForgeRegistries.ITEMS.getKey(stack.getItem()))
+                                  ^
+<CHECKOUT>/src/main/java/com/herberto/jetsetcraft/gametest/LibertyNativeTerrainGameTests.java:184: warning: [removal] ResourceLocation(String) in ResourceLocation has been deprecated and marked for removal
+        Object index=((Optional<?>)type("api.TimelessAPI").getMethod("getCommonGunIndex",ResourceLocation.class).invoke(null,new ResourceLocation(id))).orElseThrow();
+                                                                                                                             ^
+<CHECKOUT>/src/main/java/com/herberto/jetsetcraft/gametest/LibertyNativeTerrainGameTests.java:191: warning: [removal] ResourceLocation(String) in ResourceLocation has been deprecated and marked for removal
+                .newInstance(f.level,f.owner,gun,ammo,new ResourceLocation(id),false,data,bulletData);
+                                                      ^
+<CHECKOUT>/src/main/java/com/herberto/jetsetcraft/gametest/LibertyNativeTerrainGameTests.java:220: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
+            EntityType<?> targetType=ForgeRegistries.ENTITY_TYPES.getValue(new ResourceLocation("tacz","target_minecart"));check(targetType!=null,"Real TaCZ target minecart is absent");
+                                                                           ^
+<CHECKOUT>/src/main/java/com/herberto/jetsetcraft/gametest/RushSpellGameTests.java:52: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
+            check(RivalRushManager.start(owner, new ResourceLocation("jetsetcraft", "dead_beat"),
+                                                ^
+<CHECKOUT>/src/main/java/com/herberto/jetsetcraft/gametest/RushSpellGameTests.java:53: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
+                    new ResourceLocation("minecraft", "zombie"), false), "Could not start the relay proof session");
+                    ^
+<CHECKOUT>/src/main/java/com/herberto/jetsetcraft/gametest/LibertyGunCombatGameTests.java:142: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
+                            && new ResourceLocation("tacz", "bullet").equals(ForgeRegistries.ENTITY_TYPES.getKey(shot.getType()))
+                               ^
+<CHECKOUT>/src/main/java/com/herberto/jetsetcraft/gametest/LibertyStratagemGameTests.java:192: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
+                check(f.tracked.stream().allMatch(Entity::isRemoved)&&light.stream().noneMatch(p->new ResourceLocation("mcdivers","sentry_light").equals(ForgeRegistries.BLOCKS.getKey(f.level.getBlockState(p).getBlock()))),
+                                                                                                  ^
+<CHECKOUT>/src/main/java/com/herberto/jetsetcraft/compat/RushSpellCompat.java:24: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
+    public static final ResourceLocation FIREBOLT_ID = new ResourceLocation("irons_spellbooks", "firebolt");
+                                                       ^
+<CHECKOUT>/src/main/java/com/herberto/jetsetcraft/compat/LibertyTaczCompat.java:23: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
+    public static final ResourceLocation LIBERATOR = new ResourceLocation("helldiver2", "ar23_liberator");
+                                                     ^
+<CHECKOUT>/src/main/java/com/herberto/jetsetcraft/compat/LibertyTaczCompat.java:24: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
+    public static final ResourceLocation PEACEMAKER = new ResourceLocation("helldiver2", "p2_peacemaker");
+                                                      ^
+<CHECKOUT>/src/main/java/com/herberto/jetsetcraft/compat/LibertyTaczCompat.java:25: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
+    public static final ResourceLocation RIFLE_AMMO = new ResourceLocation("zeta", "ar_ammo");
+                                                      ^
+<CHECKOUT>/src/main/java/com/herberto/jetsetcraft/compat/LibertyTaczCompat.java:26: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
+    public static final ResourceLocation PISTOL_AMMO = new ResourceLocation("zeta", "p113_ammo");
+                                                       ^
+<CHECKOUT>/src/main/java/com/herberto/jetsetcraft/compat/LibertyTaczCompat.java:28: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
+    private static final ResourceLocation GUN_ITEM = new ResourceLocation("tacz", "modern_kinetic_gun");
+                                                     ^
+<CHECKOUT>/src/main/java/com/herberto/jetsetcraft/compat/LibertyTaczCompat.java:29: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
+    private static final ResourceLocation AMMO_ITEM = new ResourceLocation("tacz", "ammo");
+                                                      ^
+<CHECKOUT>/src/main/java/com/herberto/jetsetcraft/compat/LibertyHelldiversCompat.java:35: warning: [removal] ResourceLocation(String,String) in ResourceLocation has been deprecated and marked for removal
+        if (!ForgeRegistries.ENTITY_TYPES.containsKey(new ResourceLocation("mcdivers", "stratagem_beacon"))) return false;
+                                                      ^
+<CHECKOUT>/src/main/java/com/herberto/jetsetcraft/compat/LibertyHelldiversCompat.java:129: warning: [removal] ResourceLocation(String) in ResourceLocation has been deprecated and marked for removal
+            Object index=((Optional<?>)api.getMethod("getCommonGunIndex",ResourceLocation.class).invoke(null,new ResourceLocation(id))).orElse(null);
+                                                                                                             ^
+<CHECKOUT>/src/main/java/com/herberto/jetsetcraft/compat/LibertyHelldiversCompat.java:142: warning: [removal] ResourceLocation(String) in ResourceLocation has been deprecated and marked for removal
+            ResourceLocation gunId=new ResourceLocation(id);
+                                   ^
+<CHECKOUT>/src/main/java/com/herberto/jetsetcraft/activity/ActivityEvents.java:74: warning: [removal] setCanceled(boolean) in ProjectileImpactEvent has been deprecated and marked for removal
+            event.setCanceled(true); balloon.discard();
+                 ^
+<CHECKOUT>/src/main/java/com/herberto/jetsetcraft/activity/ActivityManager.java:138: warning: [deprecation] hasChunkAt(BlockPos) in LevelReader has been deprecated
+        if (boombox && (!player.serverLevel().hasChunkAt(anchor)
+                                             ^
+<CHECKOUT>/src/main/java/com/herberto/jetsetcraft/activity/ActivityManager.java:250: warning: [deprecation] hasChunkAt(BlockPos) in LevelReader has been deprecated
+                || !player.serverLevel().hasChunkAt(c.anchor) || player.distanceToSqr(Vec3.atCenterOf(c.anchor)) > 64))
+                                        ^
+<CHECKOUT>/src/main/java/com/herberto/jetsetcraft/activity/ActivityManager.java:304: warning: [deprecation] hasChunkAt(BlockPos) in LevelReader has been deprecated
+                || !level.dimension().equals(c.dimension) || !level.hasChunkAt(c.anchor)
+                                                                   ^
+<CHECKOUT>/src/main/java/com/herberto/jetsetcraft/activity/ActivityManager.java:330: warning: [deprecation] hasChunkAt(BlockPos) in LevelReader has been deprecated
+            if (mob.isRemoved() || !mob.isAlive() || !level.hasChunkAt(mob.blockPosition())
+                                                           ^
+<CHECKOUT>/src/main/java/com/herberto/jetsetcraft/activity/ActivityManager.java:510: warning: [deprecation] hasChunkAt(BlockPos) in LevelReader has been deprecated
+        if (level == null || !level.hasChunkAt(c.anchor)) return;
+                                   ^
+49 warnings
+
+> Task :processResources
+> Task :classes
+> Task :jar
+> Task :downloadMcpConfig
+> Task :extractSrg
+> Task :createMcpToSrg
+> Task :reobfJar
+> Task :jarJar SKIPPED
+> Task :reobfJarJar SKIPPED
+> Task :assemble
+> Task :compileTestJava NO-SOURCE
+> Task :processTestResources NO-SOURCE
+> Task :testClasses UP-TO-DATE
+> Task :test NO-SOURCE
+> Task :check UP-TO-DATE
+> Task :build
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0.
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
+For more on this, please refer to https://docs.gradle.org/8.8/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
+
+BUILD SUCCESSFUL in 22s
+8 actionable tasks: 8 executed

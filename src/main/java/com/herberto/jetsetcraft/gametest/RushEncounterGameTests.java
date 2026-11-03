@@ -167,33 +167,110 @@ public final class RushEncounterGameTests {
 
     @GameTest(template = "hoverboard_empty", timeoutTicks = 600)
     public static void lostHeadlinersReturnSafelyAndTheStreetDeadlineStillOffersEncore(GameTestHelper helper) {
-        Fixture lost = begin(helper, "JSC_boss_lost", false, 6000);
-        helper.runAfterDelay(2, () -> {
+        HeadlinerRecoveryFixture fixture = new HeadlinerRecoveryFixture(helper);
+        // Register once. Later phases update only fixture fields, never GameTest's scheduled-task map.
+        helper.onEachTick(fixture::tick);
+    }
+
+    /** Native chunk/actor readiness precedes clock compression; it is not a human pacing fixture. */
+    private static final class HeadlinerRecoveryFixture {
+        private final GameTestHelper helper;
+        private Fixture current;
+        private int phase, waited;
+        private boolean finished;
+
+        private HeadlinerRecoveryFixture(GameTestHelper helper) {
+            this.helper = helper;
+            current = beginBranch("JSC_boss_lost");
+        }
+
+        private Fixture beginBranch(String name) {
+            Fixture fixture = begin(helper, name, false, 0);
             try {
-                RushRun run = RivalRushManager.run(lost.player); headliner(lost.player).discard();
-                RivalRushManager.tick(lost.player.getServer());
-                check(!RivalRushManager.active(lost.player) && run.headliners() == 0,
-                        "A missing headliner bypassed the gate or manufactured a victory");
-                assertRestored(lost);
-            } finally { cleanup(lost); }
-            Fixture timed = begin(helper, "JSC_boss_limit", false, 30000);
-            helper.runAfterDelay(2, () -> {
-                try {
-                    ServerPlayer player = timed.player; RushRun run = RivalRushManager.run(player); Mob unfinished = headliner(player);
-                    advance(run, RushRun.SESSION_TICKS - 1 - run.elapsedTicks());
+                // Supply the outer neighbors around the existing radius-four ticket before
+                // starting the native readiness deadline. Terrain preparation alone still
+                // does not satisfy the unchanged 25-chunk entity-ticking gate.
+                ChunkPos center = fixture.held.get(0);
+                for (int x = -4; x <= 4; x++) for (int z = -4; z <= 4; z++)
+                    if (Math.max(Math.abs(x), Math.abs(z)) > 2)
+                        fixture.district.getChunk(center.x + x, center.z + z);
+                return fixture;
+            } catch (RuntimeException | Error error) { cleanup(fixture); throw error; }
+        }
+
+        private void tick() {
+            if (finished) return;
+            try {
+                ServerPlayer player = current.player; RushRun run = RivalRushManager.run(player);
+                check(run != null && RivalRushManager.active(player),
+                        "Headliner recovery fixture ended before its intended assertion: " + diagnostic());
+                check(++waited <= 120, "Native headliner recovery readiness timed out: " + diagnostic());
+                if (phase == 0 || phase == 2) {
+                    // getChunk() only supplies terrain; entity UUID lookup remains unavailable until
+                    // the ticket's full spawn area becomes entity-ticking in actual server ticks.
+                    if (residentChunks() != 25) return;
+                    chooseDrafts(player);
+                    advance(run, Math.max(0, (phase == 0 ? 6000 : 30000) - run.elapsedTicks()));
                     RivalRushManager.tick(player.getServer());
-                    check(RivalRushManager.active(player) && run.awaitingEncore() && unfinished.isRemoved()
-                                    && run.headliners() == 0 && RivalRushManager.encounterSnapshot(player).getString("State").equals("aborted"),
-                            "The finite deadline blocked bank/Encore, retained its boss, or invented a victory");
-                    RivalRushManager.handleAction(player, "encore", "", 0, run.id(), run.offerVersion()); chooseDrafts(player);
-                    RivalRushManager.tick(player.getServer());
-                    check(run.endless() && !RivalRushManager.encounterSnapshot(player).getString("Kind").equals("headliner"),
-                            "Encore replayed a missed headliner window immediately instead of continuing normally");
-                    returnNormally(timed);
-                    pass(helper, "rush_headliner_recovery");
-                } finally { cleanup(timed); }
-            });
-        });
+                    phase++; waited = 0; return;
+                }
+                CompoundTag encounter = RivalRushManager.encounterSnapshot(player);
+                if (!encounter.getString("Kind").equals("headliner") || !encounter.hasUUID("Actor")) return;
+                var actor = player.serverLevel().getEntity(encounter.getUUID("Actor"));
+                if (!(actor instanceof Mob)) return;
+                Mob boss = headliner(player);
+                check(!boss.isRemoved() && boss.isAlive() && boss.level() == current.district
+                                && RivalRushManager.belongsTo(boss, player),
+                        "The real headliner failed native identity/ownership checks: " + diagnostic());
+                System.out.println("JETSETCRAFT_RUSH_HEADLINER_RESIDENCY branch=" + (phase == 1 ? "lost" : "deadline")
+                        + " actor=" + boss.getUUID() + " observedAfterNativeTicks=" + waited
+                        + " entityTicking=" + current.district.isPositionEntityTicking(boss.blockPosition())
+                        + " elapsed=" + run.elapsedTicks());
+                if (phase == 1) {
+                    boss.discard(); RivalRushManager.tick(player.getServer());
+                    check(!RivalRushManager.active(player) && run.headliners() == 0,
+                            "A missing headliner bypassed the gate or manufactured a victory");
+                    assertRestored(current); cleanup(current);
+                    current = beginBranch("JSC_boss_limit");
+                    phase = 2; waited = 0; return;
+                }
+                advance(run, RushRun.SESSION_TICKS - 1 - run.elapsedTicks());
+                RivalRushManager.tick(player.getServer());
+                check(RivalRushManager.active(player) && run.awaitingEncore() && boss.isRemoved()
+                                && run.headliners() == 0 && RivalRushManager.encounterSnapshot(player).getString("State").equals("aborted"),
+                        "The finite deadline blocked bank/Encore, retained its boss, or invented a victory");
+                RivalRushManager.handleAction(player, "encore", "", 0, run.id(), run.offerVersion()); chooseDrafts(player);
+                RivalRushManager.tick(player.getServer());
+                check(run.endless() && !RivalRushManager.encounterSnapshot(player).getString("Kind").equals("headliner"),
+                        "Encore replayed a missed headliner window immediately instead of continuing normally");
+                returnNormally(current); cleanup(current); finished = true;
+                pass(helper, "rush_headliner_recovery");
+            } catch (RuntimeException error) {
+                finished = true; cleanup(current); throw error;
+            }
+        }
+
+        private int residentChunks() {
+            ChunkPos center = current.held.get(0); int ready = 0;
+            for (int x = -2; x <= 2; x++) for (int z = -2; z <= 2; z++)
+                if (current.district.isPositionEntityTicking(new BlockPos((center.x + x) << 4,
+                        RushWorld.FLOOR_Y + 1, (center.z + z) << 4))) ready++;
+            return ready;
+        }
+
+        private String diagnostic() {
+            ServerPlayer player = current.player; RushRun run = RivalRushManager.run(player);
+            CompoundTag encounter = RivalRushManager.encounterSnapshot(player);
+            UUID actor = encounter.hasUUID("Actor") ? encounter.getUUID("Actor") : null;
+            var body = actor == null ? null : player.serverLevel().getEntity(actor);
+            return "branch=" + (phase < 2 ? "lost" : "deadline") + ", phase=" + phase + ", waited=" + waited
+                    + ", active=" + RivalRushManager.active(player) + ", kind=" + encounter.getString("Kind")
+                    + ", state=" + encounter.getString("HeadlinerState") + ", actor=" + actor
+                    + ", body=" + (body == null ? "not visible" : body.getClass().getSimpleName())
+                    + ", residentChunks=" + residentChunks() + "/25, player=" + player.position()
+                    + ", dimension=" + player.serverLevel().dimension().location()
+                    + ", elapsed=" + (run == null ? -1 : run.elapsedTicks());
+        }
     }
 
     private static void prepareCircuitRoom(GameTestHelper helper, Fixture fixture, int stage) {

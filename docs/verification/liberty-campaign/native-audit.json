@@ -1,0 +1,461 @@
+{
+  "schema": 1,
+  "kind": "native-client-visual-acceptance",
+  "status": "PASS",
+  "attempt": 4,
+  "started_utc": "2026-11-02T17:23:23.395077+00:00",
+  "ended_utc": "2026-11-02T17:25:04.634895+00:00",
+  "duration_seconds": 101.24,
+  "process_exit_code": 0,
+  "audit_pass_marker": "JETSETCRAFT_LIBERTY_CAMPAIGN_VISUAL_PASS captures=19",
+  "screenshot_count": 19,
+  "scope": "Actual ForgeGradle Minecraft client and integrated server running the unchanged final compiled source set. The separately installed reobfuscated JAR is verified in installed-smoke.json. These screenshots are original native captures, not generated imagery or browser mockups.",
+  "environment": {
+    "minecraft": "1.20.1",
+    "forge": "47.4.23",
+    "java": "17.0.20",
+    "display": "Xvfb 1600\u00d71000; Mesa llvmpipe software rendering",
+    "tacz": "1.1.8-hotfix2; CurseForge9037989",
+    "mcdivers": "1.0.3; CurseForge9307472",
+    "helldivers_pack": "CurseForge9341504",
+    "pack_sha256": "fe4e01693cf3957d971e556a1d2fcd9ae0c98cb973cf47aa6d52e157c187378a"
+  },
+  "command": [
+    "xvfb-run",
+    "-a",
+    "-s",
+    "-screen 0 1600x1000x24 -nolisten tcp",
+    "./gradlew",
+    "runClient",
+    "-PlibertyTacz=true",
+    "-PlibertyPackExpected=true",
+    "-PlibertyHelldivers=true",
+    "-Djetsetcraft.libertyVisualAudit=true",
+    "-Djetsetcraft.libertyCampaignVisualAudit=true",
+    "-x",
+    "compileJava",
+    "-x",
+    "processResources",
+    "--no-daemon"
+  ],
+  "source_identity": {
+    "source_inputs_manifest": "native-source-manifest.json",
+    "input_file_count": 689,
+    "input_scope": [
+      "src/main",
+      "src/test",
+      "build.gradle",
+      "gradle.properties",
+      "settings.gradle"
+    ],
+    "native_checksum_line_digest": "a7dbd9df7653c24c90dac372d727621c251b2e23167cc5ed189bf247c8f95ef8",
+    "algorithm": "SHA-256 of UTF-8 records FILE_SHA256 + two spaces + relative POSIX path + LF, sorted by path",
+    "final_build_canonical_json_digest": "48afdfa7fece7bb786b08d9f7cd30dcb7edaa101b612a8fdc0a05bae06b3c134",
+    "all_individual_file_hashes_match_final_build_manifest": true,
+    "compiled_inputs_sha256": "90f6509ad857aa689c1e2a37e14a9548c4d908672dbba7d6019912c3466d794a",
+    "source_inputs_unchanged_during_run": true,
+    "final_jar": {
+      "file": "jetsetcraft-1.20.1-0.4.0-alpha.9.jar",
+      "bytes": 6495215,
+      "sha256": "cf892bd0bc04fb3f9678ad665b764342c94c141e84435ee2f4dd5c6781937251"
+    },
+    "note": "The two aggregate source digests use different documented serializations. Every one of the689 individual file hashes is identical. Source/build inputs are the stated scope, not an entire Git tree."
+  },
+  "baseline_preflight": [
+    {
+      "file": "level.dat",
+      "sha256": "8378d78e957d6ad67d8ce307d3b1115a7b692b614f9c747539b4c2fcde99d945"
+    },
+    {
+      "file": "playerdata/380df991-f603-344c-a090-369bad2a924a.dat",
+      "sha256": "1774f5a367a6373e623e401cccde45a20ab6ff8c6df3b3da471662a080cbc356"
+    }
+  ],
+  "fixture_disclosure": [
+    "Only the named disposable saves/LibertyGrindAudit world was used. The Java audit checks the exact normalized world and explicit quick-play argument before setup or staging.",
+    "The clean baseline was restored through in-place file writes before launch. Independent ordinary and elevated reads verified its level.dat and playerdata bytes; the wrapper repeated the exact hash preflight.",
+    "Vanilla setup used Normal difficulty and a Creative origin, plus 7 diamonds,17 XP points and a shulker containing 5 emeralds with nested return sentinels.",
+    "A logged LibertyShipProgress.settle fixture granted 510 requisitions through a fresh random run nonce (synthetic completed=6, difficulty=10, extracted=true outcome). This funds the purchase demonstration; it is not earned gameplay or extraction evidence.",
+    "Actual native screen buttons and ordinary server packets purchased CHROMAGEDDON, equipped slot 4, selected the real Breaker and Heavy kit, reviewed the choices and launched difficulty 10/30 minutes.",
+    "After genuine pod landing, server-side visual staging placed the player near the actual active territory site and enabled invulnerability/flight permissions. Camera, viewport and view angles were controlled for the captures. No mission timers or objective progress were patched.",
+    "The real field radio invoked CHROMAGEDDON; its runtime created the paint/damage and objective progress. Screenshots preserve actual native advancement chat/toasts.",
+    "Ship walking used 25 ticks of the actual client forward-key state; it did not teleport to manufacture movement.",
+    "Original window/camera/tutorial/HUD/key settings were restored by the audit; options.txt and jetsetcraft-liberty-client.json were also restored byte-for-byte by the wrapper."
+  ],
+  "verified_results": {
+    "clean_funding_balance_before": 0,
+    "fixture_requisitions_granted": 510,
+    "chromageddon_cost": 240,
+    "equipped_slot": 4,
+    "primary": "helldiver2:sg225_breaker",
+    "secondary": "helldiver2:p2_peacemaker",
+    "armor": "heavy",
+    "difficulty": 10,
+    "duration_minutes_selected": 30,
+    "arena_radius": 768,
+    "moving_pod_frames": 3,
+    "consecutive_aligned_frames": 3,
+    "seat_interpolation_error_blocks": 0.0,
+    "seat_error_tolerance_blocks": 0.05,
+    "territory_baseline_progress": 0,
+    "sampled_territory_progress": 5,
+    "territory_goal": 40,
+    "observed_owned_graffiti_entities": 14,
+    "original_surface_samples_unchanged": 25,
+    "subsequent_field_radio_primary_secured": "1/5",
+    "observed_paint_entities_verified_removed_on_return": 14,
+    "campaign_early_return": {
+      "deep_inventory_nbt_restored": true,
+      "xp_restored": true,
+      "original_dimension": "minecraft:overworld"
+    },
+    "ship_walk": {
+      "native_forward_ticks": 25,
+      "horizontal_distance_blocks": 5.136875286698341,
+      "real_floor_and_compiled_chunk_checked": true
+    },
+    "ship_return": {
+      "deep_inventory_nbt_restored": true,
+      "xp_restored": true,
+      "original_dimension": "minecraft:overworld"
+    },
+    "final_ui_requisitions": 330,
+    "final_neon_docks_threat": 30,
+    "settings_restored_byte_for_byte": true
+  },
+  "pixel_review": {
+    "all19_individually_viewed": true,
+    "result": "PASS",
+    "notes": [
+      "Six-region geometry and real menu hit targets are visible at default and minimum logical sizes.",
+      "Minimum-size body scrolling and deliberate ellipses remain within their panels; launch and return controls remain readable.",
+      "The moving pod mesh, native gun model/HUD, actual paint/damage and physical ship deck are visibly present.",
+      "An ordinary Monster Hunter advancement toast overlaps upper-right chrome in 15 and 16; required objective/hardware data and action controls remain readable. Pixels are retained unchanged."
+    ],
+    "root_review_file": "root-pixel-review.json",
+    "root_review_status": "PASS"
+  },
+  "not_demonstrated": [
+    "A full campaign ship extraction in this client walkthrough.",
+    "A human or squad playtest, intended 20/25/30-minute pacing, difficulty balance or earned-unlock progression pacing.",
+    "Purchasing a ship hardware module or all 100 selectable call-ins through the visual walkthrough; server tests cover the rules and effects.",
+    "All 68 guns fired by the native client; the native server suite separately constructs and validates every real definition.",
+    "Power-loss durability or filesystem fsync guarantees."
+  ],
+  "logs": {
+    "full_file": "native-client.log",
+    "original_bytes": 236340,
+    "original_sha256": "cc5190fcdbe3115ed7db27f2dc46eae8fafa65116fa4ddc8f1c0aee13fa7f00d",
+    "sanitized_sha256": "427700dfd76259d3f954dca7b53c5f2d2e146de3fd9de0709dc08c3d22254fa4",
+    "transform": "Only absolute checkout/cache/tmp paths replaced; diagnostics retained.",
+    "excerpt_file": "native-audit-excerpt.log",
+    "excerpt_transform": "Selected audit marker lines; exact duplicate lines removed only in this excerpt.",
+    "timestamp_note": "UTC receipt times come from Python epoch timestamps. Raw JVM log time labels are local and are not represented as UTC."
+  },
+  "captures": [
+    {
+      "file": "01-campaign-war-map-default.png",
+      "original_native_filename": "liberty-grind-1793640220492-01-campaign-war-map-default.png",
+      "bytes": 94993,
+      "sha256": "68a154492f54cc8b26ebdb22c251261fc6d5733fd265fab60c588503e94677f1",
+      "physical_pixels": [
+        1280,
+        720
+      ],
+      "logical_pixels": [
+        640,
+        360
+      ],
+      "caption": "All six real regions, three faction fronts and the 20% parent-to-frontier routes at the default logical size.",
+      "pixel_review": "PASS; individually viewed as an unmodified native capture"
+    },
+    {
+      "file": "02-campaign-plan-default.png",
+      "original_native_filename": "liberty-grind-1793640220492-02-campaign-plan-default.png",
+      "bytes": 157202,
+      "sha256": "585ec705bcb30635281d201381748edad7473ef99fe780fed1d6ac892168603a",
+      "physical_pixels": [
+        1280,
+        720
+      ],
+      "logical_pixels": [
+        640,
+        360
+      ],
+      "caption": "Turf Liberation in Neon Docks, with difficulty 10 and a 30-minute operation selected through the actual controls.",
+      "pixel_review": "PASS; individually viewed as an unmodified native capture"
+    },
+    {
+      "file": "03-callin-catalog-default.png",
+      "original_native_filename": "liberty-grind-1793640220492-03-callin-catalog-default.png",
+      "bytes": 143520,
+      "sha256": "4f28b09ee4120d247a7281bc206696e35a6112d8897f7ee614e5c1e550e261c6",
+      "physical_pixels": [
+        1280,
+        720
+      ],
+      "logical_pixels": [
+        640,
+        360
+      ],
+      "caption": "Searchable and paged call-in catalogue:125 reference entries;100 selectable entries are covered by the native server suite.",
+      "pixel_review": "PASS; individually viewed as an unmodified native capture"
+    },
+    {
+      "file": "04-chromageddon-equipped-default.png",
+      "original_native_filename": "liberty-grind-1793640220492-04-chromageddon-equipped-default.png",
+      "bytes": 155255,
+      "sha256": "e4d75575c677db545f72b7b41bad6a5848cf5371a3afb9e8b3edcaf1b6b466fc",
+      "physical_pixels": [
+        1280,
+        720
+      ],
+      "logical_pixels": [
+        640,
+        360
+      ],
+      "caption": "CHROMAGEDDON purchased for 240 requisitions and equipped in slot 4; its real controls, mission use and cooldown are shown.",
+      "pixel_review": "PASS; individually viewed as an unmodified native capture"
+    },
+    {
+      "file": "05-armory-all-weapons-default.png",
+      "original_native_filename": "liberty-grind-1793640220492-05-armory-all-weapons-default.png",
+      "bytes": 138995,
+      "sha256": "38690b41e6da54c7d269bffe5f8056d8ebd4156ef25961f3fab3a20750ddd3b9",
+      "physical_pixels": [
+        1280,
+        720
+      ],
+      "logical_pixels": [
+        640,
+        360
+      ],
+      "caption": "The live armory lists all 68 pack weapons, with real translated provider names, selection and paging.",
+      "pixel_review": "PASS; individually viewed as an unmodified native capture"
+    },
+    {
+      "file": "06-armor-heavy-minimum.png",
+      "original_native_filename": "liberty-grind-1793640220492-06-armor-heavy-minimum.png",
+      "bytes": 101869,
+      "sha256": "2c9ea6bcc3175b5b95be0633c834bee2b6d57775258548c71232b4ca0f87d622",
+      "physical_pixels": [
+        960,
+        720
+      ],
+      "logical_pixels": [
+        320,
+        240
+      ],
+      "caption": "Heavy field kit selected at 320 x 240 logical size;17 armor,6 toughness and the minus 10% walk/skate tradeoff remain visible.",
+      "pixel_review": "PASS; individually viewed as an unmodified native capture"
+    },
+    {
+      "file": "07-armory-weapon-search-minimum.png",
+      "original_native_filename": "liberty-grind-1793640220492-07-armory-weapon-search-minimum.png",
+      "bytes": 101315,
+      "sha256": "4ccf97c07f50d6be0a25e37fb3ccef32c3e8e7a9d9e3d6c21d2a05f70559b8f1",
+      "physical_pixels": [
+        960,
+        720
+      ],
+      "logical_pixels": [
+        320,
+        240
+      ],
+      "caption": "Native ID search finds and selects the real SG-225 Breaker at minimum logical size.",
+      "pixel_review": "PASS; individually viewed as an unmodified native capture"
+    },
+    {
+      "file": "08-campaign-war-map-minimum.png",
+      "original_native_filename": "liberty-grind-1793640220492-08-campaign-war-map-minimum.png",
+      "bytes": 78878,
+      "sha256": "0cb7acad08c498d9edf8cff9ea7ef4653179544ae50175e39290e45c2878f68d",
+      "physical_pixels": [
+        960,
+        720
+      ],
+      "logical_pixels": [
+        320,
+        240
+      ],
+      "caption": "All six selectable/locked regions and their three 20% routes remain visible at 320 x 240.",
+      "pixel_review": "PASS; individually viewed as an unmodified native capture"
+    },
+    {
+      "file": "09-campaign-plan-minimum.png",
+      "original_native_filename": "liberty-grind-1793640220492-09-campaign-plan-minimum.png",
+      "bytes": 104717,
+      "sha256": "bf8f3cbeff1fbdfd5e7ebdf27985faa9fe9997dc27b40cdc29fbabce9be8c015",
+      "physical_pixels": [
+        960,
+        720
+      ],
+      "logical_pixels": [
+        320,
+        240
+      ],
+      "caption": "The selected Turf Liberation mission, difficulty 10 and 30-minute controls remain usable at minimum size.",
+      "pixel_review": "PASS; individually viewed as an unmodified native capture"
+    },
+    {
+      "file": "10-loadout-review-minimum.png",
+      "original_native_filename": "liberty-grind-1793640220492-10-loadout-review-minimum.png",
+      "bytes": 109711,
+      "sha256": "f23ad4a7672e536933c5b64638ce8297b082bed4ae0edd94a065a8866d2457f4",
+      "physical_pixels": [
+        960,
+        720
+      ],
+      "logical_pixels": [
+        320,
+        240
+      ],
+      "caption": "Final pre-pod review shows both real weapons, Heavy armor and all four chosen call-ins before explicit launch.",
+      "pixel_review": "PASS; individually viewed as an unmodified native capture"
+    },
+    {
+      "file": "10b-loadout-review-scroll-minimum.png",
+      "original_native_filename": "liberty-grind-1793640220492-10b-loadout-review-scroll-minimum.png",
+      "bytes": 109242,
+      "sha256": "c07d5ad19b2f48c809c560b30098897ea6de35a9e50e948283fae4595e10be38",
+      "physical_pixels": [
+        960,
+        720
+      ],
+      "logical_pixels": [
+        320,
+        240
+      ],
+      "caption": "Review scrolling reveals the mission-loan and original inventory/XP/world return explanation without moving the launch controls.",
+      "pixel_review": "PASS; individually viewed as an unmodified native capture"
+    },
+    {
+      "file": "11-loadout-review-default.png",
+      "original_native_filename": "liberty-grind-1793640220492-11-loadout-review-default.png",
+      "bytes": 160394,
+      "sha256": "6a0ed87a5bed26b11caec24a0fe83b6c9c07eaaff1296d7f9a5794778b95a398",
+      "physical_pixels": [
+        1280,
+        720
+      ],
+      "logical_pixels": [
+        640,
+        360
+      ],
+      "caption": "The same complete selected loadout and return explanation at the default logical size.",
+      "pixel_review": "PASS; individually viewed as an unmodified native capture"
+    },
+    {
+      "file": "12-live-pod.png",
+      "original_native_filename": "liberty-grind-1793640220492-12-live-pod.png",
+      "bytes": 172460,
+      "sha256": "40a121a2a99bacda53619293521ec944e43761c894796ca80c29e093c9c833e2",
+      "physical_pixels": [
+        1280,
+        720
+      ],
+      "logical_pixels": [
+        640,
+        360
+      ],
+      "caption": "Actual moving pod visibly surrounds the diamond-armored rider wearing skates; the native alignment check reports zero error.",
+      "pixel_review": "PASS; individually viewed as an unmodified native capture"
+    },
+    {
+      "file": "13-selected-native-gun-hud.png",
+      "original_native_filename": "liberty-grind-1793640220492-13-selected-native-gun-hud.png",
+      "bytes": 549056,
+      "sha256": "23f3842478ef42d485cd74849a0832c354102e292d7efe8c0678ae73115e0c56",
+      "physical_pixels": [
+        1280,
+        720
+      ],
+      "logical_pixels": [
+        640,
+        360
+      ],
+      "caption": "The selected native Breaker is visible in first person, with its TaCZ ammunition HUD and real owned rival mobs.",
+      "pixel_review": "PASS; individually viewed as an unmodified native capture"
+    },
+    {
+      "file": "14-chromageddon-paint-blast.png",
+      "original_native_filename": "liberty-grind-1793640220492-14-chromageddon-paint-blast.png",
+      "bytes": 431349,
+      "sha256": "87a58aae0b456c06ba2b4675a126b1fddaaa2673e594161e97b71e38df320b39",
+      "physical_pixels": [
+        1280,
+        720
+      ],
+      "logical_pixels": [
+        640,
+        360
+      ],
+      "caption": "Actual CHROMAGEDDON paint overlays, particles and owned-mob damage are visible; the live HUD records territory progress 5/40.",
+      "pixel_review": "PASS; individually viewed as an unmodified native capture"
+    },
+    {
+      "file": "15-field-progress-minimum.png",
+      "original_native_filename": "liberty-grind-1793640220492-15-field-progress-minimum.png",
+      "bytes": 82441,
+      "sha256": "bf1826857a7283a263f89e151b9f756960fe8ab8d3aca66c64dc2ce5fb07511d",
+      "physical_pixels": [
+        960,
+        720
+      ],
+      "logical_pixels": [
+        320,
+        240
+      ],
+      "caption": "The continuing blast has secured 1 of 5 primary stages; the actual field radio points to the next active territory site. Native advancement toast preserved.",
+      "pixel_review": "PASS; individually viewed as an unmodified native capture"
+    },
+    {
+      "file": "16-ship-hardware-minimum.png",
+      "original_native_filename": "liberty-grind-1793640220492-16-ship-hardware-minimum.png",
+      "bytes": 80338,
+      "sha256": "0ece3882f3800152ac0cff241d6adb319217adf80ad8490bee3159f5a8166ce2",
+      "physical_pixels": [
+        960,
+        720
+      ],
+      "logical_pixels": [
+        320,
+        240
+      ],
+      "caption": "Aboard the real hub, the four ship modules,330 requisitions and return action remain visible at minimum size. Native advancement toast preserved.",
+      "pixel_review": "PASS; individually viewed as an unmodified native capture"
+    },
+    {
+      "file": "17-walkable-ship-deck.png",
+      "original_native_filename": "liberty-grind-1793640220492-17-walkable-ship-deck.png",
+      "bytes": 353762,
+      "sha256": "f9470e15cd30c6f08068ebfcf5cb9e69e8ae4399511ce8841c425bff1f663b42",
+      "physical_pixels": [
+        1280,
+        720
+      ],
+      "logical_pixels": [
+        640,
+        360
+      ],
+      "caption": "Actual ship floor, windows, console and field radio after 25 ticks of native forward input moved the player 5.1369 blocks.",
+      "pixel_review": "PASS; individually viewed as an unmodified native capture"
+    },
+    {
+      "file": "18-returned-home-map.png",
+      "original_native_filename": "liberty-grind-1793640220492-18-returned-home-map.png",
+      "bytes": 92473,
+      "sha256": "03d05bf414e21adc106312c1c9ea2c519d9bc80e90e83f47b0ed56e2d25f00d0",
+      "physical_pixels": [
+        1280,
+        720
+      ],
+      "logical_pixels": [
+        640,
+        360
+      ],
+      "caption": "Returned-home war map after the second successful inventory/XP/dimension restoration;330 requisitions and the failed mission threat 30 are retained.",
+      "pixel_review": "PASS; individually viewed as an unmodified native capture"
+    }
+  ]
+}

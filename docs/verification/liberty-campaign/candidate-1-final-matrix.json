@@ -1,0 +1,54 @@
+{
+  "date": "20261102T170114Z",
+  "required_tests": 118,
+  "source_digest": "6d2d82b51234b4d02d83594d141f364c34f131ce26af10a4bad9712995f47cb7",
+  "scope": "Native ForgeGradle source-set integration. Separately built reobfuscated JAR identity recorded; installed-package smoke and client gallery recorded independently.",
+  "lanes": [
+    {
+      "lane": "full-provider",
+      "provider": true,
+      "pack": true,
+      "mcdivers": true,
+      "exit_code": 1,
+      "seconds": 248.71,
+      "all_required_pass": false,
+      "source_and_artifact_unchanged": true,
+      "missing_markers": [
+        "liberty_campaign_native_home_preservation",
+        "liberty_campaign_native_stratagem_lifecycle",
+        "JETSETCRAFT_LIBERTY_MOB_SAFETY_PASS native_home_actors_callbacks_reinforcements_conversion_raid_return",
+        "liberty_armory_all_pack_guns count=68"
+      ],
+      "log": {
+        "file": "gametest-attempt-3.log",
+        "bytes": 137862,
+        "sha256": "b6f8000ce33874d0f945fd426bc5fd3b5c605ce60b8e73d8d3ec80c75d2536e6",
+        "original_bytes": 138018,
+        "original_sha256": "30c9558ce86c8a84b6acbf2d1b58c5fbfcbc0195c2de7f5406969a7494181954",
+        "transform": "Only absolute checkout/cache/tmp paths replaced; all diagnostics retained."
+      }
+    }
+  ],
+  "build": {
+    "exit_code": 0,
+    "seconds": 22.94,
+    "log": {
+      "file": "candidate-1-final-build.log",
+      "bytes": 18971,
+      "sha256": "2a10d9ebdcd4e200f6c58cfd50f4890e0d11e092937d6481d04388128364cccf",
+      "original_bytes": 20588,
+      "original_sha256": "88c31b163e387982a85c273b57c2e8294c3ed01d457ea9650eb3b2777b4f391d",
+      "transform": "Only absolute checkout/cache/tmp paths replaced; all diagnostics retained."
+    }
+  },
+  "jar": {
+    "file": "jetsetcraft-1.20.1-0.4.0-alpha.9.jar",
+    "bytes": 6487751,
+    "sha256": "af238ef82ff32c8433fa1fca428542c398edf41d7e62ddf53014311a2de468ad"
+  },
+  "compiled_inputs_sha256": "bc6fc44d766bb5fd0cfcbca2c3509c8fa254d7608e3030f3c80340bc2204ee04",
+  "status": "FAIL",
+  "error": "Final lane did not satisfy its required gate: full-provider",
+  "workspace_world_and_pack_restored": true,
+  "archive_note": "Only evidence-path references rebased to preserved candidate-1/attempt-3 filenames; original outcomes, source, JAR and log hashes unchanged."
+}

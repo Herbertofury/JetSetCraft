@@ -14,7 +14,7 @@ import java.util.UUID;
 
 /** Server-owned expedition rules. No client score, position, currency or completion is accepted. */
 public final class LibertyOperation {
-    public enum Phase { DROPPING, ACTIVE, EXTRACTING, BOARDING, DEPARTING, RETURNING }
+    public enum Phase { DROPPING, ACTIVE, DOWNED, EXTRACTING, BOARDING, DEPARTING, RETURNING }
     public record Theater(String id, String name, String description, String gang, String species,
                           int radius, int defenders, int minutes, int reward) {
         public ResourceLocation gangId() { return ResourceLocation.tryParse(gang); }
@@ -101,9 +101,14 @@ public final class LibertyOperation {
 
     public final UUID id, owner;
     public final Theater theater;
-    public final BlockPos origin, extraction;
+    public final BlockPos origin;
+    public final BlockPos drop;
+    public BlockPos extraction;
     public final int slot;
     public final List<Objective> objectives;
+    public final LibertyMissionPlan plan;
+    public final LibertyMissionRuntime mission;
+    public final boolean homeDefense;
     private Phase phase = Phase.DROPPING;
     private long phaseTicks, ticks, revision = 1;
     private int credits, common, rare, supers, resupplies;
@@ -111,6 +116,8 @@ public final class LibertyOperation {
     private final Set<Integer> awarded = new HashSet<>();
     public LibertyOperation(UUID id, UUID owner, Theater theater, BlockPos origin, int slot, boolean signalLacquer, boolean supplySkates) {
         this.id = id; this.owner = owner; this.theater = theater; this.origin = origin.immutable(); this.slot = slot;
+        this.plan = null; this.mission = null; this.homeDefense = false;
+        this.drop=origin.immutable();
         int r = theater.radius;
         extraction = origin.offset(0, 0, r - 20);
         objectives = List.of(new Objective(0, origin.offset(-r / 2, 0, -r / 3), theater.defenders, signalLacquer ? 2 : 3),
@@ -118,6 +125,19 @@ public final class LibertyOperation {
                 new Objective(2, origin.offset(0, 0, r / 2), theater.defenders, 1));
         resupplies = supplySkates ? 4 : 3;
     }
+    public LibertyOperation(UUID id, UUID owner, Theater theater, BlockPos origin, int slot,
+                            LibertyMissionPlan plan, boolean homeDefense, boolean supplySkates) {
+        this.id = id; this.owner = owner; this.origin = origin.immutable(); this.slot = slot;
+        this.plan = plan; this.homeDefense = homeDefense;
+        this.drop=homeDefense?origin.immutable():origin.offset(plan.drop().x(),0,plan.drop().z());
+        this.theater = new Theater(theater.id(), theater.name(), theater.description(), theater.gang(), theater.species(),
+                homeDefense ? 128 : plan.arenaRadius(), plan.difficulty().level() + 4, plan.durationMinutes(), 45 + 9 * plan.difficulty().level());
+        this.objectives = List.of(); this.mission = new LibertyMissionRuntime(plan, origin, homeDefense);
+        double scale = homeDefense ? 96.0 / plan.arenaRadius() : 1;
+        this.extraction = origin.offset((int) (plan.extraction().x() * scale), 0, (int) (plan.extraction().z() * scale));
+        this.resupplies = supplySkates ? 4 : 3;
+    }
+    public boolean campaign() { return plan != null; }
     public Phase phase() { return phase; }
     public long phaseTicks() { return phaseTicks; }
     public long ticks() { return ticks; }
@@ -127,19 +147,22 @@ public final class LibertyOperation {
     public int rare() { return rare; }
     public int supers() { return supers; }
     public int resupplies() { return resupplies; }
-    public int completed() { return (int) objectives.stream().filter(Objective::complete).count(); }
-    public boolean complete() { return completed() == objectives.size(); }
+    public void addResupplies(int amount) { resupplies=Math.max(0,Math.min(5,resupplies+Math.max(0,amount))); }
+    public int completed() { return mission == null ? (int) objectives.stream().filter(Objective::complete).count()
+            : Math.min(3, mission.completedPrimary() * 3 / Math.max(1, mission.totalPrimary())); }
+    public boolean complete() { return mission == null ? completed() == objectives.size() : mission.complete(); }
     public boolean field() { return phase == Phase.ACTIVE || phase == Phase.EXTRACTING || phase == Phase.BOARDING; }
-    public boolean expired() { return ticks >= theater.minutes * 1200L; }
+    /** The deadline closes boarding; an accepted departure finishes without revoking extraction. */
+    public boolean expired() { return phase != Phase.DEPARTING && ticks >= theater.minutes * 1200L; }
     public void tick() { ticks++; phaseTicks++; }
     public void phase(Phase next) { phase = next; phaseTicks = 0; revision++; }
     public boolean matches(UUID mission, long version) { return id.equals(mission) && revision == version; }
     public boolean extract(Vec3 position) {
-        if (phase != Phase.ACTIVE || !complete() || !finite(position) || position.distanceToSqr(Vec3.atCenterOf(extraction)) > 12 * 12) return false;
+        if (phase != Phase.ACTIVE || expired() || !complete() || !finite(position) || position.distanceToSqr(Vec3.atCenterOf(extraction)) > 12 * 12) return false;
         phase(Phase.EXTRACTING); return true;
     }
     public boolean board(Vec3 position) {
-        if (phase != Phase.BOARDING || phaseTicks < 60 || !finite(position) || position.distanceToSqr(Vec3.atCenterOf(extraction)) > 8 * 8) return false;
+        if (phase != Phase.BOARDING || expired() || phaseTicks < 60 || !finite(position) || position.distanceToSqr(Vec3.atCenterOf(extraction)) > 8 * 8) return false;
         phase(Phase.DEPARTING); return true;
     }
     public boolean spendResupply() { if (!field() || resupplies <= 0) return false; resupplies--; revision++; return true; }
@@ -156,6 +179,15 @@ public final class LibertyOperation {
     }
     /** Each completed objective contributes once, independently of rendering or repeated packets. */
     public boolean awardObjectives() {
+        if (mission != null) {
+            int rewards = mission.consumeRewards();
+            if (rewards <= 0) return false;
+            credits = Math.min(1000, credits + rewards * (6 + plan.difficulty().level()));
+            common = Math.min(1000, common + rewards * 3);
+            rare = Math.min(1000, rare + rewards * (plan.difficulty().level() >= 4 ? 2 : 1));
+            if (plan.difficulty().level() >= 7 && complete() && awarded.add(-1)) supers = Math.min(1000, supers + 1);
+            resupplies = Math.min(4, resupplies + rewards); return true;
+        }
         boolean changed = false;
         for (Objective objective : objectives) if (objective.complete && awarded.add(objective.index)) {
             credits += theater.reward / 3; common += 3; rare++; resupplies = Math.min(4, resupplies + 1); changed = true;
@@ -163,6 +195,7 @@ public final class LibertyOperation {
         return changed;
     }
     public ListTag objectivesSnapshot(Vec3 player) {
+        if (mission != null) return mission.snapshot(player);
         ListTag list = new ListTag(); objectives.forEach(o -> list.add(o.snapshot(player))); return list;
     }
     private static boolean finite(Vec3 point) { return point != null && Double.isFinite(point.x) && Double.isFinite(point.y) && Double.isFinite(point.z); }

@@ -232,10 +232,10 @@ public final class LibertyResearch {
         if (player == null || player.getServer() == null || !player.isAlive() || player.isSpectator())
             return "Research while alive and outside Spectator mode.";
         if (account.pendingRun != null || RivalRushManager.active(player) || RushReturnState.hasJournal(player)
-                || LibertyManager.active(player) || LibertyManager.hasReturn(player)
+                || !LibertyManager.inShip(player) && (LibertyManager.active(player) || LibertyManager.hasReturn(player))
                 || ActivityManager.active(player)) return "Return from your current activity before changing research.";
         String dimension = player.serverLevel().dimension().location().toString();
-        if (dimension.equals("jetsetcraft:liberty_grind") || dimension.equals("jetsetcraft:rival_rush"))
+        if (dimension.equals("jetsetcraft:liberty_grind") && !LibertyManager.inShip(player) || dimension.equals("jetsetcraft:rival_rush"))
             return "Return to your normal world before changing research.";
         return "";
     }

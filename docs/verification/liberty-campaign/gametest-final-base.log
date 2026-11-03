@@ -1,0 +1,465 @@
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/8.8/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+> Task :classes
+> Task :downloadMcpConfig
+> Task :extractSrg UP-TO-DATE
+> Task :createSrgToMcp UP-TO-DATE
+> Task :downloadMCMeta UP-TO-DATE
+> Task :downloadAssets UP-TO-DATE
+> Task :extractNatives UP-TO-DATE
+> Task :makeSrcDirs
+> Task :prepareRuns
+> Task :prepareRunGameTestServer
+> Task :prepareRunGameTestServerCompile
+
+> Task :runGameTestServer
+2026-11-02 10:20:33,871 main WARN Advanced terminal features are not available in this environment
+[10:20:33] [main/INFO] [cp.mo.mo.Launcher/MODLAUNCHER]: ModLauncher running: args [--launchTarget, forgegametestserveruserdev, --gameDir, ., --fml.forgeVersion, 47.4.23, --fml.mcVersion, 1.20.1, --fml.forgeGroup, net.minecraftforge, --fml.mcpVersion, 20230612.114412, --mixin, jetsetcraft.liberty.mixins.json]
+[10:20:33] [main/INFO] [cp.mo.mo.Launcher/MODLAUNCHER]: ModLauncher 10.0.9+10.0.9+main.dcd20f30 starting: java version 17.0.20 by Ubuntu; OS Linux arch amd64 version 6.18.57
+[10:20:34] [main/WARN] [ne.mi.fm.lo.FMLConfig/CORE]: Configuration file <TMP>/liberty-campaign-final-20261102T171309Z/base-instance/config/fml.toml is not correct. Correcting
+[10:20:34] [main/INFO] [ne.mi.fm.lo.FMLConfig/CORE]: Incorrect key [earlyWindowSkipGLVersions] was corrected from null to []
+[10:20:34] [main/INFO] [ne.mi.fm.lo.FMLConfig/CORE]: Incorrect key [earlyWindowLogHelpMessage] was corrected from null to true
+[10:20:34] [main/INFO] [ne.mi.fm.lo.FMLConfig/CORE]: Incorrect key [earlyWindowSquir] was corrected from null to false
+[10:20:34] [main/INFO] [ne.mi.fm.lo.FMLConfig/CORE]: Incorrect key [earlyWindowShowCPU] was corrected from null to false
+[10:20:34] [main/INFO] [ne.mi.fm.lo.ImmediateWindowHandler/]: ImmediateWindowProvider not loading because launch target is forgegametestserveruserdev
+[10:20:34] [main/INFO] [mixin/]: SpongePowered MIXIN Subsystem Version=0.8.5 Source=union:<GRADLE_CACHE>/caches/modules-2/files-2.1/org.spongepowered/mixin/0.8.5/9d1c0c3a304ae6697ecd477218fa61b850bf57fc/mixin-0.8.5.jar%23116!/ Service=ModLauncher Env=SERVER
+[10:20:34] [main/WARN] [ne.mi.fm.lo.mo.ModFileParser/LOADING]: Mod file <GRADLE_CACHE>/caches/modules-2/files-2.1/net.minecraftforge/javafmllanguage/1.20.1-47.4.23/103ee0ecf6e5e4a971ee1ae68384e96fd73b097f/javafmllanguage-1.20.1-47.4.23.jar is missing mods.toml file
+[10:20:34] [main/WARN] [ne.mi.fm.lo.mo.ModFileParser/LOADING]: Mod file <GRADLE_CACHE>/caches/modules-2/files-2.1/net.minecraftforge/lowcodelanguage/1.20.1-47.4.23/2531b2da1460bc09c8ec3bf946e641de664b460d/lowcodelanguage-1.20.1-47.4.23.jar is missing mods.toml file
+[10:20:34] [main/WARN] [ne.mi.fm.lo.mo.ModFileParser/LOADING]: Mod file <GRADLE_CACHE>/caches/modules-2/files-2.1/net.minecraftforge/mclanguage/1.20.1-47.4.23/eebf4eae01f6fde63717bb38b77f9b6b1b50f8/mclanguage-1.20.1-47.4.23.jar is missing mods.toml file
+[10:20:34] [main/WARN] [ne.mi.fm.lo.mo.ModFileParser/LOADING]: Mod file <GRADLE_CACHE>/caches/modules-2/files-2.1/net.minecraftforge/fmlcore/1.20.1-47.4.23/ef56cfb608a4356c3f99dd6a4fa81ce33029bcde/fmlcore-1.20.1-47.4.23.jar is missing mods.toml file
+[10:20:34] [main/INFO] [ne.mi.fm.lo.mo.JarInJarDependencyLocator/]: No dependencies to load found. Skipping!
+[10:20:35] [main/INFO] [mixin/]: Compatibility level set to JAVA_17
+[10:20:35] [main/INFO] [cp.mo.mo.LaunchServiceHandler/MODLAUNCHER]: Launching target 'forgegametestserveruserdev' with arguments [--gameDir, .]
+[10:20:35] [main/WARN] [mixin/]: Error loading class: com/tacz/guns/entity/EntityKineticBullet (java.lang.ClassNotFoundException: com.tacz.guns.entity.EntityKineticBullet)
+[10:20:40] [modloading-worker-0/INFO] [ne.mi.co.ForgeMod/FORGEMOD]: Forge mod loading, version 47.4.23, for MC 1.20.1 with MCP 20230612.114412
+[10:20:40] [modloading-worker-0/INFO] [ne.mi.co.MinecraftForge/FORGE]: MinecraftForge v47.4.23 Initialized
+[10:20:40] [Forge Version Check/INFO] [ne.mi.fm.VersionChecker/]: [forge] Starting version check at https://files.minecraftforge.net/net/minecraftforge/forge/promotions_slim.json
+[10:20:40] [Forge Version Check/WARN] [ne.mi.fm.VersionChecker/]: Failed to process update information
+java.net.ConnectException: null
+	at jdk.internal.net.http.HttpClientImpl.send(HttpClientImpl.java:900) ~[java.net.http:?] {}
+	at jdk.internal.net.http.HttpClientFacade.send(HttpClientFacade.java:133) ~[java.net.http:?] {}
+	at net.minecraftforge.fml.VersionChecker$1.openUrlString(VersionChecker.java:142) ~[fmlcore-1.20.1-47.4.23.jar%23185!/:?] {}
+	at net.minecraftforge.fml.VersionChecker$1.process(VersionChecker.java:180) ~[fmlcore-1.20.1-47.4.23.jar%23185!/:?] {}
+	at java.lang.Iterable.forEach(Iterable.java:75) ~[?:?] {}
+	at net.minecraftforge.fml.VersionChecker$1.run(VersionChecker.java:117) ~[fmlcore-1.20.1-47.4.23.jar%23185!/:?] {}
+Caused by: java.net.ConnectException
+	at jdk.internal.net.http.common.Utils.toConnectException(Utils.java:1107) ~[java.net.http:?] {}
+	at jdk.internal.net.http.PlainHttpConnection.connectAsync(PlainHttpConnection.java:203) ~[java.net.http:?] {}
+	at jdk.internal.net.http.AsyncSSLConnection.connectAsync(AsyncSSLConnection.java:56) ~[java.net.http:?] {}
+	at jdk.internal.net.http.Http2Connection.createAsync(Http2Connection.java:450) ~[java.net.http:?] {}
+	at jdk.internal.net.http.Http2ClientImpl.getConnectionFor(Http2ClientImpl.java:133) ~[java.net.http:?] {}
+	at jdk.internal.net.http.ExchangeImpl.get(ExchangeImpl.java:98) ~[java.net.http:?] {}
+	at jdk.internal.net.http.Exchange.establishExchange(Exchange.java:374) ~[java.net.http:?] {}
+	at jdk.internal.net.http.Exchange.responseAsyncImpl0(Exchange.java:567) ~[java.net.http:?] {}
+	at jdk.internal.net.http.Exchange.responseAsyncImpl(Exchange.java:411) ~[java.net.http:?] {}
+	at jdk.internal.net.http.Exchange.responseAsync(Exchange.java:403) ~[java.net.http:?] {}
+	at jdk.internal.net.http.MultiExchange.responseAsyncImpl(MultiExchange.java:430) ~[java.net.http:?] {}
+	at jdk.internal.net.http.MultiExchange.lambda$responseAsyncImpl$7(MultiExchange.java:471) ~[java.net.http:?] {}
+	at java.util.concurrent.CompletableFuture.uniHandle(CompletableFuture.java:934) ~[?:?] {}
+	at java.util.concurrent.CompletableFuture.uniHandleStage(CompletableFuture.java:950) ~[?:?] {}
+	at java.util.concurrent.CompletableFuture.handle(CompletableFuture.java:2340) ~[?:?] {}
+	at jdk.internal.net.http.MultiExchange.responseAsyncImpl(MultiExchange.java:461) ~[java.net.http:?] {}
+	at jdk.internal.net.http.MultiExchange.lambda$responseAsync0$2(MultiExchange.java:350) ~[java.net.http:?] {}
+	at java.util.concurrent.CompletableFuture$UniCompose.tryFire(CompletableFuture.java:1150) ~[?:?] {}
+	at java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:510) ~[?:?] {}
+	at java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1773) ~[?:?] {}
+	at jdk.internal.net.http.HttpClientImpl$DelegatingExecutor.execute(HttpClientImpl.java:174) ~[java.net.http:?] {}
+	at java.util.concurrent.CompletableFuture.completeAsync(CompletableFuture.java:2673) ~[?:?] {}
+	at jdk.internal.net.http.MultiExchange.responseAsync(MultiExchange.java:303) ~[java.net.http:?] {}
+	at jdk.internal.net.http.HttpClientImpl.sendAsync(HttpClientImpl.java:991) ~[java.net.http:?] {}
+	at jdk.internal.net.http.HttpClientImpl.send(HttpClientImpl.java:878) ~[java.net.http:?] {}
+	... 5 more
+Caused by: java.nio.channels.UnresolvedAddressException
+	at sun.nio.ch.Net.checkAddress(Net.java:159) ~[?:?] {}
+	at sun.nio.ch.Net.checkAddress(Net.java:167) ~[?:?] {}
+	at sun.nio.ch.SocketChannelImpl.checkRemote(SocketChannelImpl.java:816) ~[?:?] {}
+	at sun.nio.ch.SocketChannelImpl.connect(SocketChannelImpl.java:839) ~[?:?] {}
+	at jdk.internal.net.http.PlainHttpConnection.lambda$connectAsync$0(PlainHttpConnection.java:187) ~[java.net.http:?] {}
+	at java.security.AccessController.doPrivileged(AccessController.java:569) ~[?:?] {}
+	at jdk.internal.net.http.PlainHttpConnection.connectAsync(PlainHttpConnection.java:189) ~[java.net.http:?] {}
+	at jdk.internal.net.http.AsyncSSLConnection.connectAsync(AsyncSSLConnection.java:56) ~[java.net.http:?] {}
+	at jdk.internal.net.http.Http2Connection.createAsync(Http2Connection.java:450) ~[java.net.http:?] {}
+	at jdk.internal.net.http.Http2ClientImpl.getConnectionFor(Http2ClientImpl.java:133) ~[java.net.http:?] {}
+	at jdk.internal.net.http.ExchangeImpl.get(ExchangeImpl.java:98) ~[java.net.http:?] {}
+	at jdk.internal.net.http.Exchange.establishExchange(Exchange.java:374) ~[java.net.http:?] {}
+	at jdk.internal.net.http.Exchange.responseAsyncImpl0(Exchange.java:567) ~[java.net.http:?] {}
+	at jdk.internal.net.http.Exchange.responseAsyncImpl(Exchange.java:411) ~[java.net.http:?] {}
+	at jdk.internal.net.http.Exchange.responseAsync(Exchange.java:403) ~[java.net.http:?] {}
+	at jdk.internal.net.http.MultiExchange.responseAsyncImpl(MultiExchange.java:430) ~[java.net.http:?] {}
+	at jdk.internal.net.http.MultiExchange.lambda$responseAsyncImpl$7(MultiExchange.java:471) ~[java.net.http:?] {}
+	at java.util.concurrent.CompletableFuture.uniHandle(CompletableFuture.java:934) ~[?:?] {}
+	at java.util.concurrent.CompletableFuture.uniHandleStage(CompletableFuture.java:950) ~[?:?] {}
+	at java.util.concurrent.CompletableFuture.handle(CompletableFuture.java:2340) ~[?:?] {}
+	at jdk.internal.net.http.MultiExchange.responseAsyncImpl(MultiExchange.java:461) ~[java.net.http:?] {}
+	at jdk.internal.net.http.MultiExchange.lambda$responseAsync0$2(MultiExchange.java:350) ~[java.net.http:?] {}
+	at java.util.concurrent.CompletableFuture$UniCompose.tryFire(CompletableFuture.java:1150) ~[?:?] {}
+	at java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:510) ~[?:?] {}
+	at java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1773) ~[?:?] {}
+	at jdk.internal.net.http.HttpClientImpl$DelegatingExecutor.execute(HttpClientImpl.java:174) ~[java.net.http:?] {}
+	at java.util.concurrent.CompletableFuture.completeAsync(CompletableFuture.java:2673) ~[?:?] {}
+	at jdk.internal.net.http.MultiExchange.responseAsync(MultiExchange.java:303) ~[java.net.http:?] {}
+	at jdk.internal.net.http.HttpClientImpl.sendAsync(HttpClientImpl.java:991) ~[java.net.http:?] {}
+	at jdk.internal.net.http.HttpClientImpl.send(HttpClientImpl.java:878) ~[java.net.http:?] {}
+	... 5 more
+[10:20:41] [main/ERROR] [minecraft/Settings]: Failed to load properties from file: server.properties
+java.nio.file.NoSuchFileException: server.properties
+	at sun.nio.fs.UnixException.translateToIOException(UnixException.java:92) ~[?:?] {}
+	at sun.nio.fs.UnixException.rethrowAsIOException(UnixException.java:106) ~[?:?] {}
+	at sun.nio.fs.UnixException.rethrowAsIOException(UnixException.java:111) ~[?:?] {}
+	at sun.nio.fs.UnixFileSystemProvider.newByteChannel(UnixFileSystemProvider.java:218) ~[?:?] {}
+	at java.nio.file.Files.newByteChannel(Files.java:380) ~[?:?] {}
+	at java.nio.file.Files.newByteChannel(Files.java:432) ~[?:?] {}
+	at java.nio.file.spi.FileSystemProvider.newInputStream(FileSystemProvider.java:422) ~[?:?] {}
+	at java.nio.file.Files.newInputStream(Files.java:160) ~[?:?] {}
+	at net.minecraft.server.dedicated.Settings.loadFromFile(Settings.java:36) ~[forge-1.20.1-47.4.23_mapped_official_1.20.1.jar:?] {re:classloading}
+	at net.minecraft.server.dedicated.DedicatedServerProperties.fromFile(DedicatedServerProperties.java:137) ~[forge-1.20.1-47.4.23_mapped_official_1.20.1.jar:?] {re:classloading}
+	at net.minecraft.server.dedicated.DedicatedServerSettings.<init>(DedicatedServerSettings.java:12) ~[forge-1.20.1-47.4.23_mapped_official_1.20.1.jar:?] {re:classloading}
+	at net.minecraft.server.Main.main(Main.java:126) ~[forge-1.20.1-47.4.23_mapped_official_1.20.1.jar:?] {re:classloading}
+	at net.minecraftforge.gametest.GameTestMain.main(GameTestMain.java:16) ~[forge-1.20.1-47.4.23_mapped_official_1.20.1.jar:?] {re:classloading}
+	at jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:?] {}
+	at jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77) ~[?:?] {}
+	at jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:?] {}
+	at java.lang.reflect.Method.invoke(Method.java:569) ~[?:?] {}
+	at net.minecraftforge.fml.loading.targets.ForgeGametestUserdevLaunchHandler.devService(ForgeGametestUserdevLaunchHandler.java:16) ~[fmlloader-1.20.1-47.4.23.jar:?] {}
+	at net.minecraftforge.fml.loading.targets.CommonDevLaunchHandler.lambda$makeService$7(CommonDevLaunchHandler.java:135) ~[fmlloader-1.20.1-47.4.23.jar:?] {}
+	at cpw.mods.modlauncher.LaunchServiceHandlerDecorator.launch(LaunchServiceHandlerDecorator.java:30) ~[modlauncher-10.0.9.jar:?] {}
+	at cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:53) ~[modlauncher-10.0.9.jar:?] {}
+	at cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:71) ~[modlauncher-10.0.9.jar:?] {}
+	at cpw.mods.modlauncher.Launcher.run(Launcher.java:108) ~[modlauncher-10.0.9.jar:?] {}
+	at cpw.mods.modlauncher.Launcher.main(Launcher.java:78) ~[modlauncher-10.0.9.jar:?] {}
+	at cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:26) ~[modlauncher-10.0.9.jar:?] {}
+	at cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:23) ~[modlauncher-10.0.9.jar:?] {}
+	at cpw.mods.bootstraplauncher.BootstrapLauncher.main(BootstrapLauncher.java:141) ~[bootstraplauncher-1.1.2.jar:?] {}
+[10:20:41] [main/INFO] [mojang/YggdrasilAuthenticationService]: Environment: authHost='https://authserver.mojang.com', accountsHost='https://api.mojang.com', sessionHost='https://sessionserver.mojang.com', servicesHost='https://api.minecraftservices.com', name='PROD'
+[10:20:41] [main/WARN] [minecraft/VanillaPackResourcesBuilder]: Assets URL 'union:<GRADLE_CACHE>/caches/forge_gradle/minecraft_user_repo/net/minecraftforge/forge/1.20.1-47.4.23_mapped_official_1.20.1/forge-1.20.1-47.4.23_mapped_official_1.20.1.jar%23181!/assets/.mcassetsroot' uses unexpected schema
+[10:20:41] [main/WARN] [minecraft/VanillaPackResourcesBuilder]: Assets URL 'union:<GRADLE_CACHE>/caches/forge_gradle/minecraft_user_repo/net/minecraftforge/forge/1.20.1-47.4.23_mapped_official_1.20.1/forge-1.20.1-47.4.23_mapped_official_1.20.1.jar%23181!/data/.mcassetsroot' uses unexpected schema
+[10:20:42] [main/INFO] [minecraft/RecipeManager]: Loaded 7 recipes
+[10:20:42] [main/INFO] [minecraft/AdvancementList]: Loaded 1271 advancements
+[10:20:42] [main/INFO] [co.he.je.JetSetCraft/]: Loaded 173 JetSetCraft gang override(s), 1 installed entity mapping(s), 172 compatibility profile(s), and 9 hidden technical entity id(s)
+[10:20:42] [main/INFO] [co.he.je.JetSetCraft/]: JetSetCraft compatibility alexscaves -> ABSENT (0/43 known safe ids, 2 hidden technical ids)
+[10:20:42] [main/INFO] [co.he.je.JetSetCraft/]: JetSetCraft compatibility alexsmobs -> ABSENT (0/90 known safe ids, 7 hidden technical ids)
+[10:20:42] [main/INFO] [co.he.je.JetSetCraft/]: JetSetCraft compatibility cataclysm -> ABSENT (0/39 known safe ids, 0 hidden technical ids)
+[10:20:42] [main/INFO] [co.he.je.JetSetCraft/]: Loaded 1 exact JetSetCraft head/emblem target mapping(s)
+[10:20:42] [main/INFO] [co.he.je.JetSetCraft/]: Loaded 6 bounded Rival Rush arena profiles
+[10:20:43] [main/INFO] [ne.mi.ga.ForgeGameTestHooks/]: Enabled Gametest Namespaces: [jetsetcraft]
+[10:20:43] [Server thread/WARN] [ne.mi.co.ForgeConfigSpec/CORE]: Configuration file ./world/serverconfig/jetsetcraft-server.toml is not correct. Correcting
+[10:20:43] [Server thread/WARN] [ne.mi.co.ForgeConfigSpec/CORE]: Incorrect key movement was corrected from null to its default, SimpleCommentedConfig:{}. 
+[10:20:43] [Server thread/WARN] [ne.mi.co.ForgeConfigSpec/CORE]: Incorrect key movement.speedScale was corrected from null to its default, 1.0. 
+[10:20:43] [Server thread/WARN] [ne.mi.co.ForgeConfigSpec/CORE]: Incorrect key movement.boostDrainPerTick was corrected from null to its default, 0.8. 
+[10:20:43] [Server thread/WARN] [ne.mi.co.ForgeConfigSpec/CORE]: Incorrect key movement.boostRechargePerTick was corrected from null to its default, 0.18. 
+[10:20:43] [Server thread/WARN] [ne.mi.co.ForgeConfigSpec/CORE]: Incorrect key movement.grindSnapRadius was corrected from null to its default, 0.62. 
+[10:20:43] [Server thread/WARN] [ne.mi.co.ForgeConfigSpec/CORE]: Incorrect key movement.grindVerticalTolerance was corrected from null to its default, 0.76. 
+[10:20:43] [Server thread/WARN] [ne.mi.co.ForgeConfigSpec/CORE]: Incorrect key movement.allowEdgeGrinding was corrected from null to its default, true. 
+[10:20:43] [Server thread/WARN] [ne.mi.co.ForgeConfigSpec/CORE]: Incorrect key movement.allowRailGrinding was corrected from null to its default, true. 
+[10:20:43] [Server thread/WARN] [ne.mi.co.ForgeConfigSpec/CORE]: Incorrect key movement.allowRailTricks was corrected from null to its default, true. 
+[10:20:43] [Server thread/WARN] [ne.mi.co.ForgeConfigSpec/CORE]: Incorrect key movement.allowWallRides was corrected from null to its default, true. 
+[10:20:43] [Server thread/WARN] [ne.mi.co.ForgeConfigSpec/CORE]: Incorrect key styleFlow was corrected from null to its default, SimpleCommentedConfig:{}. 
+[10:20:43] [Server thread/WARN] [ne.mi.co.ForgeConfigSpec/CORE]: Incorrect key styleFlow.allowGroundStunts was corrected from null to its default, true. 
+[10:20:43] [Server thread/WARN] [ne.mi.co.ForgeConfigSpec/CORE]: Incorrect key styleFlow.allowBoostTricks was corrected from null to its default, true. 
+[10:20:43] [Server thread/WARN] [ne.mi.co.ForgeConfigSpec/CORE]: Incorrect key styleFlow.allowDancing was corrected from null to its default, true. 
+[10:20:43] [Server thread/WARN] [ne.mi.co.ForgeConfigSpec/CORE]: Incorrect key styleFlow.enableCyphers was corrected from null to its default, true. 
+[10:20:43] [Server thread/WARN] [ne.mi.co.ForgeConfigSpec/CORE]: Incorrect key styleFlow.cypherRadius was corrected from null to its default, 8.0. 
+[10:20:43] [Server thread/WARN] [ne.mi.co.ForgeConfigSpec/CORE]: Incorrect key styleFlow.styleBoostScale was corrected from null to its default, 1.0. 
+[10:20:43] [Server thread/WARN] [ne.mi.co.ForgeConfigSpec/CORE]: Incorrect key vanillaWorldPhysics was corrected from null to its default, SimpleCommentedConfig:{}. 
+[10:20:43] [Server thread/WARN] [ne.mi.co.ForgeConfigSpec/CORE]: Incorrect key vanillaWorldPhysics.enableVanillaWorldPhysics was corrected from null to its default, true. 
+[10:20:43] [Server thread/WARN] [ne.mi.co.ForgeConfigSpec/CORE]: Incorrect key vanillaWorldPhysics.blueIceSpeedMultiplier was corrected from null to its default, 2.15. 
+[10:20:43] [Server thread/WARN] [ne.mi.co.ForgeConfigSpec/CORE]: Incorrect key vanillaWorldPhysics.slimeBounceMultiplier was corrected from null to its default, 0.92. 
+[10:20:43] [Server thread/WARN] [ne.mi.co.ForgeConfigSpec/CORE]: Incorrect key vanillaWorldPhysics.poweredRailBoostPerTick was corrected from null to its default, 0.03. 
+[10:20:43] [Server thread/WARN] [ne.mi.co.ForgeConfigSpec/CORE]: Incorrect key vanillaWorldPhysics.unpoweredRailRetention was corrected from null to its default, 0.9. 
+[10:20:43] [Server thread/WARN] [ne.mi.co.ForgeConfigSpec/CORE]: Incorrect key vanillaWorldPhysics.enableMicroTerrainAssist was corrected from null to its default, true. 
+[10:20:43] [Server thread/WARN] [ne.mi.co.ForgeConfigSpec/CORE]: Incorrect key vanillaWorldPhysics.microTerrainMaxStep was corrected from null to its default, 0.625. 
+[10:20:43] [Server thread/WARN] [ne.mi.co.ForgeConfigSpec/CORE]: Incorrect key compatibility was corrected from null to its default, SimpleCommentedConfig:{}. 
+[10:20:43] [Server thread/WARN] [ne.mi.co.ForgeConfigSpec/CORE]: Incorrect key compatibility.allowCombatWhileRiding was corrected from null to its default, true. 
+[10:20:43] [Server thread/WARN] [ne.mi.co.ForgeConfigSpec/CORE]: Incorrect key graffiti was corrected from null to its default, SimpleCommentedConfig:{}. 
+[10:20:43] [Server thread/WARN] [ne.mi.co.ForgeConfigSpec/CORE]: Incorrect key graffiti.allowGraffiti was corrected from null to its default, true. 
+[10:20:43] [Server thread/WARN] [ne.mi.co.ForgeConfigSpec/CORE]: Incorrect key graffiti.maxGraffitiPerChunk was corrected from null to its default, 128. 
+[10:20:43] [Server thread/WARN] [ne.mi.co.ForgeConfigSpec/CORE]: Incorrect key gangs was corrected from null to its default, SimpleCommentedConfig:{}. 
+[10:20:43] [Server thread/WARN] [ne.mi.co.ForgeConfigSpec/CORE]: Incorrect key gangs.boomboxMaxActors was corrected from null to its default, 7. 
+[10:20:43] [Server thread/WARN] [ne.mi.co.ForgeConfigSpec/CORE]: Incorrect key gangs.boomboxChallengeLifetimeTicks was corrected from null to its default, 3600. 
+[10:20:43] [Server thread/WARN] [ne.mi.co.ForgeConfigSpec/CORE]: Incorrect key gangs.boomboxSpawnRadius was corrected from null to its default, 12.0. 
+[10:20:43] [Server thread/WARN] [ne.mi.co.ForgeConfigSpec/CORE]: Incorrect key rivalRush was corrected from null to its default, SimpleCommentedConfig:{}. 
+[10:20:43] [Server thread/WARN] [ne.mi.co.ForgeConfigSpec/CORE]: Incorrect key rivalRush.enabled was corrected from null to its default, true. 
+[10:20:43] [Server thread/WARN] [ne.mi.co.ForgeConfigSpec/CORE]: Incorrect key libertyGrind was corrected from null to its default, SimpleCommentedConfig:{}. 
+[10:20:43] [Server thread/WARN] [ne.mi.co.ForgeConfigSpec/CORE]: Incorrect key libertyGrind.enabled was corrected from null to its default, true. 
+[10:20:43] [Server thread/WARN] [ne.mi.co.ForgeConfigSpec/CORE]: Incorrect key crewHouse was corrected from null to its default, SimpleCommentedConfig:{}. 
+[10:20:43] [Server thread/WARN] [ne.mi.co.ForgeConfigSpec/CORE]: Incorrect key crewHouse.enabled was corrected from null to its default, true. 
+[10:20:43] [Server thread/WARN] [ne.mi.co.ForgeConfigSpec/CORE]: Incorrect key streetActivities was corrected from null to its default, SimpleCommentedConfig:{}. 
+[10:20:43] [Server thread/WARN] [ne.mi.co.ForgeConfigSpec/CORE]: Incorrect key streetActivities.enabled was corrected from null to its default, true. 
+[10:20:43] [Server thread/WARN] [ne.mi.co.ForgeConfigSpec/CORE]: Incorrect key streetActivities.maxConcurrent was corrected from null to its default, 32. 
+[10:20:43] [Server thread/WARN] [ne.mi.co.ForgeConfigSpec/CORE]: Configuration file ./world/serverconfig/forge-server.toml is not correct. Correcting
+[10:20:43] [Server thread/WARN] [ne.mi.co.ForgeConfigSpec/CORE]: Incorrect key server was corrected from null to its default, SimpleCommentedConfig:{}. 
+[10:20:43] [Server thread/WARN] [ne.mi.co.ForgeConfigSpec/CORE]: Incorrect key server.removeErroringBlockEntities was corrected from null to its default, false. 
+[10:20:43] [Server thread/WARN] [ne.mi.co.ForgeConfigSpec/CORE]: Incorrect key server.removeErroringEntities was corrected from null to its default, false. 
+[10:20:43] [Server thread/WARN] [ne.mi.co.ForgeConfigSpec/CORE]: Incorrect key server.fullBoundingBoxLadders was corrected from null to its default, false. 
+[10:20:43] [Server thread/WARN] [ne.mi.co.ForgeConfigSpec/CORE]: Incorrect key server.zombieBaseSummonChance was corrected from null to its default, 0.1. 
+[10:20:43] [Server thread/WARN] [ne.mi.co.ForgeConfigSpec/CORE]: Incorrect key server.zombieBabyChance was corrected from null to its default, 0.05. 
+[10:20:43] [Server thread/WARN] [ne.mi.co.ForgeConfigSpec/CORE]: Incorrect key server.permissionHandler was corrected from null to its default, forge:default_handler. 
+[10:20:43] [Server thread/WARN] [ne.mi.co.ForgeConfigSpec/CORE]: Incorrect key server.advertiseDedicatedServerToLan was corrected from null to its default, true. 
+[10:20:43] [Server thread/WARN] [ne.mi.co.ForgeConfigSpec/CORE]: Incorrect key server.useItemWithDurationZero was corrected from null to its default, false. 
+[10:20:46] [Yggdrasil Key Fetcher/ERROR] [mojang/YggdrasilServicesKeyInfo]: Failed to request yggdrasil public key
+com.mojang.authlib.exceptions.AuthenticationUnavailableException: Cannot contact authentication server
+	at com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService.makeRequest(YggdrasilAuthenticationService.java:119) ~[authlib-4.0.43.jar%23121!/:?] {}
+	at com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService.makeRequest(YggdrasilAuthenticationService.java:91) ~[authlib-4.0.43.jar%23121!/:?] {}
+	at com.mojang.authlib.yggdrasil.YggdrasilServicesKeyInfo.fetch(YggdrasilServicesKeyInfo.java:94) ~[authlib-4.0.43.jar%23121!/:?] {}
+	at com.mojang.authlib.yggdrasil.YggdrasilServicesKeyInfo.lambda$get$1(YggdrasilServicesKeyInfo.java:81) ~[authlib-4.0.43.jar%23121!/:?] {}
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539) ~[?:?] {}
+	at java.util.concurrent.FutureTask.runAndReset(FutureTask.java:305) ~[?:?] {}
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:305) ~[?:?] {}
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136) ~[?:?] {}
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635) ~[?:?] {}
+	at java.lang.Thread.run(Thread.java:840) ~[?:?] {}
+Caused by: java.net.UnknownHostException: api.minecraftservices.com
+	at sun.nio.ch.NioSocketImpl.connect(NioSocketImpl.java:572) ~[?:?] {}
+	at java.net.SocksSocketImpl.connect(SocksSocketImpl.java:327) ~[?:?] {}
+	at java.net.Socket.connect(Socket.java:633) ~[?:?] {}
+	at sun.security.ssl.SSLSocketImpl.connect(SSLSocketImpl.java:304) ~[?:?] {}
+	at sun.net.NetworkClient.doConnect(NetworkClient.java:178) ~[?:?] {}
+	at sun.net.www.http.HttpClient.openServer(HttpClient.java:533) ~[?:?] {}
+	at sun.net.www.http.HttpClient.openServer(HttpClient.java:638) ~[?:?] {}
+	at sun.net.www.protocol.https.HttpsClient.<init>(HttpsClient.java:267) ~[?:?] {}
+	at sun.net.www.protocol.https.HttpsClient.New(HttpsClient.java:381) ~[?:?] {}
+	at sun.net.www.protocol.https.AbstractDelegateHttpsURLConnection.getNewHttpClient(AbstractDelegateHttpsURLConnection.java:196) ~[?:?] {}
+	at sun.net.www.protocol.http.HttpURLConnection.plainConnect0(HttpURLConnection.java:1307) ~[?:?] {}
+	at sun.net.www.protocol.http.HttpURLConnection.plainConnect(HttpURLConnection.java:1148) ~[?:?] {}
+	at sun.net.www.protocol.http.HttpURLConnection.connect(HttpURLConnection.java:1077) ~[?:?] {}
+	at sun.net.www.protocol.https.AbstractDelegateHttpsURLConnection.connect(AbstractDelegateHttpsURLConnection.java:181) ~[?:?] {}
+	at sun.net.www.protocol.http.HttpURLConnection.getInputStream0(HttpURLConnection.java:1717) ~[?:?] {}
+	at sun.net.www.protocol.http.HttpURLConnection.getInputStream(HttpURLConnection.java:1641) ~[?:?] {}
+	at sun.net.www.protocol.https.HttpsURLConnectionImpl.getInputStream(HttpsURLConnectionImpl.java:224) ~[?:?] {}
+	at com.mojang.authlib.HttpAuthenticationService.performGetRequest(HttpAuthenticationService.java:140) ~[authlib-4.0.43.jar%23121!/:?] {}
+	at com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService.makeRequest(YggdrasilAuthenticationService.java:96) ~[authlib-4.0.43.jar%23121!/:?] {}
+	... 9 more
+[10:20:46] [Server thread/INFO] [minecraft/MinecraftServer]: Preparing start region for dimension minecraft:overworld
+[10:20:47] [Worker-Main-1/INFO] [minecraft/LoggerChunkProgressListener]: Preparing spawn area: 0%
+[10:20:47] [Worker-Main-7/INFO] [minecraft/LoggerChunkProgressListener]: Preparing spawn area: 0%
+[10:20:47] [Worker-Main-7/INFO] [minecraft/LoggerChunkProgressListener]: Preparing spawn area: 0%
+[10:20:48] [Worker-Main-2/INFO] [minecraft/LoggerChunkProgressListener]: Preparing spawn area: 0%
+[10:20:48] [Worker-Main-1/INFO] [minecraft/LoggerChunkProgressListener]: Preparing spawn area: 1%
+[10:20:49] [Worker-Main-7/INFO] [minecraft/LoggerChunkProgressListener]: Preparing spawn area: 3%
+[10:20:49] [Worker-Main-3/INFO] [minecraft/LoggerChunkProgressListener]: Preparing spawn area: 5%
+[10:20:50] [Worker-Main-2/INFO] [minecraft/LoggerChunkProgressListener]: Preparing spawn area: 8%
+[10:20:50] [Worker-Main-7/INFO] [minecraft/LoggerChunkProgressListener]: Preparing spawn area: 11%
+[10:20:51] [Worker-Main-2/INFO] [minecraft/LoggerChunkProgressListener]: Preparing spawn area: 13%
+[10:20:51] [Worker-Main-5/INFO] [minecraft/LoggerChunkProgressListener]: Preparing spawn area: 17%
+[10:20:52] [Worker-Main-1/INFO] [minecraft/LoggerChunkProgressListener]: Preparing spawn area: 20%
+[10:20:52] [Worker-Main-2/INFO] [minecraft/LoggerChunkProgressListener]: Preparing spawn area: 23%
+[10:20:53] [Worker-Main-7/INFO] [minecraft/LoggerChunkProgressListener]: Preparing spawn area: 27%
+[10:20:53] [Worker-Main-1/INFO] [minecraft/LoggerChunkProgressListener]: Preparing spawn area: 31%
+[10:20:54] [Worker-Main-5/INFO] [minecraft/LoggerChunkProgressListener]: Preparing spawn area: 34%
+[10:20:54] [Worker-Main-2/INFO] [minecraft/LoggerChunkProgressListener]: Preparing spawn area: 38%
+[10:20:55] [Worker-Main-6/INFO] [minecraft/LoggerChunkProgressListener]: Preparing spawn area: 42%
+[10:20:55] [Worker-Main-1/INFO] [minecraft/LoggerChunkProgressListener]: Preparing spawn area: 45%
+[10:20:56] [Worker-Main-3/INFO] [minecraft/LoggerChunkProgressListener]: Preparing spawn area: 50%
+[10:20:56] [Worker-Main-4/INFO] [minecraft/LoggerChunkProgressListener]: Preparing spawn area: 54%
+[10:20:57] [Worker-Main-5/INFO] [minecraft/LoggerChunkProgressListener]: Preparing spawn area: 57%
+[10:20:57] [Worker-Main-6/INFO] [minecraft/LoggerChunkProgressListener]: Preparing spawn area: 61%
+[10:20:58] [Worker-Main-4/INFO] [minecraft/LoggerChunkProgressListener]: Preparing spawn area: 66%
+[10:20:58] [Worker-Main-5/INFO] [minecraft/LoggerChunkProgressListener]: Preparing spawn area: 70%
+[10:20:59] [Worker-Main-3/INFO] [minecraft/LoggerChunkProgressListener]: Preparing spawn area: 73%
+[10:20:59] [Worker-Main-5/INFO] [minecraft/LoggerChunkProgressListener]: Preparing spawn area: 77%
+[10:21:00] [Worker-Main-4/INFO] [minecraft/LoggerChunkProgressListener]: Preparing spawn area: 82%
+[10:21:00] [Worker-Main-6/INFO] [minecraft/LoggerChunkProgressListener]: Preparing spawn area: 85%
+[10:21:01] [Worker-Main-4/INFO] [minecraft/LoggerChunkProgressListener]: Preparing spawn area: 88%
+[10:21:01] [Worker-Main-3/INFO] [minecraft/LoggerChunkProgressListener]: Preparing spawn area: 93%
+[10:21:02] [Worker-Main-2/INFO] [minecraft/LoggerChunkProgressListener]: Preparing spawn area: 97%
+[10:21:02] [Server thread/INFO] [minecraft/LoggerChunkProgressListener]: Time elapsed: 15688 ms
+[10:21:02] [Server thread/INFO] [minecraft/GameTestServer]: Started game test server
+[10:21:02] [Server thread/INFO] [ne.mi.se.pe.PermissionAPI/]: Successfully initialized permission handler forge:default_handler
+[10:21:02] [Server thread/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_LIBERTY_PROVIDER_STATUS tacz=false pack=false native_guard=false mcdivers_installed=false mcdivers_ready=false home_guard=true
+[10:21:03] [Server thread/INFO] [minecraft/GameTestBatchRunner]: Running test batch 'defaultBatch:1' (100 tests)...
+[10:21:03] [Server thread/INFO] [minecraft/GameTestServer]: 118 tests are now running!
+JETSETCRAFT_GAMETEST_PASS activity_progression
+[10:21:05] [Server thread/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_GAMETEST_PASS rush_journey_preview
+JETSETCRAFT_GAMETEST_PASS liberty_tacz_admission provider=false pack=false
+JETSETCRAFT_GAMETEST_PASS rush_debrief_rules
+[10:21:05] [Server thread/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_LIBERTY_CAMPAIGN_RUNTIME_SKIP native_base_cores optional-provider-or-pack-absent
+JETSETCRAFT_GAMETEST_PASS crew_missions
+JETSETCRAFT_GAMETEST_PASS rush_session
+[10:21:06] [Server thread/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_LIBERTY_RUNTIME_SKIP action_identity reason=Install TaCZ 1.1.8-hotfix2 and the merged Helldivers Liberty Day pack (file 9341504). expectedPack=false
+JETSETCRAFT_GAMETEST_PASS crew_house
+JETSETCRAFT_GAMETEST_SKIP liberty_armory_armor optional-provider-or-pack-absent
+[10:21:12] [Server thread/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_LIBERTY_CAMPAIGN_RUNTIME_SKIP ship_redeploy optional-provider-or-pack-absent
+[10:21:12] [Server thread/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_LIBERTY_OPERATION_PASS liberty_extraction_rules
+JETSETCRAFT_GAMETEST_SKIP liberty_tacz_loadout optional-provider-or-pack-absent
+JETSETCRAFT_GAMETEST_SKIP liberty_tacz_combat optional-provider-or-pack-absent
+JETSETCRAFT_LIBERTY_CAMPAIGN_PASS liberty_campaign_progress
+JETSETCRAFT_GAMETEST_PASS crew_progress_history
+JETSETCRAFT_GAMETEST_PASS liberty_stratagem_catalog native=false selectable=100 conditional=25
+[10:21:13] [Server thread/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_LIBERTY_CAMPAIGN_RUNTIME_SKIP stratagem_lifecycle optional-provider-or-pack-absent
+[10:21:13] [Server thread/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_LIBERTY_OPERATION_PASS liberty_mural_rules
+JETSETCRAFT_GAMETEST_PASS scooter
+JETSETCRAFT_GAMETEST_PASS rush_pit_stop_rules
+[10:21:19] [Server thread/INFO] [co.he.je.JetSetCraft/]: [JetSetCraft][GameTest] PASS liberty_mission_moving_escort
+JETSETCRAFT_LIBERTY_CAMPAIGN_PASS liberty_campaign_defense_clock
+JETSETCRAFT_GAMETEST_PASS ride_controls
+[10:21:20] [Server thread/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_LIBERTY_OPERATION_PASS liberty_courier_rules
+[10:21:20] [Server thread/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_LIBERTY_RUNTIME_SKIP extraction reason=Install TaCZ 1.1.8-hotfix2 and the merged Helldivers Liberty Day pack (file 9341504). expectedPack=false
+[10:21:25] [Server thread/INFO] [co.he.je.JetSetCraft/]: [JetSetCraft][GameTest] PASS liberty_mission_real_turf
+[10:21:25] [Server thread/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_LIBERTY_CAMPAIGN_RUNTIME_SKIP native_turf optional-provider-or-pack-absent
+[10:21:28] [Server thread/INFO] [co.he.je.JetSetCraft/]: [JetSetCraft][GameTest] PASS liberty_mission_optional_and_owned_sweep
+JETSETCRAFT_GAMETEST_SKIP liberty_mcdivers_native optional-provider-absent
+JETSETCRAFT_LIBERTY_SHIP_PASS liberty_ship_modules
+[10:21:28] [Server thread/INFO] [co.he.je.JetSetCraft/]: [JetSetCraft][GameTest] PASS liberty_mission_home_ground_remap
+JETSETCRAFT_LIBERTY_ARMORY_PASS liberty_armory_schema_selection
+JETSETCRAFT_GAMETEST_PASS crew_style_shared_rewards
+[10:21:31] [Server thread/INFO] [co.he.je.JetSetCraft/]: [JetSetCraft][GameTest] PASS liberty_mission_stage_atomic_area
+[10:21:31] [Server thread/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_LIBERTY_RUNTIME_SKIP future_research_recovery reason=Install TaCZ 1.1.8-hotfix2 and the merged Helldivers Liberty Day pack (file 9341504). expectedPack=false
+[10:21:31] [Server thread/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_LIBERTY_OPERATION_PASS liberty_cache_supply_rules
+JETSETCRAFT_GAMETEST_PASS rush_pit_stop_snapshots
+JETSETCRAFT_GAMETEST_PASS activity_dimension_return dimensions=absent
+JETSETCRAFT_GAMETEST_SKIP liberty_armory_resupply optional-provider-or-pack-absent
+[10:21:34] [Server thread/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_GAMETEST_PASS rush_cache_boundaries
+[10:21:37] [Server thread/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_GAMETEST_PASS rush_journey_history
+JETSETCRAFT_LIBERTY_CAMPAIGN_PASS liberty_campaign_defense_claims
+[10:21:38] [Server thread/INFO] [co.he.je.JetSetCraft/]: [JetSetCraft][GameTest] PASS liberty_mission_courier_core_gate
+JETSETCRAFT_GAMETEST_PASS crew_progress_mission
+[10:21:39] [Server thread/INFO] [co.he.je.JetSetCraft/]: [JetSetCraft][GameTest] PASS liberty_mission_replay_catalogue
+JETSETCRAFT_GAMETEST_PASS rush_album
+JETSETCRAFT_GAMETEST_PASS combat_sovereignty
+JETSETCRAFT_GAMETEST_PASS rush_contract_catalogue
+JETSETCRAFT_LIBERTY_SHIP_PASS liberty_ship_schema_caps
+JETSETCRAFT_GAMETEST_PASS rush_arena_rules
+[10:21:44] [Server thread/ERROR] [co.he.je.JetSetCraft/]: Retaining invalid Rival Rush return journal for 50fb2318-70a1-3bc0-b6da-947915b39cd6
+[10:21:44] [Server thread/ERROR] [co.he.je.JetSetCraft/]: Retaining invalid Rival Rush return journal for 50fb2318-70a1-3bc0-b6da-947915b39cd6
+[10:21:44] [Server thread/ERROR] [co.he.je.JetSetCraft/]: Retaining invalid Rival Rush return journal for 50fb2318-70a1-3bc0-b6da-947915b39cd6
+[10:21:44] [Server thread/ERROR] [co.he.je.JetSetCraft/]: Retaining invalid Rival Rush return journal for 50fb2318-70a1-3bc0-b6da-947915b39cd6
+JETSETCRAFT_GAMETEST_PASS rush_return
+[10:21:44] [Server thread/WARN] [co.he.je.JetSetCraft/]: Saved-data checkpoint <TMP>/jetsetcraft-missing-54d50837-6019-4948-9564-f23e62fbf492.dat could not be acknowledged: java.io.FileNotFoundException: <TMP>/jetsetcraft-missing-54d50837-6019-4948-9564-f23e62fbf492.dat (No such file or directory)
+[10:21:44] [Server thread/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_LIBERTY_OPERATION_PASS liberty_war_map_rules
+JETSETCRAFT_GAMETEST_STYLE_RELAY provider_absent
+JETSETCRAFT_GAMETEST_PASS crew_style_entry
+[10:21:45] [Server thread/INFO] [co.he.je.JetSetCraft/]: [JetSetCraft][GameTest] PASS liberty_mission_timed_actions
+JETSETCRAFT_GAMETEST_PASS rush_rules
+JETSETCRAFT_GAMETEST_SKIP liberty_tacz_reload optional-provider-or-pack-absent
+JETSETCRAFT_GAMETEST_PASS crew_persistence
+JETSETCRAFT_GAMETEST_SKIP liberty_mob_home_safety optional-provider-or-pack-absent
+[10:21:50] [Server thread/INFO] [co.he.je.JetSetCraft/]: [JetSetCraft][GameTest] PASS liberty_mission_actual_priority_target
+JETSETCRAFT_GAMETEST_PASS dance_flow
+[10:21:50] [Server thread/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_LIBERTY_CAMPAIGN_RUNTIME_SKIP home_world_safety optional-provider-or-pack-absent
+JETSETCRAFT_GAMETEST_PASS crew_style_persistence
+JETSETCRAFT_GAMETEST_SKIP liberty_tacz_home_safety optional-provider-or-pack-absent
+[10:21:50] [Server thread/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_LIBERTY_RESEARCH_PASS liberty_research_purchase
+[10:21:50] [Server thread/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_LIBERTY_CAMPAIGN_RUNTIME_SKIP director_pressure optional-provider-or-pack-absent
+[10:21:50] [Server thread/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_LIBERTY_RUNTIME_SKIP lifecycle reason=Install TaCZ 1.1.8-hotfix2 and the merged Helldivers Liberty Day pack (file 9341504). expectedPack=false
+JETSETCRAFT_GAMETEST_PASS catalogs
+[10:21:50] [Server thread/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_LIBERTY_RESEARCH_PASS liberty_research_caps
+[10:21:51] [Server thread/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_GAMETEST_PASS rush_cache_options
+JETSETCRAFT_GAMETEST_PASS hoverboard
+[10:21:51] [Server thread/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_LIBERTY_RESEARCH_PASS liberty_research_settlement
+JETSETCRAFT_GAMETEST_PASS rush_draft_controls
+[10:21:51] [Server thread/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_LIBERTY_RESEARCH_PASS liberty_research_rush
+JETSETCRAFT_GAMETEST_PASS rush_build_rules
+JETSETCRAFT_GAMETEST_PASS crew_progress_caps
+[10:21:52] [Server thread/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_LIBERTY_RESEARCH_PASS liberty_research_schema
+[10:21:52] [Server thread/WARN] [minecraft/MinecraftServer]: Can't keep up! Is the server overloaded? Running 50353ms or 1007 ticks behind
+JETSETCRAFT_GAMETEST_PASS paint_balloon_splash
+JETSETCRAFT_GAMETEST_PASS rush_elite_tells
+[10:21:55] [Server thread/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_RUSH_MARK_EXPIRY active_ticks=50 paused_calls=5 unmarked_damage=1.0
+JETSETCRAFT_GAMETEST_PASS rush_build_runtime
+JETSETCRAFT_GAMETEST_PASS rush_pit_stop_runtime
+JETSETCRAFT_GAMETEST_PASS rush_tagger_cover
+JETSETCRAFT_GAMETEST_PASS rush_evolution_return
+JETSETCRAFT_GAMETEST_PASS rush_evolution_cryo
+JETSETCRAFT_GAMETEST_PASS rush_headliner_victory
+JETSETCRAFT_GAMETEST_PASS crew_rush
+JETSETCRAFT_GAMETEST_PASS rush_contract_relay
+JETSETCRAFT_GAMETEST_PASS rush_contract_hunt
+JETSETCRAFT_RUSH_HEADLINER_RESIDENCY branch=lost actor=6fda3baf-c0d9-4f27-9953-a9f7cbb61970 observedAfterNativeTicks=1 entityTicking=true elapsed=6461
+JETSETCRAFT_GAMETEST_PASS rush_evolution_railstorm
+JETSETCRAFT_GAMETEST_PASS rush_synergy_recovery
+JETSETCRAFT_GAMETEST_PASS rush_ownership
+[10:22:04] [Server thread/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_LIBERTY_PACKET_PASS liberty_loadout_native_codec_actions
+[10:22:05] [Server thread/INFO] [minecraft/GameTestServer]: [++++++++++++_+_++++++++++++_++++++_+++_+++++++++++++++++++++++++++_+__++++++++++++++++++++++++++++++                  ]
+JETSETCRAFT_GAMETEST_PASS rush_arena_session
+[10:22:06] [Server thread/INFO] [minecraft/GameTestServer]: [++++++++++++_+_++++++++++++_++++++_+++_+++++++++++++++++++++++++++_+_+++++++++++++++++++++++++++++++                  ]
+JETSETCRAFT_RUSH_HEADLINER_RESIDENCY branch=deadline actor=75a26794-6c77-4119-80f2-ebbbc6006961 observedAfterNativeTicks=1 entityTicking=true elapsed=30002
+JETSETCRAFT_GAMETEST_PASS rush_headliner_recovery
+[10:22:07] [Server thread/INFO] [minecraft/GameTestServer]: [++++++++++++_+_++++++++++++_++++++_+++_+++++++++++++++++++++++++++_+++++++++++++++++++++++++++++++++                  ]
+JETSETCRAFT_GAMETEST_PASS activity_tag
+JETSETCRAFT_GAMETEST_PASS liberty_stratagem_equipment
+[10:22:08] [Server thread/INFO] [minecraft/GameTestServer]: [++++++++++++_+_++++++++++++_++++++++++++++++++++++++++++++++++++++_+++++++++++++++++++++++++++++++++                  ]
+JETSETCRAFT_GAMETEST_PASS graffiti_lifecycle native_support_ticks=40
+JETSETCRAFT_GAMETEST_PASS activity_safety
+[10:22:08] [Server thread/INFO] [minecraft/GameTestServer]: [++++++++++++_++++++++++++++_++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++                  ]
+[10:22:09] [Server thread/INFO] [minecraft/GameTestServer]: [++++++++++++_++++++++++++++_++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++                  ]
+[10:22:09] [Server thread/INFO] [minecraft/GameTestServer]: [++++++++++++_++++++++++++++_++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++                  ]
+JETSETCRAFT_GAMETEST_PASS liberty_stratagem_effects
+[10:22:10] [Server thread/INFO] [minecraft/GameTestServer]: [++++++++++++_+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++                  ]
+JETSETCRAFT_GAMETEST_PASS liberty_stratagem_resources
+[10:22:10] [Server thread/INFO] [minecraft/GameTestBatchRunner]: Running test batch 'defaultBatch:2' (18 tests)...
+JETSETCRAFT_LIBERTY_CAMPAIGN_PASS liberty_campaign_schema_caps
+[10:22:11] [Server thread/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_LIBERTY_OPERATION_PASS liberty_radio_rules
+JETSETCRAFT_GAMETEST_PASS rush_pit_stop_effects
+JETSETCRAFT_GAMETEST_PASS rush_evolution_rules
+JETSETCRAFT_GAMETEST_SKIP liberty_tacz_resupply optional-provider-or-pack-absent
+JETSETCRAFT_LIBERTY_SHIP_PASS liberty_ship_purchase
+JETSETCRAFT_GAMETEST_PASS rush_objectives
+JETSETCRAFT_GAMETEST_PASS rush_synergy_rules
+JETSETCRAFT_GAMETEST_SKIP liberty_armory_all_pack_guns optional-provider-or-pack-absent
+JETSETCRAFT_GAMETEST_PASS rush_arena_catalogue
+[10:22:16] [Server thread/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_LIBERTY_RUNTIME_SKIP serialized_rejoin reason=Install TaCZ 1.1.8-hotfix2 and the merged Helldivers Liberty Day pack (file 9341504). expectedPack=false
+JETSETCRAFT_GAMETEST_PASS rush_spell_relay absent
+JETSETCRAFT_GAMETEST_PASS street_gear
+[10:22:25] [Server thread/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_GAMETEST_PASS rush_route_exploration
+JETSETCRAFT_GAMETEST_PASS rush_contract_paint
+JETSETCRAFT_GAMETEST_PASS rush_synergy_control
+[10:22:27] [Server thread/INFO] [minecraft/GameTestServer]: [+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++__+++]
+JETSETCRAFT_GAMETEST_PASS rush_headliner_arena_gate
+[10:22:30] [Server thread/INFO] [minecraft/GameTestServer]: [+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++_++++]
+[10:22:30] [Server thread/INFO] [minecraft/GameTestServer]: [+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++_++++]
+[10:22:30] [Server thread/INFO] [minecraft/GameTestServer]: [+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++_++++]
+[10:22:30] [Server thread/INFO] [minecraft/GameTestServer]: [+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++_++++]
+[10:22:31] [Server thread/INFO] [minecraft/GameTestServer]: [+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++_++++]
+[10:22:31] [Server thread/INFO] [minecraft/GameTestServer]: [+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++_++++]
+[10:22:31] [Server thread/WARN] [minecraft/MinecraftServer]: Can't keep up! Is the server overloaded? Running 23379ms or 467 ticks behind
+[10:22:32] [Server thread/INFO] [minecraft/GameTestServer]: [+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++_++++]
+[10:22:33] [Server thread/INFO] [minecraft/GameTestServer]: [+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++_++++]
+[10:22:33] [Server thread/INFO] [minecraft/GameTestServer]: [+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++_++++]
+[10:22:33] [Server thread/INFO] [minecraft/GameTestServer]: [+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++_++++]
+[10:22:34] [Server thread/INFO] [minecraft/GameTestServer]: [+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++_++++]
+[10:22:34] [Server thread/INFO] [minecraft/GameTestServer]: [+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++_++++]
+[10:22:34] [Server thread/INFO] [minecraft/GameTestServer]: [+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++_++++]
+[10:22:34] [Server thread/INFO] [minecraft/GameTestServer]: [+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++_++++]
+[10:22:35] [Server thread/INFO] [minecraft/GameTestServer]: [+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++_++++]
+[10:22:35] [Server thread/INFO] [minecraft/GameTestServer]: [+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++_++++]
+[10:22:35] [Server thread/INFO] [minecraft/GameTestServer]: [+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++_++++]
+[10:22:35] [Server thread/INFO] [minecraft/GameTestServer]: [+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++_++++]
+[10:22:35] [Server thread/INFO] [minecraft/GameTestServer]: [+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++_++++]
+[10:22:36] [Server thread/INFO] [minecraft/GameTestServer]: [+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++_++++]
+[10:22:36] [Server thread/INFO] [minecraft/GameTestServer]: [+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++_++++]
+[10:22:36] [Server thread/INFO] [minecraft/GameTestServer]: [+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++_++++]
+[10:22:36] [Server thread/INFO] [minecraft/GameTestServer]: [+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++_++++]
+[10:22:36] [Server thread/INFO] [minecraft/GameTestServer]: [+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++_++++]
+[10:22:37] [Server thread/INFO] [minecraft/GameTestServer]: [+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++_++++]
+[10:22:37] [Server thread/INFO] [minecraft/GameTestServer]: [+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++_++++]
+[10:22:37] [Server thread/INFO] [minecraft/GameTestServer]: [+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++_++++]
+[10:22:38] [Server thread/INFO] [minecraft/GameTestServer]: [+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++_++++]
+JETSETCRAFT_GAMETEST_PASS activity_hill
+[10:22:38] [Server thread/INFO] [minecraft/GameTestServer]: [++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++]
+[10:22:38] [Server thread/INFO] [minecraft/GameTestServer]: ========= 118 GAME TESTS COMPLETE ======================
+[10:22:38] [Server thread/INFO] [minecraft/GameTestServer]: All 118 required tests passed :)
+[10:22:38] [Server thread/INFO] [minecraft/GameTestServer]: ====================================================
+[10:22:38] [Server thread/INFO] [minecraft/MinecraftServer]: Stopping server
+[10:22:38] [Server thread/INFO] [minecraft/MinecraftServer]: Saving players
+[10:22:38] [Server thread/INFO] [minecraft/MinecraftServer]: Saving worlds
+[10:22:39] [Server thread/INFO] [minecraft/MinecraftServer]: Saving chunks for level 'ServerLevel[world]'/minecraft:overworld
+[10:22:43] [Server thread/INFO] [minecraft/MinecraftServer]: Saving chunks for level 'ServerLevel[world]'/minecraft:the_end
+[10:22:43] [Server thread/INFO] [minecraft/MinecraftServer]: Saving chunks for level 'ServerLevel[world]'/minecraft:the_nether
+[10:22:43] [Server thread/INFO] [minecraft/MinecraftServer]: Saving chunks for level 'ServerLevel[world]'/jetsetcraft:liberty_grind
+[10:22:43] [Server thread/INFO] [minecraft/MinecraftServer]: Saving chunks for level 'ServerLevel[world]'/jetsetcraft:rival_rush
+[10:22:43] [Server thread/INFO] [minecraft/MinecraftServer]: ThreadedAnvilChunkStorage (world): All chunks are saved
+[10:22:43] [Server thread/INFO] [minecraft/MinecraftServer]: ThreadedAnvilChunkStorage (DIM1): All chunks are saved
+[10:22:43] [Server thread/INFO] [minecraft/MinecraftServer]: ThreadedAnvilChunkStorage (DIM-1): All chunks are saved
+[10:22:43] [Server thread/INFO] [minecraft/MinecraftServer]: ThreadedAnvilChunkStorage (liberty_grind): All chunks are saved
+[10:22:43] [Server thread/INFO] [minecraft/MinecraftServer]: ThreadedAnvilChunkStorage (rival_rush): All chunks are saved
+[10:22:43] [Server thread/INFO] [minecraft/MinecraftServer]: ThreadedAnvilChunkStorage: All dimensions are saved
+[10:22:44] [Server thread/INFO] [minecraft/GameTestServer]: Game test server shutting down
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0.
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
+For more on this, please refer to https://docs.gradle.org/8.8/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
+
+BUILD SUCCESSFUL in 2m 18s
+8 actionable tasks: 3 executed, 5 up-to-date

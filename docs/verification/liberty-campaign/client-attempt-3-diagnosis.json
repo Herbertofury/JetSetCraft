@@ -1,0 +1,16 @@
+{
+  "attempt": 3,
+  "result": "FAIL_CLEAN_BASELINE_ASSERTION",
+  "reason": "The client observed the previous attempt purchase; the strict locked-CHROMAGEDDON precondition rejected it before launch. This is a disposable-save reset issue, not a new product failure.",
+  "restore_diagnosis": "Directory rename/copy reported clean bytes inside its call, but subsequent independent reads showed the old save. Explicit in-place leaf restoration followed by independent ordinary and elevated reads verified clean baseline bytes. No audit JVM remained running.",
+  "exit_code": 0,
+  "exit_code_is_not_audit_result": true,
+  "source_tree_sha256": "c554960669f629745fde6365dfd058c24c8a509ec5de879f8bade0808700fc80",
+  "source_inputs_unchanged": true,
+  "settings_restored_byte_for_byte": true,
+  "started_utc": "2026-11-02T17:02:13.223303+00:00",
+  "ended_utc": "2026-11-02T17:03:25.141755+00:00",
+  "duration_seconds": 71.92,
+  "client_log_sha256": "de6e7935146107c37934e1928e9e26ac21904f5146d8aa6578957a2b597d49d6",
+  "game_source_changes": false
+}

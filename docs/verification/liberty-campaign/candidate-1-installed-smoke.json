@@ -1,0 +1,91 @@
+{
+  "kind": "installed-package-dedicated-server",
+  "launcher": "official Forge run.sh",
+  "sourceSets": false,
+  "mod": {
+    "file": "jetsetcraft-1.20.1-0.4.0-alpha.9.jar",
+    "version": "0.4.0-alpha.9",
+    "sha256": "af238ef82ff32c8433fa1fca428542c398edf41d7e62ddf53014311a2de468ad",
+    "bytes": 6487751
+  },
+  "installer": {
+    "url": "https://maven.minecraftforge.net/net/minecraftforge/forge/1.20.1-47.4.23/forge-1.20.1-47.4.23-installer.jar",
+    "file": "forge-1.20.1-47.4.23-installer.jar",
+    "bytes": 8836161,
+    "sha1": "ed31ce02ac69176f34353235cb2508d5a0f1e088",
+    "sha256": "75cfcb11f60cc641dc83757c1357c08c9bdba255ec529feb115c5e89a59cf75a",
+    "minecraft": "1.20.1",
+    "version": "1.20.1-forge-47.4.23"
+  },
+  "runtime_provider_dependencies": [
+    {
+      "file": "tacz-1.20.1-1.1.8-hotfix2.jar",
+      "sha256": "2cbb89f44333d2eb4e825d86d789ff119b272ff75184390b55bafd4f0e7f10c2",
+      "bytes": 57472579,
+      "source": "https://www.curseforge.com/minecraft/mc-mods/timeless-and-classics-zero/files/9037989"
+    },
+    {
+      "file": "player-animation-lib-forge-1.0.2-rc1+1.20.jar",
+      "sha256": "4a624602ba90d305a4cdcfbde07c893466ddbc0a1210b559bf607bf715626cb0",
+      "bytes": 181438,
+      "source": "https://maven.kosmx.dev/dev/kosmx/player-anim/player-animation-lib-forge/1.0.2-rc1+1.20/player-animation-lib-forge-1.0.2-rc1+1.20.jar"
+    },
+    {
+      "file": "mcdivers-forge-1.20.1-1.0.3.jar",
+      "sha256": "49c4ab153c50dab8766fca15ab7affcc14b1c9a8e7e52d58a9683c06ac4ceac0",
+      "bytes": 2160981,
+      "source": "https://www.curseforge.com/minecraft/mc-mods/mcdiver/files/9307472"
+    }
+  ],
+  "pack": {
+    "file": "[eof]helldivers_gun_pack.zip",
+    "sha256": "fe4e01693cf3957d971e556a1d2fcd9ae0c98cb973cf47aa6d52e157c187378a",
+    "bytes": 72883841,
+    "source": "https://www.curseforge.com/minecraft/customization/tacz-helldivers-escalation-of-freedom/files/9341504"
+  },
+  "upstream_content_embedded": false,
+  "status": "PASS",
+  "ready": true,
+  "native_provider_guard": true,
+  "rcon_stopped": true,
+  "all_dimensions_saved": true,
+  "home_contact_guard": true,
+  "scope": "The exact built and reobfuscated mod runs in a separately installed official Forge server with original upstream JARs and the full unmodified pack. The loaded native guard and live content, registered commands, normal readiness, authenticated shutdown and all-dimension saving are checked. No player connects; this is not mission gameplay or visual evidence.",
+  "startup_seconds": 43.67,
+  "rcon_command_checks": {
+    "help jetsetcraft": "/jetsetcraft rush [leave|album|start]\n/jetsetcraft liberty [menu|return|neon_docks|overpass_uprising|blackout_borough]\n/jetsetcraft status\n/jetsetcraft set_momentum <speed>\n/jetsetcraft build_vanilla_lab\n/jetsetcraft crew\n/jetsetcraft activity [random|tag|king_of_hill|showdown|rival_rush|liberty_grind|cancel]\n",
+    "help tacz": "/tacz attachment_lock <target> <AttachmentLock>\n/tacz debug <enable>\n/tacz dummy <target> <dummyAmount>\n/tacz overwrite <enable>\n/tacz reload\n/tacz hide_tooltip_part <target> <mask>\n/tacz convert\n/tacz config <key> <state>\n"
+  },
+  "exit_code": 0,
+  "saved_world": true,
+  "fatal_or_linkage_errors": [],
+  "log_evidence": [
+    {
+      "file": "candidate-1-installed-server.log",
+      "bytes": 118322,
+      "sha256": "c1f8f4b07df0da64da2e3016ba3648a4c6d388a35bd1123818e0b18b08f90f3b",
+      "original_bytes": 118466,
+      "original_sha256": "cc8aa38bb4acdb06ad76181722d88c6bf94fa26430e4bf24442ab37010cef7cc",
+      "transform": "Only absolute instance/checkout/cache paths and any private RCON secret are replaced; diagnostics are retained."
+    },
+    {
+      "file": "candidate-1-installed-rcon-stop.log",
+      "bytes": 69,
+      "sha256": "f57b5d758ca3bfc4fbe902a7ebdb3ad4b54406af878b75b218ab10e170c08ddc",
+      "original_bytes": 69,
+      "original_sha256": "f57b5d758ca3bfc4fbe902a7ebdb3ad4b54406af878b75b218ab10e170c08ddc",
+      "transform": "Only absolute instance/checkout/cache paths and any private RCON secret are replaced; diagnostics are retained."
+    },
+    {
+      "file": "candidate-1-installed-loader.log",
+      "bytes": 291154,
+      "sha256": "6103e22ded3498a73029511145c21e512e9852c710a56bba4f1c6e4c0e1b7d80",
+      "original_bytes": 291766,
+      "original_sha256": "7be26e01cfcee150c4cb9b0c7d9c615ac2ca0c5080a321d94d9f3edb0074f957",
+      "transform": "Only absolute instance/checkout/cache paths and any private RCON secret are replaced; diagnostics are retained."
+    }
+  ],
+  "elapsed_seconds": 50.55,
+  "verification_date_utc": "2026-11-02",
+  "archive_note": "Evidence filenames rebased to candidate-1 copies; installed JAR and log hashes unchanged."
+}

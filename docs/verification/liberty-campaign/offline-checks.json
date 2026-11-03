@@ -1,0 +1,101 @@
+{
+  "date": "2026-11-02T17:14:07.230859+00:00",
+  "compiled_source_digest": "48afdfa7fece7bb786b08d9f7cd30dcb7edaa101b612a8fdc0a05bae06b3c134",
+  "checks": [
+    {
+      "name": "assets",
+      "command": [
+        "python",
+        "tools/validate_assets.py"
+      ],
+      "exit_code": 0,
+      "output": "JetSetCraft asset validation OK: 10 literal + 16 generated item registrations, 72 animation clips\n"
+    },
+    {
+      "name": "gameplay",
+      "command": [
+        "python",
+        "tools/validate_gameplay_contract.py"
+      ],
+      "exit_code": 0,
+      "output": "JetSetCraft gameplay contract validation OK\n"
+    },
+    {
+      "name": "premium",
+      "command": [
+        "python",
+        "tools/validate_premium_polish.py"
+      ],
+      "exit_code": 0,
+      "output": "JetSetCraft premium-polish validation OK: 7 authored meshes, 72 seam-checked animations, compatibility boundary intact\n"
+    },
+    {
+      "name": "wave2",
+      "command": [
+        "python",
+        "tools/validate_wave2_compat.py"
+      ],
+      "exit_code": 0,
+      "output": "Wave 2 compatibility manifests OK: 172 curated safe records, 9 hidden technical records.\n"
+    },
+    {
+      "name": "syntax",
+      "command": [
+        "python",
+        "tools/validate_java_syntax.py"
+      ],
+      "exit_code": 0,
+      "output": "Java syntax parse OK: 238 source files\n"
+    },
+    {
+      "name": "wiki",
+      "command": [
+        "python",
+        "tools/validate_wiki.py"
+      ],
+      "exit_code": 0,
+      "output": "JetSetCraft wiki validation OK: 53 pages\n"
+    },
+    {
+      "name": "research",
+      "command": [
+        "python",
+        "tools/build_research_browser.py",
+        "--check"
+      ],
+      "exit_code": 0,
+      "output": "Research browser source, records, wiki targets and generated output verified.\n"
+    },
+    {
+      "name": "browser",
+      "command": [
+        "node",
+        "tools/test_research_browser.js"
+      ],
+      "exit_code": 0,
+      "output": "PASS default scope includes every curated record\nPASS initial page is bounded and more control is available\nPASS pagination adds cards and focuses the first newly revealed heading\nPASS latest action selects the declared pass and focuses search\nPASS first-pass records remain independently retrievable\nPASS accent-insensitive multi-term search finds the exact music candidate\nPASS search and category are encoded in a shareable URL\nPASS including the earlier atlas preserves the complete collection\nPASS historical category is isolated\nPASS disabling history clears contradictory historical filters\nPASS dated pass clears incompatible historical priority\nPASS dated pass clears incompatible historical category\nPASS ordered listening path: first-listen\nPASS ordered listening path: city-after-hours\nPASS leaving music clears the listening path\nPASS listening cards activate their ordered selection\nPASS collection filtering clears a previous listening path\nPASS video filter includes actual video links without labeling store pages as videos\nPASS a video channel or store listing is not misrepresented as a direct video\nPASS image filter retains credited research imagery\nPASS audition filter contains exactly the music catalogue\nPASS historical priority exits an incompatible music-path scope\nPASS saved shortlist is independent of page size\nPASS shortlist survives through the storage contract\nPASS removing the last saved item leaves an accessible empty state\nPASS CSV exports all matches and provenance columns\nPASS CSV neutralizes formula-shaped cells and escapes quotes\nPASS a listening-path URL restores the curated sequence\nPASS historical deep links continue to work\nPASS a dated URL clears contradictory historical filters\nPASS invalid filter URL values are ignored\nPASS shortlisting remains usable with unavailable browser storage\nPASS quick searches clear stale collection and saved scopes\nPASS reset restores the default view and search focus\n\n34 research-browser logic checks passed. Visual/media QA remains a real-browser check.\n"
+    },
+    {
+      "name": "python",
+      "command": [
+        "python",
+        "-m",
+        "compileall",
+        "-q",
+        "tools"
+      ],
+      "exit_code": 0,
+      "output": ""
+    },
+    {
+      "name": "whitespace",
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exit_code": 0,
+      "output": ""
+    }
+  ]
+}

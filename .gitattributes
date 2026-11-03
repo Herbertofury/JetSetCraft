@@ -1,0 +1,2 @@
+# Preserve hash-anchored JVM evidence; its recorded whitespace is part of the log.
+docs/verification/liberty-campaign/*.log -whitespace

@@ -12,7 +12,8 @@ import java.util.function.Supplier;
 /** Bounded choices only. Mission locations, objective state, costs and awards are server-owned. */
 public record C2SLibertyActionPacket(String action, String value, UUID missionId, long revision) {
     private static final Set<String> ACTIONS = Set.of("open", "deploy", "extract", "board", "abort",
-            "resupply", "research", "research_select");
+            "resupply", "research", "research_select", "armory_select", "ship_purchase", "ship_equip",
+            "campaign_deploy", "defense_deploy", "ship", "callin", "terminal", "reinforce");
 
     public static void encode(C2SLibertyActionPacket packet, FriendlyByteBuf buffer) {
         buffer.writeUtf(packet.action, 32);

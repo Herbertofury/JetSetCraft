@@ -77,6 +77,8 @@ public final class ClientEvents {
             event.registerEntityRenderer(ModEntities.GRAFFITI.get(), GraffitiRenderer::new);
             event.registerEntityRenderer(ModEntities.PAINT_BALLOON.get(), ThrownItemRenderer::new);
             event.registerEntityRenderer(ModEntities.LIBERTY_TRANSPORT.get(), com.herberto.jetsetcraft.client.render.LibertyTransportRenderer::new);
+            event.registerEntityRenderer(ModEntities.LIBERTY_CORE.get(), com.herberto.jetsetcraft.client.render.LibertyCoreRenderer::new);
+            event.registerEntityRenderer(ModEntities.LIBERTY_SUPPORT.get(), com.herberto.jetsetcraft.client.render.LibertySupportRenderer::new);
             event.registerBlockEntityRenderer(ModBlockEntities.BOOMBOX.get(), BoomboxRenderer::new);
         }
 

@@ -1,6 +1,6 @@
 # Third-party notices
 
-JetSetCraft is built against Minecraft Forge and optionally integrates with PlayerAnimator, Create, TACZ, Epic
+JetSetCraft is built against Minecraft Forge and optionally integrates with PlayerAnimator, Create, TACZ, MCDivers, Epic
 Fight, Better Combat, The Aether, Twilight Forest, and other Forge ecosystems. Those projects are not bundled in
 the JetSetCraft release JAR and retain their own licenses and trademarks.
 
@@ -12,6 +12,24 @@ Generated runtime models, animations, textures, and procedural audio are origina
 unless [docs/ASSET_PROVENANCE.md](docs/ASSET_PROVENANCE.md) records a different source. Minecraft and related
 names/assets are property of their respective owners. JetSetCraft is not affiliated with Mojang Studios,
 Microsoft, SEGA, or the optional-mod authors.
+
+## Liberty Grind optional providers
+
+Liberty Grind uses separately installed original provider releases; the JetSetCraft JAR does not contain their
+classes, weapon models, textures, sounds or gun-pack archives. Its mission, campaign, ship, paint-strike and
+containment code is original JetSetCraft code. The [exact pack guide](docs/LIBERTY_GRIND_PACK.md) records
+download pages, versions and verification hashes.
+
+- [MCDiver / MCDivers](https://www.curseforge.com/minecraft/mc-mods/mcdiver), by shiroaki193: the pinned Forge
+  1.20.1 release is 1.0.3, file 9307472. Its publisher lists the [MIT license](https://www.curseforge.com/minecraft/mc-mods/mcdiver/license).
+- [Helldivers:Liberty Day](https://www.curseforge.com/minecraft/customization/tacz-helldivers-escalation-of-freedom/files/9341504),
+  published by zeta1918 with Koei's merged Helldivers gun pack: the pinned file is 9341504. Its publisher lists
+  [CC BY-NC-SA 4.0](https://www.curseforge.com/minecraft/customization/tacz-helldivers-escalation-of-freedom/license).
+- TaCZ remains a separately installed dependency with its own notices. JetSetCraft's adapters call the live
+  installed provider and enforce ownership around mission-only entities; they do not relicense upstream content.
+
+Helldivers names and the original game's reference concepts remain associated with their respective owners.
+Liberty Grind is an unofficial Minecraft adaptation, with original JetSetCraft objectives and presentation.
 
 JetSetCraft incorporates and adapts selected MIT-licensed code and assets from the projects below. The original
 copyright notices and licenses are preserved in `third_party/`.

@@ -175,6 +175,75 @@ public final class LibertyOperationGameTests {
     }
 
     @GameTest(template = "hoverboard_empty", timeoutTicks = 100)
+    public static void lastTickBoardingCommitsDepartureButDeadlineRejectsNewActions(GameTestHelper helper) {
+        LibertyOperation departing = operation(false, false);
+        prepareBoarding(departing);
+        long deadline = departing.theater.minutes() * 1200L;
+        advanceUntil(departing, deadline - 1);
+        Vec3 pad = Vec3.atCenterOf(departing.extraction);
+        check(!departing.expired() && departing.board(pad)
+                        && departing.phase() == LibertyOperation.Phase.DEPARTING,
+                "Boarding during the last valid mission tick did not commit departure");
+        long revision = departing.revision();
+        check(!departing.board(pad) && !departing.extract(pad) && departing.phaseTicks() == 0
+                        && departing.revision() == revision,
+                "Duplicate boarding or extraction restarted the accepted departure");
+        // The manager's automatic flight lasts 100 ticks, crossing the deadline on its first tick.
+        for (int tick = 1; tick <= 100; tick++) {
+            departing.tick();
+            check(!departing.expired() && departing.phaseTicks() == tick
+                            && !departing.board(pad) && !departing.extract(pad)
+                            && departing.revision() == revision,
+                    "The mission timer revoked or restarted an already accepted departure");
+        }
+        check(departing.ticks() == deadline + 99 && departing.phaseTicks() == 100,
+                "The complete departure animation did not finish beyond the mission cutoff");
+
+        LibertyOperation lateBoard = operation(false, false);
+        prepareBoarding(lateBoard);
+        advanceUntil(lateBoard, deadline);
+        long boardingRevision = lateBoard.revision(), boardingTicks = lateBoard.phaseTicks();
+        check(lateBoard.expired() && !lateBoard.board(Vec3.atCenterOf(lateBoard.extraction))
+                        && lateBoard.phase() == LibertyOperation.Phase.BOARDING
+                        && lateBoard.revision() == boardingRevision && lateBoard.phaseTicks() == boardingTicks,
+                "Boarding at the exact cutoff bypassed expiry or changed the rejected session");
+        lateBoard.tick();
+        check(lateBoard.expired() && !lateBoard.board(Vec3.atCenterOf(lateBoard.extraction)),
+                "Boarding became available again after the mission deadline");
+
+        LibertyOperation lateCall = operation(false, false);
+        lateCall.phase(LibertyOperation.Phase.ACTIVE);
+        finishObjectives(lateCall);
+        advanceUntil(lateCall, deadline);
+        long activeRevision = lateCall.revision();
+        check(lateCall.complete() && lateCall.expired() && !lateCall.extract(Vec3.atCenterOf(lateCall.extraction))
+                        && lateCall.phase() == LibertyOperation.Phase.ACTIVE && lateCall.revision() == activeRevision,
+                "Completed objectives allowed a new extraction call at the exact cutoff");
+        lateCall.tick();
+        check(lateCall.expired() && !lateCall.extract(Vec3.atCenterOf(lateCall.extraction)),
+                "An extraction call became available after the mission deadline");
+
+        LibertyOperation lateExtract = operation(false, false);
+        lateExtract.phase(LibertyOperation.Phase.ACTIVE);
+        finishObjectives(lateExtract);
+        advanceUntil(lateExtract, deadline - 1);
+        check(lateExtract.extract(Vec3.atCenterOf(lateExtract.extraction)),
+                "An extraction call was rejected before the advertised mission cutoff");
+        lateExtract.tick();
+        check(lateExtract.expired() && lateExtract.phase() == LibertyOperation.Phase.EXTRACTING,
+                "Calling extraction without boarding granted extra mission time");
+
+        LibertyOperation downed = operation(false, false);
+        downed.phase(LibertyOperation.Phase.DOWNED);
+        advanceUntil(downed, deadline - 1);
+        check(!downed.expired(), "A downed mission expired before its cutoff");
+        downed.tick();
+        check(downed.expired() && !downed.board(Vec3.atCenterOf(downed.extraction)),
+                "Being downed bypassed the mission clock or allowed boarding");
+        pass(helper, "liberty_extraction_deadline_rules");
+    }
+
+    @GameTest(template = "hoverboard_empty", timeoutTicks = 100)
     public static void authoredTheatersKeepDistinctScaleAndBoundedMissionClocks(GameTestHelper helper) {
         check(LibertyOperation.THEATERS.size() == 3 && LibertyOperation.theater("unknown") == null,
                 "The war map omitted authored theaters or accepted an unknown one");
@@ -221,6 +290,17 @@ public final class LibertyOperationGameTests {
     private static LibertyOperation operation(boolean signal, boolean supply) {
         return new LibertyOperation(UUID.randomUUID(), UUID.randomUUID(), LibertyOperation.THEATERS.get(0),
                 new BlockPos(0, 64, 0), 0, signal, supply);
+    }
+    private static void prepareBoarding(LibertyOperation run) {
+        run.phase(LibertyOperation.Phase.ACTIVE);
+        finishObjectives(run);
+        check(run.extract(Vec3.atCenterOf(run.extraction)), "A completed fixture could not call extraction");
+        for (int tick = 0; tick < 600; tick++) run.tick();
+        run.phase(LibertyOperation.Phase.BOARDING);
+        for (int tick = 0; tick < 60; tick++) run.tick();
+    }
+    private static void advanceUntil(LibertyOperation run, long targetTick) {
+        while (run.ticks() < targetTick) run.tick();
     }
     private static void clearAndPaint(LibertyOperation.Objective objective) {
         while (objective.defeats() < objective.defenders())
