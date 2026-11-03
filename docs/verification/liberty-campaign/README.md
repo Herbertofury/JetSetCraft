@@ -1,10 +1,64 @@
 # Liberty Grind campaign — alpha.9 verification receipt
 
-## Continuation status — 3 November 2026 UTC
+## Hosted continuation
 
-The follow-up to PR #49 changes production source after the local checkpoint below. It adds bounded retirement of abandoned ordinary combatants, fairer access to shared admissions, terrain-grounded home routes, varied repeatable defense offers and extraction-deadline handling. It also repairs two native timing/isolation fixtures and the hosted client gate's outdated fixture marker. Four new required GameTests bring the source inventory to **122 distinct required cases**; the existing native director case additionally checks relocation and replacement pressure.
+**Verified and merged on 3 November 2026 UTC.** [PR #49](https://github.com/Herbertofury/JetSetCraft/pull/49) merged as `c79b9257735d53d8e15debf73131bfd3f2e4e62d` after **all eleven final-candidate checks passed**. The merge, feature head and runner checkout have the identical tracked tree recorded below. Later documentation and wiki publication are separate from the tested binary.
 
-The current workspace passes asset, gameplay-contract, premium-polish, provider-manifest, wiki, research-browser, Python-compilation and whitespace checks. The unchanged Java syntax validator helper also parses all **240 Java files** successfully through Java 17 source launching; the stock wrapper requires an unavailable `javac` executable. **Forge compilation, the 122-case native matrix, the rebuilt installed JAR and new native-client captures are pending hosted verification.** This workspace cannot download the Gradle distribution, so the archived local results must not be treated as verification of the changed source. The provider workflow now prepares a separate official Forge installation from pinned original providers and tests the exact newly built JAR, retaining its checksum and sanitized evidence.
+This continuation keeps pressure moving through large arenas, grounds home checkpoints and escort routes without editing production terrain, varies defense offers deterministically, and lets boarding accepted before the deadline finish its departure. Ordinary distant infantry retirement gives no defeat/reward credit and refunds no lifetime admission. Assigned priority targets remain, living observers prevent retirement, and the shared 384-actor limit covers legacy expeditions too.
+
+### Current gate outcomes
+
+| Gate | Observed outcome |
+| --- | --- |
+| [Standalone workflow](https://github.com/Herbertofury/JetSetCraft/actions/runs/41564559832) | **PASS**, 7m 52s. Clean build, repository validators, native GameTests, dedicated readiness and normal save/shutdown, and the base client audit. |
+| [Eight optional-provider configurations](https://github.com/Herbertofury/JetSetCraft/actions/runs/41564559844) | **8/8 PASS**, 5m 42s overall: Alex's Mobs, Alex's Caves, Cataclysm, combined core providers, Aether, Iron's Spells, AoA and combined adventure providers. Each required build/native/server gate completed. |
+| [Liberty provider workflow](https://github.com/Herbertofury/JetSetCraft/actions/runs/41564559899) | **2/2 PASS**, 10m 51s overall. Full-provider and intentional missing-pack configurations completed their required gates. |
+| Full-provider native suite | **122 required cases passed**, 5m 20s. The workflow requires the real provider, armory, lifecycle, home-preservation, grounded-route, deadline and director-relocation markers without Liberty skips. |
+| Independent installed JAR | **PASS**, 1m 11s. A separate official Forge installation loaded the exact reobfuscated JAR and pinned original providers, verified native guards, ran commands, authenticated its stop, saved all dimensions and exited successfully. |
+| Automated campaign client | **PASS**, nineteen required native captures and the campaign completion marker. This is the scripted deployment, equipment, paint, ship and return path, with the disclosed fixture interventions below. |
+| New individual image review | **Not performed.** Browser automatic approval review rejected the artifact backing host. No download or raw-log bypass was used, and no new pixel-review claim is made. |
+| Final local source checks | Java 17 syntax parsing of **240 files**, gameplay-contract, premium-polish and whitespace checks passed. The hosted clean builds establish Forge compilation. |
+
+There are **122 distinct required cases**, not 122 new cases. Optional-provider absence deliberately records skips in configurations that cannot exercise those providers; a required-test completion is not proof of unavailable native content. The four added cases cover defense variety/retry stability, independent courier elevations, grounded escort paths and extraction-deadline rules. The existing director case additionally exercises actual removal and renewed nearby pressure after controlled relocation.
+
+### Exact source and installed-artifact identities
+
+| Identity | Value |
+| --- | --- |
+| Feature head | `bbb3e1fc25adeb00fe31e5bfd1a5f757696d2b20` |
+| Observed runner checkout / PR merge ref | `f7c7dd0e0d33b51cc032cb9b95736cde53b68488` |
+| Actual main merge | `c79b9257735d53d8e15debf73131bfd3f2e4e62d` |
+| Identical tracked tree | `6ed18d66517c36b991d3ae6a88f02054cd7ba14c` |
+| Installed JAR | `jetsetcraft-1.20.1-0.4.0-alpha.9.jar` — **6,526,641 bytes** |
+| Runner-reported JAR SHA-256 | `bd950636d5f5bc712d26ba246ab7de0bcb86e92dddbc8bc1fdd4a4690769a319` |
+| Local source inputs | **691 paths**, [per-file manifest](hosted-source-manifest.json) |
+| Local canonical input aggregate | `e70f1e4783fe511423573e456a96089d60ce31a051d31e38adad800b5c60456c` |
+
+The [machine-readable continuation record](hosted-continuation.json) includes workflow identities, stage durations, archive digests and earlier attempts. These observations came from GitHub's visible job/run pages and read-only public git comparisons. The JAR hash is the runner's reported value; the binary and new PNG archives were not downloaded into this workspace. Archive ZIP digests are different from the JAR checksum.
+
+The local manifest covers `src/main` and the three Gradle configuration files, including locally generated inputs. Its aggregate is SHA-256 of UTF-8 `json.dumps(rows, sort_keys=True, separators=(',', ':'))`, with no trailing newline and rows ordered by relative path components. **CI did not recompute this local aggregate.** It is distinct from both the verified tracked tree and compiled JAR identity.
+
+### Fixture corrections and proof boundaries
+
+Native probes remain real, vulnerable entities. Their small body spaces and sentry/walker corridors are prepared before effects begin and retained in terrain checks. Later mine and paint probes use spaces prepared up front; preparation refuses to rewrite terrain after ticking starts. Diagnostics identify health, fire state, position and last damage source.
+
+The home case uses a disposable 257 × 257 platform above the highest loaded surface, then creates its original chest, mural and ordinary pig before taking the exact 257 × 16 × 257 preservation snapshot. Those controls sit outside generated objective routes, remain inside the defense area and receive native entity ticks. The owner is registered and removed through the native level methods. Real packet admission, the exact offer-selected plan, direct foreign-mob damage denial, core destruction, deep belongings, retry claims and once-only settlement remain asserted.
+
+Headliner recovery prepares neighboring chunks while retaining its 25-chunk native readiness gate and 120-tick phase limit. Showdown waits up to 80 native ticks for arena residency and observes the existing 160-tick production spawn window; the 360-tick test timeout covers the full bounded sequence. It still requires real owned actors, three separated hits, copied-marker rejection, missing-actor cancellation and normal later activity behavior.
+
+Other retained fixtures use controlled positioning, loaded-region tickets and disclosed clock compression. The client route grants fixture requisitions for an actual purchase and uses staged field observation and travel. Source-set gameplay, a no-player installed-server smoke check, and scripted client captures establish different things. They do not establish a natural human 20–30 minute clear, high-difficulty balance, the complete equipment economy, sustained multiplayer load or shared combat squads.
+
+### Earlier hosted attempts
+
+| Candidate | Observed failure and subsequent correction |
+| --- | --- |
+| `63332b0` | [Base](https://github.com/Herbertofury/JetSetCraft/actions/runs/41560700047) exposed a walker stopped after 0.75 blocks by fixture terrain. [Full provider](https://github.com/Herbertofury/JetSetCraft/actions/runs/41560700018) exposed the same-world fake player's missing native registration. The [eight-provider matrix](https://github.com/Herbertofury/JetSetCraft/actions/runs/41560700027) passed. The corridor and registration corrections retained the movement and home-preservation requirements. |
+| `7511444` | [Base](https://github.com/Herbertofury/JetSetCraft/actions/runs/41561661746) and [both Liberty lanes](https://github.com/Herbertofury/JetSetCraft/actions/runs/41561661905) passed, including installed smoke and nineteen automated captures. [Four provider jobs failed](https://github.com/Herbertofury/JetSetCraft/actions/runs/41561661784): three incomplete native chunk-readiness windows and one sentry that never spent ammunition. Neighbor preparation and an unobstructed recorded firing corridor addressed those preconditions. |
+| `a8132d3` | [Base passed](https://github.com/Herbertofury/JetSetCraft/actions/runs/41563162885). [Seven provider jobs passed](https://github.com/Herbertofury/JetSetCraft/actions/runs/41563162811), while AoA reported protected-resident health loss. [Full provider failed two required cases](https://github.com/Herbertofury/JetSetCraft/actions/runs/41563162805): home admission on an incompletely prepared flat fixture and too few queryable Showdown actors after 30 ticks. Its installed/client stages did not run. The final candidate established clear vulnerable probe spaces, a truly open home platform with route-safe preserved controls, and bounded native Showdown readiness. |
+
+The failures are retained as observed conditions; an uninstrumented health loss alone does not prove its precise damage source. The final rerun confirms the corrected fixtures while preserving their damage and world-safety assertions. The archived original checkpoint below retains its own failures, source/JAR identities and nineteen individually reviewed images.
+
+![Merged PR #49 with eleven passing checks](continuation-merge-proof.jpg)
 
 ## Archived local checkpoint — 2 November 2026
 
@@ -12,7 +66,7 @@ The current workspace passes asset, gameplay-contract, premium-polish, provider-
 
 This expansion supplies 28 seeded mission adaptations, difficulties 1–10, 20/25/30 minute operation budgets, six shared campaign regions, the pre-pod armory/four-call review, a walkable ship and explicitly accepted home defense. The catalogue distinguishes 100 selectable calls from 25 shared/mission/historical references; exact native provider mappings and JetSetCraft adaptations are documented separately. Read the [implementation guide](../../LIBERTY_GRIND.md), [player guide](../../../wiki/Liberty-Grind.md), [mission source mapping](../../research/LIBERTY_MISSION_RESEARCH.md) and [per-call behavior mapping](../../research/LIBERTY_CALLIN_IMPLEMENTATION.md).
 
-## Recorded gates
+### Recorded gates
 
 | Gate | Observed result and evidence |
 | --- | --- |
@@ -29,7 +83,7 @@ The [final matrix](final-matrix.json) records **354 registered required-test com
 
 Each configuration used a newly created independent run directory through `gameTestRunDirectory`, with a fresh world and its deliberately selected content. The runner excluded recompilation/resource processing after the clean build and verified unchanged source inputs, compiled classes/resources and JAR after every lane. It left the shared development world and gun-pack directory untouched. The machine-readable receipt records those checks for each lane.
 
-## Exact source and artifact identity
+### Exact source and artifact identity
 
 | Identity | Recorded value |
 | --- | --- |
@@ -47,7 +101,7 @@ For the final client, all **689 individual file hashes match the final build man
 
 Each installed smoke check identifies the exact reobfuscated JAR copied into its separate official Forge installation; an earlier artifact’s pass does not transfer to a rebuilt JAR. ForgeGradle GameTests and `runClient` instead execute the project's source set in native Forge. These are separate evidence boundaries: the installed smoke proves loading, registered commands, applied guards and normal save/stop; source-set native fixtures prove their exercised gameplay paths; reviewed screenshots prove the visible states they actually show. None alone substitutes for the other two.
 
-### Pinned optional content
+#### Pinned optional content
 
 | Component | Exact upstream identity |
 | --- | --- |
@@ -57,7 +111,7 @@ Each installed smoke check identifies the exact reobfuscated JAR copied into its
 
 The [pack guide](../../LIBERTY_GRIND_PACK.md) and [installed receipt](installed-smoke.json) retain upstream download references, player-animation dependency and official Forge installer identity. These third-party binaries/content are not embedded in JetSetCraft. The merged pack's missing optional Create recipes are upstream content diagnostics; the tested archive remains unmodified.
 
-## Passing full-provider gameplay coverage
+### Passing full-provider gameplay coverage
 
 The final source has **118 required GameTests**, including the retained movement, crew, activity, Rival Rush and original Liberty cases. The campaign expansion adds 34 required cases over alpha.8's 84. A pass count includes explicitly skipped optional-content cases in the intentionally absent-provider lanes; their logs must distinguish a successful admission-denial test from an unexecuted native-provider scenario.
 
@@ -76,13 +130,13 @@ Additional native cases cover all 68 live gun definitions, real armor attributes
 
 The existing native lifecycle suite still includes actual extraction, serialized same-identity rejoin recovery and durable return/settlement acknowledgements. Those controlled server cases are distinct from the shortened client capture route; a field, ship or return screenshot is not evidence that the client naturally completed a whole campaign.
 
-### Why the native safety checks matter
+#### Why the native safety checks matter
 
 The three strictly validated containment sources have different jobs. `LibertyTaczProjectileMixin` gates the pinned optional provider's native bullet hit callbacks before foreign-target or terrain side effects. `LibertyHomeEntityMixin` and `LibertyHomeBlockStateMixin` guard actual home participants/owned actors at Minecraft 1.20.1 contact dispatch. The installed-server diagnostic verifies the actual injected marker interfaces in the reobfuscated environment; source selectors alone are insufficient. Home admission fails closed if the guards are absent.
 
 Public Forge hooks contain remaining owned conversion, reinforcement, vibration, trample and damage paths. Native initialization prevents unowned jockeys and ordinary-raid membership. Home rosters use cave spiders in place of silverfish and strays in place of skeletons, avoiding their known unhooked world-writing/conversion paths. Ordinary actors retain native callbacks; normal mob/Gang Form compatibility still rejects other injection paths. See the [implementation boundary](../../LIBERTY_GRIND.md#shared-campaign-and-safe-home-defense).
 
-## Fixture interventions and limits
+### Fixture interventions and limits
 
 The native server cases use disposable worlds, uniquely identified fixture players, explicit loaded-region tickets and controlled relocation to make assertions deterministic. Most cases use Forge FakePlayer. The call lifecycle case uses an actual ServerPlayer with a no-socket outbound listener, because Forge FakePlayer deliberately rejects all damage and omits native death handling. It acknowledges the controlled dimension transfer through the native public hook, then applies a controlled lethal hit attributed to a real director-owned mob; native damage/death and the production Downed handler remain intact. Core tests lower one target to one health and shorten a gun draw setup; the shot, ammunition, native projectile, damage and death attribution remain real. Home-offer fixtures submit explicitly failed public campaign results instead of injecting an offer or compressing the shared campaign clock.
 
@@ -94,7 +148,7 @@ After genuine pod descent, disclosed server staging placed the player beside an 
 
 The ship movement check used **25 ticks of actual forward-key input**, traveling **5.136875 blocks**, with the real floor and compiled chunk checked. Both the campaign early return and ship return restored the original deep inventory NBT, Minecraft XP and Overworld destination. Original settings were restored. This client route did not complete a campaign extraction or buy a ship module. The native server suite separately exercises the relevant rules and retained extraction lifecycle.
 
-## Native gallery
+### Native gallery
 
 These are unchanged screenshots from the actual Minecraft/Forge client, with original filenames, dimensions, byte lengths and SHA-256 hashes in [native-audit.json](native-audit.json). Default views are **640 × 360 logical pixels** in a 1280 × 720 framebuffer; minimum views are **320 × 240 logical pixels**. The [root review](root-pixel-review.json) is anchored to each image's exact bytes. Native advancement toasts overlap upper-right chrome in captures 15 and 16; objective/hardware text and actions remain readable. The images retain those toasts.
 
@@ -128,7 +182,7 @@ These are unchanged screenshots from the actual Minecraft/Forge client, with ori
 
 ![Physical ship deck](17-walkable-ship-deck.png)
 
-## Preserved failed iterations
+### Preserved failed iterations
 
 | Attempt | Observed failure and subsequent correction |
 | --- | --- |
@@ -141,7 +195,7 @@ These are unchanged screenshots from the actual Minecraft/Forge client, with ori
 
 [GameTest attempt metadata](attempts.json) and [client attempt metadata](client-attempts.json) preserve source identities, original/published log hashes and observed outcomes. Published text logs replace absolute machine paths, and the installed logs redact any private RCON secret; diagnostics remain intact. Those transformations are disclosed in the JSON receipts. Final native PNG evidence is preserved as exact copies, with each image’s hash recorded in the audit and pixel-review receipts.
 
-## Remaining scope and predecessor evidence
+### Remaining scope and predecessor evidence
 
 Deployments are solo, with a shared server campaign. Escort and evacuation objectives move rigs/markers rather than a population of rescued NPCs. The 20/25/30 minute selections are operation budgets, not guaranteed human session lengths. The 100 selectable call-ins include documented JetSetCraft adaptations; only their explicit provider mappings claim native implementations. One-rider hardware does not imply the original game's multiplayer vehicle systems.
 

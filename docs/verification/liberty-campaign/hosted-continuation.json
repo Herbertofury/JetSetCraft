@@ -1,0 +1,93 @@
+{
+  "feature_commit": "bbb3e1fc25adeb00fe31e5bfd1a5f757696d2b20",
+  "pr_merge_ref": "f7c7dd0e0d33b51cc032cb9b95736cde53b68488",
+  "tracked_tree": "6ed18d66517c36b991d3ae6a88f02054cd7ba14c",
+  "local_source_input_count": 691,
+  "local_source_input_sha256": "e70f1e4783fe511423573e456a96089d60ce31a051d31e38adad800b5c60456c",
+  "jar": {
+    "file": "jetsetcraft-1.20.1-0.4.0-alpha.9.jar",
+    "bytes": 6526641,
+    "sha256": "bd950636d5f5bc712d26ba246ab7de0bcb86e92dddbc8bc1fdd4a4690769a319"
+  },
+  "installed_marker": "JETSETCRAFT_LIBERTY_INSTALLED_SMOKE_PASS exact_release_jar native_guard actual_providers commands authenticated_stop all_dimensions_saved exit_zero",
+  "liberty_run": "https://github.com/Herbertofury/JetSetCraft/actions/runs/41564559899",
+  "liberty_job": "https://github.com/Herbertofury/JetSetCraft/actions/runs/41564559899/job/125682828689?pr=49",
+  "observed_workflow_checkout": "f7c7dd0e0d33b51cc032cb9b95736cde53b68488",
+  "installed_duration_seconds": 71,
+  "full_provider_native_duration_seconds": 320,
+  "source_set_server_duration_seconds": 40,
+  "base": {
+    "run_id": "41564559832",
+    "status": "success",
+    "duration_seconds": 472,
+    "url": "https://github.com/Herbertofury/JetSetCraft/actions/runs/41564559832",
+    "job_id": "125682827960"
+  },
+  "wave2": {
+    "run_id": "41564559844",
+    "status": "success",
+    "duration_seconds": 342,
+    "url": "https://github.com/Herbertofury/JetSetCraft/actions/runs/41564559844",
+    "providers": {
+      "adventure_all": 289,
+      "aether": 316,
+      "alexscaves": 337,
+      "alexsmobs": 221,
+      "all": 258,
+      "aoa": 321,
+      "cataclysm": 201,
+      "irons_spells": 324
+    }
+  },
+  "required_case_inventory": 122,
+  "native_client_status": "success",
+  "new_individual_pixel_review": {
+    "status": "not_performed",
+    "reason": "Browser automatic approval review rejected the backing download host; no artifact-download or raw-log bypass was used."
+  },
+  "evidence_method": "Visible GitHub job/run UI and read-only public git fetch; the installed JAR hash is the runner-reported value, not a locally downloaded binary.",
+  "liberty_status": "success",
+  "liberty_duration_seconds": 651,
+  "liberty_jobs_succeeded": 2,
+  "native_campaign_captures": 19,
+  "total_successful_checks": 11,
+  "artifact_archives": {
+    "full_provider_sha256": "8e1957363c8a4a355f0b8ed75b28aaad4c891c29c66185fbea517d14f9e68096",
+    "missing_pack_sha256": "e27378c2edb7d6eb656ad8e17daa5b4388b7bae2500f78cf4c3ee49fd3210afe",
+    "native_client_sha256": "c2aced951c0050eb89d9a4aa87d89b82e08b7b883c33ce91048b74639dbea7d5",
+    "downloaded": false
+  },
+  "verified_date_utc": "2026-11-03",
+  "pull_request": "https://github.com/Herbertofury/JetSetCraft/pull/49",
+  "merge_commit": "c79b9257735d53d8e15debf73131bfd3f2e4e62d",
+  "merge_tree_matches_tested_tree": true,
+  "local_source_manifest": "hosted-source-manifest.json",
+  "merge_proof": "continuation-merge-proof.jpg",
+  "native_case_boundary": "122 distinct required cases; optional-provider absences use disclosed skips. The full-provider workflow requires its native Liberty markers without Liberty skips.",
+  "prior_attempts": [
+    {
+      "candidate": "63332b02ad981946aefb75b2f37cad9fd97f2e9d",
+      "base": "https://github.com/Herbertofury/JetSetCraft/actions/runs/41560700047",
+      "wave2": "https://github.com/Herbertofury/JetSetCraft/actions/runs/41560700027",
+      "liberty": "https://github.com/Herbertofury/JetSetCraft/actions/runs/41560700018",
+      "observed": "Eight Wave 2 jobs passed. Base walker stopped after 0.75 blocks against generated terrain; full-provider home fixture failed with an ObjectSet.remove NPE from missing same-world player registration.",
+      "correction": "Prepared a recorded walker corridor while retaining native input/travel assertions; registered and cleaned up the no-socket home owner through native level methods."
+    },
+    {
+      "candidate": "75114446c4f6ab13cbacd4c5888c74dd003789d5",
+      "base": "https://github.com/Herbertofury/JetSetCraft/actions/runs/41561661746",
+      "wave2": "https://github.com/Herbertofury/JetSetCraft/actions/runs/41561661784",
+      "liberty": "https://github.com/Herbertofury/JetSetCraft/actions/runs/41561661905",
+      "observed": "Base and both Liberty lanes passed, including installed smoke and nineteen automated captures. Four Wave 2 jobs failed: three headliner readiness timeouts at 17/25, 20/25 and 23/25 ticking chunks, plus a sentry with ammo still 180.",
+      "correction": "Prepared outer chunk neighbors without changing the 25-chunk readiness gate or 120-tick phase deadline; cleared and recorded the sentry firing corridor and added a production-equivalent sight-ray assertion."
+    },
+    {
+      "candidate": "a8132d3ab7d0dc7839110b08dcb4e6795388c0e2",
+      "base": "https://github.com/Herbertofury/JetSetCraft/actions/runs/41563162885",
+      "wave2": "https://github.com/Herbertofury/JetSetCraft/actions/runs/41563162811",
+      "liberty": "https://github.com/Herbertofury/JetSetCraft/actions/runs/41563162805",
+      "observed": "Base passed and seven Wave 2 jobs passed. AoA reported a protected foreign resident losing health. Full provider reported home-defense admission failure on the claimed flat fixture and too few queryable Showdown actors after a fixed 30 ticks. Installed smoke and client audit did not run for this head.",
+      "correction": "Prepared recorded collision-free probe spaces before effects began; raised the home platform above loaded terrain and moved preserved controls outside routes while retaining native ticking; observed Showdown native residency and the existing production spawn retry window."
+    }
+  ]
+}
