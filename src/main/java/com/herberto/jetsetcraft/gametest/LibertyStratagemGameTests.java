@@ -342,15 +342,15 @@ public final class LibertyStratagemGameTests {
             this.helper=helper;this.level=helper.getLevel();this.nativeProvider=nativeProvider;
             BlockPos anchor=new BlockPos(32000+SEQUENCE.getAndIncrement()*256,100,-32000);chunk=new ChunkPos(anchor);
             for(int x=-4;x<=4;x++)for(int z=-4;z<=4;z++)level.getChunk(chunk.x+x,chunk.z+z);
-            // Native shells collide with real terrain, and sentries/explosions require an exposed target.
-            // Keep the original provider approach above every surface in its already-loaded chunks.
+            // Every fixture needs exposed approach lanes and body space for its delayed probes.
+            // Stay above generated terrain so falling blocks cannot refill prepared air while effects tick.
             int surface=level.getMinBuildHeight();
-            if(nativeProvider)for(int x=chunk.getMinBlockX()-64;x<=chunk.getMinBlockX()+79;x++)
+            for(int x=chunk.getMinBlockX()-64;x<=chunk.getMinBlockX()+79;x++)
                 for(int z=chunk.getMinBlockZ()-64;z<=chunk.getMinBlockZ()+79;z++)
                     surface=Math.max(surface,level.getHeight(Heightmap.Types.WORLD_SURFACE,x,z));
             highestSurface=surface;
-            int floorY=nativeProvider?Math.max(100,surface+5):100;
-            check(floorY+8<level.getMaxBuildHeight(),"No clear vertical space for native call-in fixture above surface "+surface);
+            int floorY=Math.max(100,surface+5);
+            check(floorY+8<level.getMaxBuildHeight(),"No clear vertical space for call-in fixture above surface "+surface);
             center=new BlockPos(anchor.getX(),floorY,anchor.getZ());
             for(int x=-radius;x<=radius;x++)for(int z=-radius;z<=radius;z++){BlockPos p=center.offset(x,0,z);level.setBlock(p,Blocks.STONE.defaultBlockState(),3);fixtureBlocks.put(p,Blocks.STONE.defaultBlockState());}
             chest=center.offset(7,1,2);level.setBlock(chest,Blocks.CHEST.defaultBlockState(),3);
@@ -376,7 +376,18 @@ public final class LibertyStratagemGameTests {
         }
         private void readyProbe(Mob mob){
             if(!preparedProbes.contains(mob.position()))prepareProbe(mob.position());
-            check(level.noCollision(mob,mob.getBoundingBox()),"Stationary probe has obstructed native body space: "+mob.getBoundingBox());
+            check(level.noCollision(mob,mob.getBoundingBox()),"Stationary probe has obstructed native body space: "+bodyStatus(mob));
+        }
+        private String bodyStatus(Mob mob){
+            var body=mob.getBoundingBox();List<String> blocks=new ArrayList<>();
+            for(BlockPos pos:BlockPos.betweenClosed(BlockPos.containing(body.minX,body.minY,body.minZ),
+                    BlockPos.containing(body.maxX,body.maxY,body.maxZ))){
+                BlockState state=level.getBlockState(pos);if(!state.isAir())blocks.add(pos+"="+state);
+            }
+            var entities=level.getEntities(mob,body).stream().limit(8)
+                    .map(entity->ForgeRegistries.ENTITY_TYPES.getKey(entity.getType())+" "+entity.getBoundingBox()).toList();
+            return "elapsed="+elapsed+", center="+center+", originalHighestSurface="+highestSurface
+                    +", body="+body+", nonAirBodyBlocks="+blocks+", intersectingEntities="+entities;
         }
         Mob enemy(Vec3 pos){
             Mob mob=EntityType.HUSK.create(level);check(mob!=null,"Owned-effect fixture target is unavailable");

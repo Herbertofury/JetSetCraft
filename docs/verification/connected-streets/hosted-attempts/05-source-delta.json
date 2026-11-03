@@ -1,0 +1,28 @@
+{
+  "schema": 1,
+  "candidate": 5,
+  "parent_commit": "f2b021bea8780f54a540d0042d31d12db0300811",
+  "baseline_manifest": "03-source-manifest.json",
+  "baseline_source_commit": "89357025e515503c70ecf43cf90bf433b96623d2",
+  "scope": "Locally hashed source inputs after generalizing the controlled platform to every call-in fixture. Reconstruct the full ordered input list by applying changed_inputs to baseline_manifest. Actual publication and hosted acceptance identities are recorded in PR #50. This is not a CI outcome or compiled-artifact checksum.",
+  "input_count": 703,
+  "unchanged_inputs_from_baseline": 702,
+  "aggregate_sha256": "0d5402e19b7b226dea7abc761fa3cd923908db790526e40266febaf0d99ea9be",
+  "aggregate_algorithm": "SHA-256 of UTF-8 json.dumps(files, sort_keys=True, separators=(comma,colon)); same ordered input paths as continuation-local/source-manifest.json.",
+  "changed_inputs": [
+    {
+      "before": {
+        "path": "src/main/java/com/herberto/jetsetcraft/gametest/LibertyStratagemGameTests.java",
+        "bytes": 31341,
+        "sha256": "b7cb64551d9147e980925f0572615e84554d8300c413003d88aa2401c273bfe6"
+      },
+      "after": {
+        "path": "src/main/java/com/herberto/jetsetcraft/gametest/LibertyStratagemGameTests.java",
+        "bytes": 35952,
+        "sha256": "5dba9c96b307ea43ab8f3009d14714b64d6b11e38524bb803f565eba9e010c21"
+      }
+    }
+  ],
+  "reason": "Candidate 4 Alex's Mobs exposed an obstructed body at the exact delayed +45X paint probe. The log did not identify the obstructing blocks or entities. All call-in fixtures now use the already-reviewed above-surface platform; native-provider geometry is unchanged from candidate 4. Read-only failure diagnostics distinguish non-air blocks and intersecting entities. No terrain is re-cleared after effects begin; late-spawn timing, real damage, foreign safety, terrain/NBT preservation and cleanup remain required.",
+  "local_verification": "All 247 Java sources passed syntax parsing; patch whitespace passed. Root and two independent reviewers found no blocker. Fresh native acceptance remains necessary."
+}
