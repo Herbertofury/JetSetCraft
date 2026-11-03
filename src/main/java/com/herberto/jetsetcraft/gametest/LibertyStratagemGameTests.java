@@ -27,10 +27,12 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.FakePlayerFactory;
@@ -113,6 +115,14 @@ public final class LibertyStratagemGameTests {
             // Separate the targets so early sentry knockback cannot remove the mine's later trigger,
             // and damage from one call cannot satisfy another call's assertion.
             Vec3 sentryPosition=f.point.add(-24,0,-24),minePosition=f.point.add(26,0,25);
+            // A stone floor alone leaves generated terrain in the native grounding/sight path.
+            // Prepare this small firing corridor before spawning either body, and retain its
+            // air cells in the world-preservation check just like the protected floor/chest.
+            BlockPos sentryFeet=BlockPos.containing(sentryPosition);
+            for(BlockPos p:BlockPos.betweenClosed(sentryFeet.offset(-2,0,-2),sentryFeet.offset(5,5,4))){
+                f.level.setBlock(p,Blocks.AIR.defaultBlockState(),3);
+                f.fixtureBlocks.put(p.immutable(),Blocks.AIR.defaultBlockState());
+            }
             Mob sentryTarget=f.enemy(sentryPosition.add(3,0,0));
             sentryTarget.getAttribute(Attributes.KNOCKBACK_RESISTANCE).setBaseValue(1);
             float sentryHealth=sentryTarget.getHealth();
@@ -140,6 +150,11 @@ public final class LibertyStratagemGameTests {
                 if(progress.phase==0){
                     check(tick<100,"Hardware did not receive native world ticks: sentry="+sentry.tickCount+", mine="+triggerMine.tickCount);
                     if(sentry.tickCount<35||triggerMine.tickCount<35)return;
+                    var sight=f.level.clip(new ClipContext(sentry.getEyePosition(),sentryTarget.getEyePosition(),
+                            ClipContext.Block.COLLIDER,ClipContext.Fluid.NONE,f.owner));
+                    check(sentryTarget.isAlive()&&sentry.distanceToSqr(sentryTarget)<48*48&&sight.getType()==HitResult.Type.MISS,
+                            "The isolated sentry target lost its native firing path: hit="+sight.getType()+" at="+sight.getBlockPos()
+                                    +", sentry="+sentry.position()+", target="+sentryTarget.position()+", health="+sentryTarget.getHealth());
                     check(sentry.ammo()<180,"The real sentry never consumed ammunition: ammo="+sentry.ammo());
                     check(sentryTarget.getHealth()<sentryHealth,"The real sentry never damaged its isolated owned target");
                     check(mines.stream().noneMatch(Entity::isRemoved),"A mine triggered before an eligible owned target arrived");

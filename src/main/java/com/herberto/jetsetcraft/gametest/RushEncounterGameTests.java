@@ -181,7 +181,21 @@ public final class RushEncounterGameTests {
 
         private HeadlinerRecoveryFixture(GameTestHelper helper) {
             this.helper = helper;
-            current = begin(helper, "JSC_boss_lost", false, 0);
+            current = beginBranch("JSC_boss_lost");
+        }
+
+        private Fixture beginBranch(String name) {
+            Fixture fixture = begin(helper, name, false, 0);
+            try {
+                // Supply the outer neighbors around the existing radius-four ticket before
+                // starting the native readiness deadline. Terrain preparation alone still
+                // does not satisfy the unchanged 25-chunk entity-ticking gate.
+                ChunkPos center = fixture.held.get(0);
+                for (int x = -4; x <= 4; x++) for (int z = -4; z <= 4; z++)
+                    if (Math.max(Math.abs(x), Math.abs(z)) > 2)
+                        fixture.district.getChunk(center.x + x, center.z + z);
+                return fixture;
+            } catch (RuntimeException | Error error) { cleanup(fixture); throw error; }
         }
 
         private void tick() {
@@ -217,7 +231,7 @@ public final class RushEncounterGameTests {
                     check(!RivalRushManager.active(player) && run.headliners() == 0,
                             "A missing headliner bypassed the gate or manufactured a victory");
                     assertRestored(current); cleanup(current);
-                    current = begin(helper, "JSC_boss_limit", false, 0);
+                    current = beginBranch("JSC_boss_limit");
                     phase = 2; waited = 0; return;
                 }
                 advance(run, RushRun.SESSION_TICKS - 1 - run.elapsedTicks());
