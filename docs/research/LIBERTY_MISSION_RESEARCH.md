@@ -8,6 +8,8 @@ Liberty Grind expands to **28 selectable mission templates**, three enemy factio
 
 The intended session contains a pod arrival, several trips across a large skateable district, staged objectives, optional research detours, increasing combat pressure and a defended ship extraction. The chosen timer is an upper budget. Skilled players can finish earlier; the implementation does not pad a short mission with an invisible minimum-duration lock. Human pacing at each difficulty needs playtesting in addition to the deterministic and native runtime checks.
 
+Terminology matters: one `LibertyOperation` is currently **one deployment with three objective stages**. Helldivers 2 uses “operation” for a group of up to three separately deployed missions. Returning to the Liberty ship and selecting another mission provides the repeat-deployment loop; the three stages are not evidence of an implemented three-mission operation contract. [P 1]
+
 ## What the primary sources establish
 
 Arrowhead's launch explanation places the War Table aboard the ship and describes planetary operations containing up to three missions. Its objective families include infestation clearance, supplies, intelligence, priority targets and strategic launches. Resources and intelligence feed research and the wider war. This supports a connected campaign loop with varied jobs, rather than making every location repeat one checklist. [P 1]
@@ -18,9 +20,36 @@ The 2025 Hive World expansion introduced underground Hive Lung destruction and a
 
 The 2026 Cyberstan update added factory-city operations involving production facilities, infrastructure and symbolic structures. The later Void update describes multiple randomized primary objectives, evidence recording, reconnaissance, structure destruction and additional extraction options. The campaign's actual availability evolves, so an indexed mission list is not proof that every mission is offered on every planet at once. [P 5] [P 6]
 
-Arrowhead's recent pressure changes explicitly discuss performance limits on resident enemies, balancing pressure by enemy count and distance, preferring relevant nearby spawns, and removing distant actors when over budget. That supports bounded residents with continuing replenishment. **The numeric caps and rates below are original JetSetCraft tuning**, not reverse-engineered Helldivers internals. [P 7]
+Arrowhead's 7.1.0 changes measure pressure separately for each player using enemy count and distance. At the global performance cap, spawning favors players with lower nearby pressure, and distant enemies are removed when the enemy budget is exceeded. Its high-value-asset defense update also increases waves and encounter strength, reduces downtime, and exposes generator health. These are separate ideas: a resident limit alone does not establish pressure near a moving player, and faster waves alone do not reproduce destructible defense machinery. **The numeric caps and rates below are original JetSetCraft tuning**, not reverse-engineered Helldivers internals. [P 7]
 
 Nintendo describes distinct Turf War, Splat Zones, Tower Control, Rainmaker and Clam Blitz rules. Liberty uses the useful actions—cover territory, hold a contested zone, move a payload and carry an objective—in a PvE skating campaign. It does not reproduce Nintendo's competitive scoring, movement physics, art or multiplayer rules. [P 8]
+
+## Source clocks and the 20–30-minute adaptation
+
+The source game does not assign one universal length to every mission. The following are published mission time limits, **not measured average completion times**. The community mission pages supply the clock labels; official announcements establish the corresponding operation and objective families. [P 1] [P 7]
+
+| Source mission example | Published source limit | Liberty comparison |
+|---|---:|---|
+| Launch ICBM | 40 minutes [M 2] | `mural_rocket` uses the selected 20 / 25 / 30-minute budget |
+| Blitz: Search and Destroy / Terminid | 12 minutes [M 4] | `blitz_blockbuster` is a longer multi-stage raid; its compressed option is 20 minutes |
+| Eradicate Terminid Swarm | 15 minutes [M 9] | `swarm_purge` adds nest destruction and a staged combat route |
+| Evacuate High-Value Assets | 20 minutes [M 10] | `asset_guard` adapts defended sites and delivery, with all three Liberty timer options |
+
+Liberty's deadline includes the drop, field objectives, extraction defense and boarding. New extraction calls and boarding are rejected at or after the cutoff. Boarding accepted before the cutoff commits departure: the automatic 100-tick flight can finish even if the clock passes the deadline during it. An unboarded mission instead expires and returns the player; it does not switch to Helldivers' separate loss-of-orbital-support/emergency-extraction sequence. [M 11] Consequently, travel back to the pad and boarding must fit inside the chosen budget. Timer, route-length and human-playtest results must be evaluated together before claiming a reliably paced 20–30-minute session.
+
+## 2026 source refresh and coverage boundaries
+
+The dated catalogue already covers the major 2026 mission families. This follow-up distinguishes newly evidenced source behavior from what the current adaptation actually supplies.
+
+| Source change | Existing Liberty coverage | Boundary retained |
+|---|---|---|
+| Cyberstan production and factory-city assault [P 5] | `factory_uprising`, `machine_shutdown`, optional fabricator cores | These are registered weak-point objectives, not full city-building demolition or copied Cyborg encounters |
+| Galactic Campaigns and Control Centre context/history [P 14] | Persistent sector outcomes, ship progression and repeat deployment | Personal/server progression does not imply an Arrowhead-style global Major Order service or campaign archive |
+| Void randomized primary objectives and secondary extraction zones [P 6] | `prism_recon` and `lair_documentary`, with seeded site and route selection | Primary stage composition remains authored; alternate-extraction unlocking is not implemented by those templates |
+| Recon Craft retrieval enabled on the other two fronts in 7.1.0 [P 7] | `sample_heist` is already available to all factions | This is coverage of an existing retrieval family, not a reason to add a duplicate template |
+| 7.2.0 recording/relay, Gazer Spire Hellbomb and terrain-pathing fixes [P 13] | Evidence-recording and structure-destruction families already have mappings | A patch fixing an objective is not evidence that the mission was introduced in that patch, or that its source minigame is reproduced |
+
+The official patch index lists 7.2.0 at this research cutoff. Its support article was **updated 1 November 2026**; that timestamp is not asserted as the patch's original release date. Later event rotations or additions require another source check rather than extending this snapshot's completeness claim. [P 13] [P 15]
 
 ## Actual mission mechanics
 
@@ -114,7 +143,7 @@ The strategic-launch family is directly described at launch; geological objectiv
 | Restore Air Quality | `signal_blackout` | Adapted survey, contamination-source demolition and data delivery |
 | Eliminate Brood Commanders; Eliminate Chargers; Eliminate Bile Titans; Eliminate Impaler | `headliner_hunt` | Adapted actual designated Minecraft priority enemy; no copied Terminid body or armor anatomy |
 | Eradicate Terminid Swarm | `swarm_purge` | Adapted sustained local kill pressure and nest destruction |
-| Blitz: Search and Destroy | `blitz_blockbuster` | Adapted multi-base raid with actual cores;20-minute compressed option. [M 4] |
+| Blitz: Search and Destroy | `blitz_blockbuster` | Adapted multi-base raid with actual cores; 20-minute compressed option. [M 4] |
 | Purge Hatcheries | `hatchery_rampage` | Adapted egg-cluster cores, brood response and reclamation |
 | Destroy Spore Lung / Hive Lung | `hive_breaker` | Adapted central brood-core demolition; no subterranean biome or burrowing simulation claim. [P 3] |
 | Chart Terminid Tunnels | `nest_diving` | Adapted scans, nesting sites and survey escape |
@@ -214,6 +243,8 @@ The twenty- and thirty-minute admission budgets scale by 20/25 and 30/25. A thir
 
 The allowance begins with one resident-cap budget and releases the remaining admission budget over the chosen operation clock. This prevents a fast-clearing player from consuming all reinforcements at the beginning. Clearing bases slows subsequent waves, with a bounded slowdown. Difficulty therefore changes density, renewal speed, elite mix, target requirements, detours and rewards; it is not only a health multiplier.
 
+**Pressure adaptation:** the continuation retires ordinary campaign combatants more than 160 blocks from their owner, checked once per second, while preserving designated priority targets and actors within 96 blocks of another living player. Retirement frees resident slots without awarding defeats, progressing objectives or refunding lifetime admissions. Sessions with a lower fraction of their resident allowance tick first, with rotating ties; legacy expeditions also observe the shared 384-actor ceiling. This is a bounded JetSetCraft policy informed by the 7.1.0 problem, not a reproduction of Arrowhead's scheduler or evidence of sustained multiplayer scale. The native director regression moves into another district with the former front still loaded and checks actual retirement, renewed nearby admissions, unchanged rewards and preserved budgets. See the current verification receipt for its observed result. [P 7]
+
 The largest arena has a **768-block radius**, making it 1, 536 blocks across. Other plans use 512 or 640. Thirty-minute or difficulty 8–10 plans use 768; otherwise 25-minute or difficulty 4–7 plans use 640; twenty-minute difficulty 1–3 uses 512. Mission regions are spaced by 2, 048 blocks. Sites are separated by at least 96 blocks, and every route stays within its arena. The implementation decorates only loaded chunks instead of materializing an entire enormous arena in one server tick.
 
 ## Replay generation and progression connections
@@ -255,6 +286,8 @@ Primary sources carry the gameplay and architecture rationale. Community entries
 - **P 11:** Arrowhead, [Into the Unjust 6.0.1](https://arrowhead.zendesk.com/hc/en-us/articles/25259642976156--Into-the-Unjust-6-0-1), including the extension of Commando operations to Automaton planets.
 - **P 12:** Arrowhead, [Patch 01.000.200](https://arrowhead.zendesk.com/hc/en-us/articles/13343297312412--PATCH-01-000-200), including bunker and personnel mission changes.
 - **P 13:** Arrowhead, [Devoid of Liberty 7.2.0](https://arrowhead.zendesk.com/hc/en-us/articles/31176395885596-Devoid-of-Liberty-7-2-0), including recording, anomaly, shield-generator and specimen objective fixes; support article updated 1 November 2026.
+- **P 14:** Arrowhead, [Machinery of Oppression 6.3.0](https://arrowhead.zendesk.com/hc/en-us/articles/28203563503132-Machinery-of-Oppression-6-3-0), including Galactic Campaigns and the Control Centre. Its support-page modification date is not used as a release-date claim.
+- **P 15:** Arrowhead, [latest patch-note index](https://arrowhead.zendesk.com/hc/en-us/sections/12541983411100-Latest-patch-notes), checked 2 November 2026; a rolling index, not an immutable version manifest.
 - **M 1:** Community-maintained [mission inventory](https://helldivers.wiki.gg/wiki/Missions), used for additional labels and historical/conditional coverage. No completeness guarantee about future rotations is inferred.
 - **M 2:** Community comparison, [Launch ICBM](https://helldivers.wiki.gg/wiki/Launch_ICBM).
 - **M 3:** Community comparison, [Extract E-711](https://helldivers.wiki.gg/wiki/Extract_E-711).
@@ -263,3 +296,8 @@ Primary sources carry the gameplay and architecture rationale. Community entries
 - **M 6:** Community history, [Deploy Dark Fluid](https://helldivers.wiki.gg/wiki/Deploy_Dark_Fluid).
 - **M 7:** Community comparison, [Eliminate Automaton Hulks](https://helldivers.wiki.gg/wiki/Eliminate_Automaton_Hulks).
 - **M 8:** Community comparison, [Commando missions](https://helldivers.wiki.gg/wiki/Commando_Missions).
+- **M 9:** Community clock comparison, [Eradicate Terminid Swarm](https://helldivers.wiki.gg/wiki/Eradicate_Terminid_Swarm).
+- **M 10:** Community clock comparison, [Evacuate High-Value Assets](https://helldivers.wiki.gg/wiki/Defend_Evacuation_Site).
+- **M 11:** Community extraction comparison, [Extraction](https://helldivers.wiki.gg/wiki/Extraction).
+
+Community clock/roster details in this refresh were available through indexed search excerpts; direct wiki page retrieval returned HTTP 403. They remain comparison aids with that retrieval limitation, rather than first-party timing measurements or a claim that every rotating mission was inspected in-game.
