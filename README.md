@@ -11,7 +11,7 @@ JetSetCraft turns ordinary Minecraft terrain into a momentum-first street sports
 
 ## Connected Streets — 0.4.0-alpha.10 candidate
 
-This source contribution expands every activity family and connects their accepted results through a permanent **Crew Tour**. It is implemented locally and has passed the static and isolated Java model checks recorded in [the candidate receipt](docs/verification/connected-streets/README.md). **Forge compilation, native GameTests, client screenshots and hosted compatibility checks have not yet run for this candidate.** The verified alpha.9 evidence below belongs to its earlier source. Stable v0.3.0 is unchanged.
+This source contribution expands every activity family and connects their accepted results through a permanent **Crew Tour**. [PR #50](https://github.com/Herbertofury/JetSetCraft/pull/50) has passed clean hosted Forge builds and the static and isolated Java model checks recorded in [the candidate receipt](docs/verification/connected-streets/README.md). **Full native acceptance is still in progress:** the first 139-case run exposed fixture failures, and several optional-provider downloads encountered an upstream certificate error. Follow-up fixtures preserve the gameplay assertions and TLS checks. Client screenshots and installed-artifact acceptance remain pending. The verified alpha.9 evidence below belongs to its earlier source. Stable v0.3.0 is unchanged.
 
 | Play | New choices and shared payoff |
 | --- | --- |

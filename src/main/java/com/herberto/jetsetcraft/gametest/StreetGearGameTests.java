@@ -124,6 +124,13 @@ public final class StreetGearGameTests {
         Runnable releaseFixture = () -> helper.getLevel().getChunkSource()
                 .removeRegionTicket(fixtureTicket, fixtureChunk, 3, wallWorld);
         keepFixtureTicking.run(); helper.onEachTick(keepFixtureTicking);
+        // The tiny empty template does not clear the column above its corner wall. Seal a small
+        // cavity before clearing it so native falling gravel cannot refill the removed support.
+        // Keeping graffiti on a replacement sturdy block would be correct production behavior.
+        for (int x = -1; x <= 1; x++) for (int z = -1; z <= 1; z++)
+            helper.setBlock(wallRelative.offset(x, 2, z), Blocks.STONE);
+        for (int x = -1; x <= 1; x++) for (int z = -1; z <= 1; z++)
+            for (int y = 0; y <= 1; y++) helper.setBlock(wallRelative.offset(x, y, z), Blocks.AIR);
         helper.setBlock(wallRelative, Blocks.STONE);
 
         byte[] pixels = new byte[CustomGraffiti.PIXELS];
@@ -173,6 +180,9 @@ public final class StreetGearGameTests {
                     }
                 })
                 .thenWaitUntil(() -> {
+                    if (!helper.getLevel().getBlockState(wallWorld).isAir()) {
+                        throw new GameTestAssertException("Graffiti fixture support was refilled during its native removal wait: " + diagnostics.get());
+                    }
                     if (!graffiti.isRemoved()) {
                         throw new GameTestAssertException("Graffiti is still waiting for its bounded native support check: " + diagnostics.get());
                     }

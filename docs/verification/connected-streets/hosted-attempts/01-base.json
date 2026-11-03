@@ -1,0 +1,176 @@
+{
+  "run_id": 41668876133,
+  "job_id": 126031527733,
+  "workflow": "Verify JetSetCraft",
+  "job": "Java 17 / Forge 1.20.1",
+  "url": "https://github.com/Herbertofury/JetSetCraft/actions/runs/41668876133",
+  "candidate_head": "d7fcb3ddc14a3b4dcd6aa0a5fd7aca9e505008fd",
+  "checkout_commit": "fadf597da0c25d7a03e2bb40ff07fd9c8a1ed3a7",
+  "status": "completed",
+  "conclusion": "failure",
+  "expected_required_gametests": 139,
+  "observed_required_gametests": 139,
+  "expected_native_captures": 26,
+  "observed_native_captures": 0,
+  "steps": [
+    {
+      "name": "Set up job",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 1
+    },
+    {
+      "name": "Check out sources",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 2
+    },
+    {
+      "name": "Set up Temurin 17",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 3
+    },
+    {
+      "name": "Set up Gradle wrapper cache",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 4
+    },
+    {
+      "name": "Set up asset tooling",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 5
+    },
+    {
+      "name": "Regenerate deterministic authored assets",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 6
+    },
+    {
+      "name": "Validate assets, gameplay contracts, source, and wiki",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 7
+    },
+    {
+      "name": "Clean Forge build",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 8
+    },
+    {
+      "name": "Run all real Forge GameTests",
+      "status": "completed",
+      "conclusion": "failure",
+      "number": 9
+    },
+    {
+      "name": "Run real Forge dedicated-server smoke",
+      "status": "completed",
+      "conclusion": "skipped",
+      "number": 10
+    },
+    {
+      "name": "Verify activities, arena journeys and crew houses in a real Minecraft client",
+      "status": "completed",
+      "conclusion": "skipped",
+      "number": 11
+    },
+    {
+      "name": "Seal artifact checksums",
+      "status": "completed",
+      "conclusion": "skipped",
+      "number": 12
+    },
+    {
+      "name": "Upload verified release candidate",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 13
+    },
+    {
+      "name": "Post Set up Gradle wrapper cache",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 24
+    },
+    {
+      "name": "Post Set up Temurin 17",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 25
+    },
+    {
+      "name": "Post Check out sources",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 26
+    },
+    {
+      "name": "Complete job",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 27
+    }
+  ],
+  "notes": [
+    "Clean Forge build succeeded on PR merge checkout; native run finished with 2 required fixture failures.",
+    "Server smoke, 26-capture native client audit and checksums step were skipped after GameTest failure.",
+    "Foreign unowned mob insertion is rejected by the unchanged Rush admission guard. Native fixture must preserve that boundary.",
+    "Existing captain fixture waited only for actor count, not captain admission; needs an actual bounded readiness predicate, not weaker assertions.",
+    "Artifact uploaded after failure contains build JAR/logs. It is not a verified release candidate despite the workflow artifact label."
+  ],
+  "failure_excerpts": [
+    "2026-11-03T15:55:44.2796035Z HEAD is now at fadf597 Merge d7fcb3ddc14a3b4dcd6aa0a5fd7aca9e505008fd into 48894787914076c050ff9635478cc637e666842b",
+    "2026-11-03T15:56:28.6501172Z BUILD SUCCESSFUL in 19s",
+    "2026-11-03T15:57:08.1515813Z [15:57:08] [Server thread/INFO] [minecraft/GameTestServer]: 139 tests are now running!",
+    "2026-11-03T15:58:00.4516423Z [15:58:00] [Server thread/ERROR] [minecraft/LogTestReporter]: chromaticfinalerespectssixthprimarythreetargetcapwallsandnativestate failed! Could not add foreign control mob",
+    "2026-11-03T15:58:00.5519129Z [15:58:00] [Server thread/ERROR] [minecraft/LogTestReporter]: radiantrecoveryandreturneddebriefuseactualacceptedstate failed! Actual director captain fixture is missing",
+    "2026-11-03T15:58:39.0515958Z [15:58:38] [Server thread/INFO] [minecraft/GameTestServer]: ========= 139 GAME TESTS COMPLETE ======================",
+    "2026-11-03T15:58:39.0516405Z [15:58:38] [Server thread/INFO] [minecraft/GameTestServer]: 2 required tests failed :(",
+    "2026-11-03T15:58:46.7534414Z BUILD FAILED in 2m 17s"
+  ],
+  "required_test_failures": 2,
+  "observed_connected_markers": [
+    "JETSETCRAFT_GAMETEST_PASS crew_tour_safety",
+    "JETSETCRAFT_GAMETEST_PASS crew_tour_claims",
+    "JETSETCRAFT_GAMETEST_PASS activity_mix_model",
+    "JETSETCRAFT_GAMETEST_PASS rush_expanded_evolution_rules",
+    "JETSETCRAFT_GAMETEST_PASS crew_tour_standalone",
+    "JETSETCRAFT_GAMETEST_PASS crew_tour_revision_saturation",
+    "JETSETCRAFT_GAMETEST_PASS crew_tour_entry",
+    "JETSETCRAFT_GAMETEST_PASS crew_tour_training_revision",
+    "JETSETCRAFT_GAMETEST_PASS rush_expanded_evolution_reprise",
+    "JETSETCRAFT_GAMETEST_PASS activity_mix_safety",
+    "JETSETCRAFT_GAMETEST_PASS activity_mix_intermission",
+    "JETSETCRAFT_GAMETEST_PASS activity_mix_runtime",
+    "JETSETCRAFT_GAMETEST_PASS liberty_street_operations operations=6 orders=2 completed=12",
+    "JETSETCRAFT_GAMETEST_PASS crew_tour_persistence",
+    "JETSETCRAFT_GAMETEST_PASS rush_expanded_evolution_bass",
+    "JETSETCRAFT_GAMETEST_PASS rush_expanded_evolution_pulse_pause"
+  ],
+  "artifacts": [
+    {
+      "id": 13246634466,
+      "name": "jetsetcraft-forge-1.20.1-fadf597da0c25d7a03e2bb40ff07fd9c8a1ed3a7",
+      "size_in_bytes": 6362107,
+      "url": "https://api.github.com/repos/Herbertofury/JetSetCraft/actions/artifacts/13246634466",
+      "archive_download_url": "https://api.github.com/repos/Herbertofury/JetSetCraft/actions/artifacts/13246634466/zip",
+      "expired": false,
+      "created_at": "2026-11-03T15:58:48Z",
+      "expires_at": "2027-02-01T15:55:32Z",
+      "updated_at": "2026-11-03T15:58:48Z",
+      "digest": "sha256:fc670d10547a54d7731ca2e8bcbbb3fe9d8464b614fc01af29826b0f2e16b690",
+      "workflow_run": {
+        "id": 41668876133,
+        "repository_id": 1341341761,
+        "head_repository_id": 1341341761,
+        "head_branch": "feature/connected-streets",
+        "head_sha": "d7fcb3ddc14a3b4dcd6aa0a5fd7aca9e505008fd"
+      }
+    }
+  ]
+}

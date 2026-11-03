@@ -97,8 +97,11 @@ public final class RushExpandedEvolutionGameTests {
     @GameTest(template = "hoverboard_empty", timeoutTicks = 500)
     public static void chromaticFinaleRespectsSixthPrimaryThreeTargetCapWallsAndNativeState(GameTestHelper helper) {
         Fixture fixture = begin(helper, "JSC_finale", 8);
-        helper.runAfterDelay(2, () -> {
-            Mob foreign = null;
+        Fixture foreignFixture;
+        try { foreignFixture = begin(helper, "JSC_finale_guest", 1); }
+        catch (RuntimeException error) { cleanup(fixture); throw error; }
+        awaitActors(helper, 100, () -> {
+            Mob unowned = null;
             try {
                 ServerPlayer player = fixture.player(); RushRun run = RivalRushManager.run(player);
                 List<Mob> actors = arrange(fixture); check(actors.size() >= 8, "Too few real finale targets");
@@ -108,9 +111,19 @@ public final class RushExpandedEvolutionGameTests {
                 place(actors.get(5), base, 10, -4); place(actors.get(6), base, 16, 7);
                 wall(player, 5, 5, -4, -1);
                 forge(player, RushBuildPaths.Evolution.CHROMATIC_FINALE);
-                foreign = EntityType.ZOMBIE.create(player.serverLevel()); check(foreign != null, "No foreign fixture mob");
-                place(foreign, base, 11, .5); check(player.serverLevel().addFreshEntity(foreign), "Could not add foreign control mob");
+                unowned = EntityType.ZOMBIE.create(player.serverLevel()); check(unowned != null, "No unowned admission control mob");
+                place(unowned, base, 11, .5);
+                check(!player.serverLevel().addFreshEntity(unowned)
+                                && !RivalRushManager.tagEnemy(player, unowned, 3) && !RivalRushManager.artifactHit(player, unowned, 3),
+                        "An unowned mob bypassed the real Rush dimension admission or damage guard");
+                // A second genuine run supplies a physically admitted, foreign-owner control in the spark ring.
+                Mob foreign = actors(foreignFixture.player()).get(0);
+                place(foreign, base, 11, .5);
+                check(RivalRushManager.belongsTo(foreign, foreignFixture.player()) && !RivalRushManager.belongsTo(foreign, player)
+                                && !RivalRushManager.tagEnemy(player, foreign, 3) && !RivalRushManager.artifactHit(player, foreign, 3),
+                        "The real foreign-owner actor entered this run's direct damage path");
                 float foreignHealth = foreign.getHealth(), nativeHealth = primary.getHealth();
+                double foreignVitality = RivalRushManager.actorVitality(foreignFixture.player(), foreign);
                 double speed = primary.getAttributeValue(Attributes.MOVEMENT_SPEED);
                 double[] before = new double[7];
                 for (int i = 1; i <= 6; i++) before[i] = RivalRushManager.actorVitality(player, actors.get(i));
@@ -129,17 +142,18 @@ public final class RushExpandedEvolutionGameTests {
                 check(RivalRushManager.artifactHit(player, primary, .01) && run.hits() == 6
                                 && run.evolutionProcs(RushBuildPaths.Evolution.CHROMATIC_FINALE) == 1
                                 && foreign.getHealth() == foreignHealth && primary.getHealth() == nativeHealth
+                                && near(foreignVitality, RivalRushManager.actorVitality(foreignFixture.player(), foreign))
                                 && near(primary.getAttributeValue(Attributes.MOVEMENT_SPEED), speed),
                         "A secondary spark replayed the finale or changed foreign/native state");
-                restored(fixture); pass(helper, "rush_expanded_evolution_finale");
-            } finally { if (foreign != null) foreign.discard(); cleanup(fixture); }
-        });
+                restored(foreignFixture); restored(fixture); pass(helper, "rush_expanded_evolution_finale");
+            } finally { if (unowned != null) unowned.discard(); cleanup(foreignFixture); cleanup(fixture); }
+        }, fixture, foreignFixture);
     }
 
     @GameTest(template = "hoverboard_empty", timeoutTicks = 500)
     public static void bassDropUsesRealLandingFixedOriginAndExactlyThreeActiveTimePulses(GameTestHelper helper) {
         Fixture fixture = begin(helper, "JSC_bass", 3);
-        helper.runAfterDelay(2, () -> {
+        awaitActors(helper, 100, () -> {
             try {
                 ServerPlayer player = fixture.player(); RushRun run = RivalRushManager.run(player);
                 List<Mob> actors = arrange(fixture); check(actors.size() >= 3, "Too few real aftershock targets");
@@ -191,13 +205,13 @@ public final class RushExpandedEvolutionGameTests {
                         "A grounded rider repeated the landing, the expired circle kept damage, or native health changed");
                 restored(fixture); pass(helper, "rush_expanded_evolution_bass");
             } finally { cleanup(fixture); }
-        });
+        }, fixture);
     }
 
     @GameTest(template = "hoverboard_empty", timeoutTicks = 500)
     public static void soulRepriseUsesFiveRealDefeatsAndPreservesHealingSoulsAndReturnState(GameTestHelper helper) {
         Fixture fixture = begin(helper, "JSC_reprise", 7);
-        helper.runAfterDelay(2, () -> {
+        awaitActors(helper, 100, () -> {
             try {
                 ServerPlayer player = fixture.player(); RushRun run = RivalRushManager.run(player);
                 List<Mob> actors = arrange(fixture); check(actors.size() >= 7, "Too few real soul reprise rivals");
@@ -234,13 +248,13 @@ public final class RushExpandedEvolutionGameTests {
                         "Returning lost the accepted expanded evolution's debrief");
                 pass(helper, "rush_expanded_evolution_reprise");
             } finally { cleanup(fixture); }
-        });
+        }, fixture);
     }
 
     @GameTest(template = "hoverboard_empty", timeoutTicks = 500)
     public static void soulBurstFinishesItsAcceptedPulseBeforePausingFurtherArtifacts(GameTestHelper helper) {
         Fixture fixture = begin(helper, "JSC_burst_pause", 8);
-        helper.runAfterDelay(2, () -> {
+        awaitActors(helper, 100, () -> {
             try {
                 ServerPlayer player = fixture.player(); RushRun run = RivalRushManager.run(player);
                 List<Mob> actors = arrange(fixture); check(actors.size() >= 8, "Too few real pulse-pause targets");
@@ -289,7 +303,7 @@ public final class RushExpandedEvolutionGameTests {
                         "An unresolved earned draft advanced combat or changed native mob health");
                 restored(fixture); pass(helper, "rush_expanded_evolution_pulse_pause");
             } finally { cleanup(fixture); }
-        });
+        }, fixture);
     }
 
     private static void grant(RushRun run, RushRun.Upgrade upgrade, int ranks) {
@@ -314,7 +328,7 @@ public final class RushExpandedEvolutionGameTests {
     }
 
     private record Fixture(ServerPlayer player, ServerLevel source, Vec3 returnPosition, ListTag inventory,
-                           CompoundTag ride, ServerLevel district, ChunkPos chunk) { }
+                           CompoundTag ride, ServerLevel district, ChunkPos chunk, int requiredActors) { }
 
     private static Fixture begin(GameTestHelper helper, String name, int requiredActors) {
         ServerPlayer player = FakePlayerFactory.get(helper.getLevel(), new GameProfile(UUID.randomUUID(), name));
@@ -328,19 +342,44 @@ public final class RushExpandedEvolutionGameTests {
         check(RivalRushManager.start(player, ResourceLocation.tryParse("jetsetcraft:dead_beat"), ResourceLocation.tryParse("minecraft:zombie"), false),
                 "Could not start actual evolution session");
         ServerLevel district = player.serverLevel(); ChunkPos chunk = new ChunkPos(player.blockPosition());
-        Fixture fixture = new Fixture(player, helper.getLevel(), position, inventory, ride, district, chunk);
+        Fixture fixture = new Fixture(player, helper.getLevel(), position, inventory, ride, district, chunk, requiredActors);
         district.getChunkSource().addRegionTicket(TICKET, chunk, 4, player.getUUID());
         try {
             for (int x = -2; x <= 2; x++) for (int z = -2; z <= 2; z++) district.getChunk(chunk.x + x, chunk.z + z);
             RushRun run = RivalRushManager.run(player);
             for (int tick = 0; tick < 3001; tick++) run.tickActive();
             RivalRushManager.tick(player.getServer());
-            for (int step = 0; step < 14 && actors(player).size() < requiredActors; step++) {
+            for (int step = 0; step < 14 && !actorsReady(fixture); step++) {
                 for (int tick = 0; tick < 40; tick++) run.tickActive();
                 RivalRushManager.tick(player.getServer());
             }
             return fixture;
         } catch (RuntimeException error) { cleanup(fixture); throw error; }
+    }
+
+    private static boolean actorsReady(Fixture fixture) {
+        List<Mob> actors = actors(fixture.player());
+        return actors.size() >= fixture.requiredActors() && !actors.isEmpty()
+                && RivalRushManager.actorVitality(fixture.player(), actors.get(0)) >= 200;
+    }
+
+    /** Chunk tickets and a mob count alone do not establish native actor residency or captain admission. */
+    private static void awaitActors(GameTestHelper helper, int remaining, Runnable ready, Fixture... fixtures) {
+        try {
+            boolean available = true;
+            for (Fixture fixture : fixtures) {
+                BlockPos center = fixture.player().blockPosition();
+                for (int x : new int[]{-32, 32}) for (int z : new int[]{-32, 32})
+                    available &= fixture.district().isPositionEntityTicking(center.offset(x, 0, z));
+                available &= actorsReady(fixture);
+            }
+            if (available) { ready.run(); return; }
+            check(remaining > 0, "The real director did not admit its required resident actors and captain");
+            helper.runAfterDelay(5, () -> awaitActors(helper, remaining - 5, ready, fixtures));
+        } catch (RuntimeException error) {
+            for (Fixture fixture : fixtures) cleanup(fixture);
+            throw error;
+        }
     }
 
     private static List<Mob> arrange(Fixture fixture) {

@@ -68,7 +68,8 @@ jobs:
             fi
             mkdir -p build/verification
             cp "$log" "build/verification/forge-build-attempt-$attempt.log"
-            if grep -Eq 'Compilation failed|> Task :compile(Java|TestJava) FAILED|(^|[[:space:]])error:' "$log"; then
+            # compileJava also fails when dependency resolution never reaches the compiler.
+            if grep -Eq 'Compilation failed|(^|[[:space:]])error:' "$log"; then
               echo '::error::Deterministic compile failure; refusing an unchanged retry.'
               exit 1
             fi

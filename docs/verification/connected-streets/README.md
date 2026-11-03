@@ -1,6 +1,22 @@
 # Connected Streets — verification receipt
 
-## 3 November continuation
+## Hosted PR #50 — acceptance in progress
+
+[PR #50](https://github.com/Herbertofury/JetSetCraft/pull/50) publishes the reviewed contribution as head `d7fcb3ddc14a3b4dcd6aa0a5fd7aca9e505008fd`. The first runner checkout, `fadf597da0c25d7a03e2bb40ff07fd9c8a1ed3a7`, and the reviewed local candidate all have tracked tree `9fa57ea133e0f5f8eaf2b9324fbd49549c37e557`; a public git fetch and tree comparison confirmed that identity. The earlier publication rejection described below is historical: verified repository ownership and the existing branch allowed the continuation to publish through the authenticated repository API.
+
+The first [base run](https://github.com/Herbertofury/JetSetCraft/actions/runs/41668876133) passed the clean Forge build and repository checks, then completed all **139** native cases with **two required failures**. Its downstream dedicated-server and client gates were skipped. The [Wave 2 run](https://github.com/Herbertofury/JetSetCraft/actions/runs/41668876015) had five Create dependency TLS failures; the other three configurations compiled and reached native tests. [Both Liberty provider builds](https://github.com/Herbertofury/JetSetCraft/actions/runs/41668876186) passed, then failed the same two Rush fixtures; the full-provider configuration additionally rejected the native mob-safety fixture's home-defense preflight. Its exact rejected preflight condition was not exposed in that log. These failed runs do not establish full native acceptance or a verified playable artifact.
+
+The follow-up preserves the observed failures and repairs their causes without changing production gameplay or relaxing the required gates:
+
+- Rush correctly rejects an unowned zombie entering its dimension. The finale fixture now asserts that rejection, then obtains a foreign-owner control from a second genuine run and checks its native health and virtual vitality through the real effect.
+- The evolution fixtures require both the intended actor count and a successfully admitted captain. They wait at most 100 native ticks for resident actors before running the original combat and return assertions.
+- In the combined adventure-provider lane, falling gravel refilled the graffiti fixture's removed support. A small roofed fixture cavity keeps the support column controlled; the test still requires real native support checks, actual support removal and discard within 40 entity ticks.
+- The native home-mob fixture now builds above the highest existing surface and keeps its contact controls outside seeded objective routes, with a separate ticket for their real entity-ticking sections. It still deploys the exact offer-selected difficulty-10 plan through production preflight and checks its admitted origin and plan. Failure-only read-only diagnostics expose the previously missing preflight context. These changes correct observable fixture assumptions; the first rejection's exact cause remains unproven until the next run.
+- A failed `compileJava` task can indicate dependency resolution before the compiler runs. The build retry classifier now stops immediately on actual compiler diagnostics while retaining the existing three-attempt bound for dependency/service failures. The pinned Create version, official endpoint and TLS verification are unchanged. Successful cached builds do not prove the upstream certificate chain recovered.
+
+The complete first-attempt observations are preserved under `hosted-attempts/`. A later source revision must pass fresh hosted gates before this candidate is treated as accepted. Stable v0.3.0 remains separate.
+
+## 3 November local continuation
 
 The user requested continued JetSetCraft contributions. The earlier Connected Streets patch was recovered on the same verified `48894787914076c050ff9635478cc637e666842b` baseline and received a separate correctness review before native acceptance. Its original checkpoint, failures and source manifests remain below and under `evidence/`; they are not evidence for the revised source.
 
