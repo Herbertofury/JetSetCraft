@@ -1,0 +1,30 @@
+{
+  "schema": 1,
+  "repository": "Herbertofury/JetSetCraft",
+  "pull_request": 50,
+  "based_on_head": "8d19826d5e7d78d5046707d667a6cea9f6d1d12b",
+  "file": "src/main/java/com/herberto/jetsetcraft/client/liberty/LibertyVisualAudit.java",
+  "file_sha256": "0bf145f4a5c9ff05851c4acb94185b6c68fe7193e918a569742c2081b5cd4220",
+  "failure_run": 41678801956,
+  "failure_job": 126066560294,
+  "observed_failure": "45-second phase241 ship-arrival deadline after successful original inventory/XP/dimension restoration and temporary paint cleanup; client status remained Operation aborted.",
+  "source_fact": "LibertyManager.handleAction silently ignores an action less than two overworld game-time ticks after the previous action. The old audit waited20 client ticks and an asynchronous cleanup read, neither of which proves two server ticks elapsed. Both Liberty screens explicitly return false from isPauseScreen.",
+  "causal_limit": "The historical job did not log the actual server tick at either action, so a throttle rejection is consistent with the evidence but is not proven. A stale revision would send a different status; no later ship-transfer error or arrival evidence was logged.",
+  "change": "The audit stores the overworld game time at cleanup proof, then observes the real server read-only with one outstanding task and at most one poll per20client ticks. It requires at least two further actual server ticks, no active operation/return/hub, original dimension, a positive server menu revision and matching client revision before exactly one real Board your ship button press. Immutable volatile observations and ready/arrival/timeout diagnostics retain authoritative evidence.",
+  "preserved": [
+    "production throttle and boarding handler",
+    "single real UI button request; no retry, forced admission, packet injection or manual server ticks",
+    "45-second phase deadlines and all19required campaign captures",
+    "actual native ship arrival, walkable deck and original inventory/XP/dimension return assertions"
+  ],
+  "validation": {
+    "java_syntax": "PASS all247sources via Java17 compiler module",
+    "whitespace": "git diff --check PASS",
+    "native_validation": "Pending hosted candidate6 gates; syntax does not establish native success"
+  },
+  "peer_review": {
+    "root": "no blocker",
+    "native_verification": "no blocker",
+    "tour_review": "no blocker"
+  }
+}

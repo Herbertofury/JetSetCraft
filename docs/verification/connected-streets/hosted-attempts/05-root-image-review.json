@@ -1,0 +1,46 @@
+{
+  "candidate_head": "8d19826d5e7d78d5046707d667a6cea9f6d1d12b",
+  "candidate_tree": "f697380c64947b494cb6e00f9ab7c87f41ef9c85",
+  "tested_merge": "8a56fc3c58a8238cf6906904fa8a29af12b1bac0",
+  "artifact_id": 13252087670,
+  "archive_bytes": 8939176,
+  "archive_sha256": "b9b3e6f42c868f800153cc12ecbc599b0c7db0e47fc5ac3438c3d7ddece26dd2",
+  "archive_download_and_digest_verified": true,
+  "jar": {
+    "file": "jetsetcraft-1.20.1-0.4.0-alpha.10.jar",
+    "bytes": 6634631,
+    "sha256": "cd6e862bc392f8ecaa3d25c07eead9921af93cc8efc77caf8b6a3e9275dee43e",
+    "included_checksum_verified": true
+  },
+  "available_native_captures": 26,
+  "individually_reviewed_captures": [
+    {
+      "file": "rival-rush-1793725172902-24-crew-tour.png",
+      "bytes": 123139,
+      "sha256": "05b97968852335c5c499794f9803335acdfc90b32806843e053caa26d78acc6b",
+      "pixel_width": 1280,
+      "pixel_height": 720,
+      "visually_inspected_by": "root",
+      "observed": "Unobstructed title and tabs; milestone requirements, reward quantities, current training recipient warning and action states are readable."
+    },
+    {
+      "file": "rival-rush-1793725172902-25-crew-tour-minimum.png",
+      "bytes": 53729,
+      "sha256": "c46a4547bb1d03f2d936b2dd7dba55cd07c0f826c93112fae4ee10b93f96b0e6",
+      "pixel_width": 640,
+      "pixel_height": 480,
+      "visually_inspected_by": "root",
+      "observed": "At the actual 320x240 GUI / 640x480 image size, the scrolled detail viewport and fixed navigation/action controls remain usable. Part of a preceding line is intentionally scissored at the top of the scrolling region."
+    },
+    {
+      "file": "rival-rush-1793725172902-26-street-mix-preview.png",
+      "bytes": 158197,
+      "sha256": "7ed7012cea197a280c9392435c90541a61825e010a51de6ccf2146503613e1c9",
+      "pixel_width": 1280,
+      "pixel_height": 720,
+      "visually_inspected_by": "root",
+      "observed": "Selected Tag, three-round route, physical handoff instructions, explicit current-round reward estimate and launch action are readable; no notification obscures the header."
+    }
+  ],
+  "scope": "Root directly viewed only the three listed final-source PNGs, after genuine reward-notification completion. Other captures are not claimed as visually reviewed here. There is no active-toast-at-minimum image. Controlled native audit captures are not human playthrough, pacing, multiplayer-load or complete Street Mix reward evidence."
+}
