@@ -13,6 +13,7 @@ import com.herberto.jetsetcraft.liberty.LibertyArmory;
 import com.herberto.jetsetcraft.liberty.LibertyCampaignData;
 import com.herberto.jetsetcraft.liberty.LibertyManager;
 import com.herberto.jetsetcraft.liberty.LibertyMobSafety;
+import com.herberto.jetsetcraft.liberty.LibertyMissionPlan;
 import com.herberto.jetsetcraft.liberty.LibertyMissionRuntime;
 import com.herberto.jetsetcraft.liberty.LibertyOperation;
 import com.herberto.jetsetcraft.liberty.LibertyStratagemEngine;
@@ -370,31 +371,44 @@ public final class LibertyCampaignRuntimeGameTests {
         final int x = 40064, z = 40064;
         // Explicit disposable flat fixture: admission must inspect every primary site and extraction.
         // Prepare the land before adding old belongings and before taking the preservation snapshot.
-        int groundY = 100;
-        BlockPos center = new BlockPos(x, groundY, z);
-        ChunkPos homeChunk = new ChunkPos(center);
+        ChunkPos homeChunk = new ChunkPos(x >> 4, z >> 4);
         for (int cx = -9; cx <= 9; cx++) for (int cz = -9; cz <= 9; cz++) f.source.getChunk(homeChunk.x + cx, homeChunk.z + cz);
+        int highest = f.source.getMinBuildHeight();
+        for (int dx = -128; dx <= 128; dx++) for (int dz = -128; dz <= 128; dz++)
+            highest = Math.max(highest, f.source.getHeight(Heightmap.Types.WORLD_SURFACE, x + dx, z + dz));
+        // A floor at an arbitrary Y leaves taller generated surfaces in the admission heightmap.
+        // Raise this disposable platform above them; its preservation volume also starts in air.
+        int groundY = Math.max(100, highest + 5);
+        check(groundY <= f.source.getMaxBuildHeight() - 12,
+                "Home fixture has no build-height room above its loaded terrain: highest=" + highest + "; platform=" + groundY);
+        BlockPos center = new BlockPos(x, groundY, z);
         for (int dx = -128; dx <= 128; dx++) for (int dz = -128; dz <= 128; dz++)
             f.source.setBlock(center.offset(dx, 0, dz), Blocks.STONE.defaultBlockState(), 3);
         load(f, center);
         f.owner.moveTo(x + .5, groundY + 1.1, z + .5, 27, 8); rememberOriginal(f);
-        BlockPos chestPosition = center.offset(7, 1, 0);
+        // Offer-seeded escort endpoints can overlap the old near-origin mural wall. Keep all
+        // controls inside the home front but beyond the mapped objectives and their route detours.
+        BlockPos preservedArea = center.offset(110, 0, 0); load(f, preservedArea);
+        BlockPos chestPosition = preservedArea.above();
         f.source.setBlock(chestPosition, Blocks.CHEST.defaultBlockState(), 3);
         ChestBlockEntity chest = (ChestBlockEntity) f.source.getBlockEntity(chestPosition);
         check(chest != null, "Disposable home fixture chest was not created");
         ItemStack heirloom = new ItemStack(Items.WRITTEN_BOOK); heirloom.getOrCreateTag().putString("HomeHeirloom", "never borrow or overwrite");
         chest.setItem(0, heirloom); CompoundTag chestBefore = chest.saveWithFullMetadata();
-        BlockPos oldSupport = center.offset(-7, 2, -3);
+        BlockPos oldSupport = preservedArea.offset(0, 2, 6);
         for (int dx = -1; dx <= 1; dx++) for (int dy = -1; dy <= 1; dy++) f.source.setBlock(oldSupport.offset(dx, dy, 0), Blocks.WHITE_CONCRETE.defaultBlockState(), 3);
         GraffitiEntity oldTag = new GraffitiEntity(ModEntities.GRAFFITI.get(), f.source); oldTag.configure(oldSupport, Direction.SOUTH, 0);
         check(f.source.addFreshEntity(oldTag) && !LibertyManager.owned(oldTag), "Existing ordinary graffiti fixture was already mission-owned");
         Mob neighbor = EntityType.PIG.create(f.source); check(neighbor != null, "Existing ordinary neighbor fixture was unavailable");
         neighbor.setNoAi(true); neighbor.setNoGravity(true); neighbor.setPersistenceRequired();
-        neighbor.moveTo(x + 8.5, groundY + 1.1, z + 5.5, 0, 0); float neighborHealth = neighbor.getHealth(); Vec3 neighborPosition = neighbor.position();
+        neighbor.moveTo(preservedArea.getX() + 4.5, groundY + 1.1, preservedArea.getZ() + 5.5, 0, 0);
+        float neighborHealth = neighbor.getHealth(); Vec3 neighborPosition = neighbor.position();
         check(f.source.addFreshEntity(neighbor) && !LibertyManager.owned(neighbor), "Existing ordinary neighbor was claimed by the mission");
         // Exact state references over the protected home area, including the seeded chest and wall.
         BlockVolume before = BlockVolume.capture(f.source, center.offset(-128, -4, -128), 257, 16, 257);
         var offer = homeOffer(f.owner);
+        var expectedPlan = LibertyMissionPlan.defense(offer.id(), offer.sectorId(),
+                com.herberto.jetsetcraft.liberty.LibertyMissionCatalog.faction(offer.factionId()), 1, 20);
         try {
             // Same-world deployment does not perform the native player registration that a
             // dimension transfer supplies. Register this no-socket owner at its prepared home
@@ -403,23 +417,32 @@ public final class LibertyCampaignRuntimeGameTests {
             check(f.source.getEntity(f.owner.getUUID()) == f.owner && f.source.players().contains(f.owner),
                     "Home fixture owner was not registered with its native level before deployment");
             menuPacket(f.owner, "defense_deploy", offer.id() + "|1|20");
-            check(LibertyManager.operation(f.owner) != null, "Actual encoded home-defense action could not deploy on its explicit flat fixture"
-                    + "; unavailable=" + LibertyManager.unavailable(f.owner) + "; armory=" + LibertyArmory.readyReason(f.owner)
-                    + "; contactGuard=" + LibertyMobSafety.homeGuardReady(f.owner) + "; source=" + f.owner.blockPosition());
+            if (LibertyManager.operation(f.owner) == null)
+                throw new GameTestAssertException("Actual encoded home-defense action could not deploy on its explicit flat fixture"
+                        + "; unavailable=" + LibertyManager.unavailable(f.owner) + "; armory=" + LibertyArmory.readyReason(f.owner)
+                        + "; contactGuard=" + LibertyMobSafety.homeGuardReady(f.owner) + "; source=" + f.owner.blockPosition()
+                        + "; platform=" + groundY + "; preservedArea=" + preservedArea + "; offer=" + offer.id()
+                        + "; template=" + expectedPlan.template().id() + "; seed=" + expectedPlan.seed()
+                        + homeTerrainDiagnostic(f.owner, expectedPlan));
             f.operation = LibertyManager.operation(f.owner);
             check(f.operation != null && f.operation.homeDefense && f.owner.serverLevel() == f.source
                             && offer.id().equals(LibertyCampaignData.get(f.source.getServer()).offer(f.owner.getUUID(), offer.id()).orElseThrow().id())
                             && f.operation.id.equals(LibertyCampaignData.get(f.source.getServer()).offer(f.owner.getUUID(), offer.id()).orElseThrow().claimedRun()),
                     "Home defense changed dimension or failed to claim exactly its real offer");
-            check(f.operation.plan.equals(com.herberto.jetsetcraft.liberty.LibertyMissionPlan.defense(offer.id(),
-                            offer.sectorId(), com.herberto.jetsetcraft.liberty.LibertyMissionCatalog.faction(offer.factionId()), 1, 20)),
+            check(f.operation.plan.equals(expectedPlan),
                     "Actual home deployment did not use its stable offer-selected defense family and geometry");
+            check(LibertyWorld.inside(f.operation, chestPosition) && LibertyWorld.inside(f.operation, oldSupport)
+                            && LibertyWorld.inside(f.operation, neighbor.blockPosition()),
+                    "Protected home controls moved outside the actual defense area: margin=" + preservedArea + "; origin=" + f.operation.origin);
             check(!LibertyManager.startDefense(f.owner, offer.id() + "|1|20"), "A second home deployment reused an already claimed offer");
             load(f, f.operation.drop);
             later(f, 90, () -> {
                 landed(f);
                 var objective = f.operation.mission.sites().get(0); load(f, objective.center()); position(f, objective.marker().add(2, 0, 2));
                 later(f, 5, () -> {
+                    check(neighbor.tickCount > 0 && oldTag.tickCount > 0
+                                    && f.source.isPositionEntityTicking(neighbor.blockPosition()) && f.source.isPositionEntityTicking(oldTag.blockPosition()),
+                            "Protected home controls did not retain native ticking at the loaded margin: " + preservedArea);
                     f.owner.getInventory().selected = 2;
                     BlockPos support = objective.center(); int previousProgress = objective.progress();
                     BlockHitResult hit = new BlockHitResult(Vec3.atCenterOf(support).add(0, .5, 0), Direction.UP, support, false);
@@ -439,6 +462,18 @@ public final class LibertyCampaignRuntimeGameTests {
                 });
             });
         } catch (RuntimeException | Error error) { oldTag.discard(); neighbor.discard(); cleanup(f); throw error; }
+    }
+
+    /** No-socket players drop outbound status packets; inspect the same read-only admission gates on failure. */
+    private static String homeTerrainDiagnostic(ServerPlayer player, LibertyMissionPlan plan) {
+        try {
+            var originMethod = LibertyManager.class.getDeclaredMethod("homeOrigin", ServerPlayer.class);
+            originMethod.setAccessible(true); BlockPos origin = (BlockPos) originMethod.invoke(null, player);
+            if (origin == null) return "; homeLanding=unavailable";
+            var readyMethod = LibertyManager.class.getDeclaredMethod("homePlanReady", ServerLevel.class, BlockPos.class, LibertyMissionPlan.class);
+            readyMethod.setAccessible(true);
+            return "; homeLanding=" + origin + "; homePlanReady=" + readyMethod.invoke(null, player.serverLevel(), origin, plan);
+        } catch (ReflectiveOperationException error) { return "; homeAdmissionDiagnostic=" + error; }
     }
 
     private static void homeCore(Fixture f, LibertyMissionRuntime.Site base, BlockVolume before, BlockPos chestPosition,

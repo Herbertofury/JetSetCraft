@@ -115,6 +115,9 @@ public final class LibertyStratagemGameTests {
             // Separate the targets so early sentry knockback cannot remove the mine's later trigger,
             // and damage from one call cannot satisfy another call's assertion.
             Vec3 sentryPosition=f.point.add(-24,0,-24),minePosition=f.point.add(26,0,25);
+            Vec3 paintTargetPosition=f.point.add(45,0,0);
+            // The later ring probe must already have clear body space before any effects tick.
+            f.prepareProbe(paintTargetPosition);
             // A stone floor alone leaves generated terrain in the native grounding/sight path.
             // Prepare this small firing corridor before spawning either body, and retain its
             // air cells in the world-preservation check just like the protected floor/chest.
@@ -140,6 +143,8 @@ public final class LibertyStratagemGameTests {
             check(mines.size()==8,"The anti-tank field did not deploy eight individual mines");
             LibertySupportEntity triggerMine=mines.get(0);
             check(triggerMine.distanceToSqr(sentry)>48*48,"Mine probe overlaps the sentry's firing range");
+            Vec3 mineTargetPosition=triggerMine.position().add(.5,0,0);
+            f.prepareProbe(mineTargetPosition);
             LivingEntity mineForeign=f.foreign(triggerMine.position().add(0,0,-2));
             float mineForeignHealth=mineForeign.getHealth();
             check(f.engine.protectedDamage(sentryTarget.damageSources().mobAttack(sentryTarget),25)==0&&relay.energy()==75,
@@ -156,9 +161,10 @@ public final class LibertyStratagemGameTests {
                             "The isolated sentry target lost its native firing path: hit="+sight.getType()+" at="+sight.getBlockPos()
                                     +", sentry="+sentry.position()+", target="+sentryTarget.position()+", health="+sentryTarget.getHealth());
                     check(sentry.ammo()<180,"The real sentry never consumed ammunition: ammo="+sentry.ammo());
-                    check(sentryTarget.getHealth()<sentryHealth,"The real sentry never damaged its isolated owned target");
+                    check(sentryTarget.getHealth()<sentryHealth,"The real sentry never damaged its isolated owned target: "
+                            +probeStatus("sentry target",sentryTarget,sentryHealth));
                     check(mines.stream().noneMatch(Entity::isRemoved),"A mine triggered before an eligible owned target arrived");
-                    progress.mineTarget=f.enemy(triggerMine.position().add(.5,0,0));
+                    progress.mineTarget=f.enemy(mineTargetPosition);
                     progress.mineHealth=progress.mineTarget.getHealth();progress.started=tick;progress.phase=1;
                     return;
                 }
@@ -166,9 +172,10 @@ public final class LibertyStratagemGameTests {
                     check(tick-progress.started<30,"An armed mine did not trigger on the real owned target: mineTicks="
                             +triggerMine.tickCount+", targetDistance="+triggerMine.distanceTo(progress.mineTarget));
                     if(!triggerMine.isRemoved())return;
-                    check(progress.mineTarget.getHealth()<progress.mineHealth,"The triggered mine never damaged its isolated owned target");
+                    check(progress.mineTarget.getHealth()<progress.mineHealth,"The triggered mine never damaged its isolated owned target: "
+                            +probeStatus("mine target",progress.mineTarget,progress.mineHealth));
                     check(mines.stream().anyMatch(e->!e.isRemoved()),"One local trigger removed the entire minefield");
-                    progress.paintTarget=f.enemy(f.point.add(45,0,0));progress.paintHealth=progress.paintTarget.getHealth();
+                    progress.paintTarget=f.enemy(paintTargetPosition);progress.paintHealth=progress.paintTarget.getHealth();
                     check(progress.paintTarget.distanceToSqr(sentry)>48*48,"Outer paint probe overlaps the sentry's firing range");
                     check(f.engine.call("chromageddon",f.point).accepted(),"CHROMAGEDDON was rejected after the hardware probes");
                     progress.started=tick;progress.phase=2;
@@ -178,11 +185,14 @@ public final class LibertyStratagemGameTests {
                 if(f.largestPaint<48)return;
                 check(f.decals.size()>=8&&f.decals.stream().anyMatch(e->!e.isRemoved()),
                         "CHROMAGEDDON's full radius did not leave real overlays");
-                check(progress.paintTarget.getHealth()<progress.paintHealth,"CHROMAGEDDON's outer ring never damaged its isolated owned target");
+                check(progress.paintTarget.getHealth()<progress.paintHealth,"CHROMAGEDDON's outer ring never damaged its isolated owned target: "
+                        +probeStatus("paint target",progress.paintTarget,progress.paintHealth));
                 check(foreign.getHealth()==protectedHealth&&!foreign.isOnFire()
                                 &&sentryForeign.getHealth()==sentryForeignHealth&&!sentryForeign.isOnFire()
                                 &&mineForeign.getHealth()==mineForeignHealth&&!mineForeign.isOnFire(),
-                        "Call-in effects injured a foreign resident");
+                        "Call-in effects injured a foreign resident: "+probeStatus("paint resident",foreign,protectedHealth)
+                                +"; "+probeStatus("sentry resident",sentryForeign,sentryForeignHealth)
+                                +"; "+probeStatus("mine resident",mineForeign,mineForeignHealth));
                 f.assertWorld();f.close();
                 check(f.tracked.stream().allMatch(Entity::isRemoved)&&f.engine.pendingEffects()==0,"Closing support left hardware or delayed effects active");
                 pass(helper,"liberty_stratagem_effects");
@@ -266,7 +276,8 @@ public final class LibertyStratagemGameTests {
             f.run(tick->{if(tick==320){
                 check(f.nativeKinds.contains("ordnance")&&f.nativeKinds.contains("machine_gun_sentry")&&enemy.getHealth()<hp,
                         "Real native beacon timelines did not create ordnance, a sentry and actual enemy damage; actors="+f.nativeKinds+"; health="+enemy.getHealth());
-                check(foreign.getHealth()==protectedHp&&!foreign.isOnFire(),"Native MCDivers hurt a foreign resident");
+                check(foreign.getHealth()==protectedHp&&!foreign.isOnFire(),"Native MCDivers hurt a foreign resident: "
+                        +probeStatus("provider resident",foreign,protectedHp));
                 f.assertWorld();
                 List<BlockPos> light=f.tracked.stream().filter(e->e.getClass().getName().endsWith("SentryEntity"))
                         .flatMap(e->List.of(e.blockPosition(),e.blockPosition().above()).stream()).toList();
@@ -279,12 +290,17 @@ public final class LibertyStratagemGameTests {
     }
 
     private static LibertyStratagemEngine.Row row(Fixture f,String id){return f.engine.snapshot().stream().filter(r->r.id().equals(id)).findFirst().orElseThrow();}
+    private static String probeStatus(String name,LivingEntity probe,float initialHealth){
+        return name+"{initialHealth="+initialHealth+", finalHealth="+probe.getHealth()+", alive="+probe.isAlive()
+                +", burning="+probe.isOnFire()+", lastDamage="+probe.getLastDamageSource()+", position="+probe.position()+"}";
+    }
     private static final class Fixture implements LibertyStratagemEngine.Context {
         final GameTestHelper helper;final ServerLevel level;final ServerPlayer owner;final UUID operation=UUID.randomUUID();
         final BlockPos center,chest;final ChunkPos chunk;final Vec3 point;final LibertyStratagemEngine engine;
         final List<Entity> tracked=new ArrayList<>(),residents=new ArrayList<>();final List<LivingEntity> enemies=new ArrayList<>();
         final List<GraffitiEntity> decals=new ArrayList<>();final Map<BlockPos,BlockState> fixtureBlocks=new LinkedHashMap<>();
-        final Set<String> nativeKinds=new java.util.HashSet<>();final StratagemProviderCapture capture;final boolean nativeProvider;
+        final Set<String> nativeKinds=new java.util.HashSet<>();final Set<Vec3> preparedProbes=new java.util.HashSet<>();
+        final StratagemProviderCapture capture;final boolean nativeProvider;
         final CompoundTag chestBefore;boolean closed,reinforce;int elapsed,supplies=2;double largestPaint;String phase="ACTIVE";
         Fixture(GameTestHelper helper,boolean nativeProvider,int radius){
             this.helper=helper;this.level=helper.getLevel();this.nativeProvider=nativeProvider;
@@ -298,8 +314,39 @@ public final class LibertyStratagemGameTests {
             engine=new LibertyStratagemEngine(this);capture=new StratagemProviderCapture(this);MinecraftForge.EVENT_BUS.register(capture);
             level.getChunkSource().addRegionTicket(TICKET,chunk,5,operation);
         }
-        Mob enemy(Vec3 pos){Mob mob=EntityType.HUSK.create(level);mob.getAttribute(Attributes.MAX_HEALTH).setBaseValue(1000);mob.setHealth(1000);mob.setNoAi(true);mob.setNoGravity(true);mob.setPersistenceRequired();mob.setPos(pos);enemies.add(mob);residents.add(mob);check(level.addFreshEntity(mob),"Owned-effect fixture target could not spawn");return mob;}
-        LivingEntity foreign(Vec3 pos){Mob mob=EntityType.COW.create(level);mob.setNoAi(true);mob.setNoGravity(true);mob.setPos(pos);residents.add(mob);check(level.addFreshEntity(mob),"Foreign resident fixture could not spawn");return mob;}
+        /** Prepare only a three-block body cube; NoAI/NoGravity do not prevent native suffocation. */
+        void prepareProbe(Vec3 pos){
+            check(elapsed==0,"Probe terrain must be prepared before effects tick, not rewritten around a later target");
+            if(preparedProbes.contains(pos))return;
+            BlockPos feet=BlockPos.containing(pos);
+            for(BlockPos p:BlockPos.betweenClosed(feet.offset(-1,0,-1),feet.offset(1,2,1))){
+                BlockState expected=fixtureBlocks.get(p);
+                check(expected==null||expected.isAir()&&level.getBlockState(p).equals(expected),
+                        "Probe preparation would erase a protected fixture block or hide an earlier change at "+p);
+                level.setBlock(p,Blocks.AIR.defaultBlockState(),3);
+                fixtureBlocks.put(p.immutable(),Blocks.AIR.defaultBlockState());
+            }
+            preparedProbes.add(pos);
+        }
+        private void readyProbe(Mob mob){
+            if(!preparedProbes.contains(mob.position()))prepareProbe(mob.position());
+            check(level.noCollision(mob,mob.getBoundingBox()),"Stationary probe has obstructed native body space: "+mob.getBoundingBox());
+        }
+        Mob enemy(Vec3 pos){
+            Mob mob=EntityType.HUSK.create(level);check(mob!=null,"Owned-effect fixture target is unavailable");
+            mob.getAttribute(Attributes.MAX_HEALTH).setBaseValue(1000);mob.setHealth(1000);
+            mob.setNoAi(true);mob.setNoGravity(true);mob.setPersistenceRequired();mob.setPos(pos);readyProbe(mob);
+            enemies.add(mob);residents.add(mob);check(level.addFreshEntity(mob),"Owned-effect fixture target could not spawn");
+            check(level.noCollision(mob,mob.getBoundingBox()),"Owned probe gained an obstructed body during native spawn: "+mob.getBoundingBox());
+            return mob;
+        }
+        LivingEntity foreign(Vec3 pos){
+            Mob mob=EntityType.COW.create(level);check(mob!=null,"Foreign resident fixture is unavailable");
+            mob.setNoAi(true);mob.setNoGravity(true);mob.setPos(pos);readyProbe(mob);
+            residents.add(mob);check(level.addFreshEntity(mob),"Foreign resident fixture could not spawn");
+            check(level.noCollision(mob,mob.getBoundingBox()),"Foreign probe gained an obstructed body during native spawn: "+mob.getBoundingBox());
+            return mob;
+        }
         LibertySupportEntity support(String role){return tracked.stream().filter(e->e instanceof LibertySupportEntity s&&s.role().equals(role)).map(e->(LibertySupportEntity)e).findFirst().orElseThrow();}
         void run(IntConsumer assertion){helper.onEachTick(()->{if(closed)return;try{elapsed++;level.getChunkSource().addRegionTicket(TICKET,chunk,5,operation);engine.tick();assertion.accept(elapsed);}catch(RuntimeException|Error error){close();throw error;}});}
         void assertWorld(){for(var e:fixtureBlocks.entrySet())check(level.getBlockState(e.getKey()).equals(e.getValue()),"A call-in altered a protected fixture block at "+e.getKey());check(chestBefore.equals(level.getBlockEntity(chest).saveWithFullMetadata()),"A call-in changed chest contents/NBT");}

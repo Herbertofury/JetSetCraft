@@ -161,43 +161,65 @@ public final class ActivityGameTests {
         } catch (RuntimeException error) { ActivityManager.forget(owner); ActivityManager.forget(outsider); throw error; }
     }
 
-    @GameTest(template = "hoverboard_empty", timeoutTicks = 260)
+    @GameTest(template = "hoverboard_empty", timeoutTicks = 360)
     public static void randomPreviewStaleActionsAndMissingActorsCannotCompleteAGame(GameTestHelper helper) {
         BlockPos anchor = arena(helper, 28000);
         ServerPlayer owner = player(helper, "safety", anchor);
+        NativeClock clock = new NativeClock(helper, () -> ActivityManager.forget(owner));
         ActivityManager.open(owner);
         CompoundTag random = ActivityManager.snapshot(owner);
         check(random.getString("SelectedMode").equals("random") && !ActivityManager.active(owner)
                         && random.getList("Activities", 10).size() == 6
                         && random.getList("Activities", 10).stream().anyMatch(value -> value instanceof CompoundTag row && row.getString("Id").equals("liberty_grind")),
                 "The generic invitation did not put random and all five actual modes, including Liberty Grind, in one optional catalogue");
-        helper.runAfterDelay(5, () -> {
+        clock.later(5, () -> {
             action(owner, "refresh", "");
             check(ActivityManager.snapshot(owner).getString("Mode").equals(random.getString("Mode"))
                             && ActivityManager.snapshot(owner).getUUID("Context").equals(random.getUUID("Context")),
                     "Refreshing rerolled or implicitly launched the revealed random invitation");
-            helper.runAfterDelay(5, () -> {
+            clock.later(5, () -> {
                 ActivityManager.openAt(owner, anchor);
                 CompoundTag stale = ActivityManager.snapshot(owner);
-                helper.runAfterDelay(5, () -> {
+                clock.later(5, () -> {
                     action(owner, "select", "showdown");
                     check(ActivityManager.snapshot(owner).getString("Mode").equals("showdown"), "Explicit mode selection was ignored");
-                    helper.runAfterDelay(5, () -> {
+                    clock.later(5, () -> {
                         ActivityManager.handleAction(owner, "launch", "", stale.getUUID("Context"), stale.getInt("Version"));
                         check(!ActivityManager.active(owner), "A stale selection launched a different game than the reviewed mode");
-                        helper.runAfterDelay(5, () -> {
-                            action(owner, "launch", "");
-                            check(ActivityManager.active(owner), "Fresh Showdown confirmation was not accepted: " + diagnostics(owner, anchor));
-                            helper.runAfterDelay(30, () -> showdownFirstHit(helper, owner, anchor));
-                        });
+                        clock.later(5, () -> prepareShowdown(clock, helper, owner, anchor, 80));
                     });
                 });
             });
         });
     }
 
-    private static void showdownFirstHit(GameTestHelper helper, ServerPlayer owner, BlockPos anchor) {
-        List<Mob> live = actors(owner, anchor); check(live.size() >= 2, "Showdown did not spawn its real protected source actors");
+    private static void prepareShowdown(NativeClock clock, GameTestHelper helper, ServerPlayer owner, BlockPos anchor, int remaining) {
+        int ticking = 0;
+        for (int x : new int[]{-12, 12}) for (int z : new int[]{-12, 12})
+            if (owner.serverLevel().isPositionEntityTicking(anchor.offset(x, 0, z))) ticking++;
+        if (ticking != 4) {
+            check(remaining > 0, "The Showdown fixture never obtained native entity-ticking residency: tickingCorners="
+                    + ticking + "/4, " + diagnostics(owner, anchor));
+            clock.later(1, () -> prepareShowdown(clock, helper, owner, anchor, remaining - 1)); return;
+        }
+        action(owner, "launch", "");
+        check(ActivityManager.active(owner), "Fresh Showdown confirmation was not accepted: " + diagnostics(owner, anchor));
+        // Production retries every ten ticks, up to sixteen attempts for four Showdown rivals.
+        // Observe that native window instead of assuming two first-try actors after thirty ticks.
+        awaitShowdownActors(clock, helper, owner, anchor, 160);
+    }
+
+    private static void awaitShowdownActors(NativeClock clock, GameTestHelper helper, ServerPlayer owner, BlockPos anchor, int remaining) {
+        check(ActivityManager.active(owner), "Showdown ended before its real protected actors arrived: " + diagnostics(owner, anchor));
+        if (actors(owner, anchor).size() < 2) {
+            check(remaining > 0, "Showdown did not spawn its real protected source actors within the native spawn window: " + diagnostics(owner, anchor));
+            clock.later(1, () -> awaitShowdownActors(clock, helper, owner, anchor, remaining - 1)); return;
+        }
+        showdownFirstHit(clock, helper, owner, anchor);
+    }
+
+    private static void showdownFirstHit(NativeClock clock, GameTestHelper helper, ServerPlayer owner, BlockPos anchor) {
+        List<Mob> live = actors(owner, anchor); check(live.size() >= 2, "Showdown did not spawn its real protected source actors: " + diagnostics(owner, anchor));
         Mob rival = live.get(0); approach(owner, rival.position()); owner.attack(rival);
         check(!rival.isRemoved() && ActivityManager.snapshot(owner).getInt("Progress") == 0,
                 "A one-hit tap completed a three-tag Showdown rival");
@@ -205,23 +227,23 @@ public final class ActivityGameTests {
         orphan.moveTo(rival.position());
         orphan.getPersistentData().put(ActivityManager.OWNED, rival.getPersistentData().getCompound(ActivityManager.OWNED).copy());
         check(!helper.getLevel().addFreshEntity(orphan), "A copied/reloaded activity marker joined as a replacement objective");
-        helper.runAfterDelay(9, () -> {
+        clock.later(9, () -> {
             approach(owner, rival.position()); owner.attack(rival);
             check(!rival.isRemoved(), "The second Showdown tag defeated a three-tag rival");
-            helper.runAfterDelay(9, () -> {
+            clock.later(9, () -> {
                 approach(owner, rival.position()); owner.attack(rival);
                 check(rival.isRemoved() && ActivityManager.snapshot(owner).getInt("Progress") == 1,
                         "Three actual separated owner tags did not defeat exactly one Showdown rival");
                 actors(owner, anchor).get(0).discard();
-                helper.runAfterDelay(3, () -> {
+                clock.later(3, () -> {
                     check(!ActivityManager.active(owner) && !ActivityManager.snapshot(owner).getBoolean("Won")
                                     && CrewHouseData.get(owner.getServer()).pendingSupplies(owner.getUUID()) == 0,
                             "A missing/unloaded rival produced a false completion reward");
                     owner.moveTo(anchor.getX() + .5, anchor.getY() + 1, anchor.getZ() + .5, 0, 0);
                     action(owner, "select", "tag");
-                    helper.runAfterDelay(5, () -> {
+                    clock.later(5, () -> {
                         action(owner, "launch", ""); check(ActivityManager.active(owner), "A cancelled game prevented a later explicit game: " + diagnostics(owner, anchor));
-                        helper.runAfterDelay(15, () -> {
+                        clock.later(15, () -> {
                             helper.getLevel().setBlockAndUpdate(anchor, Blocks.AIR.defaultBlockState());
                             check(helper.getLevel().getBlockState(anchor).isAir() && !ActivityManager.active(owner)
                                             && actors(owner, anchor).isEmpty()
