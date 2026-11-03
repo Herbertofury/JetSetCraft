@@ -1,6 +1,16 @@
 # Connected Streets — verification receipt
 
-## Hosted PR #50 — acceptance in progress
+## Current hosted status — partial acceptance, PR remains draft
+
+Candidate `23976383cbf8a3f49d753c1e3795ca2df6738544` (tracked tree `09969da2a5b15543a6a0ba50dc1b1f47a1ba9852`, runner checkout `0d42296e0a6e2147c835a8134657e66dbc48a5c3`) passed the complete [base workflow](https://github.com/Herbertofury/JetSetCraft/actions/runs/41670932195): **139 required native tests**, normal dedicated-server startup/save and **26 client captures**. The [full Liberty configuration](https://github.com/Herbertofury/JetSetCraft/actions/runs/41670931894) also passed **139 tests**, the corrected real difficulty-10 home safety case, an independent installed-JAR audit and **19 native captures**. The [combined adventure and Iron's Spells configurations](https://github.com/Herbertofury/JetSetCraft/actions/runs/41670931836) passed all their native and server gates.
+
+Overall required CI is still failing. Five Wave 2 configurations exhausted three build attempts each with the same TLS certificate-chain failure while resolving the pinned Create slim JAR. The successful cached configurations do not establish endpoint recovery; a focused official-source search found no supported fix. Alex's Mobs and the intentional missing-pack configuration each exposed a remaining Radiant fixture failure, at admission readiness and overheal conversion respectively. Exact failures and all successful gates remain in the [base](hosted-attempts/02-base.json), [Wave 2](hosted-attempts/02-wave2.json) and [Liberty](hosted-attempts/02-liberty.json) records.
+
+The downloaded base and full-provider JARs match the independently installed artifact: **6,628,611 bytes**, SHA-256 `ee582ce2abf740a1a53fb98877086f7e642d21407cbc27c6606729688d24893c`. That identity belongs to candidate 2, not to later edits. The [selected four-frame review](hosted-attempts/02-selected-base-qa.json) and [three new-page review](hosted-attempts/02-root-image-review.json) distinguish actual pixel inspection from the automated capture count. The new-page images revealed a genuine reward notification covering page headings; resizing while it was visible also cropped its fixed-width layout.
+
+The next source revision isolates fixture preparation from ordinary automatic combat, retains the captain and effect requirements, and reports individual readiness/state conditions on failure. It also bounds reward notifications to the supported minimum viewport, waits for real notifications to finish before page captures, and labels a Street Mix preview's payment as the current round's estimate. These changes need fresh native acceptance; neither screenshots nor a merge are implied by the earlier successful jobs. Human pacing and multiplayer load remain separate playtesting work.
+
+## First hosted PR #50 attempt
 
 [PR #50](https://github.com/Herbertofury/JetSetCraft/pull/50) publishes the reviewed contribution as head `d7fcb3ddc14a3b4dcd6aa0a5fd7aca9e505008fd`. The first runner checkout, `fadf597da0c25d7a03e2bb40ff07fd9c8a1ed3a7`, and the reviewed local candidate all have tracked tree `9fa57ea133e0f5f8eaf2b9324fbd49549c37e557`; a public git fetch and tree comparison confirmed that identity. The earlier publication rejection described below is historical: verified repository ownership and the existing branch allowed the continuation to publish through the authenticated repository API.
 

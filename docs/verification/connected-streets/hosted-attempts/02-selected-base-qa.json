@@ -1,0 +1,68 @@
+{
+  "schema": 1,
+  "reviewed_at_utc": "2026-11-03 16:20:13 UTC",
+  "reviewer": "tour_review",
+  "source_directory": "build/verification/artifacts/base-second/verification",
+  "method": "Each of the four listed PNGs was opened and visually inspected using view_image; dimensions and SHA-256 were read from the exact local files.",
+  "overall_result": "No blocking visual defects in the four observed 1280x720 frames.",
+  "blocking_findings": [],
+  "code_changes_made": false,
+  "scope_limits": [
+    "No interaction was performed; screenshot readability does not establish runtime behavior.",
+    "No claims are made about unviewed screenshots, other resolutions, or other scroll positions."
+  ],
+  "screenshots": [
+    {
+      "filename": "rival-rush-1793722414986-09-activities.png",
+      "dimensions": [
+        1280,
+        720
+      ],
+      "sha256": "2aabf8652f4fd12dfd957878fda8b07da64595c24213dda22fd8c7205be5d249",
+      "screen": "Activities",
+      "observed_feature": "Tag is selected; nearby-terrain/inventory/XP explanation is visible. Completion estimate is fully readable: up to 8 Supplies, 55 crew XP, 6 reputation, and 20 training XP. Start Tag and Crew House actions are visible.",
+      "clipping": "No visible text or control clipping; the explanation wraps to two lines and the entire reward estimate fits.",
+      "readability": "Large high-contrast text; selected activity and reward estimate use distinct colors. Disabled Quick game state is visibly dimmed.",
+      "coverage_limit": "This frame verifies the displayed preview only, not reward acceptance or activity execution."
+    },
+    {
+      "filename": "rival-rush-1793722414986-12-run-build.png",
+      "dimensions": [
+        1280,
+        720
+      ],
+      "sha256": "d61c2501d7e7e2ec26c20b43db1d950c8a423cfbee9edb5c10f3648f74448d03",
+      "screen": "Rival Rush run build",
+      "observed_feature": "Current damage, critical chance/multiplier, area, vitality, attack/artifact interval, pickup range, and recovery are visible. Artifact families 0/3 and the empty-state guidance are present, with Build paths, Room contract, Scout reward caches, and Return to Minecraft controls.",
+      "clipping": "No visible clipping or overlap; the empty-state sentence fits above the lower actions.",
+      "readability": "Stat rows and controls remain readable. Pit stop (0) is visibly disabled.",
+      "coverage_limit": "Only the empty artifact state is shown; populated artifact lists and longer scrolled content are not verified."
+    },
+    {
+      "filename": "rival-rush-1793722414986-16-build-paths.png",
+      "dimensions": [
+        1280,
+        720
+      ],
+      "sha256": "69a58e3f4510f0665212fc202f1b4f5f4086deec8097b62f42981b3a20f6b59a",
+      "screen": "Rival Rush build paths",
+      "observed_feature": "Cryo shatter page 1/6 shows Venom ink 0/3 and Chill paint 0/3, the headliner forge requirement, and the full trigger/effect explanation. Text describes the 3-active-second interval, four visible owned rivals, 10 base damage, six-block range, and area scaling capped at 12.",
+      "clipping": "No visible clipping; the long effect description wraps onto a second line and ends above the scroll hint and action row.",
+      "readability": "Recipe title, missing prerequisites, and forge explanation have clear visual separation. Previous-page and Defeat a headliner controls are visibly disabled; next-page arrow and Back to build are visible.",
+      "coverage_limit": "Only Cryo shatter page 1/6 is shown; other recipes, successful forging, and additional scroll positions are not verified."
+    },
+    {
+      "filename": "rival-rush-1793722414986-19-run-debrief.png",
+      "dimensions": [
+        1280,
+        720
+      ],
+      "sha256": "ebe2d4811beb5f411779b8f51aff964eea4136fc99405d880dc842a544ace0f3",
+      "screen": "Rival Rush debrief",
+      "observed_feature": "Banked and returned status and album-retention explanation are visible. The frame shows Free streets, 5:02 active time, level 2, score 190, two rivals, two cards, arena/headliner/contract/service totals, and damage/vitality/ward rows. Scroll hint, Set up another run, and Crew House navigation are visible.",
+      "clipping": "No visible overlap or accidental clipping in the displayed rows; the last visible statistic remains above the scroll hint and actions.",
+      "readability": "Status, session summary, and numeric rows are readable with consistent spacing.",
+      "coverage_limit": "Accepted reward quantities are not visible in this top-of-list frame despite the header mentioning accepted rewards. A scroll hint is visible; this image alone does not verify receipt quantities or recipient details."
+    }
+  ]
+}

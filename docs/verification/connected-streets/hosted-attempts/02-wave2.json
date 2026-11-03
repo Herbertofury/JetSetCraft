@@ -1,0 +1,663 @@
+{
+  "schema": 1,
+  "observed_at_utc": "2026-11-03 16:15:32 UTC",
+  "repository": "Herbertofury/JetSetCraft",
+  "pull_request": 50,
+  "run_id": 41670931836,
+  "run_number": 95,
+  "run_url": "https://github.com/Herbertofury/JetSetCraft/actions/runs/41670931836",
+  "head_sha": "23976383cbf8a3f49d753c1e3795ca2df6738544",
+  "head_tree": "09969da2a5b15543a6a0ba50dc1b1f47a1ba9852",
+  "tested_merge_sha": "0d42296e0a6e2147c835a8134657e66dbc48a5c3",
+  "summary": {
+    "jobs": 8,
+    "all_terminal": true,
+    "terminal_build_tls_failures": 5,
+    "actual_tls_failed_attempts": 15,
+    "successful_builds": 3,
+    "native_test_failed_lanes": 1,
+    "native_all_139_passed_lanes": 2,
+    "successful_complete_lanes": 2,
+    "successful_server_smoke_lanes": 2
+  },
+  "dependency_failure": {
+    "artifact": "com.simibubi.create:create-1.20.1:6.0.8-289:slim",
+    "endpoint": "https://maven.createmod.net/com/simibubi/create/create-1.20.1/6.0.8-289/create-1.20.1-6.0.8-289-slim.jar",
+    "root_cause": "javax.net.ssl.SSLHandshakeException: (certificate_unknown) PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target",
+    "failed_before_java_source_compilation": true,
+    "successful_build_caveat": "Successful lanes may have the pinned dependency in their restored Gradle cache; a successful build does not establish recovery of the endpoint's TLS certificate chain."
+  },
+  "classifier_verification": {
+    "included_in_head": true,
+    "observed_three_attempts_per_tls_failed_job": true,
+    "retry_cap": 3,
+    "delay_seconds": 20,
+    "dependency_failure_no_longer_misclassified_as_deterministic_compile_failure": true
+  },
+  "jobs": [
+    {
+      "id": 126038763712,
+      "name": "aether / Forge 1.20.1",
+      "status": "completed",
+      "conclusion": "failure",
+      "url": "https://github.com/Herbertofury/JetSetCraft/actions/runs/41670931836/job/126038763712",
+      "relevant_steps": [
+        {
+          "name": "Validate source, assets, and exact Wave 2 manifests",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Build with pinned provider present",
+          "status": "completed",
+          "conclusion": "failure"
+        },
+        {
+          "name": "Record resolved provider dependencies",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "name": "Run real Forge GameTests with provider present",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "name": "Run dedicated-server smoke with provider present",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "name": "Seal evidence",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "name": "Upload provider-present evidence",
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ],
+      "tested_merge_sha": "0d42296e0a6e2147c835a8134657e66dbc48a5c3",
+      "build_passed": false,
+      "build_attempts": 3,
+      "tls_failure_count": 3,
+      "exact_failure_and_retry_evidence": [
+        "2026-11-03T16:08:18.1409526Z Caused by: javax.net.ssl.SSLHandshakeException: (certificate_unknown) PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target",
+        "2026-11-03T16:08:18.1464046Z BUILD FAILED in 10s",
+        "2026-11-03T16:08:18.5003960Z ##[warning]Possible transient dependency/service build failure on attempt 1; retrying once state can change.",
+        "2026-11-03T16:08:44.8304848Z Caused by: javax.net.ssl.SSLHandshakeException: (certificate_unknown) PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target",
+        "2026-11-03T16:08:44.8357775Z BUILD FAILED in 6s",
+        "2026-11-03T16:08:45.1924965Z ##[warning]Possible transient dependency/service build failure on attempt 2; retrying once state can change.",
+        "2026-11-03T16:09:11.5213252Z Caused by: javax.net.ssl.SSLHandshakeException: (certificate_unknown) PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target",
+        "2026-11-03T16:09:11.5283846Z BUILD FAILED in 6s",
+        "2026-11-03T16:09:11.8873835Z ##[error]Provider-present Forge build failed after three evidence-changing attempts for aether."
+      ],
+      "observed_native_failures": [],
+      "observed_native_summary": [],
+      "observed_crew_tour_passes": [],
+      "observed_related_passes": [],
+      "observed_provider_proof": [],
+      "smoke_passed": false,
+      "observed_smoke_stop": [],
+      "artifact_finalization": "2026-11-03T16:09:13.2714738Z Artifact jetsetcraft-wave2-aether-0d42296e0a6e2147c835a8134657e66dbc48a5c3 successfully finalized. Artifact ID 13248686238",
+      "uploaded_artifact_archive_sha256": "2026-11-03T16:09:12.6485836Z SHA256 digest of uploaded artifact is f4af9cf412e4a9f41238849655027f5c8ba8bd114d47a91d838b490d41596d66",
+      "log_retrieved": true
+    },
+    {
+      "id": 126038763793,
+      "name": "alexscaves / Forge 1.20.1",
+      "status": "completed",
+      "conclusion": "failure",
+      "url": "https://github.com/Herbertofury/JetSetCraft/actions/runs/41670931836/job/126038763793",
+      "relevant_steps": [
+        {
+          "name": "Validate source, assets, and exact Wave 2 manifests",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Build with pinned provider present",
+          "status": "completed",
+          "conclusion": "failure"
+        },
+        {
+          "name": "Record resolved provider dependencies",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "name": "Run real Forge GameTests with provider present",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "name": "Run dedicated-server smoke with provider present",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "name": "Seal evidence",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "name": "Upload provider-present evidence",
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ],
+      "tested_merge_sha": "0d42296e0a6e2147c835a8134657e66dbc48a5c3",
+      "build_passed": false,
+      "build_attempts": 3,
+      "tls_failure_count": 3,
+      "exact_failure_and_retry_evidence": [
+        "2026-11-03T16:08:16.2673343Z Caused by: javax.net.ssl.SSLHandshakeException: (certificate_unknown) PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target",
+        "2026-11-03T16:08:16.2719682Z BUILD FAILED in 11s",
+        "2026-11-03T16:08:16.6365063Z ##[warning]Possible transient dependency/service build failure on attempt 1; retrying once state can change.",
+        "2026-11-03T16:08:42.7752310Z Caused by: javax.net.ssl.SSLHandshakeException: (certificate_unknown) PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target",
+        "2026-11-03T16:08:42.7796256Z BUILD FAILED in 6s",
+        "2026-11-03T16:08:43.1622316Z ##[warning]Possible transient dependency/service build failure on attempt 2; retrying once state can change.",
+        "2026-11-03T16:09:09.1508598Z Caused by: javax.net.ssl.SSLHandshakeException: (certificate_unknown) PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target",
+        "2026-11-03T16:09:09.2031720Z BUILD FAILED in 5s",
+        "2026-11-03T16:09:09.5299549Z ##[error]Provider-present Forge build failed after three evidence-changing attempts for alexscaves."
+      ],
+      "observed_native_failures": [],
+      "observed_native_summary": [],
+      "observed_crew_tour_passes": [],
+      "observed_related_passes": [],
+      "observed_provider_proof": [],
+      "smoke_passed": false,
+      "observed_smoke_stop": [],
+      "artifact_finalization": "2026-11-03T16:09:10.6546193Z Artifact jetsetcraft-wave2-alexscaves-0d42296e0a6e2147c835a8134657e66dbc48a5c3 successfully finalized. Artifact ID 13247503139",
+      "uploaded_artifact_archive_sha256": "2026-11-03T16:09:10.1375539Z SHA256 digest of uploaded artifact is d7abbdeba63b2b9e136887fa2af5894445d081e97a5362a2dfa04b6600e24962",
+      "log_retrieved": true
+    },
+    {
+      "id": 126038763868,
+      "name": "adventure_all / Forge 1.20.1",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/Herbertofury/JetSetCraft/actions/runs/41670931836/job/126038763868",
+      "relevant_steps": [
+        {
+          "name": "Validate source, assets, and exact Wave 2 manifests",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Build with pinned provider present",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Record resolved provider dependencies",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run real Forge GameTests with provider present",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run dedicated-server smoke with provider present",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Seal evidence",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Upload provider-present evidence",
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ],
+      "tested_merge_sha": "0d42296e0a6e2147c835a8134657e66dbc48a5c3",
+      "build_passed": true,
+      "build_attempts": 1,
+      "tls_failure_count": 0,
+      "exact_failure_and_retry_evidence": [],
+      "observed_native_failures": [],
+      "observed_native_summary": [
+        "2026-11-03T16:12:16.9797350Z [16:12:16] [Server thread/INFO] [minecraft/GameTestServer]: All 139 required tests passed :)"
+      ],
+      "observed_crew_tour_passes": [
+        "2026-11-03T16:10:32.6784994Z JETSETCRAFT_GAMETEST_PASS crew_tour_safety",
+        "2026-11-03T16:10:37.7784733Z JETSETCRAFT_GAMETEST_PASS crew_tour_claims",
+        "2026-11-03T16:10:46.9799098Z JETSETCRAFT_GAMETEST_PASS crew_tour_standalone",
+        "2026-11-03T16:10:49.0784511Z JETSETCRAFT_GAMETEST_PASS crew_tour_revision_saturation",
+        "2026-11-03T16:10:58.4786470Z JETSETCRAFT_GAMETEST_PASS crew_tour_entry",
+        "2026-11-03T16:11:04.8784124Z JETSETCRAFT_GAMETEST_PASS crew_tour_training_revision",
+        "2026-11-03T16:12:02.3794564Z JETSETCRAFT_GAMETEST_PASS crew_tour_persistence"
+      ],
+      "observed_related_passes": [
+        "2026-11-03T16:10:35.4784353Z JETSETCRAFT_GAMETEST_PASS activity_dimension_return dimensions=aether:the_aether,aoa3:precasia",
+        "2026-11-03T16:10:40.5790704Z JETSETCRAFT_GAMETEST_PASS rush_expanded_evolution_rules",
+        "2026-11-03T16:11:19.7784273Z JETSETCRAFT_GAMETEST_PASS rush_expanded_evolution_reprise",
+        "2026-11-03T16:11:19.7785845Z JETSETCRAFT_GAMETEST_PASS rush_expanded_evolution_finale",
+        "2026-11-03T16:11:29.6805669Z JETSETCRAFT_GAMETEST_PASS graffiti_lifecycle native_support_ticks=40",
+        "2026-11-03T16:12:13.9789548Z JETSETCRAFT_GAMETEST_PASS rush_expanded_evolution_bass",
+        "2026-11-03T16:12:13.9793455Z JETSETCRAFT_GAMETEST_PASS rush_expanded_evolution_pulse_pause"
+      ],
+      "observed_provider_proof": [
+        "2026-11-03T16:10:33.8814890Z JETSETCRAFT_ADVENTURE_PROVIDER aether version=1.20.1-1.5.2-neoforge",
+        "2026-11-03T16:10:33.8824659Z JETSETCRAFT_ADVENTURE_PROVIDER aoa3 version=3.7.1",
+        "2026-11-03T16:10:33.8825655Z JETSETCRAFT_ADVENTURE_PROVIDER irons_spellbooks version=1.20.1-3.4.0.2",
+        "2026-11-03T16:10:33.8826567Z JETSETCRAFT_ADVENTURE_PROVIDER cataclysm version=3.31",
+        "2026-11-03T16:11:17.0788117Z JETSETCRAFT_GAMETEST_PASS rush_spell_relay provider=irons_spellbooks",
+        "2026-11-03T16:12:06.0824979Z JETSETCRAFT_WAVE2_LIVE_ROSTER cataclysm entity_types=103 curated_mobs=39 hidden_mobs=0 unexpected_mobs=0",
+        "2026-11-03T16:12:06.0826332Z JETSETCRAFT_WAVE2_GAMEPLAY cataclysm representative_mobs=6 challenge_roundtrips=6 tamable_owner_roundtrips=1 provider_nbt_mutations=0"
+      ],
+      "smoke_passed": true,
+      "observed_smoke_stop": [
+        "2026-11-03T16:13:05.5502174Z JETSETCRAFT_SMOKE_RCON_STOP_SENT authenticated loopback stop command"
+      ],
+      "artifact_finalization": "2026-11-03T16:13:10.7953817Z Artifact jetsetcraft-wave2-adventure_all-0d42296e0a6e2147c835a8134657e66dbc48a5c3 successfully finalized. Artifact ID 13248401979",
+      "uploaded_artifact_archive_sha256": "2026-11-03T16:13:10.1239888Z SHA256 digest of uploaded artifact is e16a71e6e21e3ead5f4d4cfb23a450a9626546da11dbc0b829a65ddab00e71ca",
+      "log_retrieved": true
+    },
+    {
+      "id": 126038763883,
+      "name": "alexsmobs / Forge 1.20.1",
+      "status": "completed",
+      "conclusion": "failure",
+      "url": "https://github.com/Herbertofury/JetSetCraft/actions/runs/41670931836/job/126038763883",
+      "relevant_steps": [
+        {
+          "name": "Validate source, assets, and exact Wave 2 manifests",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Build with pinned provider present",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Record resolved provider dependencies",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run real Forge GameTests with provider present",
+          "status": "completed",
+          "conclusion": "failure"
+        },
+        {
+          "name": "Run dedicated-server smoke with provider present",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "name": "Seal evidence",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "name": "Upload provider-present evidence",
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ],
+      "tested_merge_sha": "0d42296e0a6e2147c835a8134657e66dbc48a5c3",
+      "build_passed": true,
+      "build_attempts": 1,
+      "tls_failure_count": 0,
+      "exact_failure_and_retry_evidence": [
+        "2026-11-03T16:12:31.1443804Z BUILD FAILED in 3m 32s"
+      ],
+      "observed_native_failures": [
+        "2026-11-03T16:11:35.0424448Z [16:11:34] [Server thread/ERROR] [minecraft/LogTestReporter]: radiantrecoveryandreturneddebriefuseactualacceptedstate failed! The real director did not admit its required resident actors and captain"
+      ],
+      "observed_native_summary": [
+        "2026-11-03T16:12:23.9431699Z [16:12:23] [Server thread/INFO] [minecraft/GameTestServer]: 1 required tests failed :("
+      ],
+      "observed_crew_tour_passes": [
+        "2026-11-03T16:10:30.0411436Z JETSETCRAFT_GAMETEST_PASS crew_tour_safety",
+        "2026-11-03T16:10:33.7409342Z JETSETCRAFT_GAMETEST_PASS crew_tour_claims",
+        "2026-11-03T16:10:48.0423503Z JETSETCRAFT_GAMETEST_PASS crew_tour_standalone",
+        "2026-11-03T16:10:50.0408482Z JETSETCRAFT_GAMETEST_PASS crew_tour_revision_saturation",
+        "2026-11-03T16:10:59.9413597Z JETSETCRAFT_GAMETEST_PASS crew_tour_entry",
+        "2026-11-03T16:11:08.5407801Z JETSETCRAFT_GAMETEST_PASS crew_tour_training_revision",
+        "2026-11-03T16:12:06.8423400Z JETSETCRAFT_GAMETEST_PASS crew_tour_persistence"
+      ],
+      "observed_related_passes": [
+        "2026-11-03T16:10:31.4423749Z JETSETCRAFT_GAMETEST_PASS activity_dimension_return dimensions=absent",
+        "2026-11-03T16:10:38.0408804Z JETSETCRAFT_GAMETEST_PASS rush_expanded_evolution_rules",
+        "2026-11-03T16:11:24.0407738Z JETSETCRAFT_GAMETEST_PASS rush_expanded_evolution_reprise",
+        "2026-11-03T16:11:24.0425939Z JETSETCRAFT_GAMETEST_PASS rush_expanded_evolution_finale",
+        "2026-11-03T16:11:34.5413791Z JETSETCRAFT_GAMETEST_PASS graffiti_lifecycle native_support_ticks=40",
+        "2026-11-03T16:12:20.4443486Z JETSETCRAFT_GAMETEST_PASS rush_expanded_evolution_bass",
+        "2026-11-03T16:12:20.5415942Z JETSETCRAFT_GAMETEST_PASS rush_expanded_evolution_pulse_pause"
+      ],
+      "observed_provider_proof": [
+        "2026-11-03T16:10:48.0443691Z JETSETCRAFT_GAMETEST_PASS rush_spell_relay absent",
+        "2026-11-03T16:12:11.1421971Z JETSETCRAFT_WAVE2_LIVE_ROSTER alexsmobs entity_types=116 curated_mobs=90 hidden_mobs=3 unexpected_mobs=0",
+        "2026-11-03T16:12:11.1424055Z JETSETCRAFT_WAVE2_GAMEPLAY alexsmobs representative_mobs=6 challenge_roundtrips=6 tamable_owner_roundtrips=1 provider_nbt_mutations=0"
+      ],
+      "smoke_passed": false,
+      "observed_smoke_stop": [],
+      "artifact_finalization": "2026-11-03T16:12:33.7697274Z Artifact jetsetcraft-wave2-alexsmobs-0d42296e0a6e2147c835a8134657e66dbc48a5c3 successfully finalized. Artifact ID 13247768064",
+      "uploaded_artifact_archive_sha256": "2026-11-03T16:12:33.1037296Z SHA256 digest of uploaded artifact is c5a2bbb0b4a922b43f327c08d9041e075390f589167667a977cbaeb723747372",
+      "log_retrieved": true
+    },
+    {
+      "id": 126038764079,
+      "name": "all / Forge 1.20.1",
+      "status": "completed",
+      "conclusion": "failure",
+      "url": "https://github.com/Herbertofury/JetSetCraft/actions/runs/41670931836/job/126038764079",
+      "relevant_steps": [
+        {
+          "name": "Validate source, assets, and exact Wave 2 manifests",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Build with pinned provider present",
+          "status": "completed",
+          "conclusion": "failure"
+        },
+        {
+          "name": "Record resolved provider dependencies",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "name": "Run real Forge GameTests with provider present",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "name": "Run dedicated-server smoke with provider present",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "name": "Seal evidence",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "name": "Upload provider-present evidence",
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ],
+      "tested_merge_sha": "0d42296e0a6e2147c835a8134657e66dbc48a5c3",
+      "build_passed": false,
+      "build_attempts": 3,
+      "tls_failure_count": 3,
+      "exact_failure_and_retry_evidence": [
+        "2026-11-03T16:08:29.0321192Z Caused by: javax.net.ssl.SSLHandshakeException: (certificate_unknown) PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target",
+        "2026-11-03T16:08:29.0971061Z BUILD FAILED in 20s",
+        "2026-11-03T16:08:29.4547815Z ##[warning]Possible transient dependency/service build failure on attempt 1; retrying once state can change.",
+        "2026-11-03T16:08:56.1003076Z Caused by: javax.net.ssl.SSLHandshakeException: (certificate_unknown) PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target",
+        "2026-11-03T16:08:56.1413890Z BUILD FAILED in 6s",
+        "2026-11-03T16:08:56.5397646Z ##[warning]Possible transient dependency/service build failure on attempt 2; retrying once state can change.",
+        "2026-11-03T16:09:23.3273408Z Caused by: javax.net.ssl.SSLHandshakeException: (certificate_unknown) PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target",
+        "2026-11-03T16:09:23.3642900Z BUILD FAILED in 6s",
+        "2026-11-03T16:09:23.7322033Z ##[error]Provider-present Forge build failed after three evidence-changing attempts for all."
+      ],
+      "observed_native_failures": [],
+      "observed_native_summary": [],
+      "observed_crew_tour_passes": [],
+      "observed_related_passes": [],
+      "observed_provider_proof": [],
+      "smoke_passed": false,
+      "observed_smoke_stop": [],
+      "artifact_finalization": "2026-11-03T16:09:24.9943561Z Artifact jetsetcraft-wave2-all-0d42296e0a6e2147c835a8134657e66dbc48a5c3 successfully finalized. Artifact ID 13247493529",
+      "uploaded_artifact_archive_sha256": "2026-11-03T16:09:24.4264522Z SHA256 digest of uploaded artifact is e052fc674d51312e36370f677d8f47b45950062b939356ceca478c6d610a758c",
+      "log_retrieved": true
+    },
+    {
+      "id": 126038764119,
+      "name": "irons_spells / Forge 1.20.1",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/Herbertofury/JetSetCraft/actions/runs/41670931836/job/126038764119",
+      "relevant_steps": [
+        {
+          "name": "Validate source, assets, and exact Wave 2 manifests",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Build with pinned provider present",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Record resolved provider dependencies",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run real Forge GameTests with provider present",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run dedicated-server smoke with provider present",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Seal evidence",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Upload provider-present evidence",
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ],
+      "tested_merge_sha": "0d42296e0a6e2147c835a8134657e66dbc48a5c3",
+      "build_passed": true,
+      "build_attempts": 1,
+      "tls_failure_count": 0,
+      "exact_failure_and_retry_evidence": [],
+      "observed_native_failures": [],
+      "observed_native_summary": [
+        "2026-11-03T16:12:50.3917876Z [16:12:50] [Server thread/INFO] [minecraft/GameTestServer]: All 139 required tests passed :)"
+      ],
+      "observed_crew_tour_passes": [
+        "2026-11-03T16:10:45.6908921Z JETSETCRAFT_GAMETEST_PASS crew_tour_safety",
+        "2026-11-03T16:10:49.4903663Z JETSETCRAFT_GAMETEST_PASS crew_tour_claims",
+        "2026-11-03T16:11:00.3952388Z JETSETCRAFT_GAMETEST_PASS crew_tour_standalone",
+        "2026-11-03T16:11:03.0904740Z JETSETCRAFT_GAMETEST_PASS crew_tour_revision_saturation",
+        "2026-11-03T16:11:14.6942157Z JETSETCRAFT_GAMETEST_PASS crew_tour_entry",
+        "2026-11-03T16:11:23.8903389Z JETSETCRAFT_GAMETEST_PASS crew_tour_training_revision",
+        "2026-11-03T16:12:32.9903748Z JETSETCRAFT_GAMETEST_PASS crew_tour_persistence"
+      ],
+      "observed_related_passes": [
+        "2026-11-03T16:10:47.0928411Z JETSETCRAFT_GAMETEST_PASS activity_dimension_return dimensions=absent",
+        "2026-11-03T16:10:52.8908664Z JETSETCRAFT_GAMETEST_PASS rush_expanded_evolution_rules",
+        "2026-11-03T16:11:43.5903846Z JETSETCRAFT_GAMETEST_PASS rush_expanded_evolution_reprise",
+        "2026-11-03T16:11:43.5904904Z JETSETCRAFT_GAMETEST_PASS rush_expanded_evolution_finale",
+        "2026-11-03T16:11:54.3905418Z JETSETCRAFT_GAMETEST_PASS graffiti_lifecycle native_support_ticks=40",
+        "2026-11-03T16:12:46.1905355Z JETSETCRAFT_GAMETEST_PASS rush_expanded_evolution_bass",
+        "2026-11-03T16:12:46.1907283Z JETSETCRAFT_GAMETEST_PASS rush_expanded_evolution_pulse_pause"
+      ],
+      "observed_provider_proof": [
+        "2026-11-03T16:10:47.0927063Z JETSETCRAFT_ADVENTURE_PROVIDER irons_spellbooks version=1.20.1-3.4.0.2",
+        "2026-11-03T16:11:39.1905357Z JETSETCRAFT_GAMETEST_PASS rush_spell_relay provider=irons_spellbooks"
+      ],
+      "smoke_passed": true,
+      "observed_smoke_stop": [
+        "2026-11-03T16:13:35.5512513Z JETSETCRAFT_SMOKE_RCON_STOP_SENT authenticated loopback stop command"
+      ],
+      "artifact_finalization": "2026-11-03T16:13:42.0924741Z Artifact jetsetcraft-wave2-irons_spells-0d42296e0a6e2147c835a8134657e66dbc48a5c3 successfully finalized. Artifact ID 13249311503",
+      "uploaded_artifact_archive_sha256": "2026-11-03T16:13:41.4532958Z SHA256 digest of uploaded artifact is 9a8dadce7806e0a5e530286d0e66d39e7a525ee154940509f22532ac79b3aa15",
+      "log_retrieved": true
+    },
+    {
+      "id": 126038764153,
+      "name": "aoa / Forge 1.20.1",
+      "status": "completed",
+      "conclusion": "failure",
+      "url": "https://github.com/Herbertofury/JetSetCraft/actions/runs/41670931836/job/126038764153",
+      "relevant_steps": [
+        {
+          "name": "Validate source, assets, and exact Wave 2 manifests",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Build with pinned provider present",
+          "status": "completed",
+          "conclusion": "failure"
+        },
+        {
+          "name": "Record resolved provider dependencies",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "name": "Run real Forge GameTests with provider present",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "name": "Run dedicated-server smoke with provider present",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "name": "Seal evidence",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "name": "Upload provider-present evidence",
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ],
+      "tested_merge_sha": "0d42296e0a6e2147c835a8134657e66dbc48a5c3",
+      "build_passed": false,
+      "build_attempts": 3,
+      "tls_failure_count": 3,
+      "exact_failure_and_retry_evidence": [
+        "2026-11-03T16:08:27.3908975Z Caused by: javax.net.ssl.SSLHandshakeException: (certificate_unknown) PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target",
+        "2026-11-03T16:08:27.4061881Z BUILD FAILED in 13s",
+        "2026-11-03T16:08:27.7873875Z ##[warning]Possible transient dependency/service build failure on attempt 1; retrying once state can change.",
+        "2026-11-03T16:08:56.7371267Z Caused by: javax.net.ssl.SSLHandshakeException: (certificate_unknown) PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target",
+        "2026-11-03T16:08:56.7492969Z BUILD FAILED in 8s",
+        "2026-11-03T16:08:57.0736816Z ##[warning]Possible transient dependency/service build failure on attempt 2; retrying once state can change.",
+        "2026-11-03T16:09:26.4821469Z Caused by: javax.net.ssl.SSLHandshakeException: (certificate_unknown) PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target",
+        "2026-11-03T16:09:26.5072585Z BUILD FAILED in 9s",
+        "2026-11-03T16:09:26.9186773Z ##[error]Provider-present Forge build failed after three evidence-changing attempts for aoa."
+      ],
+      "observed_native_failures": [],
+      "observed_native_summary": [],
+      "observed_crew_tour_passes": [],
+      "observed_related_passes": [],
+      "observed_provider_proof": [],
+      "smoke_passed": false,
+      "observed_smoke_stop": [],
+      "artifact_finalization": "2026-11-03T16:09:28.5582267Z Artifact jetsetcraft-wave2-aoa-0d42296e0a6e2147c835a8134657e66dbc48a5c3 successfully finalized. Artifact ID 13247887883",
+      "uploaded_artifact_archive_sha256": "2026-11-03T16:09:27.8656249Z SHA256 digest of uploaded artifact is 12f14d372039368d6b94351d2f0baf10f68dac534b5f9e79b478feef96ea0d80",
+      "log_retrieved": true
+    },
+    {
+      "id": 126038764239,
+      "name": "cataclysm / Forge 1.20.1",
+      "status": "completed",
+      "conclusion": "failure",
+      "url": "https://github.com/Herbertofury/JetSetCraft/actions/runs/41670931836/job/126038764239",
+      "relevant_steps": [
+        {
+          "name": "Validate source, assets, and exact Wave 2 manifests",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Build with pinned provider present",
+          "status": "completed",
+          "conclusion": "failure"
+        },
+        {
+          "name": "Record resolved provider dependencies",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "name": "Run real Forge GameTests with provider present",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "name": "Run dedicated-server smoke with provider present",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "name": "Seal evidence",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "name": "Upload provider-present evidence",
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ],
+      "tested_merge_sha": "0d42296e0a6e2147c835a8134657e66dbc48a5c3",
+      "build_passed": false,
+      "build_attempts": 3,
+      "tls_failure_count": 3,
+      "exact_failure_and_retry_evidence": [
+        "2026-11-03T16:09:24.3264884Z Caused by: javax.net.ssl.SSLHandshakeException: (certificate_unknown) PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target",
+        "2026-11-03T16:09:24.3808943Z BUILD FAILED in 47s",
+        "2026-11-03T16:09:24.7672149Z ##[warning]Possible transient dependency/service build failure on attempt 1; retrying once state can change.",
+        "2026-11-03T16:09:53.1676873Z Caused by: javax.net.ssl.SSLHandshakeException: (certificate_unknown) PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target",
+        "2026-11-03T16:09:53.1763749Z BUILD FAILED in 8s",
+        "2026-11-03T16:09:53.4886043Z ##[warning]Possible transient dependency/service build failure on attempt 2; retrying once state can change.",
+        "2026-11-03T16:10:21.4544664Z Caused by: javax.net.ssl.SSLHandshakeException: (certificate_unknown) PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target",
+        "2026-11-03T16:10:21.4882851Z BUILD FAILED in 7s",
+        "2026-11-03T16:10:21.8124043Z ##[error]Provider-present Forge build failed after three evidence-changing attempts for cataclysm."
+      ],
+      "observed_native_failures": [],
+      "observed_native_summary": [],
+      "observed_crew_tour_passes": [],
+      "observed_related_passes": [],
+      "observed_provider_proof": [],
+      "smoke_passed": false,
+      "observed_smoke_stop": [],
+      "artifact_finalization": "2026-11-03T16:10:23.2499668Z Artifact jetsetcraft-wave2-cataclysm-0d42296e0a6e2147c835a8134657e66dbc48a5c3 successfully finalized. Artifact ID 13247094167",
+      "uploaded_artifact_archive_sha256": "2026-11-03T16:10:22.6223312Z SHA256 digest of uploaded artifact is c29a41ea9b4ebc11597d4daeabdd6fff991e323a6acd12f45bdfef006443bbfd",
+      "log_retrieved": true
+    }
+  ],
+  "official_incident_check": {
+    "checked_at_utc": "2026-11-03 16:15:32 UTC",
+    "current_official_dependency_docs": "https://wiki.createmod.net/developers/depend-on-create/forge-1.20.1",
+    "docs_continue_to_prescribe_pinned_host_and_version": true,
+    "official_github_issue_queries": [
+      {
+        "query": "org:Creators-of-Create \"PKIX\"",
+        "returned_issues": 0
+      },
+      {
+        "query": "org:Creators-of-Create \"maven.createmod.net\" certificate",
+        "returned_issues": 0
+      }
+    ],
+    "current_authoritative_incident_or_supported_fix_found": false,
+    "conclusion": "Unresolved: a focused current check found no authoritative incident notice or supported fix. Empty search results do not prove that no incident exists.",
+    "scope": "Official Create vendor/developer documentation and Creators-of-Create GitHub sources only; no alternate host probes or dependency/trust changes."
+  },
+  "limitations": [
+    "This second run does not pass the complete provider matrix.",
+    "Five provider lanes did not reach native tests or server smoke because Create resolution failed before compilation.",
+    "Alexsmobs retains one native director-readiness failure and did not run server smoke.",
+    "Successful build lanes may use restored dependencies and do not prove upstream TLS certificate-chain recovery.",
+    "Uploaded artifact SHA-256 records below identify the GitHub artifact archive, not the mod JAR checksum."
+  ]
+}

@@ -64,6 +64,10 @@ public final class ConnectedStreetVisualAudit {
         switch (phase) {
             case 0 -> {
                 require(!RivalRushClient.active(), "Connected-street audit requires a returned Rush player");
+                // The preceding real return may still be showing its reward receipt. Let it
+                // finish naturally before recording the baseline or resizing for page captures.
+                if (!CrewRewardFeedback.isIdle()) return false;
+                JetSetCraft.LOGGER.info("JETSETCRAFT_CONNECTED_AUDIT_FEEDBACK_SETTLED actual receipt notifications finished; none removed or hidden");
                 originalWidth = minecraft.getWindow().getWidth(); originalHeight = minecraft.getWindow().getHeight();
                 originalScale = minecraft.options.guiScale().get(); originalSlot = minecraft.player.getInventory().selected;
                 configured = true;
@@ -279,6 +283,7 @@ public final class ConnectedStreetVisualAudit {
         throw new IllegalStateException("Missing actual connected-mode button " + label);
     }
     private static boolean captureReady(Minecraft minecraft) {
+        if (!CrewRewardFeedback.isIdle()) { stableTicks = 0; return false; }
         ticks++;
         long window = minecraft.getWindow().getWindow();
         boolean focused = GLFW.glfwGetWindowAttrib(window, GLFW.GLFW_FOCUSED) == GLFW.GLFW_TRUE;

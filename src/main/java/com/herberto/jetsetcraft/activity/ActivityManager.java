@@ -560,7 +560,7 @@ public final class ActivityManager {
                 ? "Extract samples for graffiti research and Rival Rush preparations; mission rewards also grow your crew."
                 : !JetSetConfig.SERVER.enableCrewHouse.get() ? "Crew progression is disabled on this server."
                 : c.mode == ActivityMode.RIVAL_RUSH ? "Arena caches and earned run progress grow your crew."
-                : (completed ? "Banked: " : "Completion, up to: ") + rewards.supplies() + " Supplies · "
+                : (completed ? "Banked: " : c.mix != null ? "This round, up to: " : "Completion, up to: ") + rewards.supplies() + " Supplies · "
                         + rewards.crewXp() + " crew XP · " + rewards.reputation() + " reputation · " + rewards.memberXp() + " training XP");
         out.putInt("MemberXp", rewards.memberXp()); out.putBoolean("Completed", completed); out.putBoolean("Won", completed && c.run.won());
         out.putBoolean("CanLaunch", !c.active() && !completed && clock(player) < c.expires && unavailable(c, c.mode).isEmpty());
