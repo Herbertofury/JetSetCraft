@@ -2,7 +2,7 @@
 
 **Helldivers-inspired expeditions on skates, connected to the rest of JetSetCraft.** Choose a front, review your guns and four call-ins, land in a pod, paint territory, break rival bases and extract to your ship. Research and ship upgrades turn those expeditions into new options for street art, crew progression and Rival Rush.
 
-This guide describes **0.4.0-alpha.9 / protocol 17**. Both client and server need the matching version. Stable v0.3.0 does not contain this mode. **Local verification passed** 118 required GameTests in each of three configurations, nineteen individually reviewed native-client captures and a separate installed-JAR startup/save/shutdown check. The [campaign receipt and gallery](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/verification/liberty-campaign/README.md) give exact identities, intentional provider skips and fixture/playtesting limits. Earlier [alpha.8 evidence](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/verification/liberty-grind/README.md) remains archived separately.
+This guide describes **0.4.0-alpha.9 / protocol 17**. Both client and server need the matching version. Stable v0.3.0 does not contain this mode. **Hosted verification of this continuation is pending.** The archived alpha.9 checkpoint recorded 118 required GameTests in each of three configurations, nineteen reviewed native-client captures and an installed-JAR startup/save/shutdown check. Those results belong to the earlier source/JAR in the [campaign receipt and gallery](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/verification/liberty-campaign/README.md); they do not verify the current changes. Earlier [alpha.8 evidence](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/verification/liberty-grind/README.md) remains archived separately.
 
 ## Install and prepare
 
@@ -39,6 +39,8 @@ Your physical ride remains equipped. Compatible native armor sets appear only wh
 ## Fight, skate and paint
 
 The pod carries you into your own district with temporary equipment and a copy of your ride, or inline skates if you had none. Native mobs are faction-themed Minecraft bodies: spiders/silverfish, skeletons/pillagers, and zombies/vindicators with stronger native elites. Patrol pressure replenishes over time; difficulty caps the active combat population between 24 and 96 per operation. Destroying optional fabricators, bug holes or warp ships helps reduce later pressure.
+
+Campaign and legacy expeditions share a 384-enemy ceiling. New waves favor operations with the largest share of their enemy slots free, with equal priorities taking turns. Ordinary campaign infantry can retire once more than 160 blocks from its owner and more than 96 from every living player in that world; assigned priority targets remain. Retirement makes room for later waves but awards no kills or rewards and does not replenish the mission's finite reinforcement budget.
 
 Follow the HUD's **active** objective and world markers. Required stages unlock in order; optional sites can be completed for extra rewards but never hold extraction closed.
 
@@ -85,7 +87,7 @@ After every required stage is complete:
 3. Let the ship land. Approach within eight blocks and right-click it, or choose **Board extraction** in Field.
 4. Ride the departure to the ship hub, where the successful result and samples are banked.
 
-Leaving the landing zone cancels the call. A ship left waiting eventually departs empty, but another call is possible while mission time remains. Optional objectives do not need to be finished first.
+Leaving the landing zone cancels the call. A ship left waiting eventually departs empty, but another call is possible while mission time remains. Optional objectives do not need to be finished first. Board before the deadline: once boarding is accepted, even on the last valid tick, the flight finishes and banks the successful extraction after the clock runs out. New boarding closes when time expires.
 
 The physical ship is a place to review the next expedition, unlock calls and install modules. Close the menu to walk around; the command radio opens it again. Choose another operation or **Ship → Return to Minecraft** to restore your original world, position and belongings. From an active field operation, **Return home** or `/jetsetcraft liberty return` leaves early and restores the original state.
 
@@ -121,8 +123,12 @@ Liberty's accepted results also contribute **Crew Supplies, crew XP, member trai
 
 The campaign is shared, but each deployment is **solo**. Losses can raise regional threat and create a timed defense offer. Its clock advances only while campaign players are actively in the field, not while the server is offline or everyone is doing ordinary Minecraft activities.
 
+Defense offers draw varied missions suited to their faction, each including a defense objective. Retrying an offer keeps its mission choice. You can change difficulty or duration without changing that mission family.
+
 Losing or missing a regional defense can produce a **home-defense offer**. It has no deadline and never invades automatically. Choose it deliberately, review the loadout and deploy when you want to defend. Home objectives are compact and use the existing landscape; temporary owned mobs, weak points and paint overlays are removed when the operation ends. Existing builds, containers, unrelated mobs and old graffiti are protected by the operation's ownership and interaction guards. Native effects that cannot honor those boundaries use documented safe adaptations or block admission with a reason.
 
-The **HUD** button lets you move, scale or hide the mission display. Its layout is local to your client. The campaign and equipment menus use search, pages and scrolling. The native audit and individual image review confirmed readable controls at the default size and **320 × 240 logical pixels**, including the full loadout review and its scrolled explanation. Its controlled walkthrough demonstrates actual deployment, CHROMAGEDDON paint, the ship and original-world returns. Human 20–30 minute pacing, difficulty, equipment economy and sustained server load still require playtesting. Shared combat squads and full source-game NPC/vehicle parity are outside the current implementation.
+Home objectives begin only after valid placement. Courier beacons follow each checkpoint's actual ground height. Escort rigs can climb one-block slopes and take short clear detours; a new obstruction pauses the rig. Routes use loaded terrain without rebuilding it. If no suitable required route fits, deployment stays closed and the offer remains available for another attempt.
+
+The **HUD** button lets you move, scale or hide the mission display. Its layout is local to your client. The campaign and equipment menus use search, pages and scrolling. The archived alpha.9 native audit reviewed controls at the default size and **320 × 240 logical pixels**, including the full loadout review and its scrolled explanation. Its controlled walkthrough showed actual deployment, CHROMAGEDDON paint, the ship and original-world returns; fresh hosted results for this continuation are pending. Human 20–30 minute pacing, difficulty, equipment economy and sustained server load still require playtesting. Shared combat squads and full source-game NPC/vehicle parity are outside the current implementation.
 
 Continue with [Rival Rush](Rival-Rush), [Crew Houses and Progress](Player-Chapters-Posse-and-Mob-Archetypes), [Graffiti](Graffiti), or [Testing and Verification](Testing-and-Verification).
