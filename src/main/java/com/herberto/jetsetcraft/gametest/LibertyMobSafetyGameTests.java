@@ -2,9 +2,13 @@ package com.herberto.jetsetcraft.gametest;
 
 import com.herberto.jetsetcraft.JetSetCraft;
 import com.herberto.jetsetcraft.compat.LibertyTaczCompat;
+import com.herberto.jetsetcraft.liberty.LibertyArmory;
 import com.herberto.jetsetcraft.liberty.LibertyManager;
+import com.herberto.jetsetcraft.liberty.LibertyMissionCatalog;
+import com.herberto.jetsetcraft.liberty.LibertyMissionPlan;
 import com.herberto.jetsetcraft.liberty.LibertyMobSafety;
 import com.herberto.jetsetcraft.liberty.LibertyOperation;
+import com.herberto.jetsetcraft.liberty.LibertyWorld;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -37,6 +41,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.PressurePlateBlock;
 import net.minecraft.world.level.block.RedStoneOreBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.MinecraftForge;
@@ -74,12 +79,25 @@ public final class LibertyMobSafetyGameTests {
         try {
             check(LibertyMobSafety.homeGuardReady(f.owner), "Actual Minecraft home contact guard was not installed");
             var offer = LibertyNativeTerrainGameTests.illuminateHomeOffer(f.owner);
-            check(LibertyManager.startDefense(f.owner, offer.id() + "|10|20"), "Real hard home defense failed its admission/preflight");
+            var plan = LibertyMissionPlan.defense(offer.id(), offer.sectorId(),
+                    LibertyMissionCatalog.faction(offer.factionId()), 10, 20);
+            if (!LibertyManager.startDefense(f.owner, offer.id() + "|10|20"))
+                throw new GameTestAssertException("Real hard home defense failed its admission/preflight"
+                        + "; unavailable=" + LibertyManager.unavailable(f.owner) + "; armory=" + LibertyArmory.readyReason(f.owner)
+                        + "; platform=" + f.center + "; originalHighestSurface=" + f.highestSurface
+                        + "; template=" + plan.template().id() + "; seed=" + plan.seed() + homeAdmissionDiagnostic(f, plan));
+            var admitted = LibertyManager.operation(f.owner);
+            check(LibertyManager.homeDefense(f.owner) && admitted != null && admitted.origin.equals(f.center)
+                            && admitted.plan.equals(plan) && LibertyWorld.inside(admitted, f.ore)
+                            && LibertyWorld.inside(admitted, f.egg) && LibertyWorld.inside(admitted, f.plate)
+                            && LibertyWorld.inside(admitted, f.tnt),
+                    "Native mob safety did not use the prepared home landing and actual offer-selected difficulty-10 plan");
             helper.onEachTick(() -> {
                 if (f.closed) return;
                 try {
                     f.ticks++;
                     f.level.getChunkSource().addRegionTicket(TICKET, f.chunk, 5, f.owner.getUUID());
+                    f.level.getChunkSource().addRegionTicket(TICKET, f.controlChunk, 3, f.owner.getUUID());
                     if (f.ticks == 95) {
                         var operation = LibertyManager.operation(f.owner);
                         check(operation != null && operation.phase() == LibertyOperation.Phase.ACTIVE && !f.owner.isPassenger(),
@@ -97,6 +115,9 @@ public final class LibertyMobSafetyGameTests {
                                 "Native mission initialization retained a foreign jockey/passenger tree");
                     }
                     if (f.ticks == 100) {
+                        check(f.level.isPositionEntityTicking(f.ore) && f.level.isPositionEntityTicking(f.egg)
+                                        && f.level.isPositionEntityTicking(f.plate) && f.level.isPositionEntityTicking(f.tnt),
+                                "Native contact controls are outside the fixture's actual entity-ticking sections");
                         nativeMobPaths(f);
                         nativeOwnedContacts(f);
                         check(LibertyManager.leave(f.owner, false, "Native mob safety fixture return")
@@ -114,6 +135,18 @@ public final class LibertyMobSafetyGameTests {
                 } catch (RuntimeException | Error error) { f.close(); throw error; }
             });
         } catch (RuntimeException | Error error) { f.close(); throw error; }
+    }
+
+    /** Fake players drop outbound status packets; read the unchanged gates only to explain a failure. */
+    private static String homeAdmissionDiagnostic(Fixture f, LibertyMissionPlan plan) {
+        try {
+            Method originMethod = LibertyManager.class.getDeclaredMethod("homeOrigin", ServerPlayer.class);
+            originMethod.setAccessible(true); BlockPos origin = (BlockPos) originMethod.invoke(null, f.owner);
+            if (origin == null) return "; homeLanding=unavailable";
+            Method readyMethod = LibertyManager.class.getDeclaredMethod("homePlanReady", ServerLevel.class, BlockPos.class, LibertyMissionPlan.class);
+            readyMethod.setAccessible(true);
+            return "; homeLanding=" + origin + "; homePlanReady=" + readyMethod.invoke(null, f.level, origin, plan);
+        } catch (ReflectiveOperationException error) { return "; homeAdmissionDiagnostic=" + error; }
     }
 
     private static void nativeMobPaths(Fixture f) throws ReflectiveOperationException {
@@ -278,10 +311,10 @@ public final class LibertyMobSafetyGameTests {
 
     private static final class Fixture {
         final ServerLevel level;
-        final BlockPos center = new BlockPos(39000, 100, -39000), ore = center.offset(12, 0, 0),
-                egg = center.offset(12, 1, 6), plate = center.offset(18, 1, 0), tnt = plate.east();
-        final ChunkPos chunk = new ChunkPos(center);
-        final AABB bounds = new AABB(center).inflate(150);
+        final BlockPos center, ore, egg, plate, tnt;
+        final ChunkPos chunk, controlChunk;
+        final AABB bounds;
+        final int highestSurface;
         final BlockState eggState = Blocks.TURTLE_EGG.defaultBlockState();
         final ServerPlayer owner;
         final ListTag original;
@@ -291,7 +324,24 @@ public final class LibertyMobSafetyGameTests {
         int ticks; boolean closed;
         Fixture(GameTestHelper helper) {
             level = helper.getLevel();
+            final int originX = 39000, originZ = -39000;
+            chunk = new ChunkPos(originX >> 4, originZ >> 4);
             for (int x = -9; x <= 9; x++) for (int z = -9; z <= 9; z++) level.getChunk(chunk.x + x, chunk.z + z);
+            int highest = level.getMinBuildHeight();
+            for (int x = -128; x <= 128; x++) for (int z = -128; z <= 128; z++)
+                highest = Math.max(highest, level.getHeight(Heightmap.Types.WORLD_SURFACE, originX + x, originZ + z));
+            highestSurface = highest;
+            // A fixed Y=100 floor does not replace taller generated surfaces in home admission's
+            // heightmap. Prepare this disposable platform above all of its existing terrain.
+            int groundY = Math.max(100, highestSurface + 5);
+            check(groundY <= level.getMaxBuildHeight() - 12,
+                    "Native home mob fixture has no build-height room above terrain: highest=" + highestSurface + "; platform=" + groundY);
+            center = new BlockPos(originX, groundY, originZ); bounds = new AABB(center).inflate(150);
+            // Keep ordinary contact controls within the home front but outside the seeded
+            // objectives and escort-route detours, which must retain their normal preflight.
+            ore = center.offset(110, 0, 0); egg = center.offset(110, 1, 6);
+            plate = center.offset(116, 1, 0); tnt = plate.east();
+            controlChunk = new ChunkPos(ore);
             for (int x = -128; x <= 128; x++) for (int z = -128; z <= 128; z++) level.setBlock(center.offset(x, 0, z), Blocks.STONE.defaultBlockState(), 3);
             level.setBlock(ore, Blocks.REDSTONE_ORE.defaultBlockState(), 3);
             level.setBlock(egg, eggState, 3);
@@ -304,6 +354,7 @@ public final class LibertyMobSafetyGameTests {
             original = owner.getInventory().save(new ListTag());
             observer = new HomeMobSafetyObserver(this); MinecraftForge.EVENT_BUS.register(observer);
             level.getChunkSource().addRegionTicket(TICKET, chunk, 5, owner.getUUID());
+            level.getChunkSource().addRegionTicket(TICKET, controlChunk, 3, owner.getUUID());
         }
         void close() {
             if (closed) return; closed = true;
@@ -316,6 +367,7 @@ public final class LibertyMobSafetyGameTests {
                 level.setBlock(plate, Blocks.AIR.defaultBlockState(), 3); level.setBlock(tnt, Blocks.AIR.defaultBlockState(), 3);
                 MinecraftForge.EVENT_BUS.unregister(observer);
                 level.getChunkSource().removeRegionTicket(TICKET, chunk, 5, owner.getUUID());
+                level.getChunkSource().removeRegionTicket(TICKET, controlChunk, 3, owner.getUUID());
             }
         }
     }

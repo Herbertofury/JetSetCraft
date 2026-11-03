@@ -1,0 +1,85 @@
+[
+  {
+    "name": "assets",
+    "command": [
+      "python",
+      "tools/validate_assets.py"
+    ],
+    "exit_code": 0,
+    "log": "assets.log"
+  },
+  {
+    "name": "gameplay-contract",
+    "command": [
+      "python",
+      "tools/validate_gameplay_contract.py"
+    ],
+    "exit_code": 0,
+    "log": "gameplay-contract.log"
+  },
+  {
+    "name": "java-syntax",
+    "command": [
+      "python",
+      "tools/validate_java_syntax.py"
+    ],
+    "exit_code": 0,
+    "log": "java-syntax.log"
+  },
+  {
+    "name": "premium-polish",
+    "command": [
+      "python",
+      "tools/validate_premium_polish.py"
+    ],
+    "exit_code": 0,
+    "log": "premium-polish.log"
+  },
+  {
+    "name": "wave2-static",
+    "command": [
+      "python",
+      "tools/validate_wave2_compat.py"
+    ],
+    "exit_code": 0,
+    "log": "wave2-static.log"
+  },
+  {
+    "name": "wiki",
+    "command": [
+      "python",
+      "tools/validate_wiki.py"
+    ],
+    "exit_code": 0,
+    "log": "wiki.log"
+  },
+  {
+    "name": "research-generation",
+    "command": [
+      "python",
+      "tools/build_research_browser.py",
+      "--check"
+    ],
+    "exit_code": 0,
+    "log": "research-generation.log"
+  },
+  {
+    "name": "research-browser",
+    "command": [
+      "node",
+      "tools/test_research_browser.js"
+    ],
+    "exit_code": 0,
+    "log": "research-browser.log"
+  },
+  {
+    "name": "diff-whitespace",
+    "command": [
+      "git",
+      "diff",
+      "--check"
+    ],
+    "exit_code": 0,
+    "log": "diff-whitespace.log"
+  }
+]

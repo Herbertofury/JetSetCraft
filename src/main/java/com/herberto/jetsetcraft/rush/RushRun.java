@@ -120,6 +120,7 @@ public final class RushRun {
     private int surgeTicks;
     private int magnetTicks;
     private int tempoTicks;
+    private int soulRepriseTicks;
     private int soulCharge;
     private int soulBurstCharge;
     private double ward;
@@ -158,7 +159,7 @@ public final class RushRun {
     public int rank(Upgrade upgrade) { return ranks.getOrDefault(upgrade, 0); }
     public long chapter() { return elapsedTicks / 6000L + 1L; }
     public double damageMultiplier() { return (1.0D + rank(Upgrade.FORCE) * 0.15D) * (surgeTicks > 0 ? 1.25D : 1.0D); }
-    public double cadenceMultiplier() { return Math.max(0.25D, (1.0D - rank(Upgrade.CADENCE) * 0.07D) * (tempoTicks > 0 ? 0.7D : 1.0D)); }
+    public double cadenceMultiplier() { return Math.max(0.25D, (1.0D - rank(Upgrade.CADENCE) * 0.07D) * (tempoTicks() > 0 ? 0.7D : 1.0D)); }
     public double splashRadius() { return (1.5D + rank(Upgrade.SPLASH) * 0.3D) * areaMultiplier(); }
     public double pickupRadius() { return magnetTicks > 0 ? 128.0D : 3.0D + rank(Upgrade.PICKUP) * 1.5D; }
     public double recoveryPerSecond() { return rank(Upgrade.RECOVERY) * 0.35D; }
@@ -169,6 +170,7 @@ public final class RushRun {
     public double artifactIntervalMultiplier() { return Math.max(0.5D, 1.0D - rank(Upgrade.RESONANCE) * 0.08D); }
     public int soulCharge() { return soulCharge; }
     public int soulBurstCharge() { return soulBurstCharge; }
+    public int tempoTicks() { return Math.max(tempoTicks, soulRepriseTicks); }
     public double ward() { return ward; }
     public double maxWard() { return rank(Upgrade.WARD) == 0 ? 0 : 8 + rank(Upgrade.WARD) * 4; }
     public long hits() { return hits; }
@@ -267,6 +269,7 @@ public final class RushRun {
         if (finished || !buildOpportunity || version != offerVersion || evolution == null
                 || evolution == RushBuildPaths.Evolution.NONE || evolution == selectedEvolution || !evolution.ready(this)) return false;
         selectedEvolution = evolution; buildOpportunity = false; nextCryoShatterTick = elapsedTicks;
+        soulRepriseTicks = 0;
         offerVersion = nextVersion();
         return true;
     }
@@ -396,6 +399,7 @@ public final class RushRun {
         if (source == Upgrade.SOUL_BURST) soulBurstCharge = 0;
         if (source == Upgrade.WARD) ward = 0;
         if (source == Upgrade.TEMPO) tempoTicks = 0;
+        if (!evolutionActive(RushBuildPaths.Evolution.SOUL_REPRISE)) soulRepriseTicks = 0;
         if (replacement == Upgrade.WARD) { ward = maxWard(); wardLastHit = elapsedTicks; }
         completePitStop(RushPitStop.Service.REMIX, replacement, source, before, "");
         return true;
@@ -436,7 +440,13 @@ public final class RushRun {
     public boolean spendSouls() { if (soulCharge < 5 || rank(Upgrade.SOUL) == 0) return false; soulCharge -= 5; return true; }
     public boolean spendSoulBurst() {
         if (finished || awaitingEncore || hasOffer() || soulBurstCharge < 5 || rank(Upgrade.SOUL_BURST) == 0) return false;
-        soulBurstCharge -= 5; return true;
+        soulBurstCharge -= 5;
+        // The manager calls this only after finding real visible targets for the accepted burst.
+        if (tryEvolutionProc(RushBuildPaths.Evolution.SOUL_REPRISE)) {
+            heal(6);
+            soulRepriseTicks = 60;
+        }
+        return true;
     }
     public void pauseForEncore() { if (!finished) awaitingEncore = true; }
 
@@ -457,6 +467,7 @@ public final class RushRun {
         if (surgeTicks > 0) surgeTicks--;
         if (magnetTicks > 0) magnetTicks--;
         if (tempoTicks > 0) tempoTicks--;
+        if (soulRepriseTicks > 0) soulRepriseTicks--;
         if (rank(Upgrade.WARD) > 0 && elapsedTicks - wardLastHit >= 120 && elapsedTicks % 20 == 0)
             restoreWard(2 + rank(Upgrade.WARD));
         if (!circuit && !endless && elapsedTicks >= SESSION_TICKS) awaitingEncore = true;

@@ -49,7 +49,7 @@ public final class RushEvolutionGameTests {
     @GameTest(template = "hoverboard_empty", timeoutTicks = 500)
     public static void cryoConsumesPriorStatusesAndRespectsWallsCooldownAndOwnership(GameTestHelper helper) {
         Fixture fixture = begin(helper, "JSC_cryo", 4);
-        helper.runAfterDelay(2, () -> {
+        awaitActors(helper, 100, () -> {
             try {
                 ServerPlayer player = fixture.player(); RushRun run = RivalRushManager.run(player);
                 List<Mob> actors = arrange(fixture); check(actors.size() >= 4, "Too few real Cryo rivals");
@@ -87,13 +87,13 @@ public final class RushEvolutionGameTests {
                         "Cryo changed native mob health, attributes or effects");
                 restored(fixture); pass(helper, "rush_evolution_cryo");
             } finally { cleanup(fixture); }
-        });
+        }, fixture);
     }
 
     @GameTest(template = "hoverboard_empty", timeoutTicks = 500)
     public static void railstormRequiresChargedPrimaryAndKeepsForwardVisibleTargets(GameTestHelper helper) {
         Fixture fixture = begin(helper, "JSC_rail", 5);
-        helper.runAfterDelay(2, () -> {
+        awaitActors(helper, 100, () -> {
             try {
                 ServerPlayer player = fixture.player(); RushRun run = RivalRushManager.run(player);
                 List<Mob> actors = arrange(fixture); check(actors.size() >= 5, "Too few real Railstorm rivals");
@@ -136,25 +136,31 @@ public final class RushEvolutionGameTests {
                         "Captain XP paused midway through an accepted hit and suppressed its charged evolution");
                 restored(fixture); pass(helper, "rush_evolution_railstorm");
             } finally { cleanup(fixture); }
-        });
+        }, fixture);
     }
 
     @GameTest(template = "hoverboard_empty", timeoutTicks = 500)
     public static void radiantRecoveryAndReturnedDebriefUseActualAcceptedState(GameTestHelper helper) {
         Fixture fixture = begin(helper, "JSC_report", 4);
-        helper.runAfterDelay(2, () -> {
+        awaitActors(helper, 100, () -> {
             try {
                 ServerPlayer player = fixture.player(); RushRun run = RivalRushManager.run(player);
                 List<Mob> actors = arrange(fixture); check(actors.size() >= 4, "Too few real debrief rivals");
                 Mob primary = actors.get(0); place(primary, player.position(), 3, 0);
                 equipAndEvolve(player, RushBuildPaths.Evolution.RADIANT_BARRIER);
+                check(near(run.vitality(), run.maxVitality()) && near(run.ward(), run.maxWard()) && run.hits() == 0
+                                && !run.hasOffer() && !run.awaitingEncore(),
+                        "Radiance requires full vitality and ward before the accepted damage: " + preparationState(fixture));
                 float nativeHealth = player.getHealth(); RivalRushManager.hurt(player, 10);
                 double before = run.ward(), restoredBefore = run.wardRestored();
                 for (int hit = 0; hit < 6; hit++) check(RivalRushManager.tagEnemy(player, primary, .01), "Radiance primary tag failed");
                 check(near(run.ward() - before, 6) && near(run.wardRestored() - restoredBefore, 6)
                                 && run.evolutionProcs(RushBuildPaths.Evolution.RADIANT_BARRIER) == 1
                                 && player.getHealth() == nativeHealth && near(run.vitality(), run.maxVitality()),
-                        "Real Radiance did not convert only actual overheal to bounded virtual ward");
+                        "Real Radiance did not convert only actual overheal to bounded virtual ward; wardDelta="
+                                + (run.ward() - before) + ", restoredDelta=" + (run.wardRestored() - restoredBefore)
+                                + ", procs=" + run.evolutionProcs(RushBuildPaths.Evolution.RADIANT_BARRIER)
+                                + ", nativeHealth=" + player.getHealth() + "/" + nativeHealth + "; " + preparationState(fixture));
                 double damageBefore = run.secondaryDamage(), available = 0;
                 for (int i = 1; i <= 3; i++) {
                     Mob target = actors.get(i); available += RivalRushManager.actorVitality(player, target);
@@ -182,7 +188,7 @@ public final class RushEvolutionGameTests {
                 check(RushDebrief.sanitize(reloaded).equals(RivalRushManager.lastDebrief(player)), "Saved results failed bounded reload");
                 pass(helper, "rush_evolution_return");
             } finally { cleanup(fixture); }
-        });
+        }, fixture);
     }
 
     private static void equipAndEvolve(ServerPlayer player, RushBuildPaths.Evolution evolution) {
@@ -217,7 +223,7 @@ public final class RushEvolutionGameTests {
     }
 
     private record Fixture(ServerPlayer player, ServerLevel source, Vec3 returnPosition, ListTag inventory,
-                           CompoundTag ride, ServerLevel district, ChunkPos chunk) { }
+                           CompoundTag ride, ServerLevel district, ChunkPos chunk, int requiredActors) { }
 
     private static Fixture begin(GameTestHelper helper, String name, int requiredActors) {
         ServerPlayer player = FakePlayerFactory.get(helper.getLevel(), new GameProfile(UUID.randomUUID(), name));
@@ -231,19 +237,89 @@ public final class RushEvolutionGameTests {
         check(RivalRushManager.start(player, ResourceLocation.tryParse("jetsetcraft:dead_beat"), ResourceLocation.tryParse("minecraft:zombie"), false),
                 "Could not start actual evolution session");
         ServerLevel district = player.serverLevel(); ChunkPos chunk = new ChunkPos(player.blockPosition());
-        Fixture fixture = new Fixture(player, helper.getLevel(), position, inventory, ride, district, chunk);
+        Fixture fixture = new Fixture(player, helper.getLevel(), position, inventory, ride, district, chunk, requiredActors);
         district.getChunkSource().addRegionTicket(TICKET, chunk, 4, player.getUUID());
         try {
             for (int x = -2; x <= 2; x++) for (int z = -2; z <= 2; z++) district.getChunk(chunk.x + x, chunk.z + z);
             RushRun run = RivalRushManager.run(player);
             for (int tick = 0; tick < 3001; tick++) run.tickActive();
             RivalRushManager.tick(player.getServer());
-            for (int step = 0; step < 14 && actors(player).size() < requiredActors; step++) {
+            parkPreparingActors(fixture);
+            for (int step = 0; step < 14 && !actorsReady(fixture); step++) {
                 for (int tick = 0; tick < 40; tick++) run.tickActive();
                 RivalRushManager.tick(player.getServer());
+                parkPreparingActors(fixture);
             }
             return fixture;
         } catch (RuntimeException error) { cleanup(fixture); throw error; }
+    }
+
+    private static boolean actorsReady(Fixture fixture) {
+        List<Mob> actors = actors(fixture.player());
+        return actors.size() >= fixture.requiredActors() && !actors.isEmpty()
+                && RivalRushManager.actorVitality(fixture.player(), actors.get(0)) >= 200;
+    }
+
+    /** Keep real admitted targets outside automatic combat while the chunk tickets become resident. */
+    private static void parkPreparingActors(Fixture fixture) {
+        ServerPlayer player = fixture.player();
+        for (Projectile shot : fixture.district().getEntitiesOfClass(Projectile.class, player.getBoundingBox().inflate(100),
+                entity -> RivalRushManager.belongsTo(entity, player))) shot.discard();
+        for (Mob actor : actors(player)) {
+            place(actor, player.position(), 28, 20);
+            actor.setTarget(null); actor.getNavigation().stop();
+        }
+    }
+
+    /** Chunk tickets and a mob count alone do not establish native actor residency or captain admission. */
+    private static void awaitActors(GameTestHelper helper, int remaining, Runnable ready, Fixture... fixtures) {
+        try {
+            boolean available = true;
+            for (Fixture fixture : fixtures) {
+                parkPreparingActors(fixture);
+                BlockPos center = fixture.player().blockPosition();
+                for (int x : new int[]{-32, 32}) for (int z : new int[]{-32, 32})
+                    available &= fixture.district().isPositionEntityTicking(center.offset(x, 0, z));
+                available &= actorsReady(fixture);
+            }
+            if (available) {
+                for (Fixture fixture : fixtures) {
+                    RushRun run = RivalRushManager.run(fixture.player());
+                    check(run != null && !run.hasOffer() && !run.awaitingEncore() && !run.isFinished()
+                                    && run.hits() == 0 && run.defeats() == 0 && near(run.vitality(), run.maxVitality()),
+                            "Automatic combat changed the prepared evolution fixture: " + preparationState(fixture));
+                }
+                ready.run(); return;
+            }
+            if (remaining <= 0) check(false, "The real director did not admit its required resident actors and captain: "
+                    + preparationState(fixtures));
+            helper.runAfterDelay(1, () -> awaitActors(helper, remaining - 1, ready, fixtures));
+        } catch (RuntimeException error) {
+            for (Fixture fixture : fixtures) cleanup(fixture);
+            throw error;
+        }
+    }
+
+    private static String preparationState(Fixture... fixtures) {
+        StringBuilder state = new StringBuilder();
+        for (Fixture fixture : fixtures) {
+            ServerPlayer player = fixture.player(); RushRun run = RivalRushManager.run(player);
+            state.append('[').append(player.getGameProfile().getName()).append(" active=").append(run != null);
+            if (run != null) state.append(" elapsed=").append(run.elapsedTicks()).append(" offer=").append(run.offers())
+                    .append(" encore=").append(run.awaitingEncore()).append(" finished=").append(run.isFinished())
+                    .append(" xp=").append(run.xp()).append(" hits=").append(run.hits()).append(" defeats=").append(run.defeats())
+                    .append(" vitality=").append(run.vitality()).append('/').append(run.maxVitality())
+                    .append(" ward=").append(run.ward()).append('/').append(run.maxWard());
+            List<Mob> actors = actors(player);
+            state.append(" actors=").append(actors.size()).append('/').append(fixture.requiredActors()).append(" vitalities=")
+                    .append(actors.stream().map(actor -> RivalRushManager.actorVitality(player, actor)).toList());
+            BlockPos center = player.blockPosition();
+            for (int x : new int[]{-32, 32}) for (int z : new int[]{-32, 32})
+                state.append(" corner(").append(x).append(',').append(z).append(")=")
+                        .append(fixture.district().isPositionEntityTicking(center.offset(x, 0, z)));
+            state.append(']');
+        }
+        return state.toString();
     }
 
     private static List<Mob> arrange(Fixture fixture) {

@@ -995,3 +995,12 @@ The Wave 2A roster is no longer documentation-only. The canonical runtime now co
 ### Remaining gameplay-proof gate
 
 Do not overstate the baseline as full end-user interaction proof. The remaining Wave 2 runtime work is to exercise representative provider-owned boss/pet/anatomy paths through actual JetSetCraft equip/unequip, save/reload/reconnect, multiplayer synchronization, and challenge start/cancel/restore behavior while preserving source AI/equipment/provider state. This is the next implementation/verification target; registry coverage, startup compatibility, GameTests, and dedicated-server boot are no longer blockers.
+
+
+## Connected Streets local contribution checkpoint — alpha.10
+
+This bounded continuation implements mode variety and connected progression without marking the larger finish contract complete. Code adds Street Mix with per-round shared settlement, nine core plus three optional Crew Tour milestones, three additional Rush evolutions and six original Liberty templates. Existing preparation/slot, source-mob, ordinary-inventory, optional-provider and terrain boundaries remain. See [the exact candidate receipt](verification/connected-streets/README.md).
+
+Local static checks and isolated production Java model execution pass. Native Forge build/tests, 26-frame client audit, provider matrices, installed-package proof and human pacing remain open. Publication was blocked by automatic approval review requiring explicit permission to commit the proposed GitHub changes. Preserve the complete patch and its source manifest; resume hosted gates on that exact source after publication is authorized. No parent gate above is newly checked by these model/static checks.
+
+The 3 November continuation recovered that patch and added review fixes for stale Crew Tour training recipients, monotonic claim revisions and accepted Soul Burst pulses that earn a draft. The Tour now shows the current training destination. Three regression cases bring the current declared suite to **139**, with **26** required client captures. Consult the continuation section of the verification receipt for new evidence and publication state; the preceding paragraph remains the history of the original prepared patch.

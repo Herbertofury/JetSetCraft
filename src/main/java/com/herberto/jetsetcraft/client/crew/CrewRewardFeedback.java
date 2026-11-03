@@ -41,6 +41,12 @@ public final class CrewRewardFeedback {
 
     static void reset() { SEEN.clear(); generation++; }
 
+    /** Native audits wait for real receipts to finish; they never remove or hide a notification. */
+    static boolean isIdle() {
+        ToastComponent toasts = Minecraft.getInstance().getToasts();
+        return SEEN.stream().noneMatch(id -> toasts.getToast(RewardToast.class, id) != null);
+    }
+
     private static final class RewardToast implements Toast {
         private final CrewRewardReceipt receipt;
         private final int epoch, width, height;
@@ -50,7 +56,9 @@ public final class CrewRewardFeedback {
         RewardToast(CrewRewardReceipt receipt, String styles, int epoch) {
             this.receipt = receipt; this.epoch = epoch;
             Minecraft minecraft = Minecraft.getInstance();
-            width = Math.max(160, Math.min(330, minecraft.getWindow().getGuiScaledWidth() - 16));
+            // A toast can outlive a window resize. Keep its fixed layout within the supported
+            // 320-pixel minimum GUI even when it was created in a larger viewport.
+            width = Math.max(160, Math.min(304, minecraft.getWindow().getGuiScaledWidth() - 16));
             add(receipt.name(), 0xFFC5ED55);
             add(receipt.summary(), 0xFFE7E7E7);
             add(receipt.trainingSummary(), 0xFF87E1EA);

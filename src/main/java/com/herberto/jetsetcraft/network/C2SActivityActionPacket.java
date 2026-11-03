@@ -11,7 +11,7 @@ import java.util.function.Supplier;
 
 /** A mode choice and server-issued context only; never accepts positions, progress or rewards. */
 public record C2SActivityActionPacket(String action, String mode, UUID contextId, int version) {
-    private static final Set<String> ACTIONS = Set.of("open", "refresh", "select", "launch", "cancel");
+    private static final Set<String> ACTIONS = Set.of("open", "refresh", "select", "launch", "cancel", "format", "next");
 
     public static void encode(C2SActivityActionPacket packet, FriendlyByteBuf buffer) {
         buffer.writeUtf(packet.action, 32);

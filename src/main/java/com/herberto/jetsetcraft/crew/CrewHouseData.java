@@ -12,6 +12,7 @@ import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 /** One world-owned progression store; temporary Rush journals never serialize or restore it. */
@@ -21,6 +22,7 @@ public final class CrewHouseData extends SavedData {
     private final Map<UUID, PendingCrewProgress> pending = new LinkedHashMap<>();
     private record StyleChoice(String id, long revision) {}
     private final Map<UUID, StyleChoice> styleChoices = new LinkedHashMap<>();
+    private final Map<UUID, CrewTour.Progress> tours = new LinkedHashMap<>();
     private final ListTag quarantined = new ListTag();
     private CompoundTag newerSchema;
 
@@ -45,6 +47,9 @@ public final class CrewHouseData extends SavedData {
         if (profile == null || blocked(profile.owner()) || profiles.containsKey(profile.owner())) return false;
         PendingCrewProgress earned = pending.get(profile.owner());
         if (earned != null) earned.transfer(profile);
+        CrewTour.Progress tour = tours.get(profile.owner());
+        // Founding changes the reward's account, training recipient and reputation destination.
+        if (tour != null && tour.revision < Long.MAX_VALUE) tour.revision++;
         profiles.put(profile.owner(), profile); pending.remove(profile.owner()); setDirty(); return true;
     }
     public int pendingSupplies(UUID owner) { PendingCrewProgress p = pending.get(owner); return p == null ? 0 : p.supplies; }
@@ -74,6 +79,62 @@ public final class CrewHouseData extends SavedData {
         PendingCrewProgress progress = pending.get(owner);
         return progress == null ? List.of() : CrewRewardHistory.recent(progress.rewards);
     }
+
+    /**
+     * A claim observes both tour progress and its reward account. Each revision is monotonic;
+     * their bounded sum also invalidates previews when training focus, jobs or balances change.
+     * Saturation is terminal for claims, rather than wrapping into a previously valid token.
+     */
+    public long tourRevision(UUID owner) {
+        CrewTour.Progress progress = tours.get(owner);
+        CrewProfile profile = profiles.get(owner);
+        long tour = progress == null ? 0 : progress.revision;
+        long account = profile == null ? 0 : profile.revision;
+        return account > Long.MAX_VALUE - tour ? Long.MAX_VALUE : tour + account;
+    }
+
+    /** Read-only tour previews do not create accounts or award progress. */
+    public CompoundTag tourSnapshot(UUID owner) {
+        CrewTour.Progress progress = tours.get(owner);
+        if (progress == null) progress = new CrewTour.Progress(owner);
+        CompoundTag snapshot = CrewTour.snapshot(progress, tourGang(owner, progress), blocked(owner), tourRevision(owner));
+        CrewProfile profile = profiles.get(owner);
+        CrewProfile.Member member = profile == null ? null : profile.members.get(profile.focus);
+        boolean busy = member != null && profile.busy(member.id);
+        snapshot.putString("TrainingSummary", profile == null ? "Training XP will be saved for your first home."
+                : member == null ? "No training XP will be applied: no training focus is selected."
+                : busy ? "No training XP will be applied: " + member.name + " is away on a job."
+                : "Training XP goes to " + member.name + " (level " + member.level() + "), up to their XP limit.");
+        snapshot.putBoolean("TrainingEligible", profile == null || member != null && !busy);
+        return snapshot;
+    }
+
+    /** Caller validates the living owner and normal-world action boundary, as with style selection. */
+    public CrewRewardReceipt claimTour(UUID owner, String id, long expectedRevision, long gameTime) {
+        CrewTour.Progress progress = tours.get(owner);
+        CrewTour.Milestone milestone = CrewTour.byId(id);
+        long currentRevision = tourRevision(owner);
+        if (owner == null || blocked(owner) || progress == null || milestone == null || gameTime < 0
+                || expectedRevision != currentRevision || currentRevision == Long.MAX_VALUE
+                || progress.claimed.contains(id) || !progress.complete(milestone)) return null;
+        String gang = tourGang(owner, progress);
+        if (!CrewTour.validGang(gang)) return null;
+        // Both the permanent claim flag and the exact capped reward live in this same SavedData record.
+        CrewRewardReceipt receipt = award(owner, CrewTour.receiptId(owner, id), gang, milestone.supplies(),
+                milestone.crewXp(), milestone.memberXp(), milestone.reputation(), "tour:" + id, gameTime);
+        if (receipt == null) return null;
+        progress.claimed.add(id); progress.revision++; setDirty(); return receipt;
+    }
+
+    private String tourGang(UUID owner, CrewTour.Progress progress) {
+        CrewProfile profile = profiles.get(owner);
+        return profile == null ? progress.lastGang : profile.gang;
+    }
+
+    private void recordTour(UUID owner, CrewRewardReceipt receipt) {
+        if (CrewTour.source(receipt.source()) != null)
+            tours.computeIfAbsent(owner, CrewTour.Progress::new).accepted(receipt);
+    }
     /** Same save record owns receipt and reward; a first house absorbs its pending account exactly once. */
     boolean award(UUID owner, UUID receipt, String gang, int supplies, int xp, int training, int reputation) {
         return award(owner, receipt, gang, supplies, xp, training, reputation, "activity", 0) != null;
@@ -93,7 +154,7 @@ public final class CrewHouseData extends SavedData {
                     progress.reputations.getOrDefault(gang, 0) - beforeReputation, null, "", 0, 0, 1, 1, CrewRewardReceipt.Training.BANKED,
                     progress.supplies - beforeSupplies < supplies || progress.xp - beforeXp < xp
                             || progress.training - beforeTraining < training || progress.reputations.getOrDefault(gang, 0) - beforeReputation < reputation);
-            CrewRewardHistory.add(progress.rewards, awarded); setDirty(); return awarded;
+            CrewRewardHistory.add(progress.rewards, awarded); recordTour(owner, awarded); setDirty(); return awarded;
         }
         if (profile.settledRuns.contains(receipt)) return null;
         CrewProfile.Member member = profile.members.get(profile.focus);
@@ -112,11 +173,17 @@ public final class CrewHouseData extends SavedData {
                     : busy ? CrewRewardReceipt.Training.BUSY : CrewRewardReceipt.Training.APPLIED,
                 profile.supplies - beforeSupplies < supplies || profile.xp - beforeXp < xp || profile.reputation(gang) - beforeReputation < reputation
                         || (member != null && !busy && awardedTraining < training));
-        CrewRewardHistory.add(profile.rewards, awarded); profile.changed(); setDirty(); return awarded;
+        CrewRewardHistory.add(profile.rewards, awarded); recordTour(owner, awarded); profile.changed(); setDirty(); return awarded;
     }
     public static CrewHouseData load(CompoundTag tag) {
         CrewHouseData data = new CrewHouseData();
-        if (tag.getInt("Schema") < 1 || tag.getInt("Schema") > 3) { data.newerSchema = tag.copy(); return data; }
+        Tag rawTours = tag.get("TourProgress");
+        if (tag.getInt("Schema") < 1 || tag.getInt("Schema") > 4
+                || tag.getInt("Schema") == 4 && rawTours == null
+                || rawTours != null && (!(rawTours instanceof ListTag)
+                    || !((ListTag) rawTours).isEmpty() && ((ListTag) rawTours).getElementType() != Tag.TAG_COMPOUND)) {
+            data.newerSchema = tag.copy(); return data;
+        }
         ListTag rows = tag.getList("Profiles", Tag.TAG_COMPOUND);
         for (int i = 0; i < rows.size(); i++) {
             CompoundTag row = rows.getCompound(i);
@@ -142,11 +209,32 @@ public final class CrewHouseData extends SavedData {
                 data.quarantined.add(row.copy());
             } else data.styleChoices.put(row.getUUID("Owner"), new StyleChoice(row.getString("Style"), row.getLong("Revision")));
         }
+        ListTag tourRows = tag.getList("TourProgress", Tag.TAG_COMPOUND);
+        for (int i = 0; i < tourRows.size(); i++) {
+            CompoundTag row = tourRows.getCompound(i);
+            CrewTour.Progress progress = CrewTour.load(row);
+            if (progress == null || data.tours.containsKey(progress.owner)) data.quarantined.add(row.copy());
+            else data.tours.put(progress.owner, progress);
+        }
+        if (tag.getInt("Schema") < 4) {
+            // Old saves retain only sixteen display receipts: credit those actual retained results,
+            // never infer a lifetime total from XP, supplies, or jobs that were not played activities.
+            Set<UUID> owners = new java.util.LinkedHashSet<>(data.profiles.keySet()); owners.addAll(data.pending.keySet());
+            for (UUID owner : owners) if (!data.tours.containsKey(owner) && !data.blocked(owner)) {
+                Set<UUID> imported = new java.util.HashSet<>();
+                List<CrewRewardReceipt> history = data.recentRewards(owner);
+                for (int i = history.size() - 1; i >= 0; i--) {
+                    CrewRewardReceipt receipt = history.get(i);
+                    if (imported.add(receipt.id())) data.recordTour(owner, receipt);
+                }
+            }
+            data.setDirty();
+        }
         return data;
     }
     @Override public CompoundTag save(CompoundTag tag) {
         if (newerSchema != null) return newerSchema.copy();
-        tag.putInt("Schema", 3);
+        tag.putInt("Schema", 4);
         ListTag rows = new ListTag(); for (CrewProfile profile : profiles.values()) rows.add(profile.save());
         tag.put("Profiles", rows); tag.put("Quarantined", quarantined.copy());
         ListTag unclaimed = new ListTag(); for (PendingCrewProgress progress : pending.values()) unclaimed.add(progress.save());
@@ -157,6 +245,8 @@ public final class CrewHouseData extends SavedData {
             row.putLong("Revision", choice.revision()); choices.add(row);
         });
         tag.put("StyleChoices", choices);
+        ListTag tourRows = new ListTag(); for (CrewTour.Progress progress : tours.values()) tourRows.add(progress.save());
+        tag.put("TourProgress", tourRows);
         return tag;
     }
 }

@@ -1,0 +1,100 @@
+{
+  "format_version": 1,
+  "review_date_utc": "2026-11-03",
+  "candidate_head": "23976383cbf8a3f49d753c1e3795ca2df6738544",
+  "artifact_source_commit": "0d42296e0a6e2147c835a8134657e66dbc48a5c3",
+  "source_metadata_file": "build/verification/pr50-second-liberty-native-client/build/verification/liberty-capture-metadata.json",
+  "review_method": "Direct visual inspection of the six named local PNG files with view_image at original detail; selected-file SHA-256 values independently compared with artifact metadata.",
+  "available_capture_count": 19,
+  "reviewed_capture_count": 6,
+  "unreviewed_capture_count": 13,
+  "overall_result": "No blocking readability or layout defect observed in the six selected captures. Minor observations are recorded for the paint-ground seam-like lines and the transient advancement toast.",
+  "reviewed_captures": [
+    {
+      "file": "liberty-grind-1793722611634-01-campaign-war-map-default.png",
+      "label": "01-campaign-war-map-default",
+      "pixel_width": 1280,
+      "pixel_height": 720,
+      "sha256": "fd6c31a7261d36c31f42c95f85242c765751d66053bcf82d5a0a90fc67bdaae2",
+      "matches_artifact_metadata": true,
+      "area": "Campaign war map",
+      "readability_layout": "All three front headings, six region cards, progress values, lock requirements, navigation tabs and bottom controls are legible. Rows and columns remain separate with no observed text/button overlap or clipping.",
+      "visible_state": "Neon Docks, Overpass Uprising and Blackout Borough are open; the three right-hand regions show lock icons and their 20% predecessor requirements. The header shows 510 requisition.",
+      "limits": "A still image establishes displayed state and layout, not button behavior or persistence."
+    },
+    {
+      "file": "liberty-grind-1793722611634-10-loadout-review-minimum.png",
+      "label": "10-loadout-review-minimum",
+      "pixel_width": 960,
+      "pixel_height": 720,
+      "sha256": "28998836df27d7342df81752efe2c16b78e779ee1e8e67c367229ec171be2b58",
+      "matches_artifact_metadata": true,
+      "area": "Pre-deployment loadout review at the minimum UI setting",
+      "readability_layout": "Mission name, difficulty, duration, primary and secondary weapons, armor, and all four call-in slots are legible. Equipment controls and the full Confirm loadout / Launch pod action remain visible above the footer. The narrow Research footer label is shortened; it does not overflow adjacent buttons. A right-side scrollbar is visible.",
+      "visible_state": "Turf Liberation at Neon Docks, difficulty 10, 30 minutes, SG-225 Breaker, P-2 Peacemaker, heavy field kit, and CHROMAGEDDON in call-in slot 4.",
+      "limits": "The separate scrolled loadout capture was not inspected; this frame alone does not prove access to content below the visible scroll position or successful deployment."
+    },
+    {
+      "file": "liberty-grind-1793722611634-14-chromageddon-paint-blast.png",
+      "label": "14-chromageddon-paint-blast",
+      "pixel_width": 1280,
+      "pixel_height": 720,
+      "sha256": "63abf25ed188a24da306abb667ec03ac29736d5736c75d0d1f10770eb7b50ac9",
+      "matches_artifact_metadata": true,
+      "area": "Active field and paint effect",
+      "readability_layout": "The upper-left mission HUD remains legible over the active scene, and the lower health, food and hotbar elements remain visible. Paint and particle effects are visibly present around native spider actors.",
+      "visible_state": "ACTIVE status, 29:37 remaining, and Paint the district 4/40 are visible. Cyan and pink painted surfaces, white particles, and red damage tint on nearby spiders are visible.",
+      "minor_observations": [
+        "Thin multicoloured horizontal seam-like lines cross parts of the painted ground. Their cause and any motion or flicker cannot be determined from this single frame."
+      ],
+      "limits": "This frame shows rendered effects and displayed progress, not an independently measured damage outcome, blast radius, timing, objective completion, or natural combat pacing."
+    },
+    {
+      "file": "liberty-grind-1793722611634-15-field-progress-minimum.png",
+      "label": "15-field-progress-minimum",
+      "pixel_width": 960,
+      "pixel_height": 720,
+      "sha256": "9c314b1af53bbc2567239a14f2a2b3b23dc1d45fe53d9fc1939a9413e45aac8f",
+      "matches_artifact_metadata": true,
+      "area": "Active field progress and controls at the minimum UI setting",
+      "readability_layout": "ACTIVE status, remaining time, secured count, painting progress and objective direction are legible. Three ready call-ins, radio paging, Terminal, disabled Call extraction, Return home and footer buttons occupy separate rows without observed overlap.",
+      "visible_state": "ACTIVE 29:36, 0/5 secured, Paint the district 30/40, and a visibly disabled extraction action are shown.",
+      "minor_observations": [
+        "A vanilla Advancement Made / Monster Hunter toast covers part of the upper-right header area. The active status, objective progress, tabs and action controls remain readable."
+      ],
+      "limits": "The toast obscures the header area behind it. This frame does not prove the transient overlay clears correctly or that the visible actions were interactively exercised."
+    },
+    {
+      "file": "liberty-grind-1793722611634-17-walkable-ship-deck.png",
+      "label": "17-walkable-ship-deck",
+      "pixel_width": 1280,
+      "pixel_height": 720,
+      "sha256": "a55c25146d250df6d288904a6194b6f763699160de3d0bdcb4c9729520f5bfe6",
+      "matches_artifact_metadata": true,
+      "area": "Ship deck world view",
+      "readability_layout": "The deck floor, bright yellow path markings, illuminated strips, central platform and window panels are visually distinct. The health, food and hotbar are visible. Dark upper walls and ceiling remain less detailed than the lit floor, with no observed missing-texture pattern.",
+      "visible_state": "A first-person view shows a constructed ship interior with the player holding the selected compass-like item.",
+      "limits": "A static deck view does not independently prove walkability, collision behavior, successful extraction, natural traversal or route accessibility."
+    },
+    {
+      "file": "liberty-grind-1793722611634-18-returned-home-map.png",
+      "label": "18-returned-home-map",
+      "pixel_width": 1280,
+      "pixel_height": 720,
+      "sha256": "05507130b1c6d727c9262228cbaade6576df3adab6de02c25f5248f05cb0daa5",
+      "matches_artifact_metadata": true,
+      "area": "Returned home campaign map",
+      "readability_layout": "The returned map keeps the same legible three-front, six-card layout and separated navigation/actions as the earlier map. No observed clipping or blocking overlap is present.",
+      "visible_state": "The header shows 330 requisition; all displayed region liberation values remain 0%, with the same three locked successor regions visible.",
+      "limits": "The image establishes the rendered returned-map state. Inventory, rewards, journal restoration and transaction correctness require the separately logged native assertions."
+    }
+  ],
+  "coverage_limits": [
+    "Only these six captures were visually inspected; no claim is made about the other thirteen images.",
+    "The review concerns one observed candidate-2 native client artifact and does not establish results for subsequent candidate changes.",
+    "Pixel inspection is separate from automated audit markers, game tests and hashes; it does not independently validate interaction behavior, combat calculations or persisted state.",
+    "Minimum-labelled images have 960 by 720 pixel output; their full scrollable contents were not all inspected.",
+    "No human playthrough, natural traversal, combat pacing, full mission duration, objective completion, research reward completion or ship extraction completion was observed.",
+    "Animation quality, timing and any paint-surface flicker cannot be judged from these still images."
+  ]
+}

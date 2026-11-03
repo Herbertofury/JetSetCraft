@@ -1,0 +1,7 @@
+COMMAND: javac --release 17 -d /workspace/scratch/bfb17eca6594/verification/activity/classes /workspace/scratch/bfb17eca6594/JetSetCraft/src/main/java/com/herberto/jetsetcraft/activity/ActivityMode.java /workspace/scratch/bfb17eca6594/JetSetCraft/src/main/java/com/herberto/jetsetcraft/activity/ActivityRun.java /workspace/scratch/bfb17eca6594/verification/activity/StreetRoundSmoke.java
+EXIT: 0
+
+
+COMMAND: java -cp /workspace/scratch/bfb17eca6594/verification/activity/classes StreetRoundSmoke
+EXIT: 0
+STREET_ROUND_SOURCE_SMOKE_PASS: actual ActivityMode/ActivityRun compiled; quick Tag/Showdown wins and 3x160-tick hills; expanded 5x120-tick hills; absent/contested holds; all quick timeouts and cancellation; terminal-state immutability; eight invalid admission bounds. No Minecraft/Forge runtime or gameplay claim.

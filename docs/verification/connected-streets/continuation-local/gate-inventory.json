@@ -1,0 +1,28 @@
+{
+  "required_gametests": 139,
+  "new_base_explicit_markers": [
+    "activity_mix_model",
+    "activity_mix_runtime",
+    "activity_mix_safety",
+    "activity_mix_intermission",
+    "crew_tour_claims",
+    "crew_tour_standalone",
+    "crew_tour_persistence",
+    "crew_tour_safety",
+    "crew_tour_entry",
+    "crew_tour_training_revision",
+    "crew_tour_revision_saturation",
+    "rush_expanded_evolution_rules",
+    "rush_expanded_evolution_finale",
+    "rush_expanded_evolution_bass",
+    "rush_expanded_evolution_reprise",
+    "rush_expanded_evolution_pulse_pause",
+    "liberty_street_operations"
+  ],
+  "workflow_run_steps_shell_parsed": 28,
+  "base_native_captures": 26,
+  "liberty_native_captures": 19,
+  "wave2_provider_lanes": 8,
+  "liberty_provider_lanes": 2,
+  "coverage": "Every lane counts all required GameTest annotations, including new classes. Base also requires all new explicit pass markers. No new test has a provider skip branch."
+}

@@ -1,0 +1,443 @@
+{
+  "schema": 1,
+  "repository": "Herbertofury/JetSetCraft",
+  "pull_request": 50,
+  "feature_head": "23976383cbf8a3f49d753c1e3795ca2df6738544",
+  "tested_merge": "0d42296e0a6e2147c835a8134657e66dbc48a5c3",
+  "workflow_run_id": 41670931894,
+  "workflow_run_url": "https://github.com/Herbertofury/JetSetCraft/actions/runs/41670931894",
+  "attempt": 2,
+  "jobs": [
+    {
+      "id": 126038763865,
+      "name": "missing-pack / TaCZ 1.1.8-hotfix2 / MCDivers false",
+      "conclusion": "failure",
+      "steps": [
+        {
+          "name": "Build with the exact optional provider",
+          "conclusion": "success"
+        },
+        {
+          "name": "Record resolved runtime dependencies",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run native GameTests with the selected pack state",
+          "conclusion": "failure"
+        },
+        {
+          "name": "Verify full-provider dedicated startup and graceful world save",
+          "conclusion": "skipped"
+        },
+        {
+          "name": "Verify the exact built JAR in an independent official Forge installation",
+          "conclusion": "skipped"
+        },
+        {
+          "name": "Verify Liberty Grind in a real Minecraft client",
+          "conclusion": "skipped"
+        },
+        {
+          "name": "Record native PNG metadata",
+          "conclusion": "skipped"
+        },
+        {
+          "name": "Upload native Liberty client captures and metadata",
+          "conclusion": "skipped"
+        }
+      ]
+    },
+    {
+      "id": 126038764245,
+      "name": "full-provider / TaCZ 1.1.8-hotfix2 / MCDivers true",
+      "conclusion": "success",
+      "steps": [
+        {
+          "name": "Build with the exact optional provider",
+          "conclusion": "success"
+        },
+        {
+          "name": "Record resolved runtime dependencies",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run native GameTests with the selected pack state",
+          "conclusion": "success"
+        },
+        {
+          "name": "Verify full-provider dedicated startup and graceful world save",
+          "conclusion": "success"
+        },
+        {
+          "name": "Verify the exact built JAR in an independent official Forge installation",
+          "conclusion": "success"
+        },
+        {
+          "name": "Verify Liberty Grind in a real Minecraft client",
+          "conclusion": "success"
+        },
+        {
+          "name": "Record native PNG metadata",
+          "conclusion": "success"
+        },
+        {
+          "name": "Upload native Liberty client captures and metadata",
+          "conclusion": "success"
+        }
+      ]
+    }
+  ],
+  "missing_pack_evidence": [
+    "2026-11-03T16:10:51.2198511Z JETSETCRAFT_GAMETEST_PASS rush_expanded_evolution_rules",
+    "2026-11-03T16:11:43.2187116Z JETSETCRAFT_GAMETEST_PASS rush_expanded_evolution_reprise",
+    "2026-11-03T16:11:43.2220464Z JETSETCRAFT_GAMETEST_PASS rush_expanded_evolution_finale",
+    "2026-11-03T16:11:56.4208111Z [16:11:56] [Server thread/ERROR] [minecraft/LogTestReporter]: radiantrecoveryandreturneddebriefuseactualacceptedstate failed! Real Radiance did not convert only actual overheal to bounded virtual ward",
+    "2026-11-03T16:12:48.5208047Z JETSETCRAFT_GAMETEST_PASS rush_evolution_cryo",
+    "2026-11-03T16:12:48.5237217Z JETSETCRAFT_GAMETEST_PASS rush_expanded_evolution_bass",
+    "2026-11-03T16:12:48.5266815Z JETSETCRAFT_GAMETEST_PASS rush_evolution_railstorm",
+    "2026-11-03T16:12:48.6187766Z JETSETCRAFT_GAMETEST_PASS rush_expanded_evolution_pulse_pause",
+    "2026-11-03T16:12:52.7190682Z [16:12:52] [Server thread/INFO] [minecraft/GameTestServer]: ========= 139 GAME TESTS COMPLETE ======================",
+    "2026-11-03T16:12:52.7193136Z [16:12:52] [Server thread/INFO] [minecraft/GameTestServer]: 1 required tests failed :("
+  ],
+  "full_provider_evidence": [
+    "2026-11-03T16:10:34.3998808Z JETSETCRAFT_GAMETEST_PASS crew_tour_safety",
+    "2026-11-03T16:10:38.8005430Z JETSETCRAFT_GAMETEST_PASS crew_tour_claims",
+    "2026-11-03T16:10:40.2055198Z JETSETCRAFT_GAMETEST_PASS activity_mix_model",
+    "2026-11-03T16:11:22.9064904Z JETSETCRAFT_GAMETEST_PASS rush_expanded_evolution_rules",
+    "2026-11-03T16:11:32.7996888Z JETSETCRAFT_GAMETEST_PASS crew_tour_standalone",
+    "2026-11-03T16:11:35.5997595Z JETSETCRAFT_GAMETEST_PASS crew_tour_revision_saturation",
+    "2026-11-03T16:11:47.5996687Z JETSETCRAFT_GAMETEST_PASS crew_tour_entry",
+    "2026-11-03T16:11:57.6996697Z JETSETCRAFT_GAMETEST_PASS crew_tour_training_revision",
+    "2026-11-03T16:12:15.4000894Z JETSETCRAFT_GAMETEST_PASS rush_expanded_evolution_reprise",
+    "2026-11-03T16:12:15.4025043Z JETSETCRAFT_GAMETEST_PASS rush_expanded_evolution_finale",
+    "2026-11-03T16:12:26.6005404Z JETSETCRAFT_GAMETEST_PASS activity_mix_safety",
+    "2026-11-03T16:12:27.8014803Z JETSETCRAFT_GAMETEST_PASS rush_evolution_return",
+    "2026-11-03T16:12:34.4002361Z JETSETCRAFT_LIBERTY_MOB_SAFETY_PASS native_home_actors_callbacks_reinforcements_conversion_raid_return",
+    "2026-11-03T16:12:51.2014850Z JETSETCRAFT_GAMETEST_PASS activity_mix_intermission",
+    "2026-11-03T16:13:07.4997376Z JETSETCRAFT_GAMETEST_PASS activity_mix_runtime",
+    "2026-11-03T16:13:23.5045309Z [16:13:23] [Server thread/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_GAMETEST_PASS liberty_street_operations operations=6 orders=2 completed=12",
+    "2026-11-03T16:13:28.6996172Z JETSETCRAFT_GAMETEST_PASS crew_tour_persistence",
+    "2026-11-03T16:14:02.2015321Z JETSETCRAFT_GAMETEST_PASS rush_expanded_evolution_bass",
+    "2026-11-03T16:14:02.3001742Z JETSETCRAFT_GAMETEST_PASS rush_expanded_evolution_pulse_pause",
+    "2026-11-03T16:14:24.5008898Z [16:14:24] [Server thread/INFO] [minecraft/GameTestServer]: All 139 required tests passed :)",
+    "2026-11-03T16:15:11.8879347Z JETSETCRAFT_LIBERTY_SERVER_SMOKE_PASS ready authenticated_stop all_dimensions_saved exit_zero",
+    "2026-11-03T16:16:25.1855193Z JETSETCRAFT_LIBERTY_INSTALLED_SMOKE_PASS exact_release_jar native_guard actual_providers commands authenticated_stop all_dimensions_saved exit_zero",
+    "2026-11-03T16:16:25.2028345Z LIBERTY_INSTALLED_ARTIFACT file=jetsetcraft-1.20.1-0.4.0-alpha.10.jar bytes=6628611 sha256=ee582ce2abf740a1a53fb98877086f7e642d21407cbc27c6606729688d24893c",
+    "2026-11-03T16:18:31.3752417Z [16:18:31] [Render thread/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_LIBERTY_CAMPAIGN_VISUAL_PASS captures=19 gun=helldiver2:sg225_breaker armor=heavy callin=chromageddon slot=4 difficulty=10 durationMinutes=30 paintEntities=12 territoryProgress=4 sourceInventoryXPAndDimensionRestoredTwice=true",
+    "2026-11-03T16:18:31.3787333Z [16:18:31] [Render thread/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_LIBERTY_VISUAL_AUDIT_PASS 19 campaign native captures; real UI purchase/equip/weapon/armor selection and launch, moving pod, native Breaker, actual CHROMAGEDDON paint/progress, early return and walkable ship/home return. Explicit disposable requisition and camera/flight staging; no full-extraction, earned-unlock pacing or human-play claim.",
+    "2026-11-03T16:18:36.7881568Z Recorded 19 native PNGs in build/verification/liberty-capture-metadata.json"
+  ],
+  "installed_jar": {
+    "file": "jetsetcraft-1.20.1-0.4.0-alpha.10.jar",
+    "bytes": 6628611,
+    "sha256": "ee582ce2abf740a1a53fb98877086f7e642d21407cbc27c6606729688d24893c"
+  },
+  "artifacts": [
+    {
+      "id": 13248487735,
+      "name": "jetsetcraft-liberty-full-provider-0d42296e0a6e2147c835a8134657e66dbc48a5c3",
+      "bytes": 6564011,
+      "digest": "sha256:282b1e06846f23d0c66d6bd8ce3be206f7953a11e5a83145bd258ba8cd73d360",
+      "expired": false
+    },
+    {
+      "id": 13248177711,
+      "name": "jetsetcraft-liberty-native-client-0d42296e0a6e2147c835a8134657e66dbc48a5c3",
+      "bytes": 2858694,
+      "digest": "sha256:3ef189230ec6e9bd433793e0a38915ea97aaafb84dfb238c3929efc878924277",
+      "expired": false
+    },
+    {
+      "id": 13248028331,
+      "name": "jetsetcraft-liberty-missing-pack-0d42296e0a6e2147c835a8134657e66dbc48a5c3",
+      "bytes": 6370446,
+      "digest": "sha256:18ccc3e2b9bceebdc440e47885c07b71942e80fee5497cbf1a7574fd6f80f68e",
+      "expired": false
+    }
+  ],
+  "scope": "Full-provider automated native, independent installed-JAR and 19-capture real-client gates passed. Missing-pack remains blocked by one Radiant fixture assertion. Automated client audit uses explicit disposable requisition and camera/flight staging; no full-extraction, earned-unlock pacing or human-play claim.",
+  "native_client_metadata": {
+    "source_commit": "0d42296e0a6e2147c835a8134657e66dbc48a5c3",
+    "world": "LibertyGrindAudit",
+    "tacz": "1.1.8-hotfix2",
+    "helldivers_file": 9341504,
+    "mcdivers": "1.0.3",
+    "mcdivers_file": 9307472,
+    "audit_pass_marker": true,
+    "campaign_pass_marker": true,
+    "campaign_fixture_marker": true,
+    "audit_failure_marker": false,
+    "capture_count": 19,
+    "captures": [
+      {
+        "file": "liberty-grind-1793722611634-01-campaign-war-map-default.png",
+        "label": "01-campaign-war-map-default",
+        "width": 1280,
+        "height": 720,
+        "bytes": 92555,
+        "sha256": "fd6c31a7261d36c31f42c95f85242c765751d66053bcf82d5a0a90fc67bdaae2",
+        "capture_marker_observed": true
+      },
+      {
+        "file": "liberty-grind-1793722611634-02-campaign-plan-default.png",
+        "label": "02-campaign-plan-default",
+        "width": 1280,
+        "height": 720,
+        "bytes": 142534,
+        "sha256": "96cb5766a07d07ea749e58ca78b9706a6e1ca6720fcaf94c90d0a0c7c981e51c",
+        "capture_marker_observed": true
+      },
+      {
+        "file": "liberty-grind-1793722611634-03-callin-catalog-default.png",
+        "label": "03-callin-catalog-default",
+        "width": 1280,
+        "height": 720,
+        "bytes": 146374,
+        "sha256": "a06100fb3459d5fd4f133600679bdc2a547edae99f6ef21eed6c6b1f49804224",
+        "capture_marker_observed": true
+      },
+      {
+        "file": "liberty-grind-1793722611634-04-chromageddon-equipped-default.png",
+        "label": "04-chromageddon-equipped-default",
+        "width": 1280,
+        "height": 720,
+        "bytes": 145545,
+        "sha256": "55b723d01fdcc5cc71b13b355acffcc5cc326bbab94d2801492e75887eac9f17",
+        "capture_marker_observed": true
+      },
+      {
+        "file": "liberty-grind-1793722611634-05-armory-all-weapons-default.png",
+        "label": "05-armory-all-weapons-default",
+        "width": 1280,
+        "height": 720,
+        "bytes": 141889,
+        "sha256": "286d2ce34c2f07dca3fef73614c97f7de0920c18386b2dc1213a9fbe13a85941",
+        "capture_marker_observed": true
+      },
+      {
+        "file": "liberty-grind-1793722611634-06-armor-heavy-minimum.png",
+        "label": "06-armor-heavy-minimum",
+        "width": 960,
+        "height": 720,
+        "bytes": 100523,
+        "sha256": "6ae316903bcdb10f12e58c86f74bb161923be156a9eb50ac10fa8af89a8a861f",
+        "capture_marker_observed": true
+      },
+      {
+        "file": "liberty-grind-1793722611634-07-armory-weapon-search-minimum.png",
+        "label": "07-armory-weapon-search-minimum",
+        "width": 960,
+        "height": 720,
+        "bytes": 100231,
+        "sha256": "a4ca5f510d435456f2ba6c2dc81ed2c3f7a8dbc6280cdb9c9385a5ced7e02d73",
+        "capture_marker_observed": true
+      },
+      {
+        "file": "liberty-grind-1793722611634-08-campaign-war-map-minimum.png",
+        "label": "08-campaign-war-map-minimum",
+        "width": 960,
+        "height": 720,
+        "bytes": 88624,
+        "sha256": "0fe9ac7d83d0dc0ee56d910a3f44906fd7519a30f552e0b38abc6527f541c427",
+        "capture_marker_observed": true
+      },
+      {
+        "file": "liberty-grind-1793722611634-09-campaign-plan-minimum.png",
+        "label": "09-campaign-plan-minimum",
+        "width": 960,
+        "height": 720,
+        "bytes": 116497,
+        "sha256": "71c9523f5450b1803fd377316fe477072afafb439bb35a0d93eab02fd6365add",
+        "capture_marker_observed": true
+      },
+      {
+        "file": "liberty-grind-1793722611634-10-loadout-review-minimum.png",
+        "label": "10-loadout-review-minimum",
+        "width": 960,
+        "height": 720,
+        "bytes": 117105,
+        "sha256": "28998836df27d7342df81752efe2c16b78e779ee1e8e67c367229ec171be2b58",
+        "capture_marker_observed": true
+      },
+      {
+        "file": "liberty-grind-1793722611634-10b-loadout-review-scroll-minimum.png",
+        "label": "10b-loadout-review-scroll-minimum",
+        "width": 960,
+        "height": 720,
+        "bytes": 116593,
+        "sha256": "c66fc5310a82f045caaafd02bfffb6341d23a8bfa91fb6737518970218a81047",
+        "capture_marker_observed": true
+      },
+      {
+        "file": "liberty-grind-1793722611634-11-loadout-review-default.png",
+        "label": "11-loadout-review-default",
+        "width": 1280,
+        "height": 720,
+        "bytes": 148637,
+        "sha256": "460c806a2b7e4b1168c50b2e52d91e1bac99d2b6acb718ecde3c160900c65cb0",
+        "capture_marker_observed": true
+      },
+      {
+        "file": "liberty-grind-1793722611634-12-live-pod.png",
+        "label": "12-live-pod",
+        "width": 1280,
+        "height": 720,
+        "bytes": 164094,
+        "sha256": "b269c4fb9ba5bf09cf92a700ff6baaad718e4a837fc2beeef5f5f10d29065596",
+        "capture_marker_observed": true
+      },
+      {
+        "file": "liberty-grind-1793722611634-13-selected-native-gun-hud.png",
+        "label": "13-selected-native-gun-hud",
+        "width": 1280,
+        "height": 720,
+        "bytes": 486871,
+        "sha256": "8fa4f8c6ba3bb383f66f88dc8291207aa61012bdc248633c03ad1337754fa83f",
+        "capture_marker_observed": true
+      },
+      {
+        "file": "liberty-grind-1793722611634-14-chromageddon-paint-blast.png",
+        "label": "14-chromageddon-paint-blast",
+        "width": 1280,
+        "height": 720,
+        "bytes": 335354,
+        "sha256": "63abf25ed188a24da306abb667ec03ac29736d5736c75d0d1f10770eb7b50ac9",
+        "capture_marker_observed": true
+      },
+      {
+        "file": "liberty-grind-1793722611634-15-field-progress-minimum.png",
+        "label": "15-field-progress-minimum",
+        "width": 960,
+        "height": 720,
+        "bytes": 80722,
+        "sha256": "9c314b1af53bbc2567239a14f2a2b3b23dc1d45fe53d9fc1939a9413e45aac8f",
+        "capture_marker_observed": true
+      },
+      {
+        "file": "liberty-grind-1793722611634-16-ship-hardware-minimum.png",
+        "label": "16-ship-hardware-minimum",
+        "width": 960,
+        "height": 720,
+        "bytes": 80429,
+        "sha256": "b17e78b5e8932852050b5f41c0403569f6f2357deca2787aacc56ff63fe5d5ea",
+        "capture_marker_observed": true
+      },
+      {
+        "file": "liberty-grind-1793722611634-17-walkable-ship-deck.png",
+        "label": "17-walkable-ship-deck",
+        "width": 1280,
+        "height": 720,
+        "bytes": 367743,
+        "sha256": "a55c25146d250df6d288904a6194b6f763699160de3d0bdcb4c9729520f5bfe6",
+        "capture_marker_observed": true
+      },
+      {
+        "file": "liberty-grind-1793722611634-18-returned-home-map.png",
+        "label": "18-returned-home-map",
+        "width": 1280,
+        "height": 720,
+        "bytes": 87263,
+        "sha256": "05507130b1c6d727c9262228cbaade6576df3adab6de02c25f5248f05cb0daa5",
+        "capture_marker_observed": true
+      }
+    ],
+    "scope": "Native campaign planning, complete armory/search/armor, four-slot review at default/minimum size, live pod and selected weapon, actual CHROMAGEDDON paint effect, field progress, walkable ship and home return. The client audit does not simulate objective, research reward or ship extraction completion."
+  },
+  "native_client_archive_sha256_verified": true,
+  "native_client_files_bytes_dimensions_sha256_verified": true,
+  "installed_receipt": {
+    "kind": "installed-package-dedicated-server",
+    "launcher": "official Forge run.sh",
+    "sourceSets": false,
+    "mod": {
+      "file": "jetsetcraft-1.20.1-0.4.0-alpha.10.jar",
+      "version": "0.4.0-alpha.10",
+      "sha256": "ee582ce2abf740a1a53fb98877086f7e642d21407cbc27c6606729688d24893c",
+      "bytes": 6628611
+    },
+    "installer": {
+      "file": "forge-1.20.1-47.4.23-installer.jar",
+      "url": "https://maven.minecraftforge.net/net/minecraftforge/forge/1.20.1-47.4.23/forge-1.20.1-47.4.23-installer.jar",
+      "bytes": 8836161,
+      "sha1": "ed31ce02ac69176f34353235cb2508d5a0f1e088",
+      "sha256": "75cfcb11f60cc641dc83757c1357c08c9bdba255ec529feb115c5e89a59cf75a",
+      "minecraft": "1.20.1",
+      "version": "1.20.1-forge-47.4.23"
+    },
+    "runtime_provider_dependencies": [
+      {
+        "file": "tacz-1.20.1-1.1.8-hotfix2.jar",
+        "bytes": 57472579,
+        "sha256": "2cbb89f44333d2eb4e825d86d789ff119b272ff75184390b55bafd4f0e7f10c2",
+        "source": "https://www.curseforge.com/minecraft/mc-mods/timeless-and-classics-zero/files/9037989"
+      },
+      {
+        "file": "player-animation-lib-forge-1.0.2-rc1+1.20.jar",
+        "bytes": 181438,
+        "sha256": "4a624602ba90d305a4cdcfbde07c893466ddbc0a1210b559bf607bf715626cb0",
+        "source": "https://maven.kosmx.dev/dev/kosmx/player-anim/player-animation-lib-forge/1.0.2-rc1+1.20/player-animation-lib-forge-1.0.2-rc1+1.20.jar"
+      },
+      {
+        "file": "mcdivers-forge-1.20.1-1.0.3.jar",
+        "bytes": 2160981,
+        "sha256": "49c4ab153c50dab8766fca15ab7affcc14b1c9a8e7e52d58a9683c06ac4ceac0",
+        "source": "https://www.curseforge.com/minecraft/mc-mods/mcdiver/files/9307472"
+      }
+    ],
+    "pack": {
+      "file": "[eof]helldivers_gun_pack.zip",
+      "bytes": 72883841,
+      "sha256": "fe4e01693cf3957d971e556a1d2fcd9ae0c98cb973cf47aa6d52e157c187378a",
+      "source": "https://www.curseforge.com/minecraft/customization/tacz-helldivers-escalation-of-freedom/files/9341504"
+    },
+    "upstream_content_embedded": false,
+    "status": "PASS",
+    "ready": true,
+    "native_provider_guard": true,
+    "rcon_stopped": true,
+    "all_dimensions_saved": true,
+    "home_contact_guard": true,
+    "scope": "The exact built and reobfuscated mod runs in a separately installed official Forge server with original upstream JARs and the full unmodified pack. The loaded native guard and live content, registered commands, normal readiness, authenticated shutdown and all-dimension saving are checked. No player connects; this is not mission gameplay or visual evidence.",
+    "startup_seconds": 46.1,
+    "rcon_command_checks": {
+      "help jetsetcraft": "/jetsetcraft rush [leave|album|start]\n/jetsetcraft liberty [menu|return|neon_docks|overpass_uprising|blackout_borough]\n/jetsetcraft status\n/jetsetcraft set_momentum <speed>\n/jetsetcraft build_vanilla_lab\n/jetsetcraft crew\n/jetsetcraft activity [random|tag|king_of_hill|showdown|rival_rush|liberty_grind|cancel]\n",
+      "help tacz": "/tacz attachment_lock <target> <AttachmentLock>\n/tacz debug <enable>\n/tacz dummy <target> <dummyAmount>\n/tacz overwrite <enable>\n/tacz reload\n/tacz hide_tooltip_part <target> <mask>\n/tacz convert\n/tacz config <key> <state>\n"
+    },
+    "exit_code": 0,
+    "saved_world": true,
+    "fatal_or_linkage_errors": [],
+    "log_evidence": [
+      {
+        "file": "installed-server.log",
+        "bytes": 109195,
+        "sha256": "ccd412bb6e33b6ee14ce2c40420f46bae85712e62b337d89e8ccf025785c7554",
+        "original_bytes": 109459,
+        "original_sha256": "f7c82d98380fceb1719ff523a54cbab678b778bff05075ff9b2bf952f3ee01f7",
+        "transform": "Only absolute instance/checkout/cache paths and any private RCON secret are replaced; diagnostics are retained."
+      },
+      {
+        "file": "installed-rcon-stop.log",
+        "bytes": 69,
+        "sha256": "f57b5d758ca3bfc4fbe902a7ebdb3ad4b54406af878b75b218ab10e170c08ddc",
+        "original_bytes": 69,
+        "original_sha256": "f57b5d758ca3bfc4fbe902a7ebdb3ad4b54406af878b75b218ab10e170c08ddc",
+        "transform": "Only absolute instance/checkout/cache paths and any private RCON secret are replaced; diagnostics are retained."
+      },
+      {
+        "file": "installed-loader.log",
+        "bytes": 284486,
+        "sha256": "2186a3437b8a6369b5fb6d027208eb2f0527736be582a4db0132f1398eeaf0ad",
+        "original_bytes": 285608,
+        "original_sha256": "77e3ed105903bda311591e9f4d8c2ee27841ff51c5fe87b5685f17938523e9a4",
+        "transform": "Only absolute instance/checkout/cache paths and any private RCON secret are replaced; diagnostics are retained."
+      }
+    ],
+    "elapsed_seconds": 50.54,
+    "verification_date_utc": "2026-11-03",
+    "source_commit": "0d42296e0a6e2147c835a8134657e66dbc48a5c3",
+    "github_run_id": "41670931894",
+    "github_run_attempt": "1"
+  },
+  "installed_archive_sha256_verified": true,
+  "built_jar_bytes_sha256_verified": true
+}
