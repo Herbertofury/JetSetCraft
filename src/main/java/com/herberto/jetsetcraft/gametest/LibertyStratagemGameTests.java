@@ -179,6 +179,13 @@ public final class LibertyStratagemGameTests {
     public static void deliveredWeaponsBackpacksAndMountedVehiclesPerformOwnedActions(GameTestHelper helper) {
         Fixture f=new Fixture(helper,false,20);
         try {
+            // The remote fixture floor does not erase generated terrain above it. Give the real
+            // 1.5-block-wide walker and its passenger a clear lane for twenty .28-block steps.
+            // Record its air cells too, so the final terrain assertion still protects the lane.
+            for(BlockPos p:BlockPos.betweenClosed(f.center.offset(2,1,-7),f.center.offset(4,4,2))){
+                f.level.setBlock(p,Blocks.AIR.defaultBlockState(),3);
+                f.fixtureBlocks.put(p.immutable(),Blocks.AIR.defaultBlockState());
+            }
             f.enemy(f.owner.position().add(0,0,12));
             check(f.engine.setLoadout(List.of("mg_43_machine_gun","lift_850_jump_pack","exo_45_patriot_exosuit","tag_team")).accepted(),"Equipment fixture loadout failed");
             check(f.engine.call("mg_43_machine_gun",f.owner.position().add(1,0,0)).accepted()
@@ -202,7 +209,10 @@ public final class LibertyStratagemGameTests {
                             &&!f.engine.useEquipment(InteractionHand.MAIN_HAND,false).accepted(),"Jump backpack was cosmetic or ignored its recharge");
                     f.owner.setDeltaMovement(Vec3.ZERO);
                     check(f.engine.call("exo_45_patriot_exosuit",f.owner.position().add(3,0,0)).accepted(),"The physical walker could not deploy");
-                    LibertySupportEntity vehicle=f.support("PATRIOT");check(f.owner.startRiding(vehicle,true),"Owner could not mount the actual support vehicle");
+                    LibertySupportEntity vehicle=f.support("PATRIOT");
+                    check(f.level.noCollision(vehicle,vehicle.getBoundingBox().expandTowards(0,0,6)),
+                            "The walker fixture's full forward travel lane is obstructed: body="+vehicle.getBoundingBox());
+                    check(f.owner.startRiding(vehicle,true),"Owner could not mount the actual support vehicle");
                     f.engine.mounted(vehicle);f.owner.zza=1;
                     progress.vehicle=vehicle;progress.start=vehicle.position();progress.mountedAt=tick;progress.vehicleTicks=vehicle.tickCount;
                     return;
@@ -215,7 +225,8 @@ public final class LibertyStratagemGameTests {
                 if(vehicle.tickCount-progress.vehicleTicks>=20){
                     check(vehicle.position().z>progress.start.z+1.5,
                             "The rideable walker did not move from held owner input after twenty native ticks: start="
-                                    +progress.start+", actual="+vehicle.position()+", forward="+f.owner.zza);
+                                    +progress.start+", actual="+vehicle.position()+", forward="+f.owner.zza
+                                    +", yaw="+f.owner.getYRot()+", collision="+vehicle.horizontalCollision);
                     int ammo=vehicle.ammo();check(f.engine.useEquipment(InteractionHand.MAIN_HAND,false).accepted()&&vehicle.ammo()<ammo,
                             "The mounted weapon did not consume its actual finite ammunition");
                     f.owner.stopRiding();f.owner.zza=0;f.assertWorld();f.close();pass(helper,"liberty_stratagem_equipment");

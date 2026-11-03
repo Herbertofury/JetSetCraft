@@ -102,7 +102,7 @@ public final class LibertyCampaignRuntimeGameTests {
         final Set<ChunkPos> chunks = new LinkedHashSet<>();
         ServerLevel district;
         LibertyOperation operation;
-        boolean closed, monitorPressure;
+        boolean closed, monitorPressure, registeredHomeOwner;
         int ticks, nextAt, peakEnemies;
         Runnable next;
         Fixture(GameTestHelper helper, String name) { this(helper, name, false); }
@@ -396,6 +396,12 @@ public final class LibertyCampaignRuntimeGameTests {
         BlockVolume before = BlockVolume.capture(f.source, center.offset(-128, -4, -128), 257, 16, 257);
         var offer = homeOffer(f.owner);
         try {
+            // Same-world deployment does not perform the native player registration that a
+            // dimension transfer supplies. Register this no-socket owner at its prepared home
+            // so real chunk movement can remove/update an existing distance-manager entry.
+            f.source.addNewPlayer(f.owner); f.registeredHomeOwner = true;
+            check(f.source.getEntity(f.owner.getUUID()) == f.owner && f.source.players().contains(f.owner),
+                    "Home fixture owner was not registered with its native level before deployment");
             menuPacket(f.owner, "defense_deploy", offer.id() + "|1|20");
             check(LibertyManager.operation(f.owner) != null, "Actual encoded home-defense action could not deploy on its explicit flat fixture"
                     + "; unavailable=" + LibertyManager.unavailable(f.owner) + "; armory=" + LibertyArmory.readyReason(f.owner)
@@ -631,7 +637,10 @@ public final class LibertyCampaignRuntimeGameTests {
             LibertyManager.forget(f.owner);
         } finally {
             if (f.district != null) for (ChunkPos chunk : f.chunks) f.district.getChunkSource().removeRegionTicket(TICKET, chunk, 4, f.owner.getUUID());
-            if (f.nativeDamageOwner) f.owner.discard();
+            if (f.registeredHomeOwner) {
+                f.owner.serverLevel().removePlayerImmediately(f.owner, Entity.RemovalReason.DISCARDED);
+                f.registeredHomeOwner = false;
+            } else if (f.nativeDamageOwner) f.owner.discard();
         }
     }
     /** Real native damage/death, with only outbound socket delivery omitted by this disposable fixture. */
