@@ -216,15 +216,20 @@ public final class LibertyMissionGameTests {
         check(run.relocateSite(courier.id(), courier.center().above(3)) && courier.checkpoints().get(0).equals(before.get(0).above(3)), "Terrain remap failed to move an ordered route");
         var progressed = fixture(true, List.of(ObjectiveKind.COURIER), null);
         var site = progressed.sites().get(0);
-        check(progressed.interact(site.marker()) && !progressed.relocateSite(site.id(), site.center().above(8)), "A live carried route could be relocated mid-objective");
+        check(!progressed.interact(site.marker()) && progressed.relocateSite(site.id(), site.center())
+                && progressed.interact(site.marker()) && !progressed.relocateSite(site.id(), site.center().above(8)),
+                "An ungrounded route accepted pickup or a live carried route moved mid-objective");
         var away = fixture(false, List.of(ObjectiveKind.SCAN), null);
         check(!away.relocateSite(away.sites().get(0).id(), BlockPos.ZERO), "Expedition geometry admitted a home-world remap");
+        checkHomeProgressRequiresGrounding();
         pass(helper, "liberty_mission_home_ground_remap");
     }
 
     @GameTest(template = "hoverboard_empty", timeoutTicks = 100)
     public static void oneAreaActionCannotLeapSuccessiveStagesAndSnapshotsStayFinite(GameTestHelper helper) {
         var run = fixture(true, List.of(ObjectiveKind.TERRITORY, ObjectiveKind.TERRITORY), null);
+        for (var site : run.sites()) check(run.relocateSite(site.id(), site.center()),
+                "The explicit flat home-terrain fixture could not ground its sites");
         check(run.paintArea(INVALID, 20) == 0 && run.paintArea(Vec3.ZERO, Double.NaN) == 0 && run.paintArea(Vec3.ZERO, 129) == 0,
                 "An invalid or unbounded call-in area painted turf");
         Vec3 center = new Vec3(0, 65, 0);
@@ -241,6 +246,72 @@ public final class LibertyMissionGameTests {
         check(run.paintArea(center, 128) == 4 && run.complete() && run.consumeRewards() == 2 && run.consumeRewards() == 0,
                 "A second genuine call-in failed to complete the now-active stage once");
         pass(helper, "liberty_mission_stage_atomic_area");
+    }
+
+    private static void checkHomeProgressRequiresGrounding() {
+        for (ObjectiveKind kind : ObjectiveKind.values()) {
+            var run = fixture(true, List.of(kind), kind);
+            for (var site : run.sites()) {
+                Vec3 provisional = site.marker();
+                check(!site.grounded() && !site.active() && !run.interact(provisional)
+                                && !run.paint(site.center(), Direction.UP, provisional)
+                                && run.paintArea(provisional, 12) == 0
+                                && !run.defeated(UUID.randomUUID(), provisional),
+                        "An unresolved home objective accepted an action at provisional coordinates: " + kind);
+                for (var core : run.cores()) if (core.siteId().equals(site.id()))
+                    check(!run.damageCore(core.id(), Float.MAX_VALUE) && core.health() == core.maximumHealth(),
+                            "An unresolved home demolition objective accepted core damage");
+                // Cross the manager's full terrain-retry interval using ordinary public ticks.
+                for (int tick = 0; tick < 120; tick++)
+                    run.tick(provisional, provisional.add(.1, 0, 0), true, point -> 0);
+                check(site.progress() == 0 && !site.activated() && site.marker().equals(provisional),
+                        "An unresolved home objective accumulated time, route movement or progress: " + kind);
+            }
+            check(run.completedPrimary() == 0 && !run.complete() && run.consumeRewards() == 0,
+                    "Unresolved home objectives manufactured completion or rewards: " + kind);
+            // Explicit flat terrain is sufficient for this state-machine regression; the separate
+            // native terrain GameTests exercise the actual world resolver and escort clearance.
+            for (var site : run.sites()) check(run.relocateSite(site.id(), site.center().above(3)) && site.grounded(),
+                    "A rejected provisional action made the later terrain remap impossible: " + kind);
+            for (var site : run.sites()) {
+                Vec3 at = site.marker();
+                switch (kind) {
+                    case TERRITORY -> check(run.paintArea(at, 12) == site.goal(), "Grounded home turf could not be claimed");
+                    case RELAY_HOLD -> skate(run, at, site.goal() * 20, 0);
+                    case DEFEND -> {
+                        for (int tick = 0; tick < site.goal() * 20; tick++) run.tick(at, at, false, point -> 0);
+                    }
+                    case SCAN -> {
+                        check(run.interact(at), "A grounded home scan could not activate");
+                        for (int tick = 0; tick < site.goal() * 20; tick++) run.tick(at, at, false, point -> 0);
+                    }
+                    case COURIER -> {
+                        check(run.interact(at), "A grounded home courier could not accept pickup");
+                        for (BlockPos checkpoint : site.checkpoints()) {
+                            Vec3 waypoint = stand(checkpoint);
+                            run.tick(waypoint, waypoint.add(.1, 0, 0), true, point -> 0);
+                        }
+                    }
+                    case ESCORT -> {
+                        check(run.interact(at), "A grounded home escort could not activate");
+                        for (int tick = 0; tick < 1000 && !site.complete(); tick++) {
+                            Vec3 near = site.marker(); run.tick(near, near, false, point -> 0);
+                        }
+                    }
+                    case DEMOLITION -> {
+                        for (var core : run.cores()) if (core.siteId().equals(site.id()))
+                            check(run.damageCore(core.id(), Float.MAX_VALUE), "A grounded home core rejected its actual damage");
+                    }
+                    case SWEEP -> {
+                        for (int defeat = 0; defeat < site.goal(); defeat++)
+                            check(run.defeated(UUID.randomUUID(), at), "A grounded home sweep rejected an owned local defeat");
+                    }
+                }
+                check(site.complete(), "Grounding failed to restore normal home objective progress: " + kind);
+            }
+            check(run.complete() && run.completedPrimary() == 1 && run.consumeRewards() == 2 && run.consumeRewards() == 0,
+                    "Grounded primary/optional home objectives did not settle exactly once: " + kind);
+        }
     }
 
     @GameTest(template = "hoverboard_empty", timeoutTicks = 100)

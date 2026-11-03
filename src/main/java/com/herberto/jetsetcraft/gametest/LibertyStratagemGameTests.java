@@ -106,34 +106,76 @@ public final class LibertyStratagemGameTests {
         } catch(RuntimeException|Error error){f.close();throw error;}
     }
 
-    @GameTest(template="hoverboard_empty", timeoutTicks=220)
+    @GameTest(template="hoverboard_empty", timeoutTicks=320)
     public static void sentriesMinesShieldsAndChromageddonUseDistinctRealEffects(GameTestHelper helper) {
         Fixture f=new Fixture(helper,false,50);
         try {
-            Mob enemy=f.enemy(f.point.add(2,0,0)); LivingEntity foreign=f.foreign(f.point.add(-2,0,0));
-            float original=enemy.getHealth(),protectedHealth=foreign.getHealth();
+            // Separate the targets so early sentry knockback cannot remove the mine's later trigger,
+            // and damage from one call cannot satisfy another call's assertion.
+            Vec3 sentryPosition=f.point.add(-24,0,-24),minePosition=f.point.add(26,0,25);
+            Mob sentryTarget=f.enemy(sentryPosition.add(3,0,0));
+            sentryTarget.getAttribute(Attributes.KNOCKBACK_RESISTANCE).setBaseValue(1);
+            float sentryHealth=sentryTarget.getHealth();
+            LivingEntity foreign=f.foreign(f.point.add(-2,0,0));
+            LivingEntity sentryForeign=f.foreign(sentryPosition.add(3,0,2));
+            float protectedHealth=foreign.getHealth(),sentryForeignHealth=sentryForeign.getHealth();
             check(f.engine.setLoadout(List.of("a_mg_43_machine_gun_sentry","md_17_anti_tank_mines","fx_12_shield_generator_relay","chromageddon")).accepted(),"Hardware fixture loadout failed");
-            check(f.engine.call("a_mg_43_machine_gun_sentry",f.point.add(0,0,6)).accepted()
-                    &&f.engine.call("md_17_anti_tank_mines",f.point).accepted()
-                    &&f.engine.call("fx_12_shield_generator_relay",f.owner.position().add(0,0,3)).accepted()
-                    &&f.engine.call("chromageddon",f.point).accepted(),"One of the distinct hardware/paint calls was rejected");
+            check(f.engine.call("a_mg_43_machine_gun_sentry",sentryPosition).accepted()
+                    &&f.engine.call("md_17_anti_tank_mines",minePosition).accepted()
+                    &&f.engine.call("fx_12_shield_generator_relay",f.owner.position().add(0,0,3)).accepted(),
+                    "One of the distinct hardware calls was rejected");
             var sentry=f.support("SENTRY_MG");var relay=f.support("SHIELD_RELAY");
-            check(f.engine.protectedDamage(enemy.damageSources().mobAttack(enemy),25)==0&&relay.energy()==75,
+            List<LibertySupportEntity> mines=f.tracked.stream().filter(e->e instanceof LibertySupportEntity s&&s.mine())
+                    .map(e->(LibertySupportEntity)e).toList();
+            check(mines.size()==8,"The anti-tank field did not deploy eight individual mines");
+            LibertySupportEntity triggerMine=mines.get(0);
+            check(triggerMine.distanceToSqr(sentry)>48*48,"Mine probe overlaps the sentry's firing range");
+            LivingEntity mineForeign=f.foreign(triggerMine.position().add(0,0,-2));
+            float mineForeignHealth=mineForeign.getHealth();
+            check(f.engine.protectedDamage(sentryTarget.damageSources().mobAttack(sentryTarget),25)==0&&relay.energy()==75,
                     "The actual relay did not spend its finite energy to protect its owner");
-            f.run(tick->{if(tick==155){
-                check(enemy.getHealth()<original&&sentry.ammo()<180&&f.tracked.stream().anyMatch(e->e instanceof LibertySupportEntity s&&s.mine()&&s.isRemoved()),
-                        "Sentry ammunition, individual mine triggering or owned damage remained cosmetic");
-                check(f.largestPaint>=48&&f.decals.size()>=8&&f.decals.stream().anyMatch(e->!e.isRemoved()),
-                        "CHROMAGEDDON never reached its full real-overlay radius");
-                check(foreign.getHealth()==protectedHealth&&!foreign.isOnFire(),"Call-in effects injured a foreign resident");
+            class Progress {int phase,started;Mob mineTarget,paintTarget;float mineHealth,paintHealth;}
+            Progress progress=new Progress();
+            f.run(tick->{
+                if(progress.phase==0){
+                    check(tick<100,"Hardware did not receive native world ticks: sentry="+sentry.tickCount+", mine="+triggerMine.tickCount);
+                    if(sentry.tickCount<35||triggerMine.tickCount<35)return;
+                    check(sentry.ammo()<180,"The real sentry never consumed ammunition: ammo="+sentry.ammo());
+                    check(sentryTarget.getHealth()<sentryHealth,"The real sentry never damaged its isolated owned target");
+                    check(mines.stream().noneMatch(Entity::isRemoved),"A mine triggered before an eligible owned target arrived");
+                    progress.mineTarget=f.enemy(triggerMine.position().add(.5,0,0));
+                    progress.mineHealth=progress.mineTarget.getHealth();progress.started=tick;progress.phase=1;
+                    return;
+                }
+                if(progress.phase==1){
+                    check(tick-progress.started<30,"An armed mine did not trigger on the real owned target: mineTicks="
+                            +triggerMine.tickCount+", targetDistance="+triggerMine.distanceTo(progress.mineTarget));
+                    if(!triggerMine.isRemoved())return;
+                    check(progress.mineTarget.getHealth()<progress.mineHealth,"The triggered mine never damaged its isolated owned target");
+                    check(mines.stream().anyMatch(e->!e.isRemoved()),"One local trigger removed the entire minefield");
+                    progress.paintTarget=f.enemy(f.point.add(45,0,0));progress.paintHealth=progress.paintTarget.getHealth();
+                    check(progress.paintTarget.distanceToSqr(sentry)>48*48,"Outer paint probe overlaps the sentry's firing range");
+                    check(f.engine.call("chromageddon",f.point).accepted(),"CHROMAGEDDON was rejected after the hardware probes");
+                    progress.started=tick;progress.phase=2;
+                    return;
+                }
+                check(tick-progress.started<150,"CHROMAGEDDON never completed its scheduled rings: radius="+f.largestPaint);
+                if(f.largestPaint<48)return;
+                check(f.decals.size()>=8&&f.decals.stream().anyMatch(e->!e.isRemoved()),
+                        "CHROMAGEDDON's full radius did not leave real overlays");
+                check(progress.paintTarget.getHealth()<progress.paintHealth,"CHROMAGEDDON's outer ring never damaged its isolated owned target");
+                check(foreign.getHealth()==protectedHealth&&!foreign.isOnFire()
+                                &&sentryForeign.getHealth()==sentryForeignHealth&&!sentryForeign.isOnFire()
+                                &&mineForeign.getHealth()==mineForeignHealth&&!mineForeign.isOnFire(),
+                        "Call-in effects injured a foreign resident");
                 f.assertWorld();f.close();
                 check(f.tracked.stream().allMatch(Entity::isRemoved)&&f.engine.pendingEffects()==0,"Closing support left hardware or delayed effects active");
                 pass(helper,"liberty_stratagem_effects");
-            }});
+            });
         } catch(RuntimeException|Error error){f.close();throw error;}
     }
 
-    @GameTest(template="hoverboard_empty", timeoutTicks=120)
+    @GameTest(template="hoverboard_empty", timeoutTicks=220)
     public static void deliveredWeaponsBackpacksAndMountedVehiclesPerformOwnedActions(GameTestHelper helper) {
         Fixture f=new Fixture(helper,false,20);
         try {
@@ -141,9 +183,16 @@ public final class LibertyStratagemGameTests {
             check(f.engine.setLoadout(List.of("mg_43_machine_gun","lift_850_jump_pack","exo_45_patriot_exosuit","tag_team")).accepted(),"Equipment fixture loadout failed");
             check(f.engine.call("mg_43_machine_gun",f.owner.position().add(1,0,0)).accepted()
                     &&f.engine.call("lift_850_jump_pack",f.owner.position().add(-1,0,0)).accepted(),"Real support deliveries were not created");
+            List<LibertySupportEntity> pods=f.tracked.stream().filter(e->e instanceof LibertySupportEntity s&&s.role().equals("SUPPLY"))
+                    .map(e->(LibertySupportEntity)e).toList();
+            check(pods.size()==2,"Both real equipment deliveries must exist before collection");
+            class Progress {LibertySupportEntity vehicle;Vec3 start;int mountedAt,vehicleTicks;}
+            Progress progress=new Progress();
             f.run(tick->{
-                if(tick==35){
-                    for(Entity actor:List.copyOf(f.tracked))if(actor instanceof LibertySupportEntity pod&&pod.role().equals("SUPPLY"))
+                if(progress.vehicle==null){
+                    check(tick<90,"Equipment pods did not land through native ticking: ticks="+pods.stream().map(p->p.tickCount).toList());
+                    if(pods.stream().anyMatch(p->p.tickCount<20))return;
+                    for(LibertySupportEntity pod:pods)
                         check(f.engine.collectDelivery(pod).accepted(),"An arrived owner delivery could not equip its real tool");
                     f.owner.getInventory().selected=3;int ammo=f.engine.currentWeaponAmmo();
                     check(f.engine.useEquipment(InteractionHand.MAIN_HAND,false).accepted()&&f.engine.currentWeaponAmmo()<ammo,
@@ -155,11 +204,18 @@ public final class LibertyStratagemGameTests {
                     check(f.engine.call("exo_45_patriot_exosuit",f.owner.position().add(3,0,0)).accepted(),"The physical walker could not deploy");
                     LibertySupportEntity vehicle=f.support("PATRIOT");check(f.owner.startRiding(vehicle,true),"Owner could not mount the actual support vehicle");
                     f.engine.mounted(vehicle);f.owner.zza=1;
+                    progress.vehicle=vehicle;progress.start=vehicle.position();progress.mountedAt=tick;progress.vehicleTicks=vehicle.tickCount;
+                    return;
                 }
-                if(tick==65){
-                    LibertySupportEntity vehicle=f.support("PATRIOT");
-                    check(vehicle.getControllingPassenger()==f.owner&&vehicle.position().z>f.center.getZ()-4,
-                            "The rideable walker did not move from real owner movement input");
+                // A real rider continues sending held input. Passenger ticks may clear a one-shot
+                // FakePlayer input, and chunk readiness must not be mistaken for vehicle ticks.
+                LibertySupportEntity vehicle=progress.vehicle;f.owner.zza=1;
+                check(vehicle.getControllingPassenger()==f.owner,"The deployed walker lost its controlling owner passenger");
+                check(tick-progress.mountedAt<100,"The mounted walker did not receive native world ticks: ticks="+vehicle.tickCount);
+                if(vehicle.tickCount-progress.vehicleTicks>=20){
+                    check(vehicle.position().z>progress.start.z+1.5,
+                            "The rideable walker did not move from held owner input after twenty native ticks: start="
+                                    +progress.start+", actual="+vehicle.position()+", forward="+f.owner.zza);
                     int ammo=vehicle.ammo();check(f.engine.useEquipment(InteractionHand.MAIN_HAND,false).accepted()&&vehicle.ammo()<ammo,
                             "The mounted weapon did not consume its actual finite ammunition");
                     f.owner.stopRiding();f.owner.zza=0;f.assertWorld();f.close();pass(helper,"liberty_stratagem_equipment");

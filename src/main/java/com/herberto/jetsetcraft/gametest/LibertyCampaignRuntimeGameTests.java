@@ -233,7 +233,7 @@ public final class LibertyCampaignRuntimeGameTests {
                 () -> new GameTestAssertException("Actual operation omitted the call row " + id));
     }
 
-    @GameTest(template = "hoverboard_empty", timeoutTicks = 900)
+    @GameTest(template = "hoverboard_empty", timeoutTicks = 1000)
     public static void superHelldiveUsesTheRealCampaignDirectorWithBoundedResidentAndTickPressure(GameTestHelper helper) {
         if (skipAbsent(helper, "director_pressure")) return;
         Fixture f = begin(helper, "JSC_campaign10", "overpass_uprising|blitz_blockbuster|10|20");
@@ -249,8 +249,32 @@ public final class LibertyCampaignRuntimeGameTests {
                         "Native high-difficulty pressure never materialized or omitted real admissions from Spawned"
                                 + "; admitted=" + f.capture.enemyIds.size() + "; peak=" + f.peakEnemies + "; snapshot=" + snapshot.getInt("Spawned"));
                 check(f.operation.mission.completedPrimary() == 0 && !f.operation.complete(), "Passive survival fabricated campaign objective completion");
-                returned(f);
-                pass(helper, "liberty_campaign_native_director_caps");
+                Vec3 nextDistrict = f.owner.position().add(0, 0, -256);
+                List<Mob> abandoned = f.capture.owned.stream().filter(e -> e instanceof Mob && e.isAlive()
+                                && !(e instanceof LibertyCoreEntity) && !(e instanceof LibertySupportEntity)
+                                && e.distanceToSqr(nextDistrict) > 160 * 160)
+                        .map(e -> (Mob) e).toList();
+                check(!abandoned.isEmpty(), "Director relocation fixture had no live infantry to retire");
+                // Keep the real spawned actors at the old front while relocating the fixture player;
+                // production ticks, retirement and replacement admissions remain unmodified.
+                abandoned.forEach(mob -> { mob.setNoAi(true); mob.setNoGravity(true); mob.setInvulnerable(true); mob.setDeltaMovement(Vec3.ZERO); });
+                int admitted = snapshot.getInt("Spawned"), credits = f.operation.credits();
+                load(f, BlockPos.containing(nextDistrict)); position(f, nextDistrict);
+                later(f, 160, () -> {
+                    CompoundTag relocated = LibertyManager.snapshot(f.owner);
+                    check(abandoned.stream().allMatch(Entity::isRemoved) && relocated.getInt("Retired") >= abandoned.size(),
+                            "Distant persistent infantry kept occupying the resident budget after moving districts");
+                    check(relocated.getInt("Spawned") > admitted && f.capture.owned.stream().anyMatch(e ->
+                                    e instanceof Mob && e.isAlive() && !(e instanceof LibertyCoreEntity)
+                                            && !(e instanceof LibertySupportEntity) && e.distanceToSqr(f.owner) < 80 * 80),
+                            "The production director failed to re-establish real pressure near the new district");
+                    check(relocated.getInt("Spawned") == f.capture.enemyIds.size()
+                                    && f.operation.credits() == credits && f.operation.mission.completedPrimary() == 0,
+                            "Distance retirement refunded lifetime admissions or manufactured objective/reward credit");
+                    returned(f);
+                    JetSetCraft.LOGGER.info("JETSETCRAFT_LIBERTY_CAMPAIGN_RUNTIME_PASS liberty_campaign_native_director_relocation");
+                    pass(helper, "liberty_campaign_native_director_caps");
+                });
             });
         });
     }
@@ -381,20 +405,25 @@ public final class LibertyCampaignRuntimeGameTests {
                             && offer.id().equals(LibertyCampaignData.get(f.source.getServer()).offer(f.owner.getUUID(), offer.id()).orElseThrow().id())
                             && f.operation.id.equals(LibertyCampaignData.get(f.source.getServer()).offer(f.owner.getUUID(), offer.id()).orElseThrow().claimedRun()),
                     "Home defense changed dimension or failed to claim exactly its real offer");
+            check(f.operation.plan.equals(com.herberto.jetsetcraft.liberty.LibertyMissionPlan.defense(offer.id(),
+                            offer.sectorId(), com.herberto.jetsetcraft.liberty.LibertyMissionCatalog.faction(offer.factionId()), 1, 20)),
+                    "Actual home deployment did not use its stable offer-selected defense family and geometry");
             check(!LibertyManager.startDefense(f.owner, offer.id() + "|1|20"), "A second home deployment reused an already claimed offer");
             load(f, f.operation.drop);
             later(f, 90, () -> {
                 landed(f);
-                var turf = f.operation.mission.sites().get(0); load(f, turf.center()); position(f, turf.marker().add(2, 0, 2));
+                var objective = f.operation.mission.sites().get(0); load(f, objective.center()); position(f, objective.marker().add(2, 0, 2));
                 later(f, 5, () -> {
                     f.owner.getInventory().selected = 2;
-                    BlockPos support = turf.center();
+                    BlockPos support = objective.center(); int previousProgress = objective.progress();
                     BlockHitResult hit = new BlockHitResult(Vec3.atCenterOf(support).add(0, .5, 0), Direction.UP, support, false);
                     PlayerInteractEvent.RightClickBlock event = new PlayerInteractEvent.RightClickBlock(f.owner, InteractionHand.MAIN_HAND, support, hit);
                     MinecraftForge.EVENT_BUS.post(event);
-                    check(event.isCanceled() && event.getCancellationResult().consumesAction() && turf.progress() == 1
+                    int expectedProgress = previousProgress + (objective.kind()
+                            == com.herberto.jetsetcraft.liberty.LibertyMissionCatalog.ObjectiveKind.TERRITORY ? 1 : 0);
+                    check(event.isCanceled() && event.getCancellationResult().consumesAction() && objective.progress() == expectedProgress
                                     && f.capture.owned.stream().anyMatch(e -> e instanceof GraffitiEntity && !e.isRemoved()),
-                            "Home right-click did not use its safe actual overlay and objective path");
+                            "Home right-click failed its actual overlay or credited paint to an unrelated objective kind");
                     check(!neighbor.hurt(f.owner.damageSources().playerAttack(f.owner), 1000) && neighbor.getHealth() == neighborHealth,
                             "Home-defense player damage reached an unrelated existing mob");
                     var base = f.operation.mission.sites().stream().filter(s -> s.optional()
