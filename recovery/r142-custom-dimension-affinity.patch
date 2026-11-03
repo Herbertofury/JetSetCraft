@@ -1,0 +1,281 @@
+diff --git a/.github/workflows/build.yml b/.github/workflows/build.yml
+index b1db1b81e845d4cc6107677b7d0c6f82b46c9e6f..896a2ead963ff9dfcc51667f378375496fe80c9f 100644
+--- a/.github/workflows/build.yml
++++ b/.github/workflows/build.yml
+@@ -139,6 +139,8 @@ jobs:
+           python tools/validate_gang_reload_atomicity.py
+           python tools/validate_gang_definition_quarantine_claims.py
+           python tools/validate_gang_registry_snapshot.py
++          python tools/validate_gang_nether_shared_mob_affinity.py
++          python tools/validate_gang_custom_dimension_affinity.py
+           python tools/validate_head_target_snapshot.py
+           python tools/validate_head_target_dynamic_gang_binding.py
+           python tools/validate_head_explicit_gang_fail_closed.py
+diff --git a/src/main/java/com/herberto/jetsetcraft/gametest/GangDimensionPolicyGameTests.java b/src/main/java/com/herberto/jetsetcraft/gametest/GangDimensionPolicyGameTests.java
+index 7b469889ea1aa4973d34ce07511336b29543d07a..58c26f78605687656e1fdf0d24cbbe4fa027b6c1 100644
+--- a/src/main/java/com/herberto/jetsetcraft/gametest/GangDimensionPolicyGameTests.java
++++ b/src/main/java/com/herberto/jetsetcraft/gametest/GangDimensionPolicyGameTests.java
+@@ -2,6 +2,7 @@ package com.herberto.jetsetcraft.gametest;
+ 
+ import com.herberto.jetsetcraft.JetSetCraft;
+ import com.herberto.jetsetcraft.gang.GangDimensionPolicy;
++import net.minecraft.core.registries.Registries;
+ import net.minecraft.gametest.framework.GameTest;
+ import net.minecraft.gametest.framework.GameTestAssertException;
+ import net.minecraft.gametest.framework.GameTestHelper;
+@@ -52,5 +53,39 @@ public final class GangDimensionPolicyGameTests {
+         helper.succeed();
+     }
+ 
++    private static ResourceKey<Level> customDimension(String path) {
++        return ResourceKey.create(Registries.DIMENSION,
++                ResourceLocation.fromNamespaceAndPath("jetsetcraft_test", path));
++    }
++
++    @GameTest(template = "hoverboard_empty", timeoutTicks = 40)
++    public static void unknownDimensionsUseRegisteredHabitatPreflight(GameTestHelper helper) {
++        ResourceKey<Level> netherLike = customDimension("nether_mirror");
++        ResourceKey<Level> endLike = customDimension("end_mirror");
++        require(netherLike, vanilla("piglin"), true);
++        require(netherLike, vanilla("wither_skeleton"), true);
++        require(netherLike, vanilla("shulker"), true);
++        require(netherLike, vanilla("zombie"), true);
++        require(endLike, vanilla("enderman"), true);
++        require(endLike, vanilla("shulker"), true);
++        require(endLike, ResourceLocation.fromNamespaceAndPath("addon", "piglin"), true);
++        System.out.println("JETSETCRAFT_GAMETEST_PASS gang_custom_dimension_defers_to_habitat_preflight");
++        helper.succeed();
++    }
++
++    @GameTest(template = "hoverboard_empty", timeoutTicks = 40)
++    public static void customDimensionDoesNotRelaxVanillaDimensionGuards(GameTestHelper helper) {
++        require(Level.OVERWORLD, vanilla("piglin"), false);
++        require(Level.OVERWORLD, vanilla("shulker"), false);
++        require(Level.NETHER, vanilla("zombie"), false);
++        require(Level.END, vanilla("wither_skeleton"), false);
++        if (GangDimensionPolicy.allows(null, vanilla("piglin"))
++                || GangDimensionPolicy.allows(customDimension("nether_mirror"), null)) {
++            throw new GameTestAssertException("null dimension/entity id must remain rejected");
++        }
++        System.out.println("JETSETCRAFT_GAMETEST_PASS gang_custom_dimension_vanilla_guard_nonregression");
++        helper.succeed();
++    }
++
+     private GangDimensionPolicyGameTests() {}
+ }
+diff --git a/src/main/java/com/herberto/jetsetcraft/gang/GangDimensionPolicy.java b/src/main/java/com/herberto/jetsetcraft/gang/GangDimensionPolicy.java
+index 035ca3f805bd63b43887ff69141aaf9771ebfe87..961fa912f85ca2dbe74cb8b28ce2c6a2cc8a44d7 100644
+--- a/src/main/java/com/herberto/jetsetcraft/gang/GangDimensionPolicy.java
++++ b/src/main/java/com/herberto/jetsetcraft/gang/GangDimensionPolicy.java
+@@ -28,7 +28,13 @@ public final class GangDimensionPolicy {
+         String path = entityId.getPath();
+         if (dimension == Level.NETHER) return NETHER_VANILLA.contains(path) || NETHER_SHARED.contains(path);
+         if (dimension == Level.END) return END_VANILLA.contains(path);
+-        return !NETHER_VANILLA.contains(path) && !"shulker".equals(path);
++        if (dimension == Level.OVERWORLD) return !NETHER_VANILLA.contains(path) && !"shulker".equals(path);
++
++        // An unfamiliar modded/datapack dimension is not the Overworld. Leave its vanilla mob
++        // affinity undecided here so registered EntityType, Street Gear and safe-habitat
++        // preflight can evaluate the actual world without a hard-coded dimension blacklist.
++        // This lookup runs only during Boombox activation; no extra scans or allocations.
++        return true;
+     }
+ 
+     private GangDimensionPolicy() {}
+diff --git a/tools/validate_gang_custom_dimension_affinity.py b/tools/validate_gang_custom_dimension_affinity.py
+new file mode 100644
+index 0000000000000000000000000000000000000000..b9c0e8d59f68b0960bed541df9c286fdb09cda75
+--- /dev/null
++++ b/tools/validate_gang_custom_dimension_affinity.py
+@@ -0,0 +1,168 @@
++#!/usr/bin/env python3
++"""Regression gate for custom-dimension gang fallback through the real production method.
++
++No Forge installation is required for this contract gate. Native Forge GameTests
++remain mandatory for full acceptance.
++"""
++from __future__ import annotations
++
++import argparse
++from pathlib import Path
++import subprocess
++import tempfile
++
++ROOT = Path(__file__).resolve().parents[1]
++PRODUCTION = ROOT / 'src/main/java/com/herberto/jetsetcraft/gang/GangDimensionPolicy.java'
++STUBS = {
++    'net/minecraft/resources/ResourceKey.java': '''package net.minecraft.resources;
++public final class ResourceKey<T> {
++    private final String value;
++    public ResourceKey(String value) { this.value = value; }
++    @Override public String toString() { return value; }
++}
++''',
++    'net/minecraft/resources/ResourceLocation.java': '''package net.minecraft.resources;
++public final class ResourceLocation {
++    public static final String DEFAULT_NAMESPACE = "minecraft";
++    private final String namespace;
++    private final String path;
++    private ResourceLocation(String namespace, String path) {
++        this.namespace = namespace;
++        this.path = path;
++    }
++    public static ResourceLocation fromNamespaceAndPath(String namespace, String path) {
++        return new ResourceLocation(namespace, path);
++    }
++    public String getNamespace() { return namespace; }
++    public String getPath() { return path; }
++}
++''',
++    'net/minecraft/world/level/Level.java': '''package net.minecraft.world.level;
++import net.minecraft.resources.ResourceKey;
++public final class Level {
++    public static final ResourceKey<Level> OVERWORLD = new ResourceKey<>("overworld");
++    public static final ResourceKey<Level> NETHER = new ResourceKey<>("nether");
++    public static final ResourceKey<Level> END = new ResourceKey<>("end");
++    public static final ResourceKey<Level> CUSTOM = new ResourceKey<>("custom");
++    public static final ResourceKey<Level> CUSTOM_NETHER = new ResourceKey<>("addon:nether_mirror");
++    public static final ResourceKey<Level> CUSTOM_END = new ResourceKey<>("addon:end_mirror");
++}
++''',
++}
++PROBE = '''import com.herberto.jetsetcraft.gang.GangDimensionPolicy;
++import net.minecraft.resources.ResourceKey;
++import net.minecraft.resources.ResourceLocation;
++import net.minecraft.world.level.Level;
++import java.util.List;
++import java.util.Random;
++
++public final class GangDimensionPolicyProbe {
++    private static final List<String> NETHER_EXCLUSIVE = List.of("piglin", "piglin_brute", "zombified_piglin", "hoglin", "zoglin", "blaze", "ghast", "magma_cube", "strider", "wither_skeleton");
++    private static final List<String> NETHER_SHARED = List.of("skeleton", "enderman");
++    private static final List<String> END = List.of("enderman", "shulker");
++    private static int checks;
++    private static boolean reference(ResourceKey<Level> dimension, ResourceLocation id) {
++        if (dimension == null || id == null) return false;
++        if (!"minecraft".equals(id.getNamespace())) return true;
++        String path = id.getPath();
++        if (dimension == Level.NETHER) return NETHER_EXCLUSIVE.contains(path) || NETHER_SHARED.contains(path);
++        if (dimension == Level.END) return END.contains(path);
++        if (dimension == Level.OVERWORLD) return !NETHER_EXCLUSIVE.contains(path) && !"shulker".equals(path);
++        return true;
++    }
++    private static void check(ResourceKey<Level> dimension, ResourceLocation id) {
++        boolean actual = GangDimensionPolicy.allows(dimension, id);
++        boolean expected = reference(dimension, id);
++        if (actual != expected) {
++            throw new AssertionError("dimension=" + dimension + ", entity=" +
++                (id == null ? "null" : id.getNamespace() + ":" + id.getPath()) +
++                ", expected=" + expected + ", actual=" + actual);
++        }
++        checks++;
++    }
++    public static void main(String[] args) {
++        ResourceKey<Level>[] dims = new ResourceKey[] {Level.OVERWORLD, Level.NETHER, Level.END, Level.CUSTOM, Level.CUSTOM_NETHER, Level.CUSTOM_END, null};
++        List<String> paths = List.of("skeleton", "enderman", "shulker", "piglin", "piglin_brute", "zombified_piglin", "hoglin", "zoglin", "blaze", "ghast", "magma_cube", "strider", "wither_skeleton", "zombie", "creeper", "cow", "witch", "snow_golem", "stray", "endermite", "warden", "bogged");
++        for (ResourceKey<Level> dimension : dims) {
++            check(dimension, null);
++            for (String path : paths) {
++                check(dimension, ResourceLocation.fromNamespaceAndPath("minecraft", path));
++                check(dimension, ResourceLocation.fromNamespaceAndPath("example", path));
++            }
++        }
++        // Deterministic, broad regression test for the full old contract's unrelated lanes.
++        Random rng = new Random(142L);
++        for (int i = 0; i < 50000; i++) {
++            ResourceKey<Level> dimension = dims[rng.nextInt(dims.length)];
++            String path = paths.get(rng.nextInt(paths.size()));
++            String ns = rng.nextInt(5) == 0 ? "minecraft" : "crossmod";
++            check(dimension, ResourceLocation.fromNamespaceAndPath(ns, path));
++        }
++        if (checks < 50200) throw new AssertionError("Insufficient coverage: " + checks);
++        System.out.println("PASS " + checks + " Java 17-compatible production GangDimensionPolicy assertions");
++    }
++}
++'''
++
++MUTANTS = {
++    'nether_skeleton_missing': ('List.of("skeleton", "enderman")', 'List.of("enderman")'),
++    'nether_enderman_missing': ('List.of("skeleton", "enderman")', 'List.of("skeleton")'),
++    'nether_everything_allowed': ('NETHER_VANILLA.contains(path) || NETHER_SHARED.contains(path)', 'true'),
++    'overworld_skeleton_enderman_removed': ('if (dimension == Level.OVERWORLD) return !NETHER_VANILLA.contains(path) && !"shulker".equals(path);', 'if (dimension == Level.OVERWORLD) return !NETHER_VANILLA.contains(path) && !NETHER_SHARED.contains(path) && !"shulker".equals(path);'),
++    'end_enderman_removed': ('if (dimension == Level.END) return END_VANILLA.contains(path);', 'if (dimension == Level.END) return "shulker".equals(path);'),
++    'modded_mobs_rejected': ('if (!ResourceLocation.DEFAULT_NAMESPACE.equals(entityId.getNamespace())) return true;', 'if (!ResourceLocation.DEFAULT_NAMESPACE.equals(entityId.getNamespace())) return false;'),
++    'custom_dimensions_treated_as_overworld': ('if (dimension == Level.OVERWORLD) return !NETHER_VANILLA.contains(path) && !"shulker".equals(path);', 'if (dimension == Level.OVERWORLD || dimension == Level.CUSTOM) return !NETHER_VANILLA.contains(path) && !"shulker".equals(path);'),
++}
++
++
++def run_java(source: str) -> tuple[bool, str]:
++    with tempfile.TemporaryDirectory(prefix='jsc-dimension-policy-') as tmp:
++        base = Path(tmp)
++        files = dict(STUBS)
++        files['com/herberto/jetsetcraft/gang/GangDimensionPolicy.java'] = source
++        files['GangDimensionPolicyProbe.java'] = PROBE
++        paths = []
++        for relative, content in files.items():
++            dest = base / relative
++            dest.parent.mkdir(parents=True, exist_ok=True)
++            dest.write_text(content, encoding='utf-8')
++            paths.append(str(dest))
++        compiled = subprocess.run(['javac', '--release', '17', '-encoding', 'UTF-8', '-d', str(base), *paths], capture_output=True, text=True, timeout=30)
++        if compiled.returncode:
++            raise RuntimeError('javac --release 17 failed: ' + (compiled.stderr or compiled.stdout))
++        ran = subprocess.run(['java', '-cp', str(base), 'GangDimensionPolicyProbe'], capture_output=True, text=True, timeout=30)
++        return ran.returncode == 0, (ran.stdout + ran.stderr).strip()
++
++
++def main() -> None:
++    parser = argparse.ArgumentParser()
++    parser.add_argument('--no-mutations', action='store_true')
++    args = parser.parse_args()
++    source = PRODUCTION.read_text(encoding='utf-8')
++    success, evidence = run_java(source)
++    print('BASELINE ' + evidence)
++    if not success:
++        raise SystemExit(1)
++    if not args.no_mutations:
++        rejected = 0
++        for name, (old, new) in MUTANTS.items():
++            if source.count(old) != 1:
++                raise AssertionError('Mutant no longer targets one production expression: ' + name)
++            candidate = source.replace(old, new, 1)
++            passed, details = run_java(candidate)
++            if passed:
++                raise AssertionError('Adversarial mutation survived: ' + name)
++            if 'AssertionError' not in details:
++                raise AssertionError('Mutant failed for unrelated reason: ' + name + ' ' + details)
++            rejected += 1
++        custom_false = source.rsplit('return true;', 1)
++        if len(custom_false) != 2:
++            raise AssertionError('Missing custom dimension acceptance return')
++        passed, details = run_java('return false;'.join(custom_false))
++        if passed or 'AssertionError' not in details:
++            raise AssertionError('Custom dimension denial mutation survived or failed unexpectedly: ' + details)
++        rejected += 1
++        print(f'PASS {rejected}/{len(MUTANTS) + 1} adverse mutations rejected by production contract')
++
++if __name__ == '__main__':
++    main()
+diff --git a/tools/validate_gang_nether_shared_mob_affinity.py b/tools/validate_gang_nether_shared_mob_affinity.py
+index 86a0b57664bd8b297caed1329e8dc9070156d491..da1dfddcefdf36f76153c7aed306405ccf11671e 100644
+--- a/tools/validate_gang_nether_shared_mob_affinity.py
++++ b/tools/validate_gang_nether_shared_mob_affinity.py
+@@ -65,7 +65,8 @@ public final class GangDimensionPolicyProbe {
+         String path = id.getPath();
+         if (dimension == Level.NETHER) return NETHER_EXCLUSIVE.contains(path) || NETHER_SHARED.contains(path);
+         if (dimension == Level.END) return END.contains(path);
+-        return !NETHER_EXCLUSIVE.contains(path) && !"shulker".equals(path);
++        if (dimension == Level.OVERWORLD) return !NETHER_EXCLUSIVE.contains(path) && !"shulker".equals(path);
++        return true;
+     }
+     private static void check(ResourceKey<Level> dimension, ResourceLocation id) {
+         boolean actual = GangDimensionPolicy.allows(dimension, id);
+@@ -105,7 +106,7 @@ MUTANTS = {
+     'nether_skeleton_missing': ('List.of("skeleton", "enderman")', 'List.of("enderman")'),
+     'nether_enderman_missing': ('List.of("skeleton", "enderman")', 'List.of("skeleton")'),
+     'nether_everything_allowed': ('NETHER_VANILLA.contains(path) || NETHER_SHARED.contains(path)', 'true'),
+-    'overworld_skeleton_enderman_removed': ('return !NETHER_VANILLA.contains(path) && !"shulker".equals(path);', 'return !NETHER_VANILLA.contains(path) && !NETHER_SHARED.contains(path) && !"shulker".equals(path);'),
++    'overworld_skeleton_enderman_removed': ('if (dimension == Level.OVERWORLD) return !NETHER_VANILLA.contains(path) && !"shulker".equals(path);', 'if (dimension == Level.OVERWORLD) return !NETHER_VANILLA.contains(path) && !NETHER_SHARED.contains(path) && !"shulker".equals(path);'),
+     'end_enderman_removed': ('if (dimension == Level.END) return END_VANILLA.contains(path);', 'if (dimension == Level.END) return "shulker".equals(path);'),
+     'modded_mobs_rejected': ('if (!ResourceLocation.DEFAULT_NAMESPACE.equals(entityId.getNamespace())) return true;', 'if (!ResourceLocation.DEFAULT_NAMESPACE.equals(entityId.getNamespace())) return false;'),
+ }
