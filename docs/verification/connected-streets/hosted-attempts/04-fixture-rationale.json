@@ -1,0 +1,34 @@
+{
+  "kind": "native-provider-fixture-diagnosis",
+  "candidate_with_failure": "89357025e515503c70ecf43cf90bf433b96623d2",
+  "run_id": 41674056101,
+  "job_id": 126049769616,
+  "test": "realMCDiversOrdnanceAndSentryPreserveForeignEntitiesTerrainAndLightCleanup",
+  "failure": "Native actor kinds were observed (machine_gun_sentry, ordnance, stratagem_beacon), but the target remained at1000 health at helper elapsed320.",
+  "provider": {
+    "file": "mcdivers-forge-1.20.1-1.0.3.jar",
+    "bytes": 2160981,
+    "sha256": "49c4ab153c50dab8766fca15ab7affcc14b1c9a8e7e52d58a9683c06ac4ceac0",
+    "source": "https://www.curseforge.com/minecraft/mc-mods/mcdiver/files/9307472",
+    "verification": "Downloaded by existing prepare_liberty_helldivers.py and passed its exact size, SHA256, metadata and class checks. Read-only javap disassembly retained under build/verification/provider-diagnosis."
+  },
+  "pinned_method_findings": [
+    "OrdnanceEntity.serverStep calls moveHit and lands or detonates at the actual native collision position; generated terrain can intercept the approach.",
+    "StratagemExplosionDamage.onDetonate computes native damage from vanilla explosion exposure measured from surfaceAbove; blocked exposure can result in zero accepted damage.",
+    "SentryEntity.canSee delegates to native Gunnery.canSee from sentry.position+(0,1.6,0); generated terrain between the sentry and target can prevent targeting/fire.",
+    "StratagemEffects.dropShell/dropHellpod use the original provider strike direction and launchDistance. launchDistance begins100, clips the build ceiling and reduces by16 while the initial chunk is unavailable and distance remains greater than24.",
+    "OrdnanceEntity.tickServerOrdnance uses the provider serverStep fallback for actual registered ordnance that has not already stepped; the fixture must not manufacture ticks."
+  ],
+  "source_proven_fixture_risk": "The previous fixedY100 floor left native landing columns, orbital approach and most firing/exposure paths in generated terrain. Only isolated3x3x3 probe body cubes were cleared.",
+  "causality_limit": "The failed run did not record actual impact positions, native ages or line-of-sight, so its exact missed-damage sequence cannot be recovered. This patch corrects the demonstrated uncontrolled setup and adds those missing diagnostics; it does not claim a proven production regression.",
+  "fixture_changes": [
+    "Only nativeProvider=true chooses floorY=max(100, highest WORLD_SURFACE over its already-loaded9x9chunks+5), with a build-height guard.",
+    "Owner Y now follows centerY+1.05; original strike, sentry, enemy, foreign resident and chest offsets remain.",
+    "Assert clear landing columns and original native gun-height firing corridor before calling real provider beacons.",
+    "At unchanged helper elapsed320, require the actual live sentry to have at least20 native ticks and an entity-ticking position.",
+    "Retain native actor-kind and actual target-health-reduction checks, foreign health/fire safety, floor/chest/NBT preservation and actual actor/light cleanup.",
+    "Failure diagnostics report elapsed time, prepared surface/center, target authorization/body/health/last damage, and native actor type, age, ownership, position, removal, residency and sentry sight."
+  ],
+  "unchanged": "No production edits, safety relaxations, manual native ticks, synthetic damage, added event-observation handlers, deadline increases or provider substitutions.",
+  "validation": "Java syntax and whitespace checks are local gates; next hosted full-provider runtime is still required."
+}

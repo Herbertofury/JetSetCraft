@@ -1,0 +1,140 @@
+{
+  "schema": 1,
+  "repository": "Herbertofury/JetSetCraft",
+  "pull_request": 50,
+  "candidate": 3,
+  "feature_head": "89357025e515503c70ecf43cf90bf433b96623d2",
+  "tested_merge": "97d523abe7aa4538315bda35aa3e779e5b1e1044",
+  "workflow_run_id": 41674056101,
+  "workflow_run_url": "https://github.com/Herbertofury/JetSetCraft/actions/runs/41674056101",
+  "jobs": [
+    {
+      "id": 126049768803,
+      "name": "missing-pack / TaCZ 1.1.8-hotfix2 / MCDivers false",
+      "conclusion": "success",
+      "steps": [
+        {
+          "name": "Build with the exact optional provider",
+          "conclusion": "success"
+        },
+        {
+          "name": "Record resolved runtime dependencies",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run native GameTests with the selected pack state",
+          "conclusion": "success"
+        },
+        {
+          "name": "Verify full-provider dedicated startup and graceful world save",
+          "conclusion": "skipped"
+        },
+        {
+          "name": "Verify the exact built JAR in an independent official Forge installation",
+          "conclusion": "skipped"
+        },
+        {
+          "name": "Verify Liberty Grind in a real Minecraft client",
+          "conclusion": "skipped"
+        },
+        {
+          "name": "Record native PNG metadata",
+          "conclusion": "skipped"
+        },
+        {
+          "name": "Upload native Liberty client captures and metadata",
+          "conclusion": "skipped"
+        }
+      ]
+    },
+    {
+      "id": 126049769616,
+      "name": "full-provider / TaCZ 1.1.8-hotfix2 / MCDivers true",
+      "conclusion": "failure",
+      "steps": [
+        {
+          "name": "Build with the exact optional provider",
+          "conclusion": "success"
+        },
+        {
+          "name": "Record resolved runtime dependencies",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run native GameTests with the selected pack state",
+          "conclusion": "failure"
+        },
+        {
+          "name": "Verify full-provider dedicated startup and graceful world save",
+          "conclusion": "skipped"
+        },
+        {
+          "name": "Verify the exact built JAR in an independent official Forge installation",
+          "conclusion": "skipped"
+        },
+        {
+          "name": "Verify Liberty Grind in a real Minecraft client",
+          "conclusion": "skipped"
+        },
+        {
+          "name": "Record native PNG metadata",
+          "conclusion": "success"
+        },
+        {
+          "name": "Upload native Liberty client captures and metadata",
+          "conclusion": "success"
+        }
+      ]
+    }
+  ],
+  "missing_pack_evidence": [
+    "2026-11-03T16:28:21.9487900Z JETSETCRAFT_GAMETEST_PASS rush_expanded_evolution_rules",
+    "2026-11-03T16:29:05.3483885Z JETSETCRAFT_GAMETEST_PASS rush_expanded_evolution_reprise",
+    "2026-11-03T16:29:05.3515554Z JETSETCRAFT_GAMETEST_PASS rush_expanded_evolution_finale",
+    "2026-11-03T16:29:20.7481644Z JETSETCRAFT_GAMETEST_PASS rush_evolution_return",
+    "2026-11-03T16:29:22.3482116Z JETSETCRAFT_GAMETEST_PASS graffiti_lifecycle native_support_ticks=40",
+    "2026-11-03T16:30:06.7489300Z JETSETCRAFT_GAMETEST_PASS rush_expanded_evolution_bass",
+    "2026-11-03T16:30:06.8490578Z JETSETCRAFT_GAMETEST_PASS rush_expanded_evolution_pulse_pause",
+    "2026-11-03T16:30:16.6500996Z [16:30:16] [Server thread/INFO] [minecraft/GameTestServer]: ========= 139 GAME TESTS COMPLETE ======================",
+    "2026-11-03T16:30:16.6502108Z [16:30:16] [Server thread/INFO] [minecraft/GameTestServer]: All 139 required tests passed :)"
+  ],
+  "full_provider_evidence": [
+    "2026-11-03T16:29:26.6046407Z JETSETCRAFT_GAMETEST_PASS rush_expanded_evolution_rules",
+    "2026-11-03T16:30:13.8073211Z JETSETCRAFT_GAMETEST_PASS rush_expanded_evolution_reprise",
+    "2026-11-03T16:30:13.9044274Z JETSETCRAFT_GAMETEST_PASS rush_expanded_evolution_finale",
+    "2026-11-03T16:30:34.0063194Z JETSETCRAFT_GAMETEST_PASS rush_evolution_return",
+    "2026-11-03T16:30:34.9072173Z JETSETCRAFT_GAMETEST_PASS graffiti_lifecycle native_support_ticks=40",
+    "2026-11-03T16:30:39.7053487Z JETSETCRAFT_LIBERTY_MOB_SAFETY_PASS native_home_actors_callbacks_reinforcements_conversion_raid_return",
+    "2026-11-03T16:30:58.6055244Z [16:30:58] [Server thread/ERROR] [minecraft/LogTestReporter]: realmcdiversordnanceandsentrypreserveforeignentitiesterrainandlightcleanup failed! Real native beacon timelines did not create ordnance, a sentry and actual enemy damage; actors=[machine_gun_sentry, ordnance, stratagem_beacon]; health=1000.0",
+    "2026-11-03T16:32:01.1046303Z JETSETCRAFT_GAMETEST_PASS rush_expanded_evolution_bass",
+    "2026-11-03T16:32:01.1053296Z JETSETCRAFT_GAMETEST_PASS rush_expanded_evolution_pulse_pause",
+    "2026-11-03T16:32:27.4058064Z [16:32:27] [Server thread/INFO] [minecraft/GameTestServer]: ========= 139 GAME TESTS COMPLETE ======================",
+    "2026-11-03T16:32:27.4059057Z [16:32:27] [Server thread/INFO] [minecraft/GameTestServer]: 1 required tests failed :(",
+    "2026-11-03T16:32:27.4060152Z [16:32:27] [Server thread/INFO] [minecraft/GameTestServer]:    - realmcdiversordnanceandsentrypreserveforeignentitiesterrainandlightcleanup",
+    "2026-11-03T16:32:34.7053290Z Recorded 0 native PNGs in build/verification/liberty-capture-metadata.json"
+  ],
+  "artifacts": [
+    {
+      "id": 13250077060,
+      "name": "jetsetcraft-liberty-full-provider-97d523abe7aa4538315bda35aa3e779e5b1e1044",
+      "bytes": 6377531,
+      "digest": "sha256:530e079135eaa1bccf2e0572e652782e878773b2ff5f742d47e6e5db066c98ca",
+      "expired": false
+    },
+    {
+      "id": 13249942237,
+      "name": "jetsetcraft-liberty-native-client-97d523abe7aa4538315bda35aa3e779e5b1e1044",
+      "bytes": 618,
+      "digest": "sha256:226090cb1c1d7de82255963b18689fa5b5998c63079c177615dd23160debdf5e",
+      "expired": false
+    },
+    {
+      "id": 13249517673,
+      "name": "jetsetcraft-liberty-missing-pack-97d523abe7aa4538315bda35aa3e779e5b1e1044",
+      "bytes": 6373843,
+      "digest": "sha256:86db0773c55ffb11567fc962d33a2398d29cbc15afe97df4732562348a91c162",
+      "expired": false
+    }
+  ],
+  "scope": "Both lanes compiled successfully. Missing-pack passed all139 required native tests. Full-provider failed exactly the existing real MCDivers ordnance/sentry test: native actors appeared but target health remained1000. Radiant and all expanded evolution tests now passed in both lanes; full-provider native-home callbacks passed. Full-provider installed-JAR and real-client execution were skipped after the required native failure. Any uploaded client metadata is not evidence that the skipped client gate ran."
+}
