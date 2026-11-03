@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.4.0-alpha.10 — Connected Streets, unreleased candidate
+
+- Added optional three-round **Street Mix** from any local activity: relay-pair Tag with physical handoffs, five six-second contested hills, and a faster five-tag Showdown captain. Explicit intermissions bank each completed round independently. Full next-round admission occurs before mutating its identity or reward; failed terrain checks retain the paid intermission. Stale cancellation, command cancellation and removed Boomboxes have explicit cleanup paths.
+- Added **Crew Tour**, with nine evergreen standalone milestones and three optional Liberty branches. Accepted activity, arena and qualifying debrief receipts advance saved goals; manual claims pay existing crew currencies once. Claims survive history eviction and founding, and cannot generate new stamps. Schema 4 migrates only retained real receipts and preserves unknown or malformed data for recovery.
+- Expanded Rival Rush from three to **six evolutions**. Chromatic finale adds three bounded secondary sparks every sixth primary tag. Bass drop creates one fixed three-pulse landing aftershock. Soul reprise spends five offensive souls for capped recovery and a short firing-interval benefit. One selected evolution, two rank-three ingredients, three artifacts and one starting preparation remain.
+- Added **six original Liberty operations**, bringing the catalogue to **34 templates**: Neon Block Party, Last Train Home, Pirate Radio Takeover, Supply Line Shuffle, Swarm Street Cleanup and Prism Breakout. Multi-goal stages allow different completion orders while retaining every required gate.
+- Added readable tour requirements, core/optional completion counts, accepted reward guidance, Street Mix previews/intermissions and six-recipe client handling. Native visual-audit code preserves all 23 earlier captures and requires three new tour/small-viewport/Mix captures.
+- Hardened Crew Tour claims against changes to the reward account: changing the training focus, dispatching a member or receiving another account payment invalidates the old preview. The tour shows the current training recipient or explains why training will not apply. Claim revisions saturate without wrapping and remain stable across read-only previews and reloads.
+- Fixed Soul Burst admission to use the same owner, arena and visibility checks as its damage. Accepted multi-target pulses finish before their earned XP opens a draft; later artifacts wait until the decision is resolved.
+- Added **17 Forge GameTests**, bringing the declared suite to **139**. Native acceptance is still pending at this source checkpoint; passing static/model evidence and each subsequent native result are recorded separately in [the verification receipt](docs/verification/connected-streets/README.md).
+- Advanced client/server protocol to **18** and development version to **0.4.0-alpha.10**. No candidate JAR, hosted success, merge, or human playtest is claimed.
+
 ## 0.4.0-alpha.9 — Liberty Grind campaign expansion, unreleased
 
 - Continued safe home defenses with independently grounded courier checkpoints and escort paths that follow slopes, take bounded detours and pause for new obstructions. Unusable routes block admission without changing terrain. Defense offers deterministically select varied faction-appropriate templates; retries retain their mission choice.

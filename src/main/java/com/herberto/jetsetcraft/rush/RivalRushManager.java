@@ -139,6 +139,10 @@ public final class RivalRushManager {
         long airBreakPulses, lineProcs, markApplications;
         long lastSoulBurst = -100;
         long multishotVolleys, radiantPulses, soulBursts;
+        Vec3 aftershockCenter;
+        double aftershockRadius;
+        long aftershockNext, aftershockUntil, aftershockPulses;
+        int aftershockRemaining;
         long cards;
         int pendingCombatXp;
         int damageDepth;
@@ -671,10 +675,7 @@ public final class RivalRushManager {
             s.musicStops.entrySet().removeIf(entry -> time - entry.getValue() > 12000);
         }
         collectPickups(s);
-        if (s.run.hasOffer()) {
-            resetMotion(s);
-            freeze(s); s.announcedOffer = s.run.offerVersion(); send(player, true, "", -1, -1); return;
-        }
+        if (pauseForDraft(s)) return;
         if (!tickEncounter(s)) return;
         tickActors(s);
         if (s.run.isFinished()) return;
@@ -682,9 +683,12 @@ public final class RivalRushManager {
         tickTells(s);
         if (s.run.isFinished()) return;
         tickMovementArtifacts(s, true);
+        if (pauseForDraft(s)) return;
         autoFire(s);
         tickArtifacts(s);
+        if (pauseForDraft(s)) return;
         tickObjectives(s);
+        if (pauseForDraft(s)) return;
         String cache = s.points.tick(player, s.run, s.circuit);
         if (!cache.isEmpty()) s.objective = cache;
         RushPointsOfInterest.Claim claim = s.points.pollClaim();
@@ -751,6 +755,13 @@ public final class RivalRushManager {
     private static boolean combatPaused(Session s) {
         return s.exiting || s.run.isFinished() || s.run.hasOffer() || s.run.awaitingEncore()
                 || (s.circuit != null && (s.circuit.phase() != RushCircuit.Phase.ARENA || !s.circuit.inArena(s.player.position(), 4)));
+    }
+
+    /** A completed action may earn a draft halfway through a tick; later actions wait for its choice. */
+    private static boolean pauseForDraft(Session s) {
+        if (!s.run.hasOffer()) return false;
+        resetMotion(s); freeze(s); s.announcedOffer = s.run.offerVersion();
+        send(s.player, true, "", -1, -1); return true;
     }
 
     private static void resetMotion(Session s) {
@@ -1111,12 +1122,24 @@ public final class RivalRushManager {
         try {
             return applyActorDamage(s, target, baseDamage, primary);
         } finally {
-            if (--s.damageDepth == 0 && s.pendingCombatXp > 0) {
-                int earned = s.pendingCombatXp; s.pendingCombatXp = 0;
-                // Finish the accepted primary and its bounded secondary effects before pausing for its XP draft.
-                s.run.gainXp(earned);
-            }
+            finishDamageBatch(s);
         }
+    }
+
+    private static void finishDamageBatch(Session s) {
+        if (--s.damageDepth == 0 && s.pendingCombatXp > 0) {
+            int earned = s.pendingCombatXp; s.pendingCombatXp = 0;
+            // Finish an accepted hit or bounded pulse before its earned XP pauses combat for a draft.
+            s.run.gainXp(earned);
+        }
+    }
+
+    private static void damageEvolutionPulse(Session s, List<Actor> targets, double baseDamage) {
+        s.damageDepth++;
+        try {
+            for (Actor actor : targets) if (visibleEvolutionTarget(s, actor))
+                damageActor(s, actor.mob, baseDamage, false);
+        } finally { finishDamageBatch(s); }
     }
 
     private static boolean applyActorDamage(Session s, Entity target, double baseDamage, boolean primary) {
@@ -1184,6 +1207,7 @@ public final class RivalRushManager {
             onPaintHit(s, target, impact);
             if (shatterPrimed) cryoShatter(s, actor, impact);
             if (line > 1) railstorm(s, target, impact);
+            if (s.run.hits() % 6 == 0) chromaticFinale(s, impact);
         }
         return true;
     }
@@ -1235,6 +1259,59 @@ public final class RivalRushManager {
                         spark.x, spark.y, spark.z, 2, .15, .25, .15, .02);
             }
             s.player.playNotifySound(SoundEvents.TRIDENT_THUNDER, SoundSource.PLAYERS, .22f, 1.8f);
+        }
+    }
+
+    private static void chromaticFinale(Session s, Vec3 impact) {
+        if (combatPaused(s) || !s.run.evolutionActive(RushBuildPaths.Evolution.CHROMATIC_FINALE)) return;
+        double inner = (3 + s.run.rank(RushRun.Upgrade.FIREWORK) * .5) * s.run.areaMultiplier();
+        double radius = Math.min(18, 10 * s.run.areaMultiplier());
+        List<Actor> targets = s.actors.values().stream().filter(actor -> {
+            double distance = actor.mob.position().distanceToSqr(impact);
+            return distance >= inner * inner && distance <= radius * radius && visibleEvolutionTarget(s, actor);
+        }).sorted(Comparator.comparingDouble(actor -> actor.mob.position().distanceToSqr(impact))).limit(3).toList();
+        if (targets.isEmpty() || !s.run.tryEvolutionProc(RushBuildPaths.Evolution.CHROMATIC_FINALE)) return;
+        damageEvolutionPulse(s, targets, 8);
+        if (JetSetNetwork.canSync(s.player)) for (Actor actor : targets) {
+            Vec3 spark = actor.mob.position().add(0, .7, 0);
+            s.player.serverLevel().sendParticles(s.player, ParticleTypes.FIREWORK, false,
+                    spark.x, spark.y, spark.z, 10, .35, .4, .35, .04);
+        }
+    }
+
+    private static void startBassDrop(Session s) {
+        if (!s.run.tryEvolutionProc(RushBuildPaths.Evolution.BASS_DROP)) return;
+        s.aftershockCenter = s.player.position();
+        s.aftershockRadius = Math.min(10, 6 * s.run.areaMultiplier());
+        s.aftershockNext = s.run.elapsedTicks() + 20;
+        s.aftershockUntil = s.run.elapsedTicks() + 60;
+        s.aftershockRemaining = 3;
+    }
+
+    private static void tickBassDrop(Session s) {
+        if (s.aftershockCenter == null) return;
+        long time = s.run.elapsedTicks();
+        if (time > s.aftershockUntil || s.aftershockRemaining <= 0
+                || !s.run.evolutionActive(RushBuildPaths.Evolution.BASS_DROP)
+                || (s.circuit != null && !s.circuit.inArena(s.aftershockCenter, 0))) {
+            s.aftershockCenter = null; s.aftershockRemaining = 0; return;
+        }
+        if (combatPaused(s) || time < s.aftershockNext) return;
+        Vec3 center = s.aftershockCenter;
+        List<Actor> targets = s.actors.values().stream().filter(actor -> visibleEvolutionTarget(s, actor)
+                        && actor.mob.position().distanceToSqr(center) <= s.aftershockRadius * s.aftershockRadius)
+                .sorted(Comparator.comparingDouble(actor -> actor.mob.position().distanceToSqr(center))).limit(6).toList();
+        // Pulses spend their finite schedule even when no rival enters the fixed circle.
+        s.aftershockNext += 20; s.aftershockRemaining--; s.aftershockPulses++;
+        damageEvolutionPulse(s, targets, 6);
+        if (JetSetNetwork.canSync(s.player)) {
+            for (int point = 0; point < 20; point++) {
+                double angle = Math.PI * 2 * point / 20;
+                s.player.serverLevel().sendParticles(s.player, ParticleTypes.NOTE, false,
+                        center.x + Math.cos(angle) * s.aftershockRadius, center.y + .2,
+                        center.z + Math.sin(angle) * s.aftershockRadius, 1, 0, 0, 0, 0);
+            }
+            s.player.playNotifySound(SoundEvents.NOTE_BLOCK_BASEDRUM.value(), SoundSource.PLAYERS, .4f, .8f);
         }
     }
 
@@ -1313,6 +1390,7 @@ public final class RivalRushManager {
         if (!combat || rank == 0 || !motion.landed() || combatPaused(s)
                 || time - s.lastAirBreak < Math.round(100 * s.run.artifactIntervalMultiplier())) return;
         s.lastAirBreak = time; s.airBreakPulses++;
+        startBassDrop(s);
         double radius = (3 + rank * .5) * s.run.areaMultiplier();
         List<Actor> targets = s.actors.values().stream().filter(a -> !a.claimed && a.mob.isAlive()
                         && a.mob.distanceToSqr(s.player) <= radius * radius && s.player.hasLineOfSight(a.mob))
@@ -1325,6 +1403,8 @@ public final class RivalRushManager {
     }
 
     private static void tickArtifacts(Session s) {
+        if (combatPaused(s)) return;
+        tickBassDrop(s);
         if (combatPaused(s)) return;
         long time = s.run.elapsedTicks();
         double interval = s.run.artifactIntervalMultiplier();
@@ -1339,20 +1419,23 @@ public final class RivalRushManager {
                         actor.mob.getZ(), 5, .3, .4, .3, .01);
             }
         }
+        if (combatPaused(s)) return;
         int burst = s.run.rank(RushRun.Upgrade.SOUL_BURST);
         if (burst > 0 && s.run.soulBurstCharge() >= 5 && time - s.lastSoulBurst >= Math.round(100 * interval)) {
             double range = (4 + burst * .5) * s.run.areaMultiplier();
-            List<Actor> targets = s.actors.values().stream().filter(a -> !a.claimed && a.mob.isAlive()
-                            && a.mob.distanceToSqr(s.player) <= range * range && s.player.hasLineOfSight(a.mob))
+            List<Actor> targets = s.actors.values().stream().filter(a -> visibleEvolutionTarget(s, a)
+                            && a.mob.distanceToSqr(s.player) <= range * range)
                     .sorted(Comparator.comparingDouble(a -> a.mob.distanceToSqr(s.player))).limit(12).toList();
             if (!targets.isEmpty() && s.run.spendSoulBurst()) {
                 s.lastSoulBurst = time; s.soulBursts++;
-                for (Actor target : targets) damageActor(s, target.mob, 4 + burst * 3, false);
+                damageEvolutionPulse(s, targets, 4 + burst * 3);
                 s.player.serverLevel().sendParticles(ParticleTypes.SOUL_FIRE_FLAME, s.player.getX(), s.player.getY() + .7,
                         s.player.getZ(), 20, range / 3, .4, range / 3, .04);
                 s.player.serverLevel().playSound(null, s.player.blockPosition(), SoundEvents.SOUL_ESCAPE, SoundSource.PLAYERS, .5f, 1.1f);
             }
         }
+        // The accepted pulse settles all of its targets before its XP draft; subsequent artifacts wait for that choice.
+        if (combatPaused(s)) return;
         int expose = s.run.rank(RushRun.Upgrade.EXPOSE);
         if (expose > 0 && time - s.lastExpose >= Math.round(140 * interval)) {
             Actor target = s.actors.values().stream().filter(a -> !a.claimed && a.mob.isAlive()
@@ -1404,6 +1487,7 @@ public final class RivalRushManager {
             Vec3 end = s.player.position().add(direction.scale(range * .5));
             s.player.serverLevel().sendParticles(ParticleTypes.SWEEP_ATTACK, end.x, end.y + .5, end.z, 5, 1, .2, 1, 0);
         }
+        if (combatPaused(s)) return;
         int spell = s.run.rank(RushRun.Upgrade.SPELL_RELAY);
         if (spell > 0 && time - s.lastSpell >= Math.round(Math.max(40, 150 - spell * 20) * interval)) {
             Actor target = s.actors.values().stream().filter(a -> a.mob.distanceToSqr(s.player) < 28 * 28 && s.player.hasLineOfSight(a.mob))
@@ -1496,6 +1580,7 @@ public final class RivalRushManager {
             s.lastStyle = time; s.run.addScore(Math.round(30 * s.run.flowMultiplier()));
             s.run.gainXp((int) Math.round(4 * s.run.flowMultiplier()));
         }
+        if (combatPaused(s)) return;
         if (s.circuit == null && time % 20 == 0) s.musicStop = RushWorld.nearestBoombox(s.player.serverLevel(), s.player.blockPosition());
         if (s.musicStop == null) { s.musicCharge = 0; return; }
         double distance = s.player.distanceToSqr(Vec3.atCenterOf(s.musicStop));
@@ -1655,6 +1740,13 @@ public final class RivalRushManager {
         build.putInt("ChilledRivals", (int) s.actors.values().stream().filter(a -> a.chillUntil > run.elapsedTicks()).count());
         build.putLong("MultishotVolleys", s.multishotVolleys); build.putLong("RadiantPulses", s.radiantPulses);
         build.putLong("SoulBursts", s.soulBursts);
+        build.putInt("TempoTicks", run.tempoTicks());
+        boolean aftershockActive = s.aftershockCenter != null && s.aftershockRemaining > 0
+                && run.evolutionActive(RushBuildPaths.Evolution.BASS_DROP) && run.elapsedTicks() <= s.aftershockUntil;
+        build.putInt("AftershockTicks", !aftershockActive ? 0
+                : (int) Math.max(0, Math.min(60, s.aftershockUntil - run.elapsedTicks())));
+        build.putInt("AftershockRemaining", aftershockActive ? s.aftershockRemaining : 0);
+        build.putLong("AftershockPulses", s.aftershockPulses);
         build.putInt("ArtifactSlots", 3);
         CompoundTag paths = RushBuildPaths.snapshot(run);
         paths.putBoolean("CanEvolve", run.hasBuildOpportunity() && evolutionWindow(s));

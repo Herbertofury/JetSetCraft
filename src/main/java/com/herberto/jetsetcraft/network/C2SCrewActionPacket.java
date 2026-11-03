@@ -13,7 +13,7 @@ import java.util.function.Supplier;
 public record C2SCrewActionPacket(String action, String value, int number, UUID houseId, UUID targetId, long revision) {
     private static final Set<String> ACTIONS = Set.of("open", "refresh", "found", "relocate", "rename", "preview",
             "expand", "recruit", "rename_member", "focus", "focus_off", "assign", "claim", "cancel", "facility",
-            "upgrade", "preparation", "style");
+            "upgrade", "preparation", "style", "tour_claim");
 
     public static void encode(C2SCrewActionPacket packet, FriendlyByteBuf buffer) {
         buffer.writeUtf(packet.action, 32);

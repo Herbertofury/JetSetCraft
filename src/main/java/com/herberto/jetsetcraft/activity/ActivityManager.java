@@ -19,6 +19,7 @@ import com.herberto.jetsetcraft.rush.RushReturnState;
 import com.herberto.jetsetcraft.rush.RushWorld;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -58,7 +59,7 @@ import java.util.UUID;
 public final class ActivityManager {
     public static final String OWNED = "jetsetcraft:street_activity";
     private static final int RADIUS = 32;
-    private static final Set<String> ACTIONS = Set.of("open", "refresh", "select", "launch", "cancel");
+    private static final Set<String> ACTIONS = Set.of("open", "refresh", "select", "launch", "cancel", "format", "next");
     private static final Map<MinecraftServer, Map<UUID, Context>> CONTEXTS = new HashMap<>();
     private static final Map<MinecraftServer, Map<UUID, Long>> REQUESTS = new HashMap<>();
 
@@ -81,13 +82,17 @@ public final class ActivityManager {
         final List<Vec3> hills = new ArrayList<>();
         ActivityMode selected, mode;
         ActivityRun run;
+        ActivityMix mix;
+        UUID eventId;
+        String format = "quick";
         long expires;
-        int version, spawned, attempts, nextSpawn;
+        int version, spawned, attempts, nextSpawn, relayDelivered;
         String summary = "";
-        boolean contested, anchorRemoving;
+        boolean contested, anchorRemoving, finalized;
         CrewHouseManager.ActivityReward reward = CrewHouseManager.ActivityReward.NONE;
         Context(ServerPlayer player, BlockPos anchor, boolean boombox, HeadGangTargetResolver.Target target) {
             this.player = player; this.dimension = player.serverLevel().dimension(); this.anchor = anchor.immutable();
+            this.eventId = id;
             this.boombox = boombox; this.target = target; this.expires = clock(player) + 1200;
             this.tuning = boombox && player.serverLevel().getBlockEntity(anchor) instanceof BoomboxBlockEntity box
                     ? box.resolvedTarget().orElse(null) : null;
@@ -113,7 +118,7 @@ public final class ActivityManager {
         if (!marker.hasUUID("Owner") || !marker.hasUUID("Event")) return false;
         Context c = contexts(entity.getServer()).get(marker.getUUID("Owner"));
         Actor actor = c == null ? null : c.actors.get(entity.getUUID());
-        return c != null && c.active() && c.id.equals(marker.getUUID("Event"))
+        return c != null && c.active() && c.eventId.equals(marker.getUUID("Event"))
                 && actor != null && actor.mob == entity;
     }
     public static boolean anchorActive(ServerLevel level, BlockPos pos) {
@@ -132,7 +137,7 @@ public final class ActivityManager {
             RivalRushManager.handleAction(player, "menu", "", 0, null, 0); return;
         }
         Context old = context(player);
-        if (old != null && old.active()) { send(old, true); return; }
+        if (old != null && (old.active() || old.mix != null && old.mix.intermission())) { send(old, true); return; }
         boolean boombox = clicked != null;
         BlockPos anchor = boombox ? clicked : player.blockPosition();
         if (boombox && (!player.serverLevel().hasChunkAt(anchor)
@@ -149,7 +154,7 @@ public final class ActivityManager {
             LibertyManager.open(player); return;
         }
         Context old = context(player);
-        if (old != null && old.active()) { send(old, true); return; }
+        if (old != null && (old.active() || old.mix != null && old.mix.intermission())) { send(old, true); return; }
         ActivityMode selected = ActivityMode.byId(modeId).orElse(ActivityMode.RANDOM);
         Context c = invitation(player, player.blockPosition(), false, selected);
         contexts(player.getServer()).put(player.getUUID(), c); send(c, true);
@@ -166,7 +171,9 @@ public final class ActivityManager {
         if (c == null) { open(player); return; }
         if (!c.id.equals(contextId)) { if (budget(player)) send(c, true); return; }
         if (action.equals("cancel")) {
+            if (version != c.version) { if (budget(player)) send(c, true); return; }
             if (c.active()) finish(c, false, "Activity cancelled. Your existing crew progress is unchanged.");
+            else if (c.mix != null && c.mix.intermission()) endIntermission(c, "Street Mix ended.");
             else { contexts(player.getServer()).remove(player.getUUID()); open(player); }
             return;
         }
@@ -175,6 +182,23 @@ public final class ActivityManager {
         if (c.active()) { send(c, true); return; }
         if (version != c.version || clock(player) >= c.expires) {
             c.summary = "That invitation is out of date. Reopen the activity menu to choose again."; send(c, true); return;
+        }
+        if (action.equals("format")) {
+            if (c.run != null || !c.mode.local() || !(mode.equals("quick") || mode.equals(ActivityMix.FORMAT))) {
+                send(c, true); return;
+            }
+            c.format = mode;
+            c.mix = mode.equals(ActivityMix.FORMAT) ? new ActivityMix(c.id, c.mode) : null;
+            c.summary = c.mix == null ? c.mode.description : ActivityMix.modifier(c.mode)
+                    + " Each cleared round banks its own crew reward. Continue between rounds when ready.";
+            c.version++; send(c, true); return;
+        }
+        if (action.equals("next")) {
+            if (c.mix == null || !c.mix.intermission()) { send(c, true); return; }
+            LaunchPlan plan = prepareLaunch(c, c.mix.next());
+            if (!plan.reason.isEmpty()) { c.summary = plan.reason; send(c, true); return; }
+            c.mix.advance(); c.mode = c.mix.mode(); c.run = null; c.reward = CrewHouseManager.ActivityReward.NONE;
+            c.version++; launch(c, plan); return;
         }
         if (action.equals("select")) {
             ActivityMode chosen = ActivityMode.byId(mode).orElse(null);
@@ -185,7 +209,7 @@ public final class ActivityManager {
             } else { choose(c, chosen); c.version++; }
             send(c, true); return;
         }
-        if (action.equals("launch")) launch(c);
+        if (action.equals("launch") && c.run == null) launch(c);
     }
 
     private static Context invitation(ServerPlayer player, BlockPos anchor, boolean boombox, ActivityMode selected) {
@@ -212,6 +236,8 @@ public final class ActivityManager {
                     : "Play on the nearby loaded terrain. Your normal inventory and Minecraft XP stay with you.";
         }
         c.expires = clock(c.player) + 1200;
+        if (!c.mode.local()) c.format = "quick";
+        c.mix = c.format.equals(ActivityMix.FORMAT) ? new ActivityMix(c.id, c.mode) : null;
     }
 
     private static String unavailable(Context c, ActivityMode mode) {
@@ -243,9 +269,9 @@ public final class ActivityManager {
         return "";
     }
 
-    private static void launch(Context c) {
+    private static String launchReason(Context c, ActivityMode mode) {
         ServerPlayer player = c.player;
-        String reason = unavailable(c, c.mode);
+        String reason = unavailable(c, mode);
         if (reason.isEmpty() && (!player.serverLevel().dimension().equals(c.dimension)
                 || !player.serverLevel().hasChunkAt(c.anchor) || player.distanceToSqr(Vec3.atCenterOf(c.anchor)) > 64))
             reason = "Return to the invitation's nearby anchor before accepting.";
@@ -255,7 +281,38 @@ public final class ActivityManager {
             else if (!Objects.equals(box.resolvedTarget().orElse(null), c.tuning))
                 reason = "The Boombox target changed. Reopen its menu to review the new crew.";
         }
-        if (!reason.isEmpty()) { c.summary = reason; send(c, true); return; }
+        return reason;
+    }
+
+    private record LaunchPlan(String reason, List<Vec3> hills) {}
+
+    /** Preflight is read-only: a rejected next round retains its intermission and paid round identity. */
+    private static LaunchPlan prepareLaunch(Context c, ActivityMode mode) {
+        String reason = launchReason(c, mode);
+        if (!reason.isEmpty() || !mode.local()) return new LaunchPlan(reason, List.of());
+        long live = contexts(c.player.getServer()).values().stream().filter(Context::active).count();
+        if (live >= JetSetConfig.SERVER.maxStreetActivities.get())
+            return new LaunchPlan("The server's active street-game budget is full. Try again after another game finishes.", List.of());
+        List<Vec3> hills = new ArrayList<>();
+        if (mode == ActivityMode.KING_OF_HILL) {
+            List<BlockPos> offsets = c.mix == null
+                    ? List.of(new BlockPos(7, 0, 0), new BlockPos(0, 0, 7), new BlockPos(-7, 0, 0)) : ActivityMix.hillOffsets();
+            for (BlockPos offset : offsets) {
+                Vec3 center = ground(c.player.serverLevel(), c.anchor.offset(offset), c.anchor.getY());
+                if (center != null) hills.add(center);
+            }
+            if (hills.size() != offsets.size()) return new LaunchPlan(c.mix == null
+                    ? "King of the Hill needs three clear, dry locations seven blocks east, south and west of the anchor. No terrain was changed."
+                    : "Street Mix needs five clear, dry hills: nine blocks east, south, west and north, plus seven east and south. Move the anchor or clear the area yourself.", List.of());
+        }
+        return new LaunchPlan("", List.copyOf(hills));
+    }
+
+    private static void launch(Context c) { launch(c, prepareLaunch(c, c.mode)); }
+
+    private static void launch(Context c, LaunchPlan plan) {
+        ServerPlayer player = c.player;
+        if (!plan.reason.isEmpty()) { c.summary = plan.reason; send(c, true); return; }
         if (c.mode == ActivityMode.LIBERTY_GRIND) {
             contexts(player.getServer()).remove(player.getUUID(), c);
             LibertyManager.open(player);
@@ -274,18 +331,13 @@ public final class ActivityManager {
             }
             return;
         }
-        long live = contexts(player.getServer()).values().stream().filter(Context::active).count();
-        if (live >= JetSetConfig.SERVER.maxStreetActivities.get()) { c.summary = "The server's active street-game budget is full. Try again after another game finishes."; send(c, true); return; }
         c.hills.clear();
-        if (c.mode == ActivityMode.KING_OF_HILL) {
-            for (BlockPos offset : List.of(new BlockPos(7, 0, 0), new BlockPos(0, 0, 7), new BlockPos(-7, 0, 0))) {
-                Vec3 center = ground(player.serverLevel(), c.anchor.offset(offset), c.anchor.getY());
-                if (center != null) c.hills.add(center);
-            }
-            if (c.hills.size() != 3) { c.summary = "King of the Hill needs three clear, dry locations seven blocks east, south and west of the anchor. No terrain was changed."; send(c, true); return; }
-        }
-        c.run = new ActivityRun(c.mode); c.version++; c.expires = clock(player) + c.mode.durationTicks + 200;
-        c.summary = c.mode.description; c.spawned = 0; c.attempts = 0; c.nextSpawn = 1;
+        c.hills.addAll(plan.hills);
+        c.run = c.mix == null ? new ActivityRun(c.mode) : c.mix.newRun();
+        c.eventId = c.mix == null ? c.id : c.mix.eventId();
+        c.version++; c.expires = clock(player) + c.run.remaining() + 200;
+        c.summary = c.mix == null ? c.mode.description : ActivityMix.modifier(c.mode);
+        c.spawned = 0; c.attempts = 0; c.nextSpawn = 1; c.relayDelivered = 0; c.finalized = false;
         setBoomboxActive(c, true);
         player.serverLevel().playSound(null, c.anchor, SoundEvents.NOTE_BLOCK_PLING.value(), SoundSource.RECORDS, .6F, 1.2F);
         send(c, true);
@@ -309,17 +361,29 @@ public final class ActivityManager {
         c.run.tick();
         if (c.run.ended()) { finish(c, false, "Time is up. Try another game when you are ready."); return; }
         int ticks = c.run.ticks();
+        if (relayPending(c)) {
+            Vec3 handoff = Vec3.atBottomCenterOf(c.anchor);
+            if (ticks % 10 == 0) ring(level, handoff, ParticleTypes.ELECTRIC_SPARK, 2);
+            if (player.position().distanceToSqr(handoff) <= 2.5 * 2.5) {
+                c.relayDelivered = c.run.objectives(); c.version++;
+                player.displayClientMessage(Component.literal("Handoff complete · chase the next pair!"), true);
+                level.playSound(null, c.anchor, SoundEvents.NOTE_BLOCK_PLING.value(), SoundSource.RECORDS, .5F, 1.5F);
+                send(c, false);
+            }
+        }
         int simultaneous = Math.min(3, Math.max(1, JetSetConfig.SERVER.boomboxMaxActors.get()));
-        int desired = c.mode == ActivityMode.KING_OF_HILL ? simultaneous : c.mode.goal;
-        if (c.spawned < desired && c.actors.size() < simultaneous && ticks >= c.nextSpawn) {
+        int desired = c.mode == ActivityMode.KING_OF_HILL ? simultaneous : c.run.objectiveGoal();
+        int admitted = c.mix != null && c.mode == ActivityMode.TAG ? Math.min(desired, c.relayDelivered + 2) : desired;
+        if (c.mix != null && c.mode == ActivityMode.SHOWDOWN && c.run.objectives() < 3) admitted = 3;
+        if (c.spawned < admitted && c.actors.size() < simultaneous && ticks >= c.nextSpawn) {
             c.nextSpawn = ticks + 10; c.attempts++;
-            var spawned = GangActorFactory.spawn(level, c.anchor, c.target, c.id, c.spawned,
-                    level.getGameTime() + c.mode.durationTicks + 200L, 11.0);
+            var spawned = GangActorFactory.spawn(level, c.anchor, c.target, c.eventId, c.spawned,
+                    level.getGameTime() + c.run.remaining() + 200L, 11.0);
             if (spawned.isPresent()) {
                 Mob mob = spawned.get();
-                CompoundTag ownership = new CompoundTag(); ownership.putUUID("Owner", player.getUUID()); ownership.putUUID("Event", c.id);
+                CompoundTag ownership = new CompoundTag(); ownership.putUUID("Owner", player.getUUID()); ownership.putUUID("Event", c.eventId);
                 mob.getPersistentData().put(OWNED, ownership); mob.setNoAi(true); mob.setTarget(null); mob.setCanPickUpLoot(false);
-                mob.setGlowingTag(true); mob.setCustomName(Component.literal(c.mode == ActivityMode.TAG ? "Tag this skater" : c.mode == ActivityMode.SHOWDOWN ? "Rival · 3 tags" : "Hill contender"));
+                mob.setGlowingTag(true); mob.setCustomName(Component.literal(actorName(c, c.spawned, 0)));
                 c.actors.put(mob.getUUID(), new Actor(mob, c.spawned++));
             } else if (c.attempts >= desired * 4) {
                 finish(c, false, "The crew could not enter this loaded terrain safely. Choose another location; no reward was claimed."); return;
@@ -338,14 +402,8 @@ public final class ActivityManager {
             Vec3 hill = c.hills.get(Math.min(c.run.objectives(), c.hills.size() - 1));
             c.contested = c.actors.values().stream().anyMatch(a -> a.stunnedUntil <= ticks && a.mob.position().distanceToSqr(hill) < 2.6 * 2.6);
             c.run.holdHill(player.position().distanceToSqr(hill) < 3.5 * 3.5, c.contested);
-            if (ticks % 10 == 0) {
-                for (int i = 0; i < 12; i++) {
-                    double angle = i * Math.PI / 6;
-                    level.sendParticles(c.contested ? ParticleTypes.FLAME : ParticleTypes.HAPPY_VILLAGER,
-                            hill.x + Math.cos(angle) * 3, hill.y + .15, hill.z + Math.sin(angle) * 3, 1, 0, .05, 0, 0);
-                }
-            }
-            if (c.run.won()) { finish(c, true, "All three hills captured."); return; }
+            if (ticks % 10 == 0) ring(level, hill, c.contested ? ParticleTypes.FLAME : ParticleTypes.HAPPY_VILLAGER, 3);
+            if (c.run.won()) { finish(c, true, "All " + c.run.objectiveGoal() + " hills captured."); return; }
         }
         if (ticks % 20 == 0) {
             player.displayClientMessage(Component.literal(c.mode.label + " · " + objective(c) + " · " + c.run.remaining() / 20 + "s"), true);
@@ -356,16 +414,19 @@ public final class ActivityManager {
     private static void move(Context c, Actor actor) {
         int time = c.run.ticks();
         if (actor.stunnedUntil > time) { actor.mob.setDeltaMovement(0, actor.mob.getDeltaMovement().y, 0); return; }
-        if (actor.stunnedUntil != 0) { actor.stunnedUntil = 0; actor.mob.setCustomName(Component.literal("Hill contender")); }
+        if (actor.stunnedUntil != 0) { actor.stunnedUntil = 0; actor.mob.setCustomName(Component.literal(actorName(c, actor.index, actor.hits))); }
         Vec3 destination;
         if (c.mode == ActivityMode.KING_OF_HILL) destination = c.hills.get(Math.min(c.run.objectives(), c.hills.size() - 1));
         else {
-            double angle = time * .016 + actor.index * 2.399;
-            destination = Vec3.atCenterOf(c.anchor).add(Math.cos(angle) * 9, 0, Math.sin(angle) * 9);
+            int wave = c.mix != null && c.mode == ActivityMode.TAG ? Math.min(2, actor.index / 2) : 1;
+            double angle = time * (wave == 1 && c.mix != null && c.mode == ActivityMode.TAG ? -.019 : .016) + actor.index * 2.399;
+            int radius = c.mix != null && c.mode == ActivityMode.TAG ? 7 + wave * 2 : 9;
+            destination = Vec3.atCenterOf(c.anchor).add(Math.cos(angle) * radius, 0, Math.sin(angle) * radius);
         }
         Vec3 delta = destination.subtract(actor.mob.position());
         Vec3 horizontal = new Vec3(delta.x, 0, delta.z);
-        if (horizontal.lengthSqr() > .3) horizontal = horizontal.normalize().scale(c.mode == ActivityMode.KING_OF_HILL ? .14 : .20);
+        if (horizontal.lengthSqr() > .3) horizontal = horizontal.normalize().scale(c.mode == ActivityMode.KING_OF_HILL ? .14
+                : captain(c, actor.index) ? .25 : .20);
         else horizontal = Vec3.ZERO;
         actor.mob.setDeltaMovement(horizontal.x, actor.mob.getDeltaMovement().y, horizontal.z);
         if (actor.mob.horizontalCollision && actor.mob.onGround()) actor.mob.setDeltaMovement(horizontal.x, .38, horizontal.z);
@@ -386,9 +447,9 @@ public final class ActivityManager {
             if (actor.stunnedUntil > c.run.ticks()) return false;
             actor.stunnedUntil = c.run.ticks() + 120;
             actor.mob.setCustomName(Component.literal("Tagged · recovering"));
-        } else if (c.mode == ActivityMode.TAG || ++actor.hits >= 3) {
+        } else if (c.mode == ActivityMode.TAG || ++actor.hits >= requiredTags(c, actor.index)) {
             c.actors.remove(target.getUUID()); actor.mob.discard(); c.run.tagged();
-        } else actor.mob.setCustomName(Component.literal("Rival · " + (3 - actor.hits) + " tags"));
+        } else actor.mob.setCustomName(Component.literal(actorName(c, actor.index, actor.hits)));
         player.serverLevel().sendParticles(ParticleTypes.ELECTRIC_SPARK, target.getX(), target.getY() + .7, target.getZ(), 10, .2, .3, .2, .03);
         player.serverLevel().playSound(null, target.blockPosition(), SoundEvents.NOTE_BLOCK_HAT.value(), SoundSource.RECORDS, .45F, 1.1F);
         if (c.run.won()) finish(c, true, c.mode.label + " completed.");
@@ -410,22 +471,31 @@ public final class ActivityManager {
     public static void cancel(ServerPlayer player, String reason) {
         Context c = context(player);
         if (c != null && c.active()) finish(c, false, reason);
+        else if (c != null && c.mix != null && c.mix.intermission()) endIntermission(c, reason);
     }
     public static void anchorRemoved(ServerLevel level, BlockPos pos) {
         for (Context c : new ArrayList<>(contexts(level.getServer()).values()))
-            if (c.active() && c.boombox && c.dimension.equals(level.dimension()) && c.anchor.equals(pos)) {
+            if ((c.active() || c.mix != null && c.mix.intermission()) && c.boombox && c.dimension.equals(level.dimension()) && c.anchor.equals(pos)) {
                 c.anchorRemoving = true;
-                finish(c, false, "The Boombox was removed. The activity ended without a completion reward.");
+                if (c.active()) finish(c, false, "The Boombox was removed. The activity ended without a completion reward.");
+                else endIntermission(c, "The Boombox was removed. Street Mix ended.");
             }
     }
+    private static void endIntermission(Context c, String message) {
+        if (c.mix == null || !c.mix.intermission()) return;
+        c.mix.cancel(); c.summary = message + " Cleared rounds keep their saved rewards.";
+        c.version++; c.expires = clock(c.player) + 1200;
+        c.player.displayClientMessage(Component.literal(c.summary), false); send(c, true);
+    }
     private static void finish(Context c, boolean success, String message) {
-        if (c.run == null) return;
+        if (c.run == null || c.finalized) return;
+        c.finalized = true;
         boolean won = success && c.run.won();
         c.run.cancel();
         for (Actor actor : c.actors.values()) if (owned(actor.mob)) actor.mob.discard();
         c.actors.clear(); setBoomboxActive(c, false);
         if (won) {
-            c.reward = CrewHouseManager.bankActivity(c.player, c.id, c.target.gangId(), c.mode.id,
+            c.reward = CrewHouseManager.bankActivity(c.player, c.eventId, c.target.gangId(), c.mode.id,
                     c.run.ticks(), c.run.objectives(), (long) c.run.progress() * 100);
             if (c.reward.accepted()) {
                 message += " +" + c.reward.supplies() + " Crew Supplies, +" + c.reward.crewXp() + " crew XP, +"
@@ -434,8 +504,16 @@ public final class ActivityManager {
             }
             c.player.serverLevel().sendParticles(ParticleTypes.FIREWORK, c.player.getX(), c.player.getY() + 1, c.player.getZ(), 20, .5, .5, .5, .03);
             c.player.serverLevel().playSound(null, c.player.blockPosition(), SoundEvents.PLAYER_LEVELUP, SoundSource.RECORDS, .6F, 1.3F);
+            if (c.mix != null && c.mix.wonRound(c.mode)) {
+                message += c.mix.complete() ? " Street Mix complete: all three modes cleared!"
+                        : " Street Mix " + c.mix.cleared() + " / " + c.mix.total() + " cleared. Next: " + c.mix.next().label
+                            + ". Return to the anchor and choose Next round when ready.";
+            }
+        } else if (c.mix != null) {
+            c.mix.cancel();
+            message += " Earlier cleared rounds keep their saved rewards.";
         }
-        c.summary = message; c.version++; c.expires = clock(c.player) + 1200;
+        c.summary = message; c.version++; c.expires = clock(c.player) + (c.mix != null && c.mix.intermission() ? 6000 : 1200);
         c.player.displayClientMessage(Component.literal(message), false); send(c, true);
     }
 
@@ -444,13 +522,36 @@ public final class ActivityManager {
         CompoundTag out = new CompoundTag(); out.putBoolean("Open", false);
         if (c == null) return out;
         out.putUUID("Context", c.id); out.putInt("Version", c.version); out.putBoolean("Active", c.active());
+        out.putUUID("Event", c.eventId);
+        out.putString("Format", c.format); out.putBoolean("Mix", c.mix != null);
+        out.putBoolean("CanChooseFormat", c.mode.local() && c.run == null && clock(player) < c.expires);
+        if (c.mix != null) {
+            out.putInt("MixRound", c.mix.round()); out.putInt("MixCleared", c.mix.cleared()); out.putInt("MixTotal", c.mix.total());
+            out.putString("MixRoute", String.join(" → ", c.mix.route().stream().map(mode -> mode.label).toList()));
+            out.putString("MixModifier", ActivityMix.modifier(c.mode)); out.putBoolean("MixComplete", c.mix.complete());
+            out.putBoolean("Intermission", c.mix.intermission());
+            if (c.mix.intermission()) {
+                String reason = clock(player) >= c.expires ? "This Street Mix invitation expired. Reopen Activities to start a new set."
+                        : prepareLaunch(c, c.mix.next()).reason;
+                out.putBoolean("CanNextRound", reason.isEmpty());
+                out.putString("NextModeName", c.mix.next().label); out.putString("NextObjective", ActivityMix.modifier(c.mix.next()));
+                out.putString("NextRoundReason", reason);
+            }
+        }
         out.putBoolean("FromBoombox", c.boombox); out.putString("SelectedMode", c.selected.id);
         out.putString("Mode", c.mode.id); out.putString("ModeName", c.mode.label);
         out.putString("Gang", c.target == null ? "No local crew" : GangRegistry.byId(c.target.gangId()).map(g -> g.canonicalName()).orElse(c.target.gangId().toString()));
         out.putString("AnchorLabel", (c.boombox ? "Boombox · " : "Nearby street · ") + c.dimension.location() + " · " + c.anchor.getX() + ", " + c.anchor.getY() + ", " + c.anchor.getZ());
         out.putString("Summary", c.summary); out.putString("Objective", objective(c));
-        out.putLong("RemainingTicks", c.run == null ? c.mode.durationTicks : c.run.remaining());
-        out.putInt("Progress", c.run == null ? 0 : c.run.progress()); out.putInt("Goal", c.run == null ? c.mode.goal : c.run.goal());
+        ActivityRun preview = c.run != null ? c.run : c.mix == null ? null : c.mix.newRun();
+        out.putLong("RemainingTicks", preview == null ? c.mode.durationTicks : preview.remaining());
+        out.putInt("Progress", c.run == null ? 0 : c.run.progress()); out.putInt("Goal", preview == null ? c.mode.goal : preview.goal());
+        out.putBoolean("RelayHandoff", relayPending(c));
+        out.putDouble("HandoffX", c.anchor.getX() + .5); out.putDouble("HandoffY", c.anchor.getY()); out.putDouble("HandoffZ", c.anchor.getZ() + .5);
+        if (c.run != null && c.mode == ActivityMode.KING_OF_HILL && !c.hills.isEmpty()) {
+            Vec3 hill = c.hills.get(Math.min(c.run.objectives(), c.hills.size() - 1));
+            out.putBoolean("HasHill", true); out.putDouble("HillX", hill.x); out.putDouble("HillY", hill.y); out.putDouble("HillZ", hill.z);
+        }
         boolean completed = c.run != null && c.run.ended();
         CrewHouseManager.ActivityReward rewards = completed ? c.reward : JetSetConfig.SERVER.enableCrewHouse.get()
                 ? CrewHouseManager.activityReward(c.mode.id) : CrewHouseManager.ActivityReward.NONE;
@@ -464,8 +565,8 @@ public final class ActivityManager {
         out.putInt("MemberXp", rewards.memberXp()); out.putBoolean("Completed", completed); out.putBoolean("Won", completed && c.run.won());
         out.putBoolean("CanLaunch", !c.active() && !completed && clock(player) < c.expires && unavailable(c, c.mode).isEmpty());
         out.putString("LaunchLabel", c.mode == ActivityMode.LIBERTY_GRIND ? "Open war map"
-                : c.mode == ActivityMode.RIVAL_RUSH ? "Start arena journey" : "Start " + c.mode.label);
-        out.putBoolean("CanCancel", c.active());
+                : c.mode == ActivityMode.RIVAL_RUSH ? "Start arena journey" : c.mix != null ? "Start Street Mix · " + c.mode.label : "Start " + c.mode.label);
+        out.putBoolean("CanCancel", c.active() || c.mix != null && c.mix.intermission());
         out.putInt("PendingSupplies", CrewHouseData.get(player.getServer()).pendingSupplies(player.getUUID()));
         ListTag games = new ListTag();
         for (ActivityMode mode : ActivityMode.values()) {
@@ -476,13 +577,35 @@ public final class ActivityManager {
         out.put("Activities", games); return out;
     }
     private static String objective(Context c) {
-        if (c.run == null) return c.mode.description;
+        if (c.run == null) return c.mix == null ? c.mode.description : ActivityMix.modifier(c.mode);
         return switch (c.mode) {
-            case TAG -> "Rival tags " + c.run.objectives() + " / 6";
-            case SHOWDOWN -> "Rivals out " + c.run.objectives() + " / 4 · three tags each";
-            case KING_OF_HILL -> "Hill " + Math.min(3, c.run.objectives() + 1) + " / 3 · " + c.run.hillTicks() / 20 + " / 8s" + (c.contested ? " · contested: tag contenders" : "");
+            case TAG -> relayPending(c) ? "Return to the handoff ring at " + c.anchor.getX() + ", " + c.anchor.getY() + ", " + c.anchor.getZ()
+                    : "Rival tags " + c.run.objectives() + " / " + c.run.objectiveGoal()
+                        + (c.mix == null ? "" : " · relay pair " + Math.min(3, c.relayDelivered / 2 + 1) + " / 3");
+            case SHOWDOWN -> "Rivals out " + c.run.objectives() + " / " + c.run.objectiveGoal()
+                    + (c.mix == null ? " · three tags each" : " · crew: 3 tags · captain: 5");
+            case KING_OF_HILL -> "Hill " + Math.min(c.run.objectiveGoal(), c.run.objectives() + 1) + " / " + c.run.objectiveGoal()
+                    + " · " + c.run.hillTicks() / 20 + " / " + c.run.hillDuration() / 20 + "s" + (c.contested ? " · contested: tag contenders" : "");
             default -> c.mode.description;
         };
+    }
+    private static boolean relayPending(Context c) {
+        return c.mix != null && c.mode == ActivityMode.TAG && c.run != null && !c.run.ended()
+                && c.run.objectives() > c.relayDelivered && c.run.objectives() % 2 == 0;
+    }
+    private static boolean captain(Context c, int index) { return c.mix != null && c.mode == ActivityMode.SHOWDOWN && index == 3; }
+    private static int requiredTags(Context c, int index) { return captain(c, index) ? 5 : 3; }
+    private static String actorName(Context c, int index, int hits) {
+        return c.mode == ActivityMode.TAG ? c.mix == null ? "Tag this skater" : "Relay skater · pair " + (index / 2 + 1)
+                : c.mode == ActivityMode.SHOWDOWN ? (captain(c, index) ? "Crew captain · " : "Rival · ") + (requiredTags(c, index) - hits) + " tags"
+                : "Hill contender";
+    }
+    private static void ring(ServerLevel level, Vec3 center, ParticleOptions particle, double radius) {
+        for (int index = 0; index < 12; index++) {
+            double angle = index * Math.PI / 6;
+            level.sendParticles(particle, center.x + Math.cos(angle) * radius, center.y + .15,
+                    center.z + Math.sin(angle) * radius, 1, 0, .05, 0, 0);
+        }
     }
     private static void send(Context c, boolean open) { CompoundTag tag = snapshot(c.player); tag.putBoolean("Open", open); JetSetNetwork.syncActivity(c.player, tag); }
     private static boolean budget(ServerPlayer player) {

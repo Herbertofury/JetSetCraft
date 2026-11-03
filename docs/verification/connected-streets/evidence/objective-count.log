@@ -1,0 +1,8 @@
+BASELINE_PREFIX templates=28 max_primary=6 max_optional=11 max_total=17 example=nest_diving
+CURRENT templates=34 max_primary=7 max_optional=11 max_total=18 example=prism_breakout
+NEW neon_block_party primary=5 maximum_total=16 normalized_crew_completion=3
+NEW last_train_home primary=4 maximum_total=15 normalized_crew_completion=3
+NEW pirate_radio_takeover primary=6 maximum_total=17 normalized_crew_completion=3
+NEW supply_line_shuffle primary=5 maximum_total=16 normalized_crew_completion=3
+NEW swarm_street_cleanup primary=5 maximum_total=16 normalized_crew_completion=3
+NEW prism_breakout primary=7 maximum_total=18 normalized_crew_completion=3

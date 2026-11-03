@@ -43,7 +43,8 @@ public final class CrewHouseClient {
 
     static void request(String action, String value, int number, UUID target) {
         if (Minecraft.getInstance().getConnection() == null) return;
-        long revision = action.equals("style") ? state.getCompound("StyleLibrary").getLong("Revision") : state.getLong("Revision");
+        long revision = action.equals("style") ? state.getCompound("StyleLibrary").getLong("Revision")
+                : action.equals("tour_claim") ? state.getCompound("CrewTour").getLong("Revision") : state.getLong("Revision");
         JetSetNetwork.sendCrewAction(action, value, number, homeId(), target, revision);
     }
 

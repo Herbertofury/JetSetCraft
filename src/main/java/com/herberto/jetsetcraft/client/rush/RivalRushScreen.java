@@ -826,6 +826,15 @@ final class RivalRushScreen extends Screen {
                 : "Selected, dormant · restore the two required ranks to reactivate.", span(), 0xFFC5ED55);
         else if (recipe.getBoolean("Ready")) detail(lines, "Both required ranks are ready.", span(), 0xFFC5ED55);
         detail(lines, recipe.getString("Description"), span(), 0xFFE7E7E7);
+        if (recipe.getBoolean("Selected") && recipe.getString("Id").equals("BASS_DROP")) {
+            CompoundTag build = RivalRushClient.state().getCompound("Build");
+            detail(lines, "Aftershock: " + Math.max(0, build.getInt("AftershockRemaining")) + " pulses left • "
+                    + Math.max(0L, build.getLong("AftershockPulses")) + " pulses released this run", span(), 0xFF87E1EA);
+        }
+        if (recipe.getBoolean("Selected") && recipe.getString("Id").equals("SOUL_REPRISE")) {
+            detail(lines, "Current Tempo: " + RivalRushClient.clock(Math.max(0, RivalRushClient.state().getCompound("Build").getInt("TempoTicks")))
+                    + " active time remaining", span(), 0xFF87E1EA);
+        }
         detail(lines, "Keeps your artifacts and their ranks. A new forge replaces your selected evolution; opportunities do not stack.", span(), 0xFFB8B8B8);
         if (paths.getBoolean("Opportunity") && !paths.getBoolean("CanEvolve"))
             detail(lines, paths.getString("BlockedReason"), span(), 0xFFE6DBA6);

@@ -61,7 +61,11 @@ public final class RivalRushClient {
             CompoundTag build = state.getCompound("Build");
             build.put("Artifacts", boundedList(build.getList("Artifacts", Tag.TAG_COMPOUND), 3));
             CompoundTag paths = build.getCompound("Paths");
-            ListTag recipes = boundedList(paths.getList("Recipes", Tag.TAG_COMPOUND), 3);
+            ListTag recipes = boundedList(paths.getList("Recipes", Tag.TAG_COMPOUND), 6);
+            build.putInt("TempoTicks", Math.max(0, Math.min(160, build.getInt("TempoTicks"))));
+            build.putInt("AftershockTicks", Math.max(0, Math.min(60, build.getInt("AftershockTicks"))));
+            build.putInt("AftershockRemaining", Math.max(0, Math.min(3, build.getInt("AftershockRemaining"))));
+            build.putLong("AftershockPulses", Math.max(0L, build.getLong("AftershockPulses")));
             for (var raw : recipes) {
                 CompoundTag recipe = (CompoundTag) raw;
                 recipe.put("Requirements", boundedList(recipe.getList("Requirements", Tag.TAG_COMPOUND), 2));
@@ -212,8 +216,9 @@ public final class RivalRushClient {
                         + "/" + Math.max(1, build.getInt("SoulBurstChargeMax")));
                 case "BATTERY" -> lines.add("Line charge " + Math.max(0, build.getInt("LineCharge"))
                         + "/" + Math.max(1, build.getInt("LineChargeMax")));
-                case "AIR_BREAK" -> lines.add(build.getBoolean("AirborneReady")
-                        ? "Landing pulse ready" : "Landing pulse: build airtime");
+                case "AIR_BREAK" -> lines.add(build.getInt("AftershockRemaining") > 0
+                        ? "Bass drop: " + build.getInt("AftershockRemaining") + " pulses left"
+                        : build.getBoolean("AirborneReady") ? "Landing pulse ready" : "Landing pulse: build airtime");
                 default -> { }
             }
         }

@@ -1,0 +1,54 @@
+{
+  "scope": "Current-source production Liberty catalog/difficulty/plan domain classes only; no Forge, Minecraft runtime, stubs or native mission action tests executed.",
+  "timestamp_utc": "2026-11-03T06:06:56.757441+00:00",
+  "compile_command": [
+    "java",
+    "--module",
+    "jdk.compiler/com.sun.tools.javac.Main",
+    "--release",
+    "17",
+    "-d",
+    "/workspace/scratch/bfb17eca6594/liberty-model-verification/classes",
+    "/workspace/scratch/bfb17eca6594/JetSetCraft/src/main/java/com/herberto/jetsetcraft/liberty/LibertyMissionCatalog.java",
+    "/workspace/scratch/bfb17eca6594/JetSetCraft/src/main/java/com/herberto/jetsetcraft/liberty/LibertyDifficulty.java",
+    "/workspace/scratch/bfb17eca6594/JetSetCraft/src/main/java/com/herberto/jetsetcraft/liberty/LibertyMissionPlan.java",
+    "/workspace/scratch/bfb17eca6594/liberty-model-verification/LibertyPlanCheck.java"
+  ],
+  "compile_exit": 0,
+  "run_command": [
+    "java",
+    "-cp",
+    "/workspace/scratch/bfb17eca6594/liberty-model-verification/classes",
+    "LibertyPlanCheck"
+  ],
+  "run_exit": 0,
+  "sources": [
+    {
+      "path": "/workspace/scratch/bfb17eca6594/JetSetCraft/src/main/java/com/herberto/jetsetcraft/liberty/LibertyMissionCatalog.java",
+      "sha256": "65cb2faf4b53e02c04de0a00bfdc797c0e9c43a4a58bcb87f9e44edf725d658d"
+    },
+    {
+      "path": "/workspace/scratch/bfb17eca6594/JetSetCraft/src/main/java/com/herberto/jetsetcraft/liberty/LibertyDifficulty.java",
+      "sha256": "e8ab7c9c557fcc38a15e2c50a3f421de97677ccdea81d341f8581df56d408a6f"
+    },
+    {
+      "path": "/workspace/scratch/bfb17eca6594/JetSetCraft/src/main/java/com/herberto/jetsetcraft/liberty/LibertyMissionPlan.java",
+      "sha256": "02eeff10dfc8c6929aea1258d174949573b348fe3d3f4661855fb457973b3267"
+    },
+    {
+      "path": "/workspace/scratch/bfb17eca6594/liberty-model-verification/LibertyPlanCheck.java",
+      "sha256": "352d96a9e4152d005e310dbc1cc25501c5261801a17b23d6609631e6e4408820"
+    }
+  ],
+  "objective_count_check": {
+    "command": [
+      "java",
+      "--class-path",
+      "/workspace/scratch/bfb17eca6594/liberty-model-verification/classes",
+      "/workspace/scratch/bfb17eca6594/liberty-model-verification/ObjectiveCountCheck.java"
+    ],
+    "exit": 0,
+    "harness_sha256": "d71816a082be5a3ee637e623b5ed4612598563eb7dac475ce01455b6d940f03e",
+    "scope": "Current source first 28 templates match unchanged baseline prefix; this checks objective counts only."
+  }
+}

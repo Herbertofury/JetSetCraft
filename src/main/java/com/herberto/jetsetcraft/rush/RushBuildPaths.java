@@ -18,7 +18,19 @@ public final class RushBuildPaths {
                 + "on each side; area scales these to caps of 24 and 4.", RushRun.Upgrade.BATTERY, RushRun.Upgrade.SHOCKWAVE),
         RADIANT_BARRIER("Radiant barrier", "Every sixth primary tag, unused Radiant groove healing restores up to "
                 + "6 Beat ward. This works during its quiet delay, cannot exceed shield capacity and cannot bank overheal.",
-                RushRun.Upgrade.RADIANCE, RushRun.Upgrade.WARD);
+                RushRun.Upgrade.RADIANCE, RushRun.Upgrade.WARD),
+        CHROMATIC_FINALE("Chromatic finale", "Every sixth primary tag throws three extra sparks beyond its normal "
+                + "Firework cap blast. Up to 3 visible owned rivals take 8 base damage within 10 blocks of the impact; "
+                + "area scales the reach to a cap of 18. Sparks never chain or count as primary tags.",
+                RushRun.Upgrade.CHAIN, RushRun.Upgrade.FIREWORK),
+        BASS_DROP("Bass drop", "A real moving Air break landing leaves one fixed aftershock circle for 3 active seconds. "
+                + "Once per second, up to 6 visible owned rivals take 6 base damage within 6 blocks; area scales the radius "
+                + "to a cap of 10. A new landing replaces the circle, and pauses freeze its clock.",
+                RushRun.Upgrade.AIR_BREAK, RushRun.Upgrade.WIND),
+        SOUL_REPRISE("Soul reprise", "An offensive Soul burst that spends five earned souls restores up to 6 run vitality "
+                + "and refreshes 3 active seconds with a 30% shorter firing interval. It never consumes healing souls, banks "
+                + "excess recovery or stacks duration; ordinary Minecraft health stays unchanged.",
+                RushRun.Upgrade.SOUL, RushRun.Upgrade.SOUL_BURST);
 
         private final String label;
         private final String description;

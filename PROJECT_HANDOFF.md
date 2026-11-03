@@ -1,5 +1,13 @@
 # JetSetCraft Project Handoff
 
+## Latest local candidate — Connected Streets, 0.4.0-alpha.10
+
+Continue from local branch `feature/connected-streets`, based on verified main `4889478`. The candidate adds optional Street Mix playlists, a persistent twelve-milestone Crew Tour, three additional Rush evolutions and six original Liberty operations. Client/server protocol is **18**; crew store schema is **4**. [Candidate verification and publication state](docs/verification/connected-streets/README.md) is authoritative for this contribution; the alpha.9 and earlier receipts below are historical baselines.
+
+**Native acceptance pending at this checkpoint:** the earlier prepared patch was recovered intact and reviewed further. Claims now bind both tour and reward-account revisions, show the actual training destination and reject stale focus/job changes. Soul Burst validates targets before spending, accepted pulses complete before an earned draft and later artifacts respect that pause. The suite now declares **139 required GameTests** and the client gate requires **26 captures**. The verification receipt retains the earlier publication rejection and distinguishes it from subsequent continuation results; do not claim native success without new evidence.
+
+Street Mix keeps each earned round's reward if the next admission fails or the playlist is cancelled. Preserve read-only `LaunchPlan` preflight before advancing round/event identity. Tour progress comes only from accepted server settlements and claims use permanent flags; claim rewards never generate new stamps. Legacy tour credit comes only from sixteen retained display receipts. Founding changes tour revision because the reward recipient/gang can change. Unknown/future records must remain recoverable. One preparation, three Rush artifact slots, optional providers and ordinary-state journals remain protected.
+
 ## Canonical release
 
 - Version: 0.3.0
@@ -18,9 +26,9 @@ Neutral directional input means neutral: stale momentum cannot manufacture camer
 
 The custom graffiti format is deliberately bounded to a 16 × 10, 4-bit palette payload. Do not replace it with arbitrary client texture/file uploads. Paid Marketplace and research-only references remain non-redistributable even when present in the private Desktop/Drive source-assets area.
 
-## Current Liberty Grind campaign expansion — 0.4.0-alpha.9
+## Verified Liberty Grind campaign predecessor — 0.4.0-alpha.9
 
-Current source is **alpha.9 / protocol 17**. The mode has six persistent campaign regions, twenty-eight seeded mission templates, difficulty 1–10, 20/25/30 minute budgets and isolated arena radii of 512/640/768 blocks: inclusive widths of 1,025/1,281/1,537. The three frontier routes unlock at 20% liberation of their parent. All ten difficulties are selectable on unlocked routes. Solo operations contribute to shared server liberation, threat and defense offers; shared-squad combat is not implemented.
+The verified predecessor source is **alpha.9 / protocol 17**. The mode has six persistent campaign regions, twenty-eight seeded mission templates, difficulty 1–10, 20/25/30 minute budgets and isolated arena radii of 512/640/768 blocks: inclusive widths of 1,025/1,281/1,537. The three frontier routes unlock at 20% liberation of their parent. All ten difficulties are selectable on unlocked routes. Solo operations contribute to shared server liberation, threat and defense offers; shared-squad combat is not implemented.
 
 `LibertyMissionCatalog`, `LibertyMissionPlan` and `LibertyDifficulty` define immutable mission choices and bounded tuning. `LibertyMissionRuntime` owns stage gating and actual action progress for eight primitives: territory, relay, courier, demolition, sweep, scan, escort and defense. A designated-actor hunt is a distinct sweep form. `LibertyManager` performs actual world/entity actions and validates owned damage, surface placement, native core deaths and target identity before credit. Keep optional objectives out of the extraction gate. A bulk paint action captures one active stage and credits only cell centers covered by actually placed overlays.
 

@@ -140,10 +140,10 @@ public final class CrewStyleLibraryGameTests {
                 "The authoritative library snapshot did not expose the accepted selection and revision");
         CompoundTag saved = data.save(new CompoundTag());
         CrewHouseData reloaded = CrewHouseData.load(saved);
-        check(saved.getInt("Schema") == 3 && saved.equals(reloaded.save(new CompoundTag()))
+        check(saved.getInt("Schema") == 4 && saved.equals(reloaded.save(new CompoundTag()))
                         && reloaded.styleRevision(player.getUUID()) == 2
                         && CrewStyleLibrary.preparation(reloaded, player.getUUID()).orElse(null) == RushRun.Upgrade.AIR_BREAK,
-                "Schema three lost the selected style, revision or resulting preparation");
+                "Schema four lost the selected style, revision or resulting preparation");
 
         for (int schema = 1; schema <= 2; schema++) {
             CompoundTag legacy = saved.copy(); legacy.putInt("Schema", schema); legacy.remove("StyleChoices");
@@ -153,7 +153,7 @@ public final class CrewStyleLibraryGameTests {
                             && migrated.profile(player.getUUID()).save().equals(home.save())
                             && migrated.styleXp(player.getUUID()) == 145 && unlocked(migrated, player) == 2
                             && migrated.selectedStyle(player.getUUID()).equals(CrewStyleLibrary.HOME)
-                            && migrated.styleRevision(player.getUUID()) == 0 && migrated.save(new CompoundTag()).getInt("Schema") == 3,
+                            && migrated.styleRevision(player.getUUID()) == 0 && migrated.save(new CompoundTag()).getInt("Schema") == 4,
                     "Schema " + schema + " migration lost existing XP or invented a prior style selection");
         }
         CompoundTag future = saved.copy(); future.putInt("Schema", 999); future.putString("FutureLibraryField", "preserve me");

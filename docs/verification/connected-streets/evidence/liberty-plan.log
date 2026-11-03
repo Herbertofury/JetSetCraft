@@ -1,0 +1,8 @@
+PASS production plan matrix templates=34 faction_template_pairs=66 plans=5940 repeated_determinism_checks=5940 unique_first_sites=5782 max_objectives=18
+PASS seed209 fixture geometry operation=neon_block_party faction=automaton primary=5 optional=6 repeat_paint_optional_overlaps=0
+PASS seed209 fixture geometry operation=last_train_home faction=automaton primary=4 optional=6 repeat_paint_optional_overlaps=0
+PASS seed209 fixture geometry operation=pirate_radio_takeover faction=automaton primary=6 optional=6 repeat_paint_optional_overlaps=0
+PASS seed209 fixture geometry operation=supply_line_shuffle faction=automaton primary=5 optional=6 repeat_paint_optional_overlaps=0
+PASS seed209 fixture geometry operation=swarm_street_cleanup faction=terminid primary=5 optional=6 repeat_paint_optional_overlaps=0
+PASS seed209 fixture geometry operation=prism_breakout faction=illuminate primary=7 optional=6 repeat_paint_optional_overlaps=0
+PASS current-source dependency-free plan checks elapsed_ms=612.2; Forge runtime and native mission actions were not executed

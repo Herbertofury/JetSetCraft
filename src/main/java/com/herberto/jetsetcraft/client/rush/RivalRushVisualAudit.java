@@ -2,6 +2,7 @@ package com.herberto.jetsetcraft.client.rush;
 
 import com.herberto.jetsetcraft.JetSetCraft;
 import com.herberto.jetsetcraft.client.crew.CrewHouseVisualAudit;
+import com.herberto.jetsetcraft.client.crew.ConnectedStreetVisualAudit;
 import com.herberto.jetsetcraft.client.activity.ActivityJourneyVisualAudit;
 import com.herberto.jetsetcraft.network.JetSetNetwork;
 import net.minecraft.client.CameraType;
@@ -254,7 +255,12 @@ public final class RivalRushVisualAudit {
             case 13 -> {
                 if (!RushContractVisualAudit.advance(minecraft, label -> capture(minecraft, label), CAPTURES::containsKey)) return;
                 if (CAPTURES.size() != 23) { finish(minecraft, false, "expected twenty-three completed native PNG captures"); return; }
-                finish(minecraft, true, "twenty-three real-client captures; original nineteen preserved; actual PAINT briefing/progress, normally settled room/contract service budget, accepted TUNE packet and result; inventory/XP/dimension restored; owned-hit, authored-wall, arrival and clock fixtures explicitly logged, not human traversal/duration or boss-clear proof");
+                next(14);
+            }
+            case 14 -> {
+                if (!ConnectedStreetVisualAudit.advance(minecraft, label -> capture(minecraft, label), CAPTURES::containsKey)) return;
+                if (CAPTURES.size() != 26) { finish(minecraft, false, "expected twenty-six completed native PNG captures"); return; }
+                finish(minecraft, true, "twenty-six real-client captures; original twenty-three preserved; actual Crew Tour and 320x240 scrolling, unlaunched Street Mix preview cancelled; real PAINT/room/TUNE sequence retained; shared progression and ordinary inventory/XP/dimension preserved; owned-hit, authored-wall, arrival and clock fixtures explicitly logged, not human traversal/duration or boss-clear proof");
             }
             default -> finish(minecraft, false, "unknown audit phase");
         }
@@ -424,6 +430,7 @@ public final class RivalRushVisualAudit {
     }
 
     private static void stopClient(Minecraft minecraft) {
+        ConnectedStreetVisualAudit.restoreViewport(minecraft);
         if (originalTutorialStep != null) {
             minecraft.getTutorial().setStep(originalTutorialStep);
             originalTutorialStep = null;

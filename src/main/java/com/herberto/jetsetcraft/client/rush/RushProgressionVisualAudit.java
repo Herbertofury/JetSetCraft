@@ -87,7 +87,7 @@ public final class RushProgressionVisualAudit {
                 if (!RivalRushClient.isBuildPathsScreenOpen()) return false;
                 CompoundTag paths = state.getCompound("Build").getCompound("Paths");
                 ListTag recipes = paths.getList("Recipes", Tag.TAG_COMPOUND);
-                require(recipes.size() == 3 && paths.getString("Selected").equals("NONE") && !paths.getBoolean("Opportunity"),
+                require(recipes.size() == 6 && paths.getString("Selected").equals("NONE") && !paths.getBoolean("Opportunity"),
                         "Initial build-path view invented an evolution or headliner award");
                 for (var raw : recipes) {
                     CompoundTag recipe = (CompoundTag) raw;

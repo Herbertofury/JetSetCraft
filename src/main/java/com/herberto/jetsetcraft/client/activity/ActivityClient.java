@@ -74,7 +74,8 @@ public final class ActivityClient {
         gui.fill(x, y, x + width, y + 78, 0xCF181C20);
         gui.fill(x, y, x + 2, y + 78, 0xFF87E1EA);
         var font = minecraft.font;
-        gui.drawString(font, clipped(state.getString("ModeName"), width - 58), x + 7, y + 6, 0xFFC5ED55, true);
+        String round = state.getBoolean("Mix") ? " " + state.getInt("MixRound") + "/" + state.getInt("MixTotal") : "";
+        gui.drawString(font, clipped(state.getString("ModeName") + round, width - 58), x + 7, y + 6, 0xFFC5ED55, true);
         String timer = clock(state.getLong("RemainingTicks"));
         gui.drawString(font, timer, x + width - 7 - font.width(timer), y + 6, 0xFFFFFFFF, true);
         gui.drawString(font, clipped(state.getString("Gang"), width - 14), x + 7, y + 20, 0xFFE7E7E7, true);
