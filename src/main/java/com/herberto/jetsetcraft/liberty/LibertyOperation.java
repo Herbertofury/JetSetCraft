@@ -152,16 +152,17 @@ public final class LibertyOperation {
             : Math.min(3, mission.completedPrimary() * 3 / Math.max(1, mission.totalPrimary())); }
     public boolean complete() { return mission == null ? completed() == objectives.size() : mission.complete(); }
     public boolean field() { return phase == Phase.ACTIVE || phase == Phase.EXTRACTING || phase == Phase.BOARDING; }
-    public boolean expired() { return ticks >= theater.minutes * 1200L; }
+    /** The deadline closes boarding; an accepted departure finishes without revoking extraction. */
+    public boolean expired() { return phase != Phase.DEPARTING && ticks >= theater.minutes * 1200L; }
     public void tick() { ticks++; phaseTicks++; }
     public void phase(Phase next) { phase = next; phaseTicks = 0; revision++; }
     public boolean matches(UUID mission, long version) { return id.equals(mission) && revision == version; }
     public boolean extract(Vec3 position) {
-        if (phase != Phase.ACTIVE || !complete() || !finite(position) || position.distanceToSqr(Vec3.atCenterOf(extraction)) > 12 * 12) return false;
+        if (phase != Phase.ACTIVE || expired() || !complete() || !finite(position) || position.distanceToSqr(Vec3.atCenterOf(extraction)) > 12 * 12) return false;
         phase(Phase.EXTRACTING); return true;
     }
     public boolean board(Vec3 position) {
-        if (phase != Phase.BOARDING || phaseTicks < 60 || !finite(position) || position.distanceToSqr(Vec3.atCenterOf(extraction)) > 8 * 8) return false;
+        if (phase != Phase.BOARDING || expired() || phaseTicks < 60 || !finite(position) || position.distanceToSqr(Vec3.atCenterOf(extraction)) > 8 * 8) return false;
         phase(Phase.DEPARTING); return true;
     }
     public boolean spendResupply() { if (!field() || resupplies <= 0) return false; resupplies--; revision++; return true; }

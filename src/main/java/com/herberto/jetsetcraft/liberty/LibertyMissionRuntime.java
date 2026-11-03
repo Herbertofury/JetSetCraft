@@ -30,10 +30,11 @@ public final class LibertyMissionRuntime {
         private final LibertyMissionPlan.Objective spec;
         private BlockPos center;
         private final List<BlockPos> checkpoints;
+        private final List<List<BlockPos>> escortPaths = new ArrayList<>();
         private final Set<Long> cells = new HashSet<>();
         private final List<Core> cores = new ArrayList<>();
         private final int radius, cellSize;
-        private int count, heldTicks;
+        private int count, heldTicks, escortPoint;
         private boolean complete, activated, contested, relocated;
         private Vec3 escort;
         private UUID priorityTarget;
@@ -42,6 +43,7 @@ public final class LibertyMissionRuntime {
             this.spec = spec;
             this.center = map(spec.center());
             this.checkpoints = new ArrayList<>(spec.checkpoints().stream().map(LibertyMissionRuntime.this::map).toList());
+            for (BlockPos checkpoint : checkpoints) escortPaths.add(List.of(checkpoint));
             this.radius = home ? Math.max(spec.kind() == ObjectiveKind.TERRITORY ? 6
                     : spec.kind() == ObjectiveKind.SWEEP ? 8 : 5, (int) Math.round(spec.radius() * scale)) : spec.radius();
             this.cellSize = home ? 1 : 4;
@@ -53,10 +55,13 @@ public final class LibertyMissionRuntime {
         public BlockPos center() { return center; }
         public int radius() { return radius; }
         public boolean optional() { return spec.optional(); }
-        public boolean active() { return !complete && (optional() || spec.stage() == stage); }
+        // Every public progress path checks active(). Keep an unresolved home site inert so
+        // an action at its provisional flat coordinates cannot prevent the later terrain remap.
+        public boolean active() { return grounded() && !complete && (optional() || spec.stage() == stage); }
         public boolean complete() { return complete; }
         public boolean activated() { return activated; }
         public boolean contested() { return contested; }
+        public boolean grounded() { return !home || relocated; }
         public boolean priorityTarget() { return kind() == ObjectiveKind.SWEEP && spec.target() == 1; }
         public UUID priorityTargetId() { return priorityTarget; }
         public LibertyMissionPlan.Objective spec() { return spec; }
@@ -208,7 +213,13 @@ public final class LibertyMissionRuntime {
 
     /** Tick once per server tick while the owner is in the active field. Enemy counts must be mission-owned. */
     public void tick(Vec3 position, Vec3 previous, boolean skating, ToIntFunction<BlockPos> nearbyEnemies) {
-        if (!finite(position) || nearbyEnemies == null) return;
+        tick(position, previous, skating, nearbyEnemies, point -> true);
+    }
+
+    /** The manager supplies actual home-world body clearance; isolated routes retain their fixed geometry. */
+    public void tick(Vec3 position, Vec3 previous, boolean skating, ToIntFunction<BlockPos> nearbyEnemies,
+                     Predicate<Vec3> escortClearance) {
+        if (!finite(position) || nearbyEnemies == null || escortClearance == null) return;
         ticks++;
         double step = finite(previous) ? position.distanceToSqr(previous) : Double.POSITIVE_INFINITY;
         boolean riding = skating && step >= .0025 && step <= 16;
@@ -238,21 +249,35 @@ public final class LibertyMissionRuntime {
                     update(site);
                 }
                 case COURIER -> {
-                    if (site.activated && riding && site.count < site.checkpoints.size()
+                    if (site.grounded() && site.activated && riding && site.count < site.checkpoints.size()
                             && close(position, stand(site.checkpoints.get(site.count)), home ? 1.5 : 5, 6)) {
                         site.count++;
                         update(site);
                     }
                 }
                 case ESCORT -> {
-                    if (!site.activated || site.contested || site.count >= site.checkpoints.size()
+                    if (!site.grounded() || !site.activated || site.contested || site.count >= site.checkpoints.size()
                             || !close(position, site.escort, home ? 6 : 14, 8)) break;
-                    Vec3 target = stand(site.checkpoints.get(site.count));
+                    List<BlockPos> leg = site.escortPaths.get(site.count);
+                    Vec3 target = stand(leg.get(site.escortPoint));
                     Vec3 difference = target.subtract(site.escort);
                     double distance = difference.length();
                     double speed = home ? .055 : .16;
-                    if (distance <= speed) { site.escort = target; site.count++; update(site); }
-                    else site.escort = site.escort.add(difference.scale(speed / distance));
+                    Vec3 next = distance <= speed ? target : site.escort.add(difference.scale(speed / distance));
+                    if (home) {
+                        double horizontal = difference.x * difference.x + difference.z * difference.z;
+                        if (difference.y > .00001) next = site.escort.add(0, Math.min(speed, difference.y), 0);
+                        else if (horizontal > .00001) {
+                            double factor = Math.min(1, speed / Math.sqrt(horizontal));
+                            next = site.escort.add(difference.x * factor, 0, difference.z * factor);
+                        }
+                    }
+                    if (!escortClearance.test(next)) break;
+                    site.escort = next;
+                    if (next.distanceToSqr(target) < .000001) {
+                        site.escort = target;
+                        if (++site.escortPoint == leg.size()) { site.escortPoint = 0; site.count++; update(site); }
+                    }
                 }
                 default -> { }
             }
@@ -263,6 +288,7 @@ public final class LibertyMissionRuntime {
         if (!finite(playerPosition)) return false;
         Site site = sites.stream().filter(s -> s.active() && !s.activated && (s.kind() == ObjectiveKind.SCAN
                         || s.kind() == ObjectiveKind.COURIER || s.kind() == ObjectiveKind.ESCORT)
+                        && (s.kind() == ObjectiveKind.SCAN || s.grounded())
                         && s.inside(playerPosition, home ? 3 : 5))
                 .min(Comparator.comparingDouble(s -> s.marker().distanceToSqr(playerPosition))).orElse(null);
         if (site == null) return false;
@@ -308,12 +334,39 @@ public final class LibertyMissionRuntime {
     /** Home objectives may be aligned to loaded terrain once, before any objective interaction or damage. */
     public boolean relocateSite(String id, BlockPos groundCenter) {
         Site site = byId.get(id);
-        if (!home || site == null || groundCenter == null || site.relocated || site.started() || site.complete) return false;
+        if (site == null || groundCenter == null) return false;
+        BlockPos difference = groundCenter.subtract(site.center);
+        List<BlockPos> route = site.checkpoints.stream().map(point -> point.offset(difference)).toList();
+        return relocateSite(id, new LibertyHomeTerrain.GroundedSite(groundCenter, route,
+                site.kind() == ObjectiveKind.ESCORT ? route.stream().map(List::of).toList() : List.of()));
+    }
+
+    /** Apply the independently sampled terrain route atomically before the site has accepted any action. */
+    public boolean relocateSite(String id, LibertyHomeTerrain.GroundedSite ground) {
+        Site site = byId.get(id);
+        if (!home || site == null || ground == null || site.relocated || site.started() || site.complete) return false;
+        BlockPos groundCenter = ground.center();
         if (Math.abs((long) groundCenter.getX() - origin.getX()) > 128
                 || Math.abs((long) groundCenter.getZ() - origin.getZ()) > 128) return false;
         BlockPos difference = groundCenter.subtract(site.center);
+        if (ground.checkpoints().size() != site.checkpoints.size()) return false;
+        for (int i = 0; i < site.checkpoints.size(); i++) {
+            BlockPos expected = site.checkpoints.get(i).offset(difference), point = ground.checkpoints().get(i);
+            if (point.getX() != expected.getX() || point.getZ() != expected.getZ()) return false;
+        }
+        boolean escort = site.kind() == ObjectiveKind.ESCORT;
+        if (escort && ground.escortPaths().size() != ground.checkpoints().size()
+                || !escort && !ground.escortPaths().isEmpty()) return false;
+        for (int i = 0; i < ground.escortPaths().size(); i++) {
+            List<BlockPos> leg = ground.escortPaths().get(i);
+            if (leg.isEmpty() || leg.size() > 128 || !leg.get(leg.size() - 1).equals(ground.checkpoints().get(i))
+                    || leg.stream().anyMatch(point -> Math.abs((long) point.getX() - origin.getX()) > 128
+                            || Math.abs((long) point.getZ() - origin.getZ()) > 128)) return false;
+        }
         site.center = groundCenter.immutable();
-        for (int i = 0; i < site.checkpoints.size(); i++) site.checkpoints.set(i, site.checkpoints.get(i).offset(difference));
+        site.checkpoints.clear(); site.checkpoints.addAll(ground.checkpoints());
+        site.escortPaths.clear();
+        site.escortPaths.addAll(escort ? ground.escortPaths() : site.checkpoints.stream().map(List::of).toList());
         for (Core core : site.cores) core.position = core.position.offset(difference);
         site.escort = site.escort.add(difference.getX(), difference.getY(), difference.getZ());
         site.relocated = true;

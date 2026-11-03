@@ -80,6 +80,9 @@ public final class LibertyManager {
     public static final String OWNED = "jetsetcraft:liberty_owned";
     private static final Map<MinecraftServer, State> SERVERS = new WeakHashMap<>();
     private static final int ACTOR_LIMIT = 24;
+    private static final int SHARED_ACTOR_LIMIT = 384;
+    private static final int RETIRE_DISTANCE = 160;
+    private static final int OBSERVER_DISTANCE = 96;
     private static final String MISSION_PAINT = missionPaint();
     private static String missionPaint() {
         byte[] pixels=new byte[160];
@@ -91,7 +94,7 @@ public final class LibertyManager {
         final Map<UUID, Menu> menus = new HashMap<>();
         final Map<UUID, Long> actions = new HashMap<>();
         final Map<UUID, Hub> hubs = new HashMap<>();
-        long nextMenu = 1;
+        long nextMenu = 1, nextSession;
     }
     private record Menu(long revision, long expires) {}
     private static final class Hub {
@@ -111,10 +114,11 @@ public final class LibertyManager {
         final Map<Long, Vec3> missionBlasts = new LinkedHashMap<>();
         final Set<String> missionCommands = new HashSet<>();
         final Set<String> sitesBuilt = new HashSet<>(), grounded = new HashSet<>();
+        final Map<String, Long> nextGroundAttempt = new HashMap<>();
         final ResourceKey<Level> dimension;
         LibertyStratagemEngine stratagems;
         String sector = "", defense = "";
-        int reinforcements = 5, spawned, spawnSequence, waveRemaining, spawnsThisTick, artilleryShells;
+        int reinforcements = 5, spawned, retired, spawnSequence, waveRemaining, spawnsThisTick, artilleryShells;
         boolean artilleryUnlocked;
         long nextWave;
         LibertyTransportEntity transport;
@@ -479,10 +483,7 @@ public final class LibertyManager {
             if (offer==null) return fail(player,"That defense has changed. Refresh the war map.");
             var sector=LibertyCampaignData.sector(offer.sectorId());
             var faction=LibertyMissionCatalog.faction(offer.factionId());
-            var template=LibertyMissionCatalog.templates().stream().filter(t->t.factions().contains(faction)
-                    && t.stages().stream().anyMatch(stage->stage.goals().stream().anyMatch(o->o.kind()==LibertyMissionCatalog.ObjectiveKind.DEFEND)))
-                    .findFirst().orElseThrow();
-            var plan=LibertyMissionPlan.generate(player.getRandom().nextLong(),sector.id(),faction,template.id(),difficulty,minutes);
+            var plan=LibertyMissionPlan.defense(offer.id(),sector.id(),faction,difficulty,minutes);
             if (inShip(player) && !leave(player,false,"Deploying to defend your home front.")) return false;
             return deploy(player,sector.theaterId(),plan,offer.homeWorld(),sector.id(),offerId);
         } catch (IllegalArgumentException error) { return fail(player,"The defense offer is no longer available."); }
@@ -594,31 +595,24 @@ public final class LibertyManager {
         var preview=new LibertyMissionRuntime(plan,origin,true);
         double scale=96.0/plan.arenaRadius();
         BlockPos extraction=origin.offset((int)(plan.extraction().x()*scale),0,(int)(plan.extraction().z()*scale));
-        if(homeFooting(level,extraction)==null)return false;
+        if(LibertyHomeTerrain.footing(level,extraction)==null)return false;
         for(var site:preview.sites()) {
             if(site.optional())continue;
-            BlockPos center=homeFooting(level,site.center());
-            if(center==null)return false;
+            var ground=LibertyHomeTerrain.resolve(level,site);
+            if(ground==null || !preview.relocateSite(site.id(),ground))return false;
+            BlockPos center=site.center();
             if(site.kind()==LibertyMissionCatalog.ObjectiveKind.TERRITORY) {
                 int available=0;
                 for(int x=-site.radius();x<=site.radius();x++)for(int z=-site.radius();z<=site.radius();z++) {
                     if((x+.5)*(x+.5)+(z+.5)*(z+.5)>site.radius()*site.radius())continue;
-                    BlockPos ground=homeFooting(level,center.offset(x,0,z));
-                    if(ground!=null&&Math.abs(ground.getY()-center.getY())<=7)available++;
+                    BlockPos support=LibertyHomeTerrain.footing(level,center.offset(x,0,z));
+                    if(support!=null&&Math.abs(support.getY()-center.getY())<=7)available++;
                 }
                 if(available<site.goal())return false;
             }
-            for(BlockPos checkpoint:site.checkpoints())if(homeFooting(level,checkpoint)==null)return false;
-            for(var core:preview.cores())if(core.siteId().equals(site.id())&&homeFooting(level,core.position())==null)return false;
+            for(var core:preview.cores())if(core.siteId().equals(site.id())&&LibertyHomeTerrain.footing(level,core.position())==null)return false;
         }
         return true;
-    }
-    private static BlockPos homeFooting(ServerLevel level,BlockPos point) {
-        if(level.getChunkSource().getChunkNow(point.getX()>>4,point.getZ()>>4)==null)return null;
-        BlockPos ground=point.atY(level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,point.getX(),point.getZ())-1);
-        return level.getBlockState(ground).isFaceSturdy(level,ground,Direction.UP)
-                &&level.noCollision(new AABB(ground.getX()+.15,ground.getY()+1,ground.getZ()+.15,
-                    ground.getX()+.85,ground.getY()+3,ground.getZ()+.85))?ground:null;
     }
 
     public static void tick(MinecraftServer server) {
@@ -631,11 +625,24 @@ public final class LibertyManager {
                 relocate(hub.player,hub.origin.getX()+.5,hub.origin.getY()+1.1,hub.origin.getZ()+14.5);
             hub.player.setHealth(hub.player.getMaxHealth()); hub.player.getFoodData().setFoodLevel(20);
         }
-        for (Session s : List.copyOf(state(server).sessions.values())) if (!s.exiting) {
+        // Give low-pressure operations first access to shared admission slots, rotating ties
+        // instead of favoring a fixed HashMap order. Every session still ticks once per tick.
+        List<Session> sessions = new ArrayList<>(data.sessions.values());
+        sessions.sort((left, right) -> left.player.getUUID().compareTo(right.player.getUUID()));
+        int first = sessions.isEmpty() ? 0 : (int) Math.floorMod(data.nextSession++, (long) sessions.size());
+        java.util.Collections.rotate(sessions, -first);
+        sessions.sort((left, right) -> Double.compare(residentPressure(left), residentPressure(right)));
+        for (int offset = 0; offset < sessions.size(); offset++) {
+            Session s = sessions.get(offset);
+            if (s.exiting || data.sessions.get(s.player.getUUID()) != s) continue;
             try { tick(s); }
             catch (RuntimeException error) { JetSetCraft.LOGGER.error("Liberty Grind interrupted for {}", s.player.getUUID(), error);
                 leave(s.player, false, "Operation interrupted; your return checkpoint was preserved."); }
         }
+    }
+    private static double residentPressure(Session s) {
+        int cap = s.operation.campaign() ? s.operation.plan.difficulty().residentCap() : ACTOR_LIMIT;
+        return (double) s.actors.size() / cap;
     }
     private static void tick(Session s) {
         ServerPlayer player = s.player; LibertyOperation op = s.operation; ServerLevel level = player.serverLevel();
@@ -649,6 +656,7 @@ public final class LibertyManager {
         }
         s.entities.entrySet().removeIf(entry -> entry.getValue().isRemoved());
         s.actors.entrySet().removeIf(entry -> !s.entities.containsKey(entry.getKey()));
+        if (op.campaign() && op.field() && op.ticks() % 20 == 0) retireDistantCombatants(s);
         if (op.homeDefense) {
             BlockPos ground=surface(s,op.extraction); if (ground!=null) op.extraction=ground;
         }
@@ -741,10 +749,13 @@ public final class LibertyManager {
             s.artilleryUnlocked=true;s.artilleryShells=6;s.status="Support uplink secured: six SEAF artillery shells available in the field radio.";
         }
         for (var site:op.mission.sites()) {
-            if (op.homeDefense && !s.grounded.contains(site.id())) {
-                BlockPos ground=surface(s,site.center());
+            if (op.homeDefense && !s.grounded.contains(site.id())
+                    && op.ticks()>=s.nextGroundAttempt.getOrDefault(site.id(),0L)) {
+                s.nextGroundAttempt.put(site.id(),op.ticks()+100);
+                var ground=LibertyHomeTerrain.resolve(level,site);
                 if (ground!=null && op.mission.relocateSite(site.id(),ground)) s.grounded.add(site.id());
             }
+            if (op.homeDefense && !s.grounded.contains(site.id())) continue;
             if (!site.active() || site.complete()) continue;
             if (s.player.distanceToSqr(Vec3.atCenterOf(site.center()))>110*110) continue;
             if (!s.sitesBuilt.contains(site.id()) && (op.homeDefense || LibertyWorld.buildSite(level,site,op.plan.faction()))) {
@@ -778,16 +789,36 @@ public final class LibertyManager {
             if (level.addFreshEntity(entity)) s.cores.put(core.id(),entity.getUUID()); else {s.entities.remove(entity.getUUID());entity.discard();}
         }
         op.mission.tick(s.player.position(),s.previous,skating,center->(int)s.actors.keySet().stream().map(s.entities::get)
-                .filter(e->e!=null && e.isAlive() && e.distanceToSqr(Vec3.atCenterOf(center))<24*24).count());
+                .filter(e->e!=null && e.isAlive() && e.distanceToSqr(Vec3.atCenterOf(center))<24*24).count(),
+                feet->!op.homeDefense || LibertyHomeTerrain.clear(level,feet));
         s.markers.forEach((id,e)-> { var site=op.mission.sites().stream().filter(v->v.id().equals(id)).findFirst().orElse(null);
             if (site!=null && site.complete()) e.discard(); });
     }
+    /** Recycle abandoned infantry pressure without granting defeats or refunding the lifetime budget. */
+    private static void retireDistantCombatants(Session s) {
+        Set<UUID> priorityTargets = new HashSet<>();
+        for (var site : s.operation.mission.sites())
+            if (site.priorityTargetId() != null) priorityTargets.add(site.priorityTargetId());
+        for (UUID id : List.copyOf(s.actors.keySet())) {
+            Entity actor = s.entities.get(id);
+            if (!(actor instanceof Mob) || !actor.isAlive() || priorityTargets.contains(id)
+                    || actor.distanceToSqr(s.player) <= RETIRE_DISTANCE * RETIRE_DISTANCE) continue;
+            // Do not visibly remove a combatant in front of another player in the same world.
+            if (s.player.serverLevel().players().stream().anyMatch(player -> player.isAlive()
+                    && actor.distanceToSqr(player) <= OBSERVER_DISTANCE * OBSERVER_DISTANCE)) continue;
+            actor.discard();
+            s.actors.remove(id);
+            s.entities.remove(id);
+            s.retired++;
+        }
+    }
+
     private static void spawnCampaign(Session s) {
         LibertyOperation op=s.operation; var difficulty=op.plan.difficulty();
         if (!op.field() || !rightLevel(s) || s.actors.size()>=difficulty.residentCap()
                 || s.spawned>=difficulty.allowanceAt(op.ticks(),op.plan.durationMinutes())) return;
         int global=state(s.player.getServer()).sessions.values().stream().mapToInt(v->v.actors.size()).sum();
-        if (global>=384) return;
+        if (global>=SHARED_ACTOR_LIMIT) return;
         if (s.waveRemaining==0 && op.ticks()>=s.nextWave) {
             int bases=(int)op.mission.sites().stream().filter(v->v.kind()==LibertyMissionCatalog.ObjectiveKind.DEMOLITION&&v.complete()).count();
             s.waveRemaining=difficulty.waveMin()+s.player.getRandom().nextInt(difficulty.waveMax()-difficulty.waveMin()+1);
@@ -796,7 +827,7 @@ public final class LibertyManager {
             s.nextWave=op.ticks()+interval;
         }
         for (int i=0;i<difficulty.maxSpawnsPerTick() && s.spawnsThisTick<difficulty.maxSpawnsPerTick() && s.waveRemaining>0
-                && s.actors.size()<difficulty.residentCap() && global<384 && s.spawned<difficulty.allowanceAt(op.ticks(),op.plan.durationMinutes());i++) {
+                && s.actors.size()<difficulty.residentCap() && global<SHARED_ACTOR_LIMIT && s.spawned<difficulty.allowanceAt(op.ticks(),op.plan.durationMinutes());i++) {
             int number=s.spawnSequence++; double angle=number*2.399963229728653;
             double radius=30+(number%4)*4;
             BlockPos raw=s.player.blockPosition().offset((int)(Math.cos(angle)*radius),0,(int)(Math.sin(angle)*radius));
@@ -827,7 +858,7 @@ public final class LibertyManager {
         var difficulty=s.operation.plan.difficulty();
         if(s.actors.size()>=difficulty.residentCap()||s.spawnsThisTick>=difficulty.maxSpawnsPerTick()
                 ||s.spawned>=difficulty.allowanceAt(s.operation.ticks(),s.operation.plan.durationMinutes())
-                ||state(s.player.getServer()).sessions.values().stream().mapToInt(v->v.actors.size()).sum()>=384)return;
+                ||state(s.player.getServer()).sessions.values().stream().mapToInt(v->v.actors.size()).sum()>=SHARED_ACTOR_LIMIT)return;
         BlockPos point=surface(s,site.center().offset(0,0,8)); if(point==null)return;
         EntityType<?> type=switch(s.operation.plan.faction()) {case AUTOMATON->EntityType.RAVAGER;case TERMINID->EntityType.SPIDER;case ILLUMINATE->EntityType.SHULKER;};
         Entity raw=LibertyMobSafety.spawnType(type,s.operation.homeDefense).create(s.player.serverLevel()); if(!(raw instanceof Mob mob))return;
@@ -859,7 +890,8 @@ public final class LibertyManager {
 
     private static void spawnRival(Session s) {
         if (!LibertyWorld.isLiberty(s.player.level()) || !s.operation.field() || session(s.player) != s) return;
-        if (s.actors.size() >= ACTOR_LIMIT) return;
+        if (s.actors.size() >= ACTOR_LIMIT || state(s.player.getServer()).sessions.values().stream()
+                .mapToInt(other -> other.actors.size()).sum() >= SHARED_ACTOR_LIMIT) return;
         LibertyOperation.Objective target = null;
         for (LibertyOperation.Objective objective : s.operation.objectives) {
             long alive = s.actors.values().stream().filter(index -> index == objective.index()).count();
@@ -1222,7 +1254,7 @@ public final class LibertyManager {
         if (op.campaign()) {
             tag.putString("MissionName",op.plan.template().name()); tag.putString("Faction",op.plan.faction().id());
             tag.putInt("Difficulty",op.plan.difficulty().level()); tag.putInt("ArenaRadius",op.theater.radius()); tag.putLong("Seed",op.plan.seed());
-            tag.putInt("Enemies",s.actors.size()); tag.putInt("Spawned",s.spawned); tag.putInt("Stage",op.mission.stage());
+            tag.putInt("Enemies",s.actors.size()); tag.putInt("Spawned",s.spawned); tag.putInt("Retired",s.retired); tag.putInt("Stage",op.mission.stage());
             ListTag callins=new ListTag();
             for (var entry:s.stratagems.snapshot()) {
                 if(!s.stratagems.loadout().contains(entry.id())&&!entry.category().equals("SHARED")

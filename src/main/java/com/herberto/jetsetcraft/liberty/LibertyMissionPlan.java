@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Random;
 import java.util.Set;
+import java.util.UUID;
 
 import com.herberto.jetsetcraft.liberty.LibertyMissionCatalog.*;
 
@@ -86,6 +87,17 @@ public record LibertyMissionPlan(int schema, long seed, String theaterId, Factio
     public List<Objective> primaryObjectives() { return stages.stream().flatMap(s -> s.objectives().stream()).toList(); }
     public List<Objective> allObjectives() { var all = new ArrayList<>(primaryObjectives()); all.addAll(optionalObjectives); return List.copyOf(all); }
     public int totalTicks() { return durationMinutes * 1200; }
+    /** A defense offer keeps its mission family and layout on retry; new offers can choose another family. */
+    public static LibertyMissionPlan defense(UUID offer, String theaterId, Faction faction, int level, int minutes) {
+        Objects.requireNonNull(offer, "Defense offer");
+        List<MissionTemplate> choices = LibertyMissionCatalog.templates(faction).stream()
+                .filter(template -> template.stages().stream().anyMatch(stage -> stage.goals().stream()
+                        .anyMatch(goal -> goal.kind() == ObjectiveKind.DEFEND))).toList();
+        if (choices.isEmpty()) throw new IllegalArgumentException("No defense mission for this faction");
+        long seed = mix(offer.getMostSignificantBits() ^ Long.rotateLeft(offer.getLeastSignificantBits(), 23), theaterId);
+        MissionTemplate selected = choices.get((int) Math.floorMod(seed, choices.size()));
+        return generate(seed, theaterId, faction, selected.id(), level, minutes);
+    }
     public static LibertyMissionPlan generate(long seed, String theaterId, Faction faction, String templateId, int level, int minutes) {
         LibertyDifficulty difficulty = LibertyDifficulty.of(level); LibertyDifficulty.checkMinutes(minutes);
         if (!validSectorId(theaterId) || faction == null) throw new IllegalArgumentException("Invalid sector or faction");
