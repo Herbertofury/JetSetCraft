@@ -10,6 +10,8 @@ on:
       - "src/main/**"
       - "tools/prepare_liberty_pack.py"
       - "tools/prepare_liberty_helldivers.py"
+      - "tools/prepare_installed_liberty.py"
+      - "tools/smoke_installed_liberty.py"
       - "tools/stop_smoke_server.py"
       - ".github/workflows/liberty-provider-compat.yml"
   pull_request:
@@ -20,6 +22,8 @@ on:
       - "src/main/**"
       - "tools/prepare_liberty_pack.py"
       - "tools/prepare_liberty_helldivers.py"
+      - "tools/prepare_installed_liberty.py"
+      - "tools/smoke_installed_liberty.py"
       - "tools/stop_smoke_server.py"
       - ".github/workflows/liberty-provider-compat.yml"
   workflow_dispatch:
@@ -135,7 +139,9 @@ jobs:
 
           markers = [f'JETSETCRAFT_GAMETEST_PASS liberty_tacz_admission provider=true pack={expected}']
           markers += [f'JETSETCRAFT_LIBERTY_OPERATION_PASS liberty_{name}_rules'
-                      for name in ('mural', 'radio', 'courier', 'cache_supply', 'extraction', 'war_map')]
+                      for name in ('mural', 'radio', 'courier', 'cache_supply', 'extraction', 'extraction_deadline', 'war_map')]
+          markers += [f'JETSETCRAFT_LIBERTY_HOME_TERRAIN_PASS {name}'
+                      for name in ('liberty_defense_offer_variety', 'liberty_home_courier_elevations', 'liberty_home_escort_ground_path')]
           markers += [f'JETSETCRAFT_LIBERTY_RESEARCH_PASS liberty_research_{name}'
                       for name in ('settlement', 'purchase', 'rush', 'schema', 'caps')]
           markers += [f'JETSETCRAFT_GAMETEST_PASS liberty_stratagem_catalog native={os.environ["LIBERTY_HELLDIVERS"]} selectable=100 conditional=25']
@@ -155,7 +161,7 @@ jobs:
                           for name in ('abort_death_disconnect', 'action_identity', 'future_research_recovery',
                                        'serialized_rejoin', 'full_extraction')]
               markers += [f'JETSETCRAFT_LIBERTY_CAMPAIGN_RUNTIME_PASS liberty_campaign_native_{name}'
-                          for name in ('director_caps', 'tacz_core', 'floor_turf', 'home_preservation', 'ship_redeploy_return', 'stratagem_lifecycle')]
+                          for name in ('director_caps', 'director_relocation', 'tacz_core', 'floor_turf', 'home_preservation', 'ship_redeploy_return', 'stratagem_lifecycle')]
               if 'JETSETCRAFT_GAMETEST_SKIP liberty_tacz_' in log or 'JETSETCRAFT_LIBERTY_RUNTIME_SKIP' in log:
                   raise SystemExit('The full-provider lane must execute its required native tests without skipping')
               if re.search(r'JETSETCRAFT_GAMETEST_SKIP liberty_(?:mcdivers|armory)', log):
@@ -246,6 +252,45 @@ jobs:
           test -s run/world/level.dat
           echo 'JETSETCRAFT_LIBERTY_SERVER_SMOKE_PASS ready authenticated_stop all_dimensions_saved exit_zero'
 
+      - name: Verify the exact built JAR in an independent official Forge installation
+        if: matrix.pack == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          python tools/prepare_installed_liberty.py \
+            --instance "$RUNNER_TEMP/liberty-installed" --source-instance run \
+            --pack-source 'run/tacz/[eof]helldivers_gun_pack.zip' \
+            --mcdivers-source run/provider-downloads/mcdivers-forge-1.20.1-1.0.3.jar \
+            2>&1 | tee "$RUNNER_TEMP/liberty-installed-preparation.log"
+          python - <<'PY'
+          from pathlib import Path
+          import hashlib
+          import json
+          import os
+          import subprocess
+          import sys
+
+          jars = [path for path in Path('build/libs').glob('jetsetcraft-1.20.1-*.jar')
+                  if not path.name.endswith(('-sources.jar', '-javadoc.jar'))]
+          if len(jars) != 1:
+              raise SystemExit('Expected exactly one final reobfuscated JetSetCraft JAR')
+          artifact = jars[0]
+          checksum = hashlib.sha256(artifact.read_bytes()).hexdigest()
+          output = Path('build/verification/liberty-installed')
+          subprocess.run([sys.executable, 'tools/smoke_installed_liberty.py',
+                          '--instance', str(Path(os.environ['RUNNER_TEMP']) / 'liberty-installed'),
+                          '--jar', str(artifact), '--sha256', checksum, '--output', str(output)], check=True)
+          receipt_path = output / 'installed-smoke.json'
+          receipt = json.loads(receipt_path.read_text())
+          receipt['source_commit'] = os.environ['GITHUB_SHA']
+          receipt['github_run_id'] = os.environ['GITHUB_RUN_ID']
+          receipt['github_run_attempt'] = os.environ['GITHUB_RUN_ATTEMPT']
+          receipt_path.write_text(json.dumps(receipt, indent=2) + '\n')
+          if hashlib.sha256(artifact.read_bytes()).hexdigest() != checksum:
+              raise SystemExit('Final artifact changed during installed verification')
+          print(f'LIBERTY_INSTALLED_ARTIFACT file={artifact.name} bytes={artifact.stat().st_size} sha256={checksum}')
+          PY
+
       - name: Verify Liberty Grind in a real Minecraft client
         if: matrix.pack == 'true'
         shell: bash
@@ -268,7 +313,7 @@ jobs:
             2>&1 | tee "$log"
           grep -Fq 'JETSETCRAFT_LIBERTY_VISUAL_AUDIT_PASS' "$log"
           grep -Fq 'JETSETCRAFT_LIBERTY_CAMPAIGN_VISUAL_PASS captures=19 ' "$log"
-          grep -Fq 'JETSETCRAFT_LIBERTY_VISUAL_AUDIT_FIXTURE' "$log"
+          grep -Fq 'JETSETCRAFT_LIBERTY_CAMPAIGN_VISUAL_FIXTURE' "$log"
           if grep -Fq 'JETSETCRAFT_LIBERTY_VISUAL_AUDIT_FAIL' "$log"; then
             echo '::error::The native Liberty client audit reported a failure.'
             exit 1
@@ -317,6 +362,7 @@ jobs:
               'mcdivers': '1.0.3', 'mcdivers_file': 9307472,
               'audit_pass_marker': 'JETSETCRAFT_LIBERTY_VISUAL_AUDIT_PASS' in log,
               'campaign_pass_marker': 'JETSETCRAFT_LIBERTY_CAMPAIGN_VISUAL_PASS captures=19 ' in log,
+              'campaign_fixture_marker': 'JETSETCRAFT_LIBERTY_CAMPAIGN_VISUAL_FIXTURE' in log,
               'audit_failure_marker': 'JETSETCRAFT_LIBERTY_VISUAL_AUDIT_FAIL' in log,
               'capture_count': len(captures), 'captures': captures,
               'scope': 'Native campaign planning, complete armory/search/armor, four-slot review at default/minimum size, '
@@ -343,6 +389,9 @@ jobs:
           name: jetsetcraft-liberty-${{ matrix.lane }}-${{ github.sha }}
           path: |
             ${{ runner.temp }}/liberty-*.log
+            ${{ runner.temp }}/liberty-installed/forge-install.log
+            ${{ runner.temp }}/liberty-installed/prepared.json
+            build/verification/liberty-installed/*
             build/libs/*.jar
             run/crash-reports/*.txt
           if-no-files-found: warn
