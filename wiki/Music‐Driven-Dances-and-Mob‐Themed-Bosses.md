@@ -143,6 +143,16 @@ For new entries, record stable reference ID; faction; mob or general scope; owne
 
 Prior music/video references remain on [Cumbias](https://github.com/Herbertofury/JetSetCraft/wiki/Cumbias%E2%80%90and%E2%80%90Multi%E2%80%90Rival%E2%80%90Gang%E2%80%90War), [Phonkistas](https://github.com/Herbertofury/JetSetCraft/wiki/Phonkistas) and [Gabberina's](https://github.com/Herbertofury/JetSetCraft/wiki/Gabberinas%E2%80%90and%E2%80%90Gang%E2%80%90War%E2%80%90Campaign). They are not discarded or treated as newly reviewed.
 
+### Owner must-add soundtrack selections
+
+- **JSC-MUST-001 · SPINOZZA — BONESAW:** [Original owner Spotify link](https://open.spotify.com/track/19K7jYp8JxHTL8N5W13HzQ?si=92b9f35a48bd4833). **MUST ADD**, explicitly selected by the owner on November 7, 2026 for JetSetCraft's Jet Set Radio-style soundtrack. This is a priority inclusion requirement, not an optional research suggestion. General soundtrack scope; no particular crew, mode or sequence was specified.
+  - **Verified:** Spotify's public track page identifies the title as **SPINOZZA** and the credited artist as **BONESAW**, checked November 7, 2026 UTC.
+  - **Status:** selected; integration pending. Preserve this exact recording and its must-add priority alongside the existing owner selections. Audio has not been downloaded or auditioned, and no BPM, beat map, loop points, rights clearance or in-game playback is claimed. Resolve an authorized audio/provider route and the permissions needed for the actual use before implementation.
+
+- **JSC-MUST-002 · No Matter Where I Go — Qteku:** [Original owner Spotify link](https://open.spotify.com/track/3nvTPnwglYdr5tssbxJiuQ?si=e22e96c67dda43fd). **MUST HAVE**, explicitly selected by the owner on November 7, 2026 for JetSetCraft's soundtrack. This is a priority inclusion requirement alongside SPINOZZA and the existing owner selections. General soundtrack scope; no particular crew, mode or sequence was specified.
+  - **Verified:** Spotify's public track page identifies the title as **No Matter Where I Go** and the credited artist as **Qteku**, checked November 7, 2026 UTC.
+  - **Status:** selected; integration pending. Preserve this exact recording and its must-have priority. Audio has not been downloaded or auditioned, and no BPM, beat map, loop points, rights clearance or in-game playback is claimed. Resolve an authorized audio/provider route and the permissions needed for the actual use before implementation.
+
 ### Gabberina intended song references
 
 **GAB-MUSIC-002 · Gabberina's / general / intended song:** [I Need Your Lovin' (Like The Sunshine), Danny Ores](https://open.spotify.com/track/2tvhfItMoRiHmo9QuCnKem?si=c24fd0e2909843d7). The owner explicitly added this as a song reference to be used for Gabberina's. Spotify's public page was checked on October 12, 2026 UTC and identifies Danny Ores, 2025, duration 2:43. Audio, beat/bar/phrase structure and choreography timing have not been analyzed. Preserve the earlier G.A.B.B.E.R. reference and other supplied music/video references.
