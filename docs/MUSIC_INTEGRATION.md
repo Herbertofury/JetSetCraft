@@ -25,6 +25,8 @@ The project owner reported obtaining rights associated with Sonic Mania, SEGA SO
 
 - **DASSHIT — BONESAW**: [Spotify reference](https://open.spotify.com/track/3iYkaU4qu9sMqef1mKW81c?si=588f044b0dd44cc2). The project owner selected this as a must-include JetSetCraft track on 2026-11-11. Recording-specific distribution rights and an authorized audio master still need to be established before packaging; this reference alone does not install or play audio.
 
+- **LOSING.CTRL - HYPER TRIGGER OST — BONESAW**: [Spotify reference](https://open.spotify.com/track/6C28FJC1vPw81isMAK0bMN?si=a191b70ba2f2475b). Selected by the project owner as a must-include JetSetCraft track on 2026-11-11. Recording-specific distribution rights and an authorized audio master still need to be established before packaging; this reference alone does not install or play audio.
+
 ## Importing the supplied masters
 
 Install `ffmpeg` and `ffprobe`, then run the importer from the repository. Supply the project recording as a local file:
