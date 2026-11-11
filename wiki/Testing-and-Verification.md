@@ -241,6 +241,10 @@ FakePlayer tests establish in-memory lifecycle behavior; they do not establish p
 
 Client controls remain change-driven: any digital mask or analog movement change is transmitted immediately. While riding, dancing, or holding live movement input, unchanged state is refreshed every 5 client ticks instead of being resent every tick. A neutral inactive client sends its release state once and then stays quiet. The server independently sanitizes unknown bits/non-finite axes and clears stale armed input after 20 ticks, so the active heartbeat retains a four-times safety margin without needless 20-packets-per-second steady-state traffic.
 
+## Input transport acceptance
+
+Client controls remain change-driven: any digital mask or analog movement change is transmitted immediately. While riding, dancing, or holding live movement input, unchanged state is refreshed every 5 client ticks instead of being resent every tick. A neutral inactive client sends its release state once and then stays quiet. The server independently sanitizes unknown bits/non-finite axes and clears stale armed input after 20 ticks, so the active heartbeat retains a four-times safety margin without needless 20-packets-per-second steady-state traffic.
+
 ## Dedicated-server smoke
 
 CI launches Forge with `eula=true`, waits for the real ready line, and fails on lifecycle/mod-loading/fatal JetSetCraft errors. The base and all eight provider jobs issue an RCON stop and require normal saved-dimensions shutdown output and successful process completion. Alpha.7 passed this gate in [base](https://github.com/Herbertofury/JetSetCraft/actions/runs/41397720888) and [all eight provider lanes](https://github.com/Herbertofury/JetSetCraft/actions/runs/41397720946), retaining the explicit normal-shutdown gate introduced in alpha.4. Historical alpha.5 and alpha.6 results remain separately identified. JARs and logs are workflow artifacts whose inspection status belongs to the corresponding receipt. Alpha.5/alpha.6 CI archive bytes were not independently inspected. Older provider startup-only smoke results retain their historical scope.
