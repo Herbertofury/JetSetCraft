@@ -21,6 +21,10 @@ Titles, credited artists and album identities were read from Spotify's official 
 
 The project owner reported obtaining rights associated with Sonic Mania, SEGA SOUND TEAM, Kr0w!, Masato Nakamura, Tee Lopes and Naofumi Hataya. [`tools/music_rights_manifest.json`](../tools/music_rights_manifest.json) records that statement and the two exact recording references. The statement is the permission provenance supplied by the owner; the catalogue does not broaden it into unspecified recording-specific terms. When audio is imported, the generated receipt identifies the actual source and encoded file hashes.
 
+## Owner-selected must-include track
+
+- **DASSHIT — BONESAW**: [Spotify reference](https://open.spotify.com/track/3iYkaU4qu9sMqef1mKW81c?si=588f044b0dd44cc2). The project owner selected this as a must-include JetSetCraft track on 2026-11-11. Recording-specific distribution rights and an authorized audio master still need to be established before packaging; this reference alone does not install or play audio.
+
 ## Importing the supplied masters
 
 Install `ffmpeg` and `ffprobe`, then run the importer from the repository. Supply the project recording as a local file:
