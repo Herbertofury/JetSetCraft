@@ -147,8 +147,14 @@ public final class LibertyNativeTerrainGameTests {
         f.enemy.invulnerableTime=0; // Separate collisions exercise effects independently of vanilla hit immunity.
         Arrow arrow=new Arrow(f.level,f.owner);arrow.setNoGravity(true);f.projectiles.add(arrow);
         check(f.level.addFreshEntity(arrow)&&LibertyManager.belongsTo(arrow,f.owner),"Actual owned block-impact arrow was not admitted");
+        Vec3 rayStart = new Vec3(f.target.getX()-2, f.target.getY()+.5, f.target.getZ()+.5);
+        var ray = f.level.clip(new net.minecraft.world.level.ClipContext(rayStart, rayStart.add(3,0,0),
+                net.minecraft.world.level.ClipContext.Block.COLLIDER, net.minecraft.world.level.ClipContext.Fluid.NONE, arrow));
+        check(ray.getType() == net.minecraft.world.phys.HitResult.Type.BLOCK && ray.getBlockPos().equals(f.target),
+                "Native arrow fixture ray did not reach its target block: " + ray.getBlockPos());
         hitBlock(arrow,f.target);
-        check(arrow.isRemoved()&&f.level.getBlockState(f.target).equals(Blocks.TARGET.defaultBlockState()),
+        check(arrow.isRemoved(), "Owned native arrow was not removed at its verified home block impact");
+        check(f.level.getBlockState(f.target).equals(Blocks.TARGET.defaultBlockState()),
                 "Owned native arrow invoked a home target block's redstone callback");
         f.assertWorld();
     }
@@ -203,13 +209,30 @@ public final class LibertyNativeTerrainGameTests {
     private static boolean flag(Entity e,String name)throws ReflectiveOperationException{Field f=e.getClass().getDeclaredField(name);f.setAccessible(true);return f.getBoolean(e);}
     private static void setFlag(Entity e,String name,boolean value)throws ReflectiveOperationException{Field f=e.getClass().getDeclaredField(name);f.setAccessible(true);f.setBoolean(e,value);}
     private static Class<?> type(String suffix)throws ClassNotFoundException{return Class.forName("com.tacz.guns."+suffix);}
+    /** These remote test sites are outside the template and therefore contain seeded world terrain.
+     * Lay the authored floor only after clearing each column to its actual surface, not just a
+     * fixed headroom. Otherwise mountains/trees can change heightmap admission or block a shot.
+     * This is disposable GameTest setup, never production home-world terrain mutation.
+     */
+    static void prepareHomeFloor(ServerLevel level, BlockPos center) {
+        for (int x=-128; x<=128; x++) for (int z=-128; z<=128; z++) {
+            BlockPos floor = center.offset(x,0,z);
+            int top = level.getHeight(net.minecraft.world.level.levelgen.Heightmap.Types.WORLD_SURFACE,
+                    floor.getX(), floor.getZ());
+            for (int y=top; y>floor.getY(); y--) level.setBlock(floor.atY(y), Blocks.AIR.defaultBlockState(), 2);
+            level.setBlock(floor, Blocks.STONE.defaultBlockState(), 3);
+            check(level.getHeight(net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                    floor.getX(), floor.getZ()) == floor.getY()+1, "Home fixture retained terrain above its authored floor: " + floor);
+        }
+    }
     private static final class Fixture{
         final ServerLevel level;final ServerPlayer owner;final BlockPos center=new BlockPos(37000,100,-37000),wood=center.offset(8,1,2),chest=center.offset(9,1,2),target=center.offset(-6,1,3);
         final ChunkPos chunk=new ChunkPos(center);final ListTag original;final Map<BlockPos,BlockState> protectedBlocks=new LinkedHashMap<>();
         final List<Entity> projectiles=new ArrayList<>();final Mob foreign;final AbstractMinecart practice;final CompoundTag chestNbt;Mob enemy;Witch witch;boolean closed;int ticks;
         Fixture(GameTestHelper helper){
             level=helper.getLevel();for(int x=-9;x<=9;x++)for(int z=-9;z<=9;z++)level.getChunk(chunk.x+x,chunk.z+z);
-            for(int x=-128;x<=128;x++)for(int z=-128;z<=128;z++){BlockPos pos=center.offset(x,0,z);level.setBlock(pos,Blocks.STONE.defaultBlockState(),3);protectedBlocks.put(pos,Blocks.STONE.defaultBlockState());}
+            prepareHomeFloor(level, center);
+            for(int x=-128;x<=128;x++)for(int z=-128;z<=128;z++){BlockPos pos=center.offset(x,0,z);protectedBlocks.put(pos,Blocks.STONE.defaultBlockState());}
             level.setBlock(wood,Blocks.OAK_PLANKS.defaultBlockState(),3);protectedBlocks.put(wood,level.getBlockState(wood));
             level.setBlock(chest,Blocks.CHEST.defaultBlockState(),3);protectedBlocks.put(chest,level.getBlockState(chest));
             level.setBlock(target,Blocks.TARGET.defaultBlockState(),3);protectedBlocks.put(target,level.getBlockState(target));
