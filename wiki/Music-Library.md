@@ -56,6 +56,8 @@ The two November 7 selections below are whole-game must-adds with no gang or mod
 - **R3DHOT — BONESAW**: [Spotify reference](https://open.spotify.com/track/4Wz6n6DASRztYq9Z7ymXld?si=a752b80801274559). Selected by the project owner as a must-include JetSetCraft track on 2026-11-12. The owner reports author permission subject to credit; the recording master and any separate rights remain to be confirmed. This reference alone does not install or play audio.
 
 
+- **BROOOKEN — BONESAW**: [Spotify reference](https://open.spotify.com/track/5j0M0l6AvoFrvK4X3dFPQv?si=4c01930dba3a4d74). Selected by the owner as a must-include on November 12, 2026. The owner reports author permission subject to credit. This reference does not install audio.
+
 ### Identified Sonic-related recordings
 
 | Track | Exact credited artist | Version/reference | Proposed use |
@@ -177,6 +179,8 @@ Listings checked 2026-11-12. Direct links lead to artist/label or retailer pages
 - **MATCHup** · Single · [Buy/download](https://bonesawart.bandcamp.com/track/matchup)
 - **Wait For Me** · [EUPHONIC RUSH album](https://bonesawart.bandcamp.com/album/euphonic-rush) · [Buy/download](https://bonesawart.bandcamp.com/track/wait-for-me)
 - **R3DHOT** · Single · [Buy/download](https://bonesawart.bandcamp.com/track/r3dhot)
+
+- **BROOOKEN** · Single · [Artist Bandcamp listing](https://bonesawart.bandcamp.com/track/broooken), indexed by [MusicBrainz](https://musicbrainz.org/release/8a22ff10-b005-4d2d-94eb-933c83d5a89c); direct store availability not verified in this check.
 
 ### Hydraa
 
