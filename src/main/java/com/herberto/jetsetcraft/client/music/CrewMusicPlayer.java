@@ -1,5 +1,8 @@
 package com.herberto.jetsetcraft.client.music;
 
+import com.mojang.brigadier.arguments.IntegerArgumentType;
+import net.minecraft.network.chat.ClickEvent;
+import net.minecraft.ChatFormatting;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
@@ -44,6 +47,9 @@ public final class CrewMusicPlayer {
         event.getDispatcher().register(Commands.literal("jetsetmusic")
                 .executes(context -> status())
                 .then(Commands.literal("status").executes(context -> status()))
+                .then(Commands.literal("credits").executes(context -> credits(1))
+                        .then(Commands.argument("page", IntegerArgumentType.integer(1))
+                                .executes(context -> credits(IntegerArgumentType.getInteger(context, "page")))))
                 .then(Commands.literal("on").executes(context -> setEnabled(true)))
                 .then(Commands.literal("off").executes(context -> setEnabled(false)))
                 .then(Commands.literal("next").executes(context -> {
@@ -93,7 +99,26 @@ public final class CrewMusicPlayer {
         current = new CrewTrackSound(track);
         playingTicks = 0;
         minecraft.getSoundManager().play(current);
-        tell("Now playing: " + track.title() + " — " + track.artist());
+        tell("Now playing: " + track.credit());
+    }
+
+    private static int credits(int page) {
+        Minecraft minecraft = Minecraft.getInstance();
+        var catalogue = JetSetMusicCatalog.tracks();
+        int pages = Math.max(1, (catalogue.size() + 4) / 5);
+        if (page > pages) { tell("Credits page must be between 1 and " + pages + "."); return 0; }
+        tell("Soundtrack credits " + page + "/" + pages + " (catalogued recordings, not the whole recommendation library)");
+        if (catalogue.isEmpty()) tell("No soundtrack metadata is loaded.");
+        catalogue.stream().skip((long) (page - 1) * 5).limit(5).forEach(candidate ->
+                tell(candidate.credit() + " [" + (candidate.available(minecraft.getResourceManager(), minecraft.getSoundManager())
+                        ? "installed" : "metadata only; recording not installed") + "]"));
+        if (minecraft.player != null) minecraft.player.displayClientMessage(
+                Component.literal("Music Library: artists, albums, game/gang recommendations and purchase links")
+                        .withStyle(style -> style.withColor(ChatFormatting.AQUA).withUnderlined(true)
+                                .withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL,
+                                        "https://github.com/Herbertofury/JetSetCraft/wiki/Music-Library"))), false);
+        if (page < pages) tell("Next page: /jetsetmusic credits " + (page + 1));
+        return 1;
     }
 
     private static int status() {
@@ -103,6 +128,7 @@ public final class CrewMusicPlayer {
                 .filter(candidate -> candidate.available(minecraft.getResourceManager(), minecraft.getSoundManager())).count();
         tell("Soundtrack " + (enabled ? "on" : "off") + ": " + installed + "/" + JetSetMusicCatalog.tracks().size()
                 + " recordings installed. Volume: Music & Sounds → Jukebox/Note Blocks.");
+        tell("View credits anytime: /jetsetmusic credits [page].");
         if (installed == 0) tell("The catalogue is ready. Enable a resource pack containing your project audio to hear these tracks.");
         return 1;
     }

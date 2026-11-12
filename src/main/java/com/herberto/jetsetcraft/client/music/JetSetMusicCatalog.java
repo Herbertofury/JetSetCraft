@@ -24,8 +24,13 @@ import java.util.Set;
 /** Client resource-pack catalogue. A metadata entry never implies that its recording is installed. */
 @Mod.EventBusSubscriber(modid = JetSetCraft.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public final class JetSetMusicCatalog extends SimpleJsonResourceReloadListener {
-    public record Track(ResourceLocation id, String title, String artist, ResourceLocation event,
+    public record Track(ResourceLocation id, String title, String artist, String album, List<String> featuredArtists, ResourceLocation event,
                         ResourceLocation audio, Set<String> contexts, float volume) {
+        public String credit() {
+            return title + " — " + artist
+                    + (featuredArtists.isEmpty() ? "" : " feat. " + String.join(", ", featuredArtists))
+                    + (album.isEmpty() ? "" : " | Release: " + album);
+        }
         public boolean available(ResourceManager resources, SoundManager sounds) {
             var definition = sounds.getSoundEvent(event);
             return resources.getResource(audio).isPresent() && definition != null && definition.getWeight() > 0;
@@ -62,7 +67,14 @@ public final class JetSetMusicCatalog extends SimpleJsonResourceReloadListener {
                 if (contexts.isEmpty()) throw new IllegalArgumentException("at least one context is required");
                 float volume = GsonHelper.getAsFloat(json, "volume", 0.65F);
                 if (!Float.isFinite(volume) || volume <= 0 || volume > 1) throw new IllegalArgumentException("volume must be in (0,1]");
-                loaded.add(new Track(entry.getKey(), label(json, "title"), label(json, "artist"), event,
+                List<String> featured = new ArrayList<>();
+                if (json.has("featured_artists")) {
+                    var artists = GsonHelper.getAsJsonArray(json, "featured_artists");
+                    if (artists.size() > 16) throw new IllegalArgumentException("too many featured artists");
+                    for (JsonElement artist : artists) featured.add(cleanLabel(GsonHelper.convertToString(artist, "featured artist")));
+                }
+                loaded.add(new Track(entry.getKey(), label(json, "title"), label(json, "artist"),
+                        json.has("album") ? label(json, "album") : "", List.copyOf(featured), event,
                         audio, Set.copyOf(contexts), volume));
             } catch (RuntimeException error) {
                 JetSetCraft.LOGGER.warn("Ignoring invalid JetSetCraft music metadata {}: {}", entry.getKey(), error.getMessage());
@@ -81,8 +93,12 @@ public final class JetSetMusicCatalog extends SimpleJsonResourceReloadListener {
     }
 
     private static String label(JsonObject json, String key) {
-        String value = GsonHelper.getAsString(json, key).replaceAll("[\\p{Cntrl}§]", "").trim();
-        if (value.isEmpty() || value.length() > 160) throw new IllegalArgumentException("invalid " + key);
+        return cleanLabel(GsonHelper.getAsString(json, key));
+    }
+
+    private static String cleanLabel(String input) {
+        String value = input.replaceAll("[\\p{Cntrl}§]", "").trim();
+        if (value.isEmpty() || value.length() > 160) throw new IllegalArgumentException("invalid credit label");
         return value;
     }
 }
