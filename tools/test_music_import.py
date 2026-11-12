@@ -32,6 +32,10 @@ class MusicImportTests(unittest.TestCase):
         with self.assertRaises(ValueError): self.build()
         self.assertEqual((self.root / 'pack/CREDITS.txt').read_bytes(), original)
 
+    def test_empty_optional_album_remains_compatible(self):
+        self.metadata['album'] = ' \n '
+        self.assertEqual(self.build()['album'], '')
+
     def test_full_credit_parity(self):
         self.metadata.update(album='Album\nName', featured_artists=['Guest\tName'])
         receipt = self.build()
@@ -45,7 +49,7 @@ class MusicImportTests(unittest.TestCase):
         self.assertEqual(imported['recording_status'], 'owner_audio_imported')
 
     def test_malformed_optional_credit_rejected_before_output(self):
-        for extra in ({'album': 3}, {'album': ''}, {'featured_artists': 'Guest'},
+        for extra in ({'album': 3}, {'featured_artists': 'Guest'},
                       {'featured_artists': [None]}, {'featured_artists': ['a'] * 17}):
             with self.subTest(extra=extra):
                 self.metadata.pop('album', None); self.metadata.pop('featured_artists', None)

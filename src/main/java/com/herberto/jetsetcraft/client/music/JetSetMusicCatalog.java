@@ -74,7 +74,7 @@ public final class JetSetMusicCatalog extends SimpleJsonResourceReloadListener {
                     for (JsonElement artist : artists) featured.add(cleanLabel(GsonHelper.convertToString(artist, "featured artist")));
                 }
                 loaded.add(new Track(entry.getKey(), label(json, "title"), label(json, "artist"),
-                        json.has("album") ? label(json, "album") : "", List.copyOf(featured), event,
+                        optionalLabel(json, "album"), List.copyOf(featured), event,
                         audio, Set.copyOf(contexts), volume));
             } catch (RuntimeException error) {
                 JetSetCraft.LOGGER.warn("Ignoring invalid JetSetCraft music metadata {}: {}", entry.getKey(), error.getMessage());
@@ -90,6 +90,12 @@ public final class JetSetMusicCatalog extends SimpleJsonResourceReloadListener {
         ResourceLocation id = value.length() <= 256 ? ResourceLocation.tryParse(value) : null;
         if (id == null || id.getPath().contains("..")) throw new IllegalArgumentException("invalid " + key);
         return id;
+    }
+
+    private static String optionalLabel(JsonObject json, String key) {
+        if (!json.has(key)) return "";
+        String value = GsonHelper.getAsString(json, key).replaceAll("[\\p{Cntrl}§]", "").trim();
+        return value.isEmpty() ? "" : cleanLabel(value);
     }
 
     private static String label(JsonObject json, String key) {

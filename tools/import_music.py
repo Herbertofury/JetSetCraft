@@ -57,7 +57,11 @@ def build(track_id: str, recording: Path, destination: Path, catalogue: Path = C
     for key in ("title", "artist"):
         metadata[key] = credit_label(metadata.get(key))
     if "album" in metadata:
-        metadata["album"] = credit_label(metadata["album"])
+        album = metadata["album"]
+        if not isinstance(album, str):
+            raise ValueError("Album credit must be a string")
+        album = "".join(c for c in album if ord(c) >= 32 and ord(c) != 127 and c != "§").strip()
+        metadata["album"] = credit_label(album) if album else ""
     featured = metadata.get("featured_artists", [])
     if not isinstance(featured, list) or len(featured) > 16:
         raise ValueError("featured_artists must be a list of at most 16 credit labels")
