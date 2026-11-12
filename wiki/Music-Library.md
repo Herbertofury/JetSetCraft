@@ -171,16 +171,16 @@ Listings checked 2026-11-12. Direct links lead to artist/label or retailer pages
 - **DASSHIT** · Single · [Buy/download](https://bonesawart.bandcamp.com/track/dasshit)
 - **LOSING.CTRL** · HYPER TRIGGER OST single · [Buy/download](https://bonesawart.bandcamp.com/track/losing-ctrl-hyper-trigger-ost) · HYPER TRIGGER: Hypermall stage
 - **MATCHup** · Single · [Buy/download](https://bonesawart.bandcamp.com/track/matchup)
-- **Wait For Me** · EUPHONIC RUSH · [Buy/download](https://bonesawart.bandcamp.com/track/wait-for-me)
+- **Wait For Me** · [EUPHONIC RUSH album](https://bonesawart.bandcamp.com/album/euphonic-rush) · [Buy/download](https://bonesawart.bandcamp.com/track/wait-for-me)
 - **R3DHOT** · Single · [Buy/download](https://bonesawart.bandcamp.com/track/r3dhot)
 
 ### Hydraa
 
-- **Cash Flow** · Groove Rush (Anniversary Edition) · [Buy/download](https://hydraails.bandcamp.com/track/cash-flow)
+- **Cash Flow** · [Groove Rush (Anniversary Edition) album](https://hydraails.bandcamp.com/album/hydraa-groove-rush-anniversary-edition) · [Buy/download](https://hydraails.bandcamp.com/track/cash-flow)
 
 ### Hydraa and Jerez
 
-- **Wasted** · Cadence Storm · [Buy/download](https://hydraails.bandcamp.com/track/wasted)
+- **Wasted** · [Cadence Storm album](https://hydraails.bandcamp.com/album/hydraa-cadence-storm) · [Buy/download](https://hydraails.bandcamp.com/track/wasted)
 
 ### Kinda Rad
 
@@ -193,7 +193,7 @@ Listings checked 2026-11-12. Direct links lead to artist/label or retailer pages
 ### Qteku
 
 - **Shooting Star** · Single · [Buy/download](https://qteku.bandcamp.com/track/shooting-star)
-- **Starlit Pursuit** · Drift Into Dreams · [Buy/download](https://qteku.bandcamp.com/track/starlit-pursuit)
+- **Starlit Pursuit** · [Drift Into Dreams album](https://qteku.bandcamp.com/album/drift-into-dreams) · [Buy/download](https://qteku.bandcamp.com/track/starlit-pursuit)
 - **havin fun :3** · Single · [Buy/download](https://qteku.bandcamp.com/track/havin-fun-3)
 
 ### SEGA SOUND TEAM
