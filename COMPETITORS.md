@@ -28,3 +28,22 @@ During each daily review, check linked official release notes/issues and update 
 ## Review log
 
 - 2026-11-12: initial repository-scoped comparison index; official sources reviewed at documentation level. No gameplay, performance or compatibility tests run in this pass. No implementation or native GitHub Wiki publication claimed.
+
+## Candidate foundations, concrete reuse and shared work
+
+| Candidate | Exact useful technique / build-on boundary | Improvement experiment and interoperability |
+|---|---|---|
+| Existing JetSetCraft activity/provider architecture | Reuse current invitations, isolated mission state, return handling, provider adapters and verification receipts instead of introducing another campaign framework. | Define one versioned activity receipt containing provider versions, inventory/capability restoration outcome and timing; test it in existing native lanes before proposing reuse in Enderloom/TestGrid. |
+| [GeckoLib](https://github.com/bernie-g/geckolib) | Evaluate keyframe/event animation, easing and concurrent animation for original ride/crew assets; do not replace already accepted animations without a demonstrated problem. | Prototype one ride plus one combat action while preserving arm ownership; compare pose correctness and client cost. A shared original animation-event fixture schema could serve Bloom & Boom and AoA. |
+| [Better Combat integration API](https://github.com/ZsoltMolnarrr/BetterCombat) | Study provider-owned weapon attributes and readiness. Integrate through supported interfaces; do not vendor its implementation. | Share versioned provider-state scenarios with Combat Style Suite: mount, attack, gun takeover, dismount and reconnect. Each repo retains its own runtime adapter and tests. |
+
+**Specific licensing evidence:** GeckoLib [LICENSE](https://github.com/bernie-g/geckolib/blob/main/LICENSE), blob `491454db53d5a2166d8a472d07cc8b60e6d016fb`, is MIT in this review. Better Combat [LICENSE](https://github.com/ZsoltMolnarrr/BetterCombat/blob/26.2/LICENSE), blob `05965515e8dbc57587c88dc70d5d9c480d89dd25`, is All Rights Reserved. Check exact supported integration terms and target release before shipping. BRC and other commercial references remain design inspiration only.
+
+- [ ] Start with one native movement/combat fixture, not a wholesale animation migration.
+- [ ] Compare shared receipt fields with existing Enderloom/Atlas formats before inventing a new schema.
+
+### Reuse admission gates
+
+These are **candidate foundations and experiments**, not selected dependencies or measured improvements. Before reuse: pin the exact version/commit and loader; inspect its source and dependency tree; record code, asset, trademark and redistribution terms separately; keep required notices; verify permission where terms are restrictive or unclear. Public visibility is not a license. A current default-branch license is evidence for that snapshot, not every historical release. Prefer an upstream dependency/API or a small original adapter over a fork when it preserves compatibility. Do not copy proprietary game assets or publish private fixtures.
+
+For every admitted experiment retain baseline and candidate artifacts, representative native workloads, correctness/feature parity, cold/warm latency, p95 frame/tick time, memory, interrupted-save/recovery evidence and rollback. Promote only after the actual target improves without losing requirements. Cross-project sharing below is an interface proposal, not permission to change another project's implementation or declare integration complete.
