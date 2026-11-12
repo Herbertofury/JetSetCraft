@@ -292,7 +292,7 @@ public final class LibertyMobSafetyGameTests {
         Fixture(GameTestHelper helper) {
             level = helper.getLevel();
             for (int x = -9; x <= 9; x++) for (int z = -9; z <= 9; z++) level.getChunk(chunk.x + x, chunk.z + z);
-            for (int x = -128; x <= 128; x++) for (int z = -128; z <= 128; z++) level.setBlock(center.offset(x, 0, z), Blocks.STONE.defaultBlockState(), 3);
+            LibertyNativeTerrainGameTests.prepareHomeFloor(level, center);
             level.setBlock(ore, Blocks.REDSTONE_ORE.defaultBlockState(), 3);
             level.setBlock(egg, eggState, 3);
             level.setBlock(plate, Blocks.STONE_PRESSURE_PLATE.defaultBlockState(), 3);
