@@ -215,7 +215,10 @@ public final class LibertyNativeTerrainGameTests {
      * This is disposable GameTest setup, never production home-world terrain mutation.
      */
     static void prepareHomeFloor(ServerLevel level, BlockPos center) {
-        for (int x=-128; x<=128; x++) for (int z=-128; z<=128; z++) {
+        prepareHomeFloor(level, center, 128);
+    }
+    static void prepareHomeFloor(ServerLevel level, BlockPos center, int radius) {
+        for (int x=-radius; x<=radius; x++) for (int z=-radius; z<=radius; z++) {
             BlockPos floor = center.offset(x,0,z);
             int top = level.getHeight(net.minecraft.world.level.levelgen.Heightmap.Types.WORLD_SURFACE,
                     floor.getX(), floor.getZ());
