@@ -210,3 +210,7 @@ Start with **[the latest additions](https://herbertofury.github.io/JetSetCraft/r
 ## Rights
 
 Project code and original JetSetCraft content are All Rights Reserved unless a file or ledger entry says otherwise. Third-party/reference inputs retain their own permissions and are not relicensed. See [LICENSE](LICENSE), [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md), and the asset ledger before redistributing or adding external material.
+
+## Comparable projects and competitive research
+
+See [comparable games/mods, design benchmarks and evidence-led evaluation tasks](COMPETITORS.md). This dated research distinguishes current capabilities from improvement goals and complements existing roadmap and wiki research.
