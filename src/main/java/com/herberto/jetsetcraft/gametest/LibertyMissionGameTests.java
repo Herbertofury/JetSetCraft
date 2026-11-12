@@ -63,7 +63,7 @@ public final class LibertyMissionGameTests {
                     plans++;
                 }
         int eligible = LibertyMissionCatalog.factions().stream().mapToInt(f -> LibertyMissionCatalog.templates(f).size()).sum();
-        check(plans == eligible * 90 && firstSites.size() > plans * .9 && LibertyMissionCatalog.templates().size() == 28,
+        check(plans == eligible * 90 && firstSites.size() > plans * .9 && LibertyMissionCatalog.templates().size() == 34,
                 "Replay catalogue collapsed or omitted a faction/template");
         rejected(() -> LibertyDifficulty.of(0)); rejected(() -> LibertyDifficulty.of(11));
         rejected(() -> LibertyMissionPlan.generate(1, "invalid/sector", LibertyMissionCatalog.Faction.AUTOMATON, "random", 1, 25));

@@ -32,6 +32,7 @@ import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.MinecraftForge;
@@ -270,12 +271,25 @@ public final class LibertyStratagemGameTests {
         try {
             Mob enemy=f.enemy(f.point.add(2,0,0)); LivingEntity foreign=f.foreign(f.point.add(-2,0,0));
             float hp=enemy.getHealth(),protectedHp=foreign.getHealth();
+            Vec3 sentryPoint=f.point.add(0,0,8);
+            for(Vec3 landing:List.of(f.point,sentryPoint)){
+                BlockPos feet=BlockPos.containing(landing);
+                check(f.level.getHeight(Heightmap.Types.WORLD_SURFACE,feet.getX(),feet.getZ())==f.center.getY()+1,
+                        "Native call-in landing column has terrain above the fixture floor: "+feet);
+            }
+            var preparedSight=f.level.clip(new ClipContext(sentryPoint.add(0,1.6,0),enemy.getEyePosition(),
+                    ClipContext.Block.COLLIDER,ClipContext.Fluid.NONE,f.owner));
+            check(preparedSight.getType()==HitResult.Type.MISS,
+                    "Native sentry fixture has an obstructed firing corridor at "+preparedSight.getBlockPos());
             check(f.engine.call("orbital_precision_strike",f.point).accepted()
-                    &&f.engine.call("a_mg_43_machine_gun_sentry",f.point.add(0,0,8)).accepted(), "Real native beacons were not admitted");
+                    &&f.engine.call("a_mg_43_machine_gun_sentry",sentryPoint).accepted(), "Real native beacons were not admitted");
             check(f.tracked.stream().filter(e->LibertyHelldiversCompat.actor(e)).count()==2,"The provider branch substituted non-native beacons");
             f.run(tick->{if(tick==320){
+                Entity sentry=f.tracked.stream().filter(e->e.getClass().getName().endsWith("SentryEntity")).findFirst().orElse(null);
+                check(sentry!=null&&!sentry.isRemoved()&&sentry.tickCount>=20&&f.level.isPositionEntityTicking(sentry.blockPosition()),
+                        "The real native sentry did not receive its deployment ticks: "+nativeFixtureStatus(f,enemy,hp));
                 check(f.nativeKinds.contains("ordnance")&&f.nativeKinds.contains("machine_gun_sentry")&&enemy.getHealth()<hp,
-                        "Real native beacon timelines did not create ordnance, a sentry and actual enemy damage; actors="+f.nativeKinds+"; health="+enemy.getHealth());
+                        "Real native beacon timelines did not create ordnance, a sentry and actual enemy damage; "+nativeFixtureStatus(f,enemy,hp));
                 check(foreign.getHealth()==protectedHp&&!foreign.isOnFire(),"Native MCDivers hurt a foreign resident: "
                         +probeStatus("provider resident",foreign,protectedHp));
                 f.assertWorld();
@@ -294,23 +308,55 @@ public final class LibertyStratagemGameTests {
         return name+"{initialHealth="+initialHealth+", finalHealth="+probe.getHealth()+", alive="+probe.isAlive()
                 +", burning="+probe.isOnFire()+", lastDamage="+probe.getLastDamageSource()+", position="+probe.position()+"}";
     }
+    private static String nativeFixtureStatus(Fixture f,LivingEntity enemy,float initialHealth){
+        StringBuilder status=new StringBuilder("elapsed=").append(f.elapsed).append(", center=").append(f.center)
+                .append(", originalHighestSurface=").append(f.highestSurface).append(", kinds=").append(f.nativeKinds)
+                .append(", enemyAuthorized=").append(f.engine.authorizedEnemy(enemy))
+                .append(", enemyTicking=").append(f.level.isPositionEntityTicking(enemy.blockPosition()))
+                .append(", enemyBodyClear=").append(f.level.noCollision(enemy,enemy.getBoundingBox()))
+                .append(", ").append(probeStatus("native target",enemy,initialHealth));
+        for(Entity actor:f.tracked)if(LibertyHelldiversCompat.actor(actor)){
+            status.append("; ").append(ForgeRegistries.ENTITY_TYPES.getKey(actor.getType()))
+                    .append("{ticks=").append(actor.tickCount).append(", removed=").append(actor.isRemoved())
+                    .append(", owned=").append(f.engine.owns(actor)).append(", position=").append(actor.position())
+                    .append(", ticking=").append(f.level.isPositionEntityTicking(actor.blockPosition()));
+            if(actor.getClass().getName().endsWith("SentryEntity")){
+                var sight=f.level.clip(new ClipContext(actor.position().add(0,1.6,0),enemy.getEyePosition(),
+                        ClipContext.Block.COLLIDER,ClipContext.Fluid.NONE,actor));
+                status.append(", targetDistance=").append(actor.distanceTo(enemy)).append(", sight=").append(sight.getType())
+                        .append(" at ").append(sight.getBlockPos());
+            }
+            status.append('}');
+        }
+        return status.toString();
+    }
     private static final class Fixture implements LibertyStratagemEngine.Context {
         final GameTestHelper helper;final ServerLevel level;final ServerPlayer owner;final UUID operation=UUID.randomUUID();
         final BlockPos center,chest;final ChunkPos chunk;final Vec3 point;final LibertyStratagemEngine engine;
         final List<Entity> tracked=new ArrayList<>(),residents=new ArrayList<>();final List<LivingEntity> enemies=new ArrayList<>();
         final List<GraffitiEntity> decals=new ArrayList<>();final Map<BlockPos,BlockState> fixtureBlocks=new LinkedHashMap<>();
         final Set<String> nativeKinds=new java.util.HashSet<>();final Set<Vec3> preparedProbes=new java.util.HashSet<>();
-        final StratagemProviderCapture capture;final boolean nativeProvider;
+        final StratagemProviderCapture capture;final boolean nativeProvider;final int highestSurface;
         final CompoundTag chestBefore;boolean closed,reinforce;int elapsed,supplies=2;double largestPaint;String phase="ACTIVE";
         Fixture(GameTestHelper helper,boolean nativeProvider,int radius){
             this.helper=helper;this.level=helper.getLevel();this.nativeProvider=nativeProvider;
-            center=new BlockPos(32000+SEQUENCE.getAndIncrement()*256,100,-32000);chunk=new ChunkPos(center);
+            BlockPos anchor=new BlockPos(32000+SEQUENCE.getAndIncrement()*256,100,-32000);chunk=new ChunkPos(anchor);
             for(int x=-4;x<=4;x++)for(int z=-4;z<=4;z++)level.getChunk(chunk.x+x,chunk.z+z);
+            // Every fixture needs exposed approach lanes and body space for its delayed probes.
+            // Stay above generated terrain so falling blocks cannot refill prepared air while effects tick.
+            int surface=level.getMinBuildHeight();
+            for(int x=chunk.getMinBlockX()-64;x<=chunk.getMinBlockX()+79;x++)
+                for(int z=chunk.getMinBlockZ()-64;z<=chunk.getMinBlockZ()+79;z++)
+                    surface=Math.max(surface,level.getHeight(Heightmap.Types.WORLD_SURFACE,x,z));
+            highestSurface=surface;
+            int floorY=Math.max(100,surface+5);
+            check(floorY+8<level.getMaxBuildHeight(),"No clear vertical space for call-in fixture above surface "+surface);
+            center=new BlockPos(anchor.getX(),floorY,anchor.getZ());
             for(int x=-radius;x<=radius;x++)for(int z=-radius;z<=radius;z++){BlockPos p=center.offset(x,0,z);level.setBlock(p,Blocks.STONE.defaultBlockState(),3);fixtureBlocks.put(p,Blocks.STONE.defaultBlockState());}
             chest=center.offset(7,1,2);level.setBlock(chest,Blocks.CHEST.defaultBlockState(),3);
             ((ChestBlockEntity)level.getBlockEntity(chest)).setItem(0,new ItemStack(Items.DIAMOND,17));chestBefore=level.getBlockEntity(chest).saveWithFullMetadata();fixtureBlocks.put(chest,level.getBlockState(chest));
             owner=FakePlayerFactory.get(level,new GameProfile(UUID.randomUUID(),"JSC_support"));owner.getInventory().clearContent();owner.setGameMode(GameType.SURVIVAL);
-            owner.moveTo(center.getX()+.5,101.05,center.getZ()-5.5,0,0);owner.setDeltaMovement(Vec3.ZERO);point=Vec3.atCenterOf(center).add(0,.55,5);
+            owner.moveTo(center.getX()+.5,center.getY()+1.05,center.getZ()-5.5,0,0);owner.setDeltaMovement(Vec3.ZERO);point=Vec3.atCenterOf(center).add(0,.55,5);
             engine=new LibertyStratagemEngine(this);capture=new StratagemProviderCapture(this);MinecraftForge.EVENT_BUS.register(capture);
             level.getChunkSource().addRegionTicket(TICKET,chunk,5,operation);
         }
@@ -330,7 +376,18 @@ public final class LibertyStratagemGameTests {
         }
         private void readyProbe(Mob mob){
             if(!preparedProbes.contains(mob.position()))prepareProbe(mob.position());
-            check(level.noCollision(mob,mob.getBoundingBox()),"Stationary probe has obstructed native body space: "+mob.getBoundingBox());
+            check(level.noCollision(mob,mob.getBoundingBox()),"Stationary probe has obstructed native body space: "+bodyStatus(mob));
+        }
+        private String bodyStatus(Mob mob){
+            var body=mob.getBoundingBox();List<String> blocks=new ArrayList<>();
+            for(BlockPos pos:BlockPos.betweenClosed(BlockPos.containing(body.minX,body.minY,body.minZ),
+                    BlockPos.containing(body.maxX,body.maxY,body.maxZ))){
+                BlockState state=level.getBlockState(pos);if(!state.isAir())blocks.add(pos+"="+state);
+            }
+            var entities=level.getEntities(mob,body).stream().limit(8)
+                    .map(entity->ForgeRegistries.ENTITY_TYPES.getKey(entity.getType())+" "+entity.getBoundingBox()).toList();
+            return "elapsed="+elapsed+", center="+center+", originalHighestSurface="+highestSurface
+                    +", body="+body+", nonAirBodyBlocks="+blocks+", intersectingEntities="+entities;
         }
         Mob enemy(Vec3 pos){
             Mob mob=EntityType.HUSK.create(level);check(mob!=null,"Owned-effect fixture target is unavailable");

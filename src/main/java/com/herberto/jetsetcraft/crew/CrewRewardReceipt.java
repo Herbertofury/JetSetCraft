@@ -28,6 +28,7 @@ public record CrewRewardReceipt(UUID id, String source, String gang, long earned
     }
 
     public String name() {
+        if (source.startsWith("tour:")) return CrewTour.name(source.substring(5)) + " claimed";
         if (source.startsWith("mission:")) return CrewMissionCatalog.byId(source.substring(8))
                 .map(mission -> mission.name() + " claimed").orElse("Mission claimed");
         return switch (source) {

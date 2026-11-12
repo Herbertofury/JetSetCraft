@@ -1,6 +1,12 @@
 # Rival Rush: implementation status and roguelite design research
 
-**Current development alpha: `0.4.0-alpha.7`; original gameplay checkpoint merged through [PR #46](https://github.com/Herbertofury/JetSetCraft/pull/46).** Optional arena contracts, earned Pit stops and separate accepted-reward feedback are implemented. Merge [`af8e7f1b7a41b0e491f04d3f3f8ca4288ac5eed7`](https://github.com/Herbertofury/JetSetCraft/commit/af8e7f1b7a41b0e491f04d3f3f8ca4288ac5eed7) retains the verified source tree `e33c221bb02df4c949c28766007893215d7ca2ed`. [Base verification](https://github.com/Herbertofury/JetSetCraft/actions/runs/41397720888) and the [provider matrix](https://github.com/Herbertofury/JetSetCraft/actions/runs/41397720946) passed **63 required Forge GameTests in each of nine configurations — 567 executions of 63 distinct tests**, all builds and normal dedicated-server save/shutdown. Base also passed its **23-capture native-client gate**.
+## Connected Streets candidate — alpha.10
+
+The local candidate adds Chromatic finale (Arc paint + Firework cap), Bass drop (Air break + Bass horn) and Soul reprise (Soul mixtape + Soul burst), bringing Build Paths to six recipes. All require the existing two rank-three ingredients and one earned forge opportunity. Target caps, visibility, nonrecursive secondary damage, active-time pauses, independent soul budgets and exact ordinary-state return are covered by four new native test cases, which have not yet executed in Forge. See the [player rules](../wiki/Rival-Rush.md#connected-streets-candidate--six-evolutions-and-shared-tour-goals) and [candidate evidence](verification/connected-streets/README.md).
+
+The shared Crew Tour uses accepted arena-clear and qualifying-return receipts alongside street games and Liberty. Finite, manually claimed goals pay existing crew progression and do not add temporary artifact slots, another starting preparation or a second currency. Prior checkpoint verification below remains historical.
+
+**Verified arena-contract checkpoint: `0.4.0-alpha.7`; original gameplay checkpoint merged through [PR #46](https://github.com/Herbertofury/JetSetCraft/pull/46).** Optional arena contracts, earned Pit stops and separate accepted-reward feedback are implemented. Merge [`af8e7f1b7a41b0e491f04d3f3f8ca4288ac5eed7`](https://github.com/Herbertofury/JetSetCraft/commit/af8e7f1b7a41b0e491f04d3f3f8ca4288ac5eed7) retains the verified source tree `e33c221bb02df4c949c28766007893215d7ca2ed`. [Base verification](https://github.com/Herbertofury/JetSetCraft/actions/runs/41397720888) and the [provider matrix](https://github.com/Herbertofury/JetSetCraft/actions/runs/41397720946) passed **63 required Forge GameTests in each of nine configurations — 567 executions of 63 distinct tests**, all builds and normal dedicated-server save/shutdown. Base also passed its **23-capture native-client gate**.
 
 **Verification follow-up:** [PR #47](https://github.com/Herbertofury/JetSetCraft/pull/47), merge [`1fcb78852f893f083749aac2e566addc3acca78b`](https://github.com/Herbertofury/JetSetCraft/commit/1fcb78852f893f083749aac2e566addc3acca78b), strengthens the existing midpoint-headliner fixture for a real pickup-earned XP draft before room settlement. Production mechanics and the 63-test count are unchanged. The [receipt addendum](verification/contracts/README.md#post-merge-verification-follow-up) preserves the later failed push, controlled reproduction and corrected verification. Original PR #46 source, JAR and local gallery evidence below retain their own identities.
 
@@ -24,7 +30,7 @@ Source observations are separated from JetSetCraft recommendations. All locally 
 
 ## 0. What this change implements, and what remains a proposal
 
-### Current alpha.7: optional room goals and earned Pit stops
+### Verified alpha.7 checkpoint: optional room goals and earned Pit stops
 
 Relay, Paint and Hunt give each configured room a bounded optional goal. Completing it before the actual room clear earns a second choice from the shared Tune/Patch/Rewind/Remix budget. Server-authored reward feedback and saved contract/service counters keep the accepted results visible. [Section 17](#17-alpha7-a-reason-to-take-the-next-room) describes the exact rules, fixture boundaries and remaining playtest questions.
 

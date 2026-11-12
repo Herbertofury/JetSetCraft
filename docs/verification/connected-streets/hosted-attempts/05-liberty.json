@@ -1,0 +1,385 @@
+{
+  "schema": 1,
+  "repository": "Herbertofury/JetSetCraft",
+  "pull_request": 50,
+  "candidate": 5,
+  "feature_head": "8d19826d5e7d78d5046707d667a6cea9f6d1d12b",
+  "feature_tree": "f697380c64947b494cb6e00f9ab7c87f41ef9c85",
+  "tested_merge": "8a56fc3c58a8238cf6906904fa8a29af12b1bac0",
+  "workflow_run_id": 41678801956,
+  "workflow_run_url": "https://github.com/Herbertofury/JetSetCraft/actions/runs/41678801956",
+  "jobs": [
+    {
+      "id": 126066559906,
+      "name": "missing-pack / TaCZ 1.1.8-hotfix2 / MCDivers false",
+      "status": "completed",
+      "conclusion": "success",
+      "steps": [
+        {
+          "name": "Build with the exact optional provider",
+          "conclusion": "success"
+        },
+        {
+          "name": "Record resolved runtime dependencies",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run native GameTests with the selected pack state",
+          "conclusion": "success"
+        },
+        {
+          "name": "Verify full-provider dedicated startup and graceful world save",
+          "conclusion": "skipped"
+        },
+        {
+          "name": "Verify the exact built JAR in an independent official Forge installation",
+          "conclusion": "skipped"
+        },
+        {
+          "name": "Verify Liberty Grind in a real Minecraft client",
+          "conclusion": "skipped"
+        },
+        {
+          "name": "Record native PNG metadata",
+          "conclusion": "skipped"
+        },
+        {
+          "name": "Upload native Liberty client captures and metadata",
+          "conclusion": "skipped"
+        }
+      ]
+    },
+    {
+      "id": 126066560294,
+      "name": "full-provider / TaCZ 1.1.8-hotfix2 / MCDivers true",
+      "status": "completed",
+      "conclusion": "failure",
+      "steps": [
+        {
+          "name": "Build with the exact optional provider",
+          "conclusion": "success"
+        },
+        {
+          "name": "Record resolved runtime dependencies",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run native GameTests with the selected pack state",
+          "conclusion": "success"
+        },
+        {
+          "name": "Verify full-provider dedicated startup and graceful world save",
+          "conclusion": "success"
+        },
+        {
+          "name": "Verify the exact built JAR in an independent official Forge installation",
+          "conclusion": "success"
+        },
+        {
+          "name": "Verify Liberty Grind in a real Minecraft client",
+          "conclusion": "failure"
+        },
+        {
+          "name": "Record native PNG metadata",
+          "conclusion": "success"
+        },
+        {
+          "name": "Upload native Liberty client captures and metadata",
+          "conclusion": "success"
+        }
+      ]
+    }
+  ],
+  "missing_pack_evidence": [
+    "2026-11-03T16:54:11.3543536Z HEAD is now at 8a56fc3 Merge 8d19826d5e7d78d5046707d667a6cea9f6d1d12b into 48894787914076c050ff9635478cc637e666842b",
+    "2026-11-03T16:56:48.5327303Z JETSETCRAFT_GAMETEST_PASS crew_tour_safety",
+    "2026-11-03T16:56:52.1352039Z JETSETCRAFT_GAMETEST_PASS crew_tour_claims",
+    "2026-11-03T16:56:53.6351456Z JETSETCRAFT_GAMETEST_PASS activity_mix_model",
+    "2026-11-03T16:56:55.4339392Z JETSETCRAFT_GAMETEST_PASS rush_expanded_evolution_rules",
+    "2026-11-03T16:57:02.8328402Z JETSETCRAFT_GAMETEST_PASS crew_tour_standalone",
+    "2026-11-03T16:57:05.1330871Z JETSETCRAFT_GAMETEST_PASS crew_tour_revision_saturation",
+    "2026-11-03T16:57:15.3328185Z JETSETCRAFT_GAMETEST_PASS crew_tour_entry",
+    "2026-11-03T16:57:24.4348929Z JETSETCRAFT_GAMETEST_PASS crew_tour_training_revision",
+    "2026-11-03T16:57:35.2334751Z JETSETCRAFT_GAMETEST_PASS rush_expanded_evolution_reprise",
+    "2026-11-03T16:57:35.3328076Z JETSETCRAFT_GAMETEST_PASS rush_expanded_evolution_finale",
+    "2026-11-03T16:57:49.8334757Z JETSETCRAFT_GAMETEST_PASS activity_mix_safety",
+    "2026-11-03T16:57:51.9332031Z JETSETCRAFT_GAMETEST_PASS graffiti_lifecycle native_support_ticks=40",
+    "2026-11-03T16:57:52.4341502Z JETSETCRAFT_GAMETEST_PASS rush_evolution_return",
+    "2026-11-03T16:57:54.3332599Z JETSETCRAFT_GAMETEST_PASS liberty_stratagem_effects",
+    "2026-11-03T16:57:57.0344039Z JETSETCRAFT_GAMETEST_PASS activity_mix_intermission",
+    "2026-11-03T16:58:06.3332511Z JETSETCRAFT_GAMETEST_PASS activity_mix_runtime",
+    "2026-11-03T16:58:21.1332563Z [16:58:21] [Server thread/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_GAMETEST_PASS liberty_street_operations operations=6 orders=2 completed=12",
+    "2026-11-03T16:58:25.4328232Z JETSETCRAFT_GAMETEST_PASS crew_tour_persistence",
+    "2026-11-03T16:58:32.8381311Z JETSETCRAFT_GAMETEST_PASS rush_expanded_evolution_bass",
+    "2026-11-03T16:58:32.8441362Z JETSETCRAFT_GAMETEST_PASS rush_expanded_evolution_pulse_pause",
+    "2026-11-03T16:58:42.1336364Z [16:58:42] [Server thread/INFO] [minecraft/GameTestServer]: All 139 required tests passed :)"
+  ],
+  "full_provider_evidence": [
+    "2026-11-03T16:53:58.7084697Z HEAD is now at 8a56fc3 Merge 8d19826d5e7d78d5046707d667a6cea9f6d1d12b into 48894787914076c050ff9635478cc637e666842b",
+    "2026-11-03T16:56:59.7675473Z JETSETCRAFT_GAMETEST_PASS crew_tour_safety",
+    "2026-11-03T16:57:04.4679452Z JETSETCRAFT_GAMETEST_PASS crew_tour_claims",
+    "2026-11-03T16:57:05.8680083Z JETSETCRAFT_GAMETEST_PASS activity_mix_model",
+    "2026-11-03T16:57:52.5690735Z JETSETCRAFT_GAMETEST_PASS rush_expanded_evolution_rules",
+    "2026-11-03T16:58:02.3708987Z JETSETCRAFT_GAMETEST_PASS crew_tour_standalone",
+    "2026-11-03T16:58:04.6675892Z JETSETCRAFT_GAMETEST_PASS crew_tour_revision_saturation",
+    "2026-11-03T16:58:21.8679676Z JETSETCRAFT_GAMETEST_PASS crew_tour_entry",
+    "2026-11-03T16:58:31.5689350Z JETSETCRAFT_GAMETEST_PASS crew_tour_training_revision",
+    "2026-11-03T16:58:45.0676748Z JETSETCRAFT_GAMETEST_PASS rush_expanded_evolution_reprise",
+    "2026-11-03T16:58:45.0698587Z JETSETCRAFT_GAMETEST_PASS rush_expanded_evolution_finale",
+    "2026-11-03T16:59:03.4676104Z JETSETCRAFT_GAMETEST_PASS activity_mix_safety",
+    "2026-11-03T16:59:05.1689710Z JETSETCRAFT_GAMETEST_PASS rush_evolution_return",
+    "2026-11-03T16:59:06.4679447Z JETSETCRAFT_GAMETEST_PASS graffiti_lifecycle native_support_ticks=40",
+    "2026-11-03T16:59:11.5678048Z JETSETCRAFT_LIBERTY_MOB_SAFETY_PASS native_home_actors_callbacks_reinforcements_conversion_raid_return",
+    "2026-11-03T16:59:20.9689503Z JETSETCRAFT_GAMETEST_PASS liberty_stratagem_effects",
+    "2026-11-03T16:59:29.3695678Z JETSETCRAFT_GAMETEST_PASS activity_mix_intermission",
+    "2026-11-03T16:59:31.6689810Z JETSETCRAFT_GAMETEST_PASS liberty_mcdivers_native",
+    "2026-11-03T16:59:47.8678433Z JETSETCRAFT_GAMETEST_PASS activity_mix_runtime",
+    "2026-11-03T17:00:03.2680226Z [17:00:03] [Server thread/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_GAMETEST_PASS liberty_street_operations operations=6 orders=2 completed=12",
+    "2026-11-03T17:00:08.6689083Z JETSETCRAFT_GAMETEST_PASS crew_tour_persistence",
+    "2026-11-03T17:00:40.8677757Z JETSETCRAFT_GAMETEST_PASS rush_expanded_evolution_bass",
+    "2026-11-03T17:00:40.8680443Z JETSETCRAFT_GAMETEST_PASS rush_expanded_evolution_pulse_pause",
+    "2026-11-03T17:01:10.3788785Z [17:01:10] [Server thread/INFO] [minecraft/GameTestServer]: All 139 required tests passed :)",
+    "2026-11-03T17:01:55.0974733Z JETSETCRAFT_LIBERTY_SERVER_SMOKE_PASS ready authenticated_stop all_dimensions_saved exit_zero",
+    "2026-11-03T17:03:06.1592803Z JETSETCRAFT_LIBERTY_INSTALLED_SMOKE_PASS exact_release_jar native_guard actual_providers commands authenticated_stop all_dimensions_saved exit_zero",
+    "2026-11-03T17:03:06.1775407Z LIBERTY_INSTALLED_ARTIFACT file=jetsetcraft-1.20.1-0.4.0-alpha.10.jar bytes=6634631 sha256=cd6e862bc392f8ecaa3d25c07eead9921af93cc8efc77caf8b6a3e9275dee43e",
+    "2026-11-03T17:05:00.7294022Z [17:05:00] [Server thread/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_LIBERTY_CAMPAIGN_VISUAL_PAINT mission=c7e609a7-d147-4a5c-bb39-7cf95ef7bdf7 site=stage_0_turf_0 actualProgress=6 goal=40 actualOwnedGraffiti=14 originalSurfaceSamplesUnchanged=25; produced by the real UI call-in, not injected completion",
+    "2026-11-03T17:05:04.5285693Z [17:05:04] [Server thread/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_LIBERTY_CAMPAIGN_VISUAL_CLEANUP verifiedRemovedPaintEntities=14",
+    "2026-11-03T17:05:49.6290633Z [17:05:49] [Render thread/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_LIBERTY_VISUAL_AUDIT_FAIL 45-second campaign phase deadline 241; server status=Operation aborted. Earned super credits and objective crew progress were retained; field samples were left behind.",
+    "2026-11-03T17:05:49.6320791Z [17:05:49] [Render thread/ERROR] [co.he.je.JetSetCraft/]: JETSETCRAFT_LIBERTY_VISUAL_AUDIT_SCREEN com.herberto.jetsetcraft.client.liberty.LibertyCampaignScreen Liberty Grind \u00b7 Campaign"
+  ],
+  "native_client_capture_evidence": [
+    "2026-11-03T17:04:17.9317770Z [17:04:17] [IO-Worker-7/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_LIBERTY_VISUAL_AUDIT_CAPTURE 01-campaign-war-map-default /home/runner/work/JetSetCraft/JetSetCraft/run/./screenshots/liberty-grind-1793725409880-01-campaign-war-map-default.png",
+    "2026-11-03T17:04:19.5310273Z [17:04:19] [IO-Worker-4/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_LIBERTY_VISUAL_AUDIT_CAPTURE 02-campaign-plan-default /home/runner/work/JetSetCraft/JetSetCraft/run/./screenshots/liberty-grind-1793725409880-02-campaign-plan-default.png",
+    "2026-11-03T17:04:20.7290563Z [17:04:20] [IO-Worker-7/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_LIBERTY_VISUAL_AUDIT_CAPTURE 03-callin-catalog-default /home/runner/work/JetSetCraft/JetSetCraft/run/./screenshots/liberty-grind-1793725409880-03-callin-catalog-default.png",
+    "2026-11-03T17:04:23.6324561Z [17:04:23] [IO-Worker-5/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_LIBERTY_VISUAL_AUDIT_CAPTURE 04-chromageddon-equipped-default /home/runner/work/JetSetCraft/JetSetCraft/run/./screenshots/liberty-grind-1793725409880-04-chromageddon-equipped-default.png",
+    "2026-11-03T17:04:24.7320872Z [17:04:24] [IO-Worker-7/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_LIBERTY_VISUAL_AUDIT_CAPTURE 05-armory-all-weapons-default /home/runner/work/JetSetCraft/JetSetCraft/run/./screenshots/liberty-grind-1793725409880-05-armory-all-weapons-default.png",
+    "2026-11-03T17:04:28.3289968Z [17:04:28] [IO-Worker-7/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_LIBERTY_VISUAL_AUDIT_CAPTURE 06-armor-heavy-minimum /home/runner/work/JetSetCraft/JetSetCraft/run/./screenshots/liberty-grind-1793725409880-06-armor-heavy-minimum.png",
+    "2026-11-03T17:04:30.4310582Z [17:04:30] [IO-Worker-4/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_LIBERTY_VISUAL_AUDIT_CAPTURE 07-armory-weapon-search-minimum /home/runner/work/JetSetCraft/JetSetCraft/run/./screenshots/liberty-grind-1793725409880-07-armory-weapon-search-minimum.png",
+    "2026-11-03T17:04:31.6300581Z [17:04:31] [IO-Worker-7/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_LIBERTY_VISUAL_AUDIT_CAPTURE 08-campaign-war-map-minimum /home/runner/work/JetSetCraft/JetSetCraft/run/./screenshots/liberty-grind-1793725409880-08-campaign-war-map-minimum.png",
+    "2026-11-03T17:04:32.8300165Z [17:04:32] [IO-Worker-7/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_LIBERTY_VISUAL_AUDIT_CAPTURE 09-campaign-plan-minimum /home/runner/work/JetSetCraft/JetSetCraft/run/./screenshots/liberty-grind-1793725409880-09-campaign-plan-minimum.png",
+    "2026-11-03T17:04:34.0310537Z [17:04:33] [IO-Worker-5/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_LIBERTY_VISUAL_AUDIT_CAPTURE 10-loadout-review-minimum /home/runner/work/JetSetCraft/JetSetCraft/run/./screenshots/liberty-grind-1793725409880-10-loadout-review-minimum.png",
+    "2026-11-03T17:04:34.6340414Z [17:04:34] [IO-Worker-10/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_LIBERTY_VISUAL_AUDIT_CAPTURE 10b-loadout-review-scroll-minimum /home/runner/work/JetSetCraft/JetSetCraft/run/./screenshots/liberty-grind-1793725409880-10b-loadout-review-scroll-minimum.png",
+    "2026-11-03T17:04:36.0289292Z [17:04:35] [IO-Worker-4/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_LIBERTY_VISUAL_AUDIT_CAPTURE 11-loadout-review-default /home/runner/work/JetSetCraft/JetSetCraft/run/./screenshots/liberty-grind-1793725409880-11-loadout-review-default.png",
+    "2026-11-03T17:04:38.7310041Z [17:04:38] [IO-Worker-4/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_LIBERTY_VISUAL_AUDIT_CAPTURE 12-live-pod /home/runner/work/JetSetCraft/JetSetCraft/run/./screenshots/liberty-grind-1793725409880-12-live-pod.png",
+    "2026-11-03T17:04:55.9305677Z [17:04:55] [IO-Worker-8/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_LIBERTY_VISUAL_AUDIT_CAPTURE 13-selected-native-gun-hud /home/runner/work/JetSetCraft/JetSetCraft/run/./screenshots/liberty-grind-1793725409880-13-selected-native-gun-hud.png",
+    "2026-11-03T17:05:01.3285352Z [17:05:01] [IO-Worker-8/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_LIBERTY_VISUAL_AUDIT_CAPTURE 14-chromageddon-paint-blast /home/runner/work/JetSetCraft/JetSetCraft/run/./screenshots/liberty-grind-1793725409880-14-chromageddon-paint-blast.png",
+    "2026-11-03T17:05:02.5320755Z [17:05:02] [IO-Worker-4/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_LIBERTY_VISUAL_AUDIT_CAPTURE 15-field-progress-minimum /home/runner/work/JetSetCraft/JetSetCraft/run/./screenshots/liberty-grind-1793725409880-15-field-progress-minimum.png",
+    "2026-11-03T17:05:49.7285131Z [17:05:49] [IO-Worker-6/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_LIBERTY_VISUAL_AUDIT_CAPTURE 99-failure /home/runner/work/JetSetCraft/JetSetCraft/run/./screenshots/liberty-grind-1793725409880-99-failure.png"
+  ],
+  "artifacts": [
+    {
+      "id": 13252871147,
+      "name": "jetsetcraft-liberty-missing-pack-8a56fc3c58a8238cf6906904fa8a29af12b1bac0",
+      "bytes": 6376477,
+      "digest": "sha256:bf42c7f5fe06eb9bf8b93131e91ee75806c9e8ddb766635a988432a88ba04a07",
+      "expired": false,
+      "downloaded_and_archive_hash_verified": false
+    },
+    {
+      "id": 13252453195,
+      "name": "jetsetcraft-liberty-full-provider-8a56fc3c58a8238cf6906904fa8a29af12b1bac0",
+      "bytes": 6570176,
+      "digest": "sha256:72c43f4e2e9ffc9625c8522eb31ab7e4c8af1bc88aa7785e5302212349c50881",
+      "expired": false,
+      "downloaded_and_archive_hash_verified": true
+    },
+    {
+      "id": 13252183582,
+      "name": "jetsetcraft-liberty-native-client-8a56fc3c58a8238cf6906904fa8a29af12b1bac0",
+      "bytes": 2682326,
+      "digest": "sha256:3d50c2c18fdccf261c587841844ecfa5ae6b549f94d1f11eea821781ced28b79",
+      "expired": false,
+      "downloaded_and_archive_hash_verified": true
+    }
+  ],
+  "diagnosis": {
+    "established": "Both provider lanes passed all 139 required GameTests. Full provider passed native MCDivers, native home callbacks, dedicated-server smoke and independent installed-JAR smoke. The client failed the unchanged 45-second phase241 ship-arrival deadline after successful early-return restoration and paint cleanup.",
+    "exact_prior_packet_timing_known": false,
+    "likely_mechanism": "Phase240 measured20 client ticks and an asynchronous server cleanup callback, but never proved the two genuine overworld game-time ticks required between actions by LibertyManager.handleAction. A board request within that interval is silently dropped, preserving the observed prior Operation aborted status. A stale revision instead sends Review the refreshed war map, which was not observed.",
+    "limits": "No server action-time log exists for this historical failure, so the exact throttle rejection is unproven. Both Liberty UI screens explicitly do not pause the game. No later native ship-transfer error or arrival evidence appears in this job log.",
+    "requested_correction": "Audit-only read-only server-clock and menu-revision readiness barrier before one real Board button click, with precise diagnostics. Preserve production throttle, original45-second deadlines, real ship walk/return and all19required captures; do not retry or fabricate admission."
+  },
+  "scope": "Candidate5 full-provider workflow FAILED its real-client gate. Native139-test and dedicated/installed-server passes remain valid and separate. There are16 successful scenario captures through15-field-progress-minimum (including10b) plus one failure screenshot, not19 successful captures. Ship hardware, walkable ship deck and final home-return images are absent.",
+  "installed_jar": {
+    "file": "jetsetcraft-1.20.1-0.4.0-alpha.10.jar",
+    "bytes": 6634631,
+    "sha256": "cd6e862bc392f8ecaa3d25c07eead9921af93cc8efc77caf8b6a3e9275dee43e",
+    "identity_source": "Downloaded archive hash verified; actual extracted JAR bytes and SHA-256 independently match installed-smoke.json, workflow LIBERTY_INSTALLED_ARTIFACT, and root-verified candidate5 base artifact13252087670.",
+    "source_commit": "8a56fc3c58a8238cf6906904fa8a29af12b1bac0",
+    "installed_status": "PASS"
+  },
+  "native_client": {
+    "audit_pass_marker": false,
+    "campaign_pass_marker": false,
+    "audit_failure_marker": true,
+    "capture_count": 17,
+    "successful_scenario_capture_count": 16,
+    "all17_png_metadata_verified": true,
+    "captures": [
+      {
+        "file": "liberty-grind-1793725409880-01-campaign-war-map-default.png",
+        "label": "01-campaign-war-map-default",
+        "width": 1280,
+        "height": 720,
+        "bytes": 117073,
+        "sha256": "35212085f758431de9bcafaac6630b9b9ac56eeec7989c25f585e161968621c8",
+        "capture_marker_observed": true
+      },
+      {
+        "file": "liberty-grind-1793725409880-02-campaign-plan-default.png",
+        "label": "02-campaign-plan-default",
+        "width": 1280,
+        "height": 720,
+        "bytes": 184810,
+        "sha256": "fae1bfb086ff0f47e70bb61dd8f113243c8ee05768652bb818503ff73d5e1209",
+        "capture_marker_observed": true
+      },
+      {
+        "file": "liberty-grind-1793725409880-03-callin-catalog-default.png",
+        "label": "03-callin-catalog-default",
+        "width": 1280,
+        "height": 720,
+        "bytes": 195557,
+        "sha256": "d55de1ec9e801d8e50a44c3567cac0dc98a70a8ec0b31d6ad586f062a0298c32",
+        "capture_marker_observed": true
+      },
+      {
+        "file": "liberty-grind-1793725409880-04-chromageddon-equipped-default.png",
+        "label": "04-chromageddon-equipped-default",
+        "width": 1280,
+        "height": 720,
+        "bytes": 181678,
+        "sha256": "95bd51fed6fd541b7a9f597cf009cd14194a63320ad1d46a58d44b71e16618f4",
+        "capture_marker_observed": true
+      },
+      {
+        "file": "liberty-grind-1793725409880-05-armory-all-weapons-default.png",
+        "label": "05-armory-all-weapons-default",
+        "width": 1280,
+        "height": 720,
+        "bytes": 190270,
+        "sha256": "adee706aeb2c7e9a4b598004607abb7acd47a24bca4516baa1cf61fc94e317b8",
+        "capture_marker_observed": true
+      },
+      {
+        "file": "liberty-grind-1793725409880-06-armor-heavy-minimum.png",
+        "label": "06-armor-heavy-minimum",
+        "width": 960,
+        "height": 720,
+        "bytes": 149629,
+        "sha256": "883622275b8117e0deaafca42ab7f02c2c456280cba842010ec94d3f2ca05bc7",
+        "capture_marker_observed": true
+      },
+      {
+        "file": "liberty-grind-1793725409880-07-armory-weapon-search-minimum.png",
+        "label": "07-armory-weapon-search-minimum",
+        "width": 960,
+        "height": 720,
+        "bytes": 151271,
+        "sha256": "f90d813aab5543a3002396503ab367a306c8e15c2fca799b6d8728cc8090a2da",
+        "capture_marker_observed": true
+      },
+      {
+        "file": "liberty-grind-1793725409880-08-campaign-war-map-minimum.png",
+        "label": "08-campaign-war-map-minimum",
+        "width": 960,
+        "height": 720,
+        "bytes": 105357,
+        "sha256": "19f3166d029afca3ff014b55866314ff0d3a62c1fd38be3c760b6c0576ecaffa",
+        "capture_marker_observed": true
+      },
+      {
+        "file": "liberty-grind-1793725409880-09-campaign-plan-minimum.png",
+        "label": "09-campaign-plan-minimum",
+        "width": 960,
+        "height": 720,
+        "bytes": 128988,
+        "sha256": "6d5108ee665be0715ffd09b2ccaaeafa8a6328a515cb81ac5a54dbb4f7166497",
+        "capture_marker_observed": true
+      },
+      {
+        "file": "liberty-grind-1793725409880-10-loadout-review-minimum.png",
+        "label": "10-loadout-review-minimum",
+        "width": 960,
+        "height": 720,
+        "bytes": 122943,
+        "sha256": "b52b87c9c6fe8c5f8668862a3967e4c16ef0c40bfeefc20962d6f330d0ccc7d3",
+        "capture_marker_observed": true
+      },
+      {
+        "file": "liberty-grind-1793725409880-10b-loadout-review-scroll-minimum.png",
+        "label": "10b-loadout-review-scroll-minimum",
+        "width": 960,
+        "height": 720,
+        "bytes": 122153,
+        "sha256": "7018c4318b6c3b80118ca8bf8bc823beead9b005ea2cb85cacf7229f88d10e4f",
+        "capture_marker_observed": true
+      },
+      {
+        "file": "liberty-grind-1793725409880-11-loadout-review-default.png",
+        "label": "11-loadout-review-default",
+        "width": 1280,
+        "height": 720,
+        "bytes": 175022,
+        "sha256": "42e449b8de2d6bc9bc4429a81e8d06c00e24142bf2e274a6b954b7c9edc6cafb",
+        "capture_marker_observed": true
+      },
+      {
+        "file": "liberty-grind-1793725409880-12-live-pod.png",
+        "label": "12-live-pod",
+        "width": 1280,
+        "height": 720,
+        "bytes": 169366,
+        "sha256": "186afc6ce84e0e2454ff689aa5c4cb467d4f1f7061e8af9b7e7257415226b59e",
+        "capture_marker_observed": true
+      },
+      {
+        "file": "liberty-grind-1793725409880-13-selected-native-gun-hud.png",
+        "label": "13-selected-native-gun-hud",
+        "width": 1280,
+        "height": 720,
+        "bytes": 315322,
+        "sha256": "fa2eb471d125630aa8df12595bbd50affee68fde82c96a73ffe7b93189255051",
+        "capture_marker_observed": true
+      },
+      {
+        "file": "liberty-grind-1793725409880-14-chromageddon-paint-blast.png",
+        "label": "14-chromageddon-paint-blast",
+        "width": 1280,
+        "height": 720,
+        "bytes": 376505,
+        "sha256": "1074cf8c438c32e93846cd629bc7346f874fc5be3cd980ede51eae33ba136ecf",
+        "capture_marker_observed": true
+      },
+      {
+        "file": "liberty-grind-1793725409880-15-field-progress-minimum.png",
+        "label": "15-field-progress-minimum",
+        "width": 960,
+        "height": 720,
+        "bytes": 80845,
+        "sha256": "d771f40b186fbddd99db03a0a82615318150c9e26b6daf21f31cd2299525f778",
+        "capture_marker_observed": true
+      },
+      {
+        "file": "liberty-grind-1793725409880-99-failure.png",
+        "label": "99-failure",
+        "width": 960,
+        "height": 720,
+        "bytes": 113416,
+        "sha256": "c13c52c16f5eeef2d462c6721be500ddc769a174a51cae2714ff91a2bd5ee7e3",
+        "capture_marker_observed": true
+      }
+    ],
+    "missing_required_captures": [
+      "16-ship-hardware-minimum",
+      "17-walkable-ship-deck",
+      "18-returned-home-map"
+    ]
+  },
+  "local_visual_review": {
+    "images": [
+      "99-failure"
+    ],
+    "findings": "Viewed actual960x720 failure frame: campaign war map still shows Board your ship, with returned normal-world scene behind the screen. No ship admission/capture evidence. Other candidate5 Liberty images were metadata-checked only; no complete visual QA or ship/return visual success is claimed."
+  }
+}

@@ -1,0 +1,243 @@
+{
+  "format_version": 1,
+  "run_id": 41678802091,
+  "job_id": 126066560074,
+  "workflow": "Verify JetSetCraft",
+  "job": "Java 17 / Forge 1.20.1",
+  "url": "https://github.com/Herbertofury/JetSetCraft/actions/runs/41678802091",
+  "candidate_head": "8d19826d5e7d78d5046707d667a6cea9f6d1d12b",
+  "candidate_tree": "f697380c64947b494cb6e00f9ab7c87f41ef9c85",
+  "source_input_aggregate_reported_by_root": "0d5402e19b7b226dea7abc761fa3cd923908db790526e40266febaf0d99ea9be",
+  "checkout_commit": "8a56fc3c58a8238cf6906904fa8a29af12b1bac0",
+  "checkout_log_evidence": [
+    "2026-11-03T16:53:59.1380415Z [command]/usr/bin/git log -1 --format=%H",
+    "2026-11-03T16:53:59.1408013Z 8a56fc3c58a8238cf6906904fa8a29af12b1bac0"
+  ],
+  "status": "completed",
+  "conclusion": "success",
+  "clean_forge_build_passed": true,
+  "required_gametests": 139,
+  "required_test_failures": 0,
+  "observed_connected_markers": [
+    "crew_tour_safety",
+    "crew_tour_claims",
+    "activity_mix_model",
+    "rush_expanded_evolution_rules",
+    "crew_tour_standalone",
+    "crew_tour_revision_saturation",
+    "crew_tour_entry",
+    "crew_tour_training_revision",
+    "rush_expanded_evolution_reprise",
+    "rush_expanded_evolution_finale",
+    "activity_mix_safety",
+    "activity_mix_intermission",
+    "activity_mix_runtime",
+    "liberty_street_operations",
+    "crew_tour_persistence",
+    "rush_expanded_evolution_bass",
+    "rush_expanded_evolution_pulse_pause"
+  ],
+  "connected_marker_evidence": [
+    "2026-11-03T16:56:29.2309527Z JETSETCRAFT_GAMETEST_PASS crew_tour_safety",
+    "2026-11-03T16:56:33.0307188Z JETSETCRAFT_GAMETEST_PASS crew_tour_claims",
+    "2026-11-03T16:56:34.5342457Z JETSETCRAFT_GAMETEST_PASS activity_mix_model",
+    "2026-11-03T16:56:36.9313799Z JETSETCRAFT_GAMETEST_PASS rush_expanded_evolution_rules",
+    "2026-11-03T16:56:44.6323518Z JETSETCRAFT_GAMETEST_PASS crew_tour_standalone",
+    "2026-11-03T16:56:46.5306954Z JETSETCRAFT_GAMETEST_PASS crew_tour_revision_saturation",
+    "2026-11-03T16:56:57.1306899Z JETSETCRAFT_GAMETEST_PASS crew_tour_entry",
+    "2026-11-03T16:57:06.1373114Z JETSETCRAFT_GAMETEST_PASS crew_tour_training_revision",
+    "2026-11-03T16:57:16.3307118Z JETSETCRAFT_GAMETEST_PASS rush_expanded_evolution_reprise",
+    "2026-11-03T16:57:16.4311647Z JETSETCRAFT_GAMETEST_PASS rush_expanded_evolution_finale",
+    "2026-11-03T16:57:30.0332658Z JETSETCRAFT_GAMETEST_PASS activity_mix_safety",
+    "2026-11-03T16:57:37.6314058Z JETSETCRAFT_GAMETEST_PASS activity_mix_intermission",
+    "2026-11-03T16:57:47.0310481Z JETSETCRAFT_GAMETEST_PASS activity_mix_runtime",
+    "2026-11-03T16:58:01.3346687Z [16:58:01] [Server thread/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_GAMETEST_PASS liberty_street_operations operations=6 orders=2 completed=12",
+    "2026-11-03T16:58:05.7307579Z JETSETCRAFT_GAMETEST_PASS crew_tour_persistence",
+    "2026-11-03T16:58:15.0307157Z JETSETCRAFT_GAMETEST_PASS rush_expanded_evolution_bass",
+    "2026-11-03T16:58:15.0308849Z JETSETCRAFT_GAMETEST_PASS rush_expanded_evolution_pulse_pause"
+  ],
+  "dedicated_server_smoke_passed": true,
+  "native_client_audit_passed": true,
+  "native_capture_count": 26,
+  "native_capture_labels": [
+    "01-setup",
+    "02-district-hud",
+    "03-album",
+    "04-return-result",
+    "05-crew-home",
+    "06-crew-roster",
+    "07-crew-facilities",
+    "08-crew-jobs",
+    "09-activities",
+    "10-arena-route",
+    "11-journey-map",
+    "12-run-build",
+    "14-cache-scout",
+    "13-crew-progress",
+    "15-style-library",
+    "16-build-paths",
+    "17-draft-agency",
+    "18-headliner-tell",
+    "19-run-debrief",
+    "20-contract-briefing",
+    "21-contract-progress",
+    "22-pit-stop",
+    "23-service-result",
+    "24-crew-tour",
+    "25-crew-tour-minimum",
+    "26-street-mix-preview"
+  ],
+  "feedback_settled_marker_observed": true,
+  "feedback_settled_before_connected_captures": true,
+  "connected_capture_evidence": [
+    "2026-11-03T17:01:55.0604345Z [17:01:55] [IO-Worker-5/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_RUSH_VISUAL_AUDIT_CAPTURE 24-crew-tour /home/runner/work/JetSetCraft/JetSetCraft/run/./screenshots/rival-rush-1793725172902-24-crew-tour.png",
+    "2026-11-03T17:01:55.8606370Z [17:01:55] [IO-Worker-9/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_RUSH_VISUAL_AUDIT_CAPTURE 25-crew-tour-minimum /home/runner/work/JetSetCraft/JetSetCraft/run/./screenshots/rival-rush-1793725172902-25-crew-tour-minimum.png",
+    "2026-11-03T17:01:57.6599640Z [17:01:57] [IO-Worker-5/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_RUSH_VISUAL_AUDIT_CAPTURE 26-street-mix-preview /home/runner/work/JetSetCraft/JetSetCraft/run/./screenshots/rival-rush-1793725172902-26-street-mix-preview.png"
+  ],
+  "checksum_gate_passed": true,
+  "artifact_upload_passed": true,
+  "individual_image_review": false,
+  "artifact_downloaded": false,
+  "internal_jar_checksum_inspected": false,
+  "steps": [
+    {
+      "name": "Set up job",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 1
+    },
+    {
+      "name": "Check out sources",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 2
+    },
+    {
+      "name": "Set up Temurin 17",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 3
+    },
+    {
+      "name": "Set up Gradle wrapper cache",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 4
+    },
+    {
+      "name": "Set up asset tooling",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 5
+    },
+    {
+      "name": "Regenerate deterministic authored assets",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 6
+    },
+    {
+      "name": "Validate assets, gameplay contracts, source, and wiki",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 7
+    },
+    {
+      "name": "Clean Forge build",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 8
+    },
+    {
+      "name": "Run all real Forge GameTests",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 9
+    },
+    {
+      "name": "Run real Forge dedicated-server smoke",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 10
+    },
+    {
+      "name": "Verify activities, arena journeys and crew houses in a real Minecraft client",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 11
+    },
+    {
+      "name": "Seal artifact checksums",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 12
+    },
+    {
+      "name": "Upload verified release candidate",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 13
+    },
+    {
+      "name": "Post Set up Gradle wrapper cache",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 24
+    },
+    {
+      "name": "Post Set up Temurin 17",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 25
+    },
+    {
+      "name": "Post Check out sources",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 26
+    },
+    {
+      "name": "Complete job",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 27
+    }
+  ],
+  "artifacts": [
+    {
+      "id": 13252087670,
+      "name": "jetsetcraft-forge-1.20.1-8a56fc3c58a8238cf6906904fa8a29af12b1bac0",
+      "size_in_bytes": 8939176,
+      "url": "https://api.github.com/repos/Herbertofury/JetSetCraft/actions/artifacts/13252087670",
+      "archive_download_url": "https://api.github.com/repos/Herbertofury/JetSetCraft/actions/artifacts/13252087670/zip",
+      "expired": false,
+      "created_at": "2026-11-03T17:02:02Z",
+      "expires_at": "2027-02-01T16:53:41Z",
+      "updated_at": "2026-11-03T17:02:02Z",
+      "digest": "sha256:b9b3e6f42c868f800153cc12ecbc599b0c7db0e47fc5ac3438c3d7ddece26dd2",
+      "workflow_run": {
+        "id": 41678802091,
+        "repository_id": 1341341761,
+        "head_repository_id": 1341341761,
+        "head_branch": "feature/connected-streets",
+        "head_sha": "8d19826d5e7d78d5046707d667a6cea9f6d1d12b"
+      }
+    }
+  ],
+  "evidence_excerpts": [
+    "2026-11-03T16:58:24.4412506Z [16:58:24] [Server thread/INFO] [minecraft/GameTestServer]: All 139 required tests passed :)",
+    "2026-11-03T17:01:54.1598935Z [17:01:54] [Render thread/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_CONNECTED_AUDIT_FEEDBACK_SETTLED actual receipt notifications finished; none removed or hidden",
+    "2026-11-03T17:01:54.9614452Z [17:01:54] [Render thread/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_CONNECTED_AUDIT_TOUR_OBSERVED revision=6 results=2 modes=1 core=0/9 optional=0/3 ready=0 (actual prior activity receipts; read-only navigation, no award or unlock assigned)",
+    "2026-11-03T17:01:55.7604693Z [17:01:55] [Render thread/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_CONNECTED_AUDIT_MINIMUM_OBSERVED width=320 height=240 scroll=212 revision=6 (actual native detail scroll and bounded nonoverlapping controls)",
+    "2026-11-03T17:01:57.5600932Z [17:01:57] [Render thread/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_CONNECTED_AUDIT_MIX_PREVIEW_OBSERVED context=149c2aee-b07e-4ca1-b451-52ed50e23b9e version=2 route=Tag \u2192 King of the Hill \u2192 Crew showdown modifier=Relay chase: catch three pairs of skaters. Return to the marked handoff ring between pairs. active=false cleared=0 (actual UI selection; no launch, objectives or reward assigned)",
+    "2026-11-03T17:01:57.8599284Z [17:01:57] [Render thread/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_CONNECTED_STREET_VISUAL_AUDIT_PASS three appended real-client captures; actual Crew Tour snapshot and 320x240 scrolling; explicit Tag Street Mix preview cancelled through production packet before launch; exact tour/account/inventory/XP/dimension preserved; no reward, unlock, victory or human gameplay fabricated",
+    "2026-11-03T17:01:57.8604809Z [17:01:57] [Render thread/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_RUSH_VISUAL_AUDIT_PASS twenty-six real-client captures; original twenty-three preserved; actual Crew Tour and 320x240 scrolling, unlaunched Street Mix preview cancelled; real PAINT/room/TUNE sequence retained; shared progression and ordinary inventory/XP/dimension preserved; owned-hit, authored-wall, arrival and clock fixtures explicitly logged, not human traversal/duration or boss-clear proof"
+  ],
+  "limitations": [
+    "This receipt covers the successful candidate-5 base workflow only; separate provider-lane results are outside its scope.",
+    "Artifact inventory and archive digest were observed through GitHub metadata. The artifact ZIP, internal JAR checksum file and individual PNG pixels were not downloaded or inspected for this receipt; root owns their separate verification.",
+    "The source-input aggregate was supplied by root. The job checkout commit and artifact head were independently observed in hosted logs and metadata.",
+    "The automated native client audit uses explicitly logged owned-hit, authored-wall, arrival and clock fixtures. It is not a human playthrough, natural pacing, full-duration or boss-clear proof.",
+    "Feedback-settled captures do not visually demonstrate an active toast at minimum GUI size."
+  ]
+}

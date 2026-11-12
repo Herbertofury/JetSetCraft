@@ -1,0 +1,29 @@
+{
+  "date_utc": "2026-11-03T15:42:58.956706+00:00",
+  "baseline_commit": "752ee7fac8fe5817dcd1b4e33a88c5719889ac06",
+  "candidate_version": "0.4.0-alpha.10",
+  "network_protocol": 18,
+  "crew_schema": 4,
+  "source_input_count": 703,
+  "static_checks": "all nine pass",
+  "java_source_count": 247,
+  "declared_required_gametests": 139,
+  "native_gametests_executed": false,
+  "model_checks": {
+    "ActivityRun": "actual production classes compiled and exercised, no Minecraft stubs",
+    "LibertyMissionPlan": {
+      "templates": 34,
+      "faction_template_pairs": 66,
+      "plans": 5940,
+      "determinism_checks": 5940,
+      "unique_first_sites": 5782,
+      "maximum_objectives": 18
+    }
+  },
+  "forge_build": "not executed: Gradle bootstrap recovered via configured proxy; official Forge Maven metadata returned HTTP 403 before dependencies/compilation",
+  "native_client": "not executed: 26 base and 19 Liberty captures remain hosted gates",
+  "workflow_checks": "all 28 run-step scripts parsed with bash -n; all 139 required tests included by dynamic count in base and provider lanes; 17 Connected Streets pass markers explicitly required in base",
+  "limitations": "Source syntax, validators and dependency-free production model execution do not establish Forge type compilation, native gameplay, installed JAR behavior, client pixels, or human balance.",
+  "gradle_attempt_exit_code": 130,
+  "gradle_attempt_status": "Interrupted after official Forge Maven HTTP 403; no native compile/test result"
+}

@@ -68,7 +68,8 @@ jobs:
             fi
             mkdir -p build/verification
             cp "$log" "build/verification/forge-build-attempt-$attempt.log"
-            if grep -Eq 'Compilation failed|> Task :compile(Java|TestJava) FAILED|(^|[[:space:]])error:' "$log"; then
+            # compileJava also fails when dependency resolution never reaches the compiler.
+            if grep -Eq 'Compilation failed|(^|[[:space:]])error:' "$log"; then
               echo '::error::Deterministic compile failure; refusing an unchanged retry.'
               exit 1
             fi
@@ -150,7 +151,24 @@ jobs:
             'JETSETCRAFT_GAMETEST_PASS rush_pit_stop_runtime' \
             'JETSETCRAFT_GAMETEST_PASS rush_pit_stop_rules' \
             'JETSETCRAFT_GAMETEST_PASS rush_pit_stop_effects' \
-            'JETSETCRAFT_GAMETEST_PASS rush_pit_stop_snapshots'; do
+            'JETSETCRAFT_GAMETEST_PASS rush_pit_stop_snapshots' \
+            'JETSETCRAFT_GAMETEST_PASS activity_mix_model' \
+            'JETSETCRAFT_GAMETEST_PASS activity_mix_runtime' \
+            'JETSETCRAFT_GAMETEST_PASS activity_mix_safety' \
+            'JETSETCRAFT_GAMETEST_PASS activity_mix_intermission' \
+            'JETSETCRAFT_GAMETEST_PASS crew_tour_claims' \
+            'JETSETCRAFT_GAMETEST_PASS crew_tour_standalone' \
+            'JETSETCRAFT_GAMETEST_PASS crew_tour_persistence' \
+            'JETSETCRAFT_GAMETEST_PASS crew_tour_safety' \
+            'JETSETCRAFT_GAMETEST_PASS crew_tour_entry' \
+            'JETSETCRAFT_GAMETEST_PASS crew_tour_training_revision' \
+            'JETSETCRAFT_GAMETEST_PASS crew_tour_revision_saturation' \
+            'JETSETCRAFT_GAMETEST_PASS rush_expanded_evolution_rules' \
+            'JETSETCRAFT_GAMETEST_PASS rush_expanded_evolution_finale' \
+            'JETSETCRAFT_GAMETEST_PASS rush_expanded_evolution_bass' \
+            'JETSETCRAFT_GAMETEST_PASS rush_expanded_evolution_reprise' \
+            'JETSETCRAFT_GAMETEST_PASS rush_expanded_evolution_pulse_pause' \
+            'JETSETCRAFT_GAMETEST_PASS liberty_street_operations'; do
             grep -Fq "$marker" "$log" || { echo "::error::Missing GameTest marker: $marker"; exit 1; }
           done
           expected_tests=$(python -c "import pathlib,re; print(sum(len(re.findall(r'@GameTest\\s*\\(', p.read_text()) ) for p in pathlib.Path('src/main/java/com/herberto/jetsetcraft/gametest').glob('*.java')))")
@@ -273,11 +291,16 @@ jobs:
           grep -Fq 'JETSETCRAFT_CONTRACT_AUDIT_PROGRESS_OBSERVED' "$log"
           grep -Fq 'JETSETCRAFT_CONTRACT_AUDIT_PIT_STOP_OBSERVED' "$log"
           grep -Fq 'JETSETCRAFT_CONTRACT_AUDIT_SERVICE_OBSERVED' "$log"
+          grep -Fq 'JETSETCRAFT_CONNECTED_STREET_VISUAL_AUDIT_PASS' "$log"
+          grep -Fq 'JETSETCRAFT_CONNECTED_AUDIT_FEEDBACK_SETTLED' "$log"
+          grep -Fq 'JETSETCRAFT_CONNECTED_AUDIT_TOUR_OBSERVED' "$log"
+          grep -Fq 'JETSETCRAFT_CONNECTED_AUDIT_MINIMUM_OBSERVED' "$log"
+          grep -Fq 'JETSETCRAFT_CONNECTED_AUDIT_MIX_PREVIEW_OBSERVED' "$log"
           if grep -Fq 'JETSETCRAFT_RUSH_VISUAL_AUDIT_FAIL' "$log"; then
             echo '::error::Rival Rush client audit reported failure.'
             exit 1
           fi
-          for capture in 01-setup 02-district-hud 03-album 04-return-result 05-crew-home 06-crew-roster 07-crew-facilities 08-crew-jobs 09-activities 10-arena-route 11-journey-map 12-run-build 13-crew-progress 14-cache-scout 15-style-library 16-build-paths 17-draft-agency 18-headliner-tell 19-run-debrief 20-contract-briefing 21-contract-progress 22-pit-stop 23-service-result; do
+          for capture in 01-setup 02-district-hud 03-album 04-return-result 05-crew-home 06-crew-roster 07-crew-facilities 08-crew-jobs 09-activities 10-arena-route 11-journey-map 12-run-build 13-crew-progress 14-cache-scout 15-style-library 16-build-paths 17-draft-agency 18-headliner-tell 19-run-debrief 20-contract-briefing 21-contract-progress 22-pit-stop 23-service-result 24-crew-tour 25-crew-tour-minimum 26-street-mix-preview; do
             grep -Fq "JETSETCRAFT_RUSH_VISUAL_AUDIT_CAPTURE $capture " "$log"
             compgen -G "run/screenshots/rival-rush-*-$capture.png" >/dev/null
           done

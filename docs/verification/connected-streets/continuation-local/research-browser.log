@@ -1,0 +1,36 @@
+PASS default scope includes every curated record
+PASS initial page is bounded and more control is available
+PASS pagination adds cards and focuses the first newly revealed heading
+PASS latest action selects the declared pass and focuses search
+PASS first-pass records remain independently retrievable
+PASS accent-insensitive multi-term search finds the exact music candidate
+PASS search and category are encoded in a shareable URL
+PASS including the earlier atlas preserves the complete collection
+PASS historical category is isolated
+PASS disabling history clears contradictory historical filters
+PASS dated pass clears incompatible historical priority
+PASS dated pass clears incompatible historical category
+PASS ordered listening path: first-listen
+PASS ordered listening path: city-after-hours
+PASS leaving music clears the listening path
+PASS listening cards activate their ordered selection
+PASS collection filtering clears a previous listening path
+PASS video filter includes actual video links without labeling store pages as videos
+PASS a video channel or store listing is not misrepresented as a direct video
+PASS image filter retains credited research imagery
+PASS audition filter contains exactly the music catalogue
+PASS historical priority exits an incompatible music-path scope
+PASS saved shortlist is independent of page size
+PASS shortlist survives through the storage contract
+PASS removing the last saved item leaves an accessible empty state
+PASS CSV exports all matches and provenance columns
+PASS CSV neutralizes formula-shaped cells and escapes quotes
+PASS a listening-path URL restores the curated sequence
+PASS historical deep links continue to work
+PASS a dated URL clears contradictory historical filters
+PASS invalid filter URL values are ignored
+PASS shortlisting remains usable with unavailable browser storage
+PASS quick searches clear stale collection and saved scopes
+PASS reset restores the default view and search focus
+
+34 research-browser logic checks passed. Visual/media QA remains a real-browser check.

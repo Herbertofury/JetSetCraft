@@ -1,0 +1,210 @@
+{
+  "run_id": 41670932195,
+  "job_id": 126038764990,
+  "workflow": "Verify JetSetCraft",
+  "job": "Java 17 / Forge 1.20.1",
+  "url": "https://github.com/Herbertofury/JetSetCraft/actions/runs/41670932195",
+  "candidate_head": "23976383cbf8a3f49d753c1e3795ca2df6738544",
+  "candidate_tree": "09969da2a5b15543a6a0ba50dc1b1f47a1ba9852",
+  "checkout_commit": "0d42296e0a6e2147c835a8134657e66dbc48a5c3",
+  "status": "completed",
+  "conclusion": "success",
+  "required_gametests": 139,
+  "required_test_failures": 0,
+  "observed_connected_markers": [
+    "JETSETCRAFT_GAMETEST_PASS crew_tour_safety",
+    "JETSETCRAFT_GAMETEST_PASS crew_tour_claims",
+    "JETSETCRAFT_GAMETEST_PASS activity_mix_model",
+    "JETSETCRAFT_GAMETEST_PASS rush_expanded_evolution_rules",
+    "JETSETCRAFT_GAMETEST_PASS crew_tour_standalone",
+    "JETSETCRAFT_GAMETEST_PASS crew_tour_revision_saturation",
+    "JETSETCRAFT_GAMETEST_PASS crew_tour_entry",
+    "JETSETCRAFT_GAMETEST_PASS crew_tour_training_revision",
+    "JETSETCRAFT_GAMETEST_PASS rush_expanded_evolution_reprise",
+    "JETSETCRAFT_GAMETEST_PASS rush_expanded_evolution_finale",
+    "JETSETCRAFT_GAMETEST_PASS activity_mix_safety",
+    "JETSETCRAFT_GAMETEST_PASS activity_mix_intermission",
+    "JETSETCRAFT_GAMETEST_PASS activity_mix_runtime",
+    "JETSETCRAFT_GAMETEST_PASS liberty_street_operations operations=6 orders=2 completed=12",
+    "JETSETCRAFT_GAMETEST_PASS crew_tour_persistence",
+    "JETSETCRAFT_GAMETEST_PASS rush_expanded_evolution_bass",
+    "JETSETCRAFT_GAMETEST_PASS rush_expanded_evolution_pulse_pause"
+  ],
+  "native_capture_count": 26,
+  "native_capture_labels": [
+    "01-setup",
+    "02-district-hud",
+    "03-album",
+    "04-return-result",
+    "05-crew-home",
+    "06-crew-roster",
+    "07-crew-facilities",
+    "08-crew-jobs",
+    "09-activities",
+    "10-arena-route",
+    "11-journey-map",
+    "12-run-build",
+    "14-cache-scout",
+    "13-crew-progress",
+    "15-style-library",
+    "16-build-paths",
+    "17-draft-agency",
+    "18-headliner-tell",
+    "19-run-debrief",
+    "20-contract-briefing",
+    "21-contract-progress",
+    "22-pit-stop",
+    "23-service-result",
+    "24-crew-tour",
+    "25-crew-tour-minimum",
+    "26-street-mix-preview"
+  ],
+  "individual_image_review": false,
+  "steps": [
+    {
+      "name": "Set up job",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 1
+    },
+    {
+      "name": "Check out sources",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 2
+    },
+    {
+      "name": "Set up Temurin 17",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 3
+    },
+    {
+      "name": "Set up Gradle wrapper cache",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 4
+    },
+    {
+      "name": "Set up asset tooling",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 5
+    },
+    {
+      "name": "Regenerate deterministic authored assets",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 6
+    },
+    {
+      "name": "Validate assets, gameplay contracts, source, and wiki",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 7
+    },
+    {
+      "name": "Clean Forge build",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 8
+    },
+    {
+      "name": "Run all real Forge GameTests",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 9
+    },
+    {
+      "name": "Run real Forge dedicated-server smoke",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 10
+    },
+    {
+      "name": "Verify activities, arena journeys and crew houses in a real Minecraft client",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 11
+    },
+    {
+      "name": "Seal artifact checksums",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 12
+    },
+    {
+      "name": "Upload verified release candidate",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 13
+    },
+    {
+      "name": "Post Set up Gradle wrapper cache",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 24
+    },
+    {
+      "name": "Post Set up Temurin 17",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 25
+    },
+    {
+      "name": "Post Check out sources",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 26
+    },
+    {
+      "name": "Complete job",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 27
+    }
+  ],
+  "artifacts": [
+    {
+      "id": 13249610049,
+      "name": "jetsetcraft-forge-1.20.1-0d42296e0a6e2147c835a8134657e66dbc48a5c3",
+      "size_in_bytes": 8806006,
+      "url": "https://api.github.com/repos/Herbertofury/JetSetCraft/actions/artifacts/13249610049",
+      "archive_download_url": "https://api.github.com/repos/Herbertofury/JetSetCraft/actions/artifacts/13249610049/zip",
+      "expired": false,
+      "created_at": "2026-11-03T16:15:59Z",
+      "expires_at": "2027-02-01T16:07:31Z",
+      "updated_at": "2026-11-03T16:15:59Z",
+      "digest": "sha256:0c3f715133d7a7be7d9190176717e5b770a38ba283ae6a36917bd2ba1453b106",
+      "workflow_run": {
+        "id": 41670932195,
+        "repository_id": 1341341761,
+        "head_repository_id": 1341341761,
+        "head_branch": "feature/connected-streets",
+        "head_sha": "23976383cbf8a3f49d753c1e3795ca2df6738544"
+      }
+    }
+  ],
+  "evidence_excerpts": [
+    "2026-11-03T16:07:40.2496820Z HEAD is now at 0d42296 Merge 23976383cbf8a3f49d753c1e3795ca2df6738544 into 48894787914076c050ff9635478cc637e666842b",
+    "2026-11-03T16:08:39.3792832Z BUILD SUCCESSFUL in 30s",
+    "2026-11-03T16:12:23.1487259Z [16:12:23] [Server thread/INFO] [minecraft/GameTestServer]: All 139 required tests passed :)",
+    "2026-11-03T16:12:30.1479479Z [16:12:30] [Server thread/INFO] [minecraft/MinecraftServer]: ThreadedAnvilChunkStorage: All dimensions are saved",
+    "2026-11-03T16:12:31.5484401Z BUILD SUCCESSFUL in 3m 51s",
+    "2026-11-03T16:15:51.8170190Z [16:15:51] [Render thread/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_CONNECTED_AUDIT_TOUR_OBSERVED revision=6 results=2 modes=1 core=0/9 optional=0/3 ready=0 (actual prior activity receipts; read-only navigation, no award or unlock assigned)",
+    "2026-11-03T16:15:52.6206637Z [16:15:52] [Render thread/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_CONNECTED_AUDIT_MINIMUM_OBSERVED width=320 height=240 scroll=212 revision=6 (actual native detail scroll and bounded nonoverlapping controls)",
+    "2026-11-03T16:15:54.5172203Z [16:15:54] [Render thread/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_CONNECTED_AUDIT_MIX_PREVIEW_OBSERVED context=4206f7a8-e6ce-4e5f-8de4-1f74cf654c1b version=2 route=Tag \u2192 King of the Hill \u2192 Crew showdown modifier=Relay chase: catch three pairs of skaters. Return to the marked handoff ring between pairs. active=false cleared=0 (actual UI selection; no launch, objectives or reward assigned)",
+    "2026-11-03T16:15:54.8177934Z [16:15:54] [Render thread/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_CONNECTED_STREET_VISUAL_AUDIT_PASS three appended real-client captures; actual Crew Tour snapshot and 320x240 scrolling; explicit Tag Street Mix preview cancelled through production packet before launch; exact tour/account/inventory/XP/dimension preserved; no reward, unlock, victory or human gameplay fabricated",
+    "2026-11-03T16:15:54.8207115Z [16:15:54] [Render thread/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_RUSH_VISUAL_AUDIT_PASS twenty-six real-client captures; original twenty-three preserved; actual Crew Tour and 320x240 scrolling, unlaunched Street Mix preview cancelled; real PAINT/room/TUNE sequence retained; shared progression and ordinary inventory/XP/dimension preserved; owned-hit, authored-wall, arrival and clock fixtures explicitly logged, not human traversal/duration or boss-clear proof",
+    "2026-11-03T16:15:56.0267851Z [16:15:55] [Server thread/INFO] [minecraft/MinecraftServer]: ThreadedAnvilChunkStorage: All dimensions are saved",
+    "2026-11-03T16:15:57.2955230Z BUILD SUCCESSFUL in 2m 46s",
+    "2026-11-03T16:15:58.9699126Z SHA256 digest of uploaded artifact is 0c3f715133d7a7be7d9190176717e5b770a38ba283ae6a36917bd2ba1453b106",
+    "2026-11-03T16:15:59.4365521Z Artifact jetsetcraft-forge-1.20.1-0d42296e0a6e2147c835a8134657e66dbc48a5c3 successfully finalized. Artifact ID 13249610049",
+    "2026-11-03T16:15:59.4367553Z Artifact jetsetcraft-forge-1.20.1-0d42296e0a6e2147c835a8134657e66dbc48a5c3 has been successfully uploaded! Final size is 8806006 bytes. Artifact ID is 13249610049"
+  ],
+  "limitations": [
+    "This successful base run belongs to candidate 2397638 and the observed PR merge checkout, not subsequent fixture changes.",
+    "The automated native client audit uses explicitly logged setup/clock/owned-action fixtures; no human session duration, natural economy pacing, or boss-clear claim.",
+    "Artifact ZIP metadata is observed. Individual PNG pixels and the exact JAR checksum inside the ZIP have not yet been inspected."
+  ]
+}

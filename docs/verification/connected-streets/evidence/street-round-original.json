@@ -1,0 +1,11 @@
+{
+  "completed_utc": "2026-11-03T06:07:06.461285+00:00",
+  "scope": "Compiled and executed actual production ActivityMode/ActivityRun only. No Minecraft stubs or Forge runtime.",
+  "inputs": {
+    "/workspace/scratch/bfb17eca6594/JetSetCraft/src/main/java/com/herberto/jetsetcraft/activity/ActivityMode.java": "d111ad006f573e9a68221f339f6a40b390aae3e88d2dfe7f6dc3507b0a9c8e3a",
+    "/workspace/scratch/bfb17eca6594/JetSetCraft/src/main/java/com/herberto/jetsetcraft/activity/ActivityRun.java": "0a0b5e3f0019eb19c3c3e3ac6c3cfbdd0c5b1805b540a88f28ed41fb81c9750c",
+    "/workspace/scratch/bfb17eca6594/verification/activity/StreetRoundSmoke.java": "f1c62c37ad1943aa1233313089798adc4ae00096c56be7ea1b00b565b458c747"
+  },
+  "log": "/workspace/scratch/bfb17eca6594/verification/activity/StreetRoundSmoke.log",
+  "passed": true
+}

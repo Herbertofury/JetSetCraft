@@ -1,8 +1,25 @@
 # Liberty Grind — drop, tag, extract
 
+## Connected Streets candidate — six original operations
+
+The **alpha.10 / protocol 18** candidate adds six original JetSetCraft mission templates to the previous 28, for **34**. The same region, difficulty 1–10, 20/25/30-minute budget and pre-pod loadout systems apply.
+
+| Operation | Factions | Three-stage route |
+| --- | --- | --- |
+| Neon Block Party | All three | Reclaim two dance floors and scan a stolen playlist in either order → escort the sound rig → defend the party. |
+| Last Train Home | All three | Clear the freight blockade → escort two paint rigs → skate the departure signal route. |
+| Pirate Radio Takeover | All three | Scan two frequencies → complete three skating broadcasts → defend the finale. |
+| Supply Line Shuffle | Automaton | Destroy two depots → complete two distinct courier routes → defend the supply handoff. |
+| Swarm Street Cleanup | Terminid | Escort the cleanup rig → destroy two nest sites → paint both reclaimed sites. |
+| Prism Breakout | Illuminate | Scan two ciphers and destroy containment cores in either order → carry evidence → complete two broadcasts and a defense. |
+
+These are original sequences of implemented objective primitives, not claims of new source-game mechanics. Every required goal within a stage must finish before the next stage activates; optional sites still never gate extraction. Accepted objective debriefs advance three optional **Crew Tour** milestones alongside shared crew rewards. A debrief with completed objectives can qualify without a successful extraction; unextracted samples still follow the existing banking rules.
+
+The [candidate receipt](../docs/verification/connected-streets/README.md) records passing static and production-plan model checks. Forge execution, native provider/client acceptance and human pacing for these additions remain pending. Alpha.9 evidence below is retained for its earlier source.
+
 **Helldivers-inspired expeditions on skates, connected to the rest of JetSetCraft.** Choose a front, review your guns and four call-ins, land in a pod, paint territory, break rival bases and extract to your ship. Research and ship upgrades turn those expeditions into new options for street art, crew progression and Rival Rush.
 
-This guide describes **0.4.0-alpha.9 / protocol 17**. Both client and server need the matching version. Stable v0.3.0 does not contain this mode. **[PR #49](https://github.com/Herbertofury/JetSetCraft/pull/49) merged after all 11 PR checks passed**, including 122 required full-provider GameTests, all eight Wave 2 configurations, a separate installed-JAR check and an automated nineteen-capture native-client audit. The [hosted receipt](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/verification/liberty-campaign/README.md#hosted-continuation) records those results. The new captures were not individually reviewed; the earlier 118-case checkpoint and reviewed gallery remain archived separately, as does the [alpha.8 evidence](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/verification/liberty-grind/README.md).
+The retained campaign baseline below describes **0.4.0-alpha.9 / protocol 17**. The alpha.10 candidate above uses protocol 18; client and server must always match. Stable v0.3.0 does not contain this mode. **[PR #49](https://github.com/Herbertofury/JetSetCraft/pull/49) merged after all 11 PR checks passed**, including 122 required full-provider GameTests, all eight Wave 2 configurations, a separate installed-JAR check and an automated nineteen-capture native-client audit. The [hosted receipt](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/verification/liberty-campaign/README.md#hosted-continuation) records those results. The new captures were not individually reviewed; the earlier 118-case checkpoint and reviewed gallery remain archived separately, as does the [alpha.8 evidence](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/verification/liberty-grind/README.md).
 
 ## Install and prepare
 
@@ -129,6 +146,6 @@ Losing or missing a regional defense can produce a **home-defense offer**. It ha
 
 Home objectives begin only after valid placement. Courier beacons follow each checkpoint's actual ground height. Escort rigs can climb one-block slopes and take short clear detours; a new obstruction pauses the rig. Routes use loaded terrain without rebuilding it. If no suitable required route fits, deployment stays closed and the offer remains available for another attempt.
 
-The **HUD** button lets you move, scale or hide the mission display. Its layout is local to your client. The campaign and equipment menus use search, pages and scrolling. The current hosted walkthrough passed its automated nineteen-capture audit. Individual review of those new images was not performed. The earlier alpha.9 gallery records individual reviews at the default size and **320 × 240 logical pixels**; those reviews remain attached to that checkpoint. Human 20–30 minute pacing, difficulty, equipment economy and sustained server load still require playtesting. Shared combat squads and full source-game NPC/vehicle parity are outside the current implementation.
+The **HUD** button lets you move, scale or hide the mission display. Its layout is local to your client. The campaign and equipment menus use search, pages and scrolling. The alpha.9 hosted walkthrough passed its automated nineteen-capture audit. Individual review of those new images was not performed. The earlier alpha.9 gallery records individual reviews at the default size and **320 × 240 logical pixels**; those reviews remain attached to that checkpoint. Human 20–30 minute pacing, difficulty, equipment economy and sustained server load still require playtesting. Shared combat squads and full source-game NPC/vehicle parity are outside the current implementation.
 
 Continue with [Rival Rush](Rival-Rush), [Crew Houses and Progress](Player-Chapters-Posse-and-Mob-Archetypes), [Graffiti](Graffiti), or [Testing and Verification](Testing-and-Verification).

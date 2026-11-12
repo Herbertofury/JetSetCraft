@@ -1,0 +1,68 @@
+{
+  "baseline_commit": "48894787914076c050ff9635478cc637e666842b",
+  "baseline_tree": "a75bcdd877cc530d36c3791d7be845c785e9e0c6",
+  "candidate_version": "0.4.0-alpha.10",
+  "network_protocol": 18,
+  "crew_schema": 4,
+  "checks": [
+    {
+      "name": "assets",
+      "command": "python tools/validate_assets.py",
+      "exit_code": 0,
+      "log": "assets.log"
+    },
+    {
+      "name": "gameplay-contract",
+      "command": "python tools/validate_gameplay_contract.py",
+      "exit_code": 0,
+      "log": "gameplay-contract.log"
+    },
+    {
+      "name": "java-syntax",
+      "command": "PATH=/workspace/scratch/bfb17eca6594/jdk-launcher:$PATH python tools/validate_java_syntax.py",
+      "exit_code": 0,
+      "log": "java-syntax.log"
+    },
+    {
+      "name": "premium-polish",
+      "command": "python tools/validate_premium_polish.py",
+      "exit_code": 0,
+      "log": "premium-polish.log"
+    },
+    {
+      "name": "wave2-static",
+      "command": "python tools/validate_wave2_compat.py",
+      "exit_code": 0,
+      "log": "wave2-static.log"
+    },
+    {
+      "name": "wiki",
+      "command": "python tools/validate_wiki.py",
+      "exit_code": 0,
+      "log": "wiki.log"
+    },
+    {
+      "name": "research-generation",
+      "command": "python tools/build_research_browser.py --check",
+      "exit_code": 0,
+      "log": "research-generation.log"
+    },
+    {
+      "name": "research-browser",
+      "command": "node tools/test_research_browser.js",
+      "exit_code": 0,
+      "log": "research-browser.log"
+    },
+    {
+      "name": "diff-whitespace",
+      "command": "git diff --check",
+      "exit_code": 0,
+      "log": "diff-whitespace.log"
+    }
+  ],
+  "forge_build": "not executed: Gradle bootstrap failed with network unreachable",
+  "native_gametests": "136 declared; candidate suite not executed",
+  "native_client_audit": "26 expected captures; candidate audit not executed",
+  "remote_implementation_status": "not committed; automatic approval review rejected publishing",
+  "scope": "Static/syntax checks only; production model execution is recorded separately."
+}

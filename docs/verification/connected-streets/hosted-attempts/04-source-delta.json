@@ -1,0 +1,25 @@
+{
+  "schema": 1,
+  "candidate": 4,
+  "parent_commit": "89357025e515503c70ecf43cf90bf433b96623d2",
+  "baseline_manifest": "03-source-manifest.json",
+  "scope": "Locally hashed source inputs for the native-provider fixture follow-up, generated before publication. Actual feature and runner commit identities and hosted acceptance are recorded in PR #50. This is not a CI outcome or a built-artifact checksum.",
+  "input_count": 703,
+  "unchanged_inputs": 702,
+  "aggregate_sha256": "1910c12351ff6a00b000e50a7a37718bf648a53265829d4814aaafe41dd9328e",
+  "aggregate_algorithm": "SHA-256 of UTF-8 json.dumps(files, sort_keys=True, separators=(comma,colon)); same ordered input paths as continuation-local/source-manifest.json.",
+  "changed_inputs": [
+    {
+      "before": {
+        "path": "src/main/java/com/herberto/jetsetcraft/gametest/LibertyStratagemGameTests.java",
+        "bytes": 31341,
+        "sha256": "b7cb64551d9147e980925f0572615e84554d8300c413003d88aa2401c273bfe6"
+      },
+      "after": {
+        "path": "src/main/java/com/herberto/jetsetcraft/gametest/LibertyStratagemGameTests.java",
+        "bytes": 35175,
+        "sha256": "f62d6ad2425211dc9385b5f2919c16c0ee29d1044e78bc3c8cbc490cbb91f993"
+      }
+    }
+  ]
+}

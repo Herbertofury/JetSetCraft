@@ -1,0 +1,69 @@
+{
+  "format_version": 1,
+  "review_date_utc": "2026-11-03",
+  "candidate_head": "89357025e515503c70ecf43cf90bf433b96623d2",
+  "candidate_tree": "d4136930d9b5db431bc9c3fe2b8a5cc8da727b8d",
+  "artifact_source_commit": "97d523abe7aa4538315bda35aa3e779e5b1e1044",
+  "workflow_run_id": 41674056219,
+  "artifact_id": 13250352401,
+  "visual_reviewer": "root",
+  "receipt_preparer": "native_verification",
+  "review_method": "Root directly viewed the three named PNGs and supplied the findings recorded below. Native verification independently calculated their hashes and PNG dimensional metadata, and checked the extracted client log for the settled-feedback and minimum-GUI observations.",
+  "available_capture_count": 26,
+  "visually_reviewed_capture_count": 3,
+  "unreviewed_capture_count": 23,
+  "overall_result": "Root observed no blocking readability or layout issue in selected captures 24, 25 and 26; their header and navigation are unobstructed after actual receipt notifications finish.",
+  "captures": [
+    {
+      "file": "rival-rush-1793723480091-24-crew-tour.png",
+      "label": "24-crew-tour",
+      "bytes": 133525,
+      "pixel_width": 1280,
+      "pixel_height": 720,
+      "sha256": "e9ce12c635919541273d32d1e968744fc9d4d260b4a1df32cbdde8e7e5026506",
+      "visually_inspected_by": "root",
+      "visual_observation": "Root visually inspected the actual PNG and reported a clean, unobstructed header and navigation."
+    },
+    {
+      "file": "rival-rush-1793723480091-25-crew-tour-minimum.png",
+      "label": "25-crew-tour-minimum",
+      "bytes": 54742,
+      "pixel_width": 640,
+      "pixel_height": 480,
+      "sha256": "8cf0a79784482c4d77648c04a99ae2b50aa998e45bc8f39520f41e8753b4a093",
+      "visually_inspected_by": "root",
+      "visual_observation": "Root visually inspected the actual PNG and reported readable lower scrolled content with controls visible at a 320 by 240 GUI size; the header and navigation were unobstructed.",
+      "gui_width": 320,
+      "gui_height": 240,
+      "scroll_offset_observed_in_native_log": 212
+    },
+    {
+      "file": "rival-rush-1793723480091-26-street-mix-preview.png",
+      "label": "26-street-mix-preview",
+      "bytes": 149711,
+      "pixel_width": 1280,
+      "pixel_height": 720,
+      "sha256": "94db56a9ae0cd4430bc9c8c4dae3d85c1dfda91e5b5e76f2f6a5f05f3d59dc29",
+      "visually_inspected_by": "root",
+      "visual_observation": "Root visually inspected the actual PNG and reported a clean, unobstructed header/navigation and clear explicit per-round reward wording: This round, up to."
+    }
+  ],
+  "native_log_evidence": [
+    "[16:33:35] [Render thread/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_CONNECTED_AUDIT_FEEDBACK_SETTLED actual receipt notifications finished; none removed or hidden",
+    "[16:33:37] [Render thread/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_CONNECTED_AUDIT_MINIMUM_OBSERVED width=320 height=240 scroll=212 revision=6 (actual native detail scroll and bounded nonoverlapping controls)"
+  ],
+  "jar_verification_reported_by_root": {
+    "file": "jetsetcraft-1.20.1-0.4.0-alpha.10.jar",
+    "bytes": 6632153,
+    "sha256": "35ea1d71ee9e170acdfaf28a6ffe54154d47f4da34be19378cc4407e76f00a5f",
+    "status": "Root verified the artifact JAR checksum; this selected-image receipt does not repeat that verification."
+  },
+  "coverage_limits": [
+    "Root visually inspected only these three of the twenty-six captures. The remaining twenty-three are not claimed as reviewed by this receipt.",
+    "The images show the state after natural receipt-notification completion. There is no active-toast-at-minimum-size image, so this review does not visually demonstrate the 304-wide active toast fitting at minimum GUI size.",
+    "These are controlled native client audit captures, not a human playthrough or evidence of natural pacing, full session duration, completed boss encounters or player traversal.",
+    "The Street Mix image is an unlaunched preview that was cancelled through the production packet path; it does not show a completed Mix or awarded rewards.",
+    "Still-image readability does not independently prove input hit targets, scroll interaction or persisted-state correctness; separate native assertions cover their logged scopes.",
+    "This receipt belongs to candidate 89357025e515503c70ecf43cf90bf433b96623d2 and the stated PR merge checkout, not subsequent changes."
+  ]
+}

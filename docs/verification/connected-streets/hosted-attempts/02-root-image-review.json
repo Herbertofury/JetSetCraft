@@ -1,0 +1,31 @@
+{
+  "candidate_head": "23976383cbf8a3f49d753c1e3795ca2df6738544",
+  "tested_merge": "0d42296e0a6e2147c835a8134657e66dbc48a5c3",
+  "artifact_id": 13249610049,
+  "archive_sha256": "0c3f715133d7a7be7d9190176717e5b770a38ba283ae6a36917bd2ba1453b106",
+  "jar": {
+    "name": "jetsetcraft-1.20.1-0.4.0-alpha.10.jar",
+    "bytes": 6628611,
+    "sha256": "ee582ce2abf740a1a53fb98877086f7e642d21407cbc27c6606729688d24893c",
+    "verified_against_artifact_SHA256SUMS": true
+  },
+  "images_individually_reviewed": [
+    {
+      "file": "rival-rush-1793722414986-24-crew-tour.png",
+      "sha256": "3bf7938b074a624a1e767b02468f5b0f065d27eeff46a64e9767a34b506a0efc",
+      "observed": "Underlying milestone, requirements, rewards and away-training warning are readable. The genuine receipt toast obscures the header/navigation, so this is not an unobstructed final page proof."
+    },
+    {
+      "file": "rival-rush-1793722414986-25-crew-tour-minimum.png",
+      "sha256": "0f761a7849c255278c4e1d0bea1fe0eb190c263148bb9c605778c0afd2d477bf",
+      "observed": "The 320x240 GUI scroll and buttons remain usable. A receipt toast created at a width of 330 GUI pixels before resize is cropped at the left of this 640×480 native capture. The scrolled detail pane intentionally clips earlier text."
+    },
+    {
+      "file": "rival-rush-1793722414986-26-street-mix-preview.png",
+      "sha256": "edd07e5438011f75b5d9c2e28ea9bf680c77c878d8ebc8f9a11b1138dd509628",
+      "observed": "Tag route, relay instructions and unlaunched Street Mix action are readable. The genuine toast obscures top-right navigation; the reward preview should explicitly describe the current round."
+    }
+  ],
+  "follow_up": "Bound receipt toast to 304 GUI pixels; audit observes natural toast completion before captures; clarify Street Mix reward preview as current-round estimate. New native captures required for these source changes.",
+  "scope": "Only the three listed images were reviewed for this record; separate selected-base QA identifies four other reviewed captures. Automated 26-capture audit is distinct from pixel review and human gameplay."
+}

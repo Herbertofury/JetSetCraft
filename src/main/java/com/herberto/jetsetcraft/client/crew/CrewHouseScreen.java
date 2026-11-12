@@ -19,7 +19,7 @@ import java.util.UUID;
 
 /** A native, non-pausing crew ledger. Buttons submit intent; displayed eligibility is server-owned. */
 final class CrewHouseScreen extends Screen {
-    private enum View { HOME, CREW, FACILITIES, JOBS, PROGRESS, STYLES, REWARD, GOAL, MEMBER, RECRUIT, SPECIES, FACILITY, PREPARATIONS,
+    private enum View { HOME, CREW, FACILITIES, JOBS, PROGRESS, STYLES, TOUR, REWARD, GOAL, MEMBER, RECRUIT, SPECIES, FACILITY, PREPARATIONS,
         FOUND, RELOCATE, RENAME, RENAME_MEMBER, ASSIGN, MISSION, JOB, CANCEL_JOB }
     private static final String[] ROLES = {"Courier", "Tagger", "Technician", "DJ"};
     private static final int WHITE = 0xFFE7E7E7, MUTED = 0xFFB8BEC5, CYAN = 0xFF87E1EA, GREEN = 0xFFC5ED55;
@@ -38,12 +38,14 @@ final class CrewHouseScreen extends Screen {
     CrewHouseScreen() { super(Component.literal("Crew House")); message = state().getString("Message"); }
 
     boolean isView(String expected) { return view.name().equals(expected); }
+    int detailScrollForAudit() { return textScroll; }
 
     void onSnapshot(CompoundTag previous) {
         rememberName();
         CompoundTag current = state();
         message = current.getString("Message");
         boolean changed = current.getLong("Revision") != previous.getLong("Revision")
+                || current.getCompound("CrewTour").getLong("Revision") != previous.getCompound("CrewTour").getLong("Revision")
                 || current.getBoolean("Exists") != previous.getBoolean("Exists");
         if (changed && !pendingAction.isEmpty()) {
             view = switch (pendingAction) {
@@ -53,7 +55,7 @@ final class CrewHouseScreen extends Screen {
                 case "assign", "claim", "cancel" -> View.JOBS;
                 default -> view;
             };
-            page = 0;
+            if (!pendingAction.equals("tour_claim")) page = 0;
             textScroll = 0;
         }
         if (!previous.getBoolean("Exists") && current.getBoolean("Exists")) view = View.HOME;
@@ -82,11 +84,12 @@ final class CrewHouseScreen extends Screen {
                     true, "", () -> navigate(target));
         }
         if (!state().getBoolean("Exists") && view != View.HOME && view != View.FOUND
-                && view != View.PROGRESS && view != View.STYLES && view != View.REWARD && view != View.GOAL) view = View.HOME;
+                && view != View.PROGRESS && view != View.STYLES && view != View.TOUR && view != View.REWARD && view != View.GOAL) view = View.HOME;
         switch (view) {
             case HOME -> buildHome();
             case PROGRESS -> buildProgress();
             case STYLES -> buildStyles();
+            case TOUR -> buildTour();
             case REWARD -> buildReward();
             case GOAL -> buildGoal();
             case CREW, FACILITIES, JOBS, SPECIES, PREPARATIONS, ASSIGN -> buildList();
@@ -167,10 +170,65 @@ final class CrewHouseScreen extends Screen {
         }
         twoButtons(firstActions(), "‹ Previous", page > 0, "", () -> { page--; rebuildWidgets(); },
                 "Next ›", page + 1 < pages, "", () -> { page++; rebuildWidgets(); });
-        twoButtons(secondActions(), s.getBoolean("Exists") ? "Training focus" : "Plan your home", true,
-                s.getBoolean("Exists") ? "Select an idle crew member to receive activity training." : "Banked progress stays saved until you confirm founding.",
-                () -> navigate(s.getBoolean("Exists") ? View.CREW : View.HOME),
-                "Style Library", true, "Every mode's crew XP unlocks more choices for your next starting artifact.", () -> navigate(View.STYLES));
+        int third = (span() - 8) / 3;
+        button(s.getBoolean("Exists") ? "Training focus" : "Plan your home", left(), secondActions(), third, true,
+                "Review your crew and the home that your shared rewards can build.", () -> navigate(s.getBoolean("Exists") ? View.CREW : View.HOME));
+        button("Style Library", left() + third + 4, secondActions(), third, true,
+                "Every mode's crew XP unlocks choices for your next starting artifact.", () -> navigate(View.STYLES));
+        int ready = s.getCompound("CrewTour").getInt("Ready");
+        button("Crew Tour" + (ready > 0 ? " • " + ready + " ready" : ""), left() + 2 * (third + 4), secondActions(), span() - 2 * (third + 4), true,
+                "Permanent milestones connect street games, arena clears and returns. Review exact requirements and claim earned shared rewards.", this::openTour);
+    }
+
+    private void openTour() {
+        navigate(View.TOUR);
+        ListTag milestones = state().getCompound("CrewTour").getList("Milestones", Tag.TAG_COMPOUND);
+        for (int i = 0; i < milestones.size(); i++) {
+            if (milestones.getCompound(i).getBoolean("Ready")) { page = i; rebuildWidgets(); return; }
+        }
+        for (int i = 0; i < milestones.size(); i++) {
+            if (!milestones.getCompound(i).getBoolean("Claimed")) { page = i; rebuildWidgets(); return; }
+        }
+    }
+
+    private void buildTour() {
+        CompoundTag tour = state().getCompound("CrewTour");
+        ListTag milestones = tour.getList("Milestones", Tag.TAG_COMPOUND);
+        page = Math.max(0, Math.min(page, Math.max(0, milestones.size() - 1)));
+        CompoundTag milestone = milestones.isEmpty() ? new CompoundTag() : milestones.getCompound(page);
+        detail("Crew Tour • Core " + tour.getInt("BaseClaimed") + " / " + tour.getInt("BaseTotal")
+                + " • Optional " + tour.getInt("OptionalClaimed") + " / " + tour.getInt("OptionalTotal")
+                + " • " + tour.getInt("Ready") + " ready", CYAN);
+        if (milestone.isEmpty()) {
+            detail("Waiting for your server's milestone board. Refresh to request the current tour.", WHITE);
+        } else {
+            detail(milestone.getString("Name") + " • " + (page + 1) + " / " + milestones.size(), GREEN);
+            detail(milestone.getString("Description"), WHITE);
+            detail(milestone.getBoolean("Optional") ? "Optional Liberty branch • the nine core milestones do not require its providers."
+                    : "Core milestone • available with standalone JetSetCraft.", MUTED);
+            for (var raw : milestone.getList("Requirements", Tag.TAG_COMPOUND)) {
+                CompoundTag requirement = (CompoundTag) raw;
+                detail((requirement.getBoolean("Complete") ? "Complete: " : "Next: ") + requirement.getString("Name")
+                        + " • " + requirement.getInt("Current") + " / " + requirement.getInt("Target"),
+                        requirement.getBoolean("Complete") ? GREEN : WHITE);
+            }
+            detail("Reward: " + milestone.getInt("Supplies") + " Supplies • " + milestone.getInt("CrewXp") + " crew XP • "
+                    + milestone.getInt("MemberXp") + " training XP • " + milestone.getInt("Reputation") + " reputation", CYAN);
+            detail("Rewards feed your home, crew training and Style Library. Account limits can reduce the amount; Progress keeps the actual receipt.", MUTED);
+            detail(tour.getString("TrainingSummary"), tour.getBoolean("TrainingEligible") ? MUTED : 0xFFE6DBA6);
+            if (!tour.getString("GangId").isBlank()) detail("Reputation goes to " + tour.getString("GangName") + ".", MUTED);
+            detail(milestone.getBoolean("Claimed") ? "Claimed and saved. Every milestone pays once."
+                    : milestone.getBoolean("Ready") ? "Earned. Claim when you are ready; this reward has no deadline."
+                    : "Keep playing the listed activities. Accepted results count even before you found a home.",
+                    milestone.getBoolean("Claimed") || milestone.getBoolean("Ready") ? GREEN : WHITE);
+            if (!tour.getString("ManageReason").isBlank()) detail(tour.getString("ManageReason"), 0xFFE6DBA6);
+        }
+        twoButtons(firstActions(), "‹ Previous milestone", page > 0, "", () -> { page--; textScroll = 0; rebuildWidgets(); },
+                "Next milestone ›", page + 1 < milestones.size(), "", () -> { page++; textScroll = 0; rebuildWidgets(); });
+        twoButtons(secondActions(), "Back to Progress", true, "", () -> navigate(View.PROGRESS),
+                milestone.getBoolean("Claimed") ? "Reward claimed" : milestone.getBoolean("Ready") ? "Claim tour reward" : "Milestone in progress",
+                milestone.getBoolean("CanClaim"), "Claim this earned reward once. No currency is spent.\n" + tour.getString("TrainingSummary"),
+                () -> send("tour_claim", milestone.getString("Id"), 0, null));
     }
 
     private void buildStyles() {

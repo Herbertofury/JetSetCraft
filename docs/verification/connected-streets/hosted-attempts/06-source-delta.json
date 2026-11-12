@@ -1,0 +1,39 @@
+{
+  "schema": 1,
+  "candidate": 6,
+  "parent_commit": "8d19826d5e7d78d5046707d667a6cea9f6d1d12b",
+  "baseline_manifest": "03-source-manifest.json",
+  "baseline_source_commit": "89357025e515503c70ecf43cf90bf433b96623d2",
+  "scope": "Locally hashed source inputs for the shared fixture corrections and actual-server-clock boarding audit. Reconstruct the ordered input list by applying changed_inputs to baseline_manifest. Publication and hosted acceptance identities belong to PR #50. This record is not a CI outcome or built-JAR checksum.",
+  "input_count": 703,
+  "unchanged_inputs_from_baseline": 701,
+  "aggregate_sha256": "1bf9d0459a8459ff24b8e10837f9039ee734c4199be92db0ae25271550c2d276",
+  "aggregate_algorithm": "SHA-256 of UTF-8 json.dumps(files, sort_keys=True, separators=(comma,colon)); same ordered input paths as continuation-local/source-manifest.json.",
+  "changed_inputs": [
+    {
+      "before": {
+        "path": "src/main/java/com/herberto/jetsetcraft/client/liberty/LibertyVisualAudit.java",
+        "bytes": 55343,
+        "sha256": "7b364e87ba41de7a50739ba6d42c71cafcf3a0fd5d8ebff42d0e61edf4f2ddc8"
+      },
+      "after": {
+        "path": "src/main/java/com/herberto/jetsetcraft/client/liberty/LibertyVisualAudit.java",
+        "bytes": 58713,
+        "sha256": "0bf145f4a5c9ff05851c4acb94185b6c68fe7193e918a569742c2081b5cd4220"
+      }
+    },
+    {
+      "before": {
+        "path": "src/main/java/com/herberto/jetsetcraft/gametest/LibertyStratagemGameTests.java",
+        "bytes": 31341,
+        "sha256": "b7cb64551d9147e980925f0572615e84554d8300c413003d88aa2401c273bfe6"
+      },
+      "after": {
+        "path": "src/main/java/com/herberto/jetsetcraft/gametest/LibertyStratagemGameTests.java",
+        "bytes": 35952,
+        "sha256": "5dba9c96b307ea43ab8f3009d14714b64d6b11e38524bb803f565eba9e010c21"
+      }
+    }
+  ],
+  "reason": "Candidate 5 passed every native suite that could build, then its full-provider client audit timed out awaiting ship arrival after a real early return. The old20-client-tick delay did not establish the production two-server-tick action interval after asynchronous cleanup. The exact old silent rejection was not logged. The audit now observes at least two actual overworld game-time ticks after the cleanup proof and a matching authoritative menu revision before one real Board button press. Read-only diagnostics report clock/state/revision. All45-second phase limits, native arrival/walking/return assertions and19capture requirements remain. Production action handling and gameplay are unchanged."
+}

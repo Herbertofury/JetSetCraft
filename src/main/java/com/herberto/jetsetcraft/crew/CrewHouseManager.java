@@ -46,14 +46,14 @@ public final class CrewHouseManager {
     private record Candidate(String dimension, BlockPos position, long expires) {}
     private static final Map<MinecraftServer, Map<UUID, Candidate>> CANDIDATES = new HashMap<>();
     private static final class ResponseBudget {
-        long responseAt = -100, previewAt = -100, revision = -1, styleRevision = -1;
+        long responseAt = -100, previewAt = -100, revision = -1, styleRevision = -1, tourRevision = -1;
         UUID house;
         String candidateDimension = "";
         BlockPos candidatePosition;
     }
     private static final Map<MinecraftServer, Map<UUID, ResponseBudget>> RESPONSES = new HashMap<>();
     private static final Set<String> ACTIONS = Set.of("open", "refresh", "found", "relocate", "rename", "preview",
-            "expand", "recruit", "rename_member", "focus", "focus_off", "assign", "claim", "cancel", "facility", "upgrade", "preparation", "style");
+            "expand", "recruit", "rename_member", "focus", "focus_off", "assign", "claim", "cancel", "facility", "upgrade", "preparation", "style", "tour_claim");
     private static final int[] EXPANSION_COSTS = {40, 100, 200, 0};
 
     private enum Kind {
@@ -111,6 +111,16 @@ public final class CrewHouseManager {
         CrewHouseData data = CrewHouseData.get(player.getServer());
         CrewProfile profile = data.profile(player.getUUID());
         if (data.blocked(player.getUUID())) { send(player, "This crew record needs recovery or a newer compatible mod version; existing data was retained."); return; }
+        if (action.equals("tour_claim")) {
+            CrewRewardReceipt receipt = data.claimTour(player.getUUID(), value, revision, now(player));
+            if (receipt == null) {
+                send(player, "That Crew Tour milestone is unfinished, already claimed or out of date. Review the refreshed tour.");
+            } else {
+                publishReward(player, receipt);
+                send(player, "Crew Tour reward saved: " + receipt.snapshot().getString("Summary"));
+            }
+            return;
+        }
         if (action.equals("style")) {
             boolean selected = data.selectStyle(player.getUUID(), value, revision);
             if (selected && LibertyResearch.preparation(player).isPresent()) LibertyResearch.selectPreparation(player, LibertyResearch.NONE,
@@ -385,6 +395,16 @@ public final class CrewHouseManager {
         out.putLong("PendingCrewXp", data.pendingXp(player.getUUID()));
         out.putLong("PendingTraining", data.pendingTraining(player.getUUID()));
         out.put("StyleLibrary", CrewStyleLibrary.snapshot(data, player.getUUID(), normalModeReason(player).isEmpty()));
+        CompoundTag tour = data.tourSnapshot(player.getUUID());
+        String tourReason = normalModeReason(player);
+        if (tour.getBoolean("Blocked")) tourReason = "Saved tour data needs recovery or a compatible newer version.";
+        tour.putBoolean("CanManage", tourReason.isEmpty());
+        tour.putString("ManageReason", tourReason);
+        tour.putString("GangName", gangName(tour.getString("GangId")));
+        for (var raw : tour.getList("Milestones", net.minecraft.nbt.Tag.TAG_COMPOUND)) {
+            if (raw instanceof CompoundTag row) row.putBoolean("CanClaim", row.getBoolean("CanClaim") && tourReason.isEmpty());
+        }
+        out.put("CrewTour", tour);
         String founding = foundingReason(player, data, profile);
         out.putBoolean("CanFound", profile == null && founding.isEmpty());
         out.putBoolean("CanRelocate", profile != null && founding.isEmpty()); out.putString("FoundReason", founding);
@@ -612,15 +632,18 @@ public final class CrewHouseManager {
         UUID house = profile == null ? null : profile.id;
         long revision = profile == null ? 0 : profile.revision;
         long styleRevision = data.styleRevision(player.getUUID());
+        long tourRevision = data.tourRevision(player.getUUID());
         Candidate candidate = candidate(player);
         String dimension = candidate == null ? "" : candidate.dimension;
         BlockPos position = candidate == null ? null : candidate.position;
         ResponseBudget budget = responseBudget(player);
         boolean unchanged = java.util.Objects.equals(house, budget.house) && revision == budget.revision
                 && styleRevision == budget.styleRevision
+                && tourRevision == budget.tourRevision
                 && dimension.equals(budget.candidateDimension) && java.util.Objects.equals(position, budget.candidatePosition);
         if (unchanged && now(player) < budget.responseAt + 4) return;
         budget.responseAt = now(player); budget.house = house; budget.revision = revision; budget.styleRevision = styleRevision;
+        budget.tourRevision = tourRevision;
         budget.candidateDimension = dimension; budget.candidatePosition = position;
         CompoundTag state = snapshot(player); state.putString("Message", message); JetSetNetwork.syncCrew(player, state);
     }

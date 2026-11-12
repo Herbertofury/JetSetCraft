@@ -1,0 +1,189 @@
+{
+  "schema": 1,
+  "repository": "Herbertofury/JetSetCraft",
+  "pull_request": 50,
+  "candidate": 4,
+  "feature_head": "f2b021bea8780f54a540d0042d31d12db0300811",
+  "feature_tree": "a5d8356ef23f76277f6fffc619aa25a7d4efc744",
+  "tested_merge": "3f6e0a08d2fd359e08c160f009eb148c28e0621e",
+  "workflow_run_id": 41676734880,
+  "workflow_run_url": "https://github.com/Herbertofury/JetSetCraft/actions/runs/41676734880",
+  "jobs": [
+    {
+      "id": 126059263880,
+      "name": "missing-pack / TaCZ 1.1.8-hotfix2 / MCDivers false",
+      "conclusion": "success",
+      "steps": [
+        {
+          "name": "Build with the exact optional provider",
+          "conclusion": "success"
+        },
+        {
+          "name": "Record resolved runtime dependencies",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run native GameTests with the selected pack state",
+          "conclusion": "success"
+        },
+        {
+          "name": "Verify full-provider dedicated startup and graceful world save",
+          "conclusion": "skipped"
+        },
+        {
+          "name": "Verify the exact built JAR in an independent official Forge installation",
+          "conclusion": "skipped"
+        },
+        {
+          "name": "Verify Liberty Grind in a real Minecraft client",
+          "conclusion": "skipped"
+        },
+        {
+          "name": "Record native PNG metadata",
+          "conclusion": "skipped"
+        },
+        {
+          "name": "Upload native Liberty client captures and metadata",
+          "conclusion": "skipped"
+        }
+      ]
+    },
+    {
+      "id": 126059264086,
+      "name": "full-provider / TaCZ 1.1.8-hotfix2 / MCDivers true",
+      "conclusion": "success",
+      "steps": [
+        {
+          "name": "Build with the exact optional provider",
+          "conclusion": "success"
+        },
+        {
+          "name": "Record resolved runtime dependencies",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run native GameTests with the selected pack state",
+          "conclusion": "success"
+        },
+        {
+          "name": "Verify full-provider dedicated startup and graceful world save",
+          "conclusion": "success"
+        },
+        {
+          "name": "Verify the exact built JAR in an independent official Forge installation",
+          "conclusion": "success"
+        },
+        {
+          "name": "Verify Liberty Grind in a real Minecraft client",
+          "conclusion": "success"
+        },
+        {
+          "name": "Record native PNG metadata",
+          "conclusion": "success"
+        },
+        {
+          "name": "Upload native Liberty client captures and metadata",
+          "conclusion": "success"
+        }
+      ]
+    }
+  ],
+  "missing_pack_evidence": [
+    "2026-11-03T16:41:33.4103487Z HEAD is now at 3f6e0a0 Merge f2b021bea8780f54a540d0042d31d12db0300811 into 48894787914076c050ff9635478cc637e666842b",
+    "2026-11-03T16:44:19.0580411Z JETSETCRAFT_GAMETEST_PASS rush_expanded_evolution_rules",
+    "2026-11-03T16:44:58.8590780Z JETSETCRAFT_GAMETEST_PASS rush_expanded_evolution_reprise",
+    "2026-11-03T16:44:58.8638102Z JETSETCRAFT_GAMETEST_PASS rush_expanded_evolution_finale",
+    "2026-11-03T16:45:04.2601987Z JETSETCRAFT_GAMETEST_PASS rush_evolution_return",
+    "2026-11-03T16:45:15.9589862Z JETSETCRAFT_GAMETEST_PASS graffiti_lifecycle native_support_ticks=40",
+    "2026-11-03T16:45:18.8618876Z JETSETCRAFT_GAMETEST_PASS liberty_stratagem_effects",
+    "2026-11-03T16:45:59.6571933Z JETSETCRAFT_GAMETEST_PASS rush_expanded_evolution_bass",
+    "2026-11-03T16:45:59.6574804Z JETSETCRAFT_GAMETEST_PASS rush_expanded_evolution_pulse_pause",
+    "2026-11-03T16:46:09.2611026Z [16:46:09] [Server thread/INFO] [minecraft/GameTestServer]: ========= 139 GAME TESTS COMPLETE ======================",
+    "2026-11-03T16:46:09.2612520Z [16:46:09] [Server thread/INFO] [minecraft/GameTestServer]: All 139 required tests passed :)"
+  ],
+  "full_provider_evidence": [
+    "2026-11-03T16:41:32.3132174Z HEAD is now at 3f6e0a0 Merge f2b021bea8780f54a540d0042d31d12db0300811 into 48894787914076c050ff9635478cc637e666842b",
+    "2026-11-03T16:44:30.8710482Z JETSETCRAFT_GAMETEST_PASS crew_tour_safety",
+    "2026-11-03T16:44:35.1712850Z JETSETCRAFT_GAMETEST_PASS crew_tour_claims",
+    "2026-11-03T16:44:36.4711249Z JETSETCRAFT_GAMETEST_PASS activity_mix_model",
+    "2026-11-03T16:45:20.8714335Z JETSETCRAFT_GAMETEST_PASS rush_expanded_evolution_rules",
+    "2026-11-03T16:45:29.6710430Z JETSETCRAFT_GAMETEST_PASS crew_tour_standalone",
+    "2026-11-03T16:45:31.7709560Z JETSETCRAFT_GAMETEST_PASS crew_tour_revision_saturation",
+    "2026-11-03T16:45:44.2709680Z JETSETCRAFT_GAMETEST_PASS crew_tour_entry",
+    "2026-11-03T16:45:53.2732408Z JETSETCRAFT_GAMETEST_PASS crew_tour_training_revision",
+    "2026-11-03T16:46:03.8722241Z JETSETCRAFT_GAMETEST_PASS rush_expanded_evolution_reprise",
+    "2026-11-03T16:46:03.8723345Z JETSETCRAFT_GAMETEST_PASS rush_expanded_evolution_finale",
+    "2026-11-03T16:46:20.7710566Z JETSETCRAFT_GAMETEST_PASS activity_mix_safety",
+    "2026-11-03T16:46:22.9712755Z JETSETCRAFT_GAMETEST_PASS graffiti_lifecycle native_support_ticks=40",
+    "2026-11-03T16:46:23.3722474Z JETSETCRAFT_GAMETEST_PASS rush_evolution_return",
+    "2026-11-03T16:46:28.5722785Z JETSETCRAFT_LIBERTY_MOB_SAFETY_PASS native_home_actors_callbacks_reinforcements_conversion_raid_return",
+    "2026-11-03T16:46:37.5720776Z JETSETCRAFT_GAMETEST_PASS liberty_stratagem_effects",
+    "2026-11-03T16:46:47.5710297Z JETSETCRAFT_GAMETEST_PASS activity_mix_intermission",
+    "2026-11-03T16:46:49.6722191Z JETSETCRAFT_GAMETEST_PASS liberty_mcdivers_native",
+    "2026-11-03T16:47:02.3738417Z JETSETCRAFT_GAMETEST_PASS activity_mix_runtime",
+    "2026-11-03T16:47:17.3746416Z [16:47:17] [Server thread/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_GAMETEST_PASS liberty_street_operations operations=6 orders=2 completed=12",
+    "2026-11-03T16:47:22.6728635Z JETSETCRAFT_GAMETEST_PASS crew_tour_persistence",
+    "2026-11-03T16:47:53.1715963Z JETSETCRAFT_GAMETEST_PASS rush_expanded_evolution_bass",
+    "2026-11-03T16:47:53.1718696Z JETSETCRAFT_GAMETEST_PASS rush_expanded_evolution_pulse_pause",
+    "2026-11-03T16:48:18.9766224Z [16:48:18] [Server thread/INFO] [minecraft/GameTestServer]: All 139 required tests passed :)",
+    "2026-11-03T16:49:06.4212075Z JETSETCRAFT_LIBERTY_SERVER_SMOKE_PASS ready authenticated_stop all_dimensions_saved exit_zero",
+    "2026-11-03T16:50:17.9610718Z JETSETCRAFT_LIBERTY_INSTALLED_SMOKE_PASS exact_release_jar native_guard actual_providers commands authenticated_stop all_dimensions_saved exit_zero",
+    "2026-11-03T16:50:17.9791277Z LIBERTY_INSTALLED_ARTIFACT file=jetsetcraft-1.20.1-0.4.0-alpha.10.jar bytes=6634009 sha256=f415b677f5cb63a32eca5c5b1fd10ad90b528996ac0ece82f22315ec54ef9989",
+    "2026-11-03T16:52:21.6990138Z [16:52:21] [Render thread/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_LIBERTY_CAMPAIGN_VISUAL_PASS captures=19 gun=helldiver2:sg225_breaker armor=heavy callin=chromageddon slot=4 difficulty=10 durationMinutes=30 paintEntities=12 territoryProgress=4 sourceInventoryXPAndDimensionRestoredTwice=true",
+    "2026-11-03T16:52:21.7004984Z [16:52:21] [Render thread/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_LIBERTY_VISUAL_AUDIT_PASS 19 campaign native captures; real UI purchase/equip/weapon/armor selection and launch, moving pod, native Breaker, actual CHROMAGEDDON paint/progress, early return and walkable ship/home return. Explicit disposable requisition and camera/flight staging; no full-extraction, earned-unlock pacing or human-play claim.",
+    "2026-11-03T16:52:24.7517621Z Recorded 19 native PNGs in build/verification/liberty-capture-metadata.json"
+  ],
+  "installed_jar": {
+    "file": "jetsetcraft-1.20.1-0.4.0-alpha.10.jar",
+    "bytes": 6634009,
+    "sha256": "f415b677f5cb63a32eca5c5b1fd10ad90b528996ac0ece82f22315ec54ef9989",
+    "identity_source": "Successful independent installed-server workflow gate and emitted LIBERTY_INSTALLED_ARTIFACT log record; archive was not downloaded locally for this historical candidate."
+  },
+  "native_client_capture_evidence": [
+    "2026-11-03T16:51:29.6033567Z [16:51:29] [IO-Worker-5/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_LIBERTY_VISUAL_AUDIT_CAPTURE 01-campaign-war-map-default /home/runner/work/JetSetCraft/JetSetCraft/run/./screenshots/liberty-grind-1793724641443-01-campaign-war-map-default.png",
+    "2026-11-03T16:51:31.2993548Z [16:51:31] [IO-Worker-6/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_LIBERTY_VISUAL_AUDIT_CAPTURE 02-campaign-plan-default /home/runner/work/JetSetCraft/JetSetCraft/run/./screenshots/liberty-grind-1793724641443-02-campaign-plan-default.png",
+    "2026-11-03T16:51:32.2016801Z [16:51:32] [IO-Worker-6/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_LIBERTY_VISUAL_AUDIT_CAPTURE 03-callin-catalog-default /home/runner/work/JetSetCraft/JetSetCraft/run/./screenshots/liberty-grind-1793724641443-03-callin-catalog-default.png",
+    "2026-11-03T16:51:34.9989442Z [16:51:34] [IO-Worker-6/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_LIBERTY_VISUAL_AUDIT_CAPTURE 04-chromageddon-equipped-default /home/runner/work/JetSetCraft/JetSetCraft/run/./screenshots/liberty-grind-1793724641443-04-chromageddon-equipped-default.png",
+    "2026-11-03T16:51:36.0013495Z [16:51:35] [IO-Worker-9/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_LIBERTY_VISUAL_AUDIT_CAPTURE 05-armory-all-weapons-default /home/runner/work/JetSetCraft/JetSetCraft/run/./screenshots/liberty-grind-1793724641443-05-armory-all-weapons-default.png",
+    "2026-11-03T16:51:39.6010885Z [16:51:39] [IO-Worker-9/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_LIBERTY_VISUAL_AUDIT_CAPTURE 06-armor-heavy-minimum /home/runner/work/JetSetCraft/JetSetCraft/run/./screenshots/liberty-grind-1793724641443-06-armor-heavy-minimum.png",
+    "2026-11-03T16:51:41.4997343Z [16:51:41] [IO-Worker-5/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_LIBERTY_VISUAL_AUDIT_CAPTURE 07-armory-weapon-search-minimum /home/runner/work/JetSetCraft/JetSetCraft/run/./screenshots/liberty-grind-1793724641443-07-armory-weapon-search-minimum.png",
+    "2026-11-03T16:51:42.7013466Z [16:51:42] [IO-Worker-5/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_LIBERTY_VISUAL_AUDIT_CAPTURE 08-campaign-war-map-minimum /home/runner/work/JetSetCraft/JetSetCraft/run/./screenshots/liberty-grind-1793724641443-08-campaign-war-map-minimum.png",
+    "2026-11-03T16:51:43.7989003Z [16:51:43] [IO-Worker-9/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_LIBERTY_VISUAL_AUDIT_CAPTURE 09-campaign-plan-minimum /home/runner/work/JetSetCraft/JetSetCraft/run/./screenshots/liberty-grind-1793724641443-09-campaign-plan-minimum.png",
+    "2026-11-03T16:51:45.2019842Z [16:51:45] [IO-Worker-5/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_LIBERTY_VISUAL_AUDIT_CAPTURE 10-loadout-review-minimum /home/runner/work/JetSetCraft/JetSetCraft/run/./screenshots/liberty-grind-1793724641443-10-loadout-review-minimum.png",
+    "2026-11-03T16:51:45.9993696Z [16:51:45] [IO-Worker-8/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_LIBERTY_VISUAL_AUDIT_CAPTURE 10b-loadout-review-scroll-minimum /home/runner/work/JetSetCraft/JetSetCraft/run/./screenshots/liberty-grind-1793724641443-10b-loadout-review-scroll-minimum.png",
+    "2026-11-03T16:51:47.1993655Z [16:51:47] [IO-Worker-9/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_LIBERTY_VISUAL_AUDIT_CAPTURE 11-loadout-review-default /home/runner/work/JetSetCraft/JetSetCraft/run/./screenshots/liberty-grind-1793724641443-11-loadout-review-default.png",
+    "2026-11-03T16:51:49.8032043Z [16:51:49] [IO-Worker-10/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_LIBERTY_VISUAL_AUDIT_CAPTURE 12-live-pod /home/runner/work/JetSetCraft/JetSetCraft/run/./screenshots/liberty-grind-1793724641443-12-live-pod.png",
+    "2026-11-03T16:52:06.9994535Z [16:52:06] [IO-Worker-10/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_LIBERTY_VISUAL_AUDIT_CAPTURE 13-selected-native-gun-hud /home/runner/work/JetSetCraft/JetSetCraft/run/./screenshots/liberty-grind-1793724641443-13-selected-native-gun-hud.png",
+    "2026-11-03T16:52:11.9988761Z [16:52:11] [IO-Worker-5/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_LIBERTY_VISUAL_AUDIT_CAPTURE 14-chromageddon-paint-blast /home/runner/work/JetSetCraft/JetSetCraft/run/./screenshots/liberty-grind-1793724641443-14-chromageddon-paint-blast.png",
+    "2026-11-03T16:52:13.2000215Z [16:52:13] [IO-Worker-5/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_LIBERTY_VISUAL_AUDIT_CAPTURE 15-field-progress-minimum /home/runner/work/JetSetCraft/JetSetCraft/run/./screenshots/liberty-grind-1793724641443-15-field-progress-minimum.png",
+    "2026-11-03T16:52:17.3989036Z [16:52:17] [IO-Worker-4/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_LIBERTY_VISUAL_AUDIT_CAPTURE 16-ship-hardware-minimum /home/runner/work/JetSetCraft/JetSetCraft/run/./screenshots/liberty-grind-1793724641443-16-ship-hardware-minimum.png",
+    "2026-11-03T16:52:19.7989314Z [16:52:19] [IO-Worker-10/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_LIBERTY_VISUAL_AUDIT_CAPTURE 17-walkable-ship-deck /home/runner/work/JetSetCraft/JetSetCraft/run/./screenshots/liberty-grind-1793724641443-17-walkable-ship-deck.png",
+    "2026-11-03T16:52:21.5993244Z [16:52:21] [IO-Worker-4/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_LIBERTY_VISUAL_AUDIT_CAPTURE 18-returned-home-map /home/runner/work/JetSetCraft/JetSetCraft/run/./screenshots/liberty-grind-1793724641443-18-returned-home-map.png"
+  ],
+  "artifacts": [
+    {
+      "id": 13251616488,
+      "name": "jetsetcraft-liberty-missing-pack-3f6e0a08d2fd359e08c160f009eb148c28e0621e",
+      "bytes": 6375943,
+      "digest": "sha256:c38ddfa4cf54f80b81b11381e4b0eb5c0839125b9487f9e36d6c61b401e5c5dc",
+      "expired": false
+    },
+    {
+      "id": 13250892893,
+      "name": "jetsetcraft-liberty-full-provider-3f6e0a08d2fd359e08c160f009eb148c28e0621e",
+      "bytes": 6569533,
+      "digest": "sha256:9de2ec3b32ab30345a0cd6a4ce39250280a5a0486fcb57182be7fbf6fa19e7d1",
+      "expired": false
+    },
+    {
+      "id": 13250792910,
+      "name": "jetsetcraft-liberty-native-client-3f6e0a08d2fd359e08c160f009eb148c28e0621e",
+      "bytes": 2870345,
+      "digest": "sha256:7243ffc1fe4ecd06d7a6c76fd147fa996fc10c82445060ebb36113e49074eff5",
+      "expired": false
+    }
+  ],
+  "local_artifact_download": false,
+  "local_visual_review": false,
+  "scope": "Both lanes passed all139 required native tests. Full-provider passed original native MCDivers damage/safety/light cleanup, native-home callbacks, dedicated-server and independent installed-JAR gates, and all19 automated native client captures. Historical candidate4 artifacts were not downloaded or visually reviewed locally; final-candidate review is planned separately. The automated client audit uses explicit disposable requisition/camera/flight staging and does not establish full-extraction, earned-unlock pacing or human gameplay."
+}

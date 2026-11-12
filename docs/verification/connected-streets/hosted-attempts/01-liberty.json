@@ -1,0 +1,331 @@
+{
+  "run_id": 41668876186,
+  "head_sha": "d7fcb3ddc14a3b4dcd6aa0a5fd7aca9e505008fd",
+  "note": "First attempt, terminal results. Both builds and dependency reports passed. Missing-pack: 2 required Rush fixture failures. Full-provider: the same 2 Rush failures plus native home mob-safety defense admission/preflight. Installed-JAR, dedicated smoke, and client gates skipped because native tests failed. No client screenshots were produced by this attempt.",
+  "jobs": [
+    {
+      "id": 126031529014,
+      "name": "full-provider / TaCZ 1.1.8-hotfix2 / MCDivers true",
+      "status": "completed",
+      "conclusion": "failure",
+      "run_id": 41668876186,
+      "logs_url": null,
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1
+        },
+        {
+          "name": "Check out sources into a fresh test workspace",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2
+        },
+        {
+          "name": "Set up Temurin 17",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3
+        },
+        {
+          "name": "Set up Gradle wrapper cache",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4
+        },
+        {
+          "name": "Generate authored assets",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5
+        },
+        {
+          "name": "Prepare the exact official Helldivers pack",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6
+        },
+        {
+          "name": "Verify intentional absence of the Helldivers pack",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 7
+        },
+        {
+          "name": "Build with the exact optional provider",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8
+        },
+        {
+          "name": "Record resolved runtime dependencies",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9
+        },
+        {
+          "name": "Run native GameTests with the selected pack state",
+          "status": "completed",
+          "conclusion": "failure",
+          "number": 10
+        },
+        {
+          "name": "Verify full-provider dedicated startup and graceful world save",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 11
+        },
+        {
+          "name": "Verify the exact built JAR in an independent official Forge installation",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 12
+        },
+        {
+          "name": "Verify Liberty Grind in a real Minecraft client",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 13
+        },
+        {
+          "name": "Record native PNG metadata",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 14
+        },
+        {
+          "name": "Upload native Liberty client captures and metadata",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 15
+        },
+        {
+          "name": "Upload logs and JetSetCraft build only",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 16
+        },
+        {
+          "name": "Post Set up Gradle wrapper cache",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 30
+        },
+        {
+          "name": "Post Set up Temurin 17",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 31
+        },
+        {
+          "name": "Post Check out sources into a fresh test workspace",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 32
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 33
+        }
+      ]
+    },
+    {
+      "id": 126031529096,
+      "name": "missing-pack / TaCZ 1.1.8-hotfix2 / MCDivers false",
+      "status": "completed",
+      "conclusion": "failure",
+      "run_id": 41668876186,
+      "logs_url": null,
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1
+        },
+        {
+          "name": "Check out sources into a fresh test workspace",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2
+        },
+        {
+          "name": "Set up Temurin 17",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3
+        },
+        {
+          "name": "Set up Gradle wrapper cache",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4
+        },
+        {
+          "name": "Generate authored assets",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5
+        },
+        {
+          "name": "Prepare the exact official Helldivers pack",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 6
+        },
+        {
+          "name": "Verify intentional absence of the Helldivers pack",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7
+        },
+        {
+          "name": "Build with the exact optional provider",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8
+        },
+        {
+          "name": "Record resolved runtime dependencies",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9
+        },
+        {
+          "name": "Run native GameTests with the selected pack state",
+          "status": "completed",
+          "conclusion": "failure",
+          "number": 10
+        },
+        {
+          "name": "Verify full-provider dedicated startup and graceful world save",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 11
+        },
+        {
+          "name": "Verify the exact built JAR in an independent official Forge installation",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 12
+        },
+        {
+          "name": "Verify Liberty Grind in a real Minecraft client",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 13
+        },
+        {
+          "name": "Record native PNG metadata",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 14
+        },
+        {
+          "name": "Upload native Liberty client captures and metadata",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 15
+        },
+        {
+          "name": "Upload logs and JetSetCraft build only",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 16
+        },
+        {
+          "name": "Post Set up Gradle wrapper cache",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 30
+        },
+        {
+          "name": "Post Set up Temurin 17",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 31
+        },
+        {
+          "name": "Post Check out sources into a fresh test workspace",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 32
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 33
+        }
+      ]
+    }
+  ],
+  "excerpts": {
+    "missing_pack": [
+      "2026-11-03T15:58:49.4528755Z JETSETCRAFT_GAMETEST_PASS crew_tour_safety",
+      "2026-11-03T15:58:54.4527792Z JETSETCRAFT_GAMETEST_PASS crew_tour_claims",
+      "2026-11-03T15:58:55.8555278Z JETSETCRAFT_GAMETEST_PASS activity_mix_model",
+      "2026-11-03T15:58:57.7659192Z JETSETCRAFT_GAMETEST_PASS rush_expanded_evolution_rules",
+      "2026-11-03T15:59:05.4536425Z JETSETCRAFT_GAMETEST_PASS crew_tour_standalone",
+      "2026-11-03T15:59:07.8535302Z JETSETCRAFT_GAMETEST_PASS crew_tour_revision_saturation",
+      "2026-11-03T15:59:19.0522047Z JETSETCRAFT_GAMETEST_PASS crew_tour_entry",
+      "2026-11-03T15:59:26.8527444Z JETSETCRAFT_GAMETEST_PASS crew_tour_training_revision",
+      "2026-11-03T15:59:42.4528815Z JETSETCRAFT_GAMETEST_PASS rush_expanded_evolution_reprise",
+      "2026-11-03T15:59:42.4531303Z [15:59:42] [Server thread/ERROR] [minecraft/LogTestReporter]: chromaticfinalerespectssixthprimarythreetargetcapwallsandnativestate failed! Could not add foreign control mob",
+      "2026-11-03T15:59:42.6522446Z [15:59:42] [Server thread/ERROR] [minecraft/LogTestReporter]: radiantrecoveryandreturneddebriefuseactualacceptedstate failed! Actual director captain fixture is missing",
+      "2026-11-03T15:59:52.0525921Z JETSETCRAFT_GAMETEST_PASS activity_mix_safety",
+      "2026-11-03T16:00:00.0525651Z JETSETCRAFT_GAMETEST_PASS activity_mix_intermission",
+      "2026-11-03T16:00:09.9524832Z JETSETCRAFT_GAMETEST_PASS activity_mix_runtime",
+      "2026-11-03T16:00:29.4521785Z JETSETCRAFT_GAMETEST_PASS crew_tour_persistence",
+      "2026-11-03T16:00:40.5524580Z JETSETCRAFT_GAMETEST_PASS rush_expanded_evolution_bass",
+      "2026-11-03T16:00:40.6527027Z JETSETCRAFT_GAMETEST_PASS rush_expanded_evolution_pulse_pause",
+      "2026-11-03T16:00:47.0557037Z [16:00:46] [Server thread/INFO] [minecraft/GameTestServer]: 2 required tests failed :(",
+      "2026-11-03T16:00:55.1531555Z BUILD FAILED in 3m 53s",
+      "2026-11-03T16:00:55.5365651Z ##[error]Process completed with exit code 1."
+    ],
+    "full_provider": [
+      "2026-11-03T15:58:56.1696503Z JETSETCRAFT_GAMETEST_PASS crew_tour_safety",
+      "2026-11-03T15:58:57.5781064Z JETSETCRAFT_LIBERTY_ARMORY_PASS liberty_armory_resupply",
+      "2026-11-03T15:59:00.1697258Z JETSETCRAFT_GAMETEST_PASS crew_tour_claims",
+      "2026-11-03T15:59:01.4721837Z JETSETCRAFT_GAMETEST_PASS activity_mix_model",
+      "2026-11-03T15:59:29.3703401Z [15:59:29] [Server thread/ERROR] [minecraft/LogTestReporter]: nativehomeactorscannotcreateforeignchildrenortriggerterrainbutordinarycontrolsremainvanilla failed! Real hard home defense failed its admission/preflight",
+      "2026-11-03T15:59:48.5705759Z JETSETCRAFT_GAMETEST_PASS rush_expanded_evolution_rules",
+      "2026-11-03T15:59:52.5722070Z JETSETCRAFT_LIBERTY_ARMORY_PASS liberty_armory_all_pack_guns count=68",
+      "2026-11-03T15:59:58.2719386Z JETSETCRAFT_GAMETEST_PASS crew_tour_standalone",
+      "2026-11-03T16:00:00.9697151Z JETSETCRAFT_GAMETEST_PASS crew_tour_revision_saturation",
+      "2026-11-03T16:00:08.8697219Z JETSETCRAFT_LIBERTY_ARMORY_PASS liberty_armory_armor",
+      "2026-11-03T16:00:11.8701768Z JETSETCRAFT_GAMETEST_PASS crew_tour_entry",
+      "2026-11-03T16:00:22.6698296Z JETSETCRAFT_GAMETEST_PASS crew_tour_training_revision",
+      "2026-11-03T16:00:33.4811981Z JETSETCRAFT_LIBERTY_ARMORY_PASS liberty_armory_schema_selection",
+      "2026-11-03T16:00:39.5741406Z JETSETCRAFT_GAMETEST_PASS rush_expanded_evolution_reprise",
+      "2026-11-03T16:00:39.5772210Z [16:00:39] [Server thread/ERROR] [minecraft/LogTestReporter]: chromaticfinalerespectssixthprimarythreetargetcapwallsandnativestate failed! Could not add foreign control mob",
+      "2026-11-03T16:00:39.6772281Z [16:00:39] [Server thread/ERROR] [minecraft/LogTestReporter]: radiantrecoveryandreturneddebriefuseactualacceptedstate failed! Actual director captain fixture is missing",
+      "2026-11-03T16:00:49.0722072Z [16:00:49] [Server thread/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_LIBERTY_PACKET_PASS liberty_loadout_native_codec_actions",
+      "2026-11-03T16:00:54.2696702Z JETSETCRAFT_GAMETEST_PASS activity_mix_safety",
+      "2026-11-03T16:01:01.0742388Z [16:01:01] [Server thread/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_LIBERTY_CAMPAIGN_RUNTIME_PASS liberty_campaign_native_ship_redeploy_return",
+      "2026-11-03T16:01:01.3717135Z [16:01:01] [Server thread/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_LIBERTY_CAMPAIGN_RUNTIME_PASS liberty_campaign_native_floor_turf",
+      "2026-11-03T16:01:01.7704857Z [16:01:01] [Server thread/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_LIBERTY_CAMPAIGN_RUNTIME_PASS liberty_campaign_native_home_preservation",
+      "2026-11-03T16:01:01.9712345Z [16:01:01] [Server thread/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_LIBERTY_CAMPAIGN_RUNTIME_PASS liberty_campaign_native_tacz_core",
+      "2026-11-03T16:01:06.5712263Z [16:01:06] [Server thread/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_LIBERTY_RUNTIME_PASS liberty_runtime_serialized_rejoin",
+      "2026-11-03T16:01:06.8722639Z [16:01:06] [Server thread/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_LIBERTY_RUNTIME_PASS liberty_runtime_action_identity",
+      "2026-11-03T16:01:13.5702657Z [16:01:13] [Server thread/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_LIBERTY_CAMPAIGN_RUNTIME_PASS liberty_campaign_native_stratagem_lifecycle",
+      "2026-11-03T16:01:17.4703263Z [16:01:17] [Server thread/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_LIBERTY_RUNTIME_PASS liberty_runtime_abort_death_disconnect",
+      "2026-11-03T16:01:18.1701751Z JETSETCRAFT_GAMETEST_PASS activity_mix_intermission",
+      "2026-11-03T16:01:27.8707495Z [16:01:27] [Server thread/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_LIBERTY_RUNTIME_PASS liberty_runtime_full_extraction",
+      "2026-11-03T16:01:35.3699602Z JETSETCRAFT_GAMETEST_PASS activity_mix_runtime",
+      "2026-11-03T16:01:56.9700068Z JETSETCRAFT_GAMETEST_PASS crew_tour_persistence",
+      "2026-11-03T16:02:30.1697642Z JETSETCRAFT_GAMETEST_PASS rush_expanded_evolution_bass",
+      "2026-11-03T16:02:30.2696797Z JETSETCRAFT_GAMETEST_PASS rush_expanded_evolution_pulse_pause",
+      "2026-11-03T16:02:39.3696873Z [16:02:39] [Server thread/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_LIBERTY_RUNTIME_PASS liberty_runtime_future_research_recovery",
+      "2026-11-03T16:02:54.3714274Z [16:02:54] [Server thread/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_LIBERTY_CAMPAIGN_RUNTIME_PASS liberty_campaign_native_director_relocation",
+      "2026-11-03T16:02:54.3717197Z [16:02:54] [Server thread/INFO] [co.he.je.JetSetCraft/]: JETSETCRAFT_LIBERTY_CAMPAIGN_RUNTIME_PASS liberty_campaign_native_director_caps",
+      "2026-11-03T16:02:54.3724037Z [16:02:54] [Server thread/INFO] [minecraft/GameTestServer]: 3 required tests failed :(",
+      "2026-11-03T16:03:00.9710806Z BUILD FAILED in 5m 54s",
+      "2026-11-03T16:03:01.3689084Z ##[error]Process completed with exit code 1."
+    ]
+  }
+}

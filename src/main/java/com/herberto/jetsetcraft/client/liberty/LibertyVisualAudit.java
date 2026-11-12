@@ -78,6 +78,12 @@ public final class LibertyVisualAudit {
     private static volatile boolean campaignStageReady, campaignBaselineReady, campaignPaintProved;
     private static boolean campaignCleanupQueued;
     private static volatile boolean campaignCleanupProved;
+    private static volatile long campaignCleanupTick = -1;
+    private static volatile boolean campaignShipProbeQueued;
+    private static volatile ShipObservation campaignShipObserved;
+    private static int campaignShipPollTicks;
+    private record ShipObservation(long tick, long revision, boolean active, boolean inShip,
+                                   boolean hasReturn, String dimension) { }
     private static volatile int campaignPaintEntities, campaignProgress;
     private static volatile UUID campaignMission;
     private static volatile BlockPos campaignTerritory;
@@ -113,7 +119,12 @@ public final class LibertyVisualAudit {
             if (minecraft.player == null || minecraft.level == null || minecraft.getConnection() == null) { worldConfirmation(minecraft); return; }
             require(disposableServer(minecraft), "Audit lost its exact disposable integrated save");
             if (campaignAudit() && phase >= 3 && phaseStartedAt != 0 && System.nanoTime() - phaseStartedAt > 45_000_000_000L) {
-                finish(minecraft, false, "45-second campaign phase deadline " + phase + "; server status=" + LibertyClient.stateSnapshot().getString("Status")); return;
+                CompoundTag state = LibertyClient.stateSnapshot();
+                finish(minecraft, false, "45-second campaign phase deadline " + phase + "; server status=" + state.getString("Status")
+                        + (phase == 240 || phase == 241 ? "; cleanupTick=" + campaignCleanupTick + "; latestServer=" + campaignShipObserved
+                        + "; probePending=" + campaignShipProbeQueued + "; clientRevision=" + state.getLong("Revision")
+                        + "; clientActive=" + state.getBoolean("Active") + "; clientInShip=" + state.getBoolean("InShip")
+                        + "; clientDimension=" + minecraft.level.dimension().location() : "")); return;
             }
             if (minecraft.screen != null) {
                 // A fixed native position need not deliver a new mouse event after a window resize.
@@ -466,12 +477,33 @@ public final class LibertyVisualAudit {
             }
             case 240 -> {
                 if (state.getBoolean("Active") || state.getBoolean("InShip") || !minecraft.level.dimension().location().toString().equals(originalDimension) || ++ticks < 20) return;
-                requireOriginal(minecraft, "campaign early return");
-                if (!campaignCleanupQueued) { campaignCleanupQueued = true; campaignCleanup(minecraft); return; }
+                if (!campaignCleanupQueued) {
+                    requireOriginal(minecraft, "campaign early return"); campaignCleanupQueued = true; campaignCleanup(minecraft); return;
+                }
                 if (!campaignCleanupProved) return;
+                observeCampaignShip(minecraft);
+                ShipObservation observed = campaignShipObserved;
+                // Return cleanup can occupy a long server tick while client ticks continue. The real
+                // action handler needs two overworld ticks after abort, not merely a client-side delay.
+                if (observed == null || observed.tick() - campaignCleanupTick < 2) return;
+                require(!observed.active() && !observed.inShip() && !observed.hasReturn()
+                        && observed.dimension().equals(originalDimension) && observed.revision() > 0,
+                        "Ship boarding was not ready after the real early return: " + observed);
+                if (!(minecraft.screen instanceof LibertyCampaignScreen) || state.hasUUID("Mission")
+                        || state.getLong("Revision") != observed.revision()) return;
+                requireOriginal(minecraft, "campaign ship boarding");
+                JetSetCraft.LOGGER.info("JETSETCRAFT_LIBERTY_CAMPAIGN_VISUAL_BOARD_REQUEST cleanupTick={} observedServer={} clientRevision={} realButton=true attempts=1",
+                        campaignCleanupTick, observed, state.getLong("Revision"));
                 click(minecraft, "Board your ship"); next(241);
             }
-            case 241 -> { if (state.getBoolean("InShip") && minecraft.screen instanceof LibertyCampaignScreen && ++ticks >= 20) { click(minecraft, "Ship"); next(242); } }
+            case 241 -> {
+                observeCampaignShip(minecraft);
+                if (state.getBoolean("InShip") && minecraft.screen instanceof LibertyCampaignScreen && ++ticks >= 20) {
+                    JetSetCraft.LOGGER.info("JETSETCRAFT_LIBERTY_CAMPAIGN_VISUAL_SHIP_ARRIVAL clientRevision={} clientDimension={} latestServer={}",
+                            state.getLong("Revision"), minecraft.level.dimension().location(), campaignShipObserved);
+                    click(minecraft, "Ship"); next(242);
+                }
+            }
             case 242 -> { if (++ticks >= 20) { capture(minecraft, "16-ship-hardware-minimum"); next(2421); } }
             case 2421 -> {
                 if (!captured("16-ship-hardware-minimum")) return;
@@ -563,7 +595,20 @@ public final class LibertyVisualAudit {
             require(LibertyManager.operation(player) == null && !LibertyManager.hasReturn(player), "Native early return retained an active operation or return journal");
             var district = player.getServer().getLevel(com.herberto.jetsetcraft.liberty.LibertyWorld.DIMENSION);
             for (UUID id : CAMPAIGN_PAINT) { var entity = district.getEntity(id); require(entity == null || entity.isRemoved(), "A temporary mission paint entity survived the real return"); }
-            JetSetCraft.LOGGER.info("JETSETCRAFT_LIBERTY_CAMPAIGN_VISUAL_CLEANUP verifiedRemovedPaintEntities={}", CAMPAIGN_PAINT.size()); campaignCleanupProved = true;
+            campaignCleanupTick = player.getServer().overworld().getGameTime();
+            JetSetCraft.LOGGER.info("JETSETCRAFT_LIBERTY_CAMPAIGN_VISUAL_CLEANUP verifiedRemovedPaintEntities={} serverTick={}", CAMPAIGN_PAINT.size(), campaignCleanupTick); campaignCleanupProved = true;
+        });
+    }
+    private static void observeCampaignShip(Minecraft minecraft) {
+        if (++campaignShipPollTicks % 20 != 1 || campaignShipProbeQueued) return;
+        campaignShipProbeQueued = true;
+        campaignServer(minecraft, player -> {
+            try {
+                CompoundTag state = LibertyManager.snapshot(player);
+                campaignShipObserved = new ShipObservation(player.getServer().overworld().getGameTime(), state.getLong("Revision"),
+                        state.getBoolean("Active"), state.getBoolean("InShip"), LibertyManager.hasReturn(player),
+                        player.serverLevel().dimension().location().toString());
+            } finally { campaignShipProbeQueued = false; }
         });
     }
     private static void campaignServer(Minecraft minecraft, java.util.function.Consumer<net.minecraft.server.level.ServerPlayer> task) {
