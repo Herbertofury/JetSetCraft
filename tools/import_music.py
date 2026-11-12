@@ -37,6 +37,15 @@ def write_json(path: Path, data: object) -> None:
     path.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
 
+def credit_label(value: object) -> str:
+    if not isinstance(value, str):
+        raise ValueError("Credit label must be a string")
+    value = "".join(c for c in value if ord(c) >= 32 and ord(c) != 127 and c != "§").strip()
+    if not 1 <= len(value.encode("utf-16-le")) // 2 <= 160:
+        raise ValueError("Credit label must contain 1 to 160 display characters")
+    return value
+
+
 def build(track_id: str, recording: Path, destination: Path, catalogue: Path = CATALOGUE) -> dict:
     if not re.fullmatch(r"[a-z0-9_]+", track_id):
         raise ValueError("Track ID must contain lowercase letters, digits and underscores only")
@@ -46,14 +55,17 @@ def build(track_id: str, recording: Path, destination: Path, catalogue: Path = C
     if not audio_path.startswith("sounds/") or not audio_path.endswith(".ogg"):
         raise ValueError("audio_resource must name a local sounds/*.ogg resource")
     for key in ("title", "artist"):
-        value = metadata.get(key)
-        if not isinstance(value, str):
-            raise ValueError(f"Track {key} is required")
-        value = "".join(character for character in value if ord(character) >= 32
-                        and ord(character) != 127 and character != "§").strip()
-        if not 1 <= len(value.encode("utf-16-le")) // 2 <= 160:
-            raise ValueError(f"Track {key} must contain 1 to 160 display characters")
-        metadata[key] = value
+        metadata[key] = credit_label(metadata.get(key))
+    if "album" in metadata:
+        album = metadata["album"]
+        if not isinstance(album, str):
+            raise ValueError("Album credit must be a string")
+        album = "".join(c for c in album if ord(c) >= 32 and ord(c) != 127 and c != "§").strip()
+        metadata["album"] = credit_label(album) if album else ""
+    featured = metadata.get("featured_artists", [])
+    if not isinstance(featured, list) or len(featured) > 16:
+        raise ValueError("featured_artists must be a list of at most 16 credit labels")
+    metadata["featured_artists"] = [credit_label(artist) for artist in featured]
     if not metadata.get("contexts") or not set(metadata["contexts"]).issubset({"home", "rush"}):
         raise ValueError("contexts must contain home and/or rush")
     volume = float(metadata.get("volume", 0.65))
@@ -89,6 +101,7 @@ def build(track_id: str, recording: Path, destination: Path, catalogue: Path = C
             "sounds": [{"name": f"{audio_namespace}:{audio_path[7:-4]}", "stream": True}]}})
         write_json(staged / "assets/jetsetcraft/jetsetcraft_music" / f"{track_id}.json", metadata)
         receipt = {"track_id": track_id, "title": metadata["title"], "artist": metadata["artist"],
+                   "album": metadata.get("album", ""), "featured_artists": metadata["featured_artists"],
                    "source_url": metadata.get("source_url", ""), "source_filename": recording.name,
                    "source_sha256": digest(recording), "audio_resource": metadata["audio_resource"],
                    "encoded_sha256": digest(output), "duration_seconds": duration,
@@ -96,8 +109,11 @@ def build(track_id: str, recording: Path, destination: Path, catalogue: Path = C
                    "channels": streams[0]["channels"], "input_origin": "project-supplied local recording"}
         write_json(staged / "jetsetcraft-music-receipt.json", receipt)
         (staged / "CREDITS.txt").write_text(
-            f"{metadata['title']}\n{metadata['artist']}\n{metadata.get('album', '')}\n"
+            f"Title: {metadata['title']}\nArtist: {metadata['artist']}\n"
+            f"Featured artists: {', '.join(metadata['featured_artists']) or 'Not specified'}\n"
+            f"Release: {metadata.get('album') or 'Not specified'}\n"
             f"Reference: {metadata.get('source_url', '')}\n"
+            "Music Library: https://github.com/Herbertofury/JetSetCraft/wiki/Music-Library\n"
             "Audio supplied locally by the JetSetCraft project. Full source and conversion hashes are in the receipt.\n",
             encoding="utf-8")
         staged.rename(destination)

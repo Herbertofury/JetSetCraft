@@ -32,5 +32,11 @@
       "source_sha256": null,
       "encoded_sha256": null
     }
-  ]
+  ],
+  "additional_owner_report": {
+    "date": "2026-11-12",
+    "scope": "Owner reports authors of recommended music permit inclusion in the mod subject to credit.",
+    "required_credit": "Available recording title, artist, featured performers and release in accessible soundtrack credits.",
+    "verification": "Owner-reported; underlying agreements, separate recording rights and supplied masters not independently verified."
+  }
 }
