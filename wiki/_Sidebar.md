@@ -24,6 +24,10 @@
 - [🛤️ Grinding & Transfers](Grinding-and-Transfers)
 - [🌍 World Physics](World-Physics)
 
+### 🎵 Music
+
+- [🎧 Music Library: artists, albums, gangs & sources](Music-Library)
+
 ### 🎨 Street Culture
 - [🎪 Honkistas NPC Quality & Skating Physics](https://github.com/Herbertofury/JetSetCraft/wiki/Honkistas%E2%80%90NPC%E2%80%90Quality%E2%80%90and%E2%80%90Skating%E2%80%90Physics)
 - [MoccaSins — Music & Unlockable Names](MoccaSins)
