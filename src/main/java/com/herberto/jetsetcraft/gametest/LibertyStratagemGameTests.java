@@ -306,7 +306,10 @@ public final class LibertyStratagemGameTests {
             this.helper=helper;this.level=helper.getLevel();this.nativeProvider=nativeProvider;
             center=new BlockPos(32000+SEQUENCE.getAndIncrement()*256,100,-32000);chunk=new ChunkPos(center);
             for(int x=-4;x<=4;x++)for(int z=-4;z<=4;z++)level.getChunk(chunk.x+x,chunk.z+z);
-            for(int x=-radius;x<=radius;x++)for(int z=-radius;z<=radius;z++){BlockPos p=center.offset(x,0,z);level.setBlock(p,Blocks.STONE.defaultBlockState(),3);fixtureBlocks.put(p,Blocks.STONE.defaultBlockState());}
+            // Body cubes alone do not clear the native sentry line of sight or falling ordnance.
+            // Prepare the entire authored arena before capturing protected states or ticking effects.
+            LibertyNativeTerrainGameTests.prepareHomeFloor(level, center, radius);
+            for(int x=-radius;x<=radius;x++)for(int z=-radius;z<=radius;z++){BlockPos p=center.offset(x,0,z);fixtureBlocks.put(p,Blocks.STONE.defaultBlockState());}
             chest=center.offset(7,1,2);level.setBlock(chest,Blocks.CHEST.defaultBlockState(),3);
             ((ChestBlockEntity)level.getBlockEntity(chest)).setItem(0,new ItemStack(Items.DIAMOND,17));chestBefore=level.getBlockEntity(chest).saveWithFullMetadata();fixtureBlocks.put(chest,level.getBlockState(chest));
             owner=FakePlayerFactory.get(level,new GameProfile(UUID.randomUUID(),"JSC_support"));owner.getInventory().clearContent();owner.setGameMode(GameType.SURVIVAL);
