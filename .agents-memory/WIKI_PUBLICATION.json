@@ -1,9 +1,9 @@
 {
   "schema": 1,
-  "source_commit": "28cf4e1bfc0ea5885021b56cee0ae71cb8bd27ee",
-  "wiki_commit": "40a326a96580b951c756720146543fa2c440cb72",
+  "source_commit": "72d74b4ab7316e9f9300a42a66abf84e7f016368",
+  "wiki_commit": "434bb75e7433fbdfd4524a0de22881882d593eda",
   "wiki_branch": "master",
-  "page_count": 53,
+  "page_count": 54,
   "pages": [
     "Approved-Ride-Expansion-and-Trick-Combat.md",
     "Breakdance-and-Cyphers.md",
@@ -35,6 +35,7 @@
     "Modern-and-Upcoming-Mob-Gangs.md",
     "Modpack-Maker-Guide.md",
     "Multiplayer-and-Servers.md",
+    "Music-Library.md",
     "Music\u2010Driven-Dances-and-Mob\u2010Themed-Bosses.md",
     "Phonkistas.md",
     "Player-Chapters-Posse-and-Mob-Archetypes.md",
@@ -60,6 +61,6 @@
     "_Sidebar.md"
   ],
   "validated": true,
-  "published_at_utc": "2026-11-07T21:53:00.223662+00:00",
+  "published_at_utc": "2026-11-12T08:19:58.623629+00:00",
   "url": "https://github.com/Herbertofury/JetSetCraft/wiki"
 }
