@@ -142,7 +142,7 @@ public final class RivalRushManager {
         long cards;
         int pendingCombatXp;
         int damageDepth;
-        int sequence, admittedSequence, announcedOffer, announcedJourney, musicCharge;
+        int sequence, announcedOffer, announcedJourney, musicCharge;
         boolean exiting, finaleSent;
         RushDebrief.Outcome returnOutcome;
         String returnReason;
@@ -851,9 +851,9 @@ public final class RivalRushManager {
         mark(mob, s);
         mob.setPersistenceRequired(); mob.setInvulnerable(true); mob.setCanPickUpLoot(false);
         RushDirector.Elite elite = RushDirector.Elite.NONE;
-        if (!captain && s.run.elapsedTicks() >= 600 && (s.admittedSequence + 1) % 5 == 0
+        if (!captain && s.run.elapsedTicks() >= 600 && s.sequence % 5 == 0
                 && s.actors.values().stream().filter(a -> a.elite != RushDirector.Elite.NONE).count() < RushDirector.MAX_ELITES)
-            elite = RushDirector.Elite.values()[1 + Math.floorMod((s.admittedSequence + 1) / 5 - 1, 3)];
+            elite = RushDirector.Elite.values()[1 + Math.floorMod(s.sequence / 5 - 1, 3)];
         double hp = (headliner ? 420 : captain ? 220 : role == Role.BRUISER ? 42 : role == Role.TAGGER ? 18 : 14)
                 * (1.0 + Math.min(2.0, s.run.elapsedTicks() / 18000.0));
         if (elite != RushDirector.Elite.NONE) hp *= 2.25;
@@ -866,8 +866,6 @@ public final class RivalRushManager {
         if (headliner && !s.director.spawned(mob.getUUID())) {
             s.actors.remove(mob.getUUID()); mob.discard(); return false;
         }
-        // Failed placement/provider/equipment admission must not consume the next elite slot.
-        s.admittedSequence++;
         GangMemberState.attach(mob, s.gang.id(), role.name().toLowerCase(java.util.Locale.ROOT), s.run.id(), true, 0);
         updateName(s, actor);
         level.sendParticles(ParticleTypes.POOF, mob.getX(), mob.getY() + 1, mob.getZ(), 8, 0.5, 0.8, 0.5, 0.02);
@@ -1633,7 +1631,7 @@ public final class RivalRushManager {
         tag.putInt("DefeatedCount", s.director.defeatedCount()); tag.putBoolean("ForgeEarned", s.director.forgeEarned());
         tag.putInt("EliteCount", (int) s.actors.values().stream().filter(a -> a.elite != RushDirector.Elite.NONE).count());
         tag.putInt("TellCount", s.director.tells().size());
-        tag.putInt("SpawnAttempts", s.sequence); tag.putInt("AdmittedActors", s.admittedSequence);
+        tag.putInt("SpawnAttempts", s.sequence);
         tag.putInt("TrackedActors", s.actors.size()); tag.putLong("ElapsedTicks", now);
         tag.putLong("LastSpawnTick", s.lastSpawn); tag.putBoolean("DraftPending", s.run.hasOffer());
         tag.putBoolean("Finished", s.run.isFinished());

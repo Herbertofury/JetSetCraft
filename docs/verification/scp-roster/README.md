@@ -12,3 +12,6 @@ The original failed runs remain retained. Re-run final native CI and the existin
 
 
 Candidate repair6144277 compiled but the base native GameTest still failed the same bounded elite assertion. It is not a verified fix. Added bounded encounter counters and failure-only fixture snapshots to identify whether the blocked step is admission, selection, paused progression or actor observation, without weakening the assertion or increasing its bounds.
+
+
+Diagnostic c4cc9ff Alex's Mobs job132769371959 showed an active admitted Linebreaker,22 admissions,18 tracked bodies, but fixture world query visible=[] in a synchronous30-wave loop. This contradicts the initial starvation hypothesis. The cadence candidate is reverted; production spawn cadence stays unchanged. The fixture now yields a real server tick between observations, retaining30 director advances and the requirement to defeat an actual owned elite. Await native results before calling this resolved.
