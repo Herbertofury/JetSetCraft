@@ -39,6 +39,10 @@ No copyrighted recording, video, cover art or sample is included here. The proje
 - **Proposed gameplay hook:** cheerful pastry-palette graffiti battles and call-and-response crew dances, with readable score prompts and optional reduced-flash/reduced-motion effects. Do not assert choreography matches the song until a properly sourced recording is analyzed.
 - **Boundary with Signal '81:** Bananettas owns dessert-colored bubblegum-pop and playful glamour; Signal '81 owns retro broadcast/new-wave aesthetics and its different approved track.
 
+## Research backlog — 2026 audition candidates
+
+[**Browse the 102-track, quality-tiered Bananettas music discovery shelf**](Bananettas-Music-Discovery). This is an independent **audition/research queue**, not 102 owner-approved must-adds or shipped music. Lio's **Le Banana Split** remains the only canonical must-add until the owner explicitly promotes another selection.
+
 ## Concrete integration checklist
 
 - [x] Record owner-confirmed name, reference ID and first must-add artist/title without inventing a Spotify track ID.

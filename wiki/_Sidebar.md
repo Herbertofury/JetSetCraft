@@ -33,6 +33,7 @@
 
 ### 🎨 Street Culture
 - [🍌 Bananettas — Bubblegum Pop / New Wave](Bananettas)
+- [🎶 Bananettas — 102 curated radio candidates](Bananettas-Music-Discovery)
 - [📡 Signal '81 — Retro Broadcast Rival Gang](Signal-81)
 - [🎪 Honkistas NPC Quality & Skating Physics](https://github.com/Herbertofury/JetSetCraft/wiki/Honkistas%E2%80%90NPC%E2%80%90Quality%E2%80%90and%E2%80%90Skating%E2%80%90Physics)
 - [MoccaSins — Music & Unlockable Names](MoccaSins)

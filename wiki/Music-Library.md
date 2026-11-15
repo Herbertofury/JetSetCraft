@@ -91,6 +91,8 @@ These are identified metadata entries; neither recording is bundled. Their propo
 
 ### Bananettas
 
+[**Explore 102 candidate Bananettas radio tracks, with quality tiers and playback/source gates**](Bananettas-Music-Discovery). Discovery only: none is owner-approved must-add until explicitly selected, and no music/audio is bundled.
+
 [Owner-confirmed gang profile and implementation gates](Bananettas). The project owner selected **Bananettas** on **2026-11-15**, following Honkistas/Gabberinas/Phonkistas/Footworkas naming conventions. This is an upbeat Francophone **bubblegum-pop / playful new-wave** gang, not a rename of Signal '81. **The song below is its first MUST-ADD, assigned specifically to Bananettas.**
 
 | ID | Must-add owner-selected recording | Historical / listening references | Status |
