@@ -119,7 +119,7 @@ public final class HonkistasPrototypeGameTests {
                     if(!actor.onGround())return; // Overall native-tick deadline remains enforced.
                     check(!actor.startControlledRoute(List.of(origin.offset(60,1,1)),1,120),"Accepted out-of-range route");
                     check(!actor.startControlledRoute(java.util.Collections.nCopies(17,origin.offset(4,1,1)),1,120),"Accepted oversized route");
-                    check(actor.startControlledRoute(cueTest?List.of(origin.offset(4,1,1),origin.offset(4,1,4),origin.offset(1,1,1)):List.of(origin.offset(4,1,1),origin.offset(4,1,4)),cueTest?.6:1,180),"Grounded route rejected");
+                    check(actor.startControlledRoute(cueTest?List.of(origin.offset(4,1,1),origin.offset(4,1,4),origin.offset(1,1,1)):List.of(origin.offset(4,1,1),origin.offset(4,1,4)),cueTest?.6:1,cueTest?260:180),"Grounded route rejected");
                     check(!actor.startControlledRoute(List.of(origin.offset(1,1,1)),1,120),"Running route overwritten");
                     if(cueTest){
                         check(actor.startBeatCue(),"Server beat cue refused");cueStartTick=actor.tickCount;cueStartPosition=actor.position();
