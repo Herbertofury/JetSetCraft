@@ -7,3 +7,7 @@ The native GameTest checks actual registered entity identity, entity-ticking ter
 These tests are pending exact-head CI and image review when first published. The route has no skate equipment, skate controller, dance choreography, reactive cloth/hair, production provider, reward or event victory logic. It is not a substitute for control/defeat eligibility, invitations, actor ownership/reload, rival victory, Honkistas progression or rare guests. Models remain original prototypes below the owner's full visual benchmark.
 
 No reference media or third-party assets are copied.
+
+## Retained first failures
+
+Initial `7b18fdae` failed with zero displacement. Diagnostic-only `a34c856` (core run `43733131183`, job `132869785651`) observed rejected navigation with null path while `onGround=false` at entity tick 2, despite clear target and stone support. The test fixture now waits for actual native physics ground contact under its unchanged overall deadline before issuing its grounded route. Production navigation and all displacement/completion assertions remain unchanged. No teleport or manually set ground flag is used.

@@ -94,6 +94,9 @@ public final class HonkistasPrototypeGameTests {
                 check(helper.getLevel().getEntity(actor.getUUID())==actor && actor.isAlive(),"Real route actor lost from world registry");
                 check(ready(),"Native route arena stopped entity-ticking");
                 if(phase==1){
+                    // Native GroundPathNavigation cannot create a route before physics ground contact.
+                    // The initial spawn has zero vertical speed; the first ticks must actually settle.
+                    if(!actor.onGround())return; // Overall native-tick deadline remains enforced.
                     check(!actor.startControlledRoute(List.of(origin.offset(60,1,1)),1,120),"Accepted out-of-range route");
                     check(!actor.startControlledRoute(java.util.Collections.nCopies(17,origin.offset(4,1,1)),1,120),"Accepted oversized route");
                     check(actor.startControlledRoute(List.of(origin.offset(4,1,1),origin.offset(4,1,4)),1,180),"Grounded route rejected");
