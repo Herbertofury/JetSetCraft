@@ -97,7 +97,12 @@ public final class HonkistasPrototypeEntity extends PathfinderMob {
             if(!level().hasChunkAt(p))reason="target_chunk_not_loaded";
             else if(!level().getBlockState(p).getCollisionShape(level(),p).isEmpty())reason="target_collision";
             else if(!level().getBlockState(p.above()).getCollisionShape(level(),p.above()).isEmpty())reason="target_head_collision";
-            else if(!getNavigation().moveTo(p.getX()+.5,p.getY(),p.getZ()+.5,routeSpeed))reason="moveTo_returned_false";
+            else {
+                // Discard a consumed native path before requesting the same endpoint again.
+                // Otherwise native moveTo can retain the equivalent path's exhausted node cursor.
+                getNavigation().stop();
+                if(!getNavigation().moveTo(p.getX()+.5,p.getY(),p.getZ()+.5,routeSpeed))reason="moveTo_returned_false";
+            }
             diagnoseRoute(reason==null?"navigation_started":reason,p);
             if(reason!=null)finishRoute(RouteStatus.FAILED_PATH);
         }
