@@ -53,7 +53,8 @@ public final class HonkistasGroundedVisualAudit {
                     }
                     var actor=ModEntities.HONKISTAS_PROTOTYPE.get().create(level);
                     if(actor==null)throw new IllegalStateException("Original actor missing");
-                    actor.moveTo(start.x,start.y,start.z,270,0);actor.setNoAi(true);
+                    // Keep native AI/physics active so floor contact is genuinely observed.
+                    actor.moveTo(start.x,start.y,start.z,270,0);
                     if(!level.addFreshEntity(actor))throw new IllegalStateException("Grounded actor insertion failed");
                     actorId=actor.getUUID();cameraPosition=start.add(3,.4,7);
                     level.setDayTime(6000);p.setNoGravity(true);
