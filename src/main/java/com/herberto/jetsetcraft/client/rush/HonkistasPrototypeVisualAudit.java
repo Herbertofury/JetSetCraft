@@ -13,7 +13,7 @@ import java.util.function.Predicate;
 
 /** Real-client original-model views in the existing disposable audit world only; not encounter acceptance. */
 public final class HonkistasPrototypeVisualAudit {
-    private static int phase,ticks;
+    private static int phase,ticks,waitTicks;
     private static volatile UUID actorId;
     private static volatile boolean queued,applied;
     private static volatile String error;
@@ -28,6 +28,18 @@ public final class HonkistasPrototypeVisualAudit {
                 || !server.getWorldPath(LevelResource.ROOT).toAbsolutePath().normalize().getFileName().toString().equals("RivalRushAudit"))
             throw new IllegalStateException("Original actor audit refused non-disposable world");
         if(error!=null)throw new IllegalStateException(error);
+        if(++waitTicks%100==0){
+            String client="phase="+phase+" applied="+applied+" client="+mc.player.position()
+                    +" velocity="+mc.player.getDeltaMovement()+" yaw="+mc.player.getYRot()+" pitch="+mc.player.getXRot()+" center="+center;
+            HonkistasPrototypeEntity observed=null;
+            for(var e:mc.level.entitiesForRendering())if(e.getUUID().equals(actorId)&&e instanceof HonkistasPrototypeEntity a){observed=a;break;}
+            JetSetCraft.LOGGER.info("JETSETCRAFT_ORIGINAL_PREVIEW_WAIT {} actorClient={} rendered={}",client,
+                    observed==null?"absent":observed.position(),actorId!=null&&com.herberto.jetsetcraft.client.render.HonkistasPrototypeRenderer.renderedSince(actorId,poseReadyNanos));
+            UUID owner=mc.player.getUUID();server.execute(()->{
+                var p=server.getPlayerList().getPlayer(owner);var a=actorId==null?null:p.serverLevel().getEntity(actorId);
+                JetSetCraft.LOGGER.info("JETSETCRAFT_ORIGINAL_PREVIEW_SERVER player={} velocity={} actor={}",p.position(),p.getDeltaMovement(),a==null?"absent":a.position());
+            });
+        }
         if(phase==0){
             if(!queued){
                 queued=true;hideGui=mc.options.hideGui;mc.options.hideGui=true;camera=mc.options.getCameraType();mc.options.setCameraType(CameraType.FIRST_PERSON);mc.setScreen(null);
