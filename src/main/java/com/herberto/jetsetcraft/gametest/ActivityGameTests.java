@@ -321,6 +321,11 @@ public final class ActivityGameTests {
                 check(state.getBoolean("Won") && state.getInt("Progress") == 480 && state.getInt("Supplies") == 14
                                 && CrewHouseData.get(owner.getServer()).pendingXp(owner.getUUID()) == 90,
                         "Hill completion did not bank its distinct shared reward: " + state.getString("Summary"));
+                var chain = com.herberto.jetsetcraft.gang.HonkistasEncounterData.get(owner.getServer()).entry(owner.getUUID());
+                check(chain != null && chain.stage() == com.herberto.jetsetcraft.gang.HonkistasEncounterData.Stage.SOURCE_RECORDED,
+                        "Settled activity did not create exactly the source stage, or skipped to Honkistas");
+                check(com.herberto.jetsetcraft.gang.HonkistasEncounterData.saveAcknowledged(owner.getServer()),
+                        "Source event journal durable checkpoint was not acknowledged");
                 checkVanilla(owner); ActivityManager.forget(owner); pass(helper, "activity_hill"); return;
             }
             Vec3 hill = hill(anchor, Math.min(2, state.getInt("Progress") / 160)); owner.moveTo(hill);

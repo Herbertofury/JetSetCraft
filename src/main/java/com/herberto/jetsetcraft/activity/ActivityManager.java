@@ -428,6 +428,8 @@ public final class ActivityManager {
             c.reward = CrewHouseManager.bankActivity(c.player, c.id, c.target.gangId(), c.mode.id,
                     c.run.ticks(), c.run.objectives(), (long) c.run.progress() * 100);
             if (c.reward.accepted()) {
+                com.herberto.jetsetcraft.gang.HonkistasEncounterData.get(c.player.getServer())
+                        .sourceSettled(c.player.getUUID(), c.id, c.target.gangId().toString());
                 message += " +" + c.reward.supplies() + " Crew Supplies, +" + c.reward.crewXp() + " crew XP, +"
                         + c.reward.reputation() + " reputation" + (c.reward.memberXp() > 0 ? ", +" + c.reward.memberXp() + " training XP" : "") + ".";
                 if (c.reward.pendingHouse()) message += " Saved for your future crew house.";
