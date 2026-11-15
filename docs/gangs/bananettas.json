@@ -7,8 +7,15 @@
   "owner_confirmed": {
     "name": true,
     "track_ids": [
-      "BANANETTAS-MUSIC-001"
-    ]
+      "BANANETTAS-MUSIC-001",
+      "BANANETTAS-MUSIC-002",
+      "BANANETTAS-MUSIC-003",
+      "BANANETTAS-MUSIC-004",
+      "BANANETTAS-MUSIC-005",
+      "BANANETTAS-MUSIC-006",
+      "BANANETTAS-MUSIC-007"
+    ],
+    "additional_songs_selection_date": "2026-11-15"
   },
   "naming_context": {
     "note": "Owner chose Bananettas for the existing Honkistas / Gabberinas / Phonkistas / Footworkas naming style.",
@@ -63,6 +70,145 @@
       "recording_master_status": "not_supplied",
       "synchronization_rights_status": "not_verified",
       "distribution_rights_status": "not_verified",
+      "in_game_playback_status": "not_integrated"
+    },
+    {
+      "reference_id": "BANANETTAS-MUSIC-002",
+      "title": "Comix Discomix",
+      "artist": "Lio",
+      "is_owner_approved": true,
+      "owner_selection_date": "2026-11-15",
+      "assignment": "bananettas_only",
+      "source_type": "owner_supplied_exact_spotify_track",
+      "owner_supplied_url": "https://open.spotify.com/track/1P18sWcfw8z88dQaAujTN5?si=0ddeb6f2d1784ec2",
+      "spotify_track_id": "1P18sWcfw8z88dQaAujTN5",
+      "artist_official_url": null,
+      "album": "Lio",
+      "identity_verification": "confirmed_from_spotify_page",
+      "proposed_use": [
+        "gang_radio",
+        "arcade_skating"
+      ],
+      "recording_master_status": "not_supplied",
+      "synchronization_rights_status": "not_verified",
+      "distribution_rights_status": "not_verified",
+      "exact_cues_status": "not_analyzed",
+      "in_game_playback_status": "not_integrated"
+    },
+    {
+      "reference_id": "BANANETTAS-MUSIC-003",
+      "title": "Que veux-tu",
+      "artist": "Yelle",
+      "is_owner_approved": true,
+      "owner_selection_date": "2026-11-15",
+      "assignment": "bananettas_only",
+      "source_type": "owner_named_song",
+      "owner_supplied_url": null,
+      "spotify_track_id": "62nbm8Q7Uv9wNrFjwMmNns",
+      "artist_official_url": "https://yelle.bandcamp.com/track/que-veux-tu",
+      "album": "Safari Disco Club",
+      "identity_verification": "verified_original_2011_album_recording_from_spotify_and_artist_bandcamp; owner_selected_title_artist_not_spotify_id",
+      "proposed_use": [
+        "gang_radio",
+        "skating"
+      ],
+      "recording_master_status": "not_supplied",
+      "synchronization_rights_status": "not_verified",
+      "distribution_rights_status": "not_verified",
+      "exact_cues_status": "not_analyzed",
+      "in_game_playback_status": "not_integrated"
+    },
+    {
+      "reference_id": "BANANETTAS-MUSIC-004",
+      "title": "Carrément carrément",
+      "artist": "The Pirouettes",
+      "is_owner_approved": true,
+      "owner_selection_date": "2026-11-15",
+      "assignment": "bananettas_only",
+      "source_type": "owner_supplied_exact_spotify_track",
+      "owner_supplied_url": "https://open.spotify.com/track/5AM2r681yLfLLiqKRLUrdZ?si=d3e86be91b65458c",
+      "spotify_track_id": "5AM2r681yLfLLiqKRLUrdZ",
+      "artist_official_url": null,
+      "album": null,
+      "identity_verification": "confirmed_from_spotify_page",
+      "proposed_use": [
+        "gang_radio",
+        "challenge"
+      ],
+      "recording_master_status": "not_supplied",
+      "synchronization_rights_status": "not_verified",
+      "distribution_rights_status": "not_verified",
+      "exact_cues_status": "not_analyzed",
+      "in_game_playback_status": "not_integrated"
+    },
+    {
+      "reference_id": "BANANETTAS-MUSIC-005",
+      "title": "Discolombo",
+      "artist": "Le Couleur",
+      "is_owner_approved": true,
+      "owner_selection_date": "2026-11-15",
+      "assignment": "bananettas_only",
+      "source_type": "owner_supplied_spotify_search",
+      "owner_supplied_url": "https://open.spotify.com/search/Le%20Couleur%20Discolombo?utm_source=chatgpt.com",
+      "spotify_track_id": null,
+      "artist_official_url": "https://lecouleurmusic.bandcamp.com/album/p-o-p",
+      "album": "P.O.P",
+      "identity_verification": "verified_song_by_artist_official_bandcamp_and_lisbon_lux_label; no_exact_owner_supplied_spotify_track_id",
+      "proposed_use": [
+        "gang_radio",
+        "skating",
+        "arcade"
+      ],
+      "recording_master_status": "not_supplied",
+      "synchronization_rights_status": "not_verified",
+      "distribution_rights_status": "not_verified",
+      "exact_cues_status": "not_analyzed",
+      "in_game_playback_status": "not_integrated",
+      "credit_note": "Official artist video identifies Le Couleur ft. Lafayette; check final target master credits"
+    },
+    {
+      "reference_id": "BANANETTAS-MUSIC-006",
+      "title": "Ce jeu",
+      "artist": "Yelle",
+      "is_owner_approved": true,
+      "owner_selection_date": "2026-11-15",
+      "assignment": "bananettas_only",
+      "source_type": "owner_supplied_exact_spotify_track",
+      "owner_supplied_url": "https://open.spotify.com/track/2KjJhGtseXQBI5Cg6ZZdc9?si=724cd3db9a6d492f",
+      "spotify_track_id": "2KjJhGtseXQBI5Cg6ZZdc9",
+      "artist_official_url": null,
+      "album": "Pop-Up",
+      "identity_verification": "confirmed_spotify_track_page_and_recording_index",
+      "proposed_use": [
+        "gang_radio",
+        "graffiti_challenge"
+      ],
+      "recording_master_status": "not_supplied",
+      "synchronization_rights_status": "not_verified",
+      "distribution_rights_status": "not_verified",
+      "exact_cues_status": "not_analyzed",
+      "in_game_playback_status": "not_integrated"
+    },
+    {
+      "reference_id": "BANANETTAS-MUSIC-007",
+      "title": null,
+      "artist": null,
+      "is_owner_approved": true,
+      "owner_selection_date": "2026-11-15",
+      "assignment": "bananettas_only",
+      "source_type": "owner_supplied_exact_spotify_track_unresolved_metadata",
+      "owner_supplied_url": "https://open.spotify.com/track/66TWIPMA0IMNofL3glOp6X?si=b08c5c42250448d8",
+      "spotify_track_id": "66TWIPMA0IMNofL3glOp6X",
+      "artist_official_url": null,
+      "album": null,
+      "identity_verification": "metadata_unresolved_do_not_guess_artist_or_title",
+      "proposed_use": [
+        "gang_radio_pending_identification"
+      ],
+      "recording_master_status": "not_supplied",
+      "synchronization_rights_status": "not_verified",
+      "distribution_rights_status": "not_verified",
+      "exact_cues_status": "not_analyzed",
       "in_game_playback_status": "not_integrated"
     }
   ],

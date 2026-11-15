@@ -1,0 +1,17 @@
+{
+  "title": "Carrément carrément",
+  "artist": "The Pirouettes",
+  "sound_event": "jetsetcraft:licensed/bananettas_carrement_carrement",
+  "audio_resource": "jetsetcraft:sounds/music/licensed/bananettas_carrement_carrement.ogg",
+  "contexts": [
+    "rush"
+  ],
+  "volume": 0.65,
+  "source_url": "https://open.spotify.com/track/5AM2r681yLfLLiqKRLUrdZ?si=d3e86be91b65458c",
+  "gang_id": "jetsetcraft:bananettas",
+  "intended_placement": "bananettas-only after crew filter exists; not global Rush playlist",
+  "owner_reference_id": "BANANETTAS-MUSIC-004",
+  "recording_status": "awaiting_authorized_audio",
+  "rights_status": "not_verified_sync_and_redistribution; metadata_only_no_audio",
+  "spotify_track_id": "5AM2r681yLfLLiqKRLUrdZ"
+}

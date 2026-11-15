@@ -3,9 +3,9 @@
   "owner_approved_reference_id": "BANANETTAS-MUSIC-001",
   "gang_id": "jetsetcraft:bananettas",
   "generated_for": "research_and_audition_2026-11-15",
-  "review_status": "discovery_candidates_only_not_owner_approved",
+  "review_status": "mixed_approved_and_audition_candidates",
   "candidate_count": 102,
-  "policy": "The approved Lio Le Banana Split remains the only MUST-ADD; never bundle audio or grant licenses from Spotify search links.",
+  "policy": "Of the original 102 candidates, five have since been explicitly selected by the owner. The original first must-add is Le Banana Split. One additional exact Spotify link is selected but its identity remains unverified. Neither being selected nor linked grants audio licensing or establishes shipped playback.",
   "priority_legend": {
     "A": "high-priority proposed audition",
     "B": "secondary/variety proposed audition"
@@ -33,9 +33,15 @@
       "proposed_use": "radio / arcade",
       "lane": "first10",
       "source_search_url": "https://open.spotify.com/search/Lio%20Comix%20Discomix",
-      "state": "research_candidate_not_owner_approved",
+      "state": "owner_approved_must_add",
       "exact_recording_verified": false,
-      "in_game_playback_verified": false
+      "in_game_playback_verified": false,
+      "owner_approval_date": "2026-11-15",
+      "owner_approved_music_id": "BANANETTAS-MUSIC-002",
+      "owner_supplied_reference_url": "https://open.spotify.com/track/1P18sWcfw8z88dQaAujTN5?si=0ddeb6f2d1784ec2",
+      "approved_reference_url": "https://open.spotify.com/track/1P18sWcfw8z88dQaAujTN5?si=0ddeb6f2d1784ec2",
+      "source_kind": "owner_supplied_exact_spotify_track",
+      "metadata_identity_status": "confirmed_from_spotify_page"
     },
     {
       "candidate_id": "BANANETTAS-DISC-20261115-003",
@@ -98,9 +104,15 @@
       "proposed_use": "open skating",
       "lane": "first10",
       "source_search_url": "https://open.spotify.com/search/Yelle%20Que%20veux-tu",
-      "state": "research_candidate_not_owner_approved",
+      "state": "owner_approved_must_add",
       "exact_recording_verified": false,
-      "in_game_playback_verified": false
+      "in_game_playback_verified": false,
+      "owner_approval_date": "2026-11-15",
+      "owner_approved_music_id": "BANANETTAS-MUSIC-003",
+      "owner_supplied_reference_url": null,
+      "approved_reference_url": "https://yelle.bandcamp.com/track/que-veux-tu",
+      "source_kind": "owner_named_song",
+      "metadata_identity_status": "verified_original_2011_album_recording_from_spotify_and_artist_bandcamp; owner_selected_title_artist_not_spotify_id"
     },
     {
       "candidate_id": "BANANETTAS-DISC-20261115-008",
@@ -579,9 +591,15 @@
       "proposed_use": "gang radio",
       "lane": "modern",
       "source_search_url": "https://open.spotify.com/search/Yelle%20Ce%20jeu",
-      "state": "research_candidate_not_owner_approved",
+      "state": "owner_approved_must_add",
       "exact_recording_verified": false,
-      "in_game_playback_verified": false
+      "in_game_playback_verified": false,
+      "owner_approval_date": "2026-11-15",
+      "owner_approved_music_id": "BANANETTAS-MUSIC-006",
+      "owner_supplied_reference_url": "https://open.spotify.com/track/2KjJhGtseXQBI5Cg6ZZdc9?si=724cd3db9a6d492f",
+      "approved_reference_url": "https://open.spotify.com/track/2KjJhGtseXQBI5Cg6ZZdc9?si=724cd3db9a6d492f",
+      "source_kind": "owner_supplied_exact_spotify_track",
+      "metadata_identity_status": "confirmed_spotify_track_page_and_recording_index"
     },
     {
       "candidate_id": "BANANETTAS-DISC-20261115-045",
@@ -943,9 +961,15 @@
       "proposed_use": "crew radio",
       "lane": "modern",
       "source_search_url": "https://open.spotify.com/search/Le%20Couleur%20Discolombo",
-      "state": "research_candidate_not_owner_approved",
+      "state": "owner_approved_must_add",
       "exact_recording_verified": false,
-      "in_game_playback_verified": false
+      "in_game_playback_verified": false,
+      "owner_approval_date": "2026-11-15",
+      "owner_approved_music_id": "BANANETTAS-MUSIC-005",
+      "owner_supplied_reference_url": "https://open.spotify.com/search/Le%20Couleur%20Discolombo?utm_source=chatgpt.com",
+      "approved_reference_url": "https://open.spotify.com/search/Le%20Couleur%20Discolombo?utm_source=chatgpt.com",
+      "source_kind": "owner_supplied_spotify_search",
+      "metadata_identity_status": "verified_song_by_artist_official_bandcamp_and_lisbon_lux_label; no_exact_owner_supplied_spotify_track_id"
     },
     {
       "candidate_id": "BANANETTAS-DISC-20261115-073",
@@ -995,9 +1019,15 @@
       "proposed_use": "gang radio",
       "lane": "modern",
       "source_search_url": "https://open.spotify.com/search/The%20Pirouettes%20Carr%C3%A9ment%20carr%C3%A9ment",
-      "state": "research_candidate_not_owner_approved",
+      "state": "owner_approved_must_add",
       "exact_recording_verified": false,
-      "in_game_playback_verified": false
+      "in_game_playback_verified": false,
+      "owner_approval_date": "2026-11-15",
+      "owner_approved_music_id": "BANANETTAS-MUSIC-004",
+      "owner_supplied_reference_url": "https://open.spotify.com/track/5AM2r681yLfLLiqKRLUrdZ?si=d3e86be91b65458c",
+      "approved_reference_url": "https://open.spotify.com/track/5AM2r681yLfLLiqKRLUrdZ?si=d3e86be91b65458c",
+      "source_kind": "owner_supplied_exact_spotify_track",
+      "metadata_identity_status": "confirmed_from_spotify_page"
     },
     {
       "candidate_id": "BANANETTAS-DISC-20261115-077",
@@ -1337,5 +1367,24 @@
       "exact_recording_verified": false,
       "in_game_playback_verified": false
     }
-  ]
+  ],
+  "owner_approved_reference_ids": [
+    "BANANETTAS-MUSIC-001",
+    "BANANETTAS-MUSIC-002",
+    "BANANETTAS-MUSIC-003",
+    "BANANETTAS-MUSIC-004",
+    "BANANETTAS-MUSIC-005",
+    "BANANETTAS-MUSIC-006",
+    "BANANETTAS-MUSIC-007"
+  ],
+  "promoted_from_initial_102": 5,
+  "remaining_unapproved_initial_candidates": 97,
+  "additional_owner_link_pending_metadata": {
+    "reference_id": "BANANETTAS-MUSIC-007",
+    "spotify_track_id": "66TWIPMA0IMNofL3glOp6X",
+    "owner_supplied_url": "https://open.spotify.com/track/66TWIPMA0IMNofL3glOp6X?si=b08c5c42250448d8",
+    "title": null,
+    "artist": null,
+    "status": "owner_selected_exact_link_identity_unresolved"
+  }
 }

@@ -1,0 +1,18 @@
+{
+  "title": "Ce jeu",
+  "artist": "Yelle",
+  "sound_event": "jetsetcraft:licensed/bananettas_ce_jeu",
+  "audio_resource": "jetsetcraft:sounds/music/licensed/bananettas_ce_jeu.ogg",
+  "contexts": [
+    "rush"
+  ],
+  "volume": 0.65,
+  "source_url": "https://open.spotify.com/track/2KjJhGtseXQBI5Cg6ZZdc9?si=724cd3db9a6d492f",
+  "gang_id": "jetsetcraft:bananettas",
+  "intended_placement": "bananettas-only after crew filter exists; not global Rush playlist",
+  "owner_reference_id": "BANANETTAS-MUSIC-006",
+  "recording_status": "awaiting_authorized_audio",
+  "rights_status": "not_verified_sync_and_redistribution; metadata_only_no_audio",
+  "album": "Pop-Up",
+  "spotify_track_id": "2KjJhGtseXQBI5Cg6ZZdc9"
+}

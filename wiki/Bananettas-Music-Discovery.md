@@ -1,6 +1,6 @@
 # Bananettas — 2026 High-Energy Music Discovery Shelf
 
-> **Status:** researched audition queue, **NOT owner-selected additions**. Only **"Le Banana Split" — Lio (1979 original short French-language single)** is currently a Bananettas **MUST-ADD**. This page contains 102 additional candidate recordings to audition, not bundled audio, approval, song licenses, listen-through receipts or working gang playback. Editorial "A" and "B" rankings indicate expected soundtrack *fit*, not measured BPM or a claim every track has been auditioned.
+> **Status (updated 2026-11-15):** This is the original **102-song audition list**. The owner has since selected **five tracks from this list** (Comix Discomix, Que veux-tu, Carrément carrément, Discolombo and Ce jeu); the other **97 remain discovery candidates**. The owner also selected one **additional exact Spotify link with unresolved identity**, outside the 102. Together with the original must-add “Le Banana Split” — Lio, there are **seven owner selections**. Nothing has been bundled, licensed, listened through or gameplay-tested. Editorial "A" and "B" rankings indicate expected soundtrack *fit*, not measured BPM or a claim every track has been auditioned.
 
 [Canonical Bananettas gang](Bananettas) · [Owner-approved Music Library](Music-Library#bananettas) · [Local sound import specification](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/MUSIC_INTEGRATION.md)
 
@@ -10,8 +10,14 @@ Use Lio's 1979 single as the creative north star: bright percussive hooks, cheek
 
 - **A — audition first:** strongest expected fit for 3D skating/radio, based on artist, genre, song reputation and documented recording. Not a sound-quality guarantee.
 - **B — intentional variety:** worthwhile but may be slower, noisier, more abrasive, or distant from bubblegum-pop. Place strategically, not as mandatory rotation.
-- **All search links are Spotify searches**, not verified exact track/ISRC links. Check original mixes vs covers, remixes, re-recordings, local availability, explicit lyrics and mastering before any approval or licensed import.
-- **Do not treat songs by the same artist as automatically selected.** Each candidate needs an audition, source validation, and a coherent role; no invented BPM, beat-grid, stemming, track availability or gameplay tests.
+- **Unapproved discoveries have Spotify search links**; five owner-selected rows are upgraded with confirmed direct track or artist/label links where available. This does **not** confirm exact ISRC, master acquisition, game-use rights or live playback. Check original mixes vs covers, remixes, re-recordings, local availability, explicit lyrics and mastering before any approval or licensed import.
+- **Do not treat other songs by the same artist as automatically selected.** An owner choice is recorded separately from audio/version/rights validation; no invented BPM, beat-grid, stems, availability or gameplay tests.
+
+## Owner-approved promotions from this shelf — 2026-11-15
+
+The owner promoted these **five** (still lacking licensed masters and game playback): **[Comix Discomix — Lio](https://open.spotify.com/track/1P18sWcfw8z88dQaAujTN5?si=0ddeb6f2d1784ec2)**, **[Que veux-tu — Yelle](https://yelle.bandcamp.com/track/que-veux-tu)**, **[Carrément carrément — The Pirouettes](https://open.spotify.com/track/5AM2r681yLfLLiqKRLUrdZ?si=d3e86be91b65458c)**, **[Discolombo — Le Couleur](https://open.spotify.com/search/Le%20Couleur%20Discolombo?utm_source=chatgpt.com)**, and **[Ce jeu — Yelle](https://open.spotify.com/track/2KjJhGtseXQBI5Cg6ZZdc9?si=724cd3db9a6d492f)**. The [sixth owner-supplied Spotify link](https://open.spotify.com/track/66TWIPMA0IMNofL3glOp6X?si=b08c5c42250448d8) is not an existing shelf row and is marked **title/artist verification pending**.
+
+These are **owner-confirmed must-adds**, not an assertion their audio exists in-game. The original first must-add, **Le Banana Split**, is still #001.
 
 ## Fast lane (A priorities)
 
@@ -19,22 +25,22 @@ First 10 to audition in this discovery: **Safari Disco Club — Yelle; Comix Dis
 
 ## First 10 auditions (discussed in chat)
 
-| # | Song (Spotify **search**, not exact master) | Priority | Why it may work | Proposed radio/game use |
+| # | Song (verified track link for selected songs; otherwise discovery search) | Priority | Why it may work | Proposed radio/game use |
 | ---: | --- | :---: | --- | --- |
 | 1 | **Yelle — [Safari Disco Club](https://open.spotify.com/search/Yelle%20Safari%20Disco%20Club)** | **A** | Candy-colored electro-pop and repeatable hook | gang radio |
-| 2 | **Lio — [Comix Discomix](https://open.spotify.com/search/Lio%20Comix%20Discomix)** | **A** | Early Lio comic-pop and glossy vintage textures | radio / arcade |
+| 2 | **Lio — [Comix Discomix](https://open.spotify.com/track/1P18sWcfw8z88dQaAujTN5?si=0ddeb6f2d1784ec2)** | **A · MUST ADD** | Early Lio comic-pop and glossy vintage textures | radio / arcade |
 | 3 | **Yelle — [À cause des garçons](https://open.spotify.com/search/Yelle%20%C3%80%20cause%20des%20gar%C3%A7ons)** | **A** | Punchy electro revision of the 1987 song | tag battles |
 | 4 | **Juniore — [Panique](https://open.spotify.com/search/Juniore%20Panique)** | **A** | Playful urgent surf-garage pulse | rival chase |
 | 5 | **The Honeymoon Killers — [Route Nationale 7](https://open.spotify.com/search/The%20Honeymoon%20Killers%20Route%20Nationale%207)** | **A** | Absurd theatrical Belgian new wave | oddity radio |
 | 6 | **Telex — [Moskow Diskow](https://open.spotify.com/search/Telex%20Moskow%20Diskow)** | **A** | Robot disco groove with danceable momentum | rink / arcade |
-| 7 | **Yelle — [Que veux-tu](https://open.spotify.com/search/Yelle%20Que%20veux-tu)** | **A** | Bright melodic dance-pop and chantable phrasing | open skating |
+| 7 | **Yelle — [Que veux-tu](https://yelle.bandcamp.com/track/que-veux-tu)** | **A · MUST ADD** | Bright melodic dance-pop and chantable phrasing | open skating |
 | 8 | **Lio — [Amoureux solitaires](https://open.spotify.com/search/Lio%20Amoureux%20solitaires)** | **A** | Direct Lio-era analog synth and vocal identity | core radio |
 | 9 | **Niagara — [L'Amour à la plage](https://open.spotify.com/search/Niagara%20L'Amour%20%C3%A0%20la%20plage)** | **A** | Summer-kitsch chorus and brightly colored drive | daytime |
 | 10 | **Elli et Jacno — [Main dans la main](https://open.spotify.com/search/Elli%20et%20Jacno%20Main%20dans%20la%20main)** | **A** | Minimal synth-pop roots of this exact aesthetic | cruising |
 
 ## Vintage candy pop, original French/Belgian new wave
 
-| # | Song (Spotify **search**, not exact master) | Priority | Why it may work | Proposed radio/game use |
+| # | Song (verified track link for selected songs; otherwise discovery search) | Priority | Why it may work | Proposed radio/game use |
 | ---: | --- | :---: | --- | --- |
 | 11 | **Lio — [Pop Song](https://open.spotify.com/search/Lio%20Pop%20Song)** | **A** | Self-aware glossy pop from her second major era | gang radio |
 | 12 | **Lio — [Les brunes comptent pas pour des prunes](https://open.spotify.com/search/Lio%20Les%20brunes%20comptent%20pas%20pour%20des%20prunes)** | **A** | Cheeky high-color pop hook | plaza radio |
@@ -72,9 +78,9 @@ First 10 to audition in this discovery: **Safari Disco Club — Yelle; Comix Dis
 
 ## Modern French-language electro-pop and disco
 
-| # | Song (Spotify **search**, not exact master) | Priority | Why it may work | Proposed radio/game use |
+| # | Song (verified track link for selected songs; otherwise discovery search) | Priority | Why it may work | Proposed radio/game use |
 | ---: | --- | :---: | --- | --- |
-| 44 | **Yelle — [Ce jeu](https://open.spotify.com/search/Yelle%20Ce%20jeu)** | **A** | Bouncing vocal hook and clean electronic groove | gang radio |
+| 44 | **Yelle — [Ce jeu](https://open.spotify.com/track/2KjJhGtseXQBI5Cg6ZZdc9?si=724cd3db9a6d492f)** | **A · MUST ADD** | Bouncing vocal hook and clean electronic groove | gang radio |
 | 45 | **Yelle — [Jogging](https://open.spotify.com/search/Yelle%20Jogging)** | **B** | Eccentric sugar-rush pop movement | skate park |
 | 46 | **Yelle — [Comme un enfant](https://open.spotify.com/search/Yelle%20Comme%20un%20enfant)** | **A** | Tongue-in-cheek innocent melody plus club pulse | plaza / radio |
 | 47 | **Yelle — [La Musique](https://open.spotify.com/search/Yelle%20La%20Musique)** | **A** | Direct rhythm-first bright disco-pop | boombox |
@@ -102,17 +108,17 @@ First 10 to audition in this discovery: **Safari Disco Club — Yelle; Comix Dis
 | 69 | **L'Impératrice — [Vacances](https://open.spotify.com/search/L'Imp%C3%A9ratrice%20Vacances)** | **B** | Warm laidback-but-buoyant summer funk | daytime |
 | 70 | **L'Impératrice — [Anomalie bleue](https://open.spotify.com/search/L'Imp%C3%A9ratrice%20Anomalie%20bleue)** | **A** | Elastic French disco-pop energy | boombox |
 | 71 | **L'Impératrice — [Peur des filles](https://open.spotify.com/search/L'Imp%C3%A9ratrice%20Peur%20des%20filles)** | **A** | Playfully weird dance-funk/pop, lyric review | battle |
-| 72 | **Le Couleur — [Discolombo](https://open.spotify.com/search/Le%20Couleur%20Discolombo)** | **A** | Quebecois space-disco and candy pop | crew radio |
+| 72 | **Le Couleur — [Discolombo](https://open.spotify.com/search/Le%20Couleur%20Discolombo?utm_source=chatgpt.com)** | **A · MUST ADD** | Quebecois space-disco and candy pop | crew radio |
 | 73 | **Le Couleur — [Premier Contact](https://open.spotify.com/search/Le%20Couleur%20Premier%20Contact)** | **A** | Synthy cosmic disco with immediate hook | arcade |
 | 74 | **Le Couleur — [Ascenseur Tropical](https://open.spotify.com/search/Le%20Couleur%20Ascenseur%20Tropical)** | **B** | Warm tropical-space-disco shuffle | skating |
 | 75 | **Le Couleur — [Sentiments nouveaux](https://open.spotify.com/search/Le%20Couleur%20Sentiments%20nouveaux)** | **B** | Glossy newer French-language nu-disco | night radio |
-| 76 | **The Pirouettes — [Carrément carrément](https://open.spotify.com/search/The%20Pirouettes%20Carr%C3%A9ment%20carr%C3%A9ment)** | **A** | Relentless bright French electropop hook | gang radio |
+| 76 | **The Pirouettes — [Carrément carrément](https://open.spotify.com/track/5AM2r681yLfLLiqKRLUrdZ?si=d3e86be91b65458c)** | **A · MUST ADD** | Relentless bright French electropop hook | gang radio |
 | 77 | **The Pirouettes — [Jouer le jeu](https://open.spotify.com/search/The%20Pirouettes%20Jouer%20le%20jeu)** | **A** | Youthful synth-pop bounce | challenge |
 | 78 | **The Pirouettes — [Coup d'éclat](https://open.spotify.com/search/The%20Pirouettes%20Coup%20d'%C3%A9clat)** | **B** | Cheery vocal interplay and bright pop | radio |
 
 ## High-quality radio crossovers (outside strict genre)
 
-| # | Song (Spotify **search**, not exact master) | Priority | Why it may work | Proposed radio/game use |
+| # | Song (verified track link for selected songs; otherwise discovery search) | Priority | Why it may work | Proposed radio/game use |
 | ---: | --- | :---: | --- | --- |
 | 79 | **Stereo Total — [Musique automatique](https://open.spotify.com/search/Stereo%20Total%20Musique%20automatique)** | **B** | Campy French/German electro-minimalism; lo-fi check | oddity |
 | 80 | **Stereo Total — [Ma Radio](https://open.spotify.com/search/Stereo%20Total%20Ma%20Radio)** | **B** | Silly tiny-keyboard banger, deliberately rough edges | retro radio |
@@ -164,4 +170,4 @@ The song picks were sourced and cross-checked primarily against the following re
 5. **Rights/version gate:** verify edition/ISRC, artist credits, permitted source master, game synchronization and redistribution rights. Spotify discovery is **not** authorization to rip or distribute.
 6. **Implementation gate:** only promote to `must_include_music` after explicit owner approval; add gang-filtered player logic and test real gameplay before claiming installed/playable. **Do not reuse a generic global `rush` context to imply a Bananettas-specific song assignment.**
 
-**First owner-confirmed track remains `BANANETTAS-MUSIC-001`: Lio — "Le Banana Split".** This research catalog uses separate `BANANETTAS-DISC-...` IDs so none of its 102 songs is silently upgraded to owner-selected or shipped content.
+**The original first track remains `BANANETTAS-MUSIC-001`: Lio — "Le Banana Split".** The five **explicitly selected** discovery rows now link to `BANANETTAS-MUSIC-002` through `006` in the machine-readable catalog. All other 97 remain candidates. An additional unidentified exact Spotify ID is `BANANETTAS-MUSIC-007`, outside the initial 102. None is shipped audio.

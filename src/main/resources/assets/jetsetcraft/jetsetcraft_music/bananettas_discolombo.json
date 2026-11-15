@@ -1,0 +1,19 @@
+{
+  "title": "Discolombo",
+  "artist": "Le Couleur",
+  "sound_event": "jetsetcraft:licensed/bananettas_discolombo",
+  "audio_resource": "jetsetcraft:sounds/music/licensed/bananettas_discolombo.ogg",
+  "contexts": [
+    "rush"
+  ],
+  "volume": 0.65,
+  "source_url": "https://open.spotify.com/search/Le%20Couleur%20Discolombo?utm_source=chatgpt.com",
+  "gang_id": "jetsetcraft:bananettas",
+  "intended_placement": "bananettas-only after crew filter exists; not global Rush playlist",
+  "owner_reference_id": "BANANETTAS-MUSIC-005",
+  "recording_status": "awaiting_authorized_audio",
+  "rights_status": "not_verified_sync_and_redistribution; metadata_only_no_audio",
+  "album": "P.O.P",
+  "artist_official_url": "https://lecouleurmusic.bandcamp.com/album/p-o-p",
+  "spotify_reference_is_search": true
+}

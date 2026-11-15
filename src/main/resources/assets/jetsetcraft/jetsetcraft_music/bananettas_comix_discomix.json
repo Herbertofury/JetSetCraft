@@ -1,0 +1,18 @@
+{
+  "title": "Comix Discomix",
+  "artist": "Lio",
+  "sound_event": "jetsetcraft:licensed/bananettas_comix_discomix",
+  "audio_resource": "jetsetcraft:sounds/music/licensed/bananettas_comix_discomix.ogg",
+  "contexts": [
+    "rush"
+  ],
+  "volume": 0.65,
+  "source_url": "https://open.spotify.com/track/1P18sWcfw8z88dQaAujTN5?si=0ddeb6f2d1784ec2",
+  "gang_id": "jetsetcraft:bananettas",
+  "intended_placement": "bananettas-only after crew filter exists; not global Rush playlist",
+  "owner_reference_id": "BANANETTAS-MUSIC-002",
+  "recording_status": "awaiting_authorized_audio",
+  "rights_status": "not_verified_sync_and_redistribution; metadata_only_no_audio",
+  "album": "Lio",
+  "spotify_track_id": "1P18sWcfw8z88dQaAujTN5"
+}
