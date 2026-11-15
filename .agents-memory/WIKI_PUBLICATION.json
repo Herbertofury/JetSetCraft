@@ -1,7 +1,7 @@
 {
   "schema": 1,
-  "source_commit": "c4c7afccea82830980745f7dd44264f79e97574c",
-  "wiki_commit": "671c8967d9cf32d525d263ecbfe4375866a8fe22",
+  "source_commit": "b23d891ac1c38a50a62698cda9600db297bec001",
+  "wiki_commit": "4ceb88dfd21e1689187bad21fce246be0b9ccad6",
   "wiki_branch": "master",
   "page_count": 60,
   "pages": [
@@ -67,6 +67,6 @@
     "_Sidebar.md"
   ],
   "validated": true,
-  "published_at_utc": "2026-11-15T23:11:46.646570+00:00",
+  "published_at_utc": "2026-11-15T23:14:10.926133+00:00",
   "url": "https://github.com/Herbertofury/JetSetCraft/wiki"
 }
