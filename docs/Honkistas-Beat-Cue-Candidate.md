@@ -1,6 +1,6 @@
 # Original Honkistas beat-cue candidate
 
-Local candidate based on reviewed source commit `89c8a13`. Not yet compiled against Forge, run natively, published, or visually accepted.
+Draft candidate stacked on reviewed source commit `89c8a13`. At `037432f`, the native core and actual-client audit passed; the cue frame was inspected. The full provider matrix was not green. This is bounded walking-plus-cue evidence, not skating or production-event acceptance.
 
 ## Scope
 
@@ -28,3 +28,9 @@ Initial 999edad and diagnostic 7b2e33 passed all 131 native tests and ten provid
 Subsequent diagnostics retained reachable consumed paths outside the original final-approach window even after bounded replans. The candidate permits at most a two-block native MoveControl approach only after loaded swept-body collision and floor-footprint validation. Completion remains within .45 horizontal/.75 vertical distance with actual ground contact and original deadline. Native tests now exercise supported clearance, missing floor, head obstruction and excessive approach distance. This is conservative flat-ground admission, not step/cliff handling or skating.
 
 At c7f9482, all 131 native core tests and the full actual-client cue/return/reset audit passed. Actual frame30 was inspected and the raised arm is visible. Full-provider diagnostics isolated an independent home test race: accepted turf paint occurred before production lazy site grounding (100-tick retry). The fixture now waits boundedly for actual grounded/active state and recomputes its observation position; it does not set credit or terrain readiness, and preserves the 350-tick overall deadline and all preservation assertions. Independent source review confirmed the timing race. Exact-head CI remains required after this fixture correction.
+
+## Provider-terrain fixture isolation
+
+At `037432f`, adventure-all job 132916608120 observed the graffiti support replaced with natural gravel after the fixture removed its stone block (`entityTicks=101`, `removedSupportAt=40`). The lifecycle fixture now places its single support 16 blocks above the highest measured neighboring surface, verifying air before use. Native falling physics, the actual support-removal operation, real entity-tick checks, 40-tick removal bound and 100-tick test deadline remain unchanged. Exact-head CI is required. The same head's Alex's Caves build failed on Maven Central HTTP 429, not a Java assertion; no dependency versions or retry limits were changed.
+
+The isolated fixture uses a single bounded native callback with explicit waiting states and idempotent failure cleanup. It restores only its still-owned stone and releases its ticket; it does not erase third-party replacement blocks. Success checks native `DISCARDED` before cleanup can discard any fixture entity.
