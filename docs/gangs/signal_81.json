@@ -8,7 +8,8 @@
     "name": true,
     "track_ids": [
       "SIGNAL81-MUSIC-001",
-      "SIGNAL81-MUSIC-002"
+      "SIGNAL81-MUSIC-002",
+      "SIGNAL81-MUSIC-003"
     ]
   },
   "style_direction": {
@@ -76,6 +77,42 @@
         "gang_radio",
         "retro_disco_skating",
         "broadcast_challenge"
+      ],
+      "exact_cues_status": "not_analyzed",
+      "recording_master_status": "not_supplied",
+      "synchronization_rights_status": "not_verified",
+      "distribution_rights_status": "not_verified",
+      "in_game_playback_status": "not_integrated"
+    },
+    {
+      "reference_id": "SIGNAL81-MUSIC-003",
+      "title": "Love Tunnel",
+      "artist": "Julie Wilde",
+      "spotify_track_id": "5JUewvkJKWoMjiNfv8CLMF",
+      "owner_supplied_url": "https://open.spotify.com/track/5JUewvkJKWoMjiNfv8CLMF?si=9cac939431d444ed",
+      "owner_selection_date": "2026-11-15",
+      "is_owner_approved": true,
+      "assignment": "signal_81_only",
+      "source_type": "owner_supplied_exact_spotify_track",
+      "recording_reference": "Julie Wilde - Love Tunnel, approx. 4:06, on Early Sounds Recordings IES - Italian Erotic Sounds (2019 digital/vinyl compilation)",
+      "archival_origin_note": "Historical disco dealer and edit listings identify an original Julie Wilde / Winifred Band-era song from 1979; separate DJ Beppe Loda 'Obscure Italian Disco #1' re-edit is around 4:31/4:33 and must not be silently substituted.",
+      "album_reference": "IES - Italian Erotic Sounds",
+      "compilation_release_date": "2019-06-28",
+      "approximate_duration": "4:06",
+      "exact_spotify_master_and_isrc_status": "not_independently_verified",
+      "source_urls": [
+        "https://earlysounds.bandcamp.com/track/a2-julie-wilde-love-tunnel",
+        "https://earlysounds.bandcamp.com/album/vvaa-ies-italian-erotic-sounds",
+        "https://lighthouserecords.jp/?pid=100847462"
+      ],
+      "genre_reference": [
+        "Italian disco",
+        "cosmic disco / funk"
+      ],
+      "proposed_use": [
+        "broadcast_radio",
+        "retro_synth_disco_skating",
+        "gang_challenge"
       ],
       "exact_cues_status": "not_analyzed",
       "recording_master_status": "not_supplied",

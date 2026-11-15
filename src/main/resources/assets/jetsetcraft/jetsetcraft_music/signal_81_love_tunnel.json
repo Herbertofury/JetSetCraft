@@ -1,0 +1,25 @@
+{
+  "title": "Love Tunnel",
+  "artist": "Julie Wilde",
+  "album": "IES - Italian Erotic Sounds",
+  "sound_event": "jetsetcraft:licensed/signal_81_love_tunnel",
+  "audio_resource": "jetsetcraft:sounds/music/licensed/signal_81_love_tunnel.ogg",
+  "contexts": [
+    "rush"
+  ],
+  "volume": 0.65,
+  "source_url": "https://open.spotify.com/track/5JUewvkJKWoMjiNfv8CLMF?si=9cac939431d444ed",
+  "spotify_track_id": "5JUewvkJKWoMjiNfv8CLMF",
+  "compilation_release_date": "2019-06-28",
+  "approximate_duration": "4:06",
+  "archival_origin_period": "1979 Italian disco",
+  "recording_version_note": "Owner-selected exact Spotify reference. Early Sounds Recordings 2019 compilation track is ~4:06. Distinct from Beppe Loda's ~4:31-4:33 DJ edit; master identity/ISRC requires validation against an authorized source.",
+  "official_label_source": "https://earlysounds.bandcamp.com/track/a2-julie-wilde-love-tunnel",
+  "compilation_album_source": "https://earlysounds.bandcamp.com/album/vvaa-ies-italian-erotic-sounds",
+  "archival_original_year_source": "https://lighthouserecords.jp/?pid=100847462",
+  "gang_id": "jetsetcraft:signal_81",
+  "intended_placement": "Signal '81 crew-specific radio only after gang-affinity music filter is implemented; not general Rush playlist",
+  "owner_reference_id": "SIGNAL81-MUSIC-003",
+  "recording_status": "awaiting_authorized_audio",
+  "rights_status": "synchronization_and_redistribution_not_verified; no_audio_bundled"
+}
