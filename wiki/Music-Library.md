@@ -31,6 +31,10 @@ On November 12, 2026, the project owner reported that the authors of these recom
 
 **Acquisition path:** inspect each exact video/audio attribution → distinguish uploader from actual musician/arranger/master owner → find official discography and audition outstanding works → register exact source recording/artist credits and cultural style → acquire highest-fidelity masters/stems and any cameo character assets with verified scope → curate real use in crew stations, radio, dance battles and reactive scene events → generate Minecraft plus future-native exports → measure gameplay sync and report implemented state only after runtime proof. This is an owner-directed **music-inclusion research goal**, not two identified playable recordings. Preserve all earlier must-have records independently.
 
+## General soundtrack: owner-selected must-add artist, 2026-11-15
+
+- **JSC-MUST-ARTIST-NINI-20261115-001 · MUST ADD to general JetSetCraft soundtrack — NiNi / Nini Music:** [official media kit](https://ninimusic.me/media-kit-1) · [owner-supplied TikTok](https://www.tiktok.com/@ninimusic.me) · [official Spotify artist](https://open.spotify.com/artist/4iggZUAEXfBeJH9DjKwccm). Taiwanese artist combining ruan, liuqin and DaoYu/electric-lute music with rock/metal/EDM. **Owner explicitly confirms NiNi as a personal favorite and globally required soundtrack artist. Not a Cumbias-gang selection.** Research and audition artist catalogue (Longma, Longma II, Victorious, GĀN BĒI, HOMELAND, Wukong etc. as candidate songs, not individually owner-approved recordings). Retain accurate credited collaborators, lossless masters and future standalone quality. **Status: artist chosen, song acquisition and in-game playback pending.**
+
 ## Owner-selected general soundtrack
 
 The two November 7 selections below are whole-game must-adds with no gang or mode assigned. Keep them alongside all later must-includes and the two existing Sonic-related resource-pack metadata entries, not inside a Rival Rush-only list.
@@ -151,6 +155,9 @@ These are identified metadata entries; neither recording is bundled. Their propo
 **GAB-MUSIC-003 · Gabberina's / general / intended song:** [Hardtekk Tutorial, Ski Aggu, DJ TÖRKE and Mr. Polska](https://open.spotify.com/track/26jLDg6jw9KEOQlyh4IybJ?si=16465eeb535b4a65). Owner-selected Gabberina reference, added alongside the earlier tracks. Spotify's public page was checked on October 12, 2026 UTC: 2026, duration 2:44. No listening, beat analysis or detailed choreography inference is claimed.
 
 ### Cumbias
+
+- **JSC-MUST-CUMBIA-CHISMOSA-20261115-001 · MUST ADD to the Cumbias — “chismosa” by Cain Culto & Jarina De Marco:** [official video](https://www.youtube.com/watch?v=T5rSwbuJuWc) · [Apple Music exact single](https://music.apple.com/us/album/chismosa-single/1860155960) · [Qobuz high-resolution acquisition](https://www.qobuz.com/us-en/album/chismosa-cain-culto-jarina-de-marco/mrd8dyixvc83z). 2026 Hive Music, 1:50. Credits from official distribution include Cain Culto and Jarina De Marco, Alex Krispin (producer/composer), Andrew Padilla and Jarina De Marco (lyricists). [Beatport](https://www.beatport.com/track/chismosa/30827475) lists provisional 135 BPM and G major; verify actual audio before scoring. Evaluate Cumbias Boombox/radio, dance and Mortal Kumbia. **Owner correction: this is the Cumbias must-add; NiNi is general only.** No master, gameplay chart or playback has been installed or verified; do not invent a Spotify ID.
+
 
 [Gang campaign and reference context](Cumbias‐and‐Multi‐Rival‐Gang‐War).
 
