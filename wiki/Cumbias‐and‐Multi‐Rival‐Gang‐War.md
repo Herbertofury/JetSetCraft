@@ -11,6 +11,10 @@ Tracking: [Cumbias issue #28](https://github.com/Herbertofury/JetSetCraft/issues
 
 The shared **[Portable Reactive Music Engine, Mortal Kumbia and Killer Instinct acquisition atlas](Reactive-Music-Engine-and-Killer-Instinct-Reference)** is the implementation-ready architecture and acceptance ledger. It also preserves the 68-track Killer Instinct audio acquisition checklist, high-fidelity standalone-IP masters, global culture research and the unresolved owner TikTok submission. Preserve the existing Cumbias rivalry/Boombox mechanics below.
 
+## Décalco Mambo — rare Cumbias × Bananettas showdown (owner-selected)
+
+The player should have a **rare chance to face both Cumbias and Bananettas**, with the owner's exact [**“Le Mambo du décalco” — Richard Gotainer**](https://open.spotify.com/track/10hnzFqOkWifT35HfvbaNc?si=edfb79914dc9426e) as **event-only music**, not normal radio for either gang. “Bannistas” in the owner's request refers to Bananettas. See the [full rare event specification](Cumbias-Bananettas-Decalco-Mambo-Faceoff) (`JSC-RARE-MAMBO-20261115-001`), including **proposed** configurable 1% per eligible joint event, one server-owned roll, safe fallback and separation from Ocarina. **Design only; not runtime implemented.**
+
 ## Ocarina of Cumbia — ultra-rare Zelda crossover Easter egg (owner requested, 2026-11-15)
 
 **High-priority creative goal:** A truly rare Cumbias performance/encounter can become **Ocarina of Cumbia**, with recognizable **Zelda characters**, an ocarina-led cumbia soundtrack, spectacular crew choreography, playful music-driven battles and a discoverable collector's reward. [**Complete design and acceptance specification**](Ocarina-of-Cumbia-Easter-Egg) · [**Owner-corrected reference video**](https://www.tiktok.com/@hellbat2.0/video/7706311678060711189). Owner also requests exploration of this creator's and the [second referenced video creator's](https://www.tiktok.com/t/ZPLK2mF7q/) broader music, not just these clips; the artist/video/audio identities and whether both creators match are **not yet verified**.

@@ -17,7 +17,10 @@
       "BANANETTAS-MUSIC-008",
       "BANANETTAS-MUSIC-009",
       "BANANETTAS-MUSIC-010",
-      "BANANETTAS-MUSIC-011"
+      "BANANETTAS-MUSIC-011",
+      "BANANETTAS-MUSIC-012",
+      "BANANETTAS-MUSIC-013",
+      "BANANETTAS-MUSIC-014"
     ],
     "additional_songs_selection_date": "2026-11-15"
   },
@@ -338,6 +341,72 @@
       "synchronization_rights_status": "not_verified",
       "distribution_rights_status": "not_verified",
       "in_game_playback_status": "not_integrated"
+    },
+    {
+      "reference_id": "BANANETTAS-MUSIC-012",
+      "title": "I Love Video",
+      "artist": "New Paradise",
+      "is_owner_approved": true,
+      "owner_selection_date": "2026-11-15",
+      "assignment": "bananettas_only",
+      "source_type": "owner_supplied_exact_spotify_track",
+      "owner_supplied_url": "https://open.spotify.com/track/7yKGeGDjtxmfp4jlMvPUyE?si=c1035a15af4b404f",
+      "spotify_track_id": "7yKGeGDjtxmfp4jlMvPUyE",
+      "album": "I Love Video",
+      "edition_note": "Early-1980s French electro/disco song; exact owner-linked Spotify recording selected, mastering and ISRC not verified",
+      "proposed_use": [
+        "gang_radio",
+        "skating",
+        "graffiti_challenge"
+      ],
+      "recording_master_status": "not_supplied",
+      "sync_and_distribution_rights_status": "not_verified",
+      "exact_cues_status": "not_analyzed",
+      "in_game_playback_status": "not_integrated"
+    },
+    {
+      "reference_id": "BANANETTAS-MUSIC-013",
+      "title": "Marie moi",
+      "artist": "Agathe & Regrets",
+      "is_owner_approved": true,
+      "owner_selection_date": "2026-11-15",
+      "assignment": "bananettas_only",
+      "source_type": "owner_supplied_exact_spotify_track",
+      "owner_supplied_url": "https://open.spotify.com/track/5GMzTdxVGSfN0QbmV1pL9T?si=028653c2d6254b2d",
+      "spotify_track_id": "5GMzTdxVGSfN0QbmV1pL9T",
+      "album": "The Best of Agathe & Regrets (Le meilleur des années 80)",
+      "edition_note": "1986-era Agathe song; preserve exact owner-linked Spotify compilation edition, not alternate maxi/remix; master/ISRC pending",
+      "proposed_use": [
+        "gang_radio",
+        "skating",
+        "graffiti_challenge"
+      ],
+      "recording_master_status": "not_supplied",
+      "sync_and_distribution_rights_status": "not_verified",
+      "exact_cues_status": "not_analyzed",
+      "in_game_playback_status": "not_integrated"
+    },
+    {
+      "reference_id": "BANANETTAS-MUSIC-014",
+      "title": "Rendez-vous sur la Costa del Sol",
+      "artist": "Magazine 60",
+      "is_owner_approved": true,
+      "owner_selection_date": "2026-11-15",
+      "assignment": "bananettas_only",
+      "source_type": "owner_supplied_exact_spotify_track",
+      "owner_supplied_url": "https://open.spotify.com/track/1AeuPKv2cHLUYJ5QNtP5uf?si=db56a65067624b43",
+      "spotify_track_id": "1AeuPKv2cHLUYJ5QNtP5uf",
+      "album": "Rendez-Vous Sur La Costa Del Sol",
+      "edition_note": "1985 song, owner's approx 3:28 Spotify edition. Distinct from longer 4:20 version; linked master/ISRC pending",
+      "proposed_use": [
+        "gang_radio",
+        "skating",
+        "graffiti_challenge"
+      ],
+      "recording_master_status": "not_supplied",
+      "sync_and_distribution_rights_status": "not_verified",
+      "exact_cues_status": "not_analyzed",
+      "in_game_playback_status": "not_integrated"
     }
   ],
   "runtime_status": {
@@ -346,5 +415,8 @@
     "gang_specific_music_filter_implemented": false,
     "playable_audio_bundled": false
   },
-  "wiki_page": "wiki/Bananettas.md"
+  "wiki_page": "wiki/Bananettas.md",
+  "rare_event_references": [
+    "JSC-RARE-MAMBO-20261115-001"
+  ]
 }

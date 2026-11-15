@@ -1,0 +1,19 @@
+{
+  "title": "Marie moi",
+  "artist": "Agathe & Regrets",
+  "album": "The Best of Agathe & Regrets (Le meilleur des années 80)",
+  "sound_event": "jetsetcraft:licensed/bananettas_marie_moi",
+  "audio_resource": "jetsetcraft:sounds/music/licensed/bananettas_marie_moi.ogg",
+  "contexts": [
+    "rush"
+  ],
+  "volume": 0.65,
+  "source_url": "https://open.spotify.com/track/5GMzTdxVGSfN0QbmV1pL9T?si=028653c2d6254b2d",
+  "spotify_track_id": "5GMzTdxVGSfN0QbmV1pL9T",
+  "owner_reference_id": "BANANETTAS-MUSIC-013",
+  "gang_id": "jetsetcraft:bananettas",
+  "intended_placement": "Bananettas-only, only after true gang-specific music filter; not regular global Rush",
+  "edition_note": "1986-era Agathe song; preserve exact owner-linked Spotify compilation edition, not alternate maxi/remix; master/ISRC pending",
+  "recording_status": "awaiting_authorized_audio",
+  "rights_status": "sync_distribution_not_verified; metadata_only_no_audio"
+}

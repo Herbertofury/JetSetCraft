@@ -1,0 +1,19 @@
+{
+  "title": "I Love Video",
+  "artist": "New Paradise",
+  "album": "I Love Video",
+  "sound_event": "jetsetcraft:licensed/bananettas_i_love_video",
+  "audio_resource": "jetsetcraft:sounds/music/licensed/bananettas_i_love_video.ogg",
+  "contexts": [
+    "rush"
+  ],
+  "volume": 0.65,
+  "source_url": "https://open.spotify.com/track/7yKGeGDjtxmfp4jlMvPUyE?si=c1035a15af4b404f",
+  "spotify_track_id": "7yKGeGDjtxmfp4jlMvPUyE",
+  "owner_reference_id": "BANANETTAS-MUSIC-012",
+  "gang_id": "jetsetcraft:bananettas",
+  "intended_placement": "Bananettas-only, only after true gang-specific music filter; not regular global Rush",
+  "edition_note": "Early-1980s French electro/disco song; exact owner-linked Spotify recording selected, mastering and ISRC not verified",
+  "recording_status": "awaiting_authorized_audio",
+  "rights_status": "sync_distribution_not_verified; metadata_only_no_audio"
+}

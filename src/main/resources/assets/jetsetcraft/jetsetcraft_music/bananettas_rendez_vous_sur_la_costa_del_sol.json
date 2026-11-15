@@ -1,0 +1,19 @@
+{
+  "title": "Rendez-vous sur la Costa del Sol",
+  "artist": "Magazine 60",
+  "album": "Rendez-Vous Sur La Costa Del Sol",
+  "sound_event": "jetsetcraft:licensed/bananettas_rendez_vous_sur_la_costa_del_sol",
+  "audio_resource": "jetsetcraft:sounds/music/licensed/bananettas_rendez_vous_sur_la_costa_del_sol.ogg",
+  "contexts": [
+    "rush"
+  ],
+  "volume": 0.65,
+  "source_url": "https://open.spotify.com/track/1AeuPKv2cHLUYJ5QNtP5uf?si=db56a65067624b43",
+  "spotify_track_id": "1AeuPKv2cHLUYJ5QNtP5uf",
+  "owner_reference_id": "BANANETTAS-MUSIC-014",
+  "gang_id": "jetsetcraft:bananettas",
+  "intended_placement": "Bananettas-only, only after true gang-specific music filter; not regular global Rush",
+  "edition_note": "1985 song, owner's approx 3:28 Spotify edition. Distinct from longer 4:20 version; linked master/ISRC pending",
+  "recording_status": "awaiting_authorized_audio",
+  "rights_status": "sync_distribution_not_verified; metadata_only_no_audio"
+}

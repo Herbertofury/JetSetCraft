@@ -16,6 +16,10 @@
 - **Presentation:** joyful, warm, nostalgic yet surprising. A real cumbia groove and ocarina melody, playful fourth-wall comic timing, vibrant festival light, and sharply differentiated character choreography. No generic stereotypes; consult cumbia performers about dance, rhythm and instrumentation.
 - **Character/source quality:** author/obtain full-resolution cinematic human-scale/faithful crossover rigs, materials, facial performance and dance source clips as the source-of-truth; Minecraft models/audio are downstream exports. Preserve asset origin, rights/credits and export hashes. The future standalone game must not be limited to blocky textures or lossy export masters.
 
+## Independent rare Cumbias × Bananettas variant
+
+The later [Décalco Mambo two-crew face-off](Cumbias-Bananettas-Decalco-Mambo-Faceoff) uses different **event-only** Richard Gotainer audio. It must **not** reuse this Ocarina event's song, cast, chance roll or reward receipt. The server must choose at most one rare variant per encounter; neither variant is shipped.
+
 ## Rare encounter contract
 
 1. A normal Cumbias performance/faction event first passes all established eligibility/ultra-rare encounter rules. Only then roll the **Ocarina of Cumbia** variant, using server-owned seeded state. Never add a per-tick global mob scan, broad biome spawn override or unwanted player teleport.

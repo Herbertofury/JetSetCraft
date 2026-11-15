@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "record_type": "rare_two_gang_music_encounter_design",
+  "owner_reference_id": "JSC-RARE-MAMBO-20261115-001",
+  "event_id": "jetsetcraft:cumbias_bananettas_decalco_mambo_faceoff",
+  "working_title": "Décalco Mambo — Cumbias × Bananettas",
+  "date": "2026-11-15",
+  "owner_confirmed": {
+    "rare_chance": true,
+    "player_faces_both_gangs": [
+      "Cumbias",
+      "Bananettas"
+    ],
+    "song_spotify_id": "10hnzFqOkWifT35HfvbaNc",
+    "song_event_only": true
+  },
+  "naming_note": "bannistas interpreted as established Bananettas, not a separate gang",
+  "song": {
+    "title": "Le Mambo du décalco",
+    "artist": "Richard Gotainer",
+    "spotify_track_id": "10hnzFqOkWifT35HfvbaNc",
+    "owner_url": "https://open.spotify.com/track/10hnzFqOkWifT35HfvbaNc?si=edfb79914dc9426e",
+    "original_release_year": 1982,
+    "history_source": "https://www.encyclopedisque.fr/disque/7264.html",
+    "edition_isrc_status": "unverified",
+    "master_status": "not_supplied",
+    "rights_status": "not_verified",
+    "beat_grid_status": "not_measured",
+    "playback_status": "not_integrated"
+  },
+  "proposed_trigger": {
+    "required": "already-eligible joint two-crew challenge only",
+    "chance_per_eligible_event": 0.01,
+    "owner_approved_numeric_chance": false,
+    "seeded_server_roll_once": true,
+    "global_spawns_modified": false,
+    "exclusive_with": "Ocarina of Cumbia",
+    "deduplicate_and_cooldown": true,
+    "missing_audio_fallback": "normal challenge / silence or cleared cue"
+  },
+  "proposed_gameplay": "Player versus both crews using dance/skate/graffiti rounds; exact mechanics, rewards and stage not owner approved",
+  "implementation": {
+    "design_only": true,
+    "server_event": false,
+    "live_gang_encounter": false,
+    "event_scoped_music": false,
+    "audio_bundled": false,
+    "client_tested": false,
+    "server_tested": false
+  },
+  "wiki_page": "wiki/Cumbias-Bananettas-Decalco-Mambo-Faceoff.md"
+}
