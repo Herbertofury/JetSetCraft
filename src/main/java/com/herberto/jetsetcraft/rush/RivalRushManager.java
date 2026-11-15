@@ -1616,6 +1616,11 @@ public final class RivalRushManager {
         tag.putString("Attack", ""); tag.putString("Counterplay", ""); tag.putInt("TicksUntilImpact", 0);
         if (threat != null) {
             Actor selected = threat; tag.putUUID("Actor", threat.mob.getUUID());
+            tag.putString("ActorPosition", threat.mob.position().toString());
+            tag.putString("ActorLevel", threat.mob.level().dimension().location().toString());
+            tag.putBoolean("ActorRegistered", s.player.serverLevel().getEntity(threat.mob.getUUID()) == threat.mob);
+            tag.putBoolean("ActorChunkLoaded", s.player.serverLevel().hasChunkAt(threat.mob.blockPosition()));
+            tag.putString("ActorChunkPosition", threat.mob.chunkPosition().toString());
             RushDirector.Tell tell = s.director.tells().stream().filter(t -> t.actor().equals(selected.mob.getUUID()) && t.startsAt() <= now)
                     .min(Comparator.comparingLong(RushDirector.Tell::resolvesAt)).orElse(null);
             if (tell != null) {
