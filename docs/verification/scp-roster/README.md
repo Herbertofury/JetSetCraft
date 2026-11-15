@@ -15,3 +15,6 @@ Candidate repair6144277 compiled but the base native GameTest still failed the s
 
 
 Diagnostic c4cc9ff Alex's Mobs job132769371959 showed an active admitted Linebreaker,22 admissions,18 tracked bodies, but fixture world query visible=[] in a synchronous30-wave loop. This contradicts the initial starvation hypothesis. The cadence candidate is reverted; production spawn cadence stays unchanged. The fixture now yields a real server tick between observations, retaining30 director advances and the requirement to defeat an actual owned elite. Await native results before calling this resolved.
+
+
+Real-tick scheduling e249d93 still reports an active elite but empty area-query results. The next candidate also resolves the reported elite UUID through ServerLevel's actual entity registry and verifies alive/native Mob/run ownership/elite label before accepting it. It never accepts an internal actor record alone or creates an entity. Failure evidence now includes native registry lookup and player query bounds to distinguish section-query visibility from missing registration.

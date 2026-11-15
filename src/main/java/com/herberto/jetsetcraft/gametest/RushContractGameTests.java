@@ -317,10 +317,20 @@ public final class RushContractGameTests {
         helper.runAfterDelay(1, () -> {
             try {
                 for (Mob mob : actors(player)) if (elite(mob)) { found.accept(mob); return; }
+                CompoundTag encounter = RivalRushManager.encounterSnapshot(player);
+                if (encounter.hasUUID("Actor")) {
+                    var registered = player.serverLevel().getEntity(encounter.getUUID("Actor"));
+                    if (registered instanceof Mob mob && !mob.isRemoved() && mob.isAlive()
+                            && RivalRushManager.belongsTo(mob, player) && elite(mob)) {
+                        found.accept(mob); return;
+                    }
+                }
                 if (wave >= 30) throw new GameTestAssertException("The bounded real director did not expose an owned elite for its hunt fixture; "
                         + "encounter=" + RivalRushManager.encounterSnapshot(player)
                         + "; journey=" + RivalRushManager.journeySnapshot(player)
                         + "; contract=" + contract(player)
+                        + "; playerPosition=" + player.position() + "; playerBox=" + player.getBoundingBox()
+                        + "; registeredElite=" + (encounter.hasUUID("Actor") ? player.serverLevel().getEntity(encounter.getUUID("Actor")) : "none")
                         + "; visible=" + actors(player).stream().map(mob -> mob.getName().getString()).toList());
                 actors(player).forEach(Mob::discard); chooseDrafts(player);
                 advance(RivalRushManager.run(player), 40); RivalRushManager.tick(player.getServer());
