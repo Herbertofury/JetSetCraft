@@ -57,6 +57,13 @@ The owner's new **platformer + Metroidvania + roguelike with end bosses** mode h
 - [ ] Win/fail/retry/restart/rejoin/dedicated server/cleanup do not duplicate unlocks, delete Minecraft inventory, strand players, or regress old Rival Rush.
 - [ ] Exact-build media demonstrates **full level → unlock → backtrack → stage boss → final boss → safe return**, with outside assessments of movement fun, map comprehension, spectacle and replay intent.
 
+## Character special boss gate: Hakken Horse / Gabberina's
+
+- [x] Owner-confirmed Hakken Horse and exact `GAB-HORSE-MUSIC-001` **“My Little White Pony” — MCR-T & horsegiirL** documented in the [boss profile](../wiki/Hakken-Horse.md), explicitly **event-only**; recording still rights-restricted.
+- [ ] Real client test that a Gabberina-owned horse mob gang may spawn the **separate, original human Hakken Horse boss** with distinct movement/gabber/hardtekk choreography, *without cloning/removing source horse entities*.
+- [ ] Test losing full horse mob gang control suppresses the signature boss and strips related borrowed abilities; stale ownership never triggers a boss or invalidates earned defeat.
+- [ ] Inspect original costume from multiple angles, fair mechanics, reactive but legally cleared boss music, accessibility, multiplayer, exit cleanup and complete original world restoration. A Spotify link or nonplayable JSON does not pass this gate.
+
 ## Required event trials to prioritize
 
 1. **Gabberina's surprising rival encore** after legitimate control-gated event, especially original high-energy choreography and distinct jumpstyle/gabber/hardtekk identity.

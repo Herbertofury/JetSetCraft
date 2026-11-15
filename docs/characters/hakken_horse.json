@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "record_type": "owner_approved_human_mob_themed_boss_design",
+  "canonical_name": "Hakken Horse",
+  "owner_name_confirmed_on": "2026-11-15",
+  "fictional_character_reference_id": "GAB-HORSE-001",
+  "genre_and_identity_context": "Gabberina's (jumpstyle + gabber + hardtekk) controlled horse mob gang",
+  "boss_kind": "human_crew_boss_in_original_horse_themed_clothing",
+  "source_mob": "minecraft:horse",
+  "source_mob_gang_display_name": "Bridle Breakers (established horse gang in project master spec; verify runtime stable ID)",
+  "controller_faction": "Gabberina's",
+  "controller_faction_proposed_id": "jetsetcraft:gabberinas",
+  "source_mob_preservation_policy": "Never replace, copy, hijack or delete source horses. Boss character is a separately event-owned human character whose presence follows legitimate horse gang control.",
+  "campaign_rules": [
+    "Only an eligible Gabberina-controlled horse-gang encounter may trigger this themed boss; distinguish full/partial influence where campaign requires it.",
+    "Once the horse mob gang is fully taken from Gabberina's, the corresponding ability must be removed and stale boss events suppressed.",
+    "Respect persistent Gabberina defeat and server-owned encounter result; no surprise chaining or unearned resurrection.",
+    "On cancellation/exit restore source-world entities, owner/mob control and original player state unchanged."
+  ],
+  "signature_music": {
+    "reference_id": "GAB-HORSE-MUSIC-001",
+    "title": "My Little White Pony",
+    "artists": [
+      "MCR-T",
+      "horsegiirL"
+    ],
+    "spotify_track_id": "46PRAC9BDGinxWR2Jw6chN",
+    "exact_owner_url": "https://open.spotify.com/track/46PRAC9BDGinxWR2Jw6chN?si=029a2739f37244d1",
+    "album": "Farm Fantasies",
+    "original_release_date": "2022-03-04",
+    "duration": "4:59",
+    "label": "Live From Earth Klub",
+    "label_album_source": "https://livefromearth.bandcamp.com/album/farm-fantasies",
+    "specific_scope": "Hakken Horse boss reveal/challenge music only, NOT global Gabberina radio or generic Minecraft music",
+    "owner_approved": true,
+    "rights": "all rights reserved; game synchronization/redistribution permissions not verified",
+    "master_and_isrc": "not_verified",
+    "beat_map": "not_analyzed",
+    "playable_in_game": false
+  },
+  "visual_style_note": "Design a distinct original, expressive, playful human dancer/skater in horse-themed dress and independently authored costume. Do not copy horsegiirL's actual performer likeness, mask/outfit or label artwork; use inspiration and original design only.",
+  "owner_reference_video": "https://www.tiktok.com/@twi68536/video/7695409049591876878?is_from_webapp=1&sender_device=pc",
+  "music_reference_id": "GAB-HORSE-MUSIC-001",
+  "implementation_status": "design_and_reference_only_boss_not_implemented",
+  "wiki_page": "wiki/Hakken-Horse.md"
+}

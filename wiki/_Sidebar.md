@@ -48,6 +48,7 @@
 - [🔊 Phonkistas & To-dos](https://github.com/Herbertofury/JetSetCraft/wiki/Phonkistas)
 - [🎹 Cumbias Rival Gang & To-dos](https://github.com/Herbertofury/JetSetCraft/wiki/Cumbias%E2%80%90and%E2%80%90Multi%E2%80%90Rival%E2%80%90Gang%E2%80%90War)
 - [🔥 Gabberina's Campaign & To-dos](https://github.com/Herbertofury/JetSetCraft/wiki/Gabberinas%E2%80%90and%E2%80%90Gang%E2%80%90War%E2%80%90Campaign)
+- [🐴 Hakken Horse — Human Horse-Gang Boss & Music](Hakken-Horse)
 - [🎨 Graffiti](Graffiti)
 - [🗺️ Hangouts, Territory & Reputation](Hangouts-Territory-and-Reputation)
 - [👥 Chapters, Posse & Mob Archetypes](Player-Chapters-Posse-and-Mob-Archetypes)

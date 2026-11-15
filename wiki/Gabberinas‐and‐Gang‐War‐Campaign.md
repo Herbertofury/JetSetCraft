@@ -10,6 +10,14 @@ Tracking: [GitHub issue #27](https://github.com/Herbertofury/JetSetCraft/issues/
 
 The [**Encounter North Star — Beyond Minecraft**](Encounter-North-Star-Beyond-Minecraft) is the canonical acceptance standard; the [outside-judge quality scorecard](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/ENCOUNTER_NORTH_STAR_ACCEPTANCE.md) describes real native QA. Preserve Gabberina's jumpstyle/gabber/hardtekk blend, changing abilities on gang takeover, independent persistent defeat, safe controlled surprise triggers, player agency and vanilla Minecraft world protection. **This is design ambition only, not implemented animation/audio/events.**
 
+## Hakken Horse confirmed + character-exclusive must-add music (2026-11-15)
+
+**Owner confirmation: the boss is Hakken Horse.** This is the original **human in horse-themed dress** who leads or headlines an eligible **Gabberina-controlled horse mob gang** encounter—not a reskinned Minecraft horse or a replacement of original horse entities.
+
+**`GAB-HORSE-MUSIC-001` — [“My Little White Pony” by MCR-T & horsegiirL](https://open.spotify.com/track/46PRAC9BDGinxWR2Jw6chN?si=029a2739f37244d1)** is the owner's **must-add Hakken Horse signature event** track. It is on *[Farm Fantasies](https://livefromearth.bandcamp.com/album/farm-fantasies)* (March 4, 2022; **4:59**, Live From Earth Klub). **Do not treat this as Gabberina's generic radio or a new `GAB-MUSIC-011`:** its scope is the **Hakken Horse boss event only**. It has no licensed audio, confirmed Spotify master/ISRC, precise beat cues or runtime boss routing yet. The label reserves rights.
+
+[Full Hakken Horse character/music page](Hakken-Horse) · [machine-readable character record](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/characters/hakken_horse.json) · [owner music registry](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/gangs/gabberinas_music.json).
+
 ## Major requirement: music-driven dances and themed bosses
 
 High-priority owner requirement: every mob needs amazing music-generated/driven dances with meaningful, fun variety and goosebump-level presentation. Cumbias, Phonkistas, Gabberina's and Hardtekkas each need exceptional signature dances. When a major faction owns a mob gang, its boss becomes a music-driven, mob-themed human leader tied to the controller; the explicit example is **Hakken Horse**, a human dressed like a horse for a Gabberina-controlled horse gang. Preserve source mobs and existing takeover/power-removal, surprise-challenge and independent-defeat rules.
@@ -149,6 +157,8 @@ Planned use must be resolved through an authorized audio source and the permissi
 - [x] Add **GAB-MUSIC-007 — Glubis by Fabitekk** with owner's exact Spotify ID, 2026 release sources and explicit Gabberina-only placement.
 - [x] Record **GAB-MUSIC-008 — TATVERDACHT by HARDWICK** with the owner's exact Spotify ID, a 1:19 short recording and explicit exclusion of the separate slowed version.
 - [x] Record **GAB-MUSIC-009** (owner Spotify link, identification pending) and **GAB-MUSIC-010 — KrAnK by LuuZz** as two additional Gabberina-only MUST ADD references, preserving their exact streaming IDs.
+- [x] Confirm Hakken Horse by name, and assign **“My Little White Pony” by MCR-T & horsegiirL** as event-only `GAB-HORSE-MUSIC-001`, rather than a generic Gabberina radio track.
+- [ ] Prototype real Hakken Horse horse-gang boss with ownership-aware trigger and original costume, then license and beat-map the exact signature recording or author a cleared alternative.
 - [ ] Resolve #009 title/artist/version from the exact Spotify ID without inventing credits; only then create its nonplayable catalog entry.
 - [ ] Verify #010 Spotify master/ISRC, original single licensing and exact cue/beat grid before any playable integration.
 - [ ] Verify GAB-MUSIC-008 exact streaming master/ISRC, cues, lyrics and age rating before licensed import and gang-scoped testing.

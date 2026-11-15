@@ -116,6 +116,12 @@ The following are **proposed acceptance/design criteria**, to refine with refere
 
 Proposed data keys include stable faction ID, source gang/mob ID, style profile, rig adapter, music/beat profile, phrase set, variation rules, boss profile and ownership-state version. These are design suggestions, not committed APIs.
 
+## Hakken Horse named boss — exact owner-selected special song (2026-11-15)
+
+The owner reconfirmed **Hakken Horse** as the Gabberina-controlled **horse gang's horse-themed human boss**. The owner also selected the exact [Spotify recording **“My Little White Pony” — MCR-T & horsegiirL**](https://open.spotify.com/track/46PRAC9BDGinxWR2Jw6chN?si=029a2739f37244d1) as **`GAB-HORSE-MUSIC-001` — a Hakken Horse signature-event MUST ADD**. The [Live From Earth Klub label](https://livefromearth.bandcamp.com/album/farm-fantasies) lists *Farm Fantasies*, original **2022-03-04**, **4:59**, and both artists; it marks the recording **all rights reserved**. Only this specific human boss event may use the owner-selected theme once appropriately licensed; it is not a generic Gabberina song, not ordinary horse mob music and not permission to use the recording artist's likeness, costume or artwork. Preserve the real horse entities and original world.
+
+[Dedicated Hakken Horse profile](Hakken-Horse) · [Character reference design JSON](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/characters/hakken_horse.json) · [Nonplayable music metadata](https://github.com/Herbertofury/JetSetCraft/blob/main/src/main/resources/assets/jetsetcraft/jetsetcraft_music/hakken_horse_my_little_white_pony.json). Actual choreography/beat timing, custom costume, boss AI, sound rights and player-tested functionality remain **future implementation tasks**, not completed work.
+
 ## Ownership-aware mob boss design
 
 The scope applies across mob gangs controlled by Cumbias, Phonkistas, Gabberina's or Hardtekkas, with Hakken Horse as the first owner-specified example. Each supported faction × mob pairing needs a deliberate boss/music/dance concept; a changed name or costume color alone is insufficient.

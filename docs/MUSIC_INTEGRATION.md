@@ -1,5 +1,13 @@
 # Crew-house and Rival Rush soundtrack
 
+## Hakken Horse owner-selected special boss music — NOT Gabberina general radio (2026-11-15)
+
+- **`GAB-HORSE-MUSIC-001` MUST ADD:** [**My Little White Pony — MCR-T & horsegiirL**](https://open.spotify.com/track/46PRAC9BDGinxWR2Jw6chN?si=029a2739f37244d1), exact Spotify `spotify:track:46PRAC9BDGinxWR2Jw6chN`. Owner reconfirmed **Hakken Horse**, original human horse-themed leader for a Gabberina-controlled horse mob gang, as the intended *special boss event*, **not** the everyday Gabberina playlist. [Live From Earth Klub original label EP](https://livefromearth.bandcamp.com/album/farm-fantasies) (*Farm Fantasies*, **2022-03-04**, **4:59**) confirms artists, collaborators and source lineage. Retailer [original mix](https://www.beatport.com/track/my-little-white-pony/16307528) independently lists **4:59**. No claim of identical owner-linked master/ISRC without checking.
+- **Permission and routing gate:** The label says **all rights reserved**. Owner's must-add is a **music reference**, not authorization to copy Spotify audio or synchronize/distribute the recording in a mod. `jetsetcraft_music/hakken_horse_my_little_white_pony.json` is **metadata only** with empty generic player contexts; wire solely to a future Hakken Horse **boss event** if cleared, with an original permitted fallback. Do not enable `home`, `rush` or all-Gabberina playback.
+- **Character/world safety:** [Hakken Horse wiki](../wiki/Hakken-Horse.md), [character record](characters/hakken_horse.json), [Gabberina boss-specific music registry](gangs/gabberinas_music.json). The real horse gang and all source-world horses remain unchanged; boss selection must check current legitimate horse gang control and prevent stale borrowed abilities or unfair surprise chaining.
+
+
+
 ## Gabberina's MUST ADD #009 and #010 — two owner Spotify links (2026-11-15)
 
 - **`GAB-MUSIC-009` · MUST ADD, exact title/artist UNRESOLVED:** [Owner Spotify recording](https://open.spotify.com/track/3N2LZ3XF42xlhpphwasGuS?si=e18a9def826d4a86) (`spotify:track:3N2LZ3XF42xlhpphwasGuS`). Exact Spotify page/metadata retrieval did not return a reliable track title or performer. **Approved for Gabberina's, NOT identified**. Preserve the ID unchanged, no invented credits, version, BPM or playability, and **do not create a fake credited `jetsetcraft_music/` entry** until verified.
