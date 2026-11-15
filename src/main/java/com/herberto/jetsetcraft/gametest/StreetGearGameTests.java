@@ -112,8 +112,22 @@ public final class StreetGearGameTests {
 
     @GameTest(template = "hoverboard_empty", timeoutTicks = 100)
     public static void graffitiPersistsAndLeavesWithItsWall(GameTestHelper helper) {
-        BlockPos wallRelative = new BlockPos(2, 1, 2);
-        BlockPos wallWorld = helper.absolutePos(wallRelative);
+        // Provider terrain may bury the template under falling gravel. Test a freestanding
+        // support above the measured surface so removing it cannot uncover a refill column.
+        // Do not suppress falling-block physics or repeatedly erase replacement blocks.
+        BlockPos anchor = helper.absolutePos(new BlockPos(2, 1, 2));
+        int surface = anchor.getY();
+        for (int x = -1; x <= 1; x++) for (int z = -1; z <= 1; z++) {
+            surface = Math.max(surface, helper.getLevel().getHeight(
+                    net.minecraft.world.level.levelgen.Heightmap.Types.WORLD_SURFACE,
+                    anchor.getX() + x, anchor.getZ() + z));
+        }
+        BlockPos wallWorld = new BlockPos(anchor.getX(), surface + 16, anchor.getZ());
+        if (helper.getLevel().isOutsideBuildHeight(wallWorld.above())
+                || !helper.getLevel().getBlockState(wallWorld).isAir()
+                || !helper.getLevel().getBlockState(wallWorld.north()).isAir()) {
+            throw new GameTestAssertException("Graffiti fixture has no clear elevated support/decal space");
+        }
         // A loaded GameTest structure does not establish that this decal's section is entity-ticking.
         // Keep the support and its neighboring decal section ticking only for this fixture. Renewals
         // stop when the helper finishes; timeout2 also releases the ticket after failure or timeout.
@@ -123,71 +137,85 @@ public final class StreetGearGameTests {
                 .addRegionTicket(fixtureTicket, fixtureChunk, 3, wallWorld);
         Runnable releaseFixture = () -> helper.getLevel().getChunkSource()
                 .removeRegionTicket(fixtureTicket, fixtureChunk, 3, wallWorld);
-        keepFixtureTicking.run(); helper.onEachTick(keepFixtureTicking);
-        helper.setBlock(wallRelative, Blocks.STONE);
-
-        byte[] pixels = new byte[CustomGraffiti.PIXELS];
-        pixels[0] = 3;
-        pixels[CustomGraffiti.PIXELS - 1] = 8;
-        String customPattern = CustomGraffiti.encode(pixels);
-        if (!CustomGraffiti.isValid(customPattern) || CustomGraffiti.decode(customPattern)[0] != 3) {
-            throw new GameTestAssertException("Bounded custom graffiti codec did not round-trip");
-        }
+        var originalSupport = helper.getLevel().getBlockState(wallWorld);
         GraffitiEntity graffiti = new GraffitiEntity(ModEntities.GRAFFITI.get(), helper.getLevel());
-        graffiti.configure(wallWorld, Direction.NORTH, 2, customPattern);
-        if (!helper.getLevel().addFreshEntity(graffiti)) {
-            throw new GameTestAssertException("Could not add a real graffiti entity to the GameTest level");
-        }
-
-        CompoundTag saved = new CompoundTag();
-        graffiti.saveWithoutId(saved);
         GraffitiEntity restored = new GraffitiEntity(ModEntities.GRAFFITI.get(), helper.getLevel());
-        restored.load(saved);
-        if (restored.getVariant() != 2 || restored.getFace() != Direction.NORTH
-                || !customPattern.equals(restored.getCustomPattern()) || !wallWorld.equals(restored.getSupportPos())) {
-            throw new GameTestAssertException("Graffiti did not preserve its variant/facing/custom/support NBT");
-        }
+        boolean[] closed = {false}, ownsSupport = {false};
+        Runnable cleanup = () -> {
+            if (closed[0]) return;
+            closed[0] = true;
+            try {
+                graffiti.discard(); restored.discard();
+                // Only remove the fixture's still-owned stone, never erase a physics refill.
+                if (ownsSupport[0] && helper.getLevel().getBlockState(wallWorld).equals(Blocks.STONE.defaultBlockState()))
+                    helper.getLevel().setBlock(wallWorld, originalSupport, 3);
+            } finally { releaseFixture.run(); }
+        };
+        try {
+            keepFixtureTicking.run();
+            ownsSupport[0] = true;
+            helper.getLevel().setBlock(wallWorld, Blocks.STONE.defaultBlockState(), 3);
+            if (!helper.getLevel().getBlockState(wallWorld).equals(Blocks.STONE.defaultBlockState()))
+                throw new GameTestAssertException("Graffiti fixture could not place its actual support");
+            byte[] pixels = new byte[CustomGraffiti.PIXELS];
+            pixels[0] = 3;
+            pixels[CustomGraffiti.PIXELS - 1] = 8;
+            String customPattern = CustomGraffiti.encode(pixels);
+            if (!CustomGraffiti.isValid(customPattern) || CustomGraffiti.decode(customPattern)[0] != 3)
+                throw new GameTestAssertException("Bounded custom graffiti codec did not round-trip");
+            graffiti.configure(wallWorld, Direction.NORTH, 2, customPattern);
+            if (!helper.getLevel().addFreshEntity(graffiti))
+                throw new GameTestAssertException("Could not add a real graffiti entity to the GameTest level");
+            CompoundTag saved = new CompoundTag();
+            graffiti.saveWithoutId(saved); restored.load(saved);
+            if (restored.getVariant() != 2 || restored.getFace() != Direction.NORTH
+                    || !customPattern.equals(restored.getCustomPattern()) || !wallWorld.equals(restored.getSupportPos()))
+                throw new GameTestAssertException("Graffiti did not preserve its variant/facing/custom/support NBT");
 
-        int[] removedSupportAt = {-1};
-        java.util.function.Supplier<String> diagnostics = () -> "entityTicks=" + graffiti.tickCount
-                + ", removedSupportAt=" + removedSupportAt[0]
-                + ", entityTicking=" + helper.getLevel().isPositionEntityTicking(graffiti.blockPosition())
-                + ", wall=" + helper.getLevel().getBlockState(wallWorld)
-                + ", removal=" + graffiti.getRemovalReason();
-        helper.startSequence()
-                .thenWaitUntil(() -> {
-                    if (!graffiti.isAlive()) {
-                        throw new GameTestAssertException("Supported graffiti removed itself prematurely: " + diagnostics.get());
+            int[] removedSupportAt = {-1}, elapsed = {0};
+            java.util.function.Supplier<String> diagnostics = () -> "entityTicks=" + graffiti.tickCount
+                    + ", fixtureTicks=" + elapsed[0] + ", removedSupportAt=" + removedSupportAt[0]
+                    + ", entityTicking=" + helper.getLevel().isPositionEntityTicking(graffiti.blockPosition())
+                    + ", wall=" + helper.getLevel().getBlockState(wallWorld)
+                    + ", removal=" + graffiti.getRemovalReason();
+            // Waiting is ordinary state, not an assertion exception. Fatal failures always clean up.
+            // The 100-callback guard runs before the outer 100-tick GameTest timeout can strand stone.
+            helper.onEachTick(() -> {
+                if (closed[0]) return;
+                try {
+                    keepFixtureTicking.run();
+                    if (++elapsed[0] >= 100)
+                        throw new GameTestAssertException("Graffiti native lifecycle deadline: " + diagnostics.get());
+                    if (removedSupportAt[0] < 0) {
+                        if (!graffiti.isAlive())
+                            throw new GameTestAssertException("Supported graffiti removed itself prematurely: " + diagnostics.get());
+                        // Never manually tick the decal or replace its own support-cycle clock.
+                        if (graffiti.tickCount < 40) return;
+                        removedSupportAt[0] = graffiti.tickCount;
+                        helper.getLevel().setBlock(wallWorld, Blocks.AIR.defaultBlockState(), 3);
+                        if (!helper.getLevel().getBlockState(wallWorld).isAir())
+                            throw new GameTestAssertException("Graffiti fixture did not remove the actual support block: " + diagnostics.get());
+                        ownsSupport[0] = false;
+                        return;
                     }
-                    // Prove a real supported check occurred before testing removal. Never invoke Entity.tick
-                    // manually or substitute elapsed GameTest/server time for the decal's own tick count.
-                    if (graffiti.tickCount < 40) {
-                        throw new GameTestAssertException("Graffiti fixture has not completed its first native support cycle: " + diagnostics.get());
-                    }
-                })
-                .thenExecute(() -> {
-                    removedSupportAt[0] = graffiti.tickCount;
-                    helper.setBlock(wallRelative, Blocks.AIR);
-                    if (!helper.getLevel().getBlockState(wallWorld).isAir()) {
-                        throw new GameTestAssertException("Graffiti fixture did not remove the actual support block: " + diagnostics.get());
-                    }
-                })
-                .thenWaitUntil(() -> {
-                    if (!graffiti.isRemoved()) {
-                        throw new GameTestAssertException("Graffiti is still waiting for its bounded native support check: " + diagnostics.get());
-                    }
-                })
-                .thenExecute(() -> {
                     int removalTicks = graffiti.tickCount - removedSupportAt[0];
+                    if (!graffiti.isRemoved()) {
+                        if (removalTicks > 40)
+                            throw new GameTestAssertException("Graffiti exceeded its native support-removal bound: " + diagnostics.get());
+                        return;
+                    }
                     if (graffiti.getRemovalReason() != Entity.RemovalReason.DISCARDED
                             || removalTicks < 1 || removalTicks > 40
-                            || !helper.getLevel().getBlockState(wallWorld).isAir()) {
+                            || !helper.getLevel().getBlockState(wallWorld).isAir())
                         throw new GameTestAssertException("Unsupported graffiti did not discard within 40 native entity ticks: " + diagnostics.get());
-                    }
-                    releaseFixture.run();
+                    // Native removal was asserted BEFORE cleanup may discard fixture instances.
+                    cleanup.run();
                     System.out.println("JETSETCRAFT_GAMETEST_PASS graffiti_lifecycle native_support_ticks=" + removalTicks);
-                })
-                .thenSucceed();
+                    helper.succeed();
+                } catch (RuntimeException | Error failure) { cleanup.run(); throw failure; }
+            });
+        } catch (RuntimeException | Error failure) { cleanup.run(); throw failure; }
+
     }
 
     @GameTest(template = "hoverboard_empty", timeoutTicks = 80)
@@ -641,3 +669,4 @@ public final class StreetGearGameTests {
 
     private StreetGearGameTests() {}
 }
+

@@ -16,12 +16,14 @@ import java.util.function.*;
 
 /** Actual navigation on a reversible lane in the disposable audit world; not skating or an encounter. */
 public final class HonkistasGroundedVisualAudit {
-    private static int phase,ticks;
+    private static int phase,ticks,cameraReadyTicks;
     private static volatile boolean queued,applied,routeDone;
     private static volatile String error,serverDiagnostic="not sampled";
     private static UUID actorId;
     private static Vec3 original,start,cameraPosition;
+    private static volatile Vec3 cueStart;
     private static float yaw,pitch;
+    private static float expectedCameraYaw=180,expectedCameraPitch=8;
     private static boolean gravity,hideGui,requested;
     private static CameraType camera;
     private static long day,readyAt;
@@ -64,11 +66,11 @@ public final class HonkistasGroundedVisualAudit {
             if(!applied)return false;
             phase=1;readyAt=System.nanoTime();ticks=0;return false;
         }
-        if(phase<=3){
+        if(phase<=6){
             ++ticks;
             if(ticks%100==0){UUID owner=mc.player.getUUID();server.execute(()->{
                 var p=server.getPlayerList().getPlayer(owner);var a=p.serverLevel().getEntity(actorId);
-                serverDiagnostic="player="+p.position()+" velocity="+p.getDeltaMovement()+" actor="+(a==null?"absent":a.position()+" ground="+a.onGround());
+                serverDiagnostic="player="+p.position()+" velocity="+p.getDeltaMovement()+" actor="+(a==null?"absent":a.position()+" ground="+a.onGround()+" route="+((HonkistasPrototypeEntity)a).controlledRouteStatus()+" diagnostic="+((HonkistasPrototypeEntity)a).controlledRouteDiagnostic());
             });}
             if(ticks>500){
                 net.minecraft.world.entity.Entity visible=null;
@@ -81,22 +83,55 @@ public final class HonkistasGroundedVisualAudit {
             net.minecraft.world.entity.Entity candidate=null;
             for(var e:mc.level.entitiesForRendering())if(e.getUUID().equals(actorId)){candidate=e;break;}
             if(!(candidate instanceof HonkistasPrototypeEntity actor))return false;
-            if(mc.player.position().distanceToSqr(cameraPosition)>.04||Math.abs(net.minecraft.util.Mth.wrapDegrees(mc.player.getYRot()-180))>2)return false;
-            if(!actor.onGround()||!HonkistasPrototypeRenderer.renderedSince(actorId,readyAt))return false;
-            String label=phase==1?"27-honkistas-grounded-start":phase==2?"28-honkistas-walking":"29-honkistas-route-complete";
+            boolean cameraReady=applied && mc.player.position().distanceToSqr(cameraPosition)<=.04
+                    && Math.abs(net.minecraft.util.Mth.wrapDegrees(mc.player.getYRot()-expectedCameraYaw))<=2
+                    && Math.abs(mc.player.getXRot()-expectedCameraPitch)<=2;
+            if(phase>=4){
+                var actualCamera=mc.gameRenderer.getMainCamera();
+                cameraReady&=actualCamera.getPosition().distanceToSqr(cameraPosition.add(0,mc.player.getEyeHeight(),0))<=.0625
+                        && Math.abs(net.minecraft.util.Mth.wrapDegrees(actualCamera.getYRot()-expectedCameraYaw))<=2
+                        && Math.abs(actualCamera.getXRot()-expectedCameraPitch)<=2;
+            }
+            if(!cameraReady){cameraReadyTicks=0;return false;}
+            if(phase==4 && cameraReadyTicks==0){
+                // Require a new actor render after the observed camera pose, not an old south-side frame.
+                readyAt=System.nanoTime();cameraReadyTicks=1;return false;
+            }
+            if(!actor.onGround()||!HonkistasPrototypeRenderer.renderedSince(actorId,readyAt)){cameraReadyTicks=0;return false;}
+            if(phase==4){
+                // Settle the genuine camera and renderer BEFORE starting the finite server cue.
+                if(++cameraReadyTicks<25)return false;
+                queued=true;routeDone=false;UUID owner=mc.player.getUUID();
+                server.execute(()->{try{
+                    var p=server.getPlayerList().getPlayer(owner);
+                    var actual=(HonkistasPrototypeEntity)p.serverLevel().getEntity(actorId);
+                    cueStart=actual.position();
+                    if(!actual.startControlledRoute(List.of(BlockPos.containing(start)),.6,400) || !actual.startBeatCue())
+                        throw new IllegalStateException("Server return-route beat cue refused");
+                    queued=false;
+                }catch(RuntimeException failure){error=failure.toString();}});
+                phase=5;ticks=0;requested=false;readyAt=System.nanoTime();return false;
+            }
+            String label=phase==1?"27-honkistas-grounded-start":phase==2?"28-honkistas-walking":phase==3?"29-honkistas-route-complete":"30-honkistas-synced-beat-cue";
             if(phase==2 && actor.getX()<start.x+2)return false;
-            if(phase==3){
+            if(phase==5 && (cueStart==null || actor.beatCueTicksRemaining()<=8
+                    || actor.beatCueTicksRemaining()>=HonkistasPrototypeEntity.BEAT_CUE_TICKS-6
+                    || actor.position().distanceTo(cueStart)<.5))return false;
+            if(phase==3 || phase==6){
                 if(!queued){queued=true;server.execute(()->{try{
                     var p=server.getPlayerList().getPlayer(mc.player.getUUID());
                     var actual=(HonkistasPrototypeEntity)p.serverLevel().getEntity(actorId);
                     routeDone=actual!=null && actual.controlledRouteStatus()==HonkistasPrototypeEntity.RouteStatus.COMPLETED;
                     queued=false;
                 }catch(RuntimeException e){error=e.toString();}});}
-                if(!routeDone||actor.getX()<start.x+5)return false;
+                if(!routeDone || phase==3 && actor.getX()<start.x+5
+                        || phase==6 && (actor.position().distanceTo(start)>.9 || actor.beatCueTicksRemaining()!=0))return false;
             }
-            if(ticks<25)return false;
-            if(!requested){requested=true;capture.accept(label);}
-            if(!captured.test(label))return false;
+            if(ticks<(phase==5?6:25))return false;
+            if(phase!=6){
+                if(!requested){requested=true;capture.accept(label);}
+                if(!captured.test(label))return false;
+            }
             if(phase==1){
                 queued=true;UUID owner=mc.player.getUUID();server.execute(()->{try{
                     var p=server.getPlayerList().getPlayer(owner);var actorServer=(HonkistasPrototypeEntity)p.serverLevel().getEntity(actorId);
@@ -106,15 +141,29 @@ public final class HonkistasGroundedVisualAudit {
                 }catch(RuntimeException e){error=e.toString();}});
             }
             if(phase<3){phase++;ticks=0;requested=false;readyAt=System.nanoTime();return false;}
+            if(phase==3){
+                // Westbound return exposes the right arm from the north, instead of hiding
+                // the cue behind the body in the original south-side walking view.
+                cameraPosition=start.add(3,.4,-4);expectedCameraYaw=0;expectedCameraPitch=15;
+                applied=false;queued=true;mc.player.setDeltaMovement(Vec3.ZERO);
+                UUID owner=mc.player.getUUID();
+                server.execute(()->{try{
+                    var p=server.getPlayerList().getPlayer(owner);p.setDeltaMovement(Vec3.ZERO);
+                    p.teleportTo(p.serverLevel(),cameraPosition.x,cameraPosition.y,cameraPosition.z,
+                            expectedCameraYaw,expectedCameraPitch);applied=true;queued=false;
+                }catch(RuntimeException failure){error=failure.toString();}});
+                phase=4;ticks=0;cameraReadyTicks=0;requested=false;readyAt=System.nanoTime();return false;
+            }
+            if(phase==5){phase=6;ticks=0;requested=false;readyAt=System.nanoTime();return false;}
             UUID owner=mc.player.getUUID();applied=false;
             server.execute(()->{var p=server.getPlayerList().getPlayer(owner);var level=p.serverLevel();var actorServer=level.getEntity(actorId);
                 if(actorServer!=null)actorServer.discard();saved.forEach(level::setBlockAndUpdate);saved.clear();
                 level.setDayTime(day);p.setNoGravity(gravity);p.teleportTo(level,original.x,original.y,original.z,yaw,pitch);applied=true;});
-            phase=4;return false;
+            phase=7;return false;
         }
         if(!applied)return false;
         mc.options.hideGui=hideGui;mc.options.setCameraType(camera);original=null;
-        JetSetCraft.LOGGER.info("JETSETCRAFT_HONKISTAS_GROUNDED_PASS actual original actor navigation and grounded client displacement; not skating/dance/event acceptance");
+        JetSetCraft.LOGGER.info("JETSETCRAFT_HONKISTAS_GROUNDED_PASS actual original actor navigation, grounded client displacement and server-synced finite upper-body cue; not skating/attack/event acceptance");
         return true;
     }
     public static void restore(Minecraft mc){
