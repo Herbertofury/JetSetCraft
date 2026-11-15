@@ -47,7 +47,7 @@ public final class HonkistasPrototypeVisualAudit {
                         actor.moveTo(center.x,center.y,center.z,0,0);actor.setNoAi(true);actor.setNoGravity(true);
                         if(!p.serverLevel().addFreshEntity(actor))throw new IllegalStateException("Original actor insertion rejected");
                         actorId=actor.getUUID();p.setNoGravity(true);
-                        p.teleportTo(p.serverLevel(),center.x,center.y+.1,center.z+3,180,12);
+                        p.teleportTo(p.serverLevel(),center.x,center.y+.1,center.z+2.5,180,15);
                         applied=true;
                     }catch(RuntimeException e){error=e.toString();}
                 });
@@ -69,8 +69,8 @@ public final class HonkistasPrototypeVisualAudit {
                 int next=phase+1;UUID owner=mc.player.getUUID();applied=false;
                 server.execute(()->{
                     var p=server.getPlayerList().getPlayer(owner);
-                    double x=next==2?center.x+3:center.x,z=next==2?center.z:center.z-3;
-                    p.teleportTo(p.serverLevel(),x,center.y+.1,z,next==2?90:0,12);applied=true;
+                    double x=next==2?center.x+2.5:center.x,z=next==2?center.z:center.z-2.5;
+                    p.teleportTo(p.serverLevel(),x,center.y+.1,z,next==2?90:0,15);applied=true;
                 });
                 phase=next;ticks=0;return false;
             }

@@ -73,9 +73,16 @@ public final class HonkistasPrototypeModel extends EntityModel<HonkistasPrototyp
             b.box(torso,CORAL,side<0?-2.7f:1.5f,4.3f,-1.83f,1.2f,.25f,.2f);
             PartDefinition tail=b.bone(torso,side<0?"right_tail":"left_tail",side*1.45f,7.2f,1.45f);
             float length=side<0?6.2f:5.3f;
-            b.box(tail,TEAL,-1.15f,0,-.15f,2.3f,length,.55f);
-            b.box(tail,CORAL,-.9f,.5f,.43f,1.8f,length-1,.16f);
-            b.box(tail,GOLD,-1.15f,length-.5f,-.17f,2.3f,.5f,.75f);
+            // Authored six-step taper preserves the split-tail silhouette at gameplay distance.
+            for(int tier=0;tier<6;tier++) {
+                float width=2.3f-tier*.32f, y=tier*length/6;
+                float height=length/6+.025f;
+                b.box(tail,TEAL,-width/2,y,-.15f,width,height,.55f);
+                b.box(tail,CORAL,-width/2+.14f,y+.05f,.43f,width-.28f,height-.10f,.16f);
+                b.box(tail,GOLD,-width/2,y,.42f,.12f,height,.2f);
+                b.box(tail,GOLD,width/2-.12f,y,.42f,.12f,height,.2f);
+            }
+            b.box(tail,GOLD,-.35f,length-.25f,-.17f,.7f,.35f,.75f);
         }
         PartDefinition head=b.bone(torso,"head",0,-.4f,0);
         b.box(head,IVORY,-2.8f,-5.4f,-2.35f,5.6f,5.4f,4.5f);
@@ -101,6 +108,16 @@ public final class HonkistasPrototypeModel extends EntityModel<HonkistasPrototyp
         for(int side:new int[]{-1,1}) for(int lock=0;lock<3;lock++)
             b.rotBox(head,lock==1?TEAL:INK,side*2.73f,-4.3f+lock*.9f,.45f+lock*.45f,
                     .12f,side*.12f,side*.15f,-.35f,-.65f,-.7f,.7f,1.5f,1.4f);
+        // Layered rear locks cover the skull without copying the benchmark's long white hair.
+        b.box(head,INK,-2.65f,-5.15f,2.08f,5.3f,2.5f,.5f);
+        for(int lock=0;lock<5;lock++) {
+            float x=-2.15f+lock*1.075f;
+            float length=3.6f-Math.abs(lock-2)*.3f;
+            b.rotBox(head,lock==1||lock==3?TEAL:INK,x,-3.5f,2.35f,
+                    -.07f,(lock-2)*.025f,(lock-2)*-.045f,
+                    -.54f,-1.1f,-.25f,1.08f,length,.55f);
+            b.box(head,INK,x-.38f,-3.5f+length-1.1f,2.27f,.76f,.45f,.45f);
+        }
         // Off-center tilted parade cap with stacked crown and coral ribbon fan.
         PartDefinition cap=b.rotBone(head,"cap",-.45f,-5.45f,.2f,.03f,0,-.16f);
         b.box(cap,INK,-3.45f,-.4f,-2.6f,6.9f,.6f,5.2f);
@@ -119,19 +136,27 @@ public final class HonkistasPrototypeModel extends EntityModel<HonkistasPrototyp
             b.box(forearm,side<0?TEAL:CORAL,-1.05f,0,-1.05f,2.1f,3.3f,2.1f);
             b.box(forearm,IVORY,-1.45f,2.7f,-1.45f,2.9f,.7f,2.9f);
             b.box(forearm,GOLD,-1.4f,3.4f,-1.4f,2.8f,.25f,2.8f);
-            b.box(forearm,IVORY,-.95f,3.65f,-.85f,1.9f,1.3f,1.7f);
-            for(int digit=0;digit<3;digit++) b.box(forearm,IVORY,-.9f+digit*.62f,4.8f,-.8f,.46f,.7f,1.4f);
-            b.box(forearm,IVORY,side<0?.95f:-1.45f,3.8f,-.65f,.5f,1.0f,1.0f);
+            // Shaped palm, four separated fingers and angled thumb, all following the elbow rig.
+            b.box(forearm,IVORY,-.92f,3.65f,-.72f,1.84f,.85f,1.44f);
+            b.box(forearm,IVORY,-.8f,4.45f,-.66f,1.6f,.4f,1.32f);
+            for(int digit=0;digit<4;digit++) {
+                float length=digit==0||digit==3?.65f:.85f;
+                b.rotBox(forearm,IVORY,-.66f+digit*.44f,4.75f,-.12f,
+                        -.18f,0,0,-.16f,0,-.50f,.32f,length,1.0f);
+                b.box(forearm,PALE,-.76f+digit*.44f,4.25f,-.76f,.20f,.3f,.09f);
+            }
+            b.rotBox(forearm,IVORY,side<0?.86f:-.86f,3.95f,-.12f,
+                    -.14f,0,-side*.32f,-.24f,0,-.45f,.48f,1.0f,.9f);
             PartDefinition leg=b.bone(root,name+"_leg",side*1.45f,13.6f,0);
             b.box(leg,INK,-1.3f,0,-1.2f,2.6f,5.1f,2.4f);
             b.box(leg,side<0?CORAL:PALE,side<0?-1.4f:1.1f,.3f,-1.25f,.3f,4.6f,2.5f);
             PartDefinition shin=b.bone(leg,"shin",0,5,0);
             b.box(shin,INK,-1.2f,0,-1.1f,2.4f,4.8f,2.2f);
             b.box(shin,TEAL,-1.4f,2.9f,-1.35f,2.8f,1.6f,2.7f);
-            b.box(shin,GOLD,-1.5f,2.8f,-1.45f,3,.4f,2.9f);
-            b.box(shin,INK,-1.5f,4.1f,-2.7f,3,1.0f,4.2f);
-            b.box(shin,CORAL,-1.35f,4.0f,-3.3f,2.7f,.65f,1.2f);
-            b.box(shin,IVORY,-1.5f,5.1f,-2.7f,3,.3f,4.2f);
+            b.box(shin,GOLD,-1.35f,2.8f,-1.45f,2.7f,.4f,2.9f);
+            b.box(shin,INK,-1.35f,4.1f,-2.7f,2.7f,1.0f,4.2f);
+            b.box(shin,CORAL,-1.25f,4.0f,-3.3f,2.5f,.65f,1.2f);
+            b.box(shin,IVORY,-1.35f,5.1f,-2.7f,2.7f,.3f,4.2f);
         }
         return b.mesh;
     }

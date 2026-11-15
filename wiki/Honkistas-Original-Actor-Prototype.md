@@ -21,3 +21,9 @@ See [quality requirements](Honkistas‐NPC‐Quality‐and‐Skating‐Physics) 
 ## First preview review
 
 The first three captures at PR head `b256bb8` verified rendering but inherited the prior underwater fixture. Darkness, crosshair, held item and HUD prevent reliable visual-quality acceptance. These failed-quality captures remain in workflow run `43706166634`. The revised audit uses open daylight airspace, hides HUD and restores camera, HUD state, position, gravity and world time afterward. No terrain or inventory is changed. Revised pixels still require review.
+
+## Daylight review, 2026-11-15
+
+Exact head `7ba4e28845ec257330514f51cc6be3bf8a03b9dd` passed all eleven CI lanes, including all 129 required base GameTests. Workflow `43707174203`, artifact `14159491096`, contains the independently inspected front/side/back PNGs. Camera framing and daylight now expose the original model without HUD interference. The face, asymmetric shoulder treatment, lapels and split tails render. This confirms the renderer and capture path, **not finished visual acceptance**.
+
+The review found a largely blank rear head, slab-like rectangular coat tails, blocky hands and boots that nearly merge (including a slight mesh overlap). These are geometry refinements, not excuses to accept poor capture lighting. Both original and daylight evidence are retained. Standing still above the ocean does not demonstrate walking, skating, choreography, crowd performance or cloth/hair physics. Skating/dance state and a grounded native motion lane are not implemented by this preview.
