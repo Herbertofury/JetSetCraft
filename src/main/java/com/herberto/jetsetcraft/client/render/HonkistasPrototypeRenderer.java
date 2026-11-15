@@ -13,5 +13,16 @@ public final class HonkistasPrototypeRenderer extends MobRenderer<HonkistasProto
     public HonkistasPrototypeRenderer(EntityRendererProvider.Context context){
         super(context,new HonkistasPrototypeModel(),.38f);
     }
+    private static java.util.UUID lastRenderedActor;
+    private static long lastRenderedNanos;
+    @Override public void render(HonkistasPrototypeEntity actor,float yaw,float partialTick,
+                                 com.mojang.blaze3d.vertex.PoseStack pose,
+                                 net.minecraft.client.renderer.MultiBufferSource buffers,int light){
+        super.render(actor,yaw,partialTick,pose,buffers,light);
+        lastRenderedActor=actor.getUUID();lastRenderedNanos=System.nanoTime();
+    }
+    public static boolean renderedSince(java.util.UUID actor,long since){
+        return actor.equals(lastRenderedActor) && lastRenderedNanos>=since;
+    }
     @Override public ResourceLocation getTextureLocation(HonkistasPrototypeEntity entity){return TEXTURE;}
 }

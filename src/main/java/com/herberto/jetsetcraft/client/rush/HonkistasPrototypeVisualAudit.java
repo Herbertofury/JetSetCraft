@@ -19,8 +19,8 @@ public final class HonkistasPrototypeVisualAudit {
     private static volatile String error;
     private static Vec3 original,center;
     private static float yaw,pitch;
-    private static boolean gravity,hideGui;
-    private static long originalDayTime;
+    private static boolean gravity,hideGui,captureRequested;
+    private static long originalDayTime,poseReadyNanos;
     private static CameraType camera;
     public static boolean advance(Minecraft mc,Consumer<String> capture,Predicate<String> captured){
         var server=mc.getSingleplayerServer();
@@ -63,7 +63,17 @@ public final class HonkistasPrototypeVisualAudit {
         String label=phase==1?"24-honkistas-front":phase==2?"25-honkistas-side":"26-honkistas-back";
         if(phase<=3){
             if(!applied)return false;
-            if(++ticks==25)capture.accept(label);
+            // A server teleport acknowledgment alone does not prove the client camera moved.
+            Vec3 expected=phase==1?center.add(0,.1,2.5):phase==2?center.add(2.5,.1,0):center.add(0,.1,-2.5);
+            float expectedYaw=phase==1?180:phase==2?90:0;
+            if(mc.player.position().distanceToSqr(expected)>.04
+                    || Math.abs(net.minecraft.util.Mth.wrapDegrees(mc.player.getYRot()-expectedYaw))>2
+                    || Math.abs(mc.player.getXRot()-15)>2){ticks=0;poseReadyNanos=0;return false;}
+            if(poseReadyNanos==0)poseReadyNanos=System.nanoTime();
+            if(++ticks>=25 && !captureRequested
+                    && com.herberto.jetsetcraft.client.render.HonkistasPrototypeRenderer.renderedSince(actorId,poseReadyNanos)){
+                captureRequested=true;capture.accept(label);
+            }
             if(!captured.test(label))return false;
             if(phase<3){
                 int next=phase+1;UUID owner=mc.player.getUUID();applied=false;
@@ -72,7 +82,7 @@ public final class HonkistasPrototypeVisualAudit {
                     double x=next==2?center.x+2.5:center.x,z=next==2?center.z:center.z-2.5;
                     p.teleportTo(p.serverLevel(),x,center.y+.1,z,next==2?90:0,15);applied=true;
                 });
-                phase=next;ticks=0;return false;
+                phase=next;ticks=0;poseReadyNanos=0;captureRequested=false;return false;
             }
             UUID owner=mc.player.getUUID();applied=false;
             server.execute(()->{
