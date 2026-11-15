@@ -1,0 +1,29 @@
+{
+  "title": "Komm Klar Bengel",
+  "artist": "LuuZz",
+  "album": "Komm Klar Bengel",
+  "sound_event": "jetsetcraft:licensed/gabberinas_komm_klar_bengel_luuzz",
+  "audio_resource": "jetsetcraft:sounds/music/licensed/gabberinas_komm_klar_bengel_luuzz.ogg",
+  "contexts": [],
+  "volume": 0.65,
+  "source_url": "https://open.spotify.com/track/3ItEA5lnyYCDZRyQbMoj9N?si=ce6988df3f214007",
+  "spotify_track_id": "3ItEA5lnyYCDZRyQbMoj9N",
+  "source_identification": "Exact Spotify page plus Spotify playlist and Amazon LuuZz artist catalog",
+  "listed_release_year": 2026,
+  "listed_duration": "6:52",
+  "track_and_edition_note": "Exact owner-supplied Spotify ID. Bassfabrik Radio lists a 6:52 track, but precise mix/master, label credits, ISRC and release date require checking before legally importing.",
+  "verification_sources": [
+    "https://open.spotify.com/playlist/37i9dQZF1E4zaRxH7HOHJx",
+    "https://music.amazon.de/artists/B0B9KHRDJ1/luuzz?marketplaceId=A1PA6795UKMFR9&musicTerritory=DE",
+    "https://events.musicofourdesire.com/artist/luuzz"
+  ],
+  "gang_id": "jetsetcraft:gabberinas",
+  "owner_reference_id": "GAB-MUSIC-013",
+  "intended_placement": "Gabberina regular crew-specific radio/encounter music ONLY after gang-scoped picker; NOT global rush/home, Hakken Horse boss-only track, or automatically Hardtekkas",
+  "another_owner_selected_same_artist": "GAB-MUSIC-010 KrAnK — LuuZz, distinct Spotify track",
+  "master_and_isrc_status": "not_verified",
+  "beat_grid_and_cues_status": "not_measured",
+  "recording_status": "awaiting_authorized_audio",
+  "rights_status": "sync_and_redistribution_not_verified; no_audio_bundled",
+  "in_game_playback_status": "not_integrated"
+}

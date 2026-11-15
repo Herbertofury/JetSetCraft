@@ -19,7 +19,8 @@
       "GAB-MUSIC-009",
       "GAB-MUSIC-010",
       "GAB-MUSIC-011",
-      "GAB-MUSIC-012"
+      "GAB-MUSIC-012",
+      "GAB-MUSIC-013"
     ],
     "previous_phonkistas_correction": "Warpath — Redforce remains Phonkistas only. Fabitekk Glubis has been directly selected for Gabberina's despite Hardtekkas also existing.",
     "favorite_must_add_ids": [
@@ -356,6 +357,40 @@
       "recording_master_status": "not_supplied",
       "synchronization_and_distribution_rights": "not_verified",
       "beat_grid_and_cues": "not_measured",
+      "in_game_playback_status": "not_integrated"
+    },
+    {
+      "reference_id": "GAB-MUSIC-013",
+      "title": "Komm Klar Bengel",
+      "artist": "LuuZz",
+      "spotify_track_id": "3ItEA5lnyYCDZRyQbMoj9N",
+      "owner_supplied_url": "https://open.spotify.com/track/3ItEA5lnyYCDZRyQbMoj9N?si=ce6988df3f214007",
+      "owner_selection_date": "2026-11-15",
+      "is_owner_approved": true,
+      "assignment": "gabberinas_regular_music",
+      "source_type": "owner_supplied_exact_spotify_track",
+      "album": "Komm Klar Bengel",
+      "listed_release_year": 2026,
+      "listed_duration": "6:52",
+      "title_artist_verification": "Exact Spotify track page identifies 'Komm Klar Bengel' by LuuZz. Spotify's 'Bassfabrik Radio' playlist lists the title, performer, album and 6:52 duration; Amazon's LuuZz catalog lists the 2026 single. Album date, exact Spotify master/ISRC and original-edition lineage still need verification.",
+      "artist_style_context": "German hardtekk / tekno producer LuuZz; this is a prospective creative alignment with Gabberina's established jumpstyle/gabber/hardtekk style, not a measured waveform genre.",
+      "verification_sources": [
+        "https://open.spotify.com/track/3ItEA5lnyYCDZRyQbMoj9N?si=ce6988df3f214007",
+        "https://open.spotify.com/playlist/37i9dQZF1E4zaRxH7HOHJx",
+        "https://music.amazon.de/artists/B0B9KHRDJ1/luuzz?marketplaceId=A1PA6795UKMFR9&musicTerritory=DE",
+        "https://events.musicofourdesire.com/artist/luuzz"
+      ],
+      "additional_existing_same_artist_reference": "GAB-MUSIC-010 — KrAnK by LuuZz; these are separate Spotify tracks with distinct IDs and must-add slots.",
+      "owner_priority": "must_add",
+      "proposed_use": [
+        "Gabberina-only radio when gang filtering is implemented",
+        "extended skating and dance rival challenge",
+        "music-driven rhythmic escalation"
+      ],
+      "exact_spotify_master_isrc_and_edition": "not_verified",
+      "beat_grid_bpm_and_cue_times": "not_measured",
+      "source_audio": "not_supplied",
+      "synchronization_and_distribution_rights": "not_verified",
       "in_game_playback_status": "not_integrated"
     }
   ],
