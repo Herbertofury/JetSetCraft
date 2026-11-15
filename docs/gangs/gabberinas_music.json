@@ -1,0 +1,85 @@
+{
+  "schema_version": 1,
+  "record_type": "human_music_culture_gang_music_design",
+  "canonical_gang_name": "Gabberina's",
+  "proposed_stable_gang_id": "jetsetcraft:gabberinas",
+  "owner_confirmed": {
+    "music_style_blend": [
+      "jumpstyle",
+      "gabber",
+      "hardtekk"
+    ],
+    "owner_selection_date": "2026-11-15",
+    "explicit_new_must_add_ids": [
+      "GAB-MUSIC-004"
+    ],
+    "previous_phonkistas_correction": "Earlier Warpath - Redforce was redirected by owner to Phonkistas, NOT Gabberina's. Do not transfer it back."
+  },
+  "previous_owner_song_references": [
+    {
+      "legacy_id": "GAB-MUSIC-001",
+      "title": "G.A.B.B.E.R.",
+      "artist": null,
+      "spotify_track_id": "7rOcKvntilTERy7JW9rrPx",
+      "source_url": "https://open.spotify.com/track/7rOcKvntilTERy7JW9rrPx?si=505271b150414e7a",
+      "status": "prior_owner_reference_artist_unverified_no_change_to_approval"
+    },
+    {
+      "legacy_id": "GAB-MUSIC-002",
+      "title": "I Need Your Lovin' (Like The Sunshine)",
+      "artist": "Danny Ores",
+      "spotify_track_id": "2tvhfItMoRiHmo9QuCnKem",
+      "source_url": "https://open.spotify.com/track/2tvhfItMoRiHmo9QuCnKem?si=c24fd0e2909843d7",
+      "status": "prior_owner_intended_song_preserved"
+    },
+    {
+      "legacy_id": "GAB-MUSIC-003",
+      "title": "Hardtekk Tutorial",
+      "artist": "Ski Aggu, DJ TÖRKE and Mr. Polska",
+      "spotify_track_id": "26jLDg6jw9KEOQlyh4IybJ",
+      "source_url": "https://open.spotify.com/track/26jLDg6jw9KEOQlyh4IybJ?si=16465eeb535b4a65",
+      "status": "prior_owner_intended_song_preserved"
+    }
+  ],
+  "must_include_music": [
+    {
+      "reference_id": "GAB-MUSIC-004",
+      "title": "Rated R",
+      "artist": "Peckerhead",
+      "spotify_track_id": "1a6GlRgG0vWK5fso8mKSEi",
+      "owner_supplied_url": "https://open.spotify.com/track/1a6GlRgG0vWK5fso8mKSEi?si=b1e7e335a8674cb4",
+      "owner_selection_date": "2026-11-15",
+      "is_owner_approved": true,
+      "assignment": "gabberinas_only",
+      "target_original_mix": "Original Mix, ~2:50; owner Spotify appears associated with original 2018 Compassion release, not Technohead's 3:33 remix",
+      "original_release_date": "2018-06-14",
+      "label": "Mokum Records",
+      "original_release": "Compassion",
+      "original_mokum_catalog_number": "MOK182",
+      "label_reissue": "2026 Mokum Classixxx - Denmark's Finest lists Rated R (Original Mix) separately from Rated R (Technohead Remix)",
+      "independently_listed_original_isrc": "NLLB81800009 (2018 retailer listing only; exact Spotify ISRC not independently verified)",
+      "recording_identity_sources": [
+        "https://hardstyle.com/en/tracks/cbca0522-420a-405f-b807-8dea114ae45e/rated-r",
+        "https://mokumrecords.bandcamp.com/album/mok345-peckerhead-mokum-classixxx-denmarks-finest",
+        "https://www.hardtunes.fr/tunes/peckerhead-rated-r-original-mix/35233"
+      ],
+      "exact_spotify_master_isrc_verified": false,
+      "genre_context": "hardcore/gabber; track metadata and label identity, not a measured gameplay music analysis",
+      "proposed_use": [
+        "gabberinas_gang_radio",
+        "gabber_hakken_choreography",
+        "rival_encounter"
+      ],
+      "beat_map_and_timing": "not_analyzed",
+      "recording_master_status": "not_supplied",
+      "sync_and_redistribution_rights_status": "not_verified",
+      "in_game_playback_status": "not_integrated"
+    }
+  ],
+  "runtime_status": {
+    "human_gang_music_routing_implemented": false,
+    "playable_audio_bundled": false,
+    "gabberina_encounter_tested_with_track": false
+  },
+  "wiki_page": "wiki/Gabberinas‐and‐Gang‐War‐Campaign.md"
+}

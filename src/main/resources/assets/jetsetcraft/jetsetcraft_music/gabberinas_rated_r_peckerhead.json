@@ -1,0 +1,27 @@
+{
+  "title": "Rated R",
+  "artist": "Peckerhead",
+  "album": "Compassion",
+  "sound_event": "jetsetcraft:licensed/gabberinas_rated_r_peckerhead",
+  "audio_resource": "jetsetcraft:sounds/music/licensed/gabberinas_rated_r_peckerhead.ogg",
+  "contexts": [
+    "rush"
+  ],
+  "volume": 0.65,
+  "source_url": "https://open.spotify.com/track/1a6GlRgG0vWK5fso8mKSEi?si=b1e7e335a8674cb4",
+  "spotify_track_id": "1a6GlRgG0vWK5fso8mKSEi",
+  "original_release_date": "2018-06-14",
+  "label": "Mokum Records",
+  "original_duration": "2:50",
+  "specific_version": "Original Mix; not the 2026 Technohead Remix (~3:33)",
+  "version_provenance": "Owner-linked Spotify recording. Original 2018 release and 2026 Mokum original-mix reissue verified separately, but exact Spotify ISRC/master not checked.",
+  "original_release_store_url": "https://hardstyle.com/en/tracks/cbca0522-420a-405f-b807-8dea114ae45e/rated-r",
+  "label_reissue_url": "https://mokumrecords.bandcamp.com/album/mok345-peckerhead-mokum-classixxx-denmarks-finest",
+  "historic_original_isrc_source": "https://www.hardtunes.fr/tunes/peckerhead-rated-r-original-mix/35233",
+  "historic_original_isrc": "NLLB81800009 (retailer 2018 mix; Spotify exact ID not verified)",
+  "gang_id": "jetsetcraft:gabberinas",
+  "intended_placement": "Gabberina's only after gang-scoped picker exists; NOT general Rush and NOT Phonkistas",
+  "owner_reference_id": "GAB-MUSIC-004",
+  "recording_status": "awaiting_authorized_audio",
+  "rights_status": "synchronization_and_redistribution_not_verified; no_audio_bundled"
+}
