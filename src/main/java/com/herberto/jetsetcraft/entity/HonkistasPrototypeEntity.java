@@ -71,6 +71,28 @@ public final class HonkistasPrototypeEntity extends PathfinderMob {
                 +" path="+(path==null?"null":("nodes="+path.getNodeCount()+" next="+path.getNextNodeIndex()
                     +" canReach="+path.canReach()+" target="+path.getTarget()));
     }
+    /** Read-only conservative clearance check for the bounded endpoint approach. */
+    public boolean canFinishGroundedApproach(BlockPos target){
+        if(target==null || level().isClientSide || !level().hasChunkAt(target))return false;
+        double dx=target.getX()+.5-getX(),dz=target.getZ()+.5-getZ();
+        if(!onGround() || dx*dx+dz*dz>4 || Math.abs(getY()-target.getY())>.75)return false;
+        // A conservative swept rectangle validates every touched floor cell first.
+        // This deliberately rejects corner overhangs rather than promising step/cliff handling.
+        var sweep=getBoundingBox().expandTowards(dx,0,dz);
+        int minX=net.minecraft.util.Mth.floor(sweep.minX+1.0e-7),maxX=net.minecraft.util.Mth.floor(sweep.maxX-1.0e-7);
+        int minZ=net.minecraft.util.Mth.floor(sweep.minZ+1.0e-7),maxZ=net.minecraft.util.Mth.floor(sweep.maxZ-1.0e-7);
+        int floorY=net.minecraft.util.Mth.floor(getY()-.05);
+        for(int x=minX;x<=maxX;x++)for(int z=minZ;z<=maxZ;z++){
+            BlockPos floor=new BlockPos(x,floorY,z);
+            if(!level().hasChunkAt(floor))return false;
+        }
+        for(int x=minX;x<=maxX;x++)for(int z=minZ;z<=maxZ;z++){
+            BlockPos floor=new BlockPos(x,floorY,z);
+            if(!level().getBlockState(floor).isFaceSturdy(level(),floor,net.minecraft.core.Direction.UP))return false;
+        }
+        if(!level().noCollision(this,sweep))return false;
+        return true;
+    }
     private void finishRoute(RouteStatus result){routeStatus=result;getNavigation().stop();route=List.of();}
     @Override public void tick(){
         super.tick();
@@ -122,11 +144,14 @@ public final class HonkistasPrototypeEntity extends PathfinderMob {
                 // Finish the final short segment through normal collision-aware MoveControl,
                 // never by teleporting or weakening the route's arrival threshold.
                 var path=getNavigation().getPath();
-                if(path!=null && path.canReach() && dx*dx+dz*dz<=1.5*1.5
+                if(path!=null && path.canReach() && dx*dx+dz*dz<=2*2
                         && Math.abs(getY()-p.getY())<=1.5){
                     // A reachable native path can finish during its normal hop/landing arc.
                     // Wait for actual physics contact, with the unchanged real route deadline.
                     if(!onGround()){diagnoseRoute("awaiting_native_landing",p);return;}
+                    if(!canFinishGroundedApproach(p)){
+                        diagnoseRoute("unsafe_grounded_final_approach",p);finishRoute(RouteStatus.FAILED_PATH);return;
+                    }
                     getMoveControl().setWantedPosition(p.getX()+.5,p.getY(),p.getZ()+.5,routeSpeed);
                     diagnoseRoute("native_final_approach",p);
                 }else if(path!=null && path.canReach() && remainingRepaths>0){

@@ -117,6 +117,20 @@ public final class HonkistasPrototypeGameTests {
                     // Native GroundPathNavigation cannot create a route before physics ground contact.
                     // The initial spawn has zero vertical speed; the first ticks must actually settle.
                     if(!actor.onGround())return; // Overall native-tick deadline remains enforced.
+                    BlockPos approach=origin.offset(2,1,1);
+                    check(actor.canFinishGroundedApproach(approach),"Clear supported short approach rejected");
+                    helper.getLevel().setBlockAndUpdate(approach.below(),Blocks.AIR.defaultBlockState());
+                    check(!actor.canFinishGroundedApproach(approach),"Short approach accepted unsupported floor");
+                    helper.getLevel().setBlockAndUpdate(approach.below(),Blocks.STONE.defaultBlockState());
+                    helper.getLevel().setBlockAndUpdate(approach.above(),Blocks.STONE.defaultBlockState());
+                    check(!actor.canFinishGroundedApproach(approach),"Short approach crossed headroom obstruction");
+                    helper.getLevel().setBlockAndUpdate(approach.above(),Blocks.AIR.defaultBlockState());
+                    BlockPos diagonal=origin.offset(2,1,2),corner=origin.offset(1,0,2);
+                    check(actor.canFinishGroundedApproach(diagonal),"Supported diagonal short approach rejected");
+                    helper.getLevel().setBlockAndUpdate(corner,Blocks.AIR.defaultBlockState());
+                    check(!actor.canFinishGroundedApproach(diagonal),"Diagonal approach accepted unsupported corner");
+                    helper.getLevel().setBlockAndUpdate(corner,Blocks.STONE.defaultBlockState());
+                    check(!actor.canFinishGroundedApproach(origin.offset(5,1,1)),"Endpoint approach exceeded two-block bound");
                     check(!actor.startControlledRoute(List.of(origin.offset(60,1,1)),1,120),"Accepted out-of-range route");
                     check(!actor.startControlledRoute(java.util.Collections.nCopies(17,origin.offset(4,1,1)),1,120),"Accepted oversized route");
                     check(actor.startControlledRoute(cueTest?List.of(origin.offset(4,1,1),origin.offset(4,1,4),origin.offset(1,1,1)):List.of(origin.offset(4,1,1),origin.offset(4,1,4)),cueTest?.6:1,cueTest?260:180),"Grounded route rejected");
