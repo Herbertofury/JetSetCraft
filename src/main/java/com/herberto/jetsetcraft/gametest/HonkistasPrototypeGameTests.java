@@ -60,7 +60,17 @@ public final class HonkistasPrototypeGameTests {
         private double displacement;
         private boolean grounded,finished;
         RouteFixture(GameTestHelper helper){
-            this.helper=helper;origin=helper.absolutePos(BlockPos.ZERO);chunk=new ChunkPos(origin);
+            this.helper=helper;
+            BlockPos anchor=helper.absolutePos(BlockPos.ZERO);
+            chunk=new ChunkPos(anchor);
+            // A natural underground fixture can receive falling gravel from above.
+            // Place the reversible lane above the highest real surface, not under terrain.
+            int surface=anchor.getY();
+            for(int x=0;x<=5;x++)for(int z=0;z<=5;z++)
+                surface=Math.max(surface,helper.getLevel().getHeight(
+                        net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING,anchor.getX()+x,anchor.getZ()+z));
+            origin=new BlockPos(anchor.getX(),surface+16,anchor.getZ());
+            check(origin.getY()+4<helper.getLevel().getMaxBuildHeight(),"No clear space for reversible route lane");
             try{
                 keepTicking();
                 for(int x=-3;x<=3;x++)for(int z=-3;z<=3;z++)helper.getLevel().getChunk(chunk.x+x,chunk.z+z);
