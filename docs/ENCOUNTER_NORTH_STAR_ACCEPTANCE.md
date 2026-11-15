@@ -46,6 +46,17 @@ Review in a repeatable captured session, with controls enabled and audio on **an
 | Replay | Static scripted once-only show and no skill improvement | Routes, timing, faction tactics, score/style, progression and optional discovered variation reward real mastery |
 | Multiplayer and inclusion | Unsynced opponents, inaccessible cues, duplicate rewards, unwanted camera hijack | Server-authoritative events and accessibility parity, clean return even across disconnect/failure |
 
+## Additional production trial: Neon Labyrinth mode (working title)
+
+The owner's new **platformer + Metroidvania + roguelike with end bosses** mode has its own [issue #65](https://github.com/Herbertofury/JetSetCraft/issues/65), [wiki](../wiki/Neon-Labyrinth-Platformer-Metroidvania-Roguelike.md) and [technical handoff](modes/NEON_LABYRINTH_DESIGN.md). Do **not** mark it complete based on existing Rival Rush headliners.
+
+- [ ] First-time testers complete real platforming routes with satisfying control, safe landings, checkpoints and fun deliberate obstacles (not merely survive spawn quotas).
+- [ ] A player encounters a meaningful locked side route, earns a **real traversal ability**, returns through a previously visited area and now opens a shortcut/secret.
+- [ ] A seed-controlled run offers different safe choices across attempts, with every ability-state graph valid and a genuine finish.
+- [ ] One thematic stage boss and the **actual final boss** are defeated through readable, movement-centric, multi-phase interactions in native gameplay.
+- [ ] Win/fail/retry/restart/rejoin/dedicated server/cleanup do not duplicate unlocks, delete Minecraft inventory, strand players, or regress old Rival Rush.
+- [ ] Exact-build media demonstrates **full level → unlock → backtrack → stage boss → final boss → safe return**, with outside assessments of movement fun, map comprehension, spectacle and replay intent.
+
 ## Required event trials to prioritize
 
 1. **Gabberina's surprising rival encore** after legitimate control-gated event, especially original high-energy choreography and distinct jumpstyle/gabber/hardtekk identity.

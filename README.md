@@ -15,6 +15,12 @@ JetSetCraft turns ordinary Minecraft terrain into a momentum-first street sports
 
 **[Read the canonical encounter vision](wiki/Encounter-North-Star-Beyond-Minecraft.md)** · **[Operational acceptance scorecard](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/ENCOUNTER_NORTH_STAR_ACCEPTANCE.md)** · [What is actually shipped](wiki/Release-Status.md).
 
+## Planned separate mode: Neon Labyrinth (working title)
+
+**Owner-approved new mode goal, not yet implemented:** a full **platformer + Metroidvania + roguelike adventure** with memorable authored skating/parkour levels, interconnected regions and ability-gated shortcuts, run-to-run variation, exciting level-end bosses and a climactic final boss. It must be a **separate opt-in activity**, not a renaming of Rival Rush's existing six-room combat Arena circuit. Name, level roster, abilities and boss identities remain proposals.
+
+[Neon Labyrinth mode wiki](wiki/Neon-Labyrinth-Platformer-Metroidvania-Roguelike.md) · [Engineering handoff](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/modes/NEON_LABYRINTH_DESIGN.md) · [Implementation issue #65](https://github.com/Herbertofury/JetSetCraft/issues/65) · [Current Rival Rush](wiki/Rival-Rush.md).
+
 ## What ships in v0.3.0
 
 - Six persistent ride styles: inline skates, quad skates, street board, BMX, hoverboard, and scooter.

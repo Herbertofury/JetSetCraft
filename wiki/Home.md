@@ -15,6 +15,10 @@
 
 [**Read the top-level encounter vision and quality gates →**](Encounter-North-Star-Beyond-Minecraft) · [Proof-gated developer checklist](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/ENCOUNTER_NORTH_STAR_ACCEPTANCE.md) · [Current release state](Release-Status).
 
+## 🎮 Planned adventure mode — Neon Labyrinth (working title)
+
+**New owner-approved goal, NOT shipped:** an optional original **platformer × Metroidvania × roguelike** JetSetCraft mode with real handcrafted levels, revisitable ability-locked connections, varied runs, stage bosses and a spectacular final boss. Different from existing Rival Rush: this is **exploration-and-platforming first**, not only arena combat. [Full proposed design](Neon-Labyrinth-Platformer-Metroidvania-Roguelike) · [Issue #65](https://github.com/Herbertofury/JetSetCraft/issues/65) · [Existing Rival Rush](Rival-Rush).
+
 ## ✨ Start here
 
 | I want to… | Go here |
@@ -27,6 +31,7 @@
 | Build tricks, combos, transfers, and Flow | **[Tricks, Combos & Flow](Tricks-Combos-and-Flow)** |
 | Paint tags, create custom art, or use Free Paint | **[Graffiti](Graffiti)** |
 | Choose an isolated skating roguelite session or an arena circuit | **[Rival Rush](Rival-Rush)** — merged and verified `0.4.0-alpha.7` |
+| Explore fun platforming levels, unlock Metroidvania routes, and defeat end bosses | **[Neon Labyrinth](Neon-Labyrinth-Platformer-Metroidvania-Roguelike)** — **planned separate mode, not yet playable** |
 | Pod-drop into a rival district, recover research and extract on skates | **[Liberty Grind](Liberty-Grind)** — current development implementation |
 | Build a house, develop crew profiles and send dispatch jobs | **[Player Chapters and Crew Houses](Player-Chapters-Posse-and-Mob-Archetypes)** |
 | Browse games, music, art and engineering inspiration | **[Inspiration & Research](Inspiration-and-Research)** |

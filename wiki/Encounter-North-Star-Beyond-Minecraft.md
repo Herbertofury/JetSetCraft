@@ -73,6 +73,10 @@ Use the detailed [**Encounter Experience North Star — Acceptance Scorecard**](
 - **Safety and recovery:** prove opt-out/decline, reduced motion/flash, mute, spectators, multiplayer disconnection/rejoin, failure, retry, save/load, overlay cleanup, world-state restoration, and rights-cleared fallback. No success claims without recorded evidence.
 - **Competitive audit:** side-by-side *playable* movement, feeling, onboarding, expression, replay value and production finish against target reference games when accessible. Record specific wins/losses and iterate until neither a cooler trailer nor a mocked effect can pass as a gameplay-quality gain.
 
+## Additional flagship experience: a real adventure platformer (owner-approved goal, 2026-11-15)
+
+Beyond individual gang battles, JetSetCraft must eventually offer a separate, *fully playable* **platformer + Metroidvania + roguelike** mode with satisfying authored levels, vertical skating/parkour routes, secrets, traversal upgrades that open shortcuts in earlier areas, varied runs, memorable stage-end bosses and a final boss worth mastering. The proposed [**Neon Labyrinth**](Neon-Labyrinth-Platformer-Metroidvania-Roguelike) is a working-title design, not a shipped menu choice. It must pass the same [evidence-gated experience QA](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/ENCOUNTER_NORTH_STAR_ACCEPTANCE.md): fun and responsive *even muted*, unique character/stage identity, clean world recovery, accessibility, legal music and real blind player tests. [Tracked in issue #65](https://github.com/Herbertofury/JetSetCraft/issues/65).
+
 ## Delivery ladder
 
 1. **Playable signature vertical slice:** one human-crew or mob-crew rivalry in an existing safe terrain/arena, with real skating, coherent art, real crew animation, responsive reactions, original/cleared music and repeatable scoring.

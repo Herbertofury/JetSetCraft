@@ -269,6 +269,12 @@ Use biome-native materials, layered temporary geometry, underwater capability ch
 All entries are requirements/proposals until implementation and exact-build native evidence exist.
 
 
+## Integrated platformer / Metroidvania / roguelike mode with bosses — separate approved goal
+
+**Owner update (2026-11-15):** The existing runner and crate/coin platform stages below are **individual design proposals**, not a complete interconnected platformer/Metroidvania/roguelike. The owner additionally requires a **distinct adventure mode** with *fun levels, ability-gated exploration/backtracking, roguelike replayability, and actual level-ending/final bosses*. See the proposed [**Neon Labyrinth** working-title mode](Neon-Labyrinth-Platformer-Metroidvania-Roguelike), [technical run graph/level/boss specification](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/modes/NEON_LABYRINTH_DESIGN.md) and [implementation issue #65](https://github.com/Herbertofury/JetSetCraft/issues/65).
+
+Share this page's safe level-module/topology, biome/collision, reversible staging and boss-arena research. Do **not** turn existing flat timed combat rooms into a fake Metroidvania, copy other platformer levels, or expose a menu entry without real game tests. The mode has **not** been implemented.
+
 ## Runner and crate-collecting platformer modes
 
 **Explicit owner direction:** add modes inspired by Temple Run and Subway Surfers, plus Crash Bandicoot-style platforming that combines destroying boxes and collecting a substantial amount of coins. Adapt these ideas into original JetSetCraft skating challenges, alongside the other objective and combat modes. No copied characters, levels or assets are implied.

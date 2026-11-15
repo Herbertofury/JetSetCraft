@@ -1,5 +1,18 @@
 # Roadmap
 
+## Owner-approved new mode: platformer + Metroidvania + roguelike (2026-11-15)
+
+**A separate JetSetCraft adventure mode is required:** truly fun skating/platforming levels, meaningful exploration and backtracking after unlocking traversal techniques, variable roguelike runs and unforgettable end-of-level and final bosses. **Neon Labyrinth** is a provisional title, not a finalized canon name. This is distinct from Rival Rush's existing **six-stop combat Arena circuit with room-three and room-six headliners**, and from earlier runner/coin-platformer mode proposals. **Not implemented or verified playable.**
+
+**[Full mode definition](Neon-Labyrinth-Platformer-Metroidvania-Roguelike)** · **[Technical design](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/modes/NEON_LABYRINTH_DESIGN.md)** · **[Implementation checklist and tracking #65](https://github.com/Herbertofury/JetSetCraft/issues/65)**.
+
+- [ ] Add separate, clearly labelled optional game-mode entry and safe return; preserve Rival Rush, Liberty Grind and ordinary Minecraft state.
+- [ ] Make one extraordinary hand-authored 3D platforming vertical slice, not random block jumps; prove movement, checkpoint, collectibles, secrets and replay are fun in a native client.
+- [ ] Implement real connected Metroidvania regions, acquired traversal abilities, an initially visible gate, useful backtracking and a graph-level guarantee that no run gets stuck.
+- [ ] Add distinct level-end bosses with legible multi-phase mechanics and a full final-boss climax; victory must be server-confirmed and earn a real event result.
+- [ ] Add deterministic procedural variation and run-scoped build choices **without** losing authored level design, permanent legitimate crew progression or original-world safety.
+- [ ] Test full run, loss/retry, accessibility, solo/multiplayer, optional providers absent, real frame/network performance and crash/rejoin on the exact client and dedicated server before claiming "playable."
+
 ## Ultimate owner-approved encounter vision — beyond the feeling of Minecraft (2026-11-15)
 
 **Highest-level experiential target:** make major JetSetCraft events so outrageously beautiful, kinetic, musical, fun, responsive and replayable that the player feels transported into an original premium **Jet Set Radio / HYPERFUNK-class** action-and-street-culture game. The **goal is to surpass those reference feelings through original work**, not just sprinkle effects over a Minecraft minigame. This is **aspiration, not shipped quality**. Minecraft remains physically compatible and intact before/after the event.

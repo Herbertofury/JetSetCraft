@@ -22,6 +22,12 @@ Rival Rush is an optional JetSetCraft activity: a separate skating, paint-combat
 
 Source observations are separated from JetSetCraft recommendations. All locally chosen timings, thresholds, and rewards are **unvalidated tuning values**, except that approximately thirty minutes is the user's requested session target. No reference game was installed or played for this research, and linked videos were not treated as personally watched playtests.
 
+## New owner request: separate platformer / Metroidvania / roguelike adventure mode
+
+**2026-11-15:** The owner also wants JetSetCraft to feature an optional mode with **fun platforming levels, genuine Metroidvania route/backtrack/traversal unlocks, roguelike variation and true end bosses**. **Neon Labyrinth** is the provisional name; this is **NOT a feature of the currently implemented Rival Rush alpha**, which has a six-room combat Arena circuit with headliners. Link: [new mode technical specification](modes/NEON_LABYRINTH_DESIGN.md) · [mode wiki](../wiki/Neon-Labyrinth-Platformer-Metroidvania-Roguelike.md) · [issue #65](https://github.com/Herbertofury/JetSetCraft/issues/65).
+
+Re-use Rush's proven state/level building, optional mod contracts and return protection where appropriate, but create a separate mode identity and graph/boss acceptance. Do not silently change Rush's combat/time/reward rules or present unimplemented platformer maps as shipped gameplay.
+
 ## 0. What this change implements, and what remains a proposal
 
 ### Current alpha.7: optional room goals and earned Pit stops

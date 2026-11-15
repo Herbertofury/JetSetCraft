@@ -67,6 +67,12 @@ Selecting a learned, available style is free and grants **exactly one rank** at 
 
 You can change your choice away from home, including before founding, after finishing any active street game or Rush. Firebolt relay needs its provider/API both to be selected and to apply. If that provider later disappears, the saved choice remains and the next run falls back to an eligible house preparation, or the ordinary build. **All available artifact families remain in normal run drafts from the start**; learning a style unlocks a deliberate starting choice. [The crew guide lists every lesson and threshold](Player-Chapters-Posse-and-Mob-Archetypes#style-library-every-modes-xp-helps-the-next-run).
 
+## Separate upcoming adventure mode — Neon Labyrinth (design only)
+
+The owner additionally requested a distinct **platformer + Metroidvania + roguelike mode** with fun real levels, interlocking areas revisited after earning movement upgrades, stage-ending bosses and a proper climactic final boss. [**Neon Labyrinth**](Neon-Labyrinth-Platformer-Metroidvania-Roguelike) is a **working title, not final canon**. [Tracking / full implementation checklist](https://github.com/Herbertofury/JetSetCraft/issues/65).
+
+**Do not label the existing six-room Arena circuit as this completed mode.** This page documents working arena combat challenges, branching choices and headliners at rooms three and six; those are useful infrastructure, **not** a connected platformer exploration map with stateful traversal gates and authored final boss progression. The new mode must have separate opt-in entry/run state and share only proved-safe services (return recovery, controlled stage building, server authority, score/crew receipts), without regressing existing Rush/Free streets behavior. No playable Neon Labyrinth code is claimed.
+
 ## Arena circuit: choose, ride, clear, collect
 
 Rush setup has two play styles. **Free streets** retains the thirty-minute/Endless district. **Arena circuit** gives a six-stop journey; a Boombox Rival Rush invitation starts this circuit. At each fork, choose one of up to three profiles showing the reward, size and duration, then skate along the generated nine-block-wide connection to the next room. The HUD shows route progress, distance and the current combat objective.

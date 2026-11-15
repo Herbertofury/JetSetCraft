@@ -1,0 +1,101 @@
+{
+  "schema_version": 1,
+  "record_type": "jetsetcraft_owner_requested_game_mode_design_proposal",
+  "status": "design_backlog_only_not_runtime_registered_not_playable",
+  "owner_request_date": "2026-11-15",
+  "owner_approved_goal": {
+    "description": "JetSetCraft should also have a distinct mode with fun levels and end bosses, combining platformer, Metroidvania and roguelike play.",
+    "genre_pillars": [
+      "3D skating platformer with fun authored levels",
+      "Metroidvania world connectivity, exploration, backtracking and traversal gating",
+      "Roguelike/roguelite run variation and meaningful replay",
+      "real level-end bosses and a climactic final boss"
+    ]
+  },
+  "proposed_working_title": "Neon Labyrinth",
+  "name_is_canonical": false,
+  "proposed_id": "jetsetcraft:neon_labyrinth",
+  "proposed_id_runtime_registered": false,
+  "separate_from": [
+    "jetsetcraft:rival_rush",
+    "jetsetcraft:liberty_grind",
+    "normal Minecraft adventure and survival"
+  ],
+  "relevant_existing_sources": [
+    "wiki/Rival-Rush.md",
+    "docs/RIVAL_RUSH_DESIGN.md",
+    "wiki/Terrain‐Aware-Event-Circuits-and-Boss-Arenas.md",
+    "wiki/Encounter-North-Star-Beyond-Minecraft.md"
+  ],
+  "proposed_level_modules": [
+    {
+      "id": "rail_garden",
+      "purpose": "teach responsive skating platforming; hub with a visible future shortcut",
+      "role": "entry",
+      "status": "illustrative_only"
+    },
+    {
+      "id": "crosswire_towers",
+      "purpose": "vertical exploration plus acquiring a run-local traversal unlock",
+      "role": "branch",
+      "status": "illustrative_only"
+    },
+    {
+      "id": "chromatic_caves",
+      "purpose": "interconnected secret/backtrack routes and a true stage-ending boss",
+      "role": "stage_boss",
+      "status": "illustrative_only"
+    },
+    {
+      "id": "skybridge_or_flooded_venue",
+      "purpose": "different authored seeded paths with actual movement support prerequisites",
+      "role": "variant_region",
+      "status": "illustrative_only"
+    },
+    {
+      "id": "signal_spire",
+      "purpose": "final route and multi-phase boss testing earned traversal skills",
+      "role": "finale",
+      "status": "illustrative_only"
+    }
+  ],
+  "mandatory_run_features": [
+    "explicit optional mode selection",
+    "seeded stage graph with meaningful room connections",
+    "stateful room and ability gate reachability",
+    "authored platforming, checkpoints, secrets and backtracking",
+    "run-scoped traversal unlocks and separate persistent progression",
+    "genuine stage end boss and multi-phase final boss",
+    "server-owned completion, failure, awards and replay",
+    "safe return and cleanup with no world/inventory/provider damage",
+    "solo first and multiplayer/accessibility validation",
+    "original assets and rights-cleared event-only audio"
+  ],
+  "proposed_lifecycle": [
+    "preview",
+    "reserve",
+    "enter",
+    "explore",
+    "unlock_and_backtrack",
+    "stage_boss",
+    "repeat_stages",
+    "final_boss",
+    "won_or_failed",
+    "return",
+    "cleanup"
+  ],
+  "start_implementation_allowed_only_after_design_review": true,
+  "runtime_status": {
+    "mode_registered": false,
+    "menu_entry_enabled": false,
+    "level_graph_implemented": false,
+    "metroidvania_gates_implemented": false,
+    "end_bosses_implemented": false,
+    "fully_playable": false
+  },
+  "links": {
+    "issue": "https://github.com/Herbertofury/JetSetCraft/issues/65",
+    "mode_wiki": "wiki/Neon-Labyrinth-Platformer-Metroidvania-Roguelike.md",
+    "engineering_handoff": "docs/modes/NEON_LABYRINTH_DESIGN.md"
+  }
+}
