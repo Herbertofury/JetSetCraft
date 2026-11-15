@@ -94,6 +94,10 @@ public final class CrewProfile {
         if (ResourceLocation.tryParse(gangId) == null || (!reputations.containsKey(gangId) && reputations.size() >= 512)) return;
         reputations.put(gangId, (int) Math.max(0L, Math.min(10_000L, (long) reputation(gangId) + amount)));
     }
+    public boolean hasCharacter(String characterId) {
+        return members.values().stream().anyMatch(member -> member.species.equals(characterId));
+    }
+
     void addMember(String name, String species, String gangId, CrewMissionCatalog.Role role) {
         if (members.size() >= capacity()) return;
         UUID memberId = UUID.randomUUID();

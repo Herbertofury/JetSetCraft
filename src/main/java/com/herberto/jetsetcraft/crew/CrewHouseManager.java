@@ -192,8 +192,8 @@ public final class CrewHouseManager {
                 if (number < 0 || number >= CrewMissionCatalog.Role.values().length || !recruitPool(player, profile).contains(value))
                     return "Choose a currently available species and role from the ledger.";
                 CrewMissionCatalog.Role role = CrewMissionCatalog.Role.values()[number];
-                profile.addMember(role.label + " " + (profile.members.size() + 1), value,
-                        GangRegistry.gangIdForEntity(id(value)).toString(), role);
+                profile.addMember(NamedCrewRecruits.name(value).orElse(role.label + " " + (profile.members.size() + 1)), value,
+                        NamedCrewRecruits.affiliation(value).orElseGet(() -> GangRegistry.gangIdForEntity(id(value)).toString()), role);
                 profile.addSupplies(-cost); profile.changed(); return "A new roster member joined. Members are mission profiles in this first slice, not follower mobs.";
             }
             case "rename_member" -> {
@@ -571,6 +571,7 @@ public final class CrewHouseManager {
     private static int recruitmentCost(CrewProfile profile) { return Math.max(20, 20 + profile.members.size() * 5 - recruitmentDiscount(profile)); }
     private static LinkedHashSet<String> recruitPool(ServerPlayer player, CrewProfile profile) {
         LinkedHashSet<String> result = new LinkedHashSet<>();
+        if (!profile.hasCharacter(NamedCrewRecruits.LUCY)) result.add(NamedCrewRecruits.LUCY);
         String representative = representative(profile.gang); if (availableSpecies(representative)) result.add(representative);
         for (int offset = 0; offset < 400 && result.size() < 64; offset += 100) {
             List<RushAlbum.Entry> page = RushAlbum.entries(player, offset, 100);
@@ -590,6 +591,7 @@ public final class CrewHouseManager {
                 .map(ResourceLocation::toString).filter(CrewHouseManager::availableSpecies).sorted().findFirst().orElse("minecraft:villager");
     }
     private static String speciesName(String entity) {
+        if (NamedCrewRecruits.name(entity).isPresent()) return NamedCrewRecruits.name(entity).get();
         EntityType<?> type = id(entity) == null ? null : ForgeRegistries.ENTITY_TYPES.getValue(id(entity));
         return type == null ? "Unavailable creature (profile retained)" : type.getDescription().getString();
     }

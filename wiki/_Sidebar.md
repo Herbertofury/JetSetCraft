@@ -75,3 +75,5 @@
 - [🗺️ Roadmap](Roadmap)
 
 - [Grinions and AMYGDALA](Grinions-and-AMYGDALA) — identities, rare-variant policy, selected music and remaining native gates.
+
+- [Lucy Lacemaker](Lucy-Lacemaker) — named mission roster candidate and pending appearance gates.
