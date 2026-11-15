@@ -1,0 +1,28 @@
+{
+  "title": "MANETTI",
+  "artist": "DJ FENT",
+  "album": "MANETTI",
+  "sound_event": "jetsetcraft:licensed/gabberinas_manetti_dj_fent",
+  "audio_resource": "jetsetcraft:sounds/music/licensed/gabberinas_manetti_dj_fent.ogg",
+  "contexts": [
+    "rush"
+  ],
+  "volume": 0.65,
+  "source_url": "https://open.spotify.com/track/2a7XrecNI13lQdGl7NqJyU?si=c64d7af836be4e4c",
+  "spotify_track_id": "2a7XrecNI13lQdGl7NqJyU",
+  "original_release_date": "2026-08-14",
+  "label": "void.",
+  "source_version_notes": "2026 one-track single, 1:31, void.; preserve exact Spotify ID (not variants)",
+  "listed_duration": "1:31",
+  "artist_references": [
+    "https://open.spotify.com/intl-fr/album/1vsheQ9CizrJKY562gC3cu",
+    "https://www.qobuz.com/no-en/interpreter/dj-fent/27331405"
+  ],
+  "gang_id": "jetsetcraft:gabberinas",
+  "intended_placement": "Gabberina's ONLY, and only after gang-scoped audio picker exists; not global Rush, not Phonkistas",
+  "owner_reference_id": "GAB-MUSIC-005",
+  "owner_priority": "exceptional_personal_favorite",
+  "exact_spotify_isrc_status": "not_verified",
+  "recording_status": "awaiting_authorized_audio",
+  "rights_status": "sync_and_distribution_not_verified; no_copyrighted_audio_bundled"
+}

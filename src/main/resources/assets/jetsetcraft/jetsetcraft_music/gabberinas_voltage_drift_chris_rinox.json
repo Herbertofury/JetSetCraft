@@ -1,0 +1,31 @@
+{
+  "title": "Voltage Drift",
+  "artist": "Chris Rinox",
+  "album": "Raw Trax, Vol. 1",
+  "sound_event": "jetsetcraft:licensed/gabberinas_voltage_drift_chris_rinox",
+  "audio_resource": "jetsetcraft:sounds/music/licensed/gabberinas_voltage_drift_chris_rinox.ogg",
+  "contexts": [
+    "rush"
+  ],
+  "volume": 0.65,
+  "source_url": "https://open.spotify.com/track/3dVdFsp8zJjpoxb5F2avXO?si=035820cde15b4347",
+  "spotify_track_id": "3dVdFsp8zJjpoxb5F2avXO",
+  "original_release_date": "2025-08-22",
+  "label": "Rhakz Rec.",
+  "source_version_notes": "2025 Rhakz Rec. hard-techno track. Beatport lists original mix on Raw Trax, Vol. 1 released 2025-08-22, 146 BPM, ~5:48; official label Bandcamp has a 2025-08-10 listing of 5:38. Exact Spotify edition/length/ISRC must be checked; do not silently substitute a different master or edit.",
+  "reported_bpm": 146,
+  "reported_bpm_source": "https://www.beatport.com/track/voltage-drift/21123093",
+  "bpm_status": "retailer_metadata_not_beat_map_verified",
+  "artist_references": [
+    "https://www.beatport.com/track/voltage-drift/21123093",
+    "https://rhakz-records.bandcamp.com/album/various-artists",
+    "https://music.amazon.in/albums/B0FM3KW62G"
+  ],
+  "gang_id": "jetsetcraft:gabberinas",
+  "intended_placement": "Gabberina's ONLY, and only after gang-scoped audio picker exists; not global Rush, not Phonkistas",
+  "owner_reference_id": "GAB-MUSIC-006",
+  "owner_priority": "owner_must_add",
+  "exact_spotify_isrc_status": "not_verified",
+  "recording_status": "awaiting_authorized_audio",
+  "rights_status": "sync_and_distribution_not_verified; no_copyrighted_audio_bundled"
+}

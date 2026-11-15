@@ -11,9 +11,14 @@
     ],
     "owner_selection_date": "2026-11-15",
     "explicit_new_must_add_ids": [
-      "GAB-MUSIC-004"
+      "GAB-MUSIC-004",
+      "GAB-MUSIC-005",
+      "GAB-MUSIC-006"
     ],
-    "previous_phonkistas_correction": "Earlier Warpath - Redforce was redirected by owner to Phonkistas, NOT Gabberina's. Do not transfer it back."
+    "previous_phonkistas_correction": "Warpath by Redforce remains selected for Phonkistas only; do not transfer it to Gabberina's.",
+    "favorite_must_add_ids": [
+      "GAB-MUSIC-005"
+    ]
   },
   "previous_owner_song_references": [
     {
@@ -73,6 +78,74 @@
       "beat_map_and_timing": "not_analyzed",
       "recording_master_status": "not_supplied",
       "sync_and_redistribution_rights_status": "not_verified",
+      "in_game_playback_status": "not_integrated"
+    },
+    {
+      "reference_id": "GAB-MUSIC-005",
+      "title": "MANETTI",
+      "artist": "DJ FENT",
+      "spotify_track_id": "2a7XrecNI13lQdGl7NqJyU",
+      "owner_supplied_url": "https://open.spotify.com/track/2a7XrecNI13lQdGl7NqJyU?si=c64d7af836be4e4c",
+      "owner_selection_date": "2026-11-15",
+      "is_owner_approved": true,
+      "assignment": "gabberinas_only",
+      "owner_priority": "exceptional_personal_favorite",
+      "owner_wording": "200% love this one for gabberina's",
+      "album": "MANETTI",
+      "label": "void.",
+      "digital_release_date": "2026-08-14",
+      "source_version_notes": "2026 one-track single, 1:31, void.; preserve exact Spotify ID (not variants)",
+      "verification_sources": [
+        "https://open.spotify.com/intl-fr/album/1vsheQ9CizrJKY562gC3cu",
+        "https://www.qobuz.com/no-en/interpreter/dj-fent/27331405"
+      ],
+      "proposed_use": [
+        "Gabberina's signature entrance candidate",
+        "high-energy rival challenge",
+        "short-form jumpstyle/hardtekk dance/skate run",
+        "crew-scoped radio"
+      ],
+      "genre_note": "Electronic/tekno direction; don't claim waveform-verified exact substyle",
+      "listed_duration": "1:31",
+      "exact_spotify_isrc_and_master_status": "not_verified",
+      "exact_beat_grid_cues_choreography": "not_analyzed",
+      "authorized_recording_source": "not_supplied",
+      "synchronization_and_distribution_rights": "not_verified",
+      "in_game_playback_status": "not_integrated"
+    },
+    {
+      "reference_id": "GAB-MUSIC-006",
+      "title": "Voltage Drift",
+      "artist": "Chris Rinox",
+      "spotify_track_id": "3dVdFsp8zJjpoxb5F2avXO",
+      "owner_supplied_url": "https://open.spotify.com/track/3dVdFsp8zJjpoxb5F2avXO?si=035820cde15b4347",
+      "owner_selection_date": "2026-11-15",
+      "is_owner_approved": true,
+      "assignment": "gabberinas_only",
+      "owner_priority": "owner_must_add",
+      "owner_wording": "for gabberina's",
+      "album": "Raw Trax, Vol. 1",
+      "label": "Rhakz Rec.",
+      "digital_release_date": "2025-08-22",
+      "source_version_notes": "2025 Rhakz Rec. hard-techno track. Beatport lists original mix on Raw Trax, Vol. 1 released 2025-08-22, 146 BPM, ~5:48; official label Bandcamp has a 2025-08-10 listing of 5:38. Exact Spotify edition/length/ISRC must be checked; do not silently substitute a different master or edit.",
+      "verification_sources": [
+        "https://www.beatport.com/track/voltage-drift/21123093",
+        "https://rhakz-records.bandcamp.com/album/various-artists",
+        "https://music.amazon.in/albums/B0FM3KW62G"
+      ],
+      "proposed_use": [
+        "driving long-form skate route",
+        "technical rhythm/dance challenge",
+        "rival battle",
+        "crew-scoped radio"
+      ],
+      "genre_note": "Hard techno, not falsely called a traditional gabber recording; approved for Gabberina's owner's jumpstyle + gabber + hardtekk blend",
+      "beatport_bpm_reference": 146,
+      "beatport_key_reference": "D minor (retailer metadata, not audio-verified)",
+      "exact_spotify_isrc_and_master_status": "not_verified",
+      "exact_beat_grid_cues_choreography": "not_analyzed",
+      "authorized_recording_source": "not_supplied",
+      "synchronization_and_distribution_rights": "not_verified",
       "in_game_playback_status": "not_integrated"
     }
   ],
