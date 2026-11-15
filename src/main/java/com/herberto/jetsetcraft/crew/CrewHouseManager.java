@@ -571,12 +571,14 @@ public final class CrewHouseManager {
     private static int recruitmentCost(CrewProfile profile) { return Math.max(20, 20 + profile.members.size() * 5 - recruitmentDiscount(profile)); }
     private static LinkedHashSet<String> recruitPool(ServerPlayer player, CrewProfile profile) {
         LinkedHashSet<String> result = new LinkedHashSet<>();
-        if (!profile.hasCharacter(NamedCrewRecruits.LUCY)) result.add(NamedCrewRecruits.LUCY);
         String representative = representative(profile.gang); if (availableSpecies(representative)) result.add(representative);
         for (int offset = 0; offset < 400 && result.size() < 64; offset += 100) {
             List<RushAlbum.Entry> page = RushAlbum.entries(player, offset, 100);
             for (RushAlbum.Entry card : page) { if (result.size() < 64 && availableSpecies(card.entityId())) result.add(card.entityId()); }
             if (page.size() < 100) break;
+        }
+        for (NamedCrewRecruits.Entry entry : NamedCrewRecruits.all()) {
+            if (!profile.hasCharacter(entry.characterId())) result.add(entry.id());
         }
         return result;
     }

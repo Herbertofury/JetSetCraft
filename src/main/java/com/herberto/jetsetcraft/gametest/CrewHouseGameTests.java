@@ -226,6 +226,27 @@ public final class CrewHouseGameTests {
         helper.succeed();
     }
 
+    @GameTest(template = "hoverboard_empty", timeoutTicks = 100)
+    public static void scpVariantRecruitmentSharesCanonicalIdentity(GameTestHelper helper) {
+        BlockPos anchor = freeAnchor(helper, 20000);
+        ServerPlayer owner = player(helper, "scp", anchor);
+        CrewProfile home = found(owner, anchor);
+        reward(owner);
+        action(owner, home, "recruit", "jetsetcraft:scp_682_femboy", null);
+        check(home.hasCharacter("jetsetcraft:scp_682") && home.hasCharacter("jetsetcraft:scp_682_female"),
+                "Variant did not reserve the same canonical character identity");
+        CompoundTag saved = home.save();
+        check(saved.getList("Members", Tag.TAG_COMPOUND).getCompound(2).getString("Gang").equals("jetsetcraft:scp"),
+                "SCP variant lost gang affiliation");
+        CrewProfile loaded = CrewProfile.load(saved);
+        check(loaded != null && loaded.hasCharacter("jetsetcraft:scp_682"), "Reload lost canonical variant identity");
+        ListTag offers = CrewHouseManager.snapshot(owner).getList("Recruits", Tag.TAG_COMPOUND);
+        for (int i = 0; i < offers.size(); i++)
+            check(!offers.getCompound(i).getString("Id").startsWith("jetsetcraft:scp_682"),
+                    "Already-recruited character remained available as another variant");
+        helper.succeed();
+    }
+
     private static CrewProfile found(ServerPlayer owner, BlockPos anchor) {
         owner.serverLevel().setBlockAndUpdate(anchor.below(), Blocks.STONE.defaultBlockState());
         owner.serverLevel().setBlockAndUpdate(anchor, ModBlocks.BOOMBOX.get().defaultBlockState());

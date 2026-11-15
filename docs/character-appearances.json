@@ -1,0 +1,167 @@
+{
+  "schema": 1,
+  "checked": "2026-11-15",
+  "status_vocabulary": [
+    "planned",
+    "in_development",
+    "playable_verified"
+  ],
+  "characters": [
+    {
+      "id": "jetsetcraft:scp_1471_a",
+      "memories_id": "core-malo",
+      "gang": "jetsetcraft:scp",
+      "source": "https://scp-wiki.wikidot.com/scp-1471",
+      "attribution": [
+        "LurkD"
+      ],
+      "article_license": "CC BY-SA 3.0",
+      "article_license_url": "https://creativecommons.org/licenses/by-sa/3.0/",
+      "requested_variants": [
+        "female",
+        "femboy"
+      ],
+      "variants_are_canonical": false,
+      "status": "in_development",
+      "scope": "Abstract mission roster only; no world appearance",
+      "visual_asset_rights": "Unverified; text license does not establish image/model rights",
+      "assets_imported": false
+    },
+    {
+      "id": "jetsetcraft:scp_682",
+      "memories_id": "core-scp-682",
+      "gang": "jetsetcraft:scp",
+      "source": "https://scp-wiki.wikidot.com/scp-682",
+      "attribution": [
+        "Dr Gears",
+        "Epic Phail Spy"
+      ],
+      "article_license": "CC BY-SA 3.0",
+      "article_license_url": "https://creativecommons.org/licenses/by-sa/3.0/",
+      "requested_variants": [
+        "female",
+        "femboy"
+      ],
+      "variants_are_canonical": false,
+      "status": "in_development",
+      "scope": "Abstract mission roster only; no world appearance",
+      "visual_asset_rights": "Unverified; text license does not establish image/model rights",
+      "assets_imported": false
+    },
+    {
+      "id": "jetsetcraft:scp_049",
+      "memories_id": "core-scp-049",
+      "gang": "jetsetcraft:scp",
+      "source": "https://scp-wiki.wikidot.com/scp-049",
+      "attribution": [
+        "Gabriel Jade",
+        "djkaktus (rewrite with Gabriel Jade)"
+      ],
+      "article_license": "CC BY-SA 3.0",
+      "article_license_url": "https://creativecommons.org/licenses/by-sa/3.0/",
+      "requested_variants": [
+        "female",
+        "femboy"
+      ],
+      "variants_are_canonical": false,
+      "status": "in_development",
+      "scope": "Abstract mission roster only; no world appearance",
+      "visual_asset_rights": "Unverified; text license does not establish image/model rights",
+      "assets_imported": false
+    },
+    {
+      "id": "jetsetcraft:scp_173",
+      "memories_id": "core-scp-173",
+      "gang": "jetsetcraft:scp",
+      "source": "https://scp-wiki.wikidot.com/scp-173",
+      "attribution": [
+        "Moto42"
+      ],
+      "article_license": "CC BY-SA 3.0",
+      "article_license_url": "https://creativecommons.org/licenses/by-sa/3.0/",
+      "requested_variants": [
+        "female",
+        "femboy"
+      ],
+      "variants_are_canonical": false,
+      "status": "in_development",
+      "scope": "Abstract mission roster only; no world appearance",
+      "visual_asset_rights": "Unverified; text license does not establish image/model rights",
+      "assets_imported": false
+    },
+    {
+      "id": "jetsetcraft:scp_939",
+      "memories_id": "core-scp-939",
+      "gang": "jetsetcraft:scp",
+      "source": "https://scp-wiki.wikidot.com/scp-939",
+      "attribution": [
+        "Adam Smascher",
+        "EchoFourDelta"
+      ],
+      "article_license": "CC BY-SA 3.0",
+      "article_license_url": "https://creativecommons.org/licenses/by-sa/3.0/",
+      "requested_variants": [
+        "female",
+        "femboy"
+      ],
+      "variants_are_canonical": false,
+      "status": "in_development",
+      "scope": "Abstract mission roster only; no world appearance",
+      "visual_asset_rights": "Unverified; text license does not establish image/model rights",
+      "assets_imported": false
+    },
+    {
+      "id": "jetsetcraft:pomni",
+      "memories_id": "core-pomni",
+      "gang": "jetsetcraft:honkistas",
+      "source": "https://www.glitchprod.com/digital-circus",
+      "attribution": [
+        "Gooseworx",
+        "GLITCH"
+      ],
+      "status": "in_development",
+      "scope": "Abstract mission roster only; no world appearance",
+      "visual_asset_rights": "Unverified; FENNAH/Skashi permission does not apply",
+      "assets_imported": false
+    },
+    {
+      "user_supplied_name": "Roku, God of Nothing",
+      "source": "https://smutba.se/project/28cddf28-acbe-4b4f-8dab-9af05b71fe5a/",
+      "status": "planned",
+      "identity_verified": false,
+      "model_license": null,
+      "assets_imported": false,
+      "limitation": "Model site challenge; no bypass, download, inferred franchise or reuse approval",
+      "memories_id": "core-roku",
+      "memories_mapping_status": "proposed; catalog publication pending"
+    },
+    {
+      "user_supplied_name": "Shion",
+      "source": "https://smutba.se/project/116fc1dd-d70a-44c9-87b7-dfdfafe05dce/",
+      "status": "planned",
+      "identity_verified": false,
+      "model_license": null,
+      "assets_imported": false,
+      "limitation": "Model site challenge; no bypass, download, inferred franchise or reuse approval",
+      "memories_id": "core-shion",
+      "memories_mapping_status": "proposed; catalog publication pending"
+    },
+    {
+      "user_supplied_name": "Talia Yang",
+      "user_supplied_franchise": "Cyberpunk 2077",
+      "status": "planned",
+      "identity_verified": false,
+      "official_source": "https://www.cyberpunk.net/en/edgerunners2",
+      "rights": "Unverified; no third-party assets imported",
+      "assets_imported": false,
+      "memories_id": "core-talia-yang",
+      "memories_mapping_status": "proposed; catalog publication pending",
+      "official_source_scope": "Names Talia; owner supplied full name Talia Yang",
+      "attribution": [
+        "CD PROJEKT RED",
+        "TRIGGER"
+      ],
+      "design_scope": "Nonsexual character appearance only"
+    }
+  ]
+}

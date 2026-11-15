@@ -95,7 +95,7 @@ public final class CrewProfile {
         reputations.put(gangId, (int) Math.max(0L, Math.min(10_000L, (long) reputation(gangId) + amount)));
     }
     public boolean hasCharacter(String characterId) {
-        return members.values().stream().anyMatch(member -> member.species.equals(characterId));
+        return members.values().stream().anyMatch(member -> java.util.Objects.equals(NamedCrewRecruits.characterId(member.species), NamedCrewRecruits.characterId(characterId)));
     }
 
     void addMember(String name, String species, String gangId, CrewMissionCatalog.Role role) {

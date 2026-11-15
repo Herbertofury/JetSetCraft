@@ -77,3 +77,5 @@
 - [Grinions and AMYGDALA](Grinions-and-AMYGDALA) — identities, rare-variant policy, selected music and remaining native gates.
 
 - [Lucy Lacemaker](Lucy-Lacemaker) — named mission roster candidate and pending appearance gates.
+
+- [SCP gang and character appearances](SCP-Gang-and-Character-Appearances) — named roster candidates, variant identity and rights-aware appearance backlog.
