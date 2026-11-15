@@ -1,0 +1,24 @@
+{
+  "title": "Bonjour (V'là les nouvelles)",
+  "artist": "Chagrin d'Amour",
+  "album": "Chagrin d'Amour",
+  "sound_event": "jetsetcraft:licensed/bananettas_bonjour_vla_les_nouvelles",
+  "audio_resource": "jetsetcraft:sounds/music/licensed/bananettas_bonjour_vla_les_nouvelles.ogg",
+  "contexts": [
+    "rush"
+  ],
+  "volume": 0.65,
+  "source_url": "https://open.spotify.com/track/1SwJzgDCwrpBGcvldOxDs1?si=7a971e22f4cd44b1",
+  "spotify_track_id": "1SwJzgDCwrpBGcvldOxDs1",
+  "edition_note": "Original song from Chagrin d'Amour's 1982 album (3:02 in album discography). Preserve exact owner-linked Spotify ID; streaming edition/ISRC and remaster status need independent verification.",
+  "gang_id": "jetsetcraft:bananettas",
+  "intended_placement": "BANANETTAS ONLY; metadata for future licensed source import, existing global rush player has no gang filter",
+  "owner_reference_id": "BANANETTAS-MUSIC-010",
+  "recording_status": "awaiting_authorized_audio",
+  "rights_status": "sync_and_redistribution_not_verified; no_audio_bundled",
+  "external_metadata_sources": [
+    "https://open.spotify.com/intl-fr/track/1SwJzgDCwrpBGcvldOxDs1",
+    "https://www.qobuz.com/ca-en/album/chagrin-damour-chagrin-damour/vz5kplg8znxjb",
+    "https://www.youtube.com/watch?v=fHy0l1v8Ym4"
+  ]
+}

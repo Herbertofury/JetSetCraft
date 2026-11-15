@@ -106,7 +106,7 @@ The importer accepts another metadata directory through `--catalogue`, so a proj
 
 - **BANANETTAS-MUSIC-001 · MUST ADD — "Le Banana Split" by Lio (1979):** Owner confirmed **Bananettas** as a distinct French-language bubblegum-pop/new-wave gang, with this track as its **first required selection**. Original short French-language single (~2:33) is the intended version; do not substitute the extended disco, English or later remix editions. Sources: [1979 single discography](https://www.encyclopedisque.fr/disque/65862.html) and [Spotify compilation listening reference, track 1](https://open.spotify.com/album/5m0ka2doYDeh54QWdkaxT3). The Spotify reference is not an exact owner-supplied track URL or verified identical master/ISRC. Songwriters Jay Alanski and Jacques Duvall (Hagen Dierks), production Marc Moulin (reconfirm final master credits). **Status:** song and crew concept documented; no acquired/installed recording, rights proof, beat chart, or in-game Bananettas runtime. See the [gang profile](../wiki/Bananettas.md) and [music library](../wiki/Music-Library.md#bananettas). The metadata-only catalogue entry is not a licensed audio asset; current global `rush` playback cannot supply gang affinity without code changes.
 
-### Six further owner-selected Bananettas recordings (added 2026-11-15)
+### Nine further owner-selected Bananettas recordings (added 2026-11-15)
 
 | ID | Identification | Supplied source | Import readiness |
 | --- | --- | --- | --- |
@@ -116,12 +116,15 @@ The importer accepts another metadata directory through `--catalogue`, so a proj
 | BANANETTAS-MUSIC-005 | Le Couleur — Discolombo | [Owner-provided link](https://open.spotify.com/search/Le%20Couleur%20Discolombo?utm_source=chatgpt.com) | Metadata-only stub available; no audio or rights |
 | BANANETTAS-MUSIC-006 | Yelle — Ce jeu | [Owner-provided link](https://open.spotify.com/track/2KjJhGtseXQBI5Cg6ZZdc9?si=724cd3db9a6d492f) | Metadata-only stub available; no audio or rights |
 | BANANETTAS-MUSIC-007 | Unresolved Spotify track ID; artist and title must be verified | [Owner-provided link](https://open.spotify.com/track/66TWIPMA0IMNofL3glOp6X?si=b08c5c42250448d8) | No metadata stub until credits are known |
+| BANANETTAS-MUSIC-008 | Claudia Phillips & The Kicks — Quel souci la boétie ! .. | [Owner-provided exact Spotify track](https://open.spotify.com/track/5DzBbnT9C8v0O6hgAalBv1?si=bda742298d7649c6) | Metadata-only stub; preserve specified edition, no audio or rights |
+| BANANETTAS-MUSIC-009 | Histoires de filles — House tube' (Véronique Ferraro Remix) | [Owner-provided exact Spotify track](https://open.spotify.com/track/28vIgZwwB0SJwMTjZ1veAw?si=64cb554553a240de) | Metadata-only stub; preserve specified edition, no audio or rights |
+| BANANETTAS-MUSIC-010 | Chagrin d'Amour — Bonjour (V'là les nouvelles) | [Owner-provided exact Spotify track](https://open.spotify.com/track/1SwJzgDCwrpBGcvldOxDs1?si=7a971e22f4cd44b1) | Metadata-only stub; preserve specified edition, no audio or rights |
 
-- All six are **Bananettas-only must-adds**. They join `BANANETTAS-MUSIC-001` and never supersede it.
+- All nine are **Bananettas-only must-adds**. They join `BANANETTAS-MUSIC-001` and never supersede it.
 - For Yelle's **Que veux-tu**, the title/artist were owner-specified but the original-album Spotify ID was identified independently; the owner did not provide an exact track URL. Keep the original separate from **Madeon's remix**.
 - Le Couleur's **Discolombo** was provided via a Spotify search URL, not an exact selection of an individual Spotify track master. The official [P.O.P release](https://lecouleurmusic.bandcamp.com/album/p-o-p) confirms the song; verify final edition/credits (including Lafayette credit on the artist video) prior to import.
 - `66TWIPMA0IMNofL3glOp6X` is preserved exactly with **unknown title/artist**, avoiding wrong attribution and a fake playable entry.
-- New `jetsetcraft_music/` JSONs prepare the **five identified songs** for future local licensed-master import. They are nonplayable metadata only; no audio is supplied. Playback requires a gang-specific picker (global `home`/`rush` alone is insufficient) plus master rights, exact credits and in-game tests.
+- New `jetsetcraft_music/` JSONs prepare the **eight identified songs** for future local licensed-master import. The added #008 is the linked Claudia Phillips & The Kicks recording (historical release/version requires verification), #009 is the **Véronique Ferraro Remix**, and #010 is Chagrin d'Amour's **Bonjour (V'là les nouvelles)**, whose underlying song originated in 1982. Never substitute similarly titled recordings. They are nonplayable metadata only; no audio is supplied. Playback requires a gang-specific picker (global `home`/`rush` alone is insufficient) plus master rights, exact credits and in-game tests.
 
 ## Amygdlya owner-selected gang must-add, 2026-11-15
 

@@ -13,7 +13,10 @@
       "BANANETTAS-MUSIC-004",
       "BANANETTAS-MUSIC-005",
       "BANANETTAS-MUSIC-006",
-      "BANANETTAS-MUSIC-007"
+      "BANANETTAS-MUSIC-007",
+      "BANANETTAS-MUSIC-008",
+      "BANANETTAS-MUSIC-009",
+      "BANANETTAS-MUSIC-010"
     ],
     "additional_songs_selection_date": "2026-11-15"
   },
@@ -204,6 +207,95 @@
       "identity_verification": "metadata_unresolved_do_not_guess_artist_or_title",
       "proposed_use": [
         "gang_radio_pending_identification"
+      ],
+      "recording_master_status": "not_supplied",
+      "synchronization_rights_status": "not_verified",
+      "distribution_rights_status": "not_verified",
+      "exact_cues_status": "not_analyzed",
+      "in_game_playback_status": "not_integrated"
+    },
+    {
+      "reference_id": "BANANETTAS-MUSIC-008",
+      "title": "Quel souci la boétie ! ..",
+      "artist": "Claudia Phillips & The Kicks",
+      "credited_remixer": null,
+      "owner_selection_date": "2026-11-15",
+      "is_owner_approved": true,
+      "assignment": "bananettas_only",
+      "source_type": "owner_supplied_exact_spotify_track",
+      "owner_supplied_url": "https://open.spotify.com/track/5DzBbnT9C8v0O6hgAalBv1?si=bda742298d7649c6",
+      "spotify_track_id": "5DzBbnT9C8v0O6hgAalBv1",
+      "album": "Blackjack!",
+      "edition_note": "Select ONLY the owner-linked Spotify recording; 4:28 listing. The original work is historically associated with the 1987 single and a later Blackjack! album; exact current Spotify album/ISRC and mastering should be reconfirmed, not inferred from different releases.",
+      "identification_status": "confirmed_title_and_artist; exact_edition_master_ISRC_not_verified",
+      "source_verification_urls": [
+        "https://open.spotify.com/intl-fr/track/5DzBbnT9C8v0O6hgAalBv1",
+        "https://open.spotify.com/track/58T3cOvRTFaAVAtR9fcGcX"
+      ],
+      "proposed_use": [
+        "gang_radio",
+        "skating",
+        "graffiti_challenge"
+      ],
+      "recording_master_status": "not_supplied",
+      "synchronization_rights_status": "not_verified",
+      "distribution_rights_status": "not_verified",
+      "exact_cues_status": "not_analyzed",
+      "in_game_playback_status": "not_integrated"
+    },
+    {
+      "reference_id": "BANANETTAS-MUSIC-009",
+      "title": "House tube' (Véronique Ferraro Remix)",
+      "artist": "Histoires de filles",
+      "credited_remixer": "Véronique Ferraro",
+      "owner_selection_date": "2026-11-15",
+      "is_owner_approved": true,
+      "assignment": "bananettas_only",
+      "source_type": "owner_supplied_exact_spotify_track",
+      "owner_supplied_url": "https://open.spotify.com/track/28vIgZwwB0SJwMTjZ1veAw?si=64cb554553a240de",
+      "spotify_track_id": "28vIgZwwB0SJwMTjZ1veAw",
+      "album": "Dynam'Hit - Europop version française",
+      "edition_note": "Exact 3:27 Véronique Ferraro Remix on Born Bad Records' 2021 compilation; not the earlier original House Tube recording or another remix.",
+      "identification_status": "confirmed_title_and_artist; exact_edition_master_ISRC_not_verified",
+      "source_verification_urls": [
+        "https://music.apple.com/us/song/1549528956",
+        "https://www.beatport.com/track/house-tube/14810102",
+        "https://open.spotify.com/intl-fr/album/7pFPYBxVteL1d9bEfKBmV8"
+      ],
+      "proposed_use": [
+        "gang_radio",
+        "skating",
+        "boombox"
+      ],
+      "recording_master_status": "not_supplied",
+      "synchronization_rights_status": "not_verified",
+      "distribution_rights_status": "not_verified",
+      "exact_cues_status": "not_analyzed",
+      "in_game_playback_status": "not_integrated"
+    },
+    {
+      "reference_id": "BANANETTAS-MUSIC-010",
+      "title": "Bonjour (V'là les nouvelles)",
+      "artist": "Chagrin d'Amour",
+      "credited_remixer": null,
+      "owner_selection_date": "2026-11-15",
+      "is_owner_approved": true,
+      "assignment": "bananettas_only",
+      "source_type": "owner_supplied_exact_spotify_track",
+      "owner_supplied_url": "https://open.spotify.com/track/1SwJzgDCwrpBGcvldOxDs1?si=7a971e22f4cd44b1",
+      "spotify_track_id": "1SwJzgDCwrpBGcvldOxDs1",
+      "album": "Chagrin d'Amour",
+      "edition_note": "Original song from Chagrin d'Amour's 1982 album (3:02 in album discography). Preserve exact owner-linked Spotify ID; streaming edition/ISRC and remaster status need independent verification.",
+      "identification_status": "confirmed_title_and_artist; exact_edition_master_ISRC_not_verified",
+      "source_verification_urls": [
+        "https://open.spotify.com/intl-fr/track/1SwJzgDCwrpBGcvldOxDs1",
+        "https://www.qobuz.com/ca-en/album/chagrin-damour-chagrin-damour/vz5kplg8znxjb",
+        "https://www.youtube.com/watch?v=fHy0l1v8Ym4"
+      ],
+      "proposed_use": [
+        "gang_radio",
+        "skating",
+        "retro_crew_showcase"
       ],
       "recording_master_status": "not_supplied",
       "synchronization_rights_status": "not_verified",
