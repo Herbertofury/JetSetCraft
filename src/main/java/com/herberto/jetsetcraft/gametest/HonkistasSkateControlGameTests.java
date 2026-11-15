@@ -41,6 +41,7 @@ public final class HonkistasSkateControlGameTests {
         final List<HonkistasPrototypeEntity> actors=new ArrayList<>();
         final Map<BlockPos,BlockState> saved=new LinkedHashMap<>();
         final BlockPos floor;final ChunkPos chunk;
+        final double[] originalWalkingSpeed=new double[4];
         final double[] releaseX=new double[3],releaseSpeed=new double[3];
         int ticks,phase,started;boolean closed;
         Fixture(GameTestHelper helper,boolean safety){
@@ -64,7 +65,9 @@ public final class HonkistasSkateControlGameTests {
                     var actor=ModEntities.HONKISTAS_PROTOTYPE.get().create(helper.getLevel());check(actor!=null,"Original inline actor missing");
                     actors.add(actor);BlockPos at=floor.offset(2,1,2+3*i);
                     actor.moveTo(at.getX()+.5,at.getY(),at.getZ()+.5,270,0); // Initial spawn only.
-                    actor.setNoAi(true);actor.setPersistenceRequired();check(helper.getLevel().addFreshEntity(actor),"Native inline actor admission rejected");
+                    originalWalkingSpeed[i]=actor.getAttribute(net.minecraft.world.entity.ai.attributes.Attributes.MOVEMENT_SPEED).getBaseValue();
+                    actor.getAttribute(net.minecraft.world.entity.ai.attributes.Attributes.MOVEMENT_SPEED).setBaseValue(0);
+                    actor.setPersistenceRequired();check(helper.getLevel().addFreshEntity(actor),"Native inline actor admission rejected");
                     if(i<3)equip(actor);
                 }
             }catch(RuntimeException|Error error){close();throw error;}
@@ -80,10 +83,10 @@ public final class HonkistasSkateControlGameTests {
                 keepTicking();check(++ticks<230,"Inline fixture exceeded bounded native deadline phase="+phase);
                 if(phase>0)for(var actor:actors)check(actor.isAlive()&&helper.getLevel().getEntity(actor.getUUID())==actor,"Original actor lost from native world registry");
                 if(phase==0){
-                    check(ticks<=120,"Inline actors did not reach native grounded/ticking readiness");
+                    check(ticks<=120,"Inline actors did not reach native grounded/ticking readiness: "+actors.stream().map(a->"ticks="+a.tickCount+" ground="+a.onGround()+" pos="+a.position()+" velocity="+a.getDeltaMovement()+" noAI="+a.isNoAi()+" resident="+helper.getLevel().isPositionEntityTicking(a.blockPosition())+" registered="+(helper.getLevel().getEntity(a.getUUID())==a)).toList());
                     if(actors.stream().anyMatch(a->!a.onGround()||!helper.getLevel().isPositionEntityTicking(a.blockPosition())
                             ||helper.getLevel().getEntity(a.getUUID())!=a))return;
-                    for(var readyActor:actors)readyActor.setNoAi(false); // Native contact established; enable actual controlled movement.
+                    for(int i=0;i<actors.size();i++)actors.get(i).getAttribute(net.minecraft.world.entity.ai.attributes.Attributes.MOVEMENT_SPEED).setBaseValue(originalWalkingSpeed[i]); // Restore owned fixture walking attribute after native contact.
                     var a=actors.get(0);var ungeared=actors.get(3);
                     check(!ungeared.startSkateControl(SkateInput.PUSH,new Vec3(1,0,0),60),"Ungeared actor accepted inline input");
                     check(!a.startSkateControl(SkateInput.PUSH,new Vec3(Double.NaN,0,0),60)
@@ -107,7 +110,7 @@ public final class HonkistasSkateControlGameTests {
                 if(safety){
                     // Observe terminal mechanics first, then suppress unrelated random-stroll AI only.
                     // Gravity/collision and the cue clock remain native; no position/ground flags are assigned.
-                    for(int i=0;i<3;i++)if(actors.get(i).skateStatus()!=SkateStatus.RUNNING)actors.get(i).setNoAi(true);
+                    for(int i=0;i<3;i++)if(actors.get(i).skateStatus()!=SkateStatus.RUNNING)actors.get(i).getAttribute(net.minecraft.world.entity.ai.attributes.Attributes.MOVEMENT_SPEED).setBaseValue(0);
                     if(ticks-started<20)return;
                     check(actors.get(0).skateStatus()==SkateStatus.FAILED_OBSTACLE,"Native obstruction failed to stop propulsion: "+actors.get(0).skateStatus());
                     check(actors.get(0).getBoundingBox().maxX<=floor.getX()+3+.001,"Original actor crossed native blocking wall");
