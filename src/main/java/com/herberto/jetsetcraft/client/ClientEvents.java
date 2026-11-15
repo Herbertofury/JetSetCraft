@@ -74,6 +74,7 @@ public final class ClientEvents {
 
         @SubscribeEvent
         public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
+            event.registerEntityRenderer(ModEntities.HONKISTAS_PROTOTYPE.get(), com.herberto.jetsetcraft.client.render.HonkistasPrototypeRenderer::new);
             event.registerEntityRenderer(ModEntities.GRAFFITI.get(), GraffitiRenderer::new);
             event.registerEntityRenderer(ModEntities.PAINT_BALLOON.get(), ThrownItemRenderer::new);
             event.registerEntityRenderer(ModEntities.LIBERTY_TRANSPORT.get(), com.herberto.jetsetcraft.client.render.LibertyTransportRenderer::new);

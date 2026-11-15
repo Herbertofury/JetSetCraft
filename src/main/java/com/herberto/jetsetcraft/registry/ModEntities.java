@@ -45,10 +45,15 @@ public final class ModEntities {
     public static final class Attributes {
         @net.minecraftforge.eventbus.api.SubscribeEvent
         public static void register(net.minecraftforge.event.entity.EntityAttributeCreationEvent event) {
+            event.put(HONKISTAS_PROTOTYPE.get(), com.herberto.jetsetcraft.entity.HonkistasPrototypeEntity.createAttributes().build());
             event.put(LIBERTY_CORE.get(), LibertyCoreEntity.createAttributes().build());
             event.put(LIBERTY_SUPPORT.get(), LibertySupportEntity.createAttributes().build());
         }
     }
 
+    public static final RegistryObject<EntityType<com.herberto.jetsetcraft.entity.HonkistasPrototypeEntity>> HONKISTAS_PROTOTYPE =
+            ENTITIES.register("honkistas_prototype", () -> EntityType.Builder
+                    .<com.herberto.jetsetcraft.entity.HonkistasPrototypeEntity>of(com.herberto.jetsetcraft.entity.HonkistasPrototypeEntity::new, MobCategory.CREATURE)
+                    .sized(.65F,1.95F).clientTrackingRange(8).updateInterval(2).build("jetsetcraft:honkistas_prototype"));
     private ModEntities() {}
 }

@@ -1,0 +1,19 @@
+# Original Honkistas actor prototype
+
+An original theatrical actor prototype is authored from code, with a custom articulated silhouette and ivory/teal/coral/gold color layers. It is not a vanilla-mob reskin, a copy of the private Pierrot reference, or a representation of Sav, PESTRiCA, Tay, mennah, Plague, Lucy, Grinions or another creator's character.
+
+The native entity, model and renderer are registered independently as `jetsetcraft:honkistas_prototype`. There are no natural spawn rules, production event-provider bindings, soundtrack, rewards or character substitutions. The existing mesh/ModelPart and deterministic texture tooling is reused; the white sampler is generated locally without imported artwork.
+
+## Evidence boundaries
+
+- Native GameTest checks actual world registration, original type identity, attributes and save/load class continuity.
+- The existing opt-in disposable RivalRushAudit client run appends front, side and back captures and verifies the client sees the original entity with its registered renderer.
+- These are preview views, not finished-quality acceptance. Inspect the actual PNGs before judging silhouette, face readability, costume depth and clipping.
+- Basic walking/head animation is not movement-responsive secondary physics, authored dance choreography or verified skating.
+- Do not enable this prototype as an accepted Honkistas encounter provider merely because compilation and a static preview pass.
+
+## Remaining visual acceptance
+
+Compare with the owner's theatrical quality target without copying the supplied creator model. Review original front/back/side views, then skating and dance poses, shoulders/elbows/knees/hands, held objects, crowd readability, low/high frame times and motion-responsive hair/cloth. Author expressive variation and collision envelopes before promising finished NPC quality.
+
+See [quality requirements](Honkistas‐NPC‐Quality‐and‐Skating‐Physics) and [persistent sequence](Honkistas-Persistent-Sequence).
