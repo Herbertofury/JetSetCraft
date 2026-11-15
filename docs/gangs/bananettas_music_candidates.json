@@ -3,9 +3,9 @@
   "owner_approved_reference_id": "BANANETTAS-MUSIC-001",
   "gang_id": "jetsetcraft:bananettas",
   "generated_for": "research_and_audition_2026-11-15",
-  "review_status": "five_of_102_promoted_97_unselected_plus_four_owner_links_outside_original_discovery",
+  "review_status": "five_of_102_promoted_97_unselected_plus_five_owner_links_outside_original_discovery",
   "candidate_count": 102,
-  "policy": "Ten owner-selected Bananettas music requirements: original Lio Le Banana Split, five promoted candidates from the 102 discovery shelf, and four separately approved exact Spotify links (one still with unresolved title/artist). 97 discovery tracks remain unselected. No source URL grants audio licensing or proves playable game integration.",
+  "policy": "Eleven owner-selected Bananettas music requirements: original Lio Le Banana Split, five promoted candidates from the 102 discovery shelf, and five separately approved exact Spotify links (one still with unresolved title/artist). 97 discovery tracks remain unselected. Approved links are not licensed audio assets or proof of shipped gang playback.",
   "priority_legend": {
     "A": "high-priority proposed audition",
     "B": "secondary/variety proposed audition"
@@ -1378,7 +1378,8 @@
     "BANANETTAS-MUSIC-007",
     "BANANETTAS-MUSIC-008",
     "BANANETTAS-MUSIC-009",
-    "BANANETTAS-MUSIC-010"
+    "BANANETTAS-MUSIC-010",
+    "BANANETTAS-MUSIC-011"
   ],
   "promoted_from_initial_102": 5,
   "remaining_unapproved_initial_candidates": 97,
@@ -1426,7 +1427,18 @@
       "status": "owner_approved_must_add_outside_original_102",
       "recording_master_status": "not_supplied",
       "synchronization_and_distribution_rights_status": "unverified"
+    },
+    {
+      "reference_id": "BANANETTAS-MUSIC-011",
+      "spotify_track_id": "3wbtkAHIwG6R0VEJ4QOm0H",
+      "owner_supplied_url": "https://open.spotify.com/track/3wbtkAHIwG6R0VEJ4QOm0H?si=d9151f76d1944bf4",
+      "title": "Don Quichotte - No Estan Aqui, 2024 Remastered",
+      "artist": "Magazine 60",
+      "edition_note": "Exact short 'Don Quichotte - No Estan Aqui, 2024 Remastered' recording (~3:27/3:28), not the 2024 Remastered Long Version, DJ US Special Remix, 1986 US Remix, First Version, Remix 90 or other mixes. Original composition/single dates to 1984; the specified remaster dates to 2024. Verify original master provenance, ISRC, timing and distribution rights before playable import.",
+      "status": "owner_approved_must_add_outside_original_102",
+      "recording_master_status": "not_supplied",
+      "synchronization_and_distribution_rights_status": "unverified"
     }
   ],
-  "total_owner_must_add_count": 10
+  "total_owner_must_add_count": 11
 }

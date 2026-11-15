@@ -1,0 +1,29 @@
+{
+  "title": "Don Quichotte - No Estan Aqui, 2024 Remastered",
+  "artist": "Magazine 60",
+  "album": "Don Quichotte",
+  "sound_event": "jetsetcraft:licensed/bananettas_don_quichotte_no_estan_aqui_2024_remastered",
+  "audio_resource": "jetsetcraft:sounds/music/licensed/bananettas_don_quichotte_no_estan_aqui_2024_remastered.ogg",
+  "contexts": [
+    "rush"
+  ],
+  "volume": 0.65,
+  "source_url": "https://open.spotify.com/track/3wbtkAHIwG6R0VEJ4QOm0H?si=d9151f76d1944bf4",
+  "spotify_track_id": "3wbtkAHIwG6R0VEJ4QOm0H",
+  "original_song_release_year": 1984,
+  "specified_remaster_year": 2024,
+  "approximate_duration": "3:27",
+  "edition_note": "Exact short 'Don Quichotte - No Estan Aqui, 2024 Remastered' recording (~3:27/3:28), not the 2024 Remastered Long Version, DJ US Special Remix, 1986 US Remix, First Version, Remix 90 or other mixes. Original composition/single dates to 1984; the specified remaster dates to 2024. Verify original master provenance, ISRC, timing and distribution rights before playable import.",
+  "composer_credits": "Jean-Luc Drion; Dominique Regiacorte (confirm against authorized master)",
+  "gang_id": "jetsetcraft:bananettas",
+  "intended_placement": "Bananettas-only after real gang-specific filter; do not play globally via current rush context",
+  "owner_reference_id": "BANANETTAS-MUSIC-011",
+  "recording_status": "awaiting_authorized_audio",
+  "rights_status": "sync_and_redistribution_not_verified; no_audio_bundled",
+  "external_metadata_sources": [
+    "https://open.spotify.com/track/3wbtkAHIwG6R0VEJ4QOm0H",
+    "https://www.beatport.com/track/don-quichotte/21105706",
+    "https://music.amazon.com/albums/B0D8J74RY8",
+    "https://www.youtube.com/watch?v=mYGJnsI_cLI"
+  ]
+}
