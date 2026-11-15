@@ -1,9 +1,9 @@
 {
   "schema": 1,
-  "source_commit": "fd094dd9b426da1f836dfccde81201e0fa2065d5",
-  "wiki_commit": "dd412c133b05dd1bd004f4090827d4614690acd1",
+  "source_commit": "646c18edc0c204cd31ab4f8898ac5d9e0cf07751",
+  "wiki_commit": "95bdbc203676ff7863d62f8815b6c1a570a9eb22",
   "wiki_branch": "master",
-  "page_count": 60,
+  "page_count": 61,
   "pages": [
     "Approved-Ride-Expansion-and-Trick-Combat.md",
     "Bananettas-Music-Discovery.md",
@@ -16,6 +16,7 @@
     "Cumbias-Bananettas-Decalco-Mambo-Faceoff.md",
     "Cumbias\u2010and\u2010Multi\u2010Rival\u2010Gang\u2010War.md",
     "Developer-Architecture.md",
+    "Encounter-North-Star-Beyond-Minecraft.md",
     "FAQ.md",
     "Feature-Overview.md",
     "Footworkas.md",
@@ -67,6 +68,6 @@
     "_Sidebar.md"
   ],
   "validated": true,
-  "published_at_utc": "2026-11-15T23:17:15.419879+00:00",
+  "published_at_utc": "2026-11-15T23:19:55.552393+00:00",
   "url": "https://github.com/Herbertofury/JetSetCraft/wiki"
 }
