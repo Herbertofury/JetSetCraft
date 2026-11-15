@@ -29,6 +29,7 @@
 - [🎧 Music Library: artists, albums, gangs & sources](Music-Library)
 - [🎼 Portable Reactive Music Engine & Killer Instinct Atlas](Reactive-Music-Engine-and-Killer-Instinct-Reference)
 - [🎹 Mortal Kumbia rhythm-battle design](Reactive-Music-Engine-and-Killer-Instinct-Reference#5-the-cumbias-mortal-kumbia-music-battle-festival)
+- [🎵 Ocarina of Cumbia — rare Zelda crossover](Ocarina-of-Cumbia-Easter-Egg)
 
 ### 🎨 Street Culture
 - [🎪 Honkistas NPC Quality & Skating Physics](https://github.com/Herbertofury/JetSetCraft/wiki/Honkistas%E2%80%90NPC%E2%80%90Quality%E2%80%90and%E2%80%90Skating%E2%80%90Physics)

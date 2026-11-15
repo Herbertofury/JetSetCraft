@@ -209,6 +209,12 @@ integrity:
 
 **Acceptance:** local/online, all current supported input styles, timing-calibration UI, multiple difficulty curves, optional no-fail/casual route, genuine high-difficulty expression, replayable beat maps, useful controller remapping, clear chart attribution, stage readability and no visual flashes forced on sensitive users. Use **original/authorized playable chart versions**, not an album track without a verified grid. Preserve precise player agency between choreography and gameplay.
 
+### Rare Cumbias Easter egg: **Ocarina of Cumbia** (owner-requested)
+
+**JSC-EGG-CUMBIA-OCARINA-001** is an ultra-rare music-driven **Cumbias × Zelda** crossover surprise. When a normal eligible Cumbias performance/event occurs, a second server-seeded rare roll (proposed **1% of eligible Cumbias events**, configurable/tunable) can transform it into an ocarina-led cumbia showcase, with recognizable **Link, Zelda and other Zelda-character cameos** dancing with the Cumbias. Full design: [Ocarina of Cumbia — Rare Music Encounter](Ocarina-of-Cumbia-Easter-Egg). **Owner video:** https://www.tiktok.com/t/ZPLK2Fnk7/ . The exact creator, soundtrack, characters actually visible in the clip, master and audio metadata are **unverified**, not invented. The requested Zelda cast is a release goal, not a claim that crossover rights/assets are already available.
+
+The surprise must have immediate ocarina foreshadowing, genuine cumbia rhythm, theatrical appearance, playable or watchable dance/skate battle, varied personality-driven choreography, musical accent responses to combos, and satisfying phrase-quantized finale. Players may opt in or keep playing normally. Preserve existing rare-encounter eligibility, mod compatibility, normal mob identity, world saves, Cumbias rules and music settings; never broaden global spawns or create a per-tick scan. Record the discovery and enable an optional replay without making the wild surprise commonplace. High-fidelity character, music and animation masters remain canonical for the future standalone game.
+
 ## 6. Global culture/music discovery program
 
 JetSetCraft is not a genre monoculture. Curate music that is *genuinely extraordinary* in its local context with informed criticism and community participation, not a shuffled stereotype playlist. The existing 160-candidate research shelf and owner selections remain preserved. Expand deliberately across **cumbia (Mexican, Colombian and regional variants), champeta, baile funk, amapiano, gqom, footwork/juke, jersey club, UK garage/jungle, highlife, soukous, coupé-décalé, raï, dabke, qawwali, gamelan, dangdut, mor lam, taiko, Japanese jazz/funk, Gnawa, Balkan brass, bhangra and regionally specific dance scenes**. This is a research map, **not** a claim each named tradition already has vetted game-ready tracks.
@@ -220,6 +226,13 @@ For every music discovery candidate: official playable reference → exact recor
 - **ID:** `JSC-MUST-TIKTOK-20261115-001`.
 - **Submitted reference:** https://www.tiktok.com/t/ZPLKY1fPj/ . Owner asked to identify and add the track to JetSetCraft on November 15, 2026.
 - **Status:** **must-identify / selection requested; artist, title, original sound/video ID, recording edition, BPM, stems and audio master all unverified**. A TikTok short-link redirect/media read did not resolve in this research environment. **Do not guess a track name, substitute a generic cumbia or claim audio imported.** Next actionable step: inspect the source video's sound label through an authorized logged-in view or owner-provided original video URL/screenshot/audio clip; match exact song+version against official artist/release metadata, then append to the owner-selected Music Library with its validated credit and acquisition path. Preserve this exact link and ID until resolved.
+
+### Additional creator-first TikTok research goals (owner-selected)
+
+- **JSC-CREATOR-TIKTOK-20261115-002:** https://www.tiktok.com/t/ZPLK2mF7q/ . Identify video uploader, musician/composer/producer, exact featured audio and official release; audit the creator's **broader music catalogue** as a high-priority artist-inclusion goal, not simply one track.
+- **JSC-CREATOR-TIKTOK-20261115-003:** https://www.tiktok.com/t/ZPLK2Fnk7/ . Same creator/music-catalogue research priority, **plus** the canonical owner-selected **Ocarina of Cumbia** Zelda crossover Easter egg. Do not assume the two posts share one creator or sound until verified.
+
+Both short links were inaccessible to source-media inspection. Do **not** guess artist names, title, edition, Zelda scenes, lyrics, key, BPM or permission. Identify the uploader separately from underlying audio composer, arranger, cover artist and master owner; once resolved, add standout creator works to the Music Library with documented credit, style/context, audition notes, master/stem acquisition and appropriate roles in the portable reactive engine. Preserve all previous owner-selected entries independently.
 
 ## 7. Native source quality, attribution and asset preservation
 
@@ -247,6 +260,8 @@ For every music discovery candidate: official playable reference → exact recor
 - [ ] **T014** · Build authoring/QA UI for waveform, beat grid, adaptive segment timeline, intensity automation, stem alignments, and calibration and accessibility state.
 - [ ] **T015** · Verify real-player 60-fps music/combat/dance path under representative busy server/modpack conditions, 60/120/144 Hz display targets and multiple audio buffers/devices; measure event-to-audible-impact latency, timing jitter, underruns, clip peak and wrong-state/crossfade rate on equivalent complete musical content. Optimize without muting important cues or limiting content.
 - [ ] **T016** · Validate multiplayer authority, pause/restart, audio device switch, pack uninstall, missing rights/media entry, incomplete stems, settings persistence, reduced-flash/accessibility and source-mod behavior regression. Save repeatable evidence and correct failures.
+- [ ] **T017 [P]** · Resolve exact source/video/creator and audio metadata for `ZPLK2mF7q` and `ZPLK2Fnk7`; determine whether they actually share an artist; audition/credit and shortlist creator music without inventing any track identity.
+- [ ] **T018** · Implement owner-specified **Ocarina of Cumbia** rare Cumbias variant with optional recognized Zelda-character cameo cast, properly verified source audio, portable adaptive music, scene/rewards/replay and ultra-rare non-invasive spawns; satisfy all [OCA acceptance gates](Ocarina-of-Cumbia-Easter-Egg).
 - [ ] **G001 · GATE** · All 68 KI track acquisitions correctly accounted for, all asset families/edition extras statused, no false imported claims, source/credit lineage recorded.
 - [ ] **G002 · GATE** · Reactive system produces true sample-timed musical responses and earned KI-strength combat feedback in Minecraft while remaining standalone-portable.
 - [ ] **G003 · GATE** · Both named Mortal Kumbia core modes plus expressive extensions are genuinely playable with calibrated scoring and cultural identity.
