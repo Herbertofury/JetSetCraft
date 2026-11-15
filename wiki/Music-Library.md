@@ -18,6 +18,12 @@ On November 12, 2026, the project owner reported that the authors of these recom
 
 **Owner-selected** means explicitly requested or approved creative inclusion. **Discovery candidate** means researched, not selected. **Metadata verified** does not mean listened to, installed or licensed. Preserve exact recordings, edition/remix names and track IDs. A Spotify link is a listening reference, not a downloadable audio master. Buy/download links should point to legitimate artist, label or storefront releases; purchase for personal listening does not itself grant game synchronization or redistribution rights.
 
+
+### Owner-directed Killer Instinct soundtrack and TikTok research, 2026-11-15
+
+- **KI-OST-001–068 · Killer Instinct 2013, Killer Cuts, and Killer Instinct 2/Gold:** Owner-requested acquisition of **all 68 entries** from the official [Killer Instinct: The Complete Soundtrack](https://store.steampowered.com/app/720530/Killer_Instinct__The_Complete_Soundtrack/) plus relevant classic edition variants, game-specific announcer/impact/fighting assets, and true adaptive stems if obtainable. The owner reports permission to use Killer Instinct music and assets in JetSetCraft with required attribution. **Status:** 68 exact verified release positions catalogued; audio masters, source stems, asset scope and integration not supplied or verified here. See the full [Portable Reactive Music Engine & Killer Instinct acquisition atlas](Reactive-Music-Engine-and-Killer-Instinct-Reference) for every titled position, edition, credits, acquisition priority, scene roles and asset/source quality policy.
+- **JSC-MUST-TIKTOK-20261115-001 · owner TikTok soundtrack submission:** https://www.tiktok.com/t/ZPLKY1fPj/ . **Owner-selected must-identify/add**, exact track/sound ID, artist, edition and audio source pending source-video inspection. Short-link access was blocked; preserve the reference rather than inventing its identity. Queue for exact metadata/recording match and audio acquisition, then update this listing and the engine's library manifest.
+
 ## Owner-selected general soundtrack
 
 The two November 7 selections below are whole-game must-adds with no gang or mode assigned. Keep them alongside all later must-includes and the two existing Sonic-related resource-pack metadata entries, not inside a Rival Rush-only list.

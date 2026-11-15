@@ -4,6 +4,11 @@
 
 **Shared tracking:** [High-priority issue #30](https://github.com/Herbertofury/JetSetCraft/issues/30).
 
+
+## Portable reactive engine and Killer Instinct combat-audio source, 2026-11-15
+
+The owner's latest direction explicitly makes **combat-combo-adaptive music** and **Mortal Kumbia** major product pillars, with a standalone engine-neutral core that can later power the original AAA game. The owner reports permission for Killer Instinct music/assets with credits, and wants an exhaustive acquisition plan by game/edition; the official full soundtrack baseline contains 68 named tracks. **[See the canonical portable-engine, 68-track Killer Instinct and asset acquisition specification](Reactive-Music-Engine-and-Killer-Instinct-Reference).** This references existing requirements on this page without claiming implementation, playable assets or source stems.
+
 ## Current MoccaSins identity and music register
 
 The owner finalized **MoccaSins** as the canonical name on October 13, 2026. **Thundersteps, Drumrunners, Neon Shawls, Rhythm Daughters and Powwow Dreamers** are unlockable alternative names for this same crew; they are not shortlist candidates or new factions. Preserve progression and stable identity. Exact unlock gates remain unspecified.

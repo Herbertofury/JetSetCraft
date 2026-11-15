@@ -4,6 +4,13 @@
 
 Tracking: [Cumbias issue #28](https://github.com/Herbertofury/JetSetCraft/issues/28) · [Gabberina campaign issue #27](https://github.com/Herbertofury/JetSetCraft/issues/27)
 
+
+## Owner-directed Mortal Kumbia rhythm-battle expansion, 2026-11-15
+
+**Mortal Kumbia** is the Cumbias' signature music-combat challenge suite. Required core gameplay includes **Kumbia Highway** (Guitar Hero-style note highway) and **Dance Arrows** (Dance Dance Revolution-style arrow timing), joined by call-and-response, freestyle/trick-remix, crew-versus-crew and boss-encore variations. Music must materially respond to accurate player actions, counters, earned combo progression, rival performance and crowd energy. Preserve fair on-foot/skating dance agency, instrument-driven cumbia identity, real cultural reference research, multiple difficulties, accessibility and per-device input latency calibration. This is requested design and **not yet verified gameplay**.
+
+The shared **[Portable Reactive Music Engine, Mortal Kumbia and Killer Instinct acquisition atlas](Reactive-Music-Engine-and-Killer-Instinct-Reference)** is the implementation-ready architecture and acceptance ledger. It also preserves the 68-track Killer Instinct audio acquisition checklist, high-fidelity standalone-IP masters, global culture research and the unresolved owner TikTok submission. Preserve the existing Cumbias rivalry/Boombox mechanics below.
+
 ## Major requirement: music-driven dances and themed bosses
 
 High-priority owner requirement: every mob needs amazing music-generated/driven dances with meaningful, fun variety and goosebump-level presentation. Cumbias, Phonkistas, Gabberina's and Hardtekkas each need exceptional signature dances. When a major faction owns a mob gang, its boss becomes a music-driven, mob-themed human leader tied to the controller; the explicit example is **Hakken Horse**, a human dressed like a horse for a Gabberina-controlled horse gang. Preserve source mobs and existing takeover/power-removal, surprise-challenge and independent-defeat rules.
