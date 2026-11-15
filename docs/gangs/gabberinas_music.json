@@ -17,7 +17,9 @@
       "GAB-MUSIC-007",
       "GAB-MUSIC-008",
       "GAB-MUSIC-009",
-      "GAB-MUSIC-010"
+      "GAB-MUSIC-010",
+      "GAB-MUSIC-011",
+      "GAB-MUSIC-012"
     ],
     "previous_phonkistas_correction": "Warpath — Redforce remains Phonkistas only. Fabitekk Glubis has been directly selected for Gabberina's despite Hardtekkas also existing.",
     "favorite_must_add_ids": [
@@ -28,7 +30,14 @@
     "hakken_horse_signature_track_ids": [
       "GAB-HORSE-MUSIC-001"
     ],
-    "hakken_horse_music_scope": "Hakken Horse horse-mob-gang boss encounters ONLY; distinct from Gabberina general crew radio must-add list and unrelated horse mobs"
+    "hakken_horse_music_scope": "Hakken Horse horse-mob-gang boss encounters ONLY; distinct from Gabberina general crew radio must-add list and unrelated horse mobs",
+    "intentional_shared_music_with_hardtekkas": [
+      {
+        "gabberinas_reference_id": "GAB-MUSIC-011",
+        "hardtekkas_reference_id": "HARD-MUSIC-003",
+        "spotify_track_id": "5Db0K6UhL9e3ywaSCMgTBc"
+      }
+    ]
   },
   "previous_owner_song_references": [
     {
@@ -284,6 +293,69 @@
       "exact_master_and_isrc_status": "not_verified",
       "synchronization_and_distribution_rights": "not_verified",
       "beat_grid_and_cues": "not_analyzed",
+      "in_game_playback_status": "not_integrated"
+    },
+    {
+      "reference_id": "GAB-MUSIC-011",
+      "title": "Break It Down",
+      "artist": "Greb Levah",
+      "spotify_track_id": "5Db0K6UhL9e3ywaSCMgTBc",
+      "owner_supplied_url": "https://open.spotify.com/track/5Db0K6UhL9e3ywaSCMgTBc?si=2b501e41330d4292",
+      "owner_selection_date": "2026-11-15",
+      "is_owner_approved": true,
+      "assignment": "gabberinas_regular_music",
+      "also_owner_approved_for": "Hardtekkas",
+      "cross_gang_music_reference_id": "HARD-MUSIC-003",
+      "intentional_shared_recording": true,
+      "release_title": "Break It Down",
+      "original_single_release_date": "2026-03-06",
+      "listed_duration": "2:47",
+      "retailer_listed_genre": "Techno (Peak Time / Driving)",
+      "retailer_listed_bpm": 148,
+      "retailer_listed_key": "E minor",
+      "source_metadata_note": "Spotify public track title confirms Break It Down — Greb Levah; original Greb Levah single March 6, 2026 and 2:47 corroborated by Apple Music/Beatport; Beatport's 148 BPM/key reflect retailer metadata, not measured game beat grid. Track ID already owner-selected for Hardtekkas as HARD-MUSIC-003; dual assignment is explicit. Original mix/Spotify master/ISRC identity still needs verification for a licensed game audio source.",
+      "source_urls": [
+        "https://open.spotify.com/track/5Db0K6UhL9e3ywaSCMgTBc?si=2b501e41330d4292",
+        "https://www.beatport.com/track/break-it-down/24281423",
+        "https://music.apple.com/us/album/break-it-down-single/1879944808",
+        "https://distrokid.com/hyperfollow/greblevah/break-it-down"
+      ],
+      "proposed_placement": [
+        "Gabberina's gang-scoped radio",
+        "jumpstyle/gabber/hardtekk skating challenge",
+        "music-reactive rival encounter"
+      ],
+      "exact_spotify_isrc_and_licensed_master": "not_verified",
+      "recording_master_status": "not_supplied",
+      "synchronization_and_distribution_rights": "not_verified",
+      "beat_grid_and_cues": "not_measured",
+      "in_game_playback_status": "not_integrated"
+    },
+    {
+      "reference_id": "GAB-MUSIC-012",
+      "title": null,
+      "artist": null,
+      "spotify_track_id": "5FXnaBbbWBfhCANUebof4E",
+      "owner_supplied_url": "https://open.spotify.com/track/5FXnaBbbWBfhCANUebof4E?si=3a7ac3ab63c0493d",
+      "owner_selection_date": "2026-11-15",
+      "is_owner_approved": true,
+      "assignment": "gabberinas_regular_music",
+      "source_type": "owner_supplied_exact_spotify_track",
+      "verification_status": "song_title_artist_not_publicly_resolved",
+      "identification_note": "Exact Spotify track page, embed/oEmbed and independent indexed searches failed to expose trustworthy track-level title or artist. Keep owner Spotify ID as an approved must-add; do NOT substitute guessed credits or identify from other IDs.",
+      "album": null,
+      "release_date": null,
+      "duration": null,
+      "isrc": null,
+      "owner_priority": "must_add",
+      "proposed_placement": [
+        "Gabberina's regular music selection, once identified and cleared",
+        "Future crew encounter, pending master/genre/cue verification"
+      ],
+      "metadata_stub_status": "not_created_until_artist_title_verified",
+      "recording_master_status": "not_supplied",
+      "synchronization_and_distribution_rights": "not_verified",
+      "beat_grid_and_cues": "not_measured",
       "in_game_playback_status": "not_integrated"
     }
   ],
