@@ -27,3 +27,12 @@ No player settings, saves or worlds are migrated by the development tools. The c
 ## Verification
 
 Two new native Forge tests cover ordered progression, duplicate/out-of-order/other-owner calls, exact NBT round trips, future schema preservation and malformed-owner quarantine. The existing real hill activity completion test now verifies the source-only hook and acknowledged disk checkpoint after reward settlement. These are added tests pending final CI, not a claim that full events are playable.
+
+
+## Native actor admission boundary (new candidate)
+
+An explicit trusted-server provider can prepare new actors, then the admission boundary verifies identity uniqueness, count≤16, native level, entity-ticking terrain, world border, collision and bounded distance. It rejects pre-existing entities rather than adopting unrelated mobs. Only after reserving the distinct rival event and acknowledging its saved data does it insert actors. Every accepted actor must be the same object returned by the native world UUID registry. Partial insertion failures clean only the new prepared bodies and close the chain without rewards or rerolls.
+
+This is not an installed Honkistas actor provider: no production provider or automatic launch is configured. Native tests use clearly labelled ordinary pig fixtures solely to exercise insertion/checkpoint/replay behavior. They do not portray pigs as Honkistas, establish named-character asset acceptance, or implement encounter scoring.
+
+Actual production integration still needs authored rival and Honkistas actors, source-control/defeat eligibility, invitation/decline UX, selected-provider persistence, actor ownership/reload and interruption cleanup, scoring and victory hooks, plus accessible audiovisual acceptance. A returned actor list is not a complete director.
