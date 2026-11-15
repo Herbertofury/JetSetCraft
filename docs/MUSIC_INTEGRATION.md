@@ -98,6 +98,10 @@ The runtime accepts at most 256 metadata entries, validates local resource ident
 
 The importer accepts another metadata directory through `--catalogue`, so a project-specific pack can be built without changing the mod. Filename IDs use lowercase letters, digits and underscores. The sound definition must have `stream: true` so a full music track is streamed from the resource pack rather than treated as a short effect.
 
+## New Cumbias owner must-add, 2026-11-15
+
+- **JSC-MUST-CUMBIA-20261115-001 — exact Spotify source:** https://open.spotify.com/track/6k3L5dAbeLrNN5TIoLtSze (`spotify:track:6k3L5dAbeLrNN5TIoLtSze`). Explicitly selected by the project owner as a must-add Cumbias recording. The public metadata fetch did not establish exact title/artist/version; status remains **selected, not yet acquired/imported or runtime verified**. Resolve official credits and a permitted audio master through the existing importer, keep source quality independent of Minecraft, and validate actual crew playlist/Boombox playback before marking installed. Future reactive music and Mortal Kumbia charting requires verified beat/offset/stem data rather than guesswork. See the [Music Library](../wiki/Music-Library.md), [Cumbias](../wiki/Cumbias‐and‐Multi‐Rival‐Gang‐War.md), and [portable engine specification](../wiki/Reactive-Music-Engine-and-Killer-Instinct-Reference.md).
+
 ## Later musical gameplay
 
 The current Soundcheck Circuit is a **crew dispatch assignment**. Future interactive music ideas belong in the design layer until built and tested:

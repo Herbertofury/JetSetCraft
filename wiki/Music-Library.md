@@ -154,6 +154,7 @@ These are identified metadata entries; neither recording is bundled. Their propo
 
 [Gang campaign and reference context](Cumbias‐and‐Multi‐Rival‐Gang‐War).
 
+- **JSC-MUST-CUMBIA-20261115-001 · Owner-selected Cumbias MUST ADD (exact Spotify recording):** [Spotify source](https://open.spotify.com/track/6k3L5dAbeLrNN5TIoLtSze) · `spotify:track:6k3L5dAbeLrNN5TIoLtSze`. Explicit owner priority on **2026-11-15**: include the exact linked recording in the **Cumbias** music catalogue and eligible gang events; do not downgrade to an audition candidate or replace with a different recording. **Title, credited artist(s), album, duration and version are pending verification** because the linked Spotify metadata was not obtainable from accessible public retrieval. This is **selected; audio acquisition and in-game integration pending**, not a claim that a track has been downloaded or auditioned. Preserve original master quality and credit all verified creators. Once source audio and timing are validated, evaluate Cumbias radio/Boombox, entrance, dance, territory and **Mortal Kumbia** battle placements; no guessed BPM/beatmap or forced placement in **Ocarina of Cumbia**.
 - [MUNDIAL DE LOS TECLADISTAS: Luciano Creiner vs Luvi (Octavos De Final) — Sin Miedo](https://open.spotify.com/track/6VUMSxWQiL6Sj5zbl9nzBX?si=6dd0b78b44b24991)
 - [Owner-supplied Cumbias playlist](https://open.spotify.com/playlist/5A1Y4grAfGIK6W1aolWKAm?si=deb5fc48e0c541dc)
 
