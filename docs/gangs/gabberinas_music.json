@@ -14,7 +14,8 @@
       "GAB-MUSIC-004",
       "GAB-MUSIC-005",
       "GAB-MUSIC-006",
-      "GAB-MUSIC-007"
+      "GAB-MUSIC-007",
+      "GAB-MUSIC-008"
     ],
     "previous_phonkistas_correction": "Warpath — Redforce remains Phonkistas only. Fabitekk Glubis has been directly selected for Gabberina's despite Hardtekkas also existing.",
     "favorite_must_add_ids": [
@@ -180,6 +181,40 @@
       "beat_grid_and_cues": "not_measured",
       "original_source_audio": "not_supplied",
       "exact_master_and_isrc_status": "not_verified",
+      "synchronization_and_distribution_rights": "not_verified",
+      "in_game_playback_status": "not_integrated"
+    },
+    {
+      "reference_id": "GAB-MUSIC-008",
+      "title": "TATVERDACHT",
+      "artist": "HARDWICK",
+      "spotify_track_id": "0VBPfqh2QwrVPG9129PYNs",
+      "owner_supplied_url": "https://open.spotify.com/track/0VBPfqh2QwrVPG9129PYNs?si=9359aa816e9549bd",
+      "owner_selection_date": "2026-11-15",
+      "is_owner_approved": true,
+      "assignment": "gabberinas_only",
+      "album": "TATVERDACHT",
+      "listed_release_date": "2026-08-14",
+      "listed_duration": "1:19",
+      "explicit_lyrics_indicator": "Reported explicit by third-party artist playlist metadata; recheck exact linked track in Spotify before applying age rating",
+      "recording_version_note": "Exact owner-linked NORMAL/ORIGINAL short recording, 1:19, NOT separately published 'TATVERDACHT - Slowed' (Spotify ID 0L3fthNLCraLfnbHFUF1Cv, ~1:29). Independent third-party catalogs list the release 2026-08-14; exact streaming ISRC, complete credits, master and licensed version must be checked.",
+      "source_verification_urls": [
+        "https://open.spotify.com/track/0VBPfqh2QwrVPG9129PYNs",
+        "https://streamclout.io/track/tatverdacht/0VBPfqh2QwrVPG9129PYNs",
+        "https://www.last.fm/music/Hardwick/TATVERDACHT",
+        "https://streamclout.io/album/tatverdacht/4LfTS1YT9DT3RNeEpE9hPK"
+      ],
+      "style_note": "HARDWICK producer catalog features hardtekk/gabber-adjacent tracks, but exact composition BPM and substyle are not measured.",
+      "owner_status": "must_add_regular_gabberina_music",
+      "proposed_use": [
+        "gabberinas_gang_radio",
+        "fast_skating_challenge",
+        "short_form_rival_intro",
+        "jumpstyle_hardtekk_dance"
+      ],
+      "exact_spotify_master_and_isrc_status": "not_verified",
+      "beat_grid_and_cues": "not_analyzed",
+      "authorized_recording_status": "not_supplied",
       "synchronization_and_distribution_rights": "not_verified",
       "in_game_playback_status": "not_integrated"
     }

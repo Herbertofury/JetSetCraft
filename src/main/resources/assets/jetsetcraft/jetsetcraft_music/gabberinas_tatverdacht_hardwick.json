@@ -1,0 +1,32 @@
+{
+  "title": "TATVERDACHT",
+  "artist": "HARDWICK",
+  "album": "TATVERDACHT",
+  "sound_event": "jetsetcraft:licensed/gabberinas_tatverdacht_hardwick",
+  "audio_resource": "jetsetcraft:sounds/music/licensed/gabberinas_tatverdacht_hardwick.ogg",
+  "contexts": [
+    "rush"
+  ],
+  "volume": 0.65,
+  "source_url": "https://open.spotify.com/track/0VBPfqh2QwrVPG9129PYNs?si=9359aa816e9549bd",
+  "spotify_track_id": "0VBPfqh2QwrVPG9129PYNs",
+  "release_date": "2026-08-14",
+  "listed_duration": "1:19",
+  "specific_version": "regular/original short 1:19 track; NOT TATVERDACHT - Slowed (~1:29)",
+  "alternate_version_to_avoid": {
+    "title": "TATVERDACHT - Slowed",
+    "spotify_track_id": "0L3fthNLCraLfnbHFUF1Cv"
+  },
+  "master_note": "Third-party release archive and Last.fm confirm title, artist, single release date and approximate regular-mix duration; exact Spotify master and ISRC remain unverified.",
+  "sources": [
+    "https://streamclout.io/track/tatverdacht/0VBPfqh2QwrVPG9129PYNs",
+    "https://www.last.fm/music/Hardwick/TATVERDACHT",
+    "https://streamclout.io/album/tatverdacht/4LfTS1YT9DT3RNeEpE9hPK"
+  ],
+  "gang_id": "jetsetcraft:gabberinas",
+  "intended_placement": "Gabberina's only, after real gang-specific picker exists; NOT general Rush, Hardtekkas or Phonkistas",
+  "owner_reference_id": "GAB-MUSIC-008",
+  "recording_status": "awaiting_authorized_audio",
+  "beat_grid_status": "not_analyzed",
+  "rights_status": "sync_and_redistribution_not_verified; no_audio_bundled"
+}

@@ -1,5 +1,12 @@
 # Crew-house and Rival Rush soundtrack
 
+## Gabberina's must-add #008 — TATVERDACHT / HARDWICK (2026-11-15)
+
+- **`GAB-MUSIC-008` · MUST ADD to Gabberina's ONLY:** [Exact owner-selected Spotify track](https://open.spotify.com/track/0VBPfqh2QwrVPG9129PYNs?si=9359aa816e9549bd) (`spotify:track:0VBPfqh2QwrVPG9129PYNs`). **“TATVERDACHT” by HARDWICK**, original **1:19** short mix, released **August 14, 2026** on the *TATVERDACHT* single ([release archive](https://streamclout.io/track/tatverdacht/0VBPfqh2QwrVPG9129PYNs); [album tracklist](https://www.last.fm/music/Hardwick/TATVERDACHT)).
+- **Edition lock:** The owner's normal mix is **not** [“TATVERDACHT - Slowed”](https://open.spotify.com/track/0L3fthNLCraLfnbHFUF1Cv) (about 1:29). Do not conflate IDs, re-edits, masters, cover artwork, duration or rights receipts. Exact Spotify ISRC, licensed master, original songwriter/producer credits, lyrics/rating and waveform beat grid require verification.
+- **Proposed use:** Gabberina-specific short-form high-energy rival entrance, fast skating/gabber/hardtekk movement challenge or crew radio. Music should only play after a gang-scoped selector, authorized source import, and real Minecraft gameplay tests. Existing global `rush` music does not implement crew affinity; this is **metadata only**, not audio or distribution permission.
+- [Machine-readable gang record](gangs/gabberinas_music.json) · [Gang wiki](../wiki/Gabberinas‐and‐Gang‐War‐Campaign.md).
+
 ## Gabberina's must-add #007 — Glubis / Fabitekk (2026-11-15)
 
 - **`GAB-MUSIC-007` — MUST ADD to Gabberina's ONLY:** [exact owner-supplied Spotify track](https://open.spotify.com/track/3hkjdQBsDi7XU11BkEKoRT?si=ca7ddee661a44eac), Spotify ID `3hkjdQBsDi7XU11BkEKoRT`. Verified song **“Glubis” — Fabitekk**, 4:38 ([Spotify artist listing](https://open.spotify.com/embed/artist/6RaOeGXGYJsBA26PvVVh1m)). [Qobuz](https://www.qobuz.com/fi-en/interpreter/fabitekk/6667684) and [Amazon Music](https://music.amazon.in/artists/B084JT8272/fabitekk) list an **August 26, 2026** *Glubis* single released by **Fabitekk Music**. Artist hardtekk/tekno direction supports the existing **jumpstyle / gabber / hardtekk** crew identity, but does not assign this track to Hardtekkas.
