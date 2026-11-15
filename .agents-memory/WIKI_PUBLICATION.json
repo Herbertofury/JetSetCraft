@@ -1,9 +1,9 @@
 {
   "schema": 1,
-  "source_commit": "6484c6d0ba6d8be86a2daf275b212fbeb902bb23",
-  "wiki_commit": "da6d8a298990437ded4b1222972afd4519a300c9",
+  "source_commit": "53a98234e23195b75c65f2cdfaa393ff4902880d",
+  "wiki_commit": "b90efa5ad4b69dfb8bfec4643fbef86068d9ee8f",
   "wiki_branch": "master",
-  "page_count": 61,
+  "page_count": 62,
   "pages": [
     "Approved-Ride-Expansion-and-Trick-Combat.md",
     "Bananettas-Music-Discovery.md",
@@ -41,6 +41,7 @@
     "Multiplayer-and-Servers.md",
     "Music-Library.md",
     "Music\u2010Driven-Dances-and-Mob\u2010Themed-Bosses.md",
+    "Neon-Labyrinth-Platformer-Metroidvania-Roguelike.md",
     "Ocarina-of-Cumbia-Easter-Egg.md",
     "Phonkistas.md",
     "Player-Chapters-Posse-and-Mob-Archetypes.md",
@@ -68,6 +69,6 @@
     "_Sidebar.md"
   ],
   "validated": true,
-  "published_at_utc": "2026-11-15T23:23:01.421629+00:00",
+  "published_at_utc": "2026-11-15T23:28:19.015004+00:00",
   "url": "https://github.com/Herbertofury/JetSetCraft/wiki"
 }
