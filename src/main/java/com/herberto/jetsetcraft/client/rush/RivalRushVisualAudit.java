@@ -263,8 +263,8 @@ public final class RivalRushVisualAudit {
             }
             case 15 -> {
                 if(!HonkistasGroundedVisualAudit.advance(minecraft,label -> capture(minecraft,label),CAPTURES::containsKey))return;
-                if(CAPTURES.size()!=29){finish(minecraft,false,"Expected29captures including original grounded route");return;}
-                finish(minecraft,true,"Existing26captures plus original actor grounded navigation; no skating/dance/event claim");
+                if(CAPTURES.size()!=30){finish(minecraft,false,"Expected30captures including original grounded route");return;}
+                finish(minecraft,true,"Existing26captures plus original actor grounded navigation and server-synced beat cue; no skating/attack/event claim");
             }
             default -> finish(minecraft, false, "unknown audit phase");
         }

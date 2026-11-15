@@ -450,9 +450,17 @@ public final class LibertyCampaignRuntimeGameTests {
                     MinecraftForge.EVENT_BUS.post(event);
                     int expectedProgress = previousProgress + (objective.kind()
                             == com.herberto.jetsetcraft.liberty.LibertyMissionCatalog.ObjectiveKind.TERRITORY ? 1 : 0);
-                    check(event.isCanceled() && event.getCancellationResult().consumesAction() && objective.progress() == expectedProgress
-                                    && f.capture.owned.stream().anyMatch(e -> e instanceof GraffitiEntity && !e.isRemoved()),
-                            "Home right-click failed its actual overlay or credited paint to an unrelated objective kind");
+                    String sprayDiagnostic=" kind="+objective.kind()+" phase="+f.operation.phase()
+                            +" held="+f.owner.getMainHandItem()+" player="+f.owner.position()+" support="+support
+                            +" distanceSquared="+f.owner.distanceToSqr(Vec3.atCenterOf(support))
+                            +" sturdy="+f.source.getBlockState(support).isFaceSturdy(f.source,support,Direction.UP)
+                            +" progress="+previousProgress+"->"+objective.progress()+" expected="+expectedProgress;
+                    check(event.isCanceled(),"Home right-click was not cancelled by its production handler;"+sprayDiagnostic);
+                    check(event.getCancellationResult().consumesAction(),"Home right-click did not produce an accepted paint result; result="
+                            +event.getCancellationResult()+sprayDiagnostic);
+                    check(objective.progress()==expectedProgress,"Home right-click credited the wrong objective progression;"+sprayDiagnostic);
+                    check(f.capture.owned.stream().anyMatch(e -> e instanceof GraffitiEntity && !e.isRemoved()),
+                            "Home right-click produced no live owned graffiti overlay;"+sprayDiagnostic);
                     check(!neighbor.hurt(f.owner.damageSources().playerAttack(f.owner), 1000) && neighbor.getHealth() == neighborHealth,
                             "Home-defense player damage reached an unrelated existing mob");
                     var base = f.operation.mission.sites().stream().filter(s -> s.optional()

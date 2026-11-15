@@ -47,6 +47,11 @@ public final class HonkistasPrototypeGameTests {
         helper.onEachTick(fixture::tick);
     }
 
+    @GameTest(template="hoverboard_empty",timeoutTicks=360)
+    public static void serverBeatCueSyncsAndExpiresWhileNativeRouteMoves(GameTestHelper helper){
+        RouteFixture fixture=new RouteFixture(helper,true);helper.onEachTick(fixture::tick);
+    }
+
     private static final class RouteFixture {
         private static final TicketType<BlockPos> TICKET=TicketType.create(
                 "jetsetcraft_original_route_test",BlockPos::compareTo,5);
@@ -54,13 +59,18 @@ public final class HonkistasPrototypeGameTests {
         private final BlockPos origin;
         private final ChunkPos chunk;
         private final Map<BlockPos,BlockState> saved=new LinkedHashMap<>();
-        private HonkistasPrototypeEntity actor;
+        private HonkistasPrototypeEntity actor,metadataReplica;
         private Vec3 initial;
         private int ticks,phase;
         private double displacement;
         private boolean grounded,finished;
-        RouteFixture(GameTestHelper helper){
-            this.helper=helper;
+        private final boolean cueTest;
+        private int cueStartTick,noAiCueStartTick;
+        private boolean movedDuringCue,expiredCue;
+        private Vec3 cueStartPosition;
+        RouteFixture(GameTestHelper helper){this(helper,false);}
+        RouteFixture(GameTestHelper helper,boolean cueTest){
+            this.cueTest=cueTest;this.helper=helper;
             BlockPos anchor=helper.absolutePos(BlockPos.ZERO);
             chunk=new ChunkPos(anchor);
             // A natural underground fixture can receive falling gravel from above.
@@ -111,7 +121,24 @@ public final class HonkistasPrototypeGameTests {
                     check(!actor.startControlledRoute(java.util.Collections.nCopies(17,origin.offset(4,1,1)),1,120),"Accepted oversized route");
                     check(actor.startControlledRoute(List.of(origin.offset(4,1,1),origin.offset(4,1,4)),1,180),"Grounded route rejected");
                     check(!actor.startControlledRoute(List.of(origin.offset(1,1,1)),1,120),"Running route overwritten");
+                    if(cueTest){
+                        check(actor.startBeatCue(),"Server beat cue refused");cueStartTick=actor.tickCount;cueStartPosition=actor.position();
+                        check(!actor.startBeatCue() && actor.beatCueTicksRemaining()==HonkistasPrototypeEntity.BEAT_CUE_TICKS,
+                                "Overlapping cue replaced the active bounded gesture");
+                        verifyCueMetadata();
+                    }
                     phase=2;return;
+                }
+                if(cueTest && phase>=2 && !expiredCue){
+                    int elapsed=actor.tickCount-cueStartTick;
+                    check(actor.beatCueTicksRemaining()==Math.max(0,HonkistasPrototypeEntity.BEAT_CUE_TICKS-elapsed),
+                            "Server cue failed exact native tick countdown");
+                    if(actor.beatCueTicksRemaining()>0 && actor.position().distanceTo(cueStartPosition)>.5
+                            && actor.controlledRouteStatus()==RouteStatus.RUNNING)movedDuringCue=true;
+                    if(elapsed>=HonkistasPrototypeEntity.BEAT_CUE_TICKS){
+                        check(actor.beatCueTicksRemaining()==0 && movedDuringCue,"Cue failed automatic reset or prevented real walking");
+                        expiredCue=true;
+                    }
                 }
                 if(phase==2){
                     displacement=Math.max(displacement,actor.position().distanceTo(initial));
@@ -120,17 +147,30 @@ public final class HonkistasPrototypeGameTests {
                     check(actor.controlledRouteStatus()==RouteStatus.COMPLETED
                             && actor.controlledRouteCompletedWaypoints()==2 && displacement>3 && grounded,
                             "Real grounded navigation did not finish both waypoints: "+actor.controlledRouteStatus()+" moved="+displacement+" diagnostic="+actor.controlledRouteDiagnostic());
+                    if(cueTest && !expiredCue)return;
+                    if(cueTest){
+                        check(actor.startBeatCue(),"Completed cue could not restart");actor.cancelBeatCue();
+                        check(actor.beatCueTicksRemaining()==0,"Explicit cue cancellation did not reset metadata");
+                        verifyCueMetadata();
+                    }
                     check(actor.startControlledRoute(List.of(origin.offset(1,1,1)),1,120),"Cancellation route rejected");
                     actor.cancelControlledRoute();
                     check(actor.controlledRouteStatus()==RouteStatus.CANCELLED && actor.getNavigation().isDone(),"Cancellation retained navigation");
                     // AI disabled deliberately to verify a genuine server-time deadline, not simulated movement.
                     actor.setNoAi(true);
+                    if(cueTest){check(actor.startBeatCue(),"No-AI cue refused");noAiCueStartTick=actor.tickCount;}
                     check(actor.startControlledRoute(List.of(origin.offset(1,1,1)),1,3),"Deadline route rejected");
                     phase=3;return;
                 }
                 if(phase==3){
                     if(actor.controlledRouteStatus()==RouteStatus.RUNNING)return;
                     check(actor.controlledRouteStatus()==RouteStatus.FAILED_TIMEOUT,"Disabled-AI route escaped native timeout");
+                    if(cueTest){
+                        check(actor.beatCueTicksRemaining()==HonkistasPrototypeEntity.BEAT_CUE_TICKS-(actor.tickCount-noAiCueStartTick)
+                                        && actor.beatCueTicksRemaining()<HonkistasPrototypeEntity.BEAT_CUE_TICKS,
+                                "No-AI actor did not tick its server cue independently of failed navigation");
+                        actor.cancelBeatCue();check(actor.beatCueTicksRemaining()==0,"No-AI cue cancellation failed");
+                    }
                     actor.setNoAi(false);
                     helper.getLevel().setBlockAndUpdate(origin.offset(1,1,1),Blocks.STONE.defaultBlockState());
                     helper.getLevel().setBlockAndUpdate(origin.offset(1,2,1),Blocks.STONE.defaultBlockState());
@@ -139,14 +179,31 @@ public final class HonkistasPrototypeGameTests {
                 }
                 if(actor.controlledRouteStatus()==RouteStatus.RUNNING)return;
                 check(actor.controlledRouteStatus()==RouteStatus.FAILED_PATH,"Solid waypoint not reported as path failure");
-                System.out.println("JETSETCRAFT_GAMETEST_PASS original_actor_native_route moved="+displacement);
+                System.out.println("JETSETCRAFT_GAMETEST_PASS "+(cueTest?"original_actor_synced_beat_cue":"original_actor_native_route")+" moved="+displacement);
                 close();helper.succeed();
             }catch(RuntimeException|Error failure){close();throw failure;}
+        }
+        private void verifyCueMetadata(){
+            // Actual vanilla metadata packet codec, not a client progress assignment in the visual audit.
+            // Consumes fixture-only dirty updates to exercise both active and default/reset packets.
+            var values=actor.getEntityData().packDirty();
+            if(metadataReplica==null)metadataReplica=ModEntities.HONKISTAS_PROTOTYPE.get().create(helper.getLevel());
+            check(metadataReplica!=null,"Metadata receiver unavailable");
+            var bytes=new net.minecraft.network.FriendlyByteBuf(io.netty.buffer.Unpooled.buffer());
+            try{
+                var packet=new net.minecraft.network.protocol.game.ClientboundSetEntityDataPacket(actor.getId(),values==null?List.of():values);
+                packet.write(bytes);
+                var decoded=new net.minecraft.network.protocol.game.ClientboundSetEntityDataPacket(bytes);
+                metadataReplica.getEntityData().assignValues(decoded.packedItems());
+                check(bytes.readableBytes()==0 && metadataReplica.beatCueTicksRemaining()==actor.beatCueTicksRemaining(),
+                        "Native entity metadata lost the exact cue countdown");
+            }finally{bytes.release();}
         }
         private static void check(boolean condition,String message){if(!condition)throw new GameTestAssertException(message);}
         private void close(){
             if(finished)return;finished=true;
-            if(actor!=null){actor.cancelControlledRoute();actor.discard();}
+            if(actor!=null){actor.cancelBeatCue();actor.cancelControlledRoute();actor.discard();}
+            if(metadataReplica!=null)metadataReplica.discard();
             saved.forEach((pos,state)->helper.getLevel().setBlockAndUpdate(pos,state));
             helper.getLevel().getChunkSource().removeRegionTicket(TICKET,chunk,3,origin);
         }

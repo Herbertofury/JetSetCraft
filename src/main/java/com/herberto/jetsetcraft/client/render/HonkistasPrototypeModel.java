@@ -47,6 +47,20 @@ public final class HonkistasPrototypeModel extends EntityModel<HonkistasPrototyp
                 // Authored gait pose only, not movement-responsive cloth simulation.
                 torso.getChild(n+"_tail").xRot=-.12f-Math.max(0,swing*side)*.13f;
             }
+            // Upper-body overlay only. The server countdown arrives through native entity metadata;
+            // no lower-body route joint, movement velocity or damage state is written here.
+            int remaining=entity.beatCueTicksRemaining();
+            if(remaining>0){
+                float elapsed=HonkistasPrototypeEntity.BEAT_CUE_TICKS-remaining
+                        +Mth.clamp(ageInTicks-entity.tickCount,0,1);
+                float envelope=Math.min(Mth.clamp(elapsed/8,0,1),Mth.clamp(remaining/10.0f,0,1));
+                float beat=Mth.sin(elapsed*.42f)*.16f;
+                ModelPart cueArm=torso.getChild("right_arm");
+                cueArm.xRot=Mth.lerp(envelope,cueArm.xRot,-1.05f+beat);
+                cueArm.zRot=Mth.lerp(envelope,cueArm.zRot,-.48f);
+                ModelPart elbow=cueArm.getChild("forearm");
+                elbow.xRot=Mth.lerp(envelope,elbow.xRot,-1.05f-beat);
+            }
         }
     }
 

@@ -1,5 +1,8 @@
 package com.herberto.jetsetcraft.entity;
 
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import java.util.EnumSet;
 import java.util.List;
 import net.minecraft.core.BlockPos;
@@ -19,6 +22,18 @@ import net.minecraftforge.network.NetworkHooks;
 
 /** Original theatrical visual prototype. No natural spawns, reward, gang substitution or named-character likeness. */
 public final class HonkistasPrototypeEntity extends PathfinderMob {
+    public static final int BEAT_CUE_TICKS=48;
+    private static final EntityDataAccessor<Integer> BEAT_CUE=SynchedEntityData.defineId(
+            HonkistasPrototypeEntity.class,EntityDataSerializers.INT);
+    @Override protected void defineSynchedData(){super.defineSynchedData();entityData.define(BEAT_CUE,0);}
+    /** A transient server-authoritative stage cue, never an attack or navigation replacement. */
+    public boolean startBeatCue(){
+        if(level().isClientSide || !isAlive() || beatCueTicksRemaining()!=0)return false;
+        entityData.set(BEAT_CUE,BEAT_CUE_TICKS);return true;
+    }
+    public void cancelBeatCue(){if(!level().isClientSide)entityData.set(BEAT_CUE,0);}
+    public int beatCueTicksRemaining(){return entityData.get(BEAT_CUE);}
+
     public enum RouteStatus { IDLE, RUNNING, COMPLETED, FAILED_PATH, FAILED_TIMEOUT, CANCELLED }
     private RouteStatus routeStatus=RouteStatus.IDLE;
     private List<BlockPos> route=List.of();
@@ -59,6 +74,8 @@ public final class HonkistasPrototypeEntity extends PathfinderMob {
     private void finishRoute(RouteStatus result){routeStatus=result;getNavigation().stop();route=List.of();}
     @Override public void tick(){
         super.tick();
+        if(!level().isClientSide && beatCueTicksRemaining()>0)
+            entityData.set(BEAT_CUE,isAlive()?beatCueTicksRemaining()-1:0);
         // Real server time also bounds disabled-AI routes. No manually advanced fixture clock.
         if(!level().isClientSide && routeStatus==RouteStatus.RUNNING && level().getGameTime()>=routeDeadline)
             finishRoute(RouteStatus.FAILED_TIMEOUT);
