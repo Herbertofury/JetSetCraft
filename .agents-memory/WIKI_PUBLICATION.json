@@ -1,9 +1,9 @@
 {
   "schema": 1,
-  "source_commit": "97553dd7fac261bc8439daffcc2e256fd7d98ada",
-  "wiki_commit": "749102fb349ce521331e55ef237da22d8d75b3d5",
+  "source_commit": "6d8c4de6ca9992d472b76acae4ddfd30a27a0452",
+  "wiki_commit": "5fe3d49d4cb68895705eedfbbc5c9e59490a762d",
   "wiki_branch": "master",
-  "page_count": 54,
+  "page_count": 55,
   "pages": [
     "Approved-Ride-Expansion-and-Trick-Combat.md",
     "Breakdance-and-Cyphers.md",
@@ -39,6 +39,7 @@
     "Music\u2010Driven-Dances-and-Mob\u2010Themed-Bosses.md",
     "Phonkistas.md",
     "Player-Chapters-Posse-and-Mob-Archetypes.md",
+    "Reactive-Music-Engine-and-Killer-Instinct-Reference.md",
     "Release-Status.md",
     "Research-Animation-Models-and-Creators.md",
     "Research-Frameworks-Java-and-Bedrock.md",
@@ -61,6 +62,6 @@
     "_Sidebar.md"
   ],
   "validated": true,
-  "published_at_utc": "2026-11-12T08:43:08.925318+00:00",
+  "published_at_utc": "2026-11-15T18:41:25.365940+00:00",
   "url": "https://github.com/Herbertofury/JetSetCraft/wiki"
 }
