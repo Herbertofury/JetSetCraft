@@ -12,7 +12,11 @@
       "Bananettas"
     ],
     "song_spotify_id": "10hnzFqOkWifT35HfvbaNc",
-    "song_event_only": true
+    "song_event_only": true,
+    "additional_event_only_spotify_track_ids": [
+      "6oZ5yDIq74QhCbIMsLyqC4"
+    ],
+    "creative_rationale": "Owner loves that Afia Mala's vocal phrasing in 'Koma' sounds to their ear like 'kumbia'; an intentionally playful phonetic association, not a verified transcription or genre claim."
   },
   "naming_note": "bannistas interpreted as established Bananettas, not a separate gang",
   "song": {
@@ -48,5 +52,37 @@
     "client_tested": false,
     "server_tested": false
   },
-  "wiki_page": "wiki/Cumbias-Bananettas-Decalco-Mambo-Faceoff.md"
+  "wiki_page": "wiki/Cumbias-Bananettas-Decalco-Mambo-Faceoff.md",
+  "additional_event_only_songs": [
+    {
+      "reference_id": "JSC-RARE-MAMBO-20261115-002",
+      "title": "Koma",
+      "artist": "Afia Mala",
+      "owner_supplied_url": "https://open.spotify.com/track/6oZ5yDIq74QhCbIMsLyqC4?si=dc239d91d6374d1a",
+      "spotify_track_id": "6oZ5yDIq74QhCbIMsLyqC4",
+      "owner_selected_date": "2026-11-15",
+      "album": "Desir",
+      "linked_spotify_album_release_year": 1989,
+      "linked_spotify_duration": "5:05",
+      "historical_origin_note": "Discography/research documents the song on Afia Mala's 1984 Togolese Afro-boogie LP recorded in Paris; the exact user-linked Spotify recording is a 1989 KP&P-Sonodisc Desir edition and must not be swapped with 1984 vinyl or modern remixes.",
+      "source_urls": [
+        "https://open.spotify.com/intl-es/track/6oZ5yDIq74QhCbIMsLyqC4",
+        "https://www.qobuz.com/us-en/album/desir-afia-mala/xbqtor72ujwsa",
+        "https://africangrooves.fr/region/togo/"
+      ],
+      "proposed_style": "Togolese Afro-boogie / Afro-disco, not to be mislabeled traditional Mexican cumbia",
+      "owner_reason": "Sounds amusingly like she sings 'kumbia' to the project owner",
+      "lyric_claim_status": "not_transcribed_or_verified_do_not_claim_actual_kumbia_lyric",
+      "cue_placement_status": "unassigned; both this and Le Mambo du décalco are valid candidate event-only cues, not both mandatory simultaneously",
+      "approved_scope": "same_rare_Cumbias_x_Bananettas_faceoff_event_only",
+      "ordinary_gang_rotation": false,
+      "separately_triggered_event": false,
+      "edition_isrc_status": "not_verified",
+      "master_status": "not_supplied",
+      "sync_and_distribution_rights_status": "not_verified",
+      "beat_grid_and_cues_status": "not_measured",
+      "playback_status": "not_integrated"
+    }
+  ],
+  "event_music_selection_status": "Two owner-approved event-only recordings, no owner-approved sequence or cue offsets; exact runtime music decision pending."
 }

@@ -66,7 +66,7 @@ No copyrighted recording, video, cover art or sample is included here. The proje
 
 ## Rare Cumbias × Bananettas showdown (event-only)
 
-The owner also requires [**Décalco Mambo — rare two-crew face-off**](Cumbias-Bananettas-Decalco-Mambo-Faceoff), featuring exact [**“Le Mambo du décalco” — Richard Gotainer**](https://open.spotify.com/track/10hnzFqOkWifT35HfvbaNc?si=edfb79914dc9426e) as **event-only music**. This is a separate rare encounter against both gangs, **not a 15th regular Bananettas radio track**. The title and proposed 1% tuning are design proposals; the encounter is not shipped.
+The owner also requires [**Décalco Mambo — rare two-crew face-off**](Cumbias-Bananettas-Decalco-Mambo-Faceoff), featuring **two event-only cues**: [**“Le Mambo du décalco” — Richard Gotainer**](https://open.spotify.com/track/10hnzFqOkWifT35HfvbaNc?si=edfb79914dc9426e) and [**“Koma” — Afia Mala**](https://open.spotify.com/track/6oZ5yDIq74QhCbIMsLyqC4?si=dc239d91d6374d1a). The owner chose the latter because it *sounds* like the singer says “kumbia”; that is **not a verified lyric**. This is a separate rare encounter against both gangs, **not a 15th regular Bananettas radio track**. The title and proposed 1% tuning are design proposals; the encounter is not shipped.
 
 ## Research backlog — 2026 audition candidates
 
