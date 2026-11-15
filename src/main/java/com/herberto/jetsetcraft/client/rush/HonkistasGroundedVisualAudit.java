@@ -69,7 +69,7 @@ public final class HonkistasGroundedVisualAudit {
             ++ticks;
             if(ticks%100==0){UUID owner=mc.player.getUUID();server.execute(()->{
                 var p=server.getPlayerList().getPlayer(owner);var a=p.serverLevel().getEntity(actorId);
-                serverDiagnostic="player="+p.position()+" velocity="+p.getDeltaMovement()+" actor="+(a==null?"absent":a.position()+" ground="+a.onGround());
+                serverDiagnostic="player="+p.position()+" velocity="+p.getDeltaMovement()+" actor="+(a==null?"absent":a.position()+" ground="+a.onGround()+" route="+((HonkistasPrototypeEntity)a).controlledRouteStatus()+" diagnostic="+((HonkistasPrototypeEntity)a).controlledRouteDiagnostic());
             });}
             if(ticks>500){
                 net.minecraft.world.entity.Entity visible=null;
