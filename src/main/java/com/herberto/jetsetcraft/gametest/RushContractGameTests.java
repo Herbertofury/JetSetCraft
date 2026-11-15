@@ -204,9 +204,11 @@ public final class RushContractGameTests {
     @GameTest(template = "hoverboard_empty", timeoutTicks = 600)
     public static void huntCountsOnlyAcceptedOwnedCaptainAndEliteDefeats(GameTestHelper helper) {
         Fixture fixture = begin(helper, "JSC_hunt", "needlepoint_crossing");
-        ChunkPos huntCenter = new ChunkPos(fixture.center);
-        for (int x = -4; x <= 4; x++) for (int z = -4; z <= 4; z++)
-            fixture.district.getChunk(huntCenter.x + x, huntCenter.z + z);
+        try {
+            ChunkPos huntCenter = new ChunkPos(fixture.center);
+            for (int x = -4; x <= 4; x++) for (int z = -4; z <= 4; z++)
+                fixture.district.getChunk(huntCenter.x + x, huntCenter.z + z);
+        } catch (RuntimeException | Error failure) { cleanup(fixture); throw failure; }
         awaitHuntResidency(helper, fixture, 0, () -> {
             try {
                 ServerPlayer player = fixture.player; RushRun run = RivalRushManager.run(player);
@@ -324,7 +326,7 @@ public final class RushContractGameTests {
             try {
                 int resident = huntResidentChunks(fixture);
                 if (resident == 25) { ready.run(); return; }
-                check(waited < 120, "Native hunt fixture residency timed out: " + resident + "/25 chunks");
+                check(waited + 1 < 120, "Native hunt fixture residency timed out: " + resident + "/25 chunks");
                 awaitHuntResidency(helper, fixture, waited + 1, ready);
             } catch (RuntimeException | Error failure) { cleanup(fixture); throw failure; }
         });

@@ -24,3 +24,6 @@ Location diagnostics da6cdcc show an unregistered elite in a loaded nearby chunk
 
 
 Independent review found the existing HeadlinerRecoveryFixture already solves this distinction: outer±4 terrain preload plus a bounded120-native-tick gate requiring all25 inner chunks to be entity-ticking before clock compression. Reused that established readiness gate for the hunt fixture. The speculative forced-chunk candidate was local only and reverted before publication; no forced-chunk flags are changed. The original30 elite-advance bound and owned-body damage assertions remain.
+
+
+The residency candidate ae9d8e6 passed Aether, Cataclysm and missing-pack native CI lanes on first observation; other lanes were still running. Independent review confirmed substantive assertions remained intact and requested cleanup on preload failure and an exact120-observation deadline. Applied both. Recursive delayed polling completed the passing native lanes without scheduler errors; final full-lane acceptance is still required.
