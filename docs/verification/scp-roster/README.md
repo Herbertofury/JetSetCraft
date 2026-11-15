@@ -9,3 +9,6 @@ Initial candidate `d1ab998b05d8448e54bac445d91497237174aac9` compiled, but nativ
 Inspection found the runtime elite cadence counted attempted spawns: `sequence` advances before entity creation/placement/equipment admission, then `% 5` selected elites. Rejected admissions could therefore consume elite positions. The repair keeps placement/species attempt rotation unchanged but advances a separate admission counter only after successful world insertion and equipment/director acceptance. Elite scheduling uses the next accepted slot. With no rejected admissions this retains the existing cadence; failed attempts no longer silently consume it. This is a diagnosed mechanism and candidate repair, not a proven universal cause until final native comparison succeeds.
 
 The original failed runs remain retained. Re-run final native CI and the existing hunt fixture; do not weaken its assertion, raise its attempt limit or claim rendered character acceptance from a roster/encounter counter test.
+
+
+Candidate repair6144277 compiled but the base native GameTest still failed the same bounded elite assertion. It is not a verified fix. Added bounded encounter counters and failure-only fixture snapshots to identify whether the blocked step is admission, selection, paused progression or actor observation, without weakening the assertion or increasing its bounds.

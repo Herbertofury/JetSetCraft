@@ -310,7 +310,11 @@ public final class RushContractGameTests {
             for (Mob mob : actors(player)) if (elite(mob)) return mob;
             actors(player).forEach(Mob::discard); chooseDrafts(player); advance(run, 40); RivalRushManager.tick(player.getServer());
         }
-        throw new GameTestAssertException("The bounded real director did not spawn an owned elite for its hunt fixture");
+        throw new GameTestAssertException("The bounded real director did not spawn an owned elite for its hunt fixture; "
+                + "encounter=" + RivalRushManager.encounterSnapshot(player)
+                + "; journey=" + RivalRushManager.journeySnapshot(player)
+                + "; contract=" + contract(player)
+                + "; visible=" + actors(player).stream().map(mob -> mob.getName().getString()).toList());
     }
     private static void defeat(ServerPlayer player, Mob mob) {
         chooseDrafts(player); mob.moveTo(player.getX() + 5, player.getY(), player.getZ(), 0, 0); mob.setDeltaMovement(Vec3.ZERO);

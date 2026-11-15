@@ -1633,6 +1633,10 @@ public final class RivalRushManager {
         tag.putInt("DefeatedCount", s.director.defeatedCount()); tag.putBoolean("ForgeEarned", s.director.forgeEarned());
         tag.putInt("EliteCount", (int) s.actors.values().stream().filter(a -> a.elite != RushDirector.Elite.NONE).count());
         tag.putInt("TellCount", s.director.tells().size());
+        tag.putInt("SpawnAttempts", s.sequence); tag.putInt("AdmittedActors", s.admittedSequence);
+        tag.putInt("TrackedActors", s.actors.size()); tag.putLong("ElapsedTicks", now);
+        tag.putLong("LastSpawnTick", s.lastSpawn); tag.putBoolean("DraftPending", s.run.hasOffer());
+        tag.putBoolean("Finished", s.run.isFinished());
         tag.putBoolean("RoomVictoryRequired", s.circuit != null && (s.circuit.completed() + 1 == 3 || s.circuit.completed() + 1 == 6)
                 && !s.director.permitsRoomCompletion(s.circuit.set(), s.circuit.completed() + 1));
         return tag;
