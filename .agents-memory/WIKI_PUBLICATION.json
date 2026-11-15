@@ -1,9 +1,9 @@
 {
   "schema": 1,
-  "source_commit": "0a4f7748dbf8130baf65f208e17a56b9e45b0836",
-  "wiki_commit": "1a49fca1674ecac6d1a6f740dc7e3a16cbd11409",
+  "source_commit": "4d1fc4e54f620af1a12c2857ee432ea96970a092",
+  "wiki_commit": "44c6575bb7da2d5c97e6562cd845b4ca65dd5a91",
   "wiki_branch": "master",
-  "page_count": 63,
+  "page_count": 64,
   "pages": [
     "Adventure-Mode.md",
     "Approved-Ride-Expansion-and-Trick-Combat.md",
@@ -27,6 +27,7 @@
     "Getting-Started.md",
     "Graffiti.md",
     "Grinding-and-Transfers.md",
+    "Hakken-Horse.md",
     "Hangouts-Territory-and-Reputation.md",
     "Hardtekkas.md",
     "Home.md",
@@ -70,6 +71,6 @@
     "_Sidebar.md"
   ],
   "validated": true,
-  "published_at_utc": "2026-11-15T23:32:33.528847+00:00",
+  "published_at_utc": "2026-11-15T23:33:34.133843+00:00",
   "url": "https://github.com/Herbertofury/JetSetCraft/wiki"
 }
