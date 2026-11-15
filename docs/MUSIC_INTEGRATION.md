@@ -1,5 +1,12 @@
 # Crew-house and Rival Rush soundtrack
 
+## Gabberina's MUST ADD #009 and #010 — two owner Spotify links (2026-11-15)
+
+- **`GAB-MUSIC-009` · MUST ADD, exact title/artist UNRESOLVED:** [Owner Spotify recording](https://open.spotify.com/track/3N2LZ3XF42xlhpphwasGuS?si=e18a9def826d4a86) (`spotify:track:3N2LZ3XF42xlhpphwasGuS`). Exact Spotify page/metadata retrieval did not return a reliable track title or performer. **Approved for Gabberina's, NOT identified**. Preserve the ID unchanged, no invented credits, version, BPM or playability, and **do not create a fake credited `jetsetcraft_music/` entry** until verified.
+- **`GAB-MUSIC-010` · MUST ADD — “KrAnK” by LuuZz:** [Owner's exact Spotify track](https://open.spotify.com/track/4d76GwqPELl91wyM5cBEPO?si=4a8f7e0f3f924ecf) (`spotify:track:4d76GwqPELl91wyM5cBEPO`). [Apple Music's original LuuZz single](https://music.apple.com/us/album/krank-single/1725083971) lists **2024-01-20**, **6:22**, while [Amazon Music](https://music.amazon.de/albums/B0CRYTLCXD) lists 6:23. Treat as **Gabberina's jumpstyle/gabber/hardtekk** soundtrack candidate; exact linked Spotify master/ISRC/version still unverified. Metadata-only `jetsetcraft_music/gabberinas_krank_luuzz.json` does not represent audio.
+- **Rights, scope and status:** Both links are owner-confirmed MUST ADD **for Gabberina only**. They do not replace `GAB-MUSIC-004` through `008`, including personal-favorite `MANETTI`, or the older three references. **Warpath — Redforce remains Phonkistas-only.** Existing global `home`/`rush` music routing is not gang scoped; obtain exact authorized masters and per-song sync/redistribution clearance, then author real beat cues and test gameplay before marking these tracks playable. No Spotify ripping or copyrighted sound bundles.
+- [Gabberina's owner music registry](gangs/gabberinas_music.json) · [Gang wiki](../wiki/Gabberinas‐and‐Gang‐War‐Campaign.md).
+
 ## Gabberina's must-add #008 — TATVERDACHT / HARDWICK (2026-11-15)
 
 - **`GAB-MUSIC-008` · MUST ADD to Gabberina's ONLY:** [Exact owner-selected Spotify track](https://open.spotify.com/track/0VBPfqh2QwrVPG9129PYNs?si=9359aa816e9549bd) (`spotify:track:0VBPfqh2QwrVPG9129PYNs`). **“TATVERDACHT” by HARDWICK**, original **1:19** short mix, released **August 14, 2026** on the *TATVERDACHT* single ([release archive](https://streamclout.io/track/tatverdacht/0VBPfqh2QwrVPG9129PYNs); [album tracklist](https://www.last.fm/music/Hardwick/TATVERDACHT)).

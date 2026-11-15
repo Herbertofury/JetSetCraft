@@ -1,0 +1,25 @@
+{
+  "title": "KrAnK",
+  "artist": "LuuZz",
+  "album": "KrAnK",
+  "sound_event": "jetsetcraft:licensed/gabberinas_krank_luuzz",
+  "audio_resource": "jetsetcraft:sounds/music/licensed/gabberinas_krank_luuzz.ogg",
+  "contexts": [
+    "rush"
+  ],
+  "volume": 0.65,
+  "source_url": "https://open.spotify.com/track/4d76GwqPELl91wyM5cBEPO?si=4a8f7e0f3f924ecf",
+  "spotify_track_id": "4d76GwqPELl91wyM5cBEPO",
+  "original_single_release_date": "2024-01-20",
+  "original_release_source": "https://music.apple.com/us/album/krank-single/1725083971",
+  "alternate_release_source": "https://music.amazon.de/albums/B0CRYTLCXD",
+  "listed_duration": "6:22 (Apple Music); Amazon lists 6:23",
+  "recording_provenance_note": "The Spotify URL selects the exact desired track. Apple Music and Amazon corroborate KrAnK / LuuZz and 2024 origin; neither establishes identical Spotify ISRC/master. Obtain authorized master and verify before audio import.",
+  "genre_context": "hardtekk / tekno (artist context only, not waveform analysis)",
+  "gang_id": "jetsetcraft:gabberinas",
+  "intended_placement": "Gabberina's only after gang-scoped music picker exists; NOT global Rush, Hardtekkas or Phonkistas",
+  "owner_reference_id": "GAB-MUSIC-010",
+  "recording_status": "awaiting_authorized_audio",
+  "rights_status": "sync_and_redistribution_not_verified; no_audio_bundled",
+  "beat_grid_status": "not_measured"
+}

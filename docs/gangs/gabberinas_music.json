@@ -15,7 +15,9 @@
       "GAB-MUSIC-005",
       "GAB-MUSIC-006",
       "GAB-MUSIC-007",
-      "GAB-MUSIC-008"
+      "GAB-MUSIC-008",
+      "GAB-MUSIC-009",
+      "GAB-MUSIC-010"
     ],
     "previous_phonkistas_correction": "Warpath — Redforce remains Phonkistas only. Fabitekk Glubis has been directly selected for Gabberina's despite Hardtekkas also existing.",
     "favorite_must_add_ids": [
@@ -216,6 +218,66 @@
       "beat_grid_and_cues": "not_analyzed",
       "authorized_recording_status": "not_supplied",
       "synchronization_and_distribution_rights": "not_verified",
+      "in_game_playback_status": "not_integrated"
+    },
+    {
+      "reference_id": "GAB-MUSIC-009",
+      "title": null,
+      "artist": null,
+      "spotify_track_id": "3N2LZ3XF42xlhpphwasGuS",
+      "owner_supplied_url": "https://open.spotify.com/track/3N2LZ3XF42xlhpphwasGuS?si=e18a9def826d4a86",
+      "owner_selection_date": "2026-11-15",
+      "is_owner_approved": true,
+      "assignment": "gabberinas_only",
+      "source_type": "owner_supplied_exact_spotify_track",
+      "verification_status": "track_title_artist_not_publicly_resolved",
+      "identification_note": "Multiple Spotify exact-URL and indexed-search checks returned cache misses or no credible track-level identity; preserve exact Spotify ID as an approved must-add rather than guess.",
+      "release_date": null,
+      "album": null,
+      "duration": null,
+      "isrc": null,
+      "explicit_priority": "owner_must_add",
+      "proposed_use": [
+        "Gabberina-only crew music after source identity confirmed",
+        "future gang dance/skate encounters after permitted source, cues and rights"
+      ],
+      "catalogue_stub_status": "not_created_until_title_artist_identified",
+      "recording_master_status": "not_supplied",
+      "synchronization_and_distribution_rights": "not_verified",
+      "beat_grid_and_cues": "not_analyzed",
+      "in_game_playback_status": "not_integrated"
+    },
+    {
+      "reference_id": "GAB-MUSIC-010",
+      "title": "KrAnK",
+      "artist": "LuuZz",
+      "spotify_track_id": "4d76GwqPELl91wyM5cBEPO",
+      "owner_supplied_url": "https://open.spotify.com/track/4d76GwqPELl91wyM5cBEPO?si=4a8f7e0f3f924ecf",
+      "owner_selection_date": "2026-11-15",
+      "is_owner_approved": true,
+      "assignment": "gabberinas_only",
+      "source_type": "owner_supplied_exact_spotify_track",
+      "single": "KrAnK",
+      "release_date": "2024-01-20",
+      "label": "LuuZz",
+      "listed_duration": "6:22 (Apple Music original single; Amazon listing 6:23)",
+      "source_metadata_status": "Spotify linked track title identifies KrAnK — LuuZz; independent Apple Music original single verifies artist/title/release date; exact linked master, ISRC and edition require checking",
+      "verification_sources": [
+        "https://open.spotify.com/track/4d76GwqPELl91wyM5cBEPO",
+        "https://music.apple.com/us/album/krank-single/1725083971",
+        "https://music.amazon.de/albums/B0CRYTLCXD"
+      ],
+      "style_context": "Artist hardtekk/tekno; scene placements proposed, no claim of waveform-verified genre/BPM/beat map",
+      "owner_priority": "must_add",
+      "proposed_use": [
+        "Gabberina's gang-only radio",
+        "long-form skating/rival encounter",
+        "jumpstyle + gabber + hardtekk dance work"
+      ],
+      "recording_master_status": "not_supplied",
+      "exact_master_and_isrc_status": "not_verified",
+      "synchronization_and_distribution_rights": "not_verified",
+      "beat_grid_and_cues": "not_analyzed",
       "in_game_playback_status": "not_integrated"
     }
   ],
