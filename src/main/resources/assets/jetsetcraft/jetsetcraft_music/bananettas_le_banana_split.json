@@ -1,0 +1,22 @@
+{
+  "title": "Le Banana Split",
+  "artist": "Lio",
+  "album": "Lio",
+  "sound_event": "jetsetcraft:licensed/bananettas_le_banana_split",
+  "audio_resource": "jetsetcraft:sounds/music/licensed/bananettas_le_banana_split.ogg",
+  "contexts": [
+    "rush"
+  ],
+  "volume": 0.65,
+  "source_url": "https://open.spotify.com/album/5m0ka2doYDeh54QWdkaxT3",
+  "spotify_reference_track_number": 1,
+  "original_single_reference_url": "https://www.encyclopedisque.fr/disque/65862.html",
+  "original_release_year": 1979,
+  "target_version": "Original short French-language 1979 single recording (~2:33); match licensed master/ISRC before importing; do not use extended disco, English, 1995 remix or covers",
+  "exact_spotify_track_id": null,
+  "gang_id": "jetsetcraft:bananettas",
+  "intended_placement": "gang-specific only; future runtime must filter by gang before playback, not global Rush shuffle",
+  "owner_reference_id": "BANANETTAS-MUSIC-001",
+  "recording_status": "awaiting_authorized_audio",
+  "rights_status": "sync and redistribution not verified; no playable audio may be bundled without clearance"
+}

@@ -24,6 +24,7 @@
 | Pod-drop into a rival district, recover research and extract on skates | **[Liberty Grind](Liberty-Grind)** — current development implementation |
 | Build a house, develop crew profiles and send dispatch jobs | **[Player Chapters and Crew Houses](Player-Chapters-Posse-and-Mob-Archetypes)** |
 | Browse games, music, art and engineering inspiration | **[Inspiration & Research](Inspiration-and-Research)** |
+| Meet the new music-culture gangs | **[Bananettas](Bananettas)** · **[Signal '81](Signal-81)** (owner-confirmed concepts; not shipped rival encounters) |
 | Build a compatible modpack or server | **[Modpack Maker Guide](Modpack-Maker-Guide)** |
 | Inspect architecture and verification evidence | **[Developer Architecture](Developer-Architecture)** · **[Testing](Testing-and-Verification)** |
 

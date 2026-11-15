@@ -1,0 +1,76 @@
+{
+  "schema_version": 1,
+  "record_type": "human_music_culture_gang_design",
+  "canonical_name": "Bananettas",
+  "proposed_stable_gang_id": "jetsetcraft:bananettas",
+  "owner_selection_date": "2026-11-15",
+  "owner_confirmed": {
+    "name": true,
+    "track_ids": [
+      "BANANETTAS-MUSIC-001"
+    ]
+  },
+  "naming_context": {
+    "note": "Owner chose Bananettas for the existing Honkistas / Gabberinas / Phonkistas / Footworkas naming style.",
+    "not_the_same_as": [
+      "jetsetcraft:signal_81"
+    ],
+    "alias_status": "No alternate name selected; keep Bananettas canonical."
+  },
+  "style_direction": {
+    "status": "proposed_for_review",
+    "period_inspiration": [
+      "1979-early 1980s Francophone bubblegum pop and playful new wave",
+      "Lio's colorful Le Banana Split era",
+      "lighthearted French-language synthpop, roller disco, confectionery graphics"
+    ],
+    "proposed_palette": {
+      "banana_yellow": "#FFD84B",
+      "strawberry_pink": "#F25A92",
+      "cherry_red": "#E9425B",
+      "mint_teal": "#56D5C3",
+      "vanilla_cream": "#FFF5DD"
+    },
+    "motifs": [
+      "original banana-and-cherry street tag (not copied single artwork)",
+      "waffle-cone and ice-cream-scoop geometry",
+      "candy-striped skate wheels",
+      "bright plastic accessories and abstract pop graphics"
+    ],
+    "not_approved": "Palette, logo, lore, costumes, roster, movement, abilities and territory are design suggestions only."
+  },
+  "must_include_music": [
+    {
+      "reference_id": "BANANETTAS-MUSIC-001",
+      "title": "Le Banana Split",
+      "artist": "Lio",
+      "original_single_release_year": 1979,
+      "reference_version": "Original short French-language single recording (~2:33); not the extended disco, English, 1995 remix, or cover versions",
+      "spotify_reference_album_url": "https://open.spotify.com/album/5m0ka2doYDeh54QWdkaxT3",
+      "spotify_reference_track_number": 1,
+      "spotify_reference_status": "2005 compilation lists 2:33 recording; exact streaming master/ISRC equivalence to 1979 single not independently verified",
+      "exact_spotify_track_id": null,
+      "original_single_reference_url": "https://www.encyclopedisque.fr/disque/65862.html",
+      "credits_note": "Jay Alanski and Jacques Duvall (also credited as Hagen Dierks); Marc Moulin production per 1979 single discography; reconfirm against licensed master.",
+      "is_owner_approved": true,
+      "assignment": "bananettas_only",
+      "proposed_use": [
+        "gang_intro",
+        "gang_territory_boombox",
+        "skate_and_dance_challenge"
+      ],
+      "exact_cues_status": "not_analyzed",
+      "recording_master_status": "not_supplied",
+      "synchronization_rights_status": "not_verified",
+      "distribution_rights_status": "not_verified",
+      "in_game_playback_status": "not_integrated"
+    }
+  ],
+  "runtime_status": {
+    "design_record_only": true,
+    "human_gang_spawned": false,
+    "gang_specific_music_filter_implemented": false,
+    "playable_audio_bundled": false
+  },
+  "wiki_page": "wiki/Bananettas.md"
+}
