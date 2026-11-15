@@ -106,7 +106,7 @@ public final class HonkistasPrototypeGameTests {
                     if(actor.controlledRouteStatus()==RouteStatus.RUNNING)return;
                     check(actor.controlledRouteStatus()==RouteStatus.COMPLETED
                             && actor.controlledRouteCompletedWaypoints()==2 && displacement>3 && grounded,
-                            "Real grounded navigation did not finish both waypoints: "+actor.controlledRouteStatus()+" moved="+displacement);
+                            "Real grounded navigation did not finish both waypoints: "+actor.controlledRouteStatus()+" moved="+displacement+" diagnostic="+actor.controlledRouteDiagnostic());
                     check(actor.startControlledRoute(List.of(origin.offset(1,1,1)),1,120),"Cancellation route rejected");
                     actor.cancelControlledRoute();
                     check(actor.controlledRouteStatus()==RouteStatus.CANCELLED && actor.getNavigation().isDone(),"Cancellation retained navigation");

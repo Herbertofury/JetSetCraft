@@ -26,6 +26,7 @@ public final class HonkistasPrototypeEntity extends PathfinderMob {
     private double routeSpeed;
     private long routeDeadline;
     private boolean routeNeedsNavigation;
+    private String routeDiagnostic="not requested";
 
     /** Server-only, transient choreography; no teleport, rewards, event admission or skating. */
     public boolean startControlledRoute(List<BlockPos> points,double speed,int timeoutTicks){
@@ -36,13 +37,25 @@ public final class HonkistasPrototypeEntity extends PathfinderMob {
                 || level().isOutsideBuildHeight(point) || !level().hasChunkAt(point))return false;
         route=points.stream().map(BlockPos::immutable).toList();
         completedWaypoints=0;routeSpeed=speed;routeDeadline=level().getGameTime()+timeoutTicks;
-        getNavigation().stop();routeNeedsNavigation=true;routeStatus=RouteStatus.RUNNING;return true;
+        getNavigation().stop();routeNeedsNavigation=true;routeDiagnostic="requested";routeStatus=RouteStatus.RUNNING;return true;
     }
     public void cancelControlledRoute(){
         if(!level().isClientSide && routeStatus==RouteStatus.RUNNING)finishRoute(RouteStatus.CANCELLED);
     }
     public RouteStatus controlledRouteStatus(){return routeStatus;}
     public int controlledRouteCompletedWaypoints(){return completedWaypoints;}
+    /** Bounded latest snapshot, retained after failure; no history list or world mutation. */
+    public String controlledRouteDiagnostic(){return routeDiagnostic;}
+    private void diagnoseRoute(String reason,BlockPos target){
+        var path=getNavigation().getPath();
+        routeDiagnostic=reason+" position="+position()+" onGround="+onGround()+" entityTicks="+tickCount
+                +" target="+target+" targetBlock="+level().getBlockState(target)
+                +" above="+level().getBlockState(target.above())+" support="+level().getBlockState(target.below())
+                +" actorSupport="+level().getBlockState(blockPosition().below())
+                +" navigationDone="+getNavigation().isDone()
+                +" path="+(path==null?"null":("nodes="+path.getNodeCount()+" next="+path.getNextNodeIndex()
+                    +" canReach="+path.canReach()+" target="+path.getTarget()));
+    }
     private void finishRoute(RouteStatus result){routeStatus=result;getNavigation().stop();route=List.of();}
     @Override public void tick(){
         super.tick();
@@ -63,10 +76,13 @@ public final class HonkistasPrototypeEntity extends PathfinderMob {
             if(routeStatus!=RouteStatus.RUNNING)return;
             routeNeedsNavigation=false;
             BlockPos p=route.get(completedWaypoints);
-            if(!level().hasChunkAt(p) || !level().getBlockState(p).getCollisionShape(level(),p).isEmpty()
-                    || !level().getBlockState(p.above()).getCollisionShape(level(),p.above()).isEmpty()
-                    || !getNavigation().moveTo(p.getX()+.5,p.getY(),p.getZ()+.5,routeSpeed))
-                finishRoute(RouteStatus.FAILED_PATH);
+            String reason=null;
+            if(!level().hasChunkAt(p))reason="target_chunk_not_loaded";
+            else if(!level().getBlockState(p).getCollisionShape(level(),p).isEmpty())reason="target_collision";
+            else if(!level().getBlockState(p.above()).getCollisionShape(level(),p.above()).isEmpty())reason="target_head_collision";
+            else if(!getNavigation().moveTo(p.getX()+.5,p.getY(),p.getZ()+.5,routeSpeed))reason="moveTo_returned_false";
+            diagnoseRoute(reason==null?"navigation_started":reason,p);
+            if(reason!=null)finishRoute(RouteStatus.FAILED_PATH);
         }
         @Override public void tick(){
             if(routeStatus!=RouteStatus.RUNNING)return;
@@ -79,7 +95,9 @@ public final class HonkistasPrototypeEntity extends PathfinderMob {
                 completedWaypoints++;
                 if(completedWaypoints==route.size())finishRoute(RouteStatus.COMPLETED);
                 else navigate();
-            }else if(getNavigation().isDone())finishRoute(RouteStatus.FAILED_PATH);
+            }else if(getNavigation().isDone()){
+                diagnoseRoute("navigation_done_before_waypoint",p);finishRoute(RouteStatus.FAILED_PATH);
+            }
         }
     }
 
