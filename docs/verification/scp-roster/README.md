@@ -18,3 +18,9 @@ Diagnostic c4cc9ff Alex's Mobs job132769371959 showed an active admitted Linebre
 
 
 Real-tick scheduling e249d93 still reports an active elite but empty area-query results. The next candidate also resolves the reported elite UUID through ServerLevel's actual entity registry and verifies alive/native Mob/run ownership/elite label before accepting it. It never accepts an internal actor record alone or creates an entity. Failure evidence now includes native registry lookup and player query bounds to distinguish section-query visibility from missing registration.
+
+
+Location diagnostics da6cdcc show an unregistered elite in a loaded nearby chunk in the correct dimension. The fixture now explicitly activates its disposable loaded5x5 region through native forced-chunk management, preserving pre-existing force flags and removing only its own flags in cleanup. Fake players do not provide normal client entity-tracking presence. This is a test-environment candidate, not a production spawn change; native results remain required.
+
+
+Independent review found the existing HeadlinerRecoveryFixture already solves this distinction: outer±4 terrain preload plus a bounded120-native-tick gate requiring all25 inner chunks to be entity-ticking before clock compression. Reused that established readiness gate for the hunt fixture. The speculative forced-chunk candidate was local only and reverted before publication; no forced-chunk flags are changed. The original30 elite-advance bound and owned-body damage assertions remain.

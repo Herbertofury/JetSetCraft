@@ -204,7 +204,10 @@ public final class RushContractGameTests {
     @GameTest(template = "hoverboard_empty", timeoutTicks = 600)
     public static void huntCountsOnlyAcceptedOwnedCaptainAndEliteDefeats(GameTestHelper helper) {
         Fixture fixture = begin(helper, "JSC_hunt", "needlepoint_crossing");
-        helper.runAfterDelay(2, () -> {
+        ChunkPos huntCenter = new ChunkPos(fixture.center);
+        for (int x = -4; x <= 4; x++) for (int z = -4; z <= 4; z++)
+            fixture.district.getChunk(huntCenter.x + x, huntCenter.z + z);
+        awaitHuntResidency(helper, fixture, 0, () -> {
             try {
                 ServerPlayer player = fixture.player; RushRun run = RivalRushManager.run(player);
                 check(contract(player).getString("Type").equals("hunt") && contract(player).getInt("Target") == 2,
@@ -309,6 +312,23 @@ public final class RushContractGameTests {
             if (variant != RushDirector.Elite.NONE && mob.getName().getString().contains(variant.label())) return true;
         return false;
     }
+    private static int huntResidentChunks(Fixture fixture) {
+        ChunkPos center = new ChunkPos(fixture.center); int ready = 0;
+        for (int x = -2; x <= 2; x++) for (int z = -2; z <= 2; z++)
+            if (fixture.district.isPositionEntityTicking(new BlockPos((center.x + x) << 4,
+                    RushWorld.FLOOR_Y + 1, (center.z + z) << 4))) ready++;
+        return ready;
+    }
+    private static void awaitHuntResidency(GameTestHelper helper, Fixture fixture, int waited, Runnable ready) {
+        helper.runAfterDelay(1, () -> {
+            try {
+                int resident = huntResidentChunks(fixture);
+                if (resident == 25) { ready.run(); return; }
+                check(waited < 120, "Native hunt fixture residency timed out: " + resident + "/25 chunks");
+                awaitHuntResidency(helper, fixture, waited + 1, ready);
+            } catch (RuntimeException | Error failure) { cleanup(fixture); throw failure; }
+        });
+    }
     private static void nextElite(GameTestHelper helper, Fixture fixture, int wave, java.util.function.Consumer<Mob> found) {
         ServerPlayer player = fixture.player;
         // Entity-section visibility must receive a real server tick between observations.
@@ -329,6 +349,7 @@ public final class RushContractGameTests {
                         + "encounter=" + RivalRushManager.encounterSnapshot(player)
                         + "; journey=" + RivalRushManager.journeySnapshot(player)
                         + "; contract=" + contract(player)
+                        + "; residentChunks=" + huntResidentChunks(fixture) + "/25"
                         + "; playerPosition=" + player.position() + "; playerBox=" + player.getBoundingBox()
                         + "; registeredElite=" + (encounter.hasUUID("Actor") ? player.serverLevel().getEntity(encounter.getUUID("Actor")) : "none")
                         + "; visible=" + actors(player).stream().map(mob -> mob.getName().getString()).toList());
