@@ -1,9 +1,9 @@
 {
   "schema": 1,
-  "source_commit": "6d8c4de6ca9992d472b76acae4ddfd30a27a0452",
-  "wiki_commit": "5fe3d49d4cb68895705eedfbbc5c9e59490a762d",
+  "source_commit": "e9e3bcb92ac4249872c3aac386eea4ca3aea3af1",
+  "wiki_commit": "b8b449d5983018aabd7106db9b9e7fcf18ee7756",
   "wiki_branch": "master",
-  "page_count": 55,
+  "page_count": 56,
   "pages": [
     "Approved-Ride-Expansion-and-Trick-Combat.md",
     "Breakdance-and-Cyphers.md",
@@ -37,6 +37,7 @@
     "Multiplayer-and-Servers.md",
     "Music-Library.md",
     "Music\u2010Driven-Dances-and-Mob\u2010Themed-Bosses.md",
+    "Ocarina-of-Cumbia-Easter-Egg.md",
     "Phonkistas.md",
     "Player-Chapters-Posse-and-Mob-Archetypes.md",
     "Reactive-Music-Engine-and-Killer-Instinct-Reference.md",
@@ -62,6 +63,6 @@
     "_Sidebar.md"
   ],
   "validated": true,
-  "published_at_utc": "2026-11-15T18:41:25.365940+00:00",
+  "published_at_utc": "2026-11-15T19:37:09.458863+00:00",
   "url": "https://github.com/Herbertofury/JetSetCraft/wiki"
 }
