@@ -27,3 +27,11 @@ The first three captures at PR head `b256bb8` verified rendering but inherited t
 Exact head `7ba4e28845ec257330514f51cc6be3bf8a03b9dd` passed all eleven CI lanes, including all 129 required base GameTests. Workflow `43707174203`, artifact `14159491096`, contains the independently inspected front/side/back PNGs. Camera framing and daylight now expose the original model without HUD interference. The face, asymmetric shoulder treatment, lapels and split tails render. This confirms the renderer and capture path, **not finished visual acceptance**.
 
 The review found a largely blank rear head, slab-like rectangular coat tails, blocky hands and boots that nearly merge (including a slight mesh overlap). These are geometry refinements, not excuses to accept poor capture lighting. Both original and daylight evidence are retained. Standing still above the ocean does not demonstrate walking, skating, choreography, crowd performance or cloth/hair physics. Skating/dance state and a grounded native motion lane are not implemented by this preview.
+
+## Benchmark gap after geometry refinement
+
+Head `49b53685089f3a337432bad11550286d9153cfef` passed all eleven CI lanes and 129 required base GameTests. Its three native daylight captures were reviewed: rear hair, tapered tails, glove fingers and static boot separation now render as intended. This does not close the overall quality gate.
+
+The owner's supplied private reference was inspected with permission (two still images and a playing short motion clip). It demonstrates richer layered hair, local fabric shading/folds/seams, accessory detail and expressive silhouette. The source project was not inspected, so the clip alone cannot establish whether motion is physics or authored animation. No reference assets were downloaded or copied, and no redistribution license is inferred.
+
+The original prototype still needs localized material detail and character expression, grounded movement and skate/dance behavior, bounded reactive secondary motion, clipping review across poses, and measured crowd costs. Genre-appropriate original clothing takes precedence over copying benchmark outfits. Flat colors or an isolated standing pose are not equivalent to that benchmark.
