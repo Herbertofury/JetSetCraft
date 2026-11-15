@@ -1,5 +1,11 @@
 # Crew-house and Rival Rush soundtrack
 
+## Gabberina's must-add #007 — Glubis / Fabitekk (2026-11-15)
+
+- **`GAB-MUSIC-007` — MUST ADD to Gabberina's ONLY:** [exact owner-supplied Spotify track](https://open.spotify.com/track/3hkjdQBsDi7XU11BkEKoRT?si=ca7ddee661a44eac), Spotify ID `3hkjdQBsDi7XU11BkEKoRT`. Verified song **“Glubis” — Fabitekk**, 4:38 ([Spotify artist listing](https://open.spotify.com/embed/artist/6RaOeGXGYJsBA26PvVVh1m)). [Qobuz](https://www.qobuz.com/fi-en/interpreter/fabitekk/6667684) and [Amazon Music](https://music.amazon.in/artists/B084JT8272/fabitekk) list an **August 26, 2026** *Glubis* single released by **Fabitekk Music**. Artist hardtekk/tekno direction supports the existing **jumpstyle / gabber / hardtekk** crew identity, but does not assign this track to Hardtekkas.
+- **Master/version gate:** Keep the exact Spotify track ID. ISRC, linked streaming master equivalence, creator credits, waveform BPM, choreographic cues and complete genre classification have **not** been independently verified. Proposed use: Gabberina-exclusive radio, skating/dance and rival challenges only after a gang-scoped music picker exists.
+- **Source/rights:** The [machine-readable registry](gangs/gabberinas_music.json) and `jetsetcraft_music/gabberinas_glubis_fabitekk.json` are **nonplayable metadata**. No audio, samples, stems, synchronization/distribution authorization or native gameplay test have been supplied. Earlier MANETTI, Voltage Drift, Rated R and other Gabberina songs remain unchanged; **Warpath by Redforce stays Phonkistas-only**.
+
 ## Gabberina's new owner-selected tracks #005 and #006 (2026-11-15)
 
 - **`GAB-MUSIC-005` — [MANETTI — DJ FENT](https://open.spotify.com/track/2a7XrecNI13lQdGl7NqJyU?si=c64d7af836be4e4c), MUST ADD / PERSONAL FAVORITE:** Exact owner Spotify ID `2a7XrecNI13lQdGl7NqJyU`, **2026-08-14**, **1:31**, **void.**; [Spotify original single](https://open.spotify.com/intl-fr/album/1vsheQ9CizrJKY562gC3cu) and [Qobuz verification](https://www.qobuz.com/no-en/interpreter/dj-fent/27331405). Owner expressly said **“200% love this one for gabberina's”**: high-priority future Gabberina music. Entrance, gang-radio and high-impact challenge placement proposed only; no measured cue timing.

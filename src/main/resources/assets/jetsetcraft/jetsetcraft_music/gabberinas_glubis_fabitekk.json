@@ -1,0 +1,29 @@
+{
+  "title": "Glubis",
+  "artist": "Fabitekk",
+  "album": "Glubis",
+  "sound_event": "jetsetcraft:licensed/gabberinas_glubis_fabitekk",
+  "audio_resource": "jetsetcraft:sounds/music/licensed/gabberinas_glubis_fabitekk.ogg",
+  "contexts": [
+    "rush"
+  ],
+  "volume": 0.65,
+  "source_url": "https://open.spotify.com/track/3hkjdQBsDi7XU11BkEKoRT?si=ca7ddee661a44eac",
+  "spotify_track_id": "3hkjdQBsDi7XU11BkEKoRT",
+  "listed_release_date": "2026-08-26",
+  "label": "Fabitekk Music",
+  "listed_duration": "4:38",
+  "source_master_note": "Exact owner-linked Spotify track selected. Qobuz and Amazon corroborate 2026 Glubis single, but no Spotify master/ISRC match was established; do not substitute other releases or edits.",
+  "verification_sources": [
+    "https://open.spotify.com/track/3hkjdQBsDi7XU11BkEKoRT",
+    "https://www.qobuz.com/fi-en/interpreter/fabitekk/6667684",
+    "https://music.amazon.in/artists/B084JT8272/fabitekk",
+    "https://open.spotify.com/embed/artist/6RaOeGXGYJsBA26PvVVh1m"
+  ],
+  "gang_id": "jetsetcraft:gabberinas",
+  "intended_placement": "Gabberina's only after gang-specific music filter exists; NOT Hardtekkas, Phonkistas or global Rush",
+  "owner_reference_id": "GAB-MUSIC-007",
+  "recording_status": "awaiting_authorized_audio",
+  "beat_grid_status": "not_analyzed",
+  "rights_status": "synchronization_and_redistribution_not_verified; no_audio_bundled"
+}

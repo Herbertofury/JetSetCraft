@@ -13,9 +13,10 @@
     "explicit_new_must_add_ids": [
       "GAB-MUSIC-004",
       "GAB-MUSIC-005",
-      "GAB-MUSIC-006"
+      "GAB-MUSIC-006",
+      "GAB-MUSIC-007"
     ],
-    "previous_phonkistas_correction": "Warpath by Redforce remains selected for Phonkistas only; do not transfer it to Gabberina's.",
+    "previous_phonkistas_correction": "Warpath — Redforce remains Phonkistas only. Fabitekk Glubis has been directly selected for Gabberina's despite Hardtekkas also existing.",
     "favorite_must_add_ids": [
       "GAB-MUSIC-005"
     ]
@@ -145,6 +146,40 @@
       "exact_spotify_isrc_and_master_status": "not_verified",
       "exact_beat_grid_cues_choreography": "not_analyzed",
       "authorized_recording_source": "not_supplied",
+      "synchronization_and_distribution_rights": "not_verified",
+      "in_game_playback_status": "not_integrated"
+    },
+    {
+      "reference_id": "GAB-MUSIC-007",
+      "title": "Glubis",
+      "artist": "Fabitekk",
+      "spotify_track_id": "3hkjdQBsDi7XU11BkEKoRT",
+      "owner_supplied_url": "https://open.spotify.com/track/3hkjdQBsDi7XU11BkEKoRT?si=ca7ddee661a44eac",
+      "owner_selection_date": "2026-11-15",
+      "is_owner_approved": true,
+      "assignment": "gabberinas_only",
+      "artist_confirmation_basis": "Spotify track page and artist catalogue",
+      "album": "Glubis",
+      "original_release_date": "2026-08-26",
+      "label": "Fabitekk Music",
+      "listed_duration": "4:38",
+      "artist_genre_context": "Hardtekk / tekno according to artist catalogs; not a claim of measured track BPM or subgenre",
+      "version_note": "Exact owner Spotify ID selected; other platform's 2026-08-26 Glubis single is independent release metadata, exact Spotify ISRC/master not cross-verified. Do not substitute remixes/edits or another Fabitekk recording.",
+      "source_verification_urls": [
+        "https://open.spotify.com/track/3hkjdQBsDi7XU11BkEKoRT",
+        "https://www.qobuz.com/fi-en/interpreter/fabitekk/6667684",
+        "https://music.amazon.in/artists/B084JT8272/fabitekk",
+        "https://open.spotify.com/embed/artist/6RaOeGXGYJsBA26PvVVh1m"
+      ],
+      "owner_status": "must_add_regular_gabberina_music",
+      "proposed_use": [
+        "Gabberina gang-specific radio",
+        "high-energy jumpstyle/hardtekk skating challenge",
+        "rival encounter"
+      ],
+      "beat_grid_and_cues": "not_measured",
+      "original_source_audio": "not_supplied",
+      "exact_master_and_isrc_status": "not_verified",
       "synchronization_and_distribution_rights": "not_verified",
       "in_game_playback_status": "not_integrated"
     }
