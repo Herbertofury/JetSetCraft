@@ -11,3 +11,5 @@ No reference media or third-party assets are copied.
 ## Retained first failures
 
 Initial `7b18fdae` failed with zero displacement. Diagnostic-only `a34c856` (core run `43733131183`, job `132869785651`) observed rejected navigation with null path while `onGround=false` at entity tick 2, despite clear target and stone support. The test fixture now waits for actual native physics ground contact under its unchanged overall deadline before issuing its grounded route. Production navigation and all displacement/completion assertions remain unchanged. No teleport or manually set ground flag is used.
+
+The grounded retry `39e26ff` moved the real actor 2.069 blocks, then exposed a controller mismatch: native navigation reported a reachable completed path while the actor remained 0.968 blocks from the requested endpoint. The controller now uses native collision-aware MoveControl for a bounded final 1.5-block approach, preserving the 0.45-block arrival requirement and real timeout. Non-reaching paths still fail; no position is forced.

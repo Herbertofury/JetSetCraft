@@ -96,7 +96,17 @@ public final class HonkistasPrototypeEntity extends PathfinderMob {
                 if(completedWaypoints==route.size())finishRoute(RouteStatus.COMPLETED);
                 else navigate();
             }else if(getNavigation().isDone()){
-                diagnoseRoute("navigation_done_before_waypoint",p);finishRoute(RouteStatus.FAILED_PATH);
+                // Native path completion has a wider waypoint tolerance than this controller.
+                // Finish the final short segment through normal collision-aware MoveControl,
+                // never by teleporting or weakening the route's arrival threshold.
+                var path=getNavigation().getPath();
+                if(path!=null && path.canReach() && dx*dx+dz*dz<=1.5*1.5
+                        && Math.abs(getY()-p.getY())<=.75){
+                    getMoveControl().setWantedPosition(p.getX()+.5,p.getY(),p.getZ()+.5,routeSpeed);
+                    diagnoseRoute("native_final_approach",p);
+                }else{
+                    diagnoseRoute("navigation_done_before_waypoint",p);finishRoute(RouteStatus.FAILED_PATH);
+                }
             }
         }
     }
