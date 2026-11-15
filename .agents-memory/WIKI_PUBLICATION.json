@@ -1,10 +1,11 @@
 {
   "schema": 1,
-  "source_commit": "53a98234e23195b75c65f2cdfaa393ff4902880d",
-  "wiki_commit": "b90efa5ad4b69dfb8bfec4643fbef86068d9ee8f",
+  "source_commit": "0a4f7748dbf8130baf65f208e17a56b9e45b0836",
+  "wiki_commit": "1a49fca1674ecac6d1a6f740dc7e3a16cbd11409",
   "wiki_branch": "master",
-  "page_count": 62,
+  "page_count": 63,
   "pages": [
+    "Adventure-Mode.md",
     "Approved-Ride-Expansion-and-Trick-Combat.md",
     "Bananettas-Music-Discovery.md",
     "Bananettas.md",
@@ -69,6 +70,6 @@
     "_Sidebar.md"
   ],
   "validated": true,
-  "published_at_utc": "2026-11-15T23:28:19.015004+00:00",
+  "published_at_utc": "2026-11-15T23:32:33.528847+00:00",
   "url": "https://github.com/Herbertofury/JetSetCraft/wiki"
 }
