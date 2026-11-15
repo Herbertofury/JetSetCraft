@@ -439,7 +439,8 @@ public final class LibertyCampaignRuntimeGameTests {
             later(f, 90, () -> {
                 landed(f);
                 var objective = f.operation.mission.sites().get(0); load(f, objective.center()); position(f, objective.marker().add(2, 0, 2));
-                later(f, 5, () -> {
+                whenHomeSiteReady(f,objective,120,() -> {
+                    position(f,objective.marker().add(2,0,2));
                     check(neighbor.tickCount > 0 && oldTag.tickCount > 0
                                     && f.source.isPositionEntityTicking(neighbor.blockPosition()) && f.source.isPositionEntityTicking(oldTag.blockPosition()),
                             "Protected home controls did not retain native ticking at the loaded margin: " + preservedArea);
@@ -451,6 +452,7 @@ public final class LibertyCampaignRuntimeGameTests {
                     int expectedProgress = previousProgress + (objective.kind()
                             == com.herberto.jetsetcraft.liberty.LibertyMissionCatalog.ObjectiveKind.TERRITORY ? 1 : 0);
                     String sprayDiagnostic=" kind="+objective.kind()+" phase="+f.operation.phase()
+                            +" active="+objective.active()+" grounded="+objective.grounded()
                             +" held="+f.owner.getMainHandItem()+" player="+f.owner.position()+" support="+support
                             +" distanceSquared="+f.owner.distanceToSqr(Vec3.atCenterOf(support))
                             +" sturdy="+f.source.getBlockState(support).isFaceSturdy(f.source,support,Direction.UP)
@@ -605,6 +607,16 @@ public final class LibertyCampaignRuntimeGameTests {
         LibertyManager.movementDiscontinuity(f.owner);
         f.owner.moveTo(point.x, point.y, point.z, 0, 0); f.owner.setDeltaMovement(Vec3.ZERO);
         f.district.getChunkSource().move(f.owner);
+    }
+    private static void whenHomeSiteReady(Fixture f,LibertyMissionRuntime.Site site,int remaining,Runnable task){
+        // Production terrain remapping retries at 100 native ticks after a not-yet-loaded site.
+        // Wait for its real readiness instead of painting after an arbitrary five-tick delay.
+        later(f,1,()->{
+            if(site.grounded() && site.active()){task.run();return;}
+            check(remaining>0,"Home objective failed bounded native readiness: kind="+site.kind()
+                    +" active="+site.active()+" grounded="+site.grounded()+" phase="+f.operation.phase());
+            whenHomeSiteReady(f,site,remaining-1,task);
+        });
     }
     private static void later(Fixture f, int delay, Runnable task) {
         check(f.next == null, "Campaign fixture attempted to replace a pending assertion");
