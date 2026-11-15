@@ -1,5 +1,11 @@
 # Crew-house and Rival Rush soundtrack
 
+## Phonkistas owner must-add #001 — Warpath / Redforce (2026-11-15)
+
+- **`PHONKISTAS-MUSIC-001` · MUST ADD to Phonkistas only:** [Owner-supplied exact Spotify track](https://open.spotify.com/track/6wsSxJhYzaB7O7PTQu3KYv?si=4938be81caa74be8), ID `6wsSxJhYzaB7O7PTQu3KYv`. The owner **corrected the initial Gabberina assignment to Phonkistas** and provided an image identifying **“Warpath” by “Redforce.”** Do **not** register it under Gabberina's, and do not silently substitute a different song with a similar title. The pre-existing Phonkistas “On The Dance - Slowed” reference remains separate and is not changed here.
+- **Verification:** title/artist grounded in the owner's screenshot; the exact public Spotify recording metadata, release year, duration, full credits, ISRC, edition and rights remain **unverified**. Do not invent BPM or cue points. The accompanying JSON is **nonplayable metadata only**: existing `home`/`rush` contexts cannot restrict a track to one gang. Obtain permitted recording, sync and redistribution rights, then implement gang-specific routing and native/dedicated-server tests before claiming installed music.
+- [Owner music record](gangs/phonkistas.json) · [Phonkistas gang wiki](../wiki/Phonkistas.md)
+
 ## Current implementation
 
 The development alpha includes a **client resource-pack soundtrack player**, two identified recording entries, and a local audio importer. It plays available tracks in the owner's crew-house plot or during that player's active Rival Rush session. It fades in over two seconds, fades out over one second when leaving those activities, avoids an immediate repeat when another eligible track is available, and credits the title and artist in chat when a track starts.

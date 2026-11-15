@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "record_type": "human_music_culture_gang_music_design",
+  "canonical_gang_name": "Phonkistas",
+  "proposed_stable_gang_id": "jetsetcraft:phonkistas",
+  "owner_selection_dates": {
+    "gang_name": "2026-10-11",
+    "warpath_music": "2026-11-15"
+  },
+  "owner_confirmed": {
+    "name": true,
+    "music_must_add_ids": [
+      "PHONKISTAS-MUSIC-001"
+    ],
+    "explicit_assignment_correction": "The owner initially mentioned Gabberina's for this link, then corrected it explicitly to Phonkistas, and supplied a screenshot labeling it Warpath by Redforce. Do not treat it as Gabberina's music."
+  },
+  "approved_genre_direction": "phonk (substyle not yet owner-finalized)",
+  "must_include_music": [
+    {
+      "reference_id": "PHONKISTAS-MUSIC-001",
+      "title": "Warpath",
+      "artist": "Redforce",
+      "spotify_track_id": "6wsSxJhYzaB7O7PTQu3KYv",
+      "owner_supplied_url": "https://open.spotify.com/track/6wsSxJhYzaB7O7PTQu3KYv?si=4938be81caa74be8",
+      "owner_confirmation": "2026-11-15",
+      "title_artist_identification_basis": "owner-supplied screenshot and follow-up message; direct public Spotify metadata lookup was unavailable; do not claim label/album/ISRC verified",
+      "assignment": "phonkistas_only",
+      "is_owner_approved": true,
+      "exact_master_and_release_status": "not_verified",
+      "genre_from_title_only": "not_assumed",
+      "proposed_use": [
+        "phonkistas_gang_radio",
+        "skating_challenge",
+        "rival_intro"
+      ],
+      "recording_master_status": "not_supplied",
+      "sync_and_distribution_rights_status": "not_verified",
+      "beat_grid_and_cues_status": "not_measured",
+      "in_game_playback_status": "not_integrated"
+    }
+  ],
+  "other_owner_music_references": [
+    {
+      "title": "On The Dance - Slowed",
+      "artists": [
+        "DAYVØNE1",
+        "Human Resource 404",
+        "YONCE",
+        "Rozer_rev"
+      ],
+      "owner_url": "https://open.spotify.com/track/4mD0L3mSySgs0EYaCKXhHn?si=a8647d56ec8e46f9",
+      "status": "existing_owner_phonk_reference_not_promoted_to_a_new_must_add_by_this_change"
+    }
+  ],
+  "runtime_status": {
+    "human_gang_spawned": false,
+    "gang_specific_music_picker_implemented": false,
+    "playable_audio_bundled": false
+  },
+  "wiki_page": "wiki/Phonkistas.md"
+}

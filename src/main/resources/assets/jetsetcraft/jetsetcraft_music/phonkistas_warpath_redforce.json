@@ -1,0 +1,23 @@
+{
+  "title": "Warpath",
+  "artist": "Redforce",
+  "sound_event": "jetsetcraft:licensed/phonkistas_warpath_redforce",
+  "audio_resource": "jetsetcraft:sounds/music/licensed/phonkistas_warpath_redforce.ogg",
+  "contexts": [
+    "rush"
+  ],
+  "volume": 0.65,
+  "source_url": "https://open.spotify.com/track/6wsSxJhYzaB7O7PTQu3KYv?si=4938be81caa74be8",
+  "spotify_track_id": "6wsSxJhYzaB7O7PTQu3KYv",
+  "title_artist_source": "owner_supplied_screenshot_and_direct_confirmation; external_public_metadata_not_ascertained",
+  "release_year": null,
+  "album": null,
+  "duration": null,
+  "isrc": null,
+  "gang_id": "jetsetcraft:phonkistas",
+  "intended_placement": "PHONKISTAS ONLY after runtime gang-affinity filter is implemented; never generic Rush or Gabberina's",
+  "owner_reference_id": "PHONKISTAS-MUSIC-001",
+  "owner_assignment_note": "Initial Gabberina's request corrected to Phonkistas before any files were committed under Gabberina's.",
+  "recording_status": "awaiting_authorized_audio",
+  "rights_status": "sync_and_redistribution_not_verified; metadata_only; no_audio_bundled"
+}

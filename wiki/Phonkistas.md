@@ -15,6 +15,18 @@ The **Phonkistas** are the phonk-themed major competing gang in JetSetCraft, alo
 
 Phonk is the approved genre direction. Exact substyle, lineup, character genders, visual palette, costumes, choreography and final music are still design decisions; do not impose those as owner-approved facts.
 
+## Must-add Phonkistas recording — owner-confirmed 2026-11-15
+
+**`PHONKISTAS-MUSIC-001` · MUST ADD for Phonkistas ONLY:** [**Warpath — Redforce**](https://open.spotify.com/track/6wsSxJhYzaB7O7PTQu3KYv?si=4938be81caa74be8); Spotify ID `6wsSxJhYzaB7O7PTQu3KYv`.
+
+**Owner correction:** This recording was first offered for **Gabberina's**, but the owner immediately corrected the assignment to **Phonkistas** and supplied a screenshot confirming **“Warpath” by “Redforce.”** The exact Spotify track ID from the original link is retained. **Do not** cross-list it as an approved Gabberina song or substitute any other song called “Warpath.”
+
+**Metadata evidence and limitations:** Artist/title identification is based on the **owner-supplied screenshot and explicit confirmation**. Public unauthenticated Spotify searches did not reliably resolve this exact ID, so its **release date, label, version, master, ISRC, credits and duration remain unverified**. No assumption is made about its precise phonk subgenre, BPM, or beat map without listening to the exact authorized recording.
+
+**Intended use:** owner-approved Phonkistas gang soundtrack, with candidate placements in gang radio, skating, and rival encounters **after** an actual gang-specific music picker is implemented. This is a must-add **reference**, not bundled audio or tested playback; game synchronization and redistribution permission have not been verified.
+
+[Machine-readable Phonkistas design record](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/gangs/phonkistas.json) · [Music import requirements](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/MUSIC_INTEGRATION.md)
+
 ## Owner reference
 [On The Dance - Slowed](https://open.spotify.com/track/4mD0L3mSySgs0EYaCKXhHn?si=a8647d56ec8e46f9), listed by Spotify under DAYVØNE1, Human Resource 404, YONCE and Rozer_rev.
 
@@ -48,7 +60,9 @@ Telegraph hazards and combos, provide genuine counterplay and recovery windows, 
 Plan the full anticipation → reveal → music handoff → challenge → escalation → finale arc. Verify actual skating/dance contact, momentum, transitions and group synchronization in the game. Include short/skip options, separate audio levels, muted-audio rhythm cues and reduced motion/flashing. Emotional impact is a playtest goal, not a guaranteed reaction.
 
 ## Implementation to-do and acceptance
-- [ ] Review the owner track directly and finalize phonk substyle, music direction and original visual identity.
+- [x] Record owner-approved **Warpath — Redforce** as Phonkistas must-add `PHONKISTAS-MUSIC-001` and preserve the exact Spotify ID following the explicit Gabberina → Phonkistas correction.
+- [ ] Verify song edition/master, credited artist, release details, recording rights and cues against the owner's exact linked version.
+- [ ] Review the owner tracks directly and finalize phonk substyle, music direction and original visual identity.
 - [ ] Finalize Phonkistas roster, names, wardrobe, silhouettes, dance/skate animation and signature challenges.
 - [ ] Reconcile with existing registry, territory, event, movement, audio and compatibility architecture.
 - [ ] Design multi-rival partial influence, full control, contested states, recapture and independent defeat conditions.

@@ -228,9 +228,11 @@ This selection is **excluded from the regular Cumbias must-add setlist** and all
 
 [Gang design and reference context](Phonkistas).
 
+**`PHONKISTAS-MUSIC-001` · PHONKISTAS MUST ADD:** [**Warpath — Redforce**](https://open.spotify.com/track/6wsSxJhYzaB7O7PTQu3KYv?si=4938be81caa74be8) (`spotify:track:6wsSxJhYzaB7O7PTQu3KYv`). **Explicit owner correction (2026-11-15):** this was initially proposed under Gabberina's but is assigned to **Phonkistas only**. The owner supplied a screenshot identifying “Warpath” by “Redforce”; public Spotify indexing for this ID did not reliably expose artist/title, release or ISRC, so only screenshot-based identification is claimed. Exact version/master, licensed source, beat analysis, stage placement and gang-specific in-game playback are **not verified**. [Dedicated Phonkistas design record](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/gangs/phonkistas.json).
+
 [On The Dance - Slowed](https://open.spotify.com/track/4mD0L3mSySgs0EYaCKXhHn?si=a8647d56ec8e46f9), listed by Spotify under DAYVØNE1, Human Resource 404, YONCE and Rozer_rev.
 
-Owner-selected phonk reference. Final substyle, scene placement and cue timing remain open.
+Previously owner-selected **reference**; not changed into another new must-add by the Warpath decision. The original slowed version and its credits remain distinct. Final substyle, scene placement and cue timing remain open.
 
 ### Footworkas
 
