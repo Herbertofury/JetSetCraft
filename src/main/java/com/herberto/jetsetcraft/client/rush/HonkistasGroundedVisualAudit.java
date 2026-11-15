@@ -18,7 +18,7 @@ import java.util.function.*;
 public final class HonkistasGroundedVisualAudit {
     private static int phase,ticks;
     private static volatile boolean queued,applied,routeDone;
-    private static volatile String error;
+    private static volatile String error,serverDiagnostic="not sampled";
     private static UUID actorId;
     private static Vec3 original,start,cameraPosition;
     private static float yaw,pitch;
@@ -64,7 +64,19 @@ public final class HonkistasGroundedVisualAudit {
             phase=1;readyAt=System.nanoTime();ticks=0;return false;
         }
         if(phase<=3){
-            if(++ticks>500)throw new IllegalStateException("Grounded navigation/capture timeout phase "+phase);
+            ++ticks;
+            if(ticks%100==0){UUID owner=mc.player.getUUID();server.execute(()->{
+                var p=server.getPlayerList().getPlayer(owner);var a=p.serverLevel().getEntity(actorId);
+                serverDiagnostic="player="+p.position()+" velocity="+p.getDeltaMovement()+" actor="+(a==null?"absent":a.position()+" ground="+a.onGround());
+            });}
+            if(ticks>500){
+                net.minecraft.world.entity.Entity visible=null;
+                for(var e:mc.level.entitiesForRendering())if(e.getUUID().equals(actorId)){visible=e;break;}
+                throw new IllegalStateException("Grounded navigation/capture timeout phase "+phase+" client="+mc.player.position()
+                        +" expected="+cameraPosition+" velocity="+mc.player.getDeltaMovement()+" yaw="+mc.player.getYRot()
+                        +" actorClient="+(visible==null?"absent":visible.position()+" ground="+visible.onGround())
+                        +" rendered="+HonkistasPrototypeRenderer.renderedSince(actorId,readyAt)+" server="+serverDiagnostic);
+            }
             net.minecraft.world.entity.Entity candidate=null;
             for(var e:mc.level.entitiesForRendering())if(e.getUUID().equals(actorId)){candidate=e;break;}
             if(!(candidate instanceof HonkistasPrototypeEntity actor))return false;
