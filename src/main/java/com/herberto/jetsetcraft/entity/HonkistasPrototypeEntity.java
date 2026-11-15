@@ -37,7 +37,7 @@ public final class HonkistasPrototypeEntity extends PathfinderMob {
     public enum RouteStatus { IDLE, RUNNING, COMPLETED, FAILED_PATH, FAILED_TIMEOUT, CANCELLED }
     private RouteStatus routeStatus=RouteStatus.IDLE;
     private List<BlockPos> route=List.of();
-    private int completedWaypoints;
+    private int completedWaypoints,remainingRepaths;
     private double routeSpeed;
     private long routeDeadline;
     private boolean routeNeedsNavigation;
@@ -51,7 +51,7 @@ public final class HonkistasPrototypeEntity extends PathfinderMob {
         for(BlockPos point:points)if(point==null || point.distToCenterSqr(getX(),getY(),getZ())>32*32
                 || level().isOutsideBuildHeight(point) || !level().hasChunkAt(point))return false;
         route=points.stream().map(BlockPos::immutable).toList();
-        completedWaypoints=0;routeSpeed=speed;routeDeadline=level().getGameTime()+timeoutTicks;
+        completedWaypoints=0;remainingRepaths=3;routeSpeed=speed;routeDeadline=level().getGameTime()+timeoutTicks;
         getNavigation().stop();routeNeedsNavigation=true;routeDiagnostic="requested";routeStatus=RouteStatus.RUNNING;return true;
     }
     public void cancelControlledRoute(){
@@ -109,7 +109,7 @@ public final class HonkistasPrototypeEntity extends PathfinderMob {
             double dx=getX()-p.getX()-.5,dz=getZ()-p.getZ()-.5;
             getLookControl().setLookAt(p.getX()+.5,getEyeY(),p.getZ()+.5);
             if(dx*dx+dz*dz<=.45*.45 && Math.abs(getY()-p.getY())<=.75 && onGround()){
-                completedWaypoints++;
+                completedWaypoints++;remainingRepaths=3;
                 if(completedWaypoints==route.size())finishRoute(RouteStatus.COMPLETED);
                 else navigate();
             }else if(getNavigation().isDone()){
@@ -124,8 +124,13 @@ public final class HonkistasPrototypeEntity extends PathfinderMob {
                     if(!onGround()){diagnoseRoute("awaiting_native_landing",p);return;}
                     getMoveControl().setWantedPosition(p.getX()+.5,p.getY(),p.getZ()+.5,routeSpeed);
                     diagnoseRoute("native_final_approach",p);
+                }else if(path!=null && path.canReach() && remainingRepaths>0){
+                    // Native navigation may consume its last node before our stricter endpoint.
+                    // Recompute a real collision-aware path a bounded number of times; never
+                    // enlarge arrival tolerance, force position, or extend the original deadline.
+                    remainingRepaths--;navigate();
                 }else{
-                    diagnoseRoute("navigation_done_before_waypoint",p);finishRoute(RouteStatus.FAILED_PATH);
+                    diagnoseRoute("navigation_done_before_waypoint_repaths="+remainingRepaths,p);finishRoute(RouteStatus.FAILED_PATH);
                 }
             }
         }

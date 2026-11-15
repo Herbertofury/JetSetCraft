@@ -119,13 +119,19 @@ public final class HonkistasPrototypeGameTests {
                     if(!actor.onGround())return; // Overall native-tick deadline remains enforced.
                     check(!actor.startControlledRoute(List.of(origin.offset(60,1,1)),1,120),"Accepted out-of-range route");
                     check(!actor.startControlledRoute(java.util.Collections.nCopies(17,origin.offset(4,1,1)),1,120),"Accepted oversized route");
-                    check(actor.startControlledRoute(List.of(origin.offset(4,1,1),origin.offset(4,1,4)),1,180),"Grounded route rejected");
+                    check(actor.startControlledRoute(cueTest?List.of(origin.offset(4,1,1),origin.offset(4,1,4),origin.offset(1,1,1)):List.of(origin.offset(4,1,1),origin.offset(4,1,4)),cueTest?.6:1,180),"Grounded route rejected");
                     check(!actor.startControlledRoute(List.of(origin.offset(1,1,1)),1,120),"Running route overwritten");
                     if(cueTest){
                         check(actor.startBeatCue(),"Server beat cue refused");cueStartTick=actor.tickCount;cueStartPosition=actor.position();
                         check(!actor.startBeatCue() && actor.beatCueTicksRemaining()==HonkistasPrototypeEntity.BEAT_CUE_TICKS,
                                 "Overlapping cue replaced the active bounded gesture");
                         verifyCueMetadata();
+                        var savedActor=new net.minecraft.nbt.CompoundTag();actor.save(savedActor);
+                        var restored=net.minecraft.world.entity.EntityType.loadEntityRecursive(savedActor,helper.getLevel(),e->e);
+                        check(restored instanceof HonkistasPrototypeEntity
+                                        && ((HonkistasPrototypeEntity)restored).beatCueTicksRemaining()==0,
+                                "Transient gesture resumed from a saved actor");
+                        restored.discard();
                     }
                     phase=2;return;
                 }
@@ -145,7 +151,7 @@ public final class HonkistasPrototypeGameTests {
                     grounded|=actor.onGround() && actor.position().distanceTo(initial)>1;
                     if(actor.controlledRouteStatus()==RouteStatus.RUNNING)return;
                     check(actor.controlledRouteStatus()==RouteStatus.COMPLETED
-                            && actor.controlledRouteCompletedWaypoints()==2 && displacement>3 && grounded,
+                            && actor.controlledRouteCompletedWaypoints()==(cueTest?3:2) && displacement>3 && grounded,
                             "Real grounded navigation did not finish both waypoints: "+actor.controlledRouteStatus()+" moved="+displacement+" diagnostic="+actor.controlledRouteDiagnostic());
                     if(cueTest && !expiredCue)return;
                     if(cueTest){
