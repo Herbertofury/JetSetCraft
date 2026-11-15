@@ -32,6 +32,7 @@
 - [🎵 Ocarina of Cumbia — rare Zelda crossover](Ocarina-of-Cumbia-Easter-Egg)
 
 ### 🎨 Street Culture
+- [📡 Signal '81 — Retro Broadcast Rival Gang](Signal-81)
 - [🎪 Honkistas NPC Quality & Skating Physics](https://github.com/Herbertofury/JetSetCraft/wiki/Honkistas%E2%80%90NPC%E2%80%90Quality%E2%80%90and%E2%80%90Skating%E2%80%90Physics)
 - [MoccaSins — Music & Unlockable Names](MoccaSins)
 - [💥 Krumpaz — Krump Crew](Krumpaz)

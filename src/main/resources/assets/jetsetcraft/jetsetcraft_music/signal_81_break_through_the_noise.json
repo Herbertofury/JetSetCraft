@@ -1,0 +1,19 @@
+{
+  "title": "Break Through the Noise",
+  "artist": "Brighter Than a Thousand Suns",
+  "album": "Break Through the Noise - Single",
+  "sound_event": "jetsetcraft:licensed/signal_81_break_through_the_noise",
+  "audio_resource": "jetsetcraft:sounds/music/licensed/signal_81_break_through_the_noise.ogg",
+  "contexts": [
+    "rush"
+  ],
+  "volume": 0.65,
+  "source_url": "https://open.spotify.com/track/4rXK0sJImyiw9D7pFJclVS?si=b96b23c795924c04",
+  "artist_release_url": "https://brighterthanathousandsuns.bandcamp.com/track/break-through-the-noise",
+  "release_date": "2025-12-04",
+  "gang_id": "jetsetcraft:signal_81",
+  "intended_placement": "gang-specific only; future runtime must filter by gang before playback",
+  "owner_reference_id": "SIGNAL81-MUSIC-001",
+  "recording_status": "awaiting_authorized_audio",
+  "rights_status": "sync and redistribution not verified; must not bundle audio until cleared"
+}

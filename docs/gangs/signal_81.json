@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "record_type": "human_music_culture_gang_design",
+  "canonical_name": "Signal '81",
+  "proposed_stable_gang_id": "jetsetcraft:signal_81",
+  "owner_selection_date": "2026-11-15",
+  "owner_confirmed": {
+    "name": true,
+    "track_ids": [
+      "SIGNAL81-MUSIC-001"
+    ]
+  },
+  "style_direction": {
+    "status": "proposed_for_review",
+    "period_inspiration": [
+      "1980s synthpop and new wave",
+      "1981 music television and Memphis-design-era visual culture",
+      "late 1980s to early 1990s colorful Jazz-cup-era graphic design"
+    ],
+    "proposed_palette": {
+      "turquoise": "#34D2CE",
+      "ultraviolet": "#7A35D5",
+      "red": "#F04463",
+      "off_white": "#F7F3ED",
+      "charcoal": "#181828"
+    },
+    "motifs": [
+      "original television antenna",
+      "signal bars",
+      "analog video interference",
+      "abstract Memphis-inspired graffiti"
+    ],
+    "not_approved": "Exact art, lore, costumes, crew roster, leader, animations and powers are design proposals, not owner-approved final content."
+  },
+  "must_include_music": [
+    {
+      "reference_id": "SIGNAL81-MUSIC-001",
+      "title": "Break Through the Noise",
+      "artist": "Brighter Than a Thousand Suns",
+      "spotify_track_id": "4rXK0sJImyiw9D7pFJclVS",
+      "owner_supplied_url": "https://open.spotify.com/track/4rXK0sJImyiw9D7pFJclVS?si=b96b23c795924c04",
+      "artist_release_url": "https://brighterthanathousandsuns.bandcamp.com/track/break-through-the-noise",
+      "release_date": "2025-12-04",
+      "is_owner_approved": true,
+      "assignment": "signal_81_only",
+      "proposed_use": [
+        "gang_intro",
+        "territory_radio",
+        "challenge_climax"
+      ],
+      "exact_cues_status": "not_analyzed",
+      "recording_master_status": "not_supplied",
+      "synchronization_rights_status": "not_verified",
+      "distribution_rights_status": "not_verified",
+      "in_game_playback_status": "not_integrated"
+    }
+  ],
+  "runtime_status": {
+    "design_record_only": true,
+    "human_gang_spawned": false,
+    "gang_specific_music_filter_implemented": false,
+    "playable_audio_bundled": false
+  },
+  "wiki_page": "wiki/Signal-81.md"
+}

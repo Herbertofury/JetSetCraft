@@ -5,7 +5,7 @@
 ## Browse the collection
 
 - [Owner-selected general soundtrack](#owner-selected-general-soundtrack)
-- [Gang selections](#gang-selections): [Hardtekkas](#hardtekkas) · [MoccaSins](#moccasins) · [Gabberinas](#gabberinas) · [Cumbias](#cumbias) · [Phonkistas](#phonkistas) · [Footworkas](#footworkas)
+- [Gang selections](#gang-selections): [Signal '81](#signal-81) · [Hardtekkas](#hardtekkas) · [MoccaSins](#moccasins) · [Gabberinas](#gabberinas) · [Cumbias](#cumbias) · [Phonkistas](#phonkistas) · [Footworkas](#footworkas)
 - [Buy and download by artist and release](#buy-and-download-by-artist-and-release)
 - [Discovery shelf: 160 audition candidates](#discovery-shelf)
 - [Playback and musical systems](#playback-and-musical-systems)
@@ -86,6 +86,16 @@ The two November 7 selections below are whole-game must-adds with no gang or mod
 These are identified metadata entries; neither recording is bundled. Their proposed home/Rush contexts do not limit the scope of the overall music library.
 
 ## Gang selections
+
+### Signal '81
+
+[Owner-confirmed gang profile, proposed visuals, placement and implementation gates](Signal-81). The project owner selected **Signal '81** as a distinct retro-broadcast/new-wave gang on **2026-11-15**. **The track below is a MUST-ADD for this gang, not a general soundtrack choice.**
+
+| ID | Must-add owner-selected recording | Credited artist / release | State |
+| --- | --- | --- | --- |
+| **SIGNAL81-MUSIC-001** | **[Break Through the Noise](https://open.spotify.com/track/4rXK0sJImyiw9D7pFJclVS?si=b96b23c795924c04)** ([artist release](https://brighterthanathousandsuns.bandcamp.com/track/break-through-the-noise)) | **Brighter Than a Thousand Suns**; released **2025-12-04** | Owner-selected / metadata verified; recording master, gang-specific playback, sync/distribution permissions and in-game tests **pending** |
+
+**Scope:** Record this exact modern, '80s-influenced release; `'81` names the retro aesthetic, not the song's release year. A nonplayable client catalogue entry can prepare future import and credits. Existing client `home`/`rush` playback is global and **not gang-filtered**, so importing audio without new filtering must not silently make it a random soundtrack selection for unrelated crews. No tempo, drop, music cues or choreography have been auditioned/verified.
 
 ### Hardtekkas
 
