@@ -102,6 +102,10 @@ The importer accepts another metadata directory through `--catalogue`, so a proj
 
 - **JSC-MUST-CUMBIA-20261115-001 — exact Spotify source:** https://open.spotify.com/track/6k3L5dAbeLrNN5TIoLtSze (`spotify:track:6k3L5dAbeLrNN5TIoLtSze`). Explicitly selected by the project owner as a must-add Cumbias recording. The public metadata fetch did not establish exact title/artist/version; status remains **selected, not yet acquired/imported or runtime verified**. Resolve official credits and a permitted audio master through the existing importer, keep source quality independent of Minecraft, and validate actual crew playlist/Boombox playback before marking installed. Future reactive music and Mortal Kumbia charting requires verified beat/offset/stem data rather than guesswork. See the [Music Library](../wiki/Music-Library.md), [Cumbias](../wiki/Cumbias‐and‐Multi‐Rival‐Gang‐War.md), and [portable engine specification](../wiki/Reactive-Music-Engine-and-Killer-Instinct-Reference.md).
 
+### Second owner-selected must-add: Jazztick — Kokiri Forest
+
+- **`JSC-MUST-CUMBIA-20261115-002`:** [Kokiri Forest (From The Legend of Zelda: Ocarina of Time) — Jazztick](https://open.spotify.com/track/6P4ufhmrdt07Vpjm66VpiE); *The Legend of Jazztick: Tetraforce* (2018), track 8, 3:26. Metadata verified from [artist's Bandcamp](https://jazztick.bandcamp.com/album/the-legend-of-jazztick-tetraforce) and official album page. **MUST ADD for Cumbias**, priority placement candidate for [Ocarina of Cumbia](../wiki/Ocarina-of-Cumbia-Easter-Egg.md). Preserve the exact version/artist, full-quality master, credits, and non-Minecraft source asset; do not substitute another Zelda remix. **Current status:** referenced and selected only, not yet imported, played, stem-mapped or native-tested. Use existing music importer safely, then verify real playback and any beat-synced reactive-event mapping without assuming the selected recording is a traditional cumbia track.
+
 ## Later musical gameplay
 
 The current Soundcheck Circuit is a **crew dispatch assignment**. Future interactive music ideas belong in the design layer until built and tested:

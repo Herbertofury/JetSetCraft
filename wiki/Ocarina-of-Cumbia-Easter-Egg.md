@@ -33,6 +33,14 @@
 5. **Encore:** successful performance ends with a satisfying synchronized reveal/final flourish, music resolves on a phrase boundary, and a discovery record records the exact variant and credits. Failing or leaving resolves cleanly without punishing normal gameplay.
 6. **Reward:** optional original **Ocarina of Cumbia** collectible/cosmetic instrument, unlockable dance emote, character-themed title/banner or replay entry. Do not confer unbalanced combat bonuses. If rights/asset scope is incomplete, keep unreleased crossover-dependent rewards gated rather than substituting uncredited media.
 
+## Owner-selected Jazztick soundtrack for the Easter egg (2026-11-15)
+
+**MUST ADD to the Cumbias:** [“Kokiri Forest (From The Legend of Zelda: Ocarina of Time)” — Jazztick](https://open.spotify.com/track/6P4ufhmrdt07Vpjm66VpiE) (`spotify:track:6P4ufhmrdt07Vpjm66VpiE`, music library ID `JSC-MUST-CUMBIA-20261115-002`). The exact recording is track eight of [*The Legend of Jazztick: Tetraforce*](https://jazztick.bandcamp.com/album/the-legend-of-jazztick-tetraforce), 2018, 3:26, cross-checked against the artist’s [official album tracklist](https://jazztick.net/producto/the-legend-of-jazztick-tetraforce-2018/). The owner selected this recording for Cumbias, making it the **priority soundtrack candidate for this rare Zelda-linked event**, without removing its eligibility for ordinary Cumbias music scenes.
+
+**Source distinction:** The Spotify track is a verified Jazztick jazz/fusion rendition, not proof that the TikTok uses that sound or that its creator and Jazztick are the same person. Continue exact TikTok attribution research independently. Retain original musical identity; for a cumbia response, add separately authored/licensed playable band/stem layers and appropriate event choreography only after actual music analysis and source clearance. Do not retitle the source composition as “Ocarina of Cumbia”.
+
+**Status:** owner-selected and identified, **not downloaded, imported, beat-analyzed, stem-separated, licensed by this page, or runtime-tested**. Register producer/arranger/composer/master attributions, source hash, real musical cue grid, usage scope and highest-quality source independently of the Minecraft audio export.
+
 ## Music, artist discovery, and source manifest
 
 | Field | Required value / current state |
@@ -59,6 +67,7 @@ The research goal is to **find the actual creator(s) behind both linked TikToks,
 - [ ] **OCA-007** — Route ocarina and band stems through the shared reactive engine (not an independent timing engine), with verified tempo grid, quantized transitions, instantaneous hits, crowd/reaction layers, real credits and proper volume buses.
 - [ ] **OCA-008** — Persist discovery, expose collectible/replay and support multiplayer spectators, late joins, restarts, asset-missing fallback, pause/resume and correct cleanup.
 - [ ] **OCA-009** — Prove deterministic event probability over many seeded eligible events, zero event duplication, no global spawn/performance regressions, real-source music sync and native gameplay with one force-triggered and one naturally eligible path.
+- [ ] **OCA-011** — Prioritize `JSC-MUST-CUMBIA-20261115-002` (Jazztick, “Kokiri Forest”, Spotify `6P4ufhmrdt07Vpjm66VpiE`) as an owner-selected Easter egg soundtrack option. Acquire the exact master and verified credits, audition its actual arrangement, author safe musical scene timing/optional adaptive accompaniment, then prove playback and full-fidelity source retention. Do not confuse this verified Spotify recording with the still-unresolved TikTok soundtrack.
 - [ ] **OCA-010 · GATE** — No in-game "implemented" claim until exact owner reference is resolved, intended assets/sound identified, relevant permissions/source quality recorded, intended cameo/music actually playable, release-compatible tests pass, and the live wiki/Drive master source are synchronized.
 
 **State as of 2026-11-15:** design requirement recorded. No media was extracted from the two TikToks, no character/music asset was imported, and no rarity or playback was tested. The broad cumbia/ocarina trend is not proof of what appears in the exact user-supplied clip.
