@@ -7,7 +7,8 @@
   "owner_confirmed": {
     "name": true,
     "track_ids": [
-      "SIGNAL81-MUSIC-001"
+      "SIGNAL81-MUSIC-001",
+      "SIGNAL81-MUSIC-002"
     ]
   },
   "style_direction": {
@@ -47,6 +48,34 @@
         "gang_intro",
         "territory_radio",
         "challenge_climax"
+      ],
+      "exact_cues_status": "not_analyzed",
+      "recording_master_status": "not_supplied",
+      "synchronization_rights_status": "not_verified",
+      "distribution_rights_status": "not_verified",
+      "in_game_playback_status": "not_integrated"
+    },
+    {
+      "reference_id": "SIGNAL81-MUSIC-002",
+      "title": "She's a Star",
+      "artist": "Kano",
+      "spotify_track_id": "2r1J3yv6Ozhi5LYxybeQen",
+      "owner_supplied_url": "https://open.spotify.com/track/2r1J3yv6Ozhi5LYxybeQen?si=c45fe7d7444241ba",
+      "song_original_release_year": 1981,
+      "album_reference": "New York Cake (1981)",
+      "release_reference_url": "https://open.spotify.com/album/2v1VGo4RYpLnSxDKC3ROUb",
+      "label_release_reference_url": "https://www.qobuz.com/gb-en/album/new-york-cake-kano/cbnmw8outfd6a",
+      "album_track_reference_duration": "5:50",
+      "version_provenance_note": "Original 1981 Kano album New York Cake includes She's a Star (5:50 album reference); the owner's Spotify link defines the desired recording. Do not assume identical master, ISRC, length or version relative to reissues and edits without checking the exact link.",
+      "artist_disambiguation": "Kano, Italian electronic disco/Italo disco group (not the British rapper Kano).",
+      "credits_reference": "Qobuz lists Stefano Pulga, Luciano Ninzatti, Barbara Lynn Addoms, Anna Milena Cantu (exact linked master credits to verify).",
+      "owner_selection_date": "2026-11-15",
+      "is_owner_approved": true,
+      "assignment": "signal_81_only",
+      "proposed_use": [
+        "gang_radio",
+        "retro_disco_skating",
+        "broadcast_challenge"
       ],
       "exact_cues_status": "not_analyzed",
       "recording_master_status": "not_supplied",

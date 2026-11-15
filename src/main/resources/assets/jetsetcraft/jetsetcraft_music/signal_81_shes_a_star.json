@@ -1,0 +1,24 @@
+{
+  "title": "She's a Star",
+  "artist": "Kano",
+  "album": "New York Cake",
+  "sound_event": "jetsetcraft:licensed/signal_81_shes_a_star",
+  "audio_resource": "jetsetcraft:sounds/music/licensed/signal_81_shes_a_star.ogg",
+  "contexts": [
+    "rush"
+  ],
+  "volume": 0.65,
+  "source_url": "https://open.spotify.com/track/2r1J3yv6Ozhi5LYxybeQen?si=c45fe7d7444241ba",
+  "spotify_track_id": "2r1J3yv6Ozhi5LYxybeQen",
+  "original_song_year": 1981,
+  "album_release_reference": "https://open.spotify.com/album/2v1VGo4RYpLnSxDKC3ROUb",
+  "album_listing_duration": "5:50 (not independently verified for exact owner-linked streaming edition)",
+  "source_master_note": "Owner-linked Spotify recording must be matched by ISRC/master, not assumed identical to every 1981 album reissue or later remix.",
+  "artist_disambiguation": "Italian Kano Italo-disco/synth-funk group",
+  "credits_reference": "https://www.qobuz.com/gb-en/album/new-york-cake-kano/cbnmw8outfd6a",
+  "gang_id": "jetsetcraft:signal_81",
+  "intended_placement": "Signal '81-specific ONLY; future runtime must filter by gang; not general Rush/home shuffle",
+  "owner_reference_id": "SIGNAL81-MUSIC-002",
+  "recording_status": "awaiting_authorized_audio",
+  "rights_status": "sync and redistribution not verified; must not bundle audio until cleared"
+}

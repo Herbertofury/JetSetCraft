@@ -120,13 +120,14 @@ These are identified metadata entries; neither recording is bundled. Their propo
 
 ### Signal '81
 
-[Owner-confirmed gang profile, proposed visuals, placement and implementation gates](Signal-81). The project owner selected **Signal '81** as a distinct retro-broadcast/new-wave gang on **2026-11-15**. **The track below is a MUST-ADD for this gang, not a general soundtrack choice.**
+[Owner-confirmed gang profile, proposed visuals, placement and implementation gates](Signal-81). The project owner selected **Signal '81** as a distinct retro-broadcast/new-wave gang on **2026-11-15**. **Both owner-selected tracks below are MUST-ADDS for this gang, not general soundtrack choices.**
 
 | ID | Must-add owner-selected recording | Credited artist / release | State |
 | --- | --- | --- | --- |
 | **SIGNAL81-MUSIC-001** | **[Break Through the Noise](https://open.spotify.com/track/4rXK0sJImyiw9D7pFJclVS?si=b96b23c795924c04)** ([artist release](https://brighterthanathousandsuns.bandcamp.com/track/break-through-the-noise)) | **Brighter Than a Thousand Suns**; released **2025-12-04** | Owner-selected / metadata verified; recording master, gang-specific playback, sync/distribution permissions and in-game tests **pending** |
+| **SIGNAL81-MUSIC-002** | **[She's a Star — Kano](https://open.spotify.com/track/2r1J3yv6Ozhi5LYxybeQen?si=c45fe7d7444241ba)** (exact owner-supplied Spotify ID) | Italian electronic-disco group **Kano**; originally on [*New York Cake* (1981)](https://open.spotify.com/album/2v1VGo4RYpLnSxDKC3ROUb), approx. 5:50 album reference; [credits](https://www.qobuz.com/gb-en/album/new-york-cake-kano/cbnmw8outfd6a) | **Owner-selected MUST ADD**; exact linked Spotify master/ISRC, audio, gang playback, synchronization/distribution rights and game tests **pending** |
 
-**Scope:** Record this exact modern, '80s-influenced release; `'81` names the retro aesthetic, not the song's release year. A nonplayable client catalogue entry can prepare future import and credits. Existing client `home`/`rush` playback is global and **not gang-filtered**, so importing audio without new filtering must not silently make it a random soundtrack selection for unrelated crews. No tempo, drop, music cues or choreography have been auditioned/verified.
+**Scope:** Keep both approved songs: a modern, '80s-influenced 2025 selection and the historical 1981 Kano track; `'81` describes the retro aesthetic and is not a release-date mandate for all songs. A nonplayable client catalogue entry can prepare future import and credits. Existing client `home`/`rush` playback is global and **not gang-filtered**, so importing audio without new filtering must not silently make it a random soundtrack selection for unrelated crews. No tempo, drop, music cues or choreography have been auditioned/verified.
 
 ### Hardtekkas
 
