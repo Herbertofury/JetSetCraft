@@ -205,6 +205,27 @@ public final class CrewHouseGameTests {
         player.experienceLevel = 23; player.totalExperience = 587; player.experienceProgress = .625F;
         return player;
     }
+    @GameTest(template = "hoverboard_empty", timeoutTicks = 100)
+    public static void lucyNamedRecruitmentRetainsAffiliationAndRejectsDuplicates(GameTestHelper helper) {
+        BlockPos anchor = freeAnchor(helper, 18000);
+        ServerPlayer owner = player(helper, "lucy", anchor);
+        CrewProfile home = found(owner, anchor);
+        reward(owner);
+        String lucy = "jetsetcraft:lucy_lacemaker";
+        action(owner, home, "recruit", lucy, null);
+        check(home.hasCharacter(lucy), "Named Lucy recruitment did not reach the real roster");
+        check(home.members().get(2).name().equals("Lucy Lacemaker"), "Named identity was replaced by a generated name");
+        int after = home.supplies();
+        action(owner, home, "recruit", lucy, null);
+        check(home.members().size() == 3 && home.supplies() == after, "Duplicate charged supplies or created a second Lucy");
+        CompoundTag saved = home.save();
+        ListTag roster = saved.getList("Members", Tag.TAG_COMPOUND);
+        check(roster.getCompound(2).getString("Gang").equals("jetsetcraft:amygdala"), "Honkistas hosting changed Lucy's affiliation");
+        CrewProfile reloaded = CrewProfile.load(saved);
+        check(reloaded != null && reloaded.hasCharacter(lucy), "Lucy identity was lost on save/load");
+        helper.succeed();
+    }
+
     private static CrewProfile found(ServerPlayer owner, BlockPos anchor) {
         owner.serverLevel().setBlockAndUpdate(anchor.below(), Blocks.STONE.defaultBlockState());
         owner.serverLevel().setBlockAndUpdate(anchor, ModBlocks.BOOMBOX.get().defaultBlockState());
