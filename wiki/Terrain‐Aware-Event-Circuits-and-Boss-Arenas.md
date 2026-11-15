@@ -2,6 +2,12 @@
 
 **Research/design checkpoint — 12 October 2026. Minecraft Java 1.20.1 / Forge. Not an implemented-feature or performance claim.** Exact Forge dependency, movement source and installed protection integrations must be pinned before implementation.
 
+## Encounter transformation outcome — owner vision, 2026-11-15
+
+Terrain-aware routes and night stages are no longer just "Minecraft with obstacle props." They must meet the [**Encounter North Star — Beyond Minecraft**](Encounter-North-Star-Beyond-Minecraft): temporary, legible transformation into an original premium skating/graffiti/music-action experience of Jet Set Radio / HYPERFUNK-class ambition. Players should forget the Minecraft wrapper during an actual exciting encounter **without losing responsive controls, fairness, building protection, mod compatibility, accessibility or full post-event cleanup**. Only native-game video, measured frame/network timings, world-restoration tests and outside delight/playability feedback can earn that quality claim.
+
+[Operational test scorecard](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/ENCOUNTER_NORTH_STAR_ACCEPTANCE.md). **This is a requested quality target, not working terrain-generation/lighting/cinematic code.**
+
 ## Owner-approved experience
 
 Temporary, biome- and terrain-aware courses should make the actual world an excellent competitive playground: gang races, skating/platform/trick chains, obstacle dodging, branching Metroidvania-style traversal and racing to tag more valid areas. Jet Set Radio and Bomb Rush Cyberfunk are inspiration, with a higher quality ambition. Keep builds and terrain intact; remove event obstacles afterward so normal Minecraft continues. Provide teleported boss arenas where more room or isolation is necessary, and genuine underwater skating/tricks against water gangs.

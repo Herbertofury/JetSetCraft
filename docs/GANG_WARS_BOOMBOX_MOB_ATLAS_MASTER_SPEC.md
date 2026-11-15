@@ -10,6 +10,14 @@
 
 ---
 
+## 0.0 Owner's encounter north star — 2026-11-15 (vision, not shipped)
+
+**During major encounters, the player should cease to *feel* like they are playing Minecraft.** JetSetCraft is intended to become an absolutely breathtaking, ultra-fun, momentum-first and music-reactive skating/graffiti/crew-rival game-within-the-game. The ambition is **best-in-class Jet Set Radio / HYPERFUNK-style experiential quality and then beyond**, with entirely original art, animation, music arrangements, rival tactics and level/route staging; no copying of game assets or unlicensed music.
+
+This is **not a request to replace Minecraft or contradict the standalone compatibility covenant below**. Outside the encounter, the world, mobs, inventories, source mod state and player controls must remain intact. During the encounter, actual skillful input and fair rival response must drive beautiful temporary overlays, unique choreography, reactive music and earned combo/victory peaks. Afterward, leave zero unsafe persistent world changes. Record real evidence before using any shipped-quality claims.
+
+**[Canonical experience vision](../wiki/Encounter-North-Star-Beyond-Minecraft.md)** · **[Required native acceptance checklist](ENCOUNTER_NORTH_STAR_ACCEPTANCE.md)** · [Actual release status](../wiki/Release-Status.md).
+
 ## 0. Mission
 
 Continue development of **JetSetCraft** from the current project state. Do not restart the mod, replace working subsystems, regress existing movement, or reduce compatibility to make this expansion easier.

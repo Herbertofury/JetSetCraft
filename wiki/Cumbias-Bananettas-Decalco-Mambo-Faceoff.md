@@ -4,6 +4,12 @@
 
 [Bananettas](Bananettas) · [Cumbias](Cumbias‐and‐Multi‐Rival‐Gang‐War) · [Music Library](Music-Library) · [Ocarina of Cumbia](Ocarina-of-Cumbia-Easter-Egg)
 
+## Flagship experience requirement — truly transformative and earned
+
+This rare two-crew showdown is an explicit test case for the [top-level encounter north star](Encounter-North-Star-Beyond-Minecraft). It must feel like an outrageously polished, **playable** Jet Set Radio / HYPERFUNK-class original street-culture game for several glorious minutes — not vanilla Minecraft mobs standing around with a pasted song. Distinct Cumbias and Bananettas choreography, original decal-themed stage design, skate/trick/dance agency, reactive and **legally cleared event-only** music, extraordinary combo payoff, humor, safe cinematic presentation and optional replay must all work together. Its 1% rarity is only a proposed tuning value, not a substitute for quality.
+
+**Status:** desired quality bar, **not implemented**. Preserve the [original world, both approved song IDs, exact rare-event arbitration and Ocarina separation](Cumbias-Bananettas-Decalco-Mambo-Faceoff); use the [native-playtest scorecard](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/ENCOUNTER_NORTH_STAR_ACCEPTANCE.md) before any "finished" claim.
+
 ## Owner-selected foundation
 
 | Field | Decision |

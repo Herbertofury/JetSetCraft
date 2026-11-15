@@ -1,5 +1,19 @@
 # Roadmap
 
+## Ultimate owner-approved encounter vision — beyond the feeling of Minecraft (2026-11-15)
+
+**Highest-level experiential target:** make major JetSetCraft events so outrageously beautiful, kinetic, musical, fun, responsive and replayable that the player feels transported into an original premium **Jet Set Radio / HYPERFUNK-class** action-and-street-culture game. The **goal is to surpass those reference feelings through original work**, not just sprinkle effects over a Minecraft minigame. This is **aspiration, not shipped quality**. Minecraft remains physically compatible and intact before/after the event.
+
+**Canonical experience specification:** [Encounter North Star — Beyond Minecraft](Encounter-North-Star-Beyond-Minecraft) · [Evidence-gated QA scorecard](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/ENCOUNTER_NORTH_STAR_ACCEPTANCE.md).
+
+- [ ] Build one genuinely playable, deeply polished signature vertical slice with responsive skating, original crew body animation, satisfying score, camera consent, meaningful challenge and fair replay.
+- [ ] Create a fully reversible live-world-to-event staging system with original graffiti, lighting, signage and biome/terrain-aware routes. Confirm cleanup, protection and no mod/world-state loss.
+- [ ] Integrate soundtrack-reactive choreography, hit/trick/Flow musical payoffs, crew responses and legal event-scoped music routing. Never slow input or claim a Spotify reference is shipped audio.
+- [ ] Create multiple radically different authentic gang encounters with unique choreography, identity, mechanics and adaptive challenge; avoid generic reskinning or repeating choreographies.
+- [ ] Prove first-run awe, in-hand controls, readability, replay impulse, performance and accessibility using actual blind outside playtests, footage, timing traces and hardware/server profiles.
+- [ ] Achieve competitive evidence against reference game experiences while preserving world compatibility, all approved rides, vanilla/modded mobs, network correctness and multi-version direction.
+- [ ] Only graduate from **design/experimental** to **shipped AAA-level claim** after recorded native client, dedicated server, asset-rights and regression evidence demonstrates the outcome.
+
 ## Required version priority and rapid-port architecture
 
 **1.20.1 → 1.21.1 → latest stable Minecraft → eventually all Minecraft versions.** This is the owner-approved order. The latest stable target must be resolved and pinned when its port begins. Broader coverage is a long-term goal, not an existing support claim.

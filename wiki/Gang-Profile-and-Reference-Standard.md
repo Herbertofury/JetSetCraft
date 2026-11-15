@@ -4,6 +4,10 @@
 
 **Owner requirement:** every individual mob gang gets its own music reference, dance reference, eventual tagging art, quirks, abilities, unlocks and memorable gameplay identity. A shared family is organization, not a substitute for an individual profile.
 
+## Required encounter feeling and verified quality
+
+**Every crew/mob gang is judged against the [top-level beyond-Minecraft encounter vision](Encounter-North-Star-Beyond-Minecraft).** Each gang needs a signature playable "wow" moment that is impossible to confuse with a generic mob skirmish: own movement + dance + music + art + rival intelligence + meaningful score and payoff. A Spotify link, unique costume, particle emitter or repeated animation alone cannot pass. Write an explicit proposed transformation arc per gang and include evidence-linked native gameplay acceptance, rights, cleanup and accessibility status. [Developer scorecard](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/ENCOUNTER_NORTH_STAR_ACCEPTANCE.md). **This is a future design target, not automatic approval of all gang content.**
+
 ## Required profile fields
 | Field | What must be recorded |
 | --- | --- |

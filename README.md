@@ -9,6 +9,12 @@
 
 JetSetCraft turns ordinary Minecraft terrain into a momentum-first street sports game. Ride, boost, trick, grind, wall-ride, dance, tag walls, equip mobs with Street Gear, and start data-driven gang sessions—without replacing Minecraft’s world, combat, mobs, rails, or movement ecosystems.
 
+## North star: beyond Minecraft during an encounter (vision, not shipped)
+
+**Owner-approved ambition:** when a gang duel, boss fight, rave or skating challenge begins, the player should almost **forget they're inside Minecraft**. Aim for an exhilarating, breathtaking, wildly replayable skating/graffiti/music experience that can stand creatively alongside — and aspire to exceed — **Jet Set Radio** and **HYPERFUNK** in moment-to-moment quality. This is a **future product vision**, not a claim about the current release or an authorization to copy reference-game assets. Minecraft's world, mobs, controls, mod compatibility and player builds must be preserved, and the special experience must end with clean restoration.
+
+**[Read the canonical encounter vision](wiki/Encounter-North-Star-Beyond-Minecraft.md)** · **[Operational acceptance scorecard](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/ENCOUNTER_NORTH_STAR_ACCEPTANCE.md)** · [What is actually shipped](wiki/Release-Status.md).
+
 ## What ships in v0.3.0
 
 - Six persistent ride styles: inline skates, quad skates, street board, BMX, hoverboard, and scooter.

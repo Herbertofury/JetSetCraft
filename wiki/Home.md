@@ -9,6 +9,12 @@
 > [!IMPORTANT]
 > **JetSetCraft turns ordinary Minecraft worlds into a momentum-first street-sports playground without replacing the player, the world, or vanilla control.** Inline skates, quad skates, a street board, BMX, hoverboard, and scooter share one expressive movement language built around tricks, grinding, flow, dance, graffiti, and emergent Minecraft physics.
 
+## 🌟 The encounter north star — vision, not shipped
+
+**Owner's ultimate experience goal:** every major encounter should become a stunning, exhilarating **game-within-the-game** — an original, premium-quality skating, graffiti and rival-crew experience so good the player stops *feeling* like they are simply playing Minecraft. **Jet Set Radio** and **HYPERFUNK** are quality benchmarks, not assets to copy or a claim the goal has been reached. The experience must remain responsive, replayable, accessible and safe for the original Minecraft world.
+
+[**Read the top-level encounter vision and quality gates →**](Encounter-North-Star-Beyond-Minecraft) · [Proof-gated developer checklist](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/ENCOUNTER_NORTH_STAR_ACCEPTANCE.md) · [Current release state](Release-Status).
+
 ## ✨ Start here
 
 | I want to… | Go here |

@@ -4,6 +4,12 @@
 
 Tracking: [GitHub issue #27](https://github.com/Herbertofury/JetSetCraft/issues/27) · [All-gang presentation direction](https://github.com/Herbertofury/JetSetCraft/issues/27#issuecomment-6105520015) · [Gang-control campaign](https://github.com/Herbertofury/JetSetCraft/issues/27#issuecomment-6105630795)
 
+## The no-longer-feels-like-Minecraft goal — flagship encounter standard
+
+**Owner-approved ultimate vision (2026-11-15):** during a Gabberina rival entrance, encore, mob-boss confrontation or finale, the player should feel as though JetSetCraft has become an extraordinary standalone music-driven skating and graffiti game. It must be **breathtaking, ridiculously fun, kinetic and emotionally electric** — aiming to match and eventually surpass **Jet Set Radio / HYPERFUNK** *as a playable experience*, not by copying assets or hiding generic mobs under a rave. An encounter should earn its spectacle through responsive skating, real rival choreography, meaningful combo/score changes, earned music peaks and impeccably staged, original art.
+
+The [**Encounter North Star — Beyond Minecraft**](Encounter-North-Star-Beyond-Minecraft) is the canonical acceptance standard; the [outside-judge quality scorecard](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/ENCOUNTER_NORTH_STAR_ACCEPTANCE.md) describes real native QA. Preserve Gabberina's jumpstyle/gabber/hardtekk blend, changing abilities on gang takeover, independent persistent defeat, safe controlled surprise triggers, player agency and vanilla Minecraft world protection. **This is design ambition only, not implemented animation/audio/events.**
+
 ## Major requirement: music-driven dances and themed bosses
 
 High-priority owner requirement: every mob needs amazing music-generated/driven dances with meaningful, fun variety and goosebump-level presentation. Cumbias, Phonkistas, Gabberina's and Hardtekkas each need exceptional signature dances. When a major faction owns a mob gang, its boss becomes a music-driven, mob-themed human leader tied to the controller; the explicit example is **Hakken Horse**, a human dressed like a horse for a Gabberina-controlled horse gang. Preserve source mobs and existing takeover/power-removal, surprise-challenge and independent-defeat rules.

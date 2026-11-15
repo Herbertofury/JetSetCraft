@@ -4,6 +4,12 @@
 
 **Shared tracking:** [High-priority issue #30](https://github.com/Herbertofury/JetSetCraft/issues/30).
 
+### The owner’s 2026-11-15 encounter north star: become the game, not a minigame
+
+**New non-negotiable experience ambition:** encounter staging, skating, music, character acting and real-time gang challenges should become so breathtaking, unique, playable and satisfying that Minecraft no longer *feels* like a block-game minigame during the event. Aim beyond the emotional quality of **Jet Set Radio** and **HYPERFUNK**, with **original** music/art/gameplay and zero regressions to the real Minecraft world. See the complete [Encounter North Star](Encounter-North-Star-Beyond-Minecraft) and [operational, evidence-gated acceptance criteria](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/ENCOUNTER_NORTH_STAR_ACCEPTANCE.md). **This is owner-approved product direction, not already-implemented audiovisual behavior.**
+
+The experience **cannot** be achieved by an extra song ID, particle spam or a passive cinematic: confirmed tricks and rival counterplay must drive the music, animation, scene, stakes and earned peak. Human and mob crews must have authentic, unique motion, responsive AI and distinct audiovisual identities. No gameplay input lock, fake beat-sync claims, unauthorized soundtrack distribution, forced flashing or broken world cleanup.
+
 
 ## Portable reactive engine and Killer Instinct combat-audio source, 2026-11-15
 

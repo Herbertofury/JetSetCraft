@@ -8,6 +8,8 @@
 
 **[✨ Feature Overview](Feature-Overview)**
 
+**[🌟 Encounter North Star — Beyond Minecraft](Encounter-North-Star-Beyond-Minecraft)**
+
 ### 🎮 Ride & Flow
 
 - [🛸 Liberty Grind — Drop, Tag, Extract](Liberty-Grind)
