@@ -3,9 +3,9 @@
   "owner_approved_reference_id": "BANANETTAS-MUSIC-001",
   "gang_id": "jetsetcraft:bananettas",
   "generated_for": "research_and_audition_2026-11-15",
-  "review_status": "five_of_102_promoted_97_unapproved_plus_eight_owner_links_outside_original_102",
+  "review_status": "five_of_102_promoted_97_unapproved_plus_nine_approved_exact_spotify_links_outside_original_102",
   "candidate_count": 102,
-  "policy": "14 regular owner-selected Bananettas music references, 97 original audition candidates still unapproved. Separate Cumbias x Bananettas rare event song JSC-RARE-MAMBO-20261115-001 is NOT ordinary radio.",
+  "policy": "15 owner-approved regular Bananettas music references: first Lio song, five promoted among the original 102, nine additional exact Spotify references (one older link still unidentified). 97 initial audition candidates remain unselected. Separate Cumbias x Bananettas rare event cues are NOT ordinary radio tracks.",
   "priority_legend": {
     "A": "high-priority proposed audition",
     "B": "secondary/variety proposed audition"
@@ -1382,7 +1382,8 @@
     "BANANETTAS-MUSIC-011",
     "BANANETTAS-MUSIC-012",
     "BANANETTAS-MUSIC-013",
-    "BANANETTAS-MUSIC-014"
+    "BANANETTAS-MUSIC-014",
+    "BANANETTAS-MUSIC-015"
   ],
   "promoted_from_initial_102": 5,
   "remaining_unapproved_initial_candidates": 97,
@@ -1474,9 +1475,20 @@
       "status": "owner_approved_must_add_outside_original_102",
       "recording_master_status": "not_supplied",
       "synchronization_and_distribution_rights_status": "unverified"
+    },
+    {
+      "reference_id": "BANANETTAS-MUSIC-015",
+      "artist": "Glam, Clio & Roberto Ferrante",
+      "title": "More Than Ever ((Fashion Mix) Prod. by Roberto Ferrante - 2024 Remaster)",
+      "spotify_track_id": "3sWqpOUN69N9E8iCM9wKR4",
+      "owner_supplied_url": "https://open.spotify.com/track/3sWqpOUN69N9E8iCM9wKR4?si=a7c97cf7731942f4",
+      "edition_note": "Exact owner-linked Fashion Mix, 2024 remaster (4:19), originally released on GLAM's 1985 12-inch. NOT the longer 5:33 Club Mix, an original 1985 master, a later edit or re-recording. The owner-linked master/ISRC and full clearance require verification.",
+      "status": "owner_approved_must_add_outside_original_102",
+      "recording_master_status": "not_supplied",
+      "synchronization_and_distribution_rights_status": "unverified"
     }
   ],
-  "total_owner_must_add_count": 14,
+  "total_owner_must_add_count": 15,
   "rare_event_only_reference_ids": [
     "JSC-RARE-MAMBO-20261115-001"
   ]

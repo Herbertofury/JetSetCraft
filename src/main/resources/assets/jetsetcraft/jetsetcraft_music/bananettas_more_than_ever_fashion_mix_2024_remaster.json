@@ -1,0 +1,39 @@
+{
+  "title": "More Than Ever ((Fashion Mix) Prod. by Roberto Ferrante - 2024 Remaster)",
+  "artist": "Glam, Clio, Roberto Ferrante",
+  "album": "More Than Ever (2024 Remaster)",
+  "sound_event": "jetsetcraft:licensed/bananettas_more_than_ever_fashion_mix_2024_remaster",
+  "audio_resource": "jetsetcraft:sounds/music/licensed/bananettas_more_than_ever_fashion_mix_2024_remaster.ogg",
+  "contexts": [
+    "rush"
+  ],
+  "volume": 0.65,
+  "source_url": "https://open.spotify.com/track/3sWqpOUN69N9E8iCM9wKR4?si=a7c97cf7731942f4",
+  "spotify_track_id": "3sWqpOUN69N9E8iCM9wKR4",
+  "source_version": "Fashion Mix (2024 Remaster), 4:19; original song 1985",
+  "original_recording_year": 1985,
+  "selected_remaster_year": 2024,
+  "mix": "Fashion Mix",
+  "duration": "4:19",
+  "avoid_alternates": [
+    "Club Mix 5:33",
+    "unverified original-1985 master",
+    "other covers, DJ edits or remixes"
+  ],
+  "original_release_provenance": "1985 Glam 12-inch, Il Discotto Productions; 2024 remaster via Planet Records Classics",
+  "credited_artists": [
+    "Glam",
+    "Clio",
+    "Roberto Ferrante"
+  ],
+  "reference_sources": [
+    "https://www.qobuz.com/us-en/album/more-than-ever-glam-clio-roberto-ferrante/cgjp6v8ritejb",
+    "https://www.beatport.com/track/more-than-ever/18581514",
+    "https://bestrecord.bandcamp.com/album/more-than-ever-plt880mix"
+  ],
+  "gang_id": "jetsetcraft:bananettas",
+  "intended_placement": "Owner-approved for Bananettas only; do not play in generic Rush/home context until gang-specific music filtering exists",
+  "owner_reference_id": "BANANETTAS-MUSIC-015",
+  "recording_status": "awaiting_authorized_audio",
+  "rights_status": "synchronization_and_redistribution_not_verified; no_audio_bundled"
+}

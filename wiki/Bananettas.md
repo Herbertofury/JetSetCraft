@@ -1,6 +1,6 @@
 # Bananettas — French-Language Bubblegum Pop / New-Wave Street Gang
 
-> **Status (2026-11-15):** The project owner confirmed **Bananettas** as a new JetSetCraft gang name, matching the playful naming family of Honkistas, Gabberinas, Phonkistas and Footworkas. The owner selected **"Le Banana Split" by Lio** as the gang's **first MUST-ADD track** and thirteen additional Bananettas playlist selections. Twelve additional titles are identified; one earlier exact Spotify link awaits title/artist verification. The design, runtime integration, authorized audio, and finished art remain pending; **this is a design record, not a shipped encounter**.
+> **Status (2026-11-15):** The project owner confirmed **Bananettas** as a new JetSetCraft gang name, matching the playful naming family of Honkistas, Gabberinas, Phonkistas and Footworkas. The owner selected **"Le Banana Split" by Lio** as the gang's **first MUST-ADD track** and fourteen additional Bananettas playlist selections. Thirteen additional titles are identified; one earlier exact Spotify link awaits title/artist verification. The design, runtime integration, authorized audio, and finished art remain pending; **this is a design record, not a shipped encounter**.
 
 [Music Library](Music-Library#bananettas) · [Street Culture](Home) · [Gang Profile Standard](Gang-Profile-and-Reference-Standard) · [Music Integration](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/MUSIC_INTEGRATION.md)
 
@@ -13,7 +13,7 @@
 | Gang type | Distinct human music-culture crew; not a rename of Signal '81 or any existing mob gang |
 | Music identity | Playful French-language / Francophone **bubblegum pop**, bright new wave, early synthpop and candy-colored late-'70s / early-'80s street culture |
 | First MUST-ADD | **Le Banana Split — Lio** (original 1979 short French-language single, ~2:33 target) |
-| Further owner-selected songs | **Thirteen** additional requirements (12 titled + 1 exact Spotify ID pending identification); no audio bundled |
+| Further owner-selected songs | **Fourteen** additional requirements (13 titled + 1 exact Spotify ID pending identification); no audio bundled |
 | Confirmed vs suggested | **Name and track** are owner-confirmed. Styling, lore, member lineup, locations, dances, abilities and exact cues below are proposals. |
 
 **Cultural precision:** The scene is French-language and Paris-pop inspired; Lio is a Belgian singer, not evidence that the singer herself is French. This gang should feel exuberant, cheeky and lively—not like the darker/signal-driven **Signal '81** crew.
@@ -26,7 +26,7 @@
 
 ## Additional owner-confirmed Bananettas songs — 2026-11-15
 
-The thirteen selections below were supplied directly by the owner, in the order received. They join the original #001 selection. All are **MUST-ADD requirements for the Bananettas gang only**, not approved selections for other gangs or a generic Rush playlist.
+The fourteen selections below were supplied directly by the owner, in the order received. They join the original #001 selection. All are **MUST-ADD requirements for the Bananettas gang only**, not approved selections for other gangs or a generic Rush playlist.
 
 | Stable ID | Owner-selected song / original link | Version and provenance | Status |
 | --- | --- | --- | --- |
@@ -43,10 +43,11 @@ The thirteen selections below were supplied directly by the owner, in the order 
 | **BANANETTAS-MUSIC-012** | [**I Love Video — New Paradise**](https://open.spotify.com/track/7yKGeGDjtxmfp4jlMvPUyE?si=c1035a15af4b404f) | Early-1980s French electro/disco song; exact owner-linked Spotify recording selected, mastering and ISRC not verified | Owner must-add; no authorized master or playback yet |
 | **BANANETTAS-MUSIC-013** | [**Marie moi — Agathe & Regrets**](https://open.spotify.com/track/5GMzTdxVGSfN0QbmV1pL9T?si=028653c2d6254b2d) | 1986-era Agathe song; preserve exact owner-linked Spotify compilation edition, not alternate maxi/remix; master/ISRC pending | Owner must-add; no authorized master or playback yet |
 | **BANANETTAS-MUSIC-014** | [**Rendez-vous sur la Costa del Sol — Magazine 60**](https://open.spotify.com/track/1AeuPKv2cHLUYJ5QNtP5uf?si=db56a65067624b43) | 1985 song, owner's approx 3:28 Spotify edition. Distinct from longer 4:20 version; linked master/ISRC pending | Owner must-add; no authorized master or playback yet |
+| **BANANETTAS-MUSIC-015** | **[More Than Ever ((Fashion Mix) Prod. by Roberto Ferrante - 2024 Remaster) — Glam, Clio & Roberto Ferrante](https://open.spotify.com/track/3sWqpOUN69N9E8iCM9wKR4?si=a7c97cf7731942f4)** | Fashion Mix, **2024 remaster**, 4:19; original 1985 song; [authorized label notes](https://bestrecord.bandcamp.com/album/more-than-ever-plt880mix); [distributor master/credits](https://www.qobuz.com/us-en/album/more-than-ever-glam-clio-roberto-ferrante/cgjp6v8ritejb); **not** the Club Mix | Owner MUST-ADD; exact master/ISRC, audio permissions and playback still pending |
 
 **Reference handling:** "Que veux-tu" means the original Yelle song from *Safari Disco Club* (2011) unless the owner later specifies a remix. The Spotify link associated with that song was independently identified and was **not** pasted by the owner. "Discolombo" is identified from Le Couleur's official *P.O.P* release; the owner supplied a **Spotify search**, not an exact track ID, so avoid treating one search result as the chosen release. The final track ID `66TWIPMA0IMNofL3glOp6X` has no reliable title/artist result yet: **do not guess its metadata, merge it into another entry or discard the link**.
 
-**Import safety:** Twelve named entries now have metadata-only import stubs. The unidentified recording has **no import stub** until its real title and artist can be confirmed. Preserve the exact 4:28 Claudia Phillips Spotify selection, the specific Véronique Ferraro remix of “House tube’”, and the owner-linked Chagrin d'Amour recording; never silently substitute a different mix/master. Current client `home`/`rush` playlist contexts **do not implement gang affiliation**. No copyrighted audio is bundled, licensed, synchronized, downloaded or gameplay-tested by this addition.
+**Import safety:** Thirteen named entries now have metadata-only import stubs. The unidentified recording has **no import stub** until its real title and artist can be confirmed. Preserve the exact 4:28 Claudia Phillips Spotify selection, the specific Véronique Ferraro remix of “House tube’”, and the owner-linked Chagrin d'Amour recording; never silently substitute a different mix/master. Current client `home`/`rush` playlist contexts **do not implement gang affiliation**. No copyrighted audio is bundled, licensed, synchronized, downloaded or gameplay-tested by this addition.
 
 **Original-vs-remix lock:** The target is the playful, short **1979 French-language original single** (about **2:33**). A later streaming compilation includes a same-named 2:33 track, but its exact mastering/ISRC identity relative to the original 7-inch release has **not yet been established**. Do not silently replace it with the extended disco recording, an English version, a 1995 remix, a radio mix, a 2016 club version, a cover, or a different artist's recording. The album links are identification/listening references, **not an owner-supplied exact Spotify track ID or a game-use license**.
 
@@ -70,14 +71,15 @@ The owner also requires [**Décalco Mambo — rare two-crew face-off**](Cumbias-
 
 ## Research backlog — 2026 audition candidates
 
-[**Browse the 102-track, quality-tiered Bananettas music discovery shelf**](Bananettas-Music-Discovery). This is an independent **audition/research queue**, not 102 owner-approved must-adds or shipped music. Five discovery tracks are owner-approved; eight exact Spotify selections were added outside the original 102-song discovery shelf. **Fourteen tracks/links are now owner-approved**; the other 97 discovery tracks remain auditions.
+[**Browse the 102-track, quality-tiered Bananettas music discovery shelf**](Bananettas-Music-Discovery). This is an independent **audition/research queue**, not 102 owner-approved must-adds or shipped music. Five discovery tracks are owner-approved; nine exact Spotify selections were added outside the original 102-song discovery shelf. **Fifteen tracks/links are now owner-approved**; the other 97 discovery tracks remain auditions.
 
 ## Concrete integration checklist
 
 - [x] Record owner-confirmed name, reference ID and first must-add artist/title without inventing a Spotify track ID.
 - [x] Create machine-readable gang design record in `docs/gangs/bananettas.json`.
 - [x] Add music reference to `Music-Library` and an import-preparation-only JSON catalogue entry.
-- [x] Add thirteen further owner-directed Bananettas track selections, preserving all exact Spotify IDs and the one search URL.
+- [x] Add fourteen further owner-directed Bananettas track selections, preserving all exact Spotify IDs and the one search URL.
+- [x] Preserve **More Than Ever — Glam, Clio & Roberto Ferrante**, exact 4:19 **Fashion Mix (2024 Remaster)** as #015, without replacing it with the Club Mix or incorrectly treating the 1985 original as the selected master.
 - [x] Document rare Cumbias × Bananettas special encounter separately from regular gang radio.
 - [x] Preserve Magazine 60's exact **2024 Remastered** short recording and distinguish the underlying 1984 hit from later long and alternate mixes.
 - [x] Preserve Claudia Phillips & The Kicks's linked track, the 2021 Véronique Ferraro remix, and Chagrin d'Amour's original-era song as separate owner-approved selections.
