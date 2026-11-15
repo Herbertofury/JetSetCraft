@@ -81,3 +81,5 @@
 - [SCP gang and character appearances](SCP-Gang-and-Character-Appearances) — named roster candidates, variant identity and rights-aware appearance backlog.
 
 - [Honkistas persistent sequence](Honkistas-Persistent-Sequence) — source settlement journal and remaining encounter integration.
+
+- [Original Honkistas actor prototype](Honkistas-Original-Actor-Prototype)

@@ -254,7 +254,12 @@ public final class RivalRushVisualAudit {
             case 13 -> {
                 if (!RushContractVisualAudit.advance(minecraft, label -> capture(minecraft, label), CAPTURES::containsKey)) return;
                 if (CAPTURES.size() != 23) { finish(minecraft, false, "expected twenty-three completed native PNG captures"); return; }
-                finish(minecraft, true, "twenty-three real-client captures; original nineteen preserved; actual PAINT briefing/progress, normally settled room/contract service budget, accepted TUNE packet and result; inventory/XP/dimension restored; owned-hit, authored-wall, arrival and clock fixtures explicitly logged, not human traversal/duration or boss-clear proof");
+                next(14);
+            }
+            case 14 -> {
+                if (!HonkistasPrototypeVisualAudit.advance(minecraft, label -> capture(minecraft, label), CAPTURES::containsKey)) return;
+                if (CAPTURES.size()!=26) {finish(minecraft,false,"Expected26captures including original actor preview");return;}
+                finish(minecraft,true,"Existing23native acceptance captures plus original actor front/side/back preview; model visual acceptance separate, no skating/event claim");
             }
             default -> finish(minecraft, false, "unknown audit phase");
         }

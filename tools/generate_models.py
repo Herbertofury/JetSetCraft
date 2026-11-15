@@ -500,7 +500,14 @@ def make_graffiti():
     (manifest_dir/'catalog.json').write_text(json.dumps({'version': 1, 'entries': catalog}, indent=2) + '\n', encoding='utf-8')
     print('graffiti catalog entries', len(catalog))
 
+def make_honkistas_prototype_palette():
+    # Original white sampler for vertex-colored authored geometry; no imported character skin.
+    path = ROOT/'src/main/resources/assets/jetsetcraft/textures/entity/honkistas_prototype_white.png'
+    path.parent.mkdir(parents=True, exist_ok=True)
+    Image.new('RGBA',(64,64),(255,255,255,255)).save(path)
+
 if __name__=='__main__':
+    make_honkistas_prototype_palette()
     make_textures(); make_graffiti(); make_skate(); make_quad_skate(); make_board(); make_hoverboard(); make_bmx(); make_scooter(); make_spray_can()
     for name in ('inline_skates','quad_skates','street_board','hoverboard','bmx','scooter','spray_can'):
         p=OBJ_DIR/f'{name}.obj'
