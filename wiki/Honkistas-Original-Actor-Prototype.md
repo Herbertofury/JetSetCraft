@@ -17,3 +17,7 @@ The native entity, model and renderer are registered independently as `jetsetcra
 Compare with the owner's theatrical quality target without copying the supplied creator model. Review original front/back/side views, then skating and dance poses, shoulders/elbows/knees/hands, held objects, crowd readability, low/high frame times and motion-responsive hair/cloth. Author expressive variation and collision envelopes before promising finished NPC quality.
 
 See [quality requirements](Honkistas‐NPC‐Quality‐and‐Skating‐Physics) and [persistent sequence](Honkistas-Persistent-Sequence).
+
+## First preview review
+
+The first three captures at PR head `b256bb8` verified rendering but inherited the prior underwater fixture. Darkness, crosshair, held item and HUD prevent reliable visual-quality acceptance. These failed-quality captures remain in workflow run `43706166634`. The revised audit uses open daylight airspace, hides HUD and restores camera, HUD state, position, gravity and world time afterward. No terrain or inventory is changed. Revised pixels still require review.

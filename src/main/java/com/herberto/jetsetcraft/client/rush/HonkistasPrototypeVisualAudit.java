@@ -19,7 +19,8 @@ public final class HonkistasPrototypeVisualAudit {
     private static volatile String error;
     private static Vec3 original,center;
     private static float yaw,pitch;
-    private static boolean gravity;
+    private static boolean gravity,hideGui;
+    private static long originalDayTime;
     private static CameraType camera;
     public static boolean advance(Minecraft mc,Consumer<String> capture,Predicate<String> captured){
         var server=mc.getSingleplayerServer();
@@ -29,19 +30,24 @@ public final class HonkistasPrototypeVisualAudit {
         if(error!=null)throw new IllegalStateException(error);
         if(phase==0){
             if(!queued){
-                queued=true;camera=mc.options.getCameraType();mc.options.setCameraType(CameraType.FIRST_PERSON);mc.setScreen(null);
+                queued=true;hideGui=mc.options.hideGui;mc.options.hideGui=true;camera=mc.options.getCameraType();mc.options.setCameraType(CameraType.FIRST_PERSON);mc.setScreen(null);
                 UUID owner=mc.player.getUUID();
                 server.execute(()->{
                     try{
                         var p=server.getPlayerList().getPlayer(owner);
                         original=p.position();yaw=p.getYRot();pitch=p.getXRot();gravity=p.isNoGravity();
-                        center=original.add(8,0,0);
+                        // Prior preview inherited an underwater fixture; use open, daylight airspace
+                        // in this disposable world, never modify terrain or player inventory.
+                        int surface=p.serverLevel().getHeight(net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING,
+                                p.blockPosition().getX()+8,p.blockPosition().getZ());
+                        center=new Vec3(original.x+8,Math.max(original.y,surface)+16,original.z);
+                        originalDayTime=p.serverLevel().getDayTime();p.serverLevel().setDayTime(6000);
                         HonkistasPrototypeEntity actor=ModEntities.HONKISTAS_PROTOTYPE.get().create(p.serverLevel());
                         if(actor==null)throw new IllegalStateException("Original actor registry missing");
                         actor.moveTo(center.x,center.y,center.z,0,0);actor.setNoAi(true);actor.setNoGravity(true);
                         if(!p.serverLevel().addFreshEntity(actor))throw new IllegalStateException("Original actor insertion rejected");
                         actorId=actor.getUUID();p.setNoGravity(true);
-                        p.teleportTo(p.serverLevel(),center.x,center.y+.1,center.z+4,180,8);
+                        p.teleportTo(p.serverLevel(),center.x,center.y+.1,center.z+3,180,12);
                         applied=true;
                     }catch(RuntimeException e){error=e.toString();}
                 });
@@ -63,21 +69,21 @@ public final class HonkistasPrototypeVisualAudit {
                 int next=phase+1;UUID owner=mc.player.getUUID();applied=false;
                 server.execute(()->{
                     var p=server.getPlayerList().getPlayer(owner);
-                    double x=next==2?center.x+4:center.x,z=next==2?center.z:center.z-4;
-                    p.teleportTo(p.serverLevel(),x,center.y+.1,z,next==2?90:0,8);applied=true;
+                    double x=next==2?center.x+3:center.x,z=next==2?center.z:center.z-3;
+                    p.teleportTo(p.serverLevel(),x,center.y+.1,z,next==2?90:0,12);applied=true;
                 });
                 phase=next;ticks=0;return false;
             }
             UUID owner=mc.player.getUUID();applied=false;
             server.execute(()->{
                 var p=server.getPlayerList().getPlayer(owner);var actor=p.serverLevel().getEntity(actorId);
-                if(actor!=null)actor.discard();p.setNoGravity(gravity);
+                if(actor!=null)actor.discard();p.setNoGravity(gravity);p.serverLevel().setDayTime(originalDayTime);
                 p.teleportTo(p.serverLevel(),original.x,original.y,original.z,yaw,pitch);applied=true;
             });
             phase=4;return false;
         }
         if(!applied)return false;
-        mc.options.setCameraType(camera);
+        mc.options.setCameraType(camera);mc.options.hideGui=hideGui;
         JetSetCraft.LOGGER.info("JETSETCRAFT_HONKISTAS_MODEL_PREVIEW_PASS original articulated model; three native still views only; no skating/secondary-physics/event acceptance");
         return true;
     }
