@@ -1,0 +1,82 @@
+{
+  "schema_version": 1,
+  "status": "authored_blueprint_not_loaded_or_playable",
+  "mode_id": "jetsetcraft:adventure_mode",
+  "region_id": "jetsetcraft:crosswire_towers",
+  "display_name": "Crosswire Towers",
+  "design_tier": "vertical_second_stage",
+  "footprint_blocks": [
+    64,
+    64,
+    64
+  ],
+  "base_coordinate_policy": "all_anchors_relative_to_session_appointed_region_origin",
+  "visual_identity": {
+    "palette": [
+      "purple_concrete",
+      "cyan_concrete",
+      "white_concrete"
+    ],
+    "description": "Interconnected vertical signal towers with safe grind transfers and visible return shortcuts; art not authored yet"
+  },
+  "anchors": {
+    "entry_from_rail_garden": [
+      0,
+      2,
+      0
+    ],
+    "traversal_upgrade_pedestal": [
+      10,
+      18,
+      5
+    ],
+    "backtrack_connector": [
+      -14,
+      5,
+      12
+    ],
+    "boss_door": [
+      27,
+      26,
+      -10
+    ]
+  },
+  "movement_upgrade": {
+    "proposed_id": "jetsetcraft:adventure_wall_launch",
+    "status": "not_implemented",
+    "scope": "run_only",
+    "intent": "unlock a previously seen optional Rail Garden branch; not required to finish before acquired"
+  },
+  "connections": [
+    {
+      "edge_to": "jetsetcraft:rail_garden",
+      "availability": "open_backtrack"
+    },
+    {
+      "edge_to": "jetsetcraft:crosswire_stage_boss",
+      "requires_upgrade": "jetsetcraft:adventure_wall_launch",
+      "availability": "after_pedestal_acquired"
+    }
+  ],
+  "authored_platforming_prompts": [
+    {
+      "id": "vertical_switchback",
+      "action": "ascending_rail_to_wall_kick_transfers",
+      "must_have_successful_legal_path": true
+    },
+    {
+      "id": "safe_return",
+      "action": "two_way_path_after_upgrade",
+      "must_have_successful_legal_path": true
+    },
+    {
+      "id": "boss_learned_skill",
+      "action": "boss_counterplay_uses_traversal_skill",
+      "status": "boss_not_implemented"
+    }
+  ],
+  "hazard_and_collision_proof": "not_run",
+  "runtime_builder": "not_implemented",
+  "source_world_protection": "build_only_in_jetsetcraft_adventure_mode_owned_session_region",
+  "rights": "original_art_only"
+}

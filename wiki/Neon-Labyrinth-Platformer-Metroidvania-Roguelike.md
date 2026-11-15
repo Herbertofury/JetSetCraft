@@ -1,12 +1,16 @@
-# Neon Labyrinth — Platformer × Metroidvania × Roguelike (Working Title)
+# Adventure Mode — Platformer × Metroidvania × Roguelike (original Neon Labyrinth design slug)
 
 > **OWNER-APPROVED MODE REQUIREMENT · 2026-11-15 · DESIGN / BACKLOG ONLY. NOT PLAYABLE OR SHIPPED.**
 >
 > Create a dedicated JetSetCraft mode with **genuinely fun platforming levels, interconnected Metroidvania exploration, roguelike run variation, and outstanding end-of-level and final bosses**. It should feel like its own brilliantly polished action-platformer while preserving the movement, tricks, music, graffiti and unique crew personality of JetSetCraft.
 
-**Neon Labyrinth is a proposed working title, not a final name selected by the owner.** The proposed ID `jetsetcraft:neon_labyrinth` is **not registered in game**. The target is **a distinct selectable mode**, not replacing an existing activity or claiming something is implemented.
+**Owner 2026-11-15 confirmation:** the canonical mode name is **Adventure Mode**. **Neon Labyrinth** is an older working codename kept in this wiki slug for existing links. The target dimension's definition is now checked into source as `jetsetcraft:adventure_mode`, **separate from the player's Minecraft world and from Rush/Liberty**, but the run system, stage builder and menu option are **not yet implemented**. [Canonical Adventure Mode page](Adventure-Mode) · [Custom dimension architecture](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/modes/ADVENTURE_DIMENSION_ARCHITECTURE.md).
 
 **Track implementation:** [Issue #65](https://github.com/Herbertofury/JetSetCraft/issues/65) · [Technical specification](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/modes/NEON_LABYRINTH_DESIGN.md) · [Encounter North Star](Encounter-North-Star-Beyond-Minecraft) · [Current Rival Rush](Rival-Rush) · [Terrain platforming ideas](Terrain‐Aware-Event-Circuits-and-Boss-Arenas)
+
+## Owner-required custom dimension (approved, scaffolded; gameplay not built)
+
+The owner clarified that **Adventure Mode MUST create original platformer maps and level areas in its own dedicated custom dimension**, not in the player's original Overworld/Nether/End/provider worlds and not in Rival Rush's or Liberty Grind's districts. The source now includes separate `jetsetcraft:adventure_mode` dimension and type resources, a typed Java world key, and **two unloaded level blueprint JSONs**: Rail Garden and Crosswire Towers. These are real source files, **not a working procedural generator, original 3D stage assets, teleport/session manager or a completed level**. [Full architecture and native acceptance](Adventure-Mode). All eventual entry/recovery paths must preserve original world and player state.
 
 ## Was it already added? Partly — but not as this complete mode
 

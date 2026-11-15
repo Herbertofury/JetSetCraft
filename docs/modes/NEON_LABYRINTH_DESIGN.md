@@ -1,8 +1,17 @@
-# Neon Labyrinth — Platformer + Metroidvania + Roguelike Mode: Engineering Handoff
+# Adventure Mode — Platformer + Metroidvania + Roguelike Engineering Handoff (former Neon Labyrinth code name)
 
-**Approval boundary:** Requested by owner 2026-11-15: a **distinct mode** with fun platformer levels, actual Metroidvania-style exploration and ability-based revisits, roguelike replay, and compelling stage-end/final bosses. **Neon Labyrinth** and `jetsetcraft:neon_labyrinth` are **proposed labels/IDs**, not owner-finalized. Design and integration plan **only**—do not present this as compiled code or a shipped selectable activity.
+**Updated owner decision, 2026-11-15:** the name is **Adventure Mode**. A **dedicated custom platformer dimension** `jetsetcraft:adventure_mode` is mandatory, with original built regions entirely separate from the player's source worlds and from Rival Rush/Liberty Grind. The prior **Neon Labyrinth** name is a historical internal working codename/legacy file slug, **not the canonical mode label**. The standalone dimension JSON/type, typed dimension key, an unexecuted registration GameTest and two unloaded region template files have been checked into source; the mode's **run state, level generation, activity menu, teleport/return and boss gameplay remain unimplemented and unverified**. Read [the exact dimension architecture contract](ADVENTURE_DIMENSION_ARCHITECTURE.md) before making any new runtime changes.
 
 **Owner-readable vision:** [Mode wiki](../../wiki/Neon-Labyrinth-Platformer-Metroidvania-Roguelike.md). **Tracking:** [GitHub issue #65](https://github.com/Herbertofury/JetSetCraft/issues/65). **Global quality gate:** [Encounter North Star](../../wiki/Encounter-North-Star-Beyond-Minecraft.md), [Acceptance scorecard](../ENCOUNTER_NORTH_STAR_ACCEPTANCE.md).
+
+## 0.1 Locked dimension requirement and concrete scaffold
+
+- **World ID:** `jetsetcraft:adventure_mode`, separate from `jetsetcraft:rival_rush`, `jetsetcraft:liberty_grind`, vanilla and provider worlds. Java/Forge uses a **static data-defined dimension with separately allocated run map areas**, not temporary runtime-generated dimensions.
+- **Source now present:** `src/main/resources/data/jetsetcraft/dimension/adventure_mode.json`, `src/main/resources/data/jetsetcraft/dimension_type/adventure_mode.json`, `src/main/java/com/herberto/jetsetcraft/adventure/AdventureWorld.java`, `src/main/java/com/herberto/jetsetcraft/gametest/AdventureDimensionGameTests.java`. The new GameTest is a test *definition*, not a passing result.
+- **Map seeds/blueprints:** `src/main/resources/data/jetsetcraft/adventure_regions/rail_garden.json` and `src/main/resources/data/jetsetcraft/adventure_regions/crosswire_towers.json` are authored illustrative region descriptors **currently ignored by runtime**. Build the JSON reload listener, validated structure geometry, gap/grind collision probes, slot allocator, checkpoint and boss pipelines before calling them game levels.
+- **No player-world interference:** source Overworld/Nether/End/provider dimensions and their blocks, mobs, chests, machines, inventories, existing mode sessions and owner capabilities are off limits. Save a return journal and allocate a private slot before travel; never recreate a foreign mob or restore entire player inventories.
+- **Persistence:** one Adventure dimension inevitably contributes independent chunks to the world save. Clean separation means *no modification of the player's normal gameplay worlds*, not the impossible claim of no additional save data.
+- **Testing gate:** native Forge GameTest + actual client/dedicated-server start, map generation, return, multi-run isolation, crash recovery, performance and original-world comparison must pass. Current checkpoint has **not** executed those tests.
 
 ## 1. Evidence-based gap inventory from the existing repository
 
@@ -20,10 +29,10 @@ Do not regress or rewrite those existing systems merely to satisfy a new label. 
 
 ## 2. Mode boundaries and source ownership
 
-**Proposed `ModeId`:** `jetsetcraft:neon_labyrinth` (not currently registered).
+**Owner-approved mode label:** `Adventure Mode`. **Proposed `ModeId`:** `jetsetcraft:adventure_mode` (not registered in the activity menu). **World dimension ID:** `jetsetcraft:adventure_mode` (definition exists; runtime registry/native loading must be verified).
 
 - **Entry:** opt-in separate tile in existing Boombox/activity selection; preview this as platformer/exploration/roguelike, not an ambiguous “Rival Rush variant.” Prevent starting while street activities, Rush, Liberty Grind or another run is active. Do not insert into the public activity catalogue until implemented.
-- **World:** prefer bounded slots in an existing appropriate pre-registered arena district/isolated dimension after verifying coordinate ownership, chunk use and return semantics. Never force-create dynamic dimensions or copy other mods' live entities/loot. Isolated level arenas must be distinguishable from the real Overworld.
+- **World:** allocate bounded, mutually isolated slots in the **dedicated new `jetsetcraft:adventure_mode` dimension** after validating its registry/load state; **never use Rush or Liberty dimensions**. This static dimension is a separate world, not a generated/destroyed dimension per run. Verify coordinate ownership, chunk use and return semantics. Never force-create dynamic dimensions or copy other mods' live entities/loot. Isolated level arenas must be distinguishable from the real Overworld.
 - **Run model:** distinct `AdventureRun` state and versioned serialized snapshot; server owns seed, phase, level graph, room state, traversal unlocks, checkpoints, branch discovery, boss phases, currency/collectibles and complete/defeated flags. The client only requests legal actions and receives state/deltas.
 - **Modularity:** special stage modules and boss scripts must be data-driven and validated independently. Named story beats are authored while selection of safe optional routes, hazards, bonuses, gang variants and boss modifiers can use deterministic seeded composition.
 - **Cross-mode progress:** if using shared crew XP/reputation, credit only once from server-authored settlement receipts; other existing run levels, cash, Pit stops, Style Library and personal Minecraft inventory remain untouched unless owner approves explicit cross-mode rewards.

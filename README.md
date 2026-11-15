@@ -15,11 +15,11 @@ JetSetCraft turns ordinary Minecraft terrain into a momentum-first street sports
 
 **[Read the canonical encounter vision](wiki/Encounter-North-Star-Beyond-Minecraft.md)** · **[Operational acceptance scorecard](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/ENCOUNTER_NORTH_STAR_ACCEPTANCE.md)** · [What is actually shipped](wiki/Release-Status.md).
 
-## Planned separate mode: Neon Labyrinth (working title)
+## Planned Adventure Mode — independent custom platformer dimension
 
-**Owner-approved new mode goal, not yet implemented:** a full **platformer + Metroidvania + roguelike adventure** with memorable authored skating/parkour levels, interconnected regions and ability-gated shortcuts, run-to-run variation, exciting level-end bosses and a climactic final boss. It must be a **separate opt-in activity**, not a renaming of Rival Rush's existing six-room combat Arena circuit. Name, level roster, abilities and boss identities remain proposals.
+**Owner-approved Adventure Mode:** a full **platformer + Metroidvania + roguelike** with fun authored levels, interconnected areas/ability-gated shortcuts, replayable runs and proper level-end/final bosses. The owner explicitly requires **a dedicated, separate custom platformer dimension** so Adventure stages are built away from players' normal Minecraft worlds, other mods and other JetSetCraft activities. Source now contains static `jetsetcraft:adventure_mode` dimension/type JSONs and two **unloaded region blueprint data files**, plus an **unrun registration/isolation GameTest**. **No playable Adventure Mode menu, level builder, run manager, boss or proven safe entry/return yet.** Neon Labyrinth was the former working name, not the confirmed mode label.
 
-[Neon Labyrinth mode wiki](wiki/Neon-Labyrinth-Platformer-Metroidvania-Roguelike.md) · [Engineering handoff](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/modes/NEON_LABYRINTH_DESIGN.md) · [Implementation issue #65](https://github.com/Herbertofury/JetSetCraft/issues/65) · [Current Rival Rush](wiki/Rival-Rush.md).
+[Adventure Mode wiki](wiki/Adventure-Mode.md) · [Dimension architecture](docs/modes/ADVENTURE_DIMENSION_ARCHITECTURE.md) · [Full level/boss design](wiki/Neon-Labyrinth-Platformer-Metroidvania-Roguelike.md) · [Engineering handoff](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/modes/NEON_LABYRINTH_DESIGN.md) · [Implementation issue #65](https://github.com/Herbertofury/JetSetCraft/issues/65) · [Current Rival Rush](wiki/Rival-Rush.md).
 
 ## What ships in v0.3.0
 

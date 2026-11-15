@@ -1,11 +1,13 @@
 # Roadmap
 
-## Owner-approved new mode: platformer + Metroidvania + roguelike (2026-11-15)
+## Owner-approved Adventure Mode: a separate platformer dimension + Metroidvania + roguelike (2026-11-15)
 
-**A separate JetSetCraft adventure mode is required:** truly fun skating/platforming levels, meaningful exploration and backtracking after unlocking traversal techniques, variable roguelike runs and unforgettable end-of-level and final bosses. **Neon Labyrinth** is a provisional title, not a finalized canon name. This is distinct from Rival Rush's existing **six-stop combat Arena circuit with room-three and room-six headliners**, and from earlier runner/coin-platformer mode proposals. **Not implemented or verified playable.**
+**A separate JetSetCraft adventure mode is required:** truly fun skating/platforming levels, meaningful exploration and backtracking after unlocking traversal techniques, variable roguelike runs and unforgettable end-of-level and final bosses. **Adventure Mode** is the owner's confirmed name; **Neon Labyrinth** was the prior working codename. This is distinct from Rival Rush's existing **six-stop combat Arena circuit with room-three and room-six headliners**, and from earlier runner/coin-platformer mode proposals. **Not implemented or verified playable.**
 
-**[Full mode definition](Neon-Labyrinth-Platformer-Metroidvania-Roguelike)** · **[Technical design](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/modes/NEON_LABYRINTH_DESIGN.md)** · **[Implementation checklist and tracking #65](https://github.com/Herbertofury/JetSetCraft/issues/65)**.
+**[Canonical Adventure Mode + dimension architecture](Adventure-Mode)** · [Full level/boss design](Neon-Labyrinth-Platformer-Metroidvania-Roguelike) · **[Technical design](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/modes/NEON_LABYRINTH_DESIGN.md)** · **[Implementation checklist and tracking #65](https://github.com/Herbertofury/JetSetCraft/issues/65)**.
 
+- [x] Add dedicated **`jetsetcraft:adventure_mode` dimension/type resource definitions**, typed identity helper and two **unloaded authored area blueprints** (Rail Garden / Crosswire Towers); no verified runtime entry or playable map yet.
+- [ ] Implement Adventure-only region/session allocation, map generation, safe entry/return and crash/rejoin recovery without touching Overworld/Nether/End/provider worlds.
 - [ ] Add separate, clearly labelled optional game-mode entry and safe return; preserve Rival Rush, Liberty Grind and ordinary Minecraft state.
 - [ ] Make one extraordinary hand-authored 3D platforming vertical slice, not random block jumps; prove movement, checkpoint, collectibles, secrets and replay are fun in a native client.
 - [ ] Implement real connected Metroidvania regions, acquired traversal abilities, an initially visible gate, useful backtracking and a graph-level guarantee that no run gets stuck.

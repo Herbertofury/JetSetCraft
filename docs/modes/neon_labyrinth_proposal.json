@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "record_type": "jetsetcraft_owner_requested_game_mode_design_proposal",
-  "status": "design_backlog_only_not_runtime_registered_not_playable",
+  "status": "dimension_resources_scaffolded_mode_not_wired_not_playable",
   "owner_request_date": "2026-11-15",
   "owner_approved_goal": {
     "description": "JetSetCraft should also have a distinct mode with fun levels and end bosses, combining platformer, Metroidvania and roguelike play.",
@@ -12,9 +12,9 @@
       "real level-end bosses and a climactic final boss"
     ]
   },
-  "proposed_working_title": "Neon Labyrinth",
-  "name_is_canonical": false,
-  "proposed_id": "jetsetcraft:neon_labyrinth",
+  "proposed_working_title": "Adventure Mode",
+  "name_is_canonical": true,
+  "proposed_id": "jetsetcraft:adventure_mode",
   "proposed_id_runtime_registered": false,
   "separate_from": [
     "jetsetcraft:rival_rush",
@@ -91,11 +91,39 @@
     "level_graph_implemented": false,
     "metroidvania_gates_implemented": false,
     "end_bosses_implemented": false,
-    "fully_playable": false
+    "fully_playable": false,
+    "dimension_resource_defined": true,
+    "dimension_registry_verified": false,
+    "level_map_builder_implemented": false,
+    "dimension_travel_and_return_implemented": false,
+    "source_world_mutation_checks_passed": false
   },
   "links": {
     "issue": "https://github.com/Herbertofury/JetSetCraft/issues/65",
     "mode_wiki": "wiki/Neon-Labyrinth-Platformer-Metroidvania-Roguelike.md",
-    "engineering_handoff": "docs/modes/NEON_LABYRINTH_DESIGN.md"
-  }
+    "engineering_handoff": "docs/modes/NEON_LABYRINTH_DESIGN.md",
+    "canonical_mode_wiki": "wiki/Adventure-Mode.md",
+    "dimension_architecture": "docs/modes/ADVENTURE_DIMENSION_ARCHITECTURE.md"
+  },
+  "owner_confirmed_mode_display_name": "Adventure Mode",
+  "owner_confirmed_dimension_requirement": "Dedicated custom platformer dimension, completely separate from the player's original Minecraft world, Rival Rush, Liberty Grind, and other provider dimensions.",
+  "owner_name_confirmation_date": "2026-11-15",
+  "previous_internal_working_title": "Neon Labyrinth (legacy design codename, not the player's selected mode name)",
+  "dimension_resource_id": "jetsetcraft:adventure_mode",
+  "dimension_type_resource_id": "jetsetcraft:adventure_mode",
+  "dimension_definition_checked_into_source": true,
+  "dimension_runtime_gameplay_implemented": false,
+  "dimension_native_test_status": "unrun",
+  "custom_map_blueprints": [
+    "src/main/resources/data/jetsetcraft/adventure_regions/rail_garden.json",
+    "src/main/resources/data/jetsetcraft/adventure_regions/crosswire_towers.json"
+  ],
+  "custom_map_loader_implemented": false,
+  "player_world_isolation_contract": [
+    "Never place generated Adventure levels, bosses, rewards or level-altering effects in player source worlds",
+    "Use distinct session-owned slots only in jetsetcraft:adventure_mode; do not reuse Rival Rush or Liberty Grind slots",
+    "Persist exact return dimension and position before transfer; recover on reconnect/crash/exit",
+    "Do not duplicate or overwrite source player inventory, XP, mounts, provider capabilities, world blocks or mob identities",
+    "Clear only temporary event-owned areas and entities; bounded load and lifecycle budget"
+  ]
 }

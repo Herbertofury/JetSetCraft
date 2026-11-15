@@ -14,7 +14,7 @@
 
 - [🛸 Liberty Grind — Drop, Tag, Extract](Liberty-Grind)
 - [🎟️ Rival Rush — Optional Roguelite](Rival-Rush)
-- [🌀 Neon Labyrinth — Platformer / Metroidvania / Roguelike (Planned)](Neon-Labyrinth-Platformer-Metroidvania-Roguelike)
+- [🌀 Adventure Mode — Dedicated Platformer World (Planned)](Adventure-Mode)
 - [🚂 Trick Trains & Create](Trick-Trains-and-Create)
 - [🏁 Terrain-Aware Circuits & Boss Arenas](Terrain‐Aware-Event-Circuits-and-Boss-Arenas)
 - [🎛️ Controls](Controls)

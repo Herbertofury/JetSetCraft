@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "status": "authored_blueprint_not_loaded_or_playable",
+  "mode_id": "jetsetcraft:adventure_mode",
+  "region_id": "jetsetcraft:rail_garden",
+  "display_name": "Rail Garden",
+  "design_tier": "first_stage",
+  "footprint_blocks": [
+    64,
+    32,
+    64
+  ],
+  "base_coordinate_policy": "all_anchors_relative_to_session_appointed_region_origin",
+  "visual_identity": {
+    "palette": [
+      "light_gray_concrete",
+      "magenta_concrete",
+      "cyan_concrete"
+    ],
+    "description": "Luminous ink-and-graffiti garden with stacked skating lines and rail silhouettes; art/model assets not yet authored"
+  },
+  "anchors": {
+    "entry": [
+      0,
+      2,
+      0
+    ],
+    "exit_to_crosswire": [
+      27,
+      5,
+      10
+    ],
+    "visible_locked_shortcut": [
+      -18,
+      7,
+      10
+    ],
+    "checkpoint": [
+      12,
+      4,
+      0
+    ]
+  },
+  "connection_gates": [
+    {
+      "edge_to": "jetsetcraft:crosswire_towers",
+      "required_ability": "none",
+      "availability": "mandatory_baseline"
+    },
+    {
+      "edge_to": "jetsetcraft:rail_garden_secret",
+      "required_ability": "jetsetcraft:adventure_wall_launch",
+      "availability": "optional_backtrack_after_unlock",
+      "implementation_status": "not_implemented"
+    }
+  ],
+  "authored_platforming_prompts": [
+    {
+      "id": "warmup_curve",
+      "action": "controllable_grind_to_jump_to_landing",
+      "must_have_successful_legal_path": true
+    },
+    {
+      "id": "high_inkline",
+      "action": "risk_reward_jump_and_trick_line",
+      "optional": true
+    },
+    {
+      "id": "locked_loop",
+      "action": "visible_inaccessible_secret_then_backtrack",
+      "optional": true
+    }
+  ],
+  "hazard_and_collision_proof": "not_run",
+  "runtime_builder": "not_implemented",
+  "source_world_protection": "build_only_in_jetsetcraft_adventure_mode_owned_session_region",
+  "rights": "original_art_only"
+}
