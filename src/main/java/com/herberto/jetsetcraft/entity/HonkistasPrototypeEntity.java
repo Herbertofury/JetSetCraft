@@ -91,7 +91,7 @@ public final class HonkistasPrototypeEntity extends PathfinderMob {
             BlockPos p=route.get(completedWaypoints);
             double dx=getX()-p.getX()-.5,dz=getZ()-p.getZ()-.5;
             getLookControl().setLookAt(p.getX()+.5,getEyeY(),p.getZ()+.5);
-            if(dx*dx+dz*dz<=.45*.45 && Math.abs(getY()-p.getY())<=.75){
+            if(dx*dx+dz*dz<=.45*.45 && Math.abs(getY()-p.getY())<=.75 && onGround()){
                 completedWaypoints++;
                 if(completedWaypoints==route.size())finishRoute(RouteStatus.COMPLETED);
                 else navigate();
@@ -101,7 +101,10 @@ public final class HonkistasPrototypeEntity extends PathfinderMob {
                 // never by teleporting or weakening the route's arrival threshold.
                 var path=getNavigation().getPath();
                 if(path!=null && path.canReach() && dx*dx+dz*dz<=1.5*1.5
-                        && Math.abs(getY()-p.getY())<=.75){
+                        && Math.abs(getY()-p.getY())<=1.5){
+                    // A reachable native path can finish during its normal hop/landing arc.
+                    // Wait for actual physics contact, with the unchanged real route deadline.
+                    if(!onGround()){diagnoseRoute("awaiting_native_landing",p);return;}
                     getMoveControl().setWantedPosition(p.getX()+.5,p.getY(),p.getZ()+.5,routeSpeed);
                     diagnoseRoute("native_final_approach",p);
                 }else{
