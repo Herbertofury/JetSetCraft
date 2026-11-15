@@ -6,7 +6,7 @@
 
 **An extraordinarily rare Cumbias encounter transforms into a Hyrule-meets-cumbia street celebration: an ocarina calls the rhythm in, recognizable Zelda characters join the Cumbias, the musical battle reacts to the player's moves, and the discovery becomes a genuine little gaming legend.** It must make players laugh, dance, and want to show friends, without becoming a tedious farm, permanent combat interrupt, cheap joke, or ordinary random spawn.
 
-**Original owner video:** https://www.tiktok.com/t/ZPLK2Fnk7/ . The user explicitly designated this as the inspiration for *Ocarina of Cumbia*, its **rare spawn**, **music**, and **Zelda characters**. The short-link video/creator/sound metadata could not be independently resolved in this session. The broader ocarina + cumbia mashup trend is documented independently, but no specific claims about this clip's shots, characters, arrangement, instrumentation, vocals or creator are verified by that reporting. [Related global creator/music goal](Music-Library).
+**Owner-corrected reference video (2026-11-15):** https://www.tiktok.com/@hellbat2.0/video/7706311678060711189 . The user explicitly designated this as the inspiration for *Ocarina of Cumbia*, its **rare spawn**, **music**, and **Zelda characters**. The previous TikTok short link was incorrect; the owner supplied this replacement direct URL, with handle `@hellbat2.0` and video ID `7706311678060711189`. The video's contents, actual uploader identity and music/sound attribution have not been independently inspected. The broader ocarina + cumbia mashup trend is documented independently, but no specific claims about this clip's shots, characters, arrangement, instrumentation, vocals or creator are verified by that reporting. [Related global creator/music goal](Music-Library).
 
 ## Event identity and casting
 
@@ -45,8 +45,8 @@
 
 | Field | Required value / current state |
 |---|---|
-| Event/video source | https://www.tiktok.com/t/ZPLK2Fnk7/ — owner-selected |
-| Clip creator/performer | **Unverified**. Preserve author discovery as an active research task |
+| Event/video source | https://www.tiktok.com/@hellbat2.0/video/7706311678060711189 — owner-corrected direct video; supplied handle `@hellbat2.0` and video ID `7706311678060711189` |
+| Clip uploader handle and performer | `@hellbat2.0` appears in the owner-supplied direct URL; independent uploader confirmation and underlying musician/performer attribution remain pending |
 | TikTok audio label/sound ID | **Unverified**. Inspect original post and sound attribution |
 | Original composition/arrangement | **Unverified**. Distinguish original cumbia, Zelda melody, edited/remix sound and cover artist |
 | Exact master, stems, musical key, BPM and latency | **Not acquired/verified**; no playable integration claim |
@@ -58,7 +58,7 @@ The research goal is to **find the actual creator(s) behind both linked TikToks,
 
 ## Integration and acceptance backlog
 
-- [ ] **OCA-001** — Resolve both TikTok short links to creator IDs, canonical video IDs, exact sound IDs and verified artist/recording credits; record source URLs, retrieval date and whether creator identities match. Preserve uncertainty when unavailable.
+- [ ] **OCA-001** — Confirm the owner-corrected direct Ocarina TikTok (`@hellbat2.0`, video ID `7706311678060711189`) against the actual post, resolve the separate artist-reference short link to its canonical video ID, verify both sound IDs and artist/recording credits, and determine whether the creators match. Preserve uncertainty when source access is unavailable.
 - [ ] **OCA-002** — Research the artist's catalogue and official masters; audition and shortlist distinctive tracks, with culture/story/reason for use and rights/source status for each recording.
 - [ ] **OCA-003** — Obtain/verify actual source master/stems and Zelda-specific character/music/visual asset scope, if intended for shipping; preserve high-quality native sources and attribution. Never infer Zelda permission from Killer Instinct permission.
 - [ ] **OCA-004** — Implement additive, server-seeded **rare variant selection** only after Cumbias eligibility; configurable 1% initial target, cooldown/deduplication and zero broad vanilla/modded spawn takeover.
