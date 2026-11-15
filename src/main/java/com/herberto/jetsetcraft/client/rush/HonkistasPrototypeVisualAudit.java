@@ -13,11 +13,12 @@ import java.util.function.Predicate;
 
 /** Real-client original-model views in the existing disposable audit world only; not encounter acceptance. */
 public final class HonkistasPrototypeVisualAudit {
-    private static int phase,ticks;
+    private static int phase,ticks,waitTicks;
     private static volatile UUID actorId;
     private static volatile boolean queued,applied;
     private static volatile String error;
-    private static Vec3 original,center;
+    private static Vec3 original,center,originalVelocity;
+    private static boolean clientVelocityCleared;
     private static float yaw,pitch;
     private static boolean gravity,hideGui,captureRequested;
     private static long originalDayTime,poseReadyNanos;
@@ -28,6 +29,18 @@ public final class HonkistasPrototypeVisualAudit {
                 || !server.getWorldPath(LevelResource.ROOT).toAbsolutePath().normalize().getFileName().toString().equals("RivalRushAudit"))
             throw new IllegalStateException("Original actor audit refused non-disposable world");
         if(error!=null)throw new IllegalStateException(error);
+        if(++waitTicks%100==0){
+            String client="phase="+phase+" applied="+applied+" client="+mc.player.position()
+                    +" velocity="+mc.player.getDeltaMovement()+" yaw="+mc.player.getYRot()+" pitch="+mc.player.getXRot()+" center="+center;
+            HonkistasPrototypeEntity observed=null;
+            for(var e:mc.level.entitiesForRendering())if(e.getUUID().equals(actorId)&&e instanceof HonkistasPrototypeEntity a){observed=a;break;}
+            JetSetCraft.LOGGER.info("JETSETCRAFT_ORIGINAL_PREVIEW_WAIT {} actorClient={} rendered={}",client,
+                    observed==null?"absent":observed.position(),actorId!=null&&com.herberto.jetsetcraft.client.render.HonkistasPrototypeRenderer.renderedSince(actorId,poseReadyNanos));
+            UUID owner=mc.player.getUUID();server.execute(()->{
+                var p=server.getPlayerList().getPlayer(owner);var a=actorId==null?null:p.serverLevel().getEntity(actorId);
+                JetSetCraft.LOGGER.info("JETSETCRAFT_ORIGINAL_PREVIEW_SERVER player={} velocity={} actor={}",p.position(),p.getDeltaMovement(),a==null?"absent":a.position());
+            });
+        }
         if(phase==0){
             if(!queued){
                 queued=true;hideGui=mc.options.hideGui;mc.options.hideGui=true;camera=mc.options.getCameraType();mc.options.setCameraType(CameraType.FIRST_PERSON);mc.setScreen(null);
@@ -35,7 +48,7 @@ public final class HonkistasPrototypeVisualAudit {
                 server.execute(()->{
                     try{
                         var p=server.getPlayerList().getPlayer(owner);
-                        original=p.position();yaw=p.getYRot();pitch=p.getXRot();gravity=p.isNoGravity();
+                        original=p.position();originalVelocity=p.getDeltaMovement();yaw=p.getYRot();pitch=p.getXRot();gravity=p.isNoGravity();
                         // Prior preview inherited an underwater fixture; use open, daylight airspace
                         // in this disposable world, never modify terrain or player inventory.
                         int surface=p.serverLevel().getHeight(net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING,
@@ -46,13 +59,16 @@ public final class HonkistasPrototypeVisualAudit {
                         if(actor==null)throw new IllegalStateException("Original actor registry missing");
                         actor.moveTo(center.x,center.y,center.z,0,0);actor.setNoAi(true);actor.setNoGravity(true);
                         if(!p.serverLevel().addFreshEntity(actor))throw new IllegalStateException("Original actor insertion rejected");
-                        actorId=actor.getUUID();p.setNoGravity(true);
+                        actorId=actor.getUUID();p.setNoGravity(true);p.setDeltaMovement(Vec3.ZERO);
                         p.teleportTo(p.serverLevel(),center.x,center.y+.1,center.z+2.5,180,15);
                         applied=true;
                     }catch(RuntimeException e){error=e.toString();}
                 });
             }
             if(!applied)return false;
+            // Gravity suppression does not cancel velocity inherited from the prior audit.
+            // Clear only the camera player's residual motion after its setup teleport.
+            if(!clientVelocityCleared){mc.player.setNoGravity(true);mc.player.setDeltaMovement(Vec3.ZERO);clientVelocityCleared=true;}
             boolean visible=false;
             for(var candidate:mc.level.entitiesForRendering())
                 if(candidate.getUUID().equals(actorId) && candidate instanceof HonkistasPrototypeEntity prototype
@@ -88,11 +104,12 @@ public final class HonkistasPrototypeVisualAudit {
             server.execute(()->{
                 var p=server.getPlayerList().getPlayer(owner);var actor=p.serverLevel().getEntity(actorId);
                 if(actor!=null)actor.discard();p.setNoGravity(gravity);p.serverLevel().setDayTime(originalDayTime);
-                p.teleportTo(p.serverLevel(),original.x,original.y,original.z,yaw,pitch);applied=true;
+                p.teleportTo(p.serverLevel(),original.x,original.y,original.z,yaw,pitch);p.setDeltaMovement(originalVelocity);applied=true;
             });
             phase=4;return false;
         }
         if(!applied)return false;
+        mc.player.setNoGravity(gravity);mc.player.setDeltaMovement(originalVelocity);
         mc.options.setCameraType(camera);mc.options.hideGui=hideGui;
         JetSetCraft.LOGGER.info("JETSETCRAFT_HONKISTAS_MODEL_PREVIEW_PASS original articulated model; three native still views only; no skating/secondary-physics/event acceptance");
         return true;

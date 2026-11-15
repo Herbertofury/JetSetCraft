@@ -259,7 +259,12 @@ public final class RivalRushVisualAudit {
             case 14 -> {
                 if (!HonkistasPrototypeVisualAudit.advance(minecraft, label -> capture(minecraft, label), CAPTURES::containsKey)) return;
                 if (CAPTURES.size()!=26) {finish(minecraft,false,"Expected26captures including original actor preview");return;}
-                finish(minecraft,true,"Existing23native acceptance captures plus original actor front/side/back preview; model visual acceptance separate, no skating/event claim");
+                next(15);return;
+            }
+            case 15 -> {
+                if(!HonkistasGroundedVisualAudit.advance(minecraft,label -> capture(minecraft,label),CAPTURES::containsKey))return;
+                if(CAPTURES.size()!=29){finish(minecraft,false,"Expected29captures including original grounded route");return;}
+                finish(minecraft,true,"Existing26captures plus original actor grounded navigation; no skating/dance/event claim");
             }
             default -> finish(minecraft, false, "unknown audit phase");
         }
@@ -429,6 +434,7 @@ public final class RivalRushVisualAudit {
     }
 
     private static void stopClient(Minecraft minecraft) {
+        HonkistasGroundedVisualAudit.restore(minecraft);
         if (originalTutorialStep != null) {
             minecraft.getTutorial().setStep(originalTutorialStep);
             originalTutorialStep = null;
