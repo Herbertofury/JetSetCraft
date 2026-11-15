@@ -106,6 +106,12 @@ The importer accepts another metadata directory through `--catalogue`, so a proj
 
 - **`JSC-MUST-CUMBIA-20261115-002`:** [Kokiri Forest (From The Legend of Zelda: Ocarina of Time) — Jazztick](https://open.spotify.com/track/6P4ufhmrdt07Vpjm66VpiE); *The Legend of Jazztick: Tetraforce* (2018), track 8, 3:26. Metadata verified from [artist's Bandcamp](https://jazztick.bandcamp.com/album/the-legend-of-jazztick-tetraforce) and official album page. **MUST ADD for Cumbias**, priority placement candidate for [Ocarina of Cumbia](../wiki/Ocarina-of-Cumbia-Easter-Egg.md). Preserve the exact version/artist, full-quality master, credits, and non-Minecraft source asset; do not substitute another Zelda remix. **Current status:** referenced and selected only, not yet imported, played, stem-mapped or native-tested. Use existing music importer safely, then verify real playback and any beat-synced reactive-event mapping without assuming the selected recording is a traditional cumbia track.
 
+## Owner-selected general artist and Cumbias song: 2026-11-15
+
+- **General soundtrack, MUST ADD artist:** **NiNi / Nini Music** ([media kit](https://ninimusic.me/media-kit-1), [TikTok](https://www.tiktok.com/@ninimusic.me), [Spotify](https://open.spotify.com/artist/4iggZUAEXfBeJH9DjKwccm)). Preserve the distinct owner-favorite musician memory and find actual verified songs for global radio/skating/combat; **not a Cumbias assignment**. Stable ID: `JSC-MUST-ARTIST-NINI-20261115-001`.
+- **Cumbias gang, MUST ADD exact song:** **“chismosa” by Cain Culto & Jarina De Marco** ([official video](https://www.youtube.com/watch?v=T5rSwbuJuWc), [Apple Music](https://music.apple.com/us/album/chismosa-single/1860155960), [Qobuz](https://www.qobuz.com/us-en/album/chismosa-cain-culto-jarina-de-marco/mrd8dyixvc83z)). 2026 Hive Music, 1:50; official listed artist and writer credits retained. Stable ID: `JSC-MUST-CUMBIA-CHISMOSA-20261115-001`.
+- **True implementation state:** reference and spec only; neither selection's audio is provided/imported or verified playable. Use exact masters/credits, maintain a source-quality vault independent of Minecraft streams, measure rhythm data before adding scoring, preserve all existing player controls, settings and other source selections.
+
 ## Later musical gameplay
 
 The current Soundcheck Circuit is a **crew dispatch assignment**. Future interactive music ideas belong in the design layer until built and tested:
