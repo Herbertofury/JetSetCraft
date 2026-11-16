@@ -5,7 +5,7 @@
 ## Browse the collection
 
 - [Owner-selected general soundtrack](#owner-selected-general-soundtrack)
-- [Gang selections](#gang-selections): [Bananettas](#bananettas) · [Signal '81](#signal-81) · [Hardtekkas](#hardtekkas) · [MoccaSins](#moccasins) · [Gabberinas](#gabberinas) · [Cumbias](#cumbias) · [Phonkistas](#phonkistas) · [Footworkas](#footworkas)
+- [Gang selections](#gang-selections): [Bananettas](#bananettas) · [Signal '81](#signal-81) · [New martial-arts crew](#new-martial-arts-crew-name-pending) · [Hardtekkas](#hardtekkas) · [MoccaSins](#moccasins) · [Gabberinas](#gabberinas) · [Cumbias](#cumbias) · [Phonkistas](#phonkistas) · [Footworkas](#footworkas)
 - [Buy and download by artist and release](#buy-and-download-by-artist-and-release)
 - [Discovery shelf: 160 audition candidates](#discovery-shelf)
 - [Playback and musical systems](#playback-and-musical-systems)
@@ -130,6 +130,12 @@ These are identified metadata entries; neither recording is bundled. Their propo
 | **SIGNAL81-MUSIC-003** | **[Love Tunnel — Julie Wilde](https://open.spotify.com/track/5JUewvkJKWoMjiNfv8CLMF?si=9cac939431d444ed)** (exact owner-supplied Spotify ID) | Early Sounds *[IES – Italian Erotic Sounds](https://earlysounds.bandcamp.com/album/vvaa-ies-italian-erotic-sounds)*, **2019**, 4:06; track's historical **1979** origin documented in [archival disco references](https://lighthouserecords.jp/?pid=100847462); **not** the longer Beppe Loda edit | **Owner-selected MUST ADD**; original-vs-reissue edition/ISRC, authorized master, exact gang-specific routing and native tests **pending** |
 
 **Scope:** Keep all three approved songs: a modern, '80s-influenced 2025 selection, the historical 1981 Kano track, and Julie Wilde's 1979-rooted disco recording; `'81` describes the retro aesthetic and is not a release-date mandate for all songs. A nonplayable client catalogue entry can prepare future import and credits. Existing client `home`/`rush` playback is global and **not gang-filtered**, so importing audio without new filtering must not silently make it a random soundtrack selection for unrelated crews. No tempo, drop, music cues or choreography have been auditioned/verified.
+
+### New martial-arts crew (name pending)
+
+**New owner-approved gang concept, 2026-11-15:** proposed **Chinese wuxia-inspired or Japanese shinobi/ninja-inspired** original skating/martial-arts crew. **No canonical name chosen**. Assistant candidate names: **Wuxistas** (recommended), Shinobistas, Shaolistas, Shadowlotus, Jade Strikers. [Gang identity and naming shortlist](Martial-Arts-Crew-Naming-Shortlist). The Chinese/Japanese styling needs a specific owner choice; do not treat the traditions as interchangeable.
+
+**`MARTIALCREW-MUSIC-001` · MUST ADD — [USAIN — Moreart & Asylllum](https://open.spotify.com/track/5lViQePieL6gzg9ajLBUUN?si=6431d65f32ad47e2):** Exact owner-supplied Spotify track ID `5lViQePieL6gzg9ajLBUUN`. [Zvuk release](https://sber-zvuk.com/release/53479616) lists **2026**, **2:24** and **Headliner Music**; the [2026 release listing](https://mogtext.com/song/moreart-asylllum-usain/) dates it **2026-10-30**. **Russian-language rap**, not a claimed Chinese/Japanese recording; chosen by owner as the crew's *first* track. Artist/version/ISRC to be matched to the exact streaming master before licensed import. **Metadata only**, not approved general music playback; licensed audio, age rating, choreography beat mapping and actual game filtering not verified. [Owner gang registry](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/gangs/unnamed_martial_arts_crew.json).
 
 ### Hardtekkas
 

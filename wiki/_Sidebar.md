@@ -39,6 +39,7 @@
 - [💃 Décalco Mambo — Rare Cumbias × Bananettas Face-Off](Cumbias-Bananettas-Decalco-Mambo-Faceoff)
 - [🎶 Bananettas — 102 curated radio candidates](Bananettas-Music-Discovery)
 - [📡 Signal '81 — Retro Broadcast Rival Gang](Signal-81)
+- [🥷 Martial-Arts Crew — Wuxistas / Shinobistas Name Shortlist](Martial-Arts-Crew-Naming-Shortlist)
 - [🎪 Honkistas NPC Quality & Skating Physics](https://github.com/Herbertofury/JetSetCraft/wiki/Honkistas%E2%80%90NPC%E2%80%90Quality%E2%80%90and%E2%80%90Skating%E2%80%90Physics)
 - [MoccaSins — Music & Unlockable Names](MoccaSins)
 - [💥 Krumpaz — Krump Crew](Krumpaz)

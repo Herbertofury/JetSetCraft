@@ -1,5 +1,12 @@
 # Crew-house and Rival Rush soundtrack
 
+## New martial-arts skating gang — first owner song, name pending (2026-11-15)
+
+- **`MARTIALCREW-MUSIC-001` · FIRST MUST ADD — [“USAIN” — Moreart & Asylllum](https://open.spotify.com/track/5lViQePieL6gzg9ajLBUUN?si=6431d65f32ad47e2):** Exact owner Spotify ID `5lViQePieL6gzg9ajLBUUN`. [Zvuk release catalog](https://sber-zvuk.com/release/53479616) gives 2026, 2:24, Headliner Music, with mature-content warning. The [2026 artist/release listing](https://mogtext.com/song/moreart-asylllum-usain/) gives **2026-10-30**; the song is **Russian-language rap** and is not misrepresented as Chinese or Japanese music. This is **the first song of a new Chinese wuxia-/Japanese shinobi-inspired crew whose final gang name is not yet chosen**. `Wuxistas` is only an assistant-suggested name; alternate `Shinobistas`/others pending. [Name and gang direction](../wiki/Martial-Arts-Crew-Naming-Shortlist.md) · [Machine-readable requested gang](gangs/unnamed_martial_arts_crew.json).
+- **Music integration blocked intentionally:** `jetsetcraft_music/unnamed_martial_crew_usain_moreart_asylllum.json` is **metadata only** with no `rush`/`home` contexts, no canonical gang ID, and no audio. Do not route it to an existing faction or grant rights by artist attribution alone. Confirm exact Spotify master/ISRC, content rating, authorized synchronization/redistribution license, gang naming, crew-specific player filter and real-game rhythm/cue QA first.
+
+
+
 ## Gabberina's MUST ADD #013 — Komm Klar Bengel / LuuZz (2026-11-15)
 
 - **`GAB-MUSIC-013` — [Komm Klar Bengel — LuuZz](https://open.spotify.com/track/3ItEA5lnyYCDZRyQbMoj9N?si=ce6988df3f214007):** Exact owner-supplied Spotify ID `3ItEA5lnyYCDZRyQbMoj9N`; distinct from the existing Gabberina must-add **`GAB-MUSIC-010` “KrAnK”** by the same artist. [Spotify's Bassfabrik Radio playlist](https://open.spotify.com/playlist/37i9dQZF1E4zaRxH7HOHJx) lists **6:52**; [Amazon's official LuuZz music catalog](https://music.amazon.de/artists/B0B9KHRDJ1/luuzz?marketplaceId=A1PA6795UKMFR9&musicTerritory=DE) identifies the 2026 single. This is **Gabberina crew music only** and is separate from **Hakken Horse's event-only** `GAB-HORSE-MUSIC-001`. Artist's wider catalog includes hardtekk/tekno; exact track BPM, lyrics, beat/phrase markers, album/master/ISRC and any approved scene placement have not been independently measured or verified.

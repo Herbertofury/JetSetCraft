@@ -1,0 +1,34 @@
+{
+  "title": "USAIN",
+  "artist": "Moreart, Asylllum",
+  "album": "USAIN",
+  "sound_event": "jetsetcraft:licensed/unnamed_martial_crew_usain_moreart_asylllum",
+  "audio_resource": "jetsetcraft:sounds/music/licensed/unnamed_martial_crew_usain_moreart_asylllum.ogg",
+  "contexts": [],
+  "volume": 0.65,
+  "source_url": "https://open.spotify.com/track/5lViQePieL6gzg9ajLBUUN?si=6431d65f32ad47e2",
+  "spotify_track_id": "5lViQePieL6gzg9ajLBUUN",
+  "artist_credits": [
+    "Moreart",
+    "Asylllum"
+  ],
+  "original_release_date_reference": "2026-10-30",
+  "label_reference": "Headliner Music",
+  "listed_duration": "2:24",
+  "genre_reference": "Russian-language rap/hip-hop, not Chinese or Japanese music",
+  "metadata_provenance": [
+    "https://sber-zvuk.com/release/53479616",
+    "https://mogtext.com/song/moreart-asylllum-usain/"
+  ],
+  "content_advisory": "Zvuk listing adult 18+; exact Spotify explicit status needs verification",
+  "owner_reference_id": "MARTIALCREW-MUSIC-001",
+  "gang_id": null,
+  "gang_name_status": "new_martial_arts_crew_name_not_owner_selected",
+  "recommended_unconfirmed_gang_name": "Wuxistas",
+  "intended_placement": "First owner-selected song for the NEW martial-arts/skating gang only AFTER canonical gang name, licensed master and crew-scoped music picker; NOT general rush/home or existing gangs",
+  "exact_spotify_master_and_isrc_status": "not_verified",
+  "beat_grid_status": "not_analyzed",
+  "recording_status": "awaiting_authorized_audio",
+  "rights_status": "sync_and_redistribution_not_verified; no_audio_bundled",
+  "in_game_playback_status": "not_integrated"
+}

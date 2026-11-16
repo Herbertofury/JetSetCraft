@@ -1,0 +1,122 @@
+{
+  "schema_version": 1,
+  "record_type": "new_human_music_culture_gang_naming_pending",
+  "canonical_name": null,
+  "name_finalized": false,
+  "suggested_working_name": "Wuxistas",
+  "working_name_is_owner_approved": false,
+  "owner_request_date": "2026-11-15",
+  "owner_request_wording": "shoonna asian/chinese ninja gang whatever",
+  "owner_approved_scope": "Create a new martial-arts/stealth/skating street-culture gang and keep supplied Spotify recording as its first owner-selected must-add.",
+  "interpretation_note": "Owner may be blending Chinese wuxia/Shaolin-inspired action with Japanese ninja/shinobi. Ninja/shinobi is Japanese; wuxia and Shaolin reference Chinese traditions. Do not assert one cultural identity or a canonical gang name before owner chooses.",
+  "proposed_stable_gang_id": null,
+  "stable_id_assignment": "pending_owner_selected_name",
+  "name_candidates": [
+    {
+      "name": "Wuxistas",
+      "direction": "Chinese wuxia / martial-fantasy crew",
+      "why": "Wuxia-inspired and matches the existing -istas naming family",
+      "owner_confirmed": false,
+      "rank": 1
+    },
+    {
+      "name": "Shinobistas",
+      "direction": "Japanese shinobi / ninja crew",
+      "why": "Strongest overt ninja identity and same -istas naming pattern",
+      "owner_confirmed": false,
+      "rank": 2
+    },
+    {
+      "name": "Shaolistas",
+      "direction": "Chinese Shaolin-inspired acrobatic crew",
+      "why": "Recognizable martial-arts reference with playful -istas suffix; cultural history to research respectfully",
+      "owner_confirmed": false,
+      "rank": 3
+    },
+    {
+      "name": "Shadowlotus",
+      "direction": "Fictional stealth / neon-street-art crew",
+      "why": "Original mysterious style without pretending Chinese and Japanese traditions are identical",
+      "owner_confirmed": false,
+      "rank": 4
+    },
+    {
+      "name": "Jade Strikers",
+      "direction": "Fictional high-speed martial-arts skating crew",
+      "why": "Graphic-friendly street gang name and action feel",
+      "owner_confirmed": false,
+      "rank": 5
+    }
+  ],
+  "style_direction": {
+    "status": "proposed_for_review_not_final_canon",
+    "gameplay_aesthetic": [
+      "high-velocity skate and precision parkour challenges",
+      "reversible rooftop/pagoda-inspired traversal courses with original structures",
+      "stealth-to-reveal crew encounters, wall runs and rail/grind transitions where supported",
+      "expressive martial dance, acrobatics and music-driven rival responses",
+      "distinct original graffiti, cloth motion and cinematic-but-controllable action"
+    ],
+    "cultural_scope_note": "Design with specific cultural references, properly researched art/movement and original assets; do not interchange Chinese and Japanese language/costumes as a generic Asian stereotype.",
+    "not_approved": [
+      "final name and gang ID",
+      "historical/ethnic identity",
+      "costumes and language",
+      "leader, roster, AI and final abilities",
+      "music use in other gangs"
+    ],
+    "runtime_status": "concept_only_not_spawned"
+  },
+  "owner_confirmed": {
+    "first_song_reference_id": "MARTIALCREW-MUSIC-001",
+    "first_song_must_add": true,
+    "song_owner_supplied_on": "2026-11-15",
+    "final_gang_name_selected": false
+  },
+  "must_include_music": [
+    {
+      "reference_id": "MARTIALCREW-MUSIC-001",
+      "title": "USAIN",
+      "artists": [
+        "Moreart",
+        "Asylllum"
+      ],
+      "artist": "Moreart, Asylllum",
+      "spotify_track_id": "5lViQePieL6gzg9ajLBUUN",
+      "owner_supplied_url": "https://open.spotify.com/track/5lViQePieL6gzg9ajLBUUN?si=6431d65f32ad47e2",
+      "owner_selection_date": "2026-11-15",
+      "is_owner_approved": true,
+      "assignment": "new_martial_arts_crew_only_pending_final_gang_name",
+      "release_date_reference": "2026-10-30",
+      "listed_duration": "2:24",
+      "release_type": "single",
+      "label_reference": "Headliner Music",
+      "genre_reference": "Russian-language rap / hip hop; not a Chinese-language or Japanese-language track",
+      "genre_source_status": "independent release listings; no direct listening or BPM analysis performed",
+      "content_advisory": "Mature/explicit listing reported by Zvuk; verify streaming edition and ratings before future in-game use",
+      "identity_sources": [
+        "https://open.spotify.com/track/5lViQePieL6gzg9ajLBUUN?si=6431d65f32ad47e2",
+        "https://sber-zvuk.com/release/53479616",
+        "https://mogtext.com/song/moreart-asylllum-usain/"
+      ],
+      "version_note": "The user-selected Spotify ID locks the intended song; same-title edits, intros, remixes, bootlegs or different editions do not substitute without owner approval. Distributor/Spotify ISRC and exact mix/master require verification.",
+      "proposed_use": [
+        "gang_debut_music_reference",
+        "high-speed_parcour_chase",
+        "crew_versus_player_trick_and_martial_dance_encounter"
+      ],
+      "beat_map_cues_status": "not_analyzed",
+      "master_audio_status": "not_supplied",
+      "synchronization_and_redistribution_rights_status": "not_verified",
+      "playable_music_status": "not_integrated"
+    }
+  ],
+  "runtime_status": {
+    "concept_only": true,
+    "owner_selected_name": false,
+    "real_human_gang_spawned": false,
+    "gang_specific_music_routing_implemented": false,
+    "playable_audio_bundled": false
+  },
+  "wiki_page": "wiki/Martial-Arts-Crew-Naming-Shortlist.md"
+}

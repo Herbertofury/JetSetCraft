@@ -1,5 +1,17 @@
 # Roadmap
 
+## Newly requested martial-arts skating gang — name pending (2026-11-15)
+
+The owner wants a new high-energy **Chinese wuxia-inspired / Japanese shinobi-ninja-inspired** martial-arts skating gang (cultural/art direction still to choose), with the exact song [**“USAIN” — Moreart & Asylllum**](https://open.spotify.com/track/5lViQePieL6gzg9ajLBUUN?si=6431d65f32ad47e2) as its **first confirmed must-add**. The proposed name **Wuxistas** and alternatives **Shinobistas, Shaolistas, Shadowlotus, Jade Strikers** are **not yet owner-approved**. This is an original fictional crew and a new soundtrack assignment, **not a shipped NPC group** or proof of playable/licensed music.
+
+[New crew concept and naming shortlist](Martial-Arts-Crew-Naming-Shortlist) · [Owner-selection metadata](https://github.com/Herbertofury/JetSetCraft/blob/main/docs/gangs/unnamed_martial_arts_crew.json).
+
+- [x] Preserve new crew concept and first owner-selected Spotify recording separately from all existing gangs.
+- [ ] Get owner confirmation of the final name and choose an internally stable gang ID.
+- [ ] Research the specific chosen Chinese/Japanese-inspired art/movement tradition rather than conflating them; author original character rigging, graffiti, skating, on-foot dance and signature challenges.
+- [ ] Verify exact recording/master, content rating and synchronization/redistribution permissions; implement gang-specific music routing and actual boss/choreography timing.
+- [ ] Native-game and dedicated-server QA for realistic movement, fair action, safe source-world state and premium encounter quality.
+
 ## Owner-approved Adventure Mode: a separate platformer dimension + Metroidvania + roguelike (2026-11-15)
 
 **A separate JetSetCraft adventure mode is required:** truly fun skating/platforming levels, meaningful exploration and backtracking after unlocking traversal techniques, variable roguelike runs and unforgettable end-of-level and final bosses. **Adventure Mode** is the owner's confirmed name; **Neon Labyrinth** was the prior working codename. This is distinct from Rival Rush's existing **six-stop combat Arena circuit with room-three and room-six headliners**, and from earlier runner/coin-platformer mode proposals. **Not implemented or verified playable.**
