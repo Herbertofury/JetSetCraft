@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "record_type": "nonplayable_owner_selected_track_reference",
+  "reference_id": "JSC-MUST-CUMBIA-20261115-008",
+  "gang_id": "jetsetcraft:cumbias",
+  "assignment": "cumbias_regular_music",
+  "is_owner_approved": true,
+  "owner_priority": "must_add",
+  "owner_selection_date": "2026-11-15",
+  "spotify_track_id": "0rGWylfSiveMMk0vPjkBKe",
+  "exact_owner_spotify_url": "https://open.spotify.com/track/0rGWylfSiveMMk0vPjkBKe?si=a6c021dcd8704231",
+  "title": null,
+  "artists": [],
+  "verification_status": "unresolved_public_spotify_title_artist_recording",
+  "rights_status": "not_verified",
+  "permitted_audio_available": false,
+  "playback_routing_enabled": false,
+  "audio_resource": null,
+  "sound_event": null,
+  "contexts": [],
+  "notes": "Nonplayable documentary record only. No music runtime manifest until identity, edition/ISRC and authorized soundtrack source are verified. Preserve regular Cumbias gang assignment, distinct from event-only cues."
+}
