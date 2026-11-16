@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "record_type": "owner_must_add_artists",
+  "updated_on": "2026-11-15",
+  "entries": [
+    {
+      "reference_id": "JSC-ARTIST-001",
+      "artist": "Flammy",
+      "spotify_artist_id": "4WP7QI3CaGCk42LIuYjbrz",
+      "spotify_artist_url": "https://open.spotify.com/artist/4WP7QI3CaGCk42LIuYjbrz",
+      "owner_supplied_url": "https://open.spotify.com/artist/4WP7QI3CaGCk42LIuYjbrz?si=d78cc056ff1a4d2a",
+      "owner_selection_date": "2026-11-15",
+      "priority": "MUST_ADD",
+      "scope": "JetSetCraft soundtrack artist",
+      "selected_spotify_track_ids": [],
+      "gang_assignment": null,
+      "selected_scene": null,
+      "artist_identity_source": "Spotify artist profile title",
+      "reference_status": "artist_selected_tracks_pending",
+      "runtime_status": "metadata_only_not_playable",
+      "music_rights_status": "not_verified",
+      "notes": "Owner has explicitly selected the artist, not a specific track. Prioritize reviewing Flammy's catalog for music choices; select and verify exact recordings and crew/scene before any integration. Do not infer permission to bundle or stream audio."
+    }
+  ],
+  "integration_requirements": [
+    "Preserve the artist-level must-add independently of any future song selections.",
+    "Do not invent a gang assignment or select tracks without owner confirmation.",
+    "No Spotify audio downloads, copied masters, or unlicensed mod distribution.",
+    "Before gameplay integration, confirm exact recording, synchronization/distribution permissions, gang routing and in-game QA."
+  ]
+}
