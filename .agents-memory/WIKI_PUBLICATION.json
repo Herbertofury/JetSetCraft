@@ -1,9 +1,9 @@
 {
   "schema": 1,
-  "source_commit": "8571b446ae4a9f48609fec316b9e56875ea44653",
-  "wiki_commit": "c957b8fe4336dc866cab7d422b43487bc540b0a2",
+  "source_commit": "ec11f1b615a0cb7bdbbabaf16443b3e1ef66a0b4",
+  "wiki_commit": "23299e73eade16729b8303a52a0935f7d7e9cf4e",
   "wiki_branch": "master",
-  "page_count": 64,
+  "page_count": 65,
   "pages": [
     "Adventure-Mode.md",
     "Approved-Ride-Expansion-and-Trick-Combat.md",
@@ -35,6 +35,7 @@
     "Inspiration-and-Research.md",
     "Krumpaz.md",
     "Liberty-Grind.md",
+    "Martial-Arts-Crew-Naming-Shortlist.md",
     "Mob-Gangs.md",
     "MoccaSins.md",
     "Modded-Mob-Gangs.md",
@@ -71,6 +72,6 @@
     "_Sidebar.md"
   ],
   "validated": true,
-  "published_at_utc": "2026-11-15T23:40:04.433002+00:00",
+  "published_at_utc": "2026-11-16T00:07:25.436244+00:00",
   "url": "https://github.com/Herbertofury/JetSetCraft/wiki"
 }
