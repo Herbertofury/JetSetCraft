@@ -1,0 +1,26 @@
+{
+  "title": "Pedro",
+  "artist": "Jaxomy, Agatino Romero & Raffaella Carrà",
+  "artist_credits": [
+    "Jaxomy",
+    "Agatino Romero",
+    "Raffaella Carrà"
+  ],
+  "album": null,
+  "sound_event": "jetsetcraft:licensed/cumbias_pedro_jaxomy_agatino_romero_raffaella_carra",
+  "audio_resource": "jetsetcraft:sounds/music/licensed/cumbias_pedro_jaxomy_agatino_romero_raffaella_carra.ogg",
+  "contexts": [],
+  "volume": 0.65,
+  "source_url": "https://open.spotify.com/track/48lxT5qJF0yYyf2z4wB4xW?si=3bf630f26a824b82",
+  "spotify_track_id": "48lxT5qJF0yYyf2z4wB4xW",
+  "source_identification": "Spotify exact track page; historical 2024 reporting corroborates credits",
+  "gang_id": "jetsetcraft:cumbias",
+  "owner_reference_id": "JSC-MUST-CUMBIA-20261115-007",
+  "intended_placement": "Regular Cumbias crew-scoped music only; not Ocarina of Cumbia Easter-egg-only, rare two-gang event music, or generic home/rush",
+  "style_and_edition_note": "2024 electronic remix of Raffaella Carrà song; exact linked Spotify master/ISRC not verified, not traditional cumbia",
+  "exact_spotify_master_and_isrc_status": "not_verified",
+  "beat_grid_and_cues_status": "not_measured",
+  "recording_status": "awaiting_authorized_audio",
+  "rights_status": "sync_and_redistribution_not_verified; no_audio_bundled",
+  "in_game_playback_status": "not_integrated"
+}
