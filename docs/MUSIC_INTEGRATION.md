@@ -1,5 +1,10 @@
 # Crew-house and Rival Rush soundtrack
 
+## Cumbias MUST ADD #008 — exact owner-selected recording, identity pending (2026-11-15)
+
+- **`JSC-MUST-CUMBIA-20261115-008` · Cumbias regular music MUST ADD:** [exact owner Spotify track](https://open.spotify.com/track/0rGWylfSiveMMk0vPjkBKe?si=a6c021dcd8704231), `spotify:track:0rGWylfSiveMMk0vPjkBKe`. The exact ID and Cumbias-only approval are preserved. **Song title, artist, album, edition and ISRC are not verified**; Spotify public-page/embed/oEmbed lookup and exact-ID searches did not resolve them. Do not substitute a similarly named song or invent credits. This is the next normal Cumbias entry after #007 “Pedro,” **not** an Ocarina of Cumbia Easter egg or rare Cumbias × Bananettas encounter cue.
+- **Catalog and implementation:** [Cumbias music registry](gangs/cumbias_music.json) · [nonplayable owner-reference manifest](music/cumbias_owner_must_add_008.json). The reference is owner-approved **MUST ADD** but has no bundled audio or enabled playback context. Resolve official release credits, the exact permitted master and synchronization/redistribution license, then author a named audio manifest, implement gang-scoped selection, and conduct in-game client/server and cue timing tests.
+
 ## Two new owner-selected MUST ADD recordings — 2026-11-15
 
 - **`GAB-MUSIC-014` · Gabberina's regular music — [“Истерика” by CREAM SODA](https://open.spotify.com/track/3cJyyFDAZlW8PURuXweFXe?si=1e7cad177dac4cb2)** (`spotify:track:3cJyyFDAZlW8PURuXweFXe`). The exact Spotify track page identifies the Cyrillic-titled recording and artist. Preserve its owner-linked ID; do not replace it with a similarly titled recording or route it to Hakken Horse. This is **Gabberina-only MUST ADD**, not a playable audio import. [Gabberina owner registry](gangs/gabberinas_music.json) · metadata-only manifest `src/main/resources/assets/jetsetcraft/jetsetcraft_music/gabberinas_isterika_cream_soda.json`.
