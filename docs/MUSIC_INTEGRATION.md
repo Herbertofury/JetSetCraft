@@ -1,5 +1,10 @@
 # Crew-house and Rival Rush soundtrack
 
+## Global artist MUST ADD — Flammy (2026-11-15)
+
+- **`JSC-ARTIST-001` · ARTIST MUST ADD — [Flammy](https://open.spotify.com/artist/4WP7QI3CaGCk42LIuYjbrz):** The owner selected exact Spotify artist ID `4WP7QI3CaGCk42LIuYjbrz` for JetSetCraft. This is an **artist-level priority**, not a selected song or album. Preserve Flammy on the must-add soundtrack list and prioritize discovering fitting tracks. **No exact recording, gang or scene placement has been selected.** Do not automatically mark the artist's entire catalog as approved.
+- **Integration/rights gate:** [Machine-readable owner artist registry](music/owner_must_add_artists.json) preserves the reference with `MUST_ADD` priority, awaiting track selection and faction/scene decision. **Metadata only**: no protected audio or generic `rush`/`home` playback is enabled. Any in-game soundtrack inclusion requires a verified exact master, sync/redistribution permission, contextual routing and in-game QA.
+
 ## New martial-arts skating gang — first owner song, name pending (2026-11-15)
 
 - **`MARTIALCREW-MUSIC-001` · FIRST MUST ADD — [“USAIN” — Moreart & Asylllum](https://open.spotify.com/track/5lViQePieL6gzg9ajLBUUN?si=6431d65f32ad47e2):** Exact owner Spotify ID `5lViQePieL6gzg9ajLBUUN`. [Zvuk release catalog](https://sber-zvuk.com/release/53479616) gives 2026, 2:24, Headliner Music, with mature-content warning. The [2026 artist/release listing](https://mogtext.com/song/moreart-asylllum-usain/) gives **2026-10-30**; the song is **Russian-language rap** and is not misrepresented as Chinese or Japanese music. This is **the first song of a new Chinese wuxia-/Japanese shinobi-inspired crew whose final gang name is not yet chosen**. `Wuxistas` is only an assistant-suggested name; alternate `Shinobistas`/others pending. [Name and gang direction](../wiki/Martial-Arts-Crew-Naming-Shortlist.md) · [Machine-readable requested gang](gangs/unnamed_martial_arts_crew.json).
