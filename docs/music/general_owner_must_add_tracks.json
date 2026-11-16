@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "record_type": "owner_confirmed_general_soundtrack_must_add_tracks",
+  "updated_on": "2026-11-15",
+  "scope": "JetSetCraft global music selections (not gang-specific, not special-event-only)",
+  "entries": [
+    {
+      "reference_id": "JSC-MUST-GENERAL-20261115-001",
+      "spotify_track_id": "27ynArU5pjldcpqe5GfcxC",
+      "owner_supplied_url": "https://open.spotify.com/track/27ynArU5pjldcpqe5GfcxC",
+      "title": "Above The Rim",
+      "artist": "Bell Biv DeVoe",
+      "identity_status": "title_and_artist_previously_verified_in_music_integration",
+      "owner_selection_date": "2026-11-15",
+      "priority": "MUST_ADD",
+      "gang_assignment": null,
+      "event_assignment": null,
+      "intended_scope": "general_jetsetcraft_soundtrack",
+      "audio_status": "not_supplied",
+      "synchronization_and_redistribution_rights": "not_verified",
+      "in_game_playback_status": "not_integrated",
+      "source_note": "Preserved from docs/MUSIC_INTEGRATION.md; no change to previous owner approval."
+    },
+    {
+      "reference_id": "JSC-MUST-GENERAL-20261115-002",
+      "spotify_track_id": "7r2Pe0QriLn9gpwGvRPYy3",
+      "owner_supplied_url": "https://open.spotify.com/track/7r2Pe0QriLn9gpwGvRPYy3?si=e5c2ea44511944d5",
+      "title": null,
+      "artist": null,
+      "album": null,
+      "isrc": null,
+      "identity_status": "owner_supplied_exact_spotify_track_identity_unresolved",
+      "metadata_verification_note": "Direct Spotify page, embed, oEmbed and independent exact-ID web searches did not yield reliable title/artist metadata on 2026-11-15; do not invent an identity or substitute another track.",
+      "owner_selection_date": "2026-11-15",
+      "priority": "MUST_ADD",
+      "owner_selected": true,
+      "gang_assignment": null,
+      "event_assignment": null,
+      "intended_scope": "general_jetsetcraft_soundtrack",
+      "intended_placement": "general music library, skate/free-roam, crew-house, radio, or other global soundtrack placement to be decided after exact recording identity and rights verification",
+      "genre_status": "not_verified",
+      "exact_master_and_isrc_status": "not_verified",
+      "beat_grid_and_cue_status": "not_measured",
+      "audio_status": "not_supplied",
+      "synchronization_and_redistribution_rights": "not_verified",
+      "in_game_playback_status": "not_integrated",
+      "runtime_manifest_status": "not_created_until_title_artist_and_authorized_master_verified",
+      "include_in_gang_only_playlists": false,
+      "include_in_special_event_only_playlists": false,
+      "notes": "An owner-approved must-add reference; this is NOT a Cumbias, Gabberina, Signal '81, or other gang-specific assignment. No Spotify audio is downloaded or bundled."
+    }
+  ],
+  "runtime_status": {
+    "metadata_only": true,
+    "playable_audio_bundled": false
+  }
+}
