@@ -4,7 +4,7 @@
   "canonical_gang_name": "Cumbias",
   "proposed_stable_gang_id": "jetsetcraft:cumbias",
   "owner_selection_date": "2026-11-15",
-  "coverage_note": "Incremental registry for the new #007 selection. Earlier Cumbias must-adds and the Ocarina-only correction remain in docs/MUSIC_INTEGRATION.md; this file does not replace the complete historical selections.",
+  "coverage_note": "Incremental owner-confirmed Cumbias must-add records #007 and #008. Earlier Cumbias must-adds and the Ocarina-only correction remain in docs/MUSIC_INTEGRATION.md; this file does not replace the complete historical selections.",
   "must_include_music": [
     {
       "reference_id": "JSC-MUST-CUMBIA-20261115-007",
@@ -38,6 +38,31 @@
       "source_audio": "not_supplied",
       "synchronization_and_distribution_rights": "not_verified",
       "in_game_playback_status": "not_integrated"
+    },
+    {
+      "reference_id": "JSC-MUST-CUMBIA-20261115-008",
+      "title": null,
+      "artist": null,
+      "spotify_track_id": "0rGWylfSiveMMk0vPjkBKe",
+      "owner_supplied_url": "https://open.spotify.com/track/0rGWylfSiveMMk0vPjkBKe?si=a6c021dcd8704231",
+      "owner_selection_date": "2026-11-15",
+      "is_owner_approved": true,
+      "owner_priority": "must_add",
+      "source_type": "owner_supplied_exact_spotify_track",
+      "assignment": "cumbias_regular_music",
+      "verification_status": "exact_track_title_artist_album_and_edition_unresolved",
+      "verification_note": "Owner-provided Spotify track ID preserved. Direct public Spotify page/embed/oEmbed and exact-ID web searches did not yield reliable metadata on 2026-11-15. Do not invent performer/title, substitute a recording, or claim genre or version.",
+      "catalog_status": "selected_metadata_only_pending_song_identification",
+      "proposed_use": [
+        "Cumbias-specific gang radio/Boombox following crew-scoped music selector and audio licensing",
+        "Cumbias dance/skating challenges after actual cue/beat review"
+      ],
+      "scope_note": "Cumbias regular MUST ADD only; no connection to Ocarina of Cumbia event-only song or Cumbias × Bananettas rare face-off.",
+      "edition_isrc_master_status": "not_verified",
+      "audio_master_status": "not_supplied",
+      "synchronization_and_distribution_rights": "not_verified",
+      "in_game_playback_status": "not_integrated",
+      "playable_manifest_status": "not_created_until_artist_and_title_verified"
     }
   ],
   "runtime_status": {
