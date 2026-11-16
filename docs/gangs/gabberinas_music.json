@@ -20,7 +20,8 @@
       "GAB-MUSIC-010",
       "GAB-MUSIC-011",
       "GAB-MUSIC-012",
-      "GAB-MUSIC-013"
+      "GAB-MUSIC-013",
+      "GAB-MUSIC-014"
     ],
     "previous_phonkistas_correction": "Warpath — Redforce remains Phonkistas only. Fabitekk Glubis has been directly selected for Gabberina's despite Hardtekkas also existing.",
     "favorite_must_add_ids": [
@@ -387,6 +388,32 @@
         "extended skating and dance rival challenge",
         "music-driven rhythmic escalation"
       ],
+      "exact_spotify_master_isrc_and_edition": "not_verified",
+      "beat_grid_bpm_and_cue_times": "not_measured",
+      "source_audio": "not_supplied",
+      "synchronization_and_distribution_rights": "not_verified",
+      "in_game_playback_status": "not_integrated"
+    },
+    {
+      "reference_id": "GAB-MUSIC-014",
+      "title": "Истерика",
+      "artist": "CREAM SODA",
+      "spotify_track_id": "3cJyyFDAZlW8PURuXweFXe",
+      "owner_supplied_url": "https://open.spotify.com/track/3cJyyFDAZlW8PURuXweFXe?si=1e7cad177dac4cb2",
+      "owner_selection_date": "2026-11-15",
+      "is_owner_approved": true,
+      "assignment": "gabberinas_regular_music",
+      "source_type": "owner_supplied_exact_spotify_track",
+      "title_artist_verification": "Spotify track page identifies Истерика by CREAM SODA; precise linked recording master, ISRC, edition, album and cue details have not been independently verified.",
+      "verification_sources": [
+        "https://open.spotify.com/track/3cJyyFDAZlW8PURuXweFXe"
+      ],
+      "owner_priority": "must_add",
+      "proposed_use": [
+        "Gabberina-specific crew radio/Boombox after gang-scoped playback is implemented",
+        "Gabberina skating or dance rival encounter pending cue analysis"
+      ],
+      "note": "Owner chose the exact recording for Gabberina's. Preserve the Cyrillic song title and do not substitute other CREAM SODA tracks. Not a Hakken Horse boss-only selection.",
       "exact_spotify_master_isrc_and_edition": "not_verified",
       "beat_grid_bpm_and_cue_times": "not_measured",
       "source_audio": "not_supplied",
