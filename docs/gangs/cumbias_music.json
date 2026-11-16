@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "record_type": "owner_selected_cumbias_music_additions",
+  "canonical_gang_name": "Cumbias",
+  "proposed_stable_gang_id": "jetsetcraft:cumbias",
+  "owner_selection_date": "2026-11-15",
+  "coverage_note": "Incremental registry for the new #007 selection. Earlier Cumbias must-adds and the Ocarina-only correction remain in docs/MUSIC_INTEGRATION.md; this file does not replace the complete historical selections.",
+  "must_include_music": [
+    {
+      "reference_id": "JSC-MUST-CUMBIA-20261115-007",
+      "title": "Pedro",
+      "artist": "Jaxomy, Agatino Romero & Raffaella Carrà",
+      "artist_credit_names": [
+        "Jaxomy",
+        "Agatino Romero",
+        "Raffaella Carrà"
+      ],
+      "spotify_track_id": "48lxT5qJF0yYyf2z4wB4xW",
+      "owner_supplied_url": "https://open.spotify.com/track/48lxT5qJF0yYyf2z4wB4xW?si=3bf630f26a824b82",
+      "owner_selection_date": "2026-11-15",
+      "is_owner_approved": true,
+      "assignment": "cumbias_regular_music",
+      "source_type": "owner_supplied_exact_spotify_track",
+      "title_artist_verification": "Exact Spotify track page identifies Pedro by Jaxomy, Agatino Romero and Raffaella Carrà; the edition/ISRC/recording-master match remains to be verified.",
+      "verification_sources": [
+        "https://open.spotify.com/track/48lxT5qJF0yYyf2z4wB4xW",
+        "https://www.los40.com.ec/2024/pao-te-cuenta-los-singles-videos-musicales-y-artistas-que-hacen-tendencia-taylor-swift-feid-drake-dayanara-alka-yagnik-bad-bunny-entre-otros-son-los-nombres-que-destacan-en-las-plata-3951262.html"
+      ],
+      "style_note": "Electronic dance remix of Raffaella Carrà's Italian pop song. The owner's Cumbias gang assignment is explicit, but this is not documented as traditional cumbia.",
+      "scope_note": "Cumbias regular must-add music ONLY, not the Ocarina of Cumbia event-only slot or the Cumbias × Bananettas rare face-off.",
+      "owner_priority": "must_add",
+      "proposed_use": [
+        "Cumbias-specific Boombox/crew radio after selector implemented",
+        "Cumbias skating and dance encounters after cue review"
+      ],
+      "exact_spotify_master_isrc_and_edition": "not_verified",
+      "beat_grid_bpm_and_cue_times": "not_measured",
+      "source_audio": "not_supplied",
+      "synchronization_and_distribution_rights": "not_verified",
+      "in_game_playback_status": "not_integrated"
+    }
+  ],
+  "runtime_status": {
+    "metadata_only": true,
+    "cumbias_specific_music_filter_implemented": false,
+    "playable_audio_bundled": false
+  }
+}
