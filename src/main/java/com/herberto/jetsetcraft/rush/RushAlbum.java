@@ -48,6 +48,18 @@ public final class RushAlbum {
         return new CollectionReward(count, tier, newTier, xp, score);
     }
 
+    /** Exact read-only actor/gang defeat lookup; never treats a card as whole-gang conquest. */
+    public static boolean hasDefeated(ServerPlayer player,String entityId,String gangId) {
+        if(player==null||entityId==null||gangId==null
+                ||ResourceLocation.tryParse(entityId)==null||ResourceLocation.tryParse(gangId)==null)return false;
+        CompoundTag cards=persisted(player,false).getCompound(KEY).getCompound("Cards");
+        String key=entityId+"|"+gangId;
+        if(!cards.contains(key,Tag.TAG_COMPOUND))return false;
+        CompoundTag card=cards.getCompound(key);
+        return entityId.equals(card.getString("Entity"))&&gangId.equals(card.getString("Gang"))
+                &&clamp(card.getLong("Count"))>0;
+    }
+
     public static long total(ServerPlayer player) {
         if (player == null) return 0L;
         return clamp(persisted(player, false).getCompound(KEY).getLong("Total"));
@@ -118,3 +130,4 @@ public final class RushAlbum {
     private static long clamp(long count) { return Math.max(0L, Math.min(LIMIT, count)); }
     private RushAlbum() {}
 }
+
