@@ -1,0 +1,9 @@
+{
+  "gang_id": "jetsetcraft:amygdala",
+  "display_name": "AMYGDALA",
+  "entities": [],
+  "disposition": "neutral",
+  "music": "jetsetcraft:music/gangs/generic",
+  "boombox_eligible": false,
+  "legendary": false
+}

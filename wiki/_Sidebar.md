@@ -85,3 +85,5 @@
 - [🧯 Troubleshooting](Troubleshooting)
 - [❓ FAQ](FAQ)
 - [🗺️ Roadmap](Roadmap)
+
+- [Grinions and AMYGDALA](Grinions-and-AMYGDALA) — identities, rare-variant policy, selected music and remaining native gates.

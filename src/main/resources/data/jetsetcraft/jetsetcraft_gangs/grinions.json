@@ -1,0 +1,9 @@
+{
+  "gang_id": "jetsetcraft:grinions",
+  "display_name": "Grinions",
+  "entities": [],
+  "disposition": "neutral",
+  "music": "jetsetcraft:music/gangs/generic",
+  "boombox_eligible": false,
+  "legendary": false
+}
