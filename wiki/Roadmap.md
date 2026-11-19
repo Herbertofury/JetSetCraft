@@ -166,3 +166,17 @@ Owner-selected name for the phonk competing gang. [Full design and to-do list](h
 - [ ] Build satisfying Denshattack-inspired whole-train handling, tricks, customizable skins/liveries and crew/mob train battles, with measured installed-game comparisons for future Codex/Claude work.
 - [ ] Integrate music, biome-safe temporary courses, train-to-ride/wingsuit transitions, progression and multiplayer.
 - [ ] Preserve actual construction, inventories, passengers, identity, schedules and railway behavior across events, failure and reload; prove performance and compatibility before release.
+
+
+## Roaming creature reward POIs — approved goal, not implemented (2026-11-19)
+
+Add optional moving points of interest on large creatures: airborne birds and eventually colossal roaming giants. Reach an attached, clearly marked object by platforming/climbing, then **hit that object to collect a substantial in-game XP/points reward**. The intended feel mixes playful traversal with roguelite run decisions, especially Megabonk-like experiences; Shadow of the Colossus is a scale/climbing inspiration, not permission to copy characters, art or code. This records a requested goal, not verified capabilities of either reference game.
+
+- [ ] Reconcile existing movement, moving-platform collision, creature rigs, reward ledgers and run lifecycle before implementation; research reusable existing solutions first.
+- [ ] Prototype one optional slow ground giant with a marked reward object, two approach routes, safe exit and seed-varied route placement. Reuse suitable authorized assets/data for variation without treating reuse as a ceiling on quality or new features.
+- [ ] Make boarding, movement-relative footing, climbing/jumping, hit registration and payoff legible and fun; provide reachable alternatives for differing mobility/builds and accessibility needs. Missing an optional encounter must not block a run.
+- [ ] Define meaningful high rewards balanced against time, traversal difficulty and combat risk. Commit one reward per stable run/creature/object identity; repeated hits, reconnect, reload and overlapping collection must not duplicate it.
+- [ ] Test missed jumps, safe recovery, camera/readability, creature bounds/despawn, pause/death/restart, simultaneous collection where multiplayer exists, and low/high mobility. Preserve saves, unrelated world/player state and prior progression.
+- [ ] Record exact-build performance and actual player enjoyment/playtests; expand to flying creatures and larger multi-stage giants only after the bounded first slice works. Do not mark the goal complete from a mockup, menu, static giant or simulated reward alone.
+
+**JetSetCraft scope:** prioritize Adventure Mode's own custom dimension and platformer/Metroidvania/roguelike traversal. Preserve skating/grind/trick identity, validated traversal unlocks and original-world return safety. Evaluate Rival Rush separately for fit rather than silently imposing the same system on every mode. Event rewards must be server-confirmed, run-scoped and non-farmable; this does not relax the no-vanilla-loot/XP farming guardrail, replace provider mobs or force chunks. Existing Adventure Mode implementation gaps remain open.
