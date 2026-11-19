@@ -57,5 +57,26 @@
     "gang_specific_music_picker_implemented": false,
     "playable_audio_bundled": false
   },
-  "wiki_page": "wiki/Phonkistas.md"
+  "wiki_page": "wiki/Phonkistas.md",
+  "owner_inspiration_references": [
+    {
+      "reference_id": "PHONKISTAS-INSPIRATION-ILUVMEWW",
+      "name": "iluvmeww",
+      "owner_requested_date": "2026-11-19",
+      "owner_url": "https://www.youtube.com/shorts/kT0JtBpVUh0?feature=share",
+      "youtube_video_id": "kT0JtBpVUh0",
+      "role": "owner-selected favorite character/reference and gang inspiration",
+      "identity_status": "character/persona/creator identity unverified",
+      "music_reference": {
+        "title": "Hokus Pokus",
+        "artist": "Insane Clown Posse",
+        "attribution_basis": "owner request",
+        "exact_recording": "unverified",
+        "short_soundtrack_match": "unverified"
+      },
+      "verification": "public fetch throttled; exact name/video search returned no result; no deletion inference",
+      "rights": "reference only; no media downloaded or bundled; permissions unverified",
+      "implementation_status": "inspiration/backlog only"
+    }
+  ]
 }
