@@ -86,17 +86,3 @@ Related designs: [Gabberina's](https://github.com/Herbertofury/JetSetCraft/wiki/
 [Hardtekkas](Hardtekkas) is now the fourth major rival, with reputation-unlocked **Tekkistas** as an optional name, tracked in [issue #31](https://github.com/Herbertofury/JetSetCraft/issues/31). The [multi-rival campaign](Cumbias‐and‐Multi‐Rival‐Gang‐War) must reconcile all four crews' control, source-power removal, ownership-aware bosses, surprise arbitration and independent persistent defeats. Gabberina's keeps its explicit jumpstyle/gabber/hardtekk blend and Hardtekk Tutorial reference.
 
 The owner's major [reactive fight/trick-chain music and combo payoff goal](Music‐Driven-Dances-and-Mob‐Themed-Bosses#major-requirement-reactive-fight-trick-chain-and-combo-music) is tracked with solo/crew choreography in [issue #30](https://github.com/Herbertofury/JetSetCraft/issues/30). Apply the Killer Instinct-inspired level of musical interaction through original faction-specific audio, responsive combat/trick-chain feedback and memorable announcer-style payoffs; never delay controls/hits to match music, copy reference recordings, or introduce arbitrary feature/participation caps. Proposed technical criteria and tests live in the canonical specification. Design/backlog only.
-
-## iluvmeww and Hokus Pokus — owner inspiration, 2026-11-19
-
-The owner requested **iluvmeww** as a favorite character/reference and **Phonkistas** inspiration, together with **Hokus Pokus — Insane Clown Posse**. Use the corrected spelling iluvmeww, not ilubmeww. The request's “honkistas” is recorded under the established Phonkistas gang, not a new gang.
-
-Exact source: [owner-supplied YouTube Short](https://www.youtube.com/shorts/kT0JtBpVUh0?feature=share), ID `kT0JtBpVUh0`. [Favorite reference record](https://github.com/Herbertofury/memories/blob/main/docs/Core-memories.md#iluvmeww--owner-selected-favorite-characterreference).
-
-This is an approved inspiration reference, not a claim of implemented roster membership, bundled soundtrack or a genre redefinition. Public video retrieval was throttled; identity (character/persona/creator handle), lore, appearance and upload metadata remain unverified. Song title/artist are owner-supplied; exact recording/edit, its presence in the Short, cues and permissions remain unverified. Do not infer choreography or visual traits without reviewing the reference. Preserve Warpath and the existing gang direction.
-
-- [x] Record corrected iluvmeww reference and Hokus Pokus — Insane Clown Posse for Phonkistas.
-- [ ] Review the exact video and resolve identity/attribution without guessing.
-- [ ] Identify the intended song edition and assess original, rights-cleared adaptation before any gameplay/audio integration.
-
-Links only; no video, art or audio downloaded or bundled. Inspiration does not grant synchronization, copying or redistribution rights.

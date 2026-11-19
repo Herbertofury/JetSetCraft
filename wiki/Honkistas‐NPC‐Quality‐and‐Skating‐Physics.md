@@ -84,3 +84,17 @@ This is a native **reference-preview** checkpoint, not an implemented Honkistas 
 - [ ] Obtain visual acceptance separately from structural tests. A valid file, successful import or static preview is not finished quality.
 
 [Existing Honkistas roster and encounter requirements](Music‐Driven-Dances-and-Mob‐Themed-Bosses) · [Animation and model research](Research-Animation-Models-and-Creators) · [World physics](World-Physics) · [Roadmap](Roadmap)
+
+## iluvmeww and Hokus Pokus — owner inspiration, 2026-11-19
+
+The owner requested **iluvmeww** as a favorite character/reference and **Honkistas** inspiration, together with **Hokus Pokus — Insane Clown Posse**. Use the corrected spelling iluvmeww, not ilubmeww. The owner explicitly corrected the destination: “honkistats the clown one not phonkistas”. The established canonical clown crew is **Honkistas**, as recorded in the [roster specification](Music‐Driven-Dances-and-Mob‐Themed-Bosses#roster-addition-honkistas). This corrects an earlier mistaken Phonkistas assignment; the favorite character entry remains unchanged.
+
+Exact source: [owner-supplied YouTube Short](https://www.youtube.com/shorts/kT0JtBpVUh0?feature=share), ID `kT0JtBpVUh0`. [Favorite reference record](https://github.com/Herbertofury/memories/blob/main/docs/Core-memories.md#iluvmeww--owner-selected-favorite-characterreference).
+
+This is an approved inspiration reference, not a claim of implemented roster membership, bundled soundtrack or a genre redefinition. Public video retrieval was throttled; identity (character/persona/creator handle), lore, appearance and upload metadata remain unverified. Song title/artist are owner-supplied; exact recording/edit, its presence in the Short, cues and permissions remain unverified. Do not infer choreography or visual traits without reviewing the reference. Preserve the existing Honkistas roster, references and gang direction.
+
+- [x] Record corrected iluvmeww reference and Hokus Pokus — Insane Clown Posse for Honkistas.
+- [ ] Review the exact video and resolve identity/attribution without guessing.
+- [ ] Identify the intended song edition and assess original, rights-cleared adaptation before any gameplay/audio integration.
+
+Links only; no video, art or audio downloaded or bundled. Inspiration does not grant synchronization, copying or redistribution rights.

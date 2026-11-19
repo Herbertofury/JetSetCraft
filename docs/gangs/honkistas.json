@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "record_type": "owner_gang_inspiration_references",
+  "canonical_gang_name": "Honkistas",
+  "identity_source": "wiki/Music‐Driven-Dances-and-Mob‐Themed-Bosses.md#roster-addition-honkistas",
+  "assignment_correction": {
+    "date": "2026-11-19",
+    "owner_words": "honkistats the clown one not phonkistas",
+    "previous_erroneous_assignment": "Phonkistas",
+    "favorite_character_entry": "preserved unchanged"
+  },
+  "owner_inspiration_references": [
+    {
+      "reference_id": "HONKISTAS-INSPIRATION-ILUVMEWW",
+      "name": "iluvmeww",
+      "owner_requested_date": "2026-11-19",
+      "owner_url": "https://www.youtube.com/shorts/kT0JtBpVUh0?feature=share",
+      "youtube_video_id": "kT0JtBpVUh0",
+      "role": "owner-selected favorite character/reference and gang inspiration",
+      "identity_status": "character/persona/creator identity unverified",
+      "music_reference": {
+        "title": "Hokus Pokus",
+        "artist": "Insane Clown Posse",
+        "attribution_basis": "owner request",
+        "exact_recording": "unverified",
+        "short_soundtrack_match": "unverified"
+      },
+      "verification": "public fetch throttled; exact name/video search returned no result; no deletion inference",
+      "rights": "reference only; no media downloaded or bundled; permissions unverified",
+      "implementation_status": "inspiration/backlog only"
+    }
+  ],
+  "wiki_page": "wiki/Honkistas‐NPC‐Quality‐and‐Skating‐Physics.md"
+}
