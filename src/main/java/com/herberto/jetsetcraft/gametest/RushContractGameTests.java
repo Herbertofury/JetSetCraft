@@ -204,7 +204,12 @@ public final class RushContractGameTests {
     @GameTest(template = "hoverboard_empty", timeoutTicks = 600)
     public static void huntCountsOnlyAcceptedOwnedCaptainAndEliteDefeats(GameTestHelper helper) {
         Fixture fixture = begin(helper, "JSC_hunt", "needlepoint_crossing");
-        helper.runAfterDelay(2, () -> {
+        try {
+            ChunkPos huntCenter = new ChunkPos(fixture.center);
+            for (int x = -4; x <= 4; x++) for (int z = -4; z <= 4; z++)
+                fixture.district.getChunk(huntCenter.x + x, huntCenter.z + z);
+        } catch (RuntimeException | Error failure) { cleanup(fixture); throw failure; }
+        awaitHuntResidency(helper, fixture, 0, () -> {
             try {
                 ServerPlayer player = fixture.player; RushRun run = RivalRushManager.run(player);
                 check(contract(player).getString("Type").equals("hunt") && contract(player).getInt("Target") == 2,
@@ -224,16 +229,21 @@ public final class RushContractGameTests {
                 check(contract(player).getInt("Progress") == 1 && captain.getHealth() == nativeHealth
                                 && !RivalRushManager.artifactHit(player, captain, 40) && contract(player).getInt("Progress") == 1,
                         "A real captain defeat did not count once, or it consumed native health/replayed after removal");
-                Mob removed = nextElite(player);
-                removed.discard(); RivalRushManager.tick(player.getServer());
-                check(contract(player).getInt("Progress") == 1, "Discarding an owned elite falsely credited a defeat");
-                Mob defeated = nextElite(player); defeat(player, defeated);
-                check(contract(player).getInt("Progress") == 2 && contract(player).getBoolean("Completed")
-                                && run.defeats() == 3 && run.pitStopCredits() == 0 && run.contractClears() == 0
-                                && RivalRushManager.journeySnapshot(player).getString("Phase").equals("arena"),
-                        "A real elite did not finish the bounded hunt, or optional completion bypassed the required defeat quota");
-                returnNormally(fixture); pass(helper, "rush_contract_hunt");
-            } finally { cleanup(fixture); }
+                nextElite(helper, fixture, 0, removed -> {
+                    removed.discard(); RivalRushManager.tick(player.getServer());
+                    check(contract(player).getInt("Progress") == 1, "Discarding an owned elite falsely credited a defeat");
+                    nextElite(helper, fixture, 0, defeated -> {
+                        try {
+                            defeat(player, defeated);
+                            check(contract(player).getInt("Progress") == 2 && contract(player).getBoolean("Completed")
+                                            && run.defeats() == 3 && run.pitStopCredits() == 0 && run.contractClears() == 0
+                                            && RivalRushManager.journeySnapshot(player).getString("Phase").equals("arena"),
+                                    "A real elite did not finish the bounded hunt, or optional completion bypassed the required defeat quota");
+                            returnNormally(fixture); pass(helper, "rush_contract_hunt");
+                        } finally { cleanup(fixture); }
+                    });
+                });
+            } catch (RuntimeException | Error failure) { cleanup(fixture); throw failure; }
         });
     }
 
@@ -304,13 +314,52 @@ public final class RushContractGameTests {
             if (variant != RushDirector.Elite.NONE && mob.getName().getString().contains(variant.label())) return true;
         return false;
     }
-    private static Mob nextElite(ServerPlayer player) {
-        RushRun run = RivalRushManager.run(player);
-        for (int wave = 0; wave < 30; wave++) {
-            for (Mob mob : actors(player)) if (elite(mob)) return mob;
-            actors(player).forEach(Mob::discard); chooseDrafts(player); advance(run, 40); RivalRushManager.tick(player.getServer());
-        }
-        throw new GameTestAssertException("The bounded real director did not spawn an owned elite for its hunt fixture");
+    private static int huntResidentChunks(Fixture fixture) {
+        ChunkPos center = new ChunkPos(fixture.center); int ready = 0;
+        for (int x = -2; x <= 2; x++) for (int z = -2; z <= 2; z++)
+            if (fixture.district.isPositionEntityTicking(new BlockPos((center.x + x) << 4,
+                    RushWorld.FLOOR_Y + 1, (center.z + z) << 4))) ready++;
+        return ready;
+    }
+    private static void awaitHuntResidency(GameTestHelper helper, Fixture fixture, int waited, Runnable ready) {
+        helper.runAfterDelay(1, () -> {
+            try {
+                int resident = huntResidentChunks(fixture);
+                if (resident == 25) { ready.run(); return; }
+                check(waited + 1 < 120, "Native hunt fixture residency timed out: " + resident + "/25 chunks");
+                awaitHuntResidency(helper, fixture, waited + 1, ready);
+            } catch (RuntimeException | Error failure) { cleanup(fixture); throw failure; }
+        });
+    }
+    private static void nextElite(GameTestHelper helper, Fixture fixture, int wave, java.util.function.Consumer<Mob> found) {
+        ServerPlayer player = fixture.player;
+        // Entity-section visibility must receive a real server tick between observations.
+        // A synchronous 30-wave loop could report no visible entities while the manager
+        // already owned an admitted elite. Preserve the same bounded director requirement.
+        helper.runAfterDelay(1, () -> {
+            try {
+                for (Mob mob : actors(player)) if (elite(mob)) { found.accept(mob); return; }
+                CompoundTag encounter = RivalRushManager.encounterSnapshot(player);
+                if (encounter.hasUUID("Actor")) {
+                    var registered = player.serverLevel().getEntity(encounter.getUUID("Actor"));
+                    if (registered instanceof Mob mob && !mob.isRemoved() && mob.isAlive()
+                            && RivalRushManager.belongsTo(mob, player) && elite(mob)) {
+                        found.accept(mob); return;
+                    }
+                }
+                if (wave >= 30) throw new GameTestAssertException("The bounded real director did not expose an owned elite for its hunt fixture; "
+                        + "encounter=" + RivalRushManager.encounterSnapshot(player)
+                        + "; journey=" + RivalRushManager.journeySnapshot(player)
+                        + "; contract=" + contract(player)
+                        + "; residentChunks=" + huntResidentChunks(fixture) + "/25"
+                        + "; playerPosition=" + player.position() + "; playerBox=" + player.getBoundingBox()
+                        + "; registeredElite=" + (encounter.hasUUID("Actor") ? player.serverLevel().getEntity(encounter.getUUID("Actor")) : "none")
+                        + "; visible=" + actors(player).stream().map(mob -> mob.getName().getString()).toList());
+                actors(player).forEach(Mob::discard); chooseDrafts(player);
+                advance(RivalRushManager.run(player), 40); RivalRushManager.tick(player.getServer());
+                nextElite(helper, fixture, wave + 1, found);
+            } catch (RuntimeException | Error failure) { cleanup(fixture); throw failure; }
+        });
     }
     private static void defeat(ServerPlayer player, Mob mob) {
         chooseDrafts(player); mob.moveTo(player.getX() + 5, player.getY(), player.getZ(), 0, 0); mob.setDeltaMovement(Vec3.ZERO);
