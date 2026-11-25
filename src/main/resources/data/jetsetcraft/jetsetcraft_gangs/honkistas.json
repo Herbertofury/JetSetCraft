@@ -1,0 +1,9 @@
+{
+  "gang_id": "jetsetcraft:honkistas",
+  "display_name": "Honkistas",
+  "entities": [],
+  "disposition": "neutral",
+  "music": "jetsetcraft:music/gangs/generic",
+  "boombox_eligible": false,
+  "legendary": false
+}
